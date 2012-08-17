@@ -852,6 +852,7 @@ namespace BDInfo
             }
 
             string bestGuess = webServiceResult != "" ? webServiceResult : quickGuess;
+            bool confidentChoice = !bestGuess.Contains("[");
 
             MessageBox.Show(
                 this,
@@ -866,7 +867,7 @@ namespace BDInfo
                 "Best guess: " + bestGuess,
                 "Auto-detect results",
                 MessageBoxButtons.OK,
-                foundMainMovie ? MessageBoxIcon.Information : MessageBoxIcon.Exclamation);
+                confidentChoice ? MessageBoxIcon.Information : MessageBoxIcon.Exclamation);
         }
 
         private bool FindMainPlaylistIndex(TSPlaylistFile playlist)
