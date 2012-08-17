@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Globalization;
+using System.IO;
 
 namespace BDInfo
 {
@@ -29,28 +31,36 @@ namespace BDInfo
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        [STAThread]
+        [STAThreadAttribute]
         static void Main(string[] args)
         {
-            InitAssemblyResolver();
+            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain(args));
         }
 
-        static void InitAssemblyResolver()
+        // From http://blogs.interknowlogy.com/2011/07/13/merging-a-wpf-application-into-a-single-exe/
+        private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
         {
-            // From http://blogs.msdn.com/b/microsoft_press/archive/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition.aspx
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            AssemblyName assemblyName = new AssemblyName(args.Name);
+
+            string path = assemblyName.Name + ".dll";
+            if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
             {
-                String resourceName = "AssemblyLoadingAndReflection." + new AssemblyName(args.Name).Name + ".dll";
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-                {
-                    Byte[] assemblyData = new Byte[stream.Length];
-                    stream.Read(assemblyData, 0, assemblyData.Length);
-                    return Assembly.Load(assemblyData);
-                }
-            };
+                path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
+            }
+
+            using (Stream stream = executingAssembly.GetManifestResourceStream(path))
+            {
+                if (stream == null)
+                    return null;
+
+                byte[] assemblyRawBytes = new byte[stream.Length];
+                stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
+                return Assembly.Load(assemblyRawBytes);
+            }
         }
     }
 }
