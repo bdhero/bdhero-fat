@@ -1,0 +1,4 @@
+*.suo
+/BDInfo/bin
+/BDInfo/obj
+
