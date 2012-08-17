@@ -26,6 +26,8 @@ using System.Drawing;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace BDInfo
 {
@@ -475,6 +477,8 @@ namespace BDInfo
             listViewStreamFiles.Items.Clear();
             listViewStreams.Items.Clear();
 
+            sortedPlaylists.Clear();
+
             if (BDROM == null) return;
 
             bool hasHiddenTracks = false;
@@ -607,6 +611,8 @@ namespace BDInfo
                     ListViewItem playlistItem =
                         new ListViewItem(playlistSubItems, 0);
                     listViewPlaylistFiles.Items.Add(playlistItem);
+
+                    sortedPlaylists.Add(playlist);
                 }
             }
 
@@ -620,6 +626,161 @@ namespace BDInfo
                 listViewPlaylistFiles.Items[0].Selected = true;
             }
             ResetColumnWidths();
+
+            FindMainPlaylist();
+        }
+
+        private List<TSPlaylistFile> sortedPlaylists = new List<TSPlaylistFile>();
+        private List<TSPlaylistFile> mainPlaylists = new List<TSPlaylistFile>();
+
+        private void SimpleAutoDetect()
+        {
+            mainPlaylists.Clear();
+
+            if (sortedPlaylists.Count == 0) return;
+
+            double maxlength = sortedPlaylists[0].TotalLength;
+
+            foreach (TSPlaylistFile playlist in sortedPlaylists)
+            {
+                if (playlist.TotalLength > maxlength * 0.9)
+                {
+                    mainPlaylists.Add(playlist);
+                }
+            }
+
+            // We're done!
+            if (mainPlaylists.Count == 1)
+            {
+                //MessageBox.Show("Only one playlist is long enough to be the main movie: " + mainPlaylists[0].Name);
+                return;
+            }
+
+            TSPlaylistFile[] sortedMainPlaylists = new TSPlaylistFile[mainPlaylists.Count];
+            mainPlaylists.CopyTo(sortedMainPlaylists, 0);
+            Array.Sort(sortedMainPlaylists, ComparePlaylistFilesForMainMovie);
+
+            string msg = "";
+
+            foreach (TSPlaylistFile playlist in sortedMainPlaylists)
+            {
+                msg += playlist.Name + ": " + playlist.HiddenTrackCount + " hidden tracks" + "\n";
+            }
+
+            //MessageBox.Show(msg);
+
+            int lowestHiddenTrackCount = sortedMainPlaylists[0].HiddenTrackCount;
+
+            mainPlaylists.Clear();
+
+            // TODO: This isn't a valid test - it fails on Beauty and the Beast (picks 00801.mpls (Special Edition) instead of 00800.mpls (classic edition))
+            foreach(TSPlaylistFile playlist in sortedMainPlaylists) {
+                if (playlist.HiddenTrackCount <= lowestHiddenTrackCount)
+                    mainPlaylists.Add(playlist);
+                else
+                    break;
+            }
+        }
+
+        private void FindMainPlaylist()
+        {
+            SimpleAutoDetect();
+
+            foreach (ListViewItem item in listViewPlaylistFiles.Items)
+            {
+                item.Selected = false;
+            }
+
+            if (mainPlaylists.Count == 1)
+            {
+                int idx = sortedPlaylists.FindIndex(FindMainPlaylistIndex);
+
+                //MessageBox.Show("Found main playlist: " + mainPlaylists[0].Name + ", list index = " + idx);
+
+                if (idx != -1)
+                {
+                    listViewPlaylistFiles.Items[idx].Selected = true;
+                }
+            }
+            // TODO: Only for testing/debugging
+            /*else*/ if (true || mainPlaylists.Count > 1)
+            {
+                string xmlpath = BDROM.DirectoryBDMV.FullName + @"\META\DL\bdmt_eng.xml";
+                string movieName = BDROM.DiscName;
+                int mainTitleIndex = BDROM.MainTitleIndex;
+
+                if (mainTitleIndex != -1)
+                {
+                    listViewPlaylistFiles.Items[mainTitleIndex].Selected = true;
+                    /*MessageBox.Show(
+                        this,
+                        "Found main title index (0-based) for \"" + movieName + "\": " + mainTitleIndex + " ==> " + sortedPlaylists[mainTitleIndex].Name,
+                        "Found main title",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);*/
+                }
+
+                if (movieName == null)
+                {
+                    new FormMovieName().ShowDialog(this);
+                }
+                else
+                {
+                    /*MessageBox.Show(
+                        this,
+                        "Found movie name: \"" + movieName + "\"",
+                        "Found movie name",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);*/
+                }
+            }
+
+            bool foundMainMovie = false;
+
+            string mainTitleFilenames;
+            if (mainPlaylists.Count == 1)
+            {
+                mainTitleFilenames = mainPlaylists[0].Name;
+                foundMainMovie = true;
+            }
+            else
+            {
+                mainTitleFilenames = "[ ";
+                for (int i = 0; i < mainPlaylists.Count; i++)
+                {
+                    mainTitleFilenames += mainPlaylists[i].Name + (i < mainPlaylists.Count - 1 ? ", " : "");
+                }
+                mainTitleFilenames += " ]";
+            }
+
+            string result;
+            // TODO: This isn't a valid test - it fails on Tangled (picks 00801.mpls (French render) instead of 00800.mpls (English render))
+            if (BDROM.MainTitleIndex != -1)
+            {
+                result = sortedPlaylists[BDROM.MainTitleIndex].Name;
+                foundMainMovie = true;
+            }
+            else
+            {
+                result = mainTitleFilenames;
+            }
+
+            MessageBox.Show(
+                this,
+                "Disc name: \"" + BDROM.DiscName + "\"" + "\n" +
+                "\n" +
+                "Main title index: " + BDROM.MainTitleIndex + "\n" +
+                "Main title filenames: " + mainTitleFilenames + "\n" +
+                "\n" +
+                "Result: " + result,
+                "Auto-detect results",
+                MessageBoxButtons.OK,
+                foundMainMovie ? MessageBoxIcon.Information : MessageBoxIcon.Exclamation);
+        }
+
+        private bool FindMainPlaylistIndex(TSPlaylistFile playlist)
+        {
+            return mainPlaylists.Count > 0 && playlist != null && mainPlaylists[0] != null && playlist == mainPlaylists[0];
         }
 
         private void LoadPlaylist()
@@ -1345,6 +1506,39 @@ namespace BDInfo
                     return -1;
                 }
                 else if (y.TotalLength > x.TotalLength)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return x.Name.CompareTo(y.Name);
+                }
+            }
+        }
+
+        public static int ComparePlaylistFilesForMainMovie(
+            TSPlaylistFile x,
+            TSPlaylistFile y)
+        {
+            if (x == null && y == null)
+            {
+                return 0;
+            }
+            else if (x == null && y != null)
+            {
+                return 1;
+            }
+            else if (x != null && y == null)
+            {
+                return -1;
+            }
+            else
+            {
+                if (x.HiddenTrackCount < y.HiddenTrackCount)
+                {
+                    return -1;
+                }
+                else if (y.HiddenTrackCount < x.HiddenTrackCount)
                 {
                     return 1;
                 }

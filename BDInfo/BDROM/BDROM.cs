@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BDInfo
 {
@@ -36,8 +37,10 @@ namespace BDInfo
         public DirectoryInfo DirectorySSIF = null;
         public DirectoryInfo DirectorySTREAM = null;
 
+        public string DiscName = null;
         public string VolumeLabel = null;
         public ulong Size = 0;
+        public int MainTitleIndex = -1;
         public bool IsBDPlus = false;
         public bool IsBDJava = false;
         public bool IsDBOX = false;
@@ -111,6 +114,7 @@ namespace BDInfo
             // Initialize basic disc properties.
             //
 
+            DiscName = GetDiscName();
             VolumeLabel = GetVolumeLabel(DirectoryRoot);
             Size = (ulong)GetDirectorySize(DirectoryRoot);
             
@@ -398,6 +402,43 @@ namespace BDInfo
             }
 
             return size;
+        }
+
+        private string GetDiscName()
+        {
+            string xmlpath = Path.Combine(DirectoryBDMV.FullName, @"META\DL\bdmt_eng.xml");
+            string movieName = null;
+
+            if (File.Exists(xmlpath))
+            {
+                Regex movieNameRegex = new Regex("<di:name>(.*?)</di:name>", RegexOptions.IgnoreCase);
+                string xml = File.ReadAllText(xmlpath);
+
+                if (movieNameRegex.IsMatch(xml))
+                {
+                    Match movieNameMatch = movieNameRegex.Match(xml);
+
+                    movieName = movieNameMatch.Groups[1].ToString();
+
+                    Regex titleRegex = new Regex("<di:titleName titleNumber=\"(\\d+)\">(.*?)</di:titleName>");
+
+                    if (titleRegex.IsMatch(xml))
+                    {
+                        MatchCollection titleMatches = titleRegex.Matches(xml);
+
+                        foreach (Match titleMatch in titleMatches)
+                        {
+                            if (titleMatch.Groups[2].ToString().Equals(movieName))
+                            {
+                                MainTitleIndex = int.Parse(titleMatch.Groups[1].ToString()) - 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return movieName;
         }
 
         private string GetVolumeLabel(DirectoryInfo dir)

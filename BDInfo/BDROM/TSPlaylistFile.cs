@@ -36,6 +36,7 @@ namespace BDInfo
         public bool HasHiddenTracks = false;
         public bool HasLoops = false;
         public bool IsCustom = false;
+        public int HiddenTrackCount = 0;
 
         public List<double> Chapters = new List<double>();
 
@@ -746,6 +747,7 @@ namespace BDInfo
                     {
                         stream.IsHidden = true;
                         HasHiddenTracks = true;
+                        HiddenTrackCount++;
                     }
 
                     if (stream.IsVideoStream)
