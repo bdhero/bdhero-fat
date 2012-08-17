@@ -17,6 +17,8 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,10 +41,16 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Json\Bin\Net20\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -77,6 +85,8 @@
     <Compile Include="FormPlaylist.Designer.cs">
       <DependentUpon>FormPlaylist.cs</DependentUpon>
     </Compile>
+    <Compile Include="models\MplsSearchResult.cs" />
+    <Compile Include="models\MplsSearchResultError.cs" />
     <Compile Include="ZedGraph\ArrowObj.cs" />
     <Compile Include="ZedGraph\Axis.cs" />
     <Compile Include="ZedGraph\AxisLabel.cs" />
@@ -249,6 +259,39 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="lib\Json\Source\Build\build.ps1" />
+    <None Include="lib\Json\Source\Build\Newtonsoft.Json.nuspec" />
+    <None Include="lib\Json\Source\Build\runbuild.cmd" />
+    <None Include="lib\Json\Source\Build\runbuild.ps1" />
+    <None Include="lib\Json\Source\Doc\ContractResolver.aml" />
+    <None Include="lib\Json\Source\Doc\ConvertingJSONandXML.aml" />
+    <None Include="lib\Json\Source\Doc\CustomCreationConverter.aml" />
+    <None Include="lib\Json\Source\Doc\DatesInJSON.aml" />
+    <None Include="lib\Json\Source\Doc\doc.content" />
+    <None Include="lib\Json\Source\Doc\doc.shfbproj" />
+    <None Include="lib\Json\Source\Doc\doc.sitemap" />
+    <None Include="lib\Json\Source\Doc\Introduction.aml" />
+    <None Include="lib\Json\Source\Doc\LINQtoJSON.aml" />
+    <None Include="lib\Json\Source\Doc\PreserveObjectReferences.aml" />
+    <None Include="lib\Json\Source\Doc\ReadingWritingJSON.aml" />
+    <None Include="lib\Json\Source\Doc\ReducingSerializedJSONSize.aml" />
+    <None Include="lib\Json\Source\Doc\SelectToken.aml" />
+    <None Include="lib\Json\Source\Doc\SerializationAttributes.aml" />
+    <None Include="lib\Json\Source\Doc\SerializationCallbacks.aml" />
+    <None Include="lib\Json\Source\Doc\SerializationErrorHandling.aml" />
+    <None Include="lib\Json\Source\Doc\SerializationGuide.aml" />
+    <None Include="lib\Json\Source\Doc\SerializationSettings.aml" />
+    <None Include="lib\Json\Source\Doc\SerializingCollections.aml" />
+    <None Include="lib\Json\Source\Doc\SerializingJSON.aml" />
+    <None Include="lib\Json\Source\Doc\SerializingJSONFragments.aml" />
+    <None Include="lib\Json\Source\Tools\7-zip\7-zip.chm" />
+    <None Include="lib\Json\Source\Tools\NUnit\nunit-agent-x86.exe.config" />
+    <None Include="lib\Json\Source\Tools\NUnit\nunit-agent.exe.config" />
+    <None Include="lib\Json\Source\Tools\NUnit\nunit-console-x86.exe.config" />
+    <None Include="lib\Json\Source\Tools\NUnit\nunit-console.exe.config" />
+    <None Include="lib\Json\Source\Tools\NUnit\nunit-x86.exe.config" />
+    <None Include="lib\Json\Source\Tools\NUnit\nunit.exe.config" />
+    <None Include="lib\Json\Source\Tools\PSake\psake.psm1" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -258,6 +301,68 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="lib\Json\Bin\Net20\Newtonsoft.Json.dll" />
+    <Content Include="lib\Json\Bin\Net20\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Json\Bin\Net20\Newtonsoft.Json.xml" />
+    <Content Include="lib\Json\Bin\Net35\Newtonsoft.Json.dll" />
+    <Content Include="lib\Json\Bin\Net35\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Json\Bin\Net35\Newtonsoft.Json.xml" />
+    <Content Include="lib\Json\Bin\Net40\Newtonsoft.Json.dll" />
+    <Content Include="lib\Json\Bin\Net40\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Json\Bin\Net40\Newtonsoft.Json.xml" />
+    <Content Include="lib\Json\Bin\Portable\Newtonsoft.Json.dll" />
+    <Content Include="lib\Json\Bin\Portable\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Json\Bin\Portable\Newtonsoft.Json.xml" />
+    <Content Include="lib\Json\Bin\Silverlight\Newtonsoft.Json.dll" />
+    <Content Include="lib\Json\Bin\Silverlight\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Json\Bin\Silverlight\Newtonsoft.Json.xml" />
+    <Content Include="lib\Json\Bin\Silverlight\Signed\Newtonsoft.Json.dll" />
+    <Content Include="lib\Json\Bin\Silverlight\Signed\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Json\Bin\Silverlight\Signed\Newtonsoft.Json.xml" />
+    <Content Include="lib\Json\Bin\versions.txt" />
+    <Content Include="lib\Json\Bin\WindowsPhone\Newtonsoft.Json.dll" />
+    <Content Include="lib\Json\Bin\WindowsPhone\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Json\Bin\WindowsPhone\Newtonsoft.Json.xml" />
+    <Content Include="lib\Json\Bin\WindowsPhone\Signed\Newtonsoft.Json.dll" />
+    <Content Include="lib\Json\Bin\WindowsPhone\Signed\Newtonsoft.Json.pdb" />
+    <Content Include="lib\Json\Bin\WindowsPhone\Signed\Newtonsoft.Json.xml" />
+    <Content Include="lib\Json\readme.txt" />
+    <Content Include="lib\Json\Source\Doc\donate.gif" />
+    <Content Include="lib\Json\Source\Doc\logo.jpg" />
+    <Content Include="lib\Json\Source\Doc\readme.txt" />
+    <Content Include="lib\Json\Source\Doc\versions.txt" />
+    <Content Include="lib\Json\Source\Tools\7-zip\7za.exe" />
+    <Content Include="lib\Json\Source\Tools\7-zip\copying.txt" />
+    <Content Include="lib\Json\Source\Tools\7-zip\license.txt" />
+    <Content Include="lib\Json\Source\Tools\7-zip\readme.txt" />
+    <Content Include="lib\Json\Source\Tools\NuGet\NuGet.exe" />
+    <Content Include="lib\Json\Source\Tools\NUnit\framework\nunit.framework.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\framework\nunit.framework.xml" />
+    <Content Include="lib\Json\Source\Tools\NUnit\framework\nunit.mocks.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\failure.png" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\ignored.png" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\inconclusive.png" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\nunit-console-runner.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\nunit-gui-runner.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\nunit.core.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\nunit.core.interfaces.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\nunit.uiexception.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\nunit.uikit.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\nunit.util.dll" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\skipped.png" />
+    <Content Include="lib\Json\Source\Tools\NUnit\lib\success.png" />
+    <Content Include="lib\Json\Source\Tools\NUnit\nunit-agent-x86.exe" />
+    <Content Include="lib\Json\Source\Tools\NUnit\nunit-agent.exe" />
+    <Content Include="lib\Json\Source\Tools\NUnit\nunit-console-x86.exe" />
+    <Content Include="lib\Json\Source\Tools\NUnit\nunit-console.exe" />
+    <Content Include="lib\Json\Source\Tools\NUnit\nunit-x86.exe" />
+    <Content Include="lib\Json\Source\Tools\NUnit\nunit.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

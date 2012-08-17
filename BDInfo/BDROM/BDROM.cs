@@ -438,6 +438,13 @@ namespace BDInfo
                 }
             }
 
+            if (movieName != null)
+            {
+                movieName = Regex.Replace(movieName, " - Blu-ray.*", "", RegexOptions.IgnoreCase);
+                movieName = Regex.Replace(movieName, @" \(?Disc \d+\)?", "", RegexOptions.IgnoreCase);
+                movieName = movieName.Trim();
+            }
+
             return movieName;
         }
 

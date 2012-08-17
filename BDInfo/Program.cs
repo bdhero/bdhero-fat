@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace BDInfo
 {
@@ -31,9 +32,25 @@ namespace BDInfo
         [STAThread]
         static void Main(string[] args)
         {
+            InitAssemblyResolver();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain(args));
+        }
+
+        static void InitAssemblyResolver()
+        {
+            // From http://blogs.msdn.com/b/microsoft_press/archive/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition.aspx
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                String resourceName = "AssemblyLoadingAndReflection." + new AssemblyName(args.Name).Name + ".dll";
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                {
+                    Byte[] assemblyData = new Byte[stream.Length];
+                    stream.Read(assemblyData, 0, assemblyData.Length);
+                    return Assembly.Load(assemblyData);
+                }
+            };
         }
     }
 }

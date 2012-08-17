@@ -38,6 +38,10 @@ namespace BDInfo
         public bool IsCustom = false;
         public int HiddenTrackCount = 0;
 
+        public bool HasFewestHiddenTracks = false;
+        public bool IsMainTitle = false;
+        public bool IsSelectedByService = false;
+
         public List<double> Chapters = new List<double>();
 
         public Dictionary<ushort, TSStream> Streams = 

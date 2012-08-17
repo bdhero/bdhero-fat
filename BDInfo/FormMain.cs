@@ -28,6 +28,10 @@ using System.Threading;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Net;
+using System.Net.Cache;
+using BDInfo.models;
+using Newtonsoft.Json;
 
 namespace BDInfo
 {
@@ -669,17 +673,20 @@ namespace BDInfo
 
             //MessageBox.Show(msg);
 
+            
             int lowestHiddenTrackCount = sortedMainPlaylists[0].HiddenTrackCount;
 
-            mainPlaylists.Clear();
+            //mainPlaylists.Clear();
 
-            // TODO: This isn't a valid test - it fails on Beauty and the Beast (picks 00801.mpls (Special Edition) instead of 00800.mpls (classic edition))
+            // TODO: This isn't a valid test in and of itself - it fails on Beauty and the Beast (picks 00801.mpls (Special Edition) instead of 00800.mpls (classic edition))
+            //       The "winner" of this test should simply be marked as having a higher probability of being the correct track (by setting a flag)
             foreach(TSPlaylistFile playlist in sortedMainPlaylists) {
                 if (playlist.HiddenTrackCount <= lowestHiddenTrackCount)
-                    mainPlaylists.Add(playlist);
+                    playlist.HasFewestHiddenTracks = true;
                 else
                     break;
             }
+            
         }
 
         private void FindMainPlaylist()
@@ -735,6 +742,73 @@ namespace BDInfo
                 }
             }
 
+            QueryDB();
+            PrintResult();
+        }
+
+        private void QueryDB()
+        {
+            if (BDROM.DiscName == null) return;
+
+            string uri = "http://bd.andydvorak.net/api/v1/mpls?query=" + Uri.EscapeUriString(BDROM.DiscName);
+            foreach (TSPlaylistFile playlist in mainPlaylists)
+            {
+                uri += "&mplsSize=" + playlist.FileSize;
+            }
+
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+            request.Method = "GET";
+            request.UserAgent = "BDAutoRip/0.0.1";
+            request.KeepAlive = true;
+
+            var cachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
+            request.CachePolicy = cachePolicy;
+            request.Expect = null;
+
+            var httpResponse = (HttpWebResponse)request.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var responseText = streamReader.ReadToEnd();
+                
+                //MessageBox.Show(uri + "\n\n" + responseText);
+                
+                MplsSearchResult searchResult = JsonConvert.DeserializeObject<MplsSearchResult>(responseText);
+
+                /*MessageBox.Show(
+                    "success = " + searchResult.success + "\n" +
+                    "error = " + searchResult.error + "\n" +
+                    "errors = " + searchResult.errors + "\n" +
+                    "mainMplsFileSize = " + searchResult.mainMplsFileSize + "\n"
+                );*/
+
+                if (searchResult.success)
+                {
+                    foreach (TSPlaylistFile playlist in mainPlaylists)
+                    {
+                        if (playlist.FileSize == searchResult.mainMplsFileSize)
+                        {
+                            playlist.IsSelectedByService = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    string errorMessage = "";
+                    foreach (MplsSearchResultError error in searchResult.errors)
+                    {
+                        errorMessage += error.textStatus + ": " + error.errorMessage + "\n";
+                    }
+
+                    MessageBox.Show(this,
+                        "Error occurred while calling Web service: " + "\n\n" + errorMessage,
+                        "Error calling Web service", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void PrintResult()
+        {
             bool foundMainMovie = false;
 
             string mainTitleFilenames;
@@ -753,17 +827,31 @@ namespace BDInfo
                 mainTitleFilenames += " ]";
             }
 
-            string result;
-            // TODO: This isn't a valid test - it fails on Tangled (picks 00801.mpls (French render) instead of 00800.mpls (English render))
+            string quickGuess;
+            // TODO: This isn't a valid test in and of itself - it fails on Tangled (picks 00801.mpls (French render) instead of 00800.mpls (English render))
+            //       The "winner" of this test should simply be marked as having a higher probability of being the correct track (by setting a flag)
             if (BDROM.MainTitleIndex != -1)
             {
-                result = sortedPlaylists[BDROM.MainTitleIndex].Name;
+                sortedPlaylists[BDROM.MainTitleIndex].IsMainTitle = true;
+                quickGuess = sortedPlaylists[BDROM.MainTitleIndex].Name;
                 foundMainMovie = true;
             }
             else
             {
-                result = mainTitleFilenames;
+                quickGuess = mainTitleFilenames;
             }
+
+            string webServiceResult = "";
+            foreach (TSPlaylistFile playlist in mainPlaylists)
+            {
+                if (playlist.IsSelectedByService)
+                {
+                    webServiceResult = playlist.Name;
+                    break;
+                }
+            }
+
+            string bestGuess = webServiceResult != "" ? webServiceResult : quickGuess;
 
             MessageBox.Show(
                 this,
@@ -772,7 +860,10 @@ namespace BDInfo
                 "Main title index: " + BDROM.MainTitleIndex + "\n" +
                 "Main title filenames: " + mainTitleFilenames + "\n" +
                 "\n" +
-                "Result: " + result,
+                "Quick guess: " + quickGuess + "\n" +
+                "Web service result: " + webServiceResult +
+                "\n" +
+                "Best guess: " + bestGuess,
                 "Auto-detect results",
                 MessageBoxButtons.OK,
                 foundMainMovie ? MessageBoxIcon.Information : MessageBoxIcon.Exclamation);
