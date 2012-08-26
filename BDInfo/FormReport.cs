@@ -60,6 +60,8 @@ namespace BDInfo
             string bdjava = (BDROM.IsBDJava ? "Yes" : "No");
 
             report += string.Format(
+                "{0,-16}{1}\r\n", "Disc Name:", BDROM.DiscName);
+            report += string.Format(
                 "{0,-16}{1}\r\n", "Disc Title:", BDROM.VolumeLabel);
             report += string.Format(
                 "{0,-16}{1:N0} bytes\r\n", "Disc Size:", BDROM.Size);
@@ -149,7 +151,7 @@ namespace BDInfo
                     playlistTotalLength.Minutes,
                     playlistTotalLength.Seconds);
                 string totalSize = string.Format(
-                    "{0:N0}", playlist.TotalSize);
+                    "{0:N0}", playlist.FileSize);
                 string totalBitrate = string.Format(
                     "{0:F2}",
                     Math.Round((double)playlist.TotalBitRate / 10000) / 100);
@@ -646,7 +648,7 @@ namespace BDInfo
                     }
 
                     string clipSize = string.Format(
-                        "{0:N0}", clip.PacketSize);
+                        "{0:N0}", clip.FileSize);
 
                     TimeSpan clipInSpan =
                         new TimeSpan((long)(clip.RelativeTimeIn * 10000000));

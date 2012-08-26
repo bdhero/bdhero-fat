@@ -698,6 +698,18 @@ namespace BDInfo
                 item.Selected = false;
             }
 
+            foreach (TSPlaylistFile mainPlaylist in mainPlaylists)
+            {
+                int idx = sortedPlaylists.FindIndex(delegate(TSPlaylistFile sortedPlaylist)
+                {
+                    return sortedPlaylist == mainPlaylist;
+                });
+                if (idx != -1)
+                {
+                    listViewPlaylistFiles.Items[idx].Checked = true;
+                }
+            }
+
             if (mainPlaylists.Count == 1)
             {
                 int idx = sortedPlaylists.FindIndex(FindMainPlaylistIndex);
@@ -712,7 +724,6 @@ namespace BDInfo
             // TODO: Only for testing/debugging
             /*else*/ if (true || mainPlaylists.Count > 1)
             {
-                string xmlpath = BDROM.DirectoryBDMV.FullName + @"\META\DL\bdmt_eng.xml";
                 string movieName = BDROM.DiscName;
                 int mainTitleIndex = BDROM.MainTitleIndex;
 
@@ -742,8 +753,8 @@ namespace BDInfo
                 }
             }
 
-            QueryDB();
-            PrintResult();
+            //QueryDB();
+            //PrintResult();
         }
 
         private void QueryDB()
