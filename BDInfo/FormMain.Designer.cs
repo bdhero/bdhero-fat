@@ -95,7 +95,7 @@ namespace BDInfo
             // buttonBrowse
             // 
             this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowse.Location = new System.Drawing.Point(416, 23);
+            this.buttonBrowse.Location = new System.Drawing.Point(513, 23);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowse.TabIndex = 1;
@@ -109,7 +109,7 @@ namespace BDInfo
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxSource.Location = new System.Drawing.Point(17, 24);
             this.textBoxSource.Name = "textBoxSource";
-            this.textBoxSource.Size = new System.Drawing.Size(393, 20);
+            this.textBoxSource.Size = new System.Drawing.Size(490, 20);
             this.textBoxSource.TabIndex = 0;
             this.textBoxSource.TextChanged += new System.EventHandler(this.textBoxSource_TextChanged);
             // 
@@ -125,7 +125,7 @@ namespace BDInfo
             // buttonSettings
             // 
             this.buttonSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSettings.Location = new System.Drawing.Point(463, 548);
+            this.buttonSettings.Location = new System.Drawing.Point(560, 655);
             this.buttonSettings.Name = "buttonSettings";
             this.buttonSettings.Size = new System.Drawing.Size(108, 23);
             this.buttonSettings.TabIndex = 10;
@@ -138,7 +138,7 @@ namespace BDInfo
             this.labelTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTimeRemainingElapsed.AutoSize = true;
             this.labelTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTimeRemainingElapsed.Location = new System.Drawing.Point(310, 503);
+            this.labelTimeRemainingElapsed.Location = new System.Drawing.Point(407, 610);
             this.labelTimeRemainingElapsed.Name = "labelTimeRemainingElapsed";
             this.labelTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
             this.labelTimeRemainingElapsed.TabIndex = 35;
@@ -148,7 +148,7 @@ namespace BDInfo
             // 
             this.labelTimeDivider.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTimeDivider.AutoSize = true;
-            this.labelTimeDivider.Location = new System.Drawing.Point(503, 503);
+            this.labelTimeDivider.Location = new System.Drawing.Point(600, 610);
             this.labelTimeDivider.Name = "labelTimeDivider";
             this.labelTimeDivider.Size = new System.Drawing.Size(12, 13);
             this.labelTimeDivider.TabIndex = 34;
@@ -159,7 +159,7 @@ namespace BDInfo
             this.labelTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTimeElapsed.AutoSize = true;
             this.labelTimeElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTimeElapsed.Location = new System.Drawing.Point(521, 503);
+            this.labelTimeElapsed.Location = new System.Drawing.Point(618, 610);
             this.labelTimeElapsed.Name = "labelTimeElapsed";
             this.labelTimeElapsed.Size = new System.Drawing.Size(49, 13);
             this.labelTimeElapsed.TabIndex = 33;
@@ -170,7 +170,7 @@ namespace BDInfo
             this.labelTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTimeRemaining.AutoSize = true;
             this.labelTimeRemaining.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTimeRemaining.Location = new System.Drawing.Point(451, 503);
+            this.labelTimeRemaining.Location = new System.Drawing.Point(548, 610);
             this.labelTimeRemaining.Name = "labelTimeRemaining";
             this.labelTimeRemaining.Size = new System.Drawing.Size(49, 13);
             this.labelTimeRemaining.TabIndex = 32;
@@ -180,9 +180,9 @@ namespace BDInfo
             // 
             this.progressBarScan.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarScan.Location = new System.Drawing.Point(17, 519);
+            this.progressBarScan.Location = new System.Drawing.Point(17, 626);
             this.progressBarScan.Name = "progressBarScan";
-            this.progressBarScan.Size = new System.Drawing.Size(554, 23);
+            this.progressBarScan.Size = new System.Drawing.Size(651, 23);
             this.progressBarScan.TabIndex = 31;
             // 
             // labelPlaylistFiles
@@ -198,7 +198,7 @@ namespace BDInfo
             // 
             this.buttonViewReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonViewReport.Enabled = false;
-            this.buttonViewReport.Location = new System.Drawing.Point(285, 548);
+            this.buttonViewReport.Location = new System.Drawing.Point(382, 655);
             this.buttonViewReport.Name = "buttonViewReport";
             this.buttonViewReport.Size = new System.Drawing.Size(108, 23);
             this.buttonViewReport.TabIndex = 9;
@@ -210,7 +210,7 @@ namespace BDInfo
             // 
             this.buttonScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonScan.Enabled = false;
-            this.buttonScan.Location = new System.Drawing.Point(168, 548);
+            this.buttonScan.Location = new System.Drawing.Point(265, 655);
             this.buttonScan.Name = "buttonScan";
             this.buttonScan.Size = new System.Drawing.Size(108, 23);
             this.buttonScan.TabIndex = 8;
@@ -223,19 +223,19 @@ namespace BDInfo
             this.textBoxDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxDetails.Enabled = false;
-            this.textBoxDetails.Location = new System.Drawing.Point(16, 438);
+            this.textBoxDetails.Location = new System.Drawing.Point(16, 545);
             this.textBoxDetails.Multiline = true;
             this.textBoxDetails.Name = "textBoxDetails";
             this.textBoxDetails.ReadOnly = true;
             this.textBoxDetails.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDetails.Size = new System.Drawing.Size(554, 59);
+            this.textBoxDetails.Size = new System.Drawing.Size(651, 59);
             this.textBoxDetails.TabIndex = 8;
             // 
             // labelProgress
             // 
             this.labelProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelProgress.AutoSize = true;
-            this.labelProgress.Location = new System.Drawing.Point(14, 503);
+            this.labelProgress.Location = new System.Drawing.Point(14, 610);
             this.labelProgress.Name = "labelProgress";
             this.labelProgress.Size = new System.Drawing.Size(0, 13);
             this.labelProgress.TabIndex = 37;
@@ -289,8 +289,8 @@ namespace BDInfo
             // splitContainerOuter.Panel2
             // 
             this.splitContainerOuter.Panel2.Controls.Add(this.listViewStreams);
-            this.splitContainerOuter.Size = new System.Drawing.Size(553, 353);
-            this.splitContainerOuter.SplitterDistance = 199;
+            this.splitContainerOuter.Size = new System.Drawing.Size(650, 460);
+            this.splitContainerOuter.SplitterDistance = 259;
             this.splitContainerOuter.TabIndex = 38;
             // 
             // splitContainerInner
@@ -307,8 +307,8 @@ namespace BDInfo
             // splitContainerInner.Panel2
             // 
             this.splitContainerInner.Panel2.Controls.Add(this.listViewStreamFiles);
-            this.splitContainerInner.Size = new System.Drawing.Size(553, 199);
-            this.splitContainerInner.SplitterDistance = 97;
+            this.splitContainerInner.Size = new System.Drawing.Size(650, 259);
+            this.splitContainerInner.SplitterDistance = 126;
             this.splitContainerInner.TabIndex = 0;
             // 
             // listViewPlaylistFiles
@@ -327,7 +327,7 @@ namespace BDInfo
             this.listViewPlaylistFiles.Location = new System.Drawing.Point(0, 0);
             this.listViewPlaylistFiles.MultiSelect = false;
             this.listViewPlaylistFiles.Name = "listViewPlaylistFiles";
-            this.listViewPlaylistFiles.Size = new System.Drawing.Size(553, 97);
+            this.listViewPlaylistFiles.Size = new System.Drawing.Size(650, 126);
             this.listViewPlaylistFiles.TabIndex = 5;
             this.listViewPlaylistFiles.UseCompatibleStateImageBehavior = false;
             this.listViewPlaylistFiles.View = System.Windows.Forms.View.Details;
@@ -378,7 +378,7 @@ namespace BDInfo
             this.listViewStreamFiles.Location = new System.Drawing.Point(0, 0);
             this.listViewStreamFiles.MultiSelect = false;
             this.listViewStreamFiles.Name = "listViewStreamFiles";
-            this.listViewStreamFiles.Size = new System.Drawing.Size(553, 98);
+            this.listViewStreamFiles.Size = new System.Drawing.Size(650, 129);
             this.listViewStreamFiles.TabIndex = 6;
             this.listViewStreamFiles.UseCompatibleStateImageBehavior = false;
             this.listViewStreamFiles.View = System.Windows.Forms.View.Details;
@@ -425,7 +425,7 @@ namespace BDInfo
             this.listViewStreams.Location = new System.Drawing.Point(0, 0);
             this.listViewStreams.MultiSelect = false;
             this.listViewStreams.Name = "listViewStreams";
-            this.listViewStreams.Size = new System.Drawing.Size(553, 150);
+            this.listViewStreams.Size = new System.Drawing.Size(650, 197);
             this.listViewStreams.TabIndex = 7;
             this.listViewStreams.UseCompatibleStateImageBehavior = false;
             this.listViewStreams.View = System.Windows.Forms.View.Details;
@@ -453,7 +453,7 @@ namespace BDInfo
             // 
             this.buttonRescan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonRescan.Enabled = false;
-            this.buttonRescan.Location = new System.Drawing.Point(497, 23);
+            this.buttonRescan.Location = new System.Drawing.Point(594, 23);
             this.buttonRescan.Name = "buttonRescan";
             this.buttonRescan.Size = new System.Drawing.Size(75, 23);
             this.buttonRescan.TabIndex = 2;
@@ -466,7 +466,7 @@ namespace BDInfo
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 575);
+            this.ClientSize = new System.Drawing.Size(681, 682);
             this.Controls.Add(this.buttonRescan);
             this.Controls.Add(this.splitContainerOuter);
             this.Controls.Add(this.buttonCustomPlaylist);

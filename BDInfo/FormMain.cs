@@ -625,13 +625,9 @@ namespace BDInfo
                 textBoxDetails.Text += "(*) Some playlists on this disc have hidden tracks. These tracks are marked with an asterisk.";
             }
 
-            if (listViewPlaylistFiles.Items.Count > 0)
-            {
-                listViewPlaylistFiles.Items[0].Selected = true;
-            }
-            ResetColumnWidths();
-
             FindMainPlaylist();
+
+            ResetColumnWidths();
         }
 
         private List<TSPlaylistFile> sortedPlaylists = new List<TSPlaylistFile>();
@@ -673,13 +669,8 @@ namespace BDInfo
 
             //MessageBox.Show(msg);
 
-            
             int lowestHiddenTrackCount = sortedMainPlaylists[0].HiddenTrackCount;
 
-            //mainPlaylists.Clear();
-
-            // TODO: This isn't a valid test in and of itself - it fails on Beauty and the Beast (picks 00801.mpls (Special Edition) instead of 00800.mpls (classic edition))
-            //       The "winner" of this test should simply be marked as having a higher probability of being the correct track (by setting a flag)
             foreach(TSPlaylistFile playlist in sortedMainPlaylists) {
                 if (playlist.HiddenTrackCount <= lowestHiddenTrackCount)
                     playlist.HasFewestHiddenTracks = true;
@@ -752,6 +743,9 @@ namespace BDInfo
                         MessageBoxIcon.Information);*/
                 }
             }
+
+            //MessageBox.Show(this, BDROM.DiscLanguage.ISO_639_1 + " - " + BDROM.DiscLanguage.ISO_639_2 + " - " + BDROM.DiscLanguage.Name);
+            //MessageBox.Show(this, BDROM.DiscName + "\n" + BDROM.DiscNameSearchable);
 
             //QueryDB();
             //PrintResult();

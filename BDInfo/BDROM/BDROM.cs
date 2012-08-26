@@ -37,6 +37,7 @@ namespace BDInfo
         public DirectoryInfo DirectorySSIF = null;
         public DirectoryInfo DirectorySTREAM = null;
 
+        public Language DiscLanguage = null;
         public string DiscName = null;
         public string VolumeLabel = null;
         public ulong Size = 0;
@@ -47,6 +48,22 @@ namespace BDInfo
         public bool IsPSP = false;
         public bool Is3D = false;
         public bool Is50Hz = false;
+
+        public string DiscNameSearchable
+        {
+            get
+            {
+                string movieName = DiscName;
+                if (movieName != null)
+                {
+                    movieName = Regex.Replace(movieName, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
+                    movieName = Regex.Replace(movieName, @" \(?Disc \d+\)?", "", RegexOptions.IgnoreCase);
+                    movieName = Regex.Replace(movieName, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
+                    movieName = movieName.Trim();
+                }
+                return movieName;
+            }
+        }
 
         public Dictionary<string, TSPlaylistFile> PlaylistFiles = 
             new Dictionary<string, TSPlaylistFile>();
@@ -404,12 +421,27 @@ namespace BDInfo
             return size;
         }
 
+        private string GetBdmtPath()
+        {
+            string path = null;
+            foreach (string code in LanguageCodes.GetISO6392Codes())
+            {
+                path = Path.Combine(DirectoryBDMV.FullName, @"META\DL\bdmt_" + code + @".xml");
+                if (File.Exists(path))
+                {
+                    DiscLanguage = LanguageCodes.GetLanguage(code);
+                    break;
+                }
+            }
+            return path;
+        }
+
         private string GetDiscName()
         {
-            string xmlpath = Path.Combine(DirectoryBDMV.FullName, @"META\DL\bdmt_eng.xml");
+            string xmlpath = GetBdmtPath();
             string movieName = null;
 
-            if (File.Exists(xmlpath))
+            if (xmlpath != null)
             {
                 Regex movieNameRegex = new Regex("<di:name>(.*?)</di:name>", RegexOptions.IgnoreCase);
                 string xml = File.ReadAllText(xmlpath);
@@ -436,13 +468,6 @@ namespace BDInfo
                         }
                     }
                 }
-            }
-
-            if (movieName != null)
-            {
-                movieName = Regex.Replace(movieName, " - Blu-ray.*", "", RegexOptions.IgnoreCase);
-                movieName = Regex.Replace(movieName, @" \(?Disc \d+\)?", "", RegexOptions.IgnoreCase);
-                movieName = movieName.Trim();
             }
 
             return movieName;
