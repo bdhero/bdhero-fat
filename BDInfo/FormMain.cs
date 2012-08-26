@@ -858,7 +858,7 @@ namespace BDInfo
                 this,
                 "Disc name: \"" + BDROM.DiscName + "\"" + "\n" +
                 "\n" +
-                "Main title index: " + BDROM.MainTitleIndex + "\n" +
+                "Main title index: " + BDROM.MainTitleIndex + (BDROM.MainTitleIndex > -1 ? " - " + sortedPlaylists[BDROM.MainTitleIndex].Name : "") + "\n" +
                 "Main title filenames: " + mainTitleFilenames + "\n" +
                 "\n" +
                 "Quick guess: " + quickGuess + "\n" +
