@@ -32,6 +32,7 @@ using System.Net;
 using System.Net.Cache;
 using BDInfo.models;
 using Newtonsoft.Json;
+using WatTmdb.V3;
 
 namespace BDInfo
 {
@@ -731,7 +732,7 @@ namespace BDInfo
 
                 if (movieName == null)
                 {
-                    new FormMovieName().ShowDialog(this);
+                    //new FormMovieName(movieName).ShowDialog(this);
                 }
                 else
                 {
@@ -746,6 +747,8 @@ namespace BDInfo
 
             //MessageBox.Show(this, BDROM.DiscLanguage.ISO_639_1 + " - " + BDROM.DiscLanguage.ISO_639_2 + " - " + BDROM.DiscLanguage.Name);
             //MessageBox.Show(this, BDROM.DiscName + "\n" + BDROM.DiscNameSearchable);
+
+            new FormMovieName(BDROM.DiscNameSearchable, BDROM.DiscLanguage.ISO_639_1).ShowDialog(this);
 
             //QueryDB();
             //PrintResult();
