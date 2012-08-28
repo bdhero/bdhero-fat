@@ -36,11 +36,14 @@ using WatTmdb.V3;
 
 namespace BDInfo
 {
+    public delegate void FormMovieNameDelegate(MovieResult movieResult);
+
     public partial class FormMain : Form
     {
         private BDROM BDROM = null;
         private int CustomPlaylistCount = 0;
         ScanBDROMResult ScanResult = new ScanBDROMResult();
+        private MovieResult MovieResult;
 
         #region UI Handlers
 
@@ -748,7 +751,15 @@ namespace BDInfo
             //MessageBox.Show(this, BDROM.DiscLanguage.ISO_639_1 + " - " + BDROM.DiscLanguage.ISO_639_2 + " - " + BDROM.DiscLanguage.Name);
             //MessageBox.Show(this, BDROM.DiscName + "\n" + BDROM.DiscNameSearchable);
 
-            new FormMovieName(BDROM.DiscNameSearchable, BDROM.DiscLanguage.ISO_639_1).ShowDialog(this);
+
+            FormMovieNameDelegate formMovieNameDelegate = (MovieResult movieResult) => { MovieResult = movieResult; };
+
+            new FormMovieName(BDROM.DiscNameSearchable, BDROM.DiscLanguage.ISO_639_1, formMovieNameDelegate).ShowDialog(this);
+
+            if (MovieResult != null)
+            {
+                new FormMoviePlaylist(BDROM, sortedPlaylists, mainPlaylists).ShowDialog(this);
+            }
 
             //QueryDB();
             //PrintResult();
@@ -840,7 +851,7 @@ namespace BDInfo
             //       The "winner" of this test should simply be marked as having a higher probability of being the correct track (by setting a flag)
             if (BDROM.MainTitleIndex != -1)
             {
-                sortedPlaylists[BDROM.MainTitleIndex].IsMainTitle = true;
+                sortedPlaylists[BDROM.MainTitleIndex].IsFirstPlay = true;
                 quickGuess = sortedPlaylists[BDROM.MainTitleIndex].Name;
                 foundMainMovie = true;
             }

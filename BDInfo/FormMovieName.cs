@@ -18,13 +18,16 @@ namespace BDInfo
 
         private string DiscNameSearchable;
         private string ISO_639_1;
+        private TmdbMovieSearch movieSearch;
 
+        private FormMovieNameDelegate formMovieNameDelegate;
         private BackgroundWorker worker;
 
-        public FormMovieName(string DiscNameSearchable, string ISO_639_1)
+        public FormMovieName(string DiscNameSearchable, string ISO_639_1, FormMovieNameDelegate formMovieNameDelegate)
         {
             InitializeComponent();
 
+            this.formMovieNameDelegate = formMovieNameDelegate;
             this.DiscNameSearchable = DiscNameSearchable;
             this.ISO_639_1 = ISO_639_1;
 
@@ -51,16 +54,9 @@ namespace BDInfo
 
             EnableForm(false);
 
-            TmdbMovieSearch movieSearch = api.SearchMovie(this.searchTextBox.Text, 1);
+            movieSearch = api.SearchMovie(this.searchTextBox.Text, 1);
 
-            MovieResult[] sortedResults = new MovieResult[movieSearch.results.Count];
-            movieSearch.results.CopyTo(sortedResults, 0);
-            Array.Sort(sortedResults, delegate(MovieResult a, MovieResult b)
-            {
-                return (int)((b.popularity - a.popularity) * 1000);
-            });
-
-            foreach (MovieResult movieResult in sortedResults)
+            foreach (MovieResult movieResult in movieSearch.results)
             {
                 ListViewItem.ListViewSubItem movieNameSubItem = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem movieYearSubItem = new ListViewItem.ListViewSubItem();
@@ -93,7 +89,7 @@ namespace BDInfo
                 searchResultListView.Items[0].Selected = true;
             }
 
-            ResetColumnWidths();
+            ResetColumnWidths(20);
         }
 
         private void EnableForm(bool enabled)
@@ -104,12 +100,12 @@ namespace BDInfo
             ResetContinueButton();
         }
 
-        private void ResetColumnWidths()
+        private void ResetColumnWidths(int offset = 0)
         {
             var width = searchResultListView.ClientSize.Width;
             var columns = searchResultListView.Columns;
 
-            columns[0].Width = (int)(width - columns[1].Width - columns[2].Width);
+            columns[0].Width = (int)(width - columns[1].Width - columns[2].Width) - offset;
         }
 
         private bool ResetContinueButton()
@@ -134,7 +130,16 @@ namespace BDInfo
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Continue");
+            MovieResult movieResult = null;
+
+            if (searchResultListView.SelectedIndices.Count > 0)
+            {
+                movieResult = movieSearch.results[0];
+            }
+
+            formMovieNameDelegate.Invoke(movieResult);
+
+            Close();
         }
     }
 }
