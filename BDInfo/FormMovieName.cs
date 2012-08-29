@@ -63,7 +63,7 @@ namespace BDInfo
                 ListViewItem.ListViewSubItem moviePopularitySubItem = new ListViewItem.ListViewSubItem();
 
                 movieNameSubItem.Text = movieResult.title;
-                movieYearSubItem.Text = Regex.Replace(movieResult.release_date, @"^(\d{4})-(\d{1,2})-(\d{1,2})$", @"$1", RegexOptions.IgnoreCase);
+                movieYearSubItem.Text = movieResult.release_date != null ? Regex.Replace(movieResult.release_date, @"^(\d{4})-(\d{1,2})-(\d{1,2})$", @"$1", RegexOptions.IgnoreCase) : null;
                 moviePopularitySubItem.Text = movieResult.popularity.ToString("N3", CultureInfo.CurrentUICulture);
 
                 ListViewItem.ListViewSubItem[] searchResultSubItems =
