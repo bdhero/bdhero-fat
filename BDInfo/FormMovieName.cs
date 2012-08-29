@@ -20,6 +20,7 @@ namespace BDInfo
         private string ISO_639_1;
         private TmdbMovieSearch movieSearch;
 
+        private MovieResult movieResult = null;
         private FormMovieNameDelegate formMovieNameDelegate;
         private BackgroundWorker worker;
 
@@ -130,16 +131,18 @@ namespace BDInfo
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            MovieResult movieResult = null;
-
             if (searchResultListView.SelectedIndices.Count > 0)
             {
                 movieResult = movieSearch.results[0];
             }
 
-            formMovieNameDelegate.Invoke(movieResult);
-
             Close();
+        }
+
+        private void Close()
+        {
+            formMovieNameDelegate.Invoke(movieResult);
+            base.Close();
         }
     }
 }

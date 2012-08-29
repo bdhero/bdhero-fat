@@ -59,7 +59,6 @@
     <StartupObject>BDInfo.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BetterListViewExpress, Version=3.2.0.0, Culture=neutral, PublicKeyToken=e6c91a3add447be2, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>

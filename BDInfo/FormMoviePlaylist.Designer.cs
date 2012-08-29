@@ -28,64 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.playlistListView = new ComponentOwl.BetterListView.BetterListView();
-            this.filenameColumnHeader = new ComponentOwl.BetterListView.BetterListViewColumnHeader();
-            this.lengthColumnHeader = new ComponentOwl.BetterListView.BetterListViewColumnHeader();
-            this.trackTypeColumnHeader = new ComponentOwl.BetterListView.BetterListViewColumnHeader();
-            this.releaseTypeColumnHeader = new ComponentOwl.BetterListView.BetterListViewColumnHeader();
-            this.hasCommentaryColumnHeader = new ComponentOwl.BetterListView.BetterListViewColumnHeader();
             this.showAllPlaylistsCheckbox = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.playlistListView)).BeginInit();
+            this.playlistDataGridView = new System.Windows.Forms.DataGridView();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.playlistDataGridView)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // playlistListView
-            // 
-            this.playlistListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.playlistListView.CheckBoxes = ComponentOwl.BetterListView.BetterListViewCheckBoxes.TwoState;
-            this.playlistListView.Columns.AddRange(new object[] {
-            this.filenameColumnHeader,
-            this.lengthColumnHeader,
-            this.trackTypeColumnHeader,
-            this.releaseTypeColumnHeader,
-            this.hasCommentaryColumnHeader});
-            this.playlistListView.LabelEditModeSubItems = ComponentOwl.BetterListView.BetterListViewLabelEditMode.CustomControl;
-            this.playlistListView.Location = new System.Drawing.Point(13, 65);
-            this.playlistListView.Name = "playlistListView";
-            this.playlistListView.Size = new System.Drawing.Size(685, 278);
-            this.playlistListView.TabIndex = 0;
-            // 
-            // filenameColumnHeader
-            // 
-            this.filenameColumnHeader.Name = "filenameColumnHeader";
-            this.filenameColumnHeader.Text = "Filename";
-            // 
-            // lengthColumnHeader
-            // 
-            this.lengthColumnHeader.Name = "lengthColumnHeader";
-            this.lengthColumnHeader.Text = "Length";
-            // 
-            // trackTypeColumnHeader
-            // 
-            this.trackTypeColumnHeader.Name = "trackTypeColumnHeader";
-            this.trackTypeColumnHeader.Text = "Track Type";
-            // 
-            // releaseTypeColumnHeader
-            // 
-            this.releaseTypeColumnHeader.Name = "releaseTypeColumnHeader";
-            this.releaseTypeColumnHeader.Text = "Release Type";
-            // 
-            // hasCommentaryColumnHeader
-            // 
-            this.hasCommentaryColumnHeader.Name = "hasCommentaryColumnHeader";
-            this.hasCommentaryColumnHeader.Text = "Has Commentary";
-            this.hasCommentaryColumnHeader.Width = 100;
             // 
             // showAllPlaylistsCheckbox
             // 
+            this.showAllPlaylistsCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showAllPlaylistsCheckbox.AutoSize = true;
-            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(13, 350);
+            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(12, 397);
             this.showAllPlaylistsCheckbox.Name = "showAllPlaylistsCheckbox";
             this.showAllPlaylistsCheckbox.Size = new System.Drawing.Size(105, 17);
             this.showAllPlaylistsCheckbox.TabIndex = 1;
@@ -93,16 +48,58 @@
             this.showAllPlaylistsCheckbox.UseVisualStyleBackColor = true;
             this.showAllPlaylistsCheckbox.CheckedChanged += new System.EventHandler(this.showAllPlaylistsCheckbox_CheckedChanged);
             // 
+            // playlistDataGridView
+            // 
+            this.playlistDataGridView.AllowUserToAddRows = false;
+            this.playlistDataGridView.AllowUserToDeleteRows = false;
+            this.playlistDataGridView.AllowUserToResizeRows = false;
+            this.playlistDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.playlistDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.playlistDataGridView.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.playlistDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.playlistDataGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.playlistDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.playlistDataGridView.Location = new System.Drawing.Point(3, 3);
+            this.playlistDataGridView.MultiSelect = false;
+            this.playlistDataGridView.Name = "playlistDataGridView";
+            this.playlistDataGridView.Size = new System.Drawing.Size(679, 322);
+            this.playlistDataGridView.TabIndex = 2;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.playlistDataGridView);
+            this.panel1.Location = new System.Drawing.Point(13, 63);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(685, 328);
+            this.panel1.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 44);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(101, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Select main movies:";
+            // 
             // FormMoviePlaylist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(710, 426);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.showAllPlaylistsCheckbox);
-            this.Controls.Add(this.playlistListView);
             this.Name = "FormMoviePlaylist";
             this.Text = "Select Playlists";
-            ((System.ComponentModel.ISupportInitialize)(this.playlistListView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playlistDataGridView)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,12 +107,9 @@
 
         #endregion
 
-        private ComponentOwl.BetterListView.BetterListView playlistListView;
-        private ComponentOwl.BetterListView.BetterListViewColumnHeader filenameColumnHeader;
-        private ComponentOwl.BetterListView.BetterListViewColumnHeader lengthColumnHeader;
-        private ComponentOwl.BetterListView.BetterListViewColumnHeader trackTypeColumnHeader;
-        private ComponentOwl.BetterListView.BetterListViewColumnHeader releaseTypeColumnHeader;
-        private ComponentOwl.BetterListView.BetterListViewColumnHeader hasCommentaryColumnHeader;
         private System.Windows.Forms.CheckBox showAllPlaylistsCheckbox;
+        private System.Windows.Forms.DataGridView playlistDataGridView;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
     }
 }

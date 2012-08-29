@@ -649,6 +649,7 @@ namespace BDInfo
             {
                 if (playlist.TotalLength > maxlength * 0.9)
                 {
+                    playlist.IsMainPlaylist = true;
                     mainPlaylists.Add(playlist);
                 }
             }
