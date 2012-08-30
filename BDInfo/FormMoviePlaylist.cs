@@ -6,6 +6,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BDInfo.models;
+using WatTmdb.V3;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace BDInfo
 {
@@ -22,7 +26,10 @@ namespace BDInfo
         private BDROM BDROM;
         private List<TSPlaylistFile> allPlaylists;
         private List<TSPlaylistFile> mainPlaylists;
+        private MovieResult movieResult;
+
         private BindingList<PlaylistGridItem> bindingList = new BindingList<PlaylistGridItem>();
+
         private IList<Language> languages = new List<Language>();
         private IList<string> languageCodes = new List<string>();
         private IList<string> languageNames = new List<string>();
@@ -32,13 +39,14 @@ namespace BDInfo
             get { return showAllPlaylistsCheckbox.Checked ? allPlaylists : mainPlaylists; }
         }
 
-        public FormMoviePlaylist(BDROM BDROM, List<TSPlaylistFile> allPlaylists, List<TSPlaylistFile> mainPlaylists)
+        public FormMoviePlaylist(BDROM BDROM, List<TSPlaylistFile> allPlaylists, List<TSPlaylistFile> mainPlaylists, MovieResult movieResult)
         {
             InitializeComponent();
 
             this.BDROM = BDROM;
             this.allPlaylists = allPlaylists;
             this.mainPlaylists = mainPlaylists;
+            this.movieResult = movieResult;
 
             this.Load += FormMoviePlaylist_Load;
         }
@@ -130,7 +138,7 @@ namespace BDInfo
             return column;
         }
 
-        private string HumanFriendlyLength(double length)
+        public static string HumanFriendlyLength(double length)
         {
             TimeSpan playlistLengthSpan = new TimeSpan((long)(length * 10000000));
             return string.Format(
@@ -163,17 +171,9 @@ namespace BDInfo
                 }
             }
 
-            foreach (TSPlaylistFile playlistFile in Playlists)
+            foreach (TSPlaylistFile playlist in Playlists)
             {
-                bindingList.Add(
-                    new PlaylistGridItem(
-                        playlistFile.IsMainPlaylist,
-                        playlistFile.Name,
-                        HumanFriendlyLength(playlistFile.TotalLength),
-                        playlistFile.FileSize.ToString("N0"),
-                        languageCodes.Count > 0 ? languageCodes[0] : null
-                    )
-                );
+                bindingList.Add(new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null));
             }
 
             playlistDataGridView.DataSource = bindingList;
@@ -183,27 +183,77 @@ namespace BDInfo
         {
             ResetPlaylists();
         }
+
+        private void submitButton_Click(object sender, EventArgs e)
+        {
+            JsonDisc jsonDisc = new JsonDisc();
+            
+            jsonDisc.disc_name = BDROM.DiscName;
+            jsonDisc.volume_label = BDROM.VolumeLabel;
+            jsonDisc.ISO_639_2 = BDROM.DiscLanguage.ISO_639_2;
+
+            jsonDisc.tmdb_id = movieResult.id;
+            jsonDisc.movie_title = movieResult.title;
+            jsonDisc.year = Convert.ToInt32(String.IsNullOrEmpty(movieResult.release_date) ? null : Regex.Replace(movieResult.release_date, @"^(\w{4})-.*", "$1", RegexOptions.IgnoreCase));
+
+            jsonDisc.playlists = new List<JsonPlaylist>();
+
+            foreach (PlaylistGridItem item in bindingList)
+            {
+                JsonPlaylist jsonPlaylist = new JsonPlaylist();
+
+                jsonPlaylist.filename = item.Filename;
+                jsonPlaylist.filesize = item.Playlist.FileSize;
+                jsonPlaylist.length = item.Playlist.TotalLength;
+                jsonPlaylist.ISO_639_2 = item.VideoLanguage;
+
+                jsonPlaylist.is_main = true;
+                jsonPlaylist.is_theatrical = item.ReleaseType.Equals(ReleaseType.Theatrical);
+                jsonPlaylist.is_special = item.ReleaseType.Equals(ReleaseType.Special);
+                jsonPlaylist.is_extended = item.ReleaseType.Equals(ReleaseType.Extended);
+                jsonPlaylist.is_unrated = item.ReleaseType.Equals(ReleaseType.Unrated);
+                jsonPlaylist.is_commentary = item.HasCommentary;
+
+                jsonDisc.playlists.Add(jsonPlaylist);
+            }
+
+            string jsonString = JsonConvert.SerializeObject(jsonDisc);
+            Clipboard.SetText(jsonString);
+            MessageBox.Show("Copied to clipboard: \n\n" + jsonString);
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 
     public class PlaylistGridItem
     {
+        private TSPlaylistFile playlist;
         private bool isMainMovie;
         private string filename;
         private string length;
         private string size;
-        private string videoLanguage;
+        private string ISO_639_2;
         private ReleaseType releaseType;
         private bool hasCommentary;
 
-        public PlaylistGridItem(bool isMainMovie, string filename, string length, string size, string videoLanguage)
+        public PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2)
         {
-            this.isMainMovie = isMainMovie;
-            this.filename = filename;
-            this.length = length;
-            this.size = size;
-            this.videoLanguage = videoLanguage;
+            this.playlist = playlist;
+            this.isMainMovie = playlist.IsMainPlaylist;
+            this.filename = playlist.Name;
+            this.length = FormMoviePlaylist.HumanFriendlyLength(playlist.TotalLength);
+            this.size = playlist.FileSize.ToString("N0");
+            this.ISO_639_2 = ISO_639_2;
             this.releaseType = ReleaseType.Theatrical;
             this.hasCommentary = false;
+        }
+
+        public TSPlaylistFile Playlist
+        {
+            get { return playlist; }
         }
 
         public bool IsMainMovie
@@ -232,8 +282,8 @@ namespace BDInfo
 
         public string VideoLanguage
         {
-            get { return videoLanguage; }
-            set { videoLanguage = value; }
+            get { return ISO_639_2; }
+            set { ISO_639_2 = value; }
         }
 
         public ReleaseType ReleaseType

@@ -139,7 +139,7 @@ namespace BDInfo
             Close();
         }
 
-        private void Close()
+        new private void Close()
         {
             formMovieNameDelegate.Invoke(movieResult);
             base.Close();

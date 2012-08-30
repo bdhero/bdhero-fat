@@ -118,6 +118,8 @@
     <Compile Include="FormPlaylist.Designer.cs">
       <DependentUpon>FormPlaylist.cs</DependentUpon>
     </Compile>
+    <Compile Include="models\JsonDisc.cs" />
+    <Compile Include="models\JsonPlaylist.cs" />
     <Compile Include="models\MplsSearchResult.cs" />
     <Compile Include="models\MplsSearchResultError.cs" />
     <Compile Include="ZedGraph\ArrowObj.cs" />
