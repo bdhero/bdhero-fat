@@ -200,6 +200,9 @@ namespace BDInfo
 
             foreach (PlaylistGridItem item in bindingList)
             {
+                // Skip unchecked items
+                if (!item.IsMainMovie) continue;
+
                 JsonPlaylist jsonPlaylist = new JsonPlaylist();
 
                 jsonPlaylist.filename = item.Filename;
