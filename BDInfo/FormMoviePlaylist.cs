@@ -200,6 +200,7 @@ namespace BDInfo
 
             foreach (PlaylistGridItem item in bindingList)
             {
+                // TODO: This doesn't do anything (even unchecked items get added)
                 // Skip unchecked items
                 if (!item.IsMainMovie) continue;
 
