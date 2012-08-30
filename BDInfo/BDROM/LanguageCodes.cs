@@ -26,13 +26,13 @@ namespace BDInfo
     public class Language
     {
         /// 2 digits - e.g., "en"
-        public readonly string ISO_639_1;
+        public string ISO_639_1 { get; set; }
 
         /// 3 digits - e.g., "eng"
-        public readonly string ISO_639_2;
+        public string ISO_639_2 { get; set; }
 
         /// Human-friendly English name of the language
-        public readonly string Name;
+        public string Name { get; set; }
 
         public Language(string ISO_639_1, string ISO_639_2, string Name)
         {
@@ -40,19 +40,21 @@ namespace BDInfo
             this.ISO_639_2 = ISO_639_2;
             this.Name = Name;
         }
+        /*
+        public override string ToString()
+        {
+            return Name;
+        }*/
     }
 
     public abstract class LanguageCodes
     {
-        private static readonly List<Language> Languages;
-        private static readonly Dictionary<string, Language> ISO_639_1_Map;
-        private static readonly Dictionary<string, Language> ISO_639_2_Map;
+        private static readonly List<Language> Languages = new List<Language>();
+        private static readonly Dictionary<string, Language> ISO_639_1_Map = new Dictionary<string, Language>();
+        private static readonly Dictionary<string, Language> ISO_639_2_Map = new Dictionary<string, Language>();
 
         static LanguageCodes()
         {
-            Languages = new List<Language>();
-            ISO_639_1_Map = new Dictionary<string, Language>();
-            ISO_639_2_Map = new Dictionary<string, Language>();
             Languages.Add(new Language("ab", "abk", "Abkhazian"));
             Languages.Add(new Language(null, "ace", "Achinese"));
             Languages.Add(new Language(null, "ach", "Acoli"));

@@ -17,22 +17,15 @@ namespace BDInfo
         Unrated
     }
 
-    public enum VideoLanguage
-    {
-        English,
-        Spanish,
-        French,
-        Italian,
-        German,
-        Russian
-    }
-
     public partial class FormMoviePlaylist : Form
     {
         private BDROM BDROM;
         private List<TSPlaylistFile> allPlaylists;
         private List<TSPlaylistFile> mainPlaylists;
-        private BindingSource bindingSource = new BindingSource();
+        private BindingList<PlaylistGridItem> bindingList = new BindingList<PlaylistGridItem>();
+        private IList<Language> languages = new List<Language>();
+        private IList<string> languageCodes = new List<string>();
+        private IList<string> languageNames = new List<string>();
 
         private List<TSPlaylistFile> Playlists
         {
@@ -68,8 +61,6 @@ namespace BDInfo
             playlistDataGridView.Columns.Add(CreateVideoLanguageColumn());
             playlistDataGridView.Columns.Add(CreateReleaseTypeColumn());
             playlistDataGridView.Columns.Add(CreateHasCommentaryColumn());
-
-            //this.AutoSize = true;
         }
 
         private DataGridViewCheckBoxColumn CreateIsMainMovieColumn()
@@ -85,6 +76,7 @@ namespace BDInfo
             DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Filename";
             column.Name = "Filename";
+            column.ReadOnly = true;
             return column;
         }
 
@@ -94,6 +86,7 @@ namespace BDInfo
             column.DataPropertyName = "Length";
             column.Name = "Length";
             column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            column.ReadOnly = true;
             return column;
         }
 
@@ -103,14 +96,19 @@ namespace BDInfo
             column.DataPropertyName = "Size";
             column.Name = "Size";
             column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            column.ReadOnly = true;
             return column;
         }
 
         private DataGridViewComboBoxColumn CreateVideoLanguageColumn()
         {
             DataGridViewComboBoxColumn combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = Enum.GetValues(typeof(VideoLanguage));
+            
+            combo.DataSource = languageCodes;
             combo.DataPropertyName = "VideoLanguage";
+            //combo.DisplayMember = "Name";
+            //combo.ValueMember = "ISO_639_2";
+
             combo.Name = "Video Language";
             return combo;
         }
@@ -145,19 +143,40 @@ namespace BDInfo
         private void ResetPlaylists()
         {
             playlistDataGridView.DataSource = null;
-            bindingSource.Clear();
+            
+            bindingList.Clear();
+            languages.Clear();
+            languageCodes.Clear();
+            languageNames.Clear();
+
             foreach (TSPlaylistFile playlistFile in Playlists)
             {
-                bindingSource.Add(
+                foreach (TSStream stream in playlistFile.SortedStreams)
+                {
+                    if (stream.LanguageCode != null && !languageCodes.Contains(stream.LanguageCode))
+                    {
+                        Language lang = LanguageCodes.GetLanguage(stream.LanguageCode);
+                        languages.Add(lang);
+                        languageCodes.Add(stream.LanguageCode);
+                        languageNames.Add(stream.LanguageName);
+                    }
+                }
+            }
+
+            foreach (TSPlaylistFile playlistFile in Playlists)
+            {
+                bindingList.Add(
                     new PlaylistGridItem(
                         playlistFile.IsMainPlaylist,
                         playlistFile.Name,
                         HumanFriendlyLength(playlistFile.TotalLength),
-                        playlistFile.FileSize.ToString("N0")
+                        playlistFile.FileSize.ToString("N0"),
+                        languageCodes.Count > 0 ? languageCodes[0] : null
                     )
                 );
             }
-            playlistDataGridView.DataSource = bindingSource;
+
+            playlistDataGridView.DataSource = bindingList;
         }
 
         private void showAllPlaylistsCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -172,17 +191,17 @@ namespace BDInfo
         private string filename;
         private string length;
         private string size;
-        private VideoLanguage videoLanguage;
+        private string videoLanguage;
         private ReleaseType releaseType;
         private bool hasCommentary;
 
-        public PlaylistGridItem(bool isMainMovie, string filename, string length, string size)
+        public PlaylistGridItem(bool isMainMovie, string filename, string length, string size, string videoLanguage)
         {
             this.isMainMovie = isMainMovie;
             this.filename = filename;
             this.length = length;
             this.size = size;
-            this.videoLanguage = VideoLanguage.English;
+            this.videoLanguage = videoLanguage;
             this.releaseType = ReleaseType.Theatrical;
             this.hasCommentary = false;
         }
@@ -211,7 +230,7 @@ namespace BDInfo
             set { size = value; }
         }
 
-        public VideoLanguage VideoLanguage
+        public string VideoLanguage
         {
             get { return videoLanguage; }
             set { videoLanguage = value; }
