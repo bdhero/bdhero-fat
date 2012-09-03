@@ -423,23 +423,34 @@ namespace BDInfo
 
         private string GetBdmtPath()
         {
-            string path = null;
+            string bdmt_path = null;
             foreach (string code in Language.GetISO6392Codes())
             {
-                path = Path.Combine(DirectoryBDMV.FullName, @"META\DL\bdmt_" + code + @".xml");
+                string path = Path.Combine(DirectoryBDMV.FullName, @"META\DL\bdmt_" + code + @".xml");
                 if (File.Exists(path))
                 {
+                    bdmt_path = path;
                     DiscLanguage = Language.GetLanguage(code);
                     break;
                 }
             }
-            return path;
+            return bdmt_path;
         }
 
         private string GetDiscName()
         {
+            string discName = GetDiscNameBdmt();
+            if (discName == null)
+            {
+                discName = GetDiscNameFileIndex();
+            }
+            return discName;
+        }
+
+        private string GetDiscNameBdmt()
+        {
             string xmlpath = GetBdmtPath();
-            string movieName = null;
+            string discName = null;
 
             if (xmlpath != null)
             {
@@ -450,7 +461,7 @@ namespace BDInfo
                 {
                     Match movieNameMatch = movieNameRegex.Match(xml);
 
-                    movieName = movieNameMatch.Groups[1].ToString();
+                    discName = movieNameMatch.Groups[1].ToString();
 
                     Regex titleRegex = new Regex("<di:titleName titleNumber=\"(\\d+)\">(.*?)</di:titleName>");
 
@@ -460,7 +471,7 @@ namespace BDInfo
 
                         foreach (Match titleMatch in titleMatches)
                         {
-                            if (titleMatch.Groups[2].ToString().Equals(movieName))
+                            if (titleMatch.Groups[2].ToString().Equals(discName))
                             {
                                 MainTitleIndex = int.Parse(titleMatch.Groups[1].ToString()) - 1;
                                 break;
@@ -470,7 +481,27 @@ namespace BDInfo
                 }
             }
 
-            return movieName;
+            return discName;
+        }
+
+        private string GetDiscNameFileIndex()
+        {
+            string xmlpath = Path.Combine(DirectoryRoot.FullName, "FilmIndex.xml");
+            string discName = null;
+
+            if (File.Exists(xmlpath))
+            {
+                Regex movieNameRegex = new Regex("<Title>(.*?)</Title>", RegexOptions.IgnoreCase);
+                string xml = File.ReadAllText(xmlpath);
+
+                if (movieNameRegex.IsMatch(xml))
+                {
+                    Match movieNameMatch = movieNameRegex.Match(xml);
+                    discName = movieNameMatch.Groups[1].ToString();
+                }
+            }
+
+            return discName;
         }
 
         private string GetVolumeLabel(DirectoryInfo dir)
