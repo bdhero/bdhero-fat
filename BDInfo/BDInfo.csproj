@@ -122,6 +122,7 @@
     <Compile Include="models\JsonPlaylist.cs" />
     <Compile Include="models\MplsSearchResult.cs" />
     <Compile Include="models\MplsSearchResultError.cs" />
+    <Compile Include="views\PlaylistDataGridPopulator.cs" />
     <Compile Include="ZedGraph\ArrowObj.cs" />
     <Compile Include="ZedGraph\Axis.cs" />
     <Compile Include="ZedGraph\AxisLabel.cs" />

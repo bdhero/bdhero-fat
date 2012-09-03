@@ -773,7 +773,7 @@ namespace BDInfo
 
             if (MovieResult != null)
             {
-                new FormMoviePlaylist(BDROM, sortedPlaylists, mainPlaylists, MovieResult).ShowDialog(this);
+                new FormMoviePlaylist(BDROM, sortedPlaylists, Languages, MovieResult).ShowDialog(this);
             }
 
             //QueryDB();
