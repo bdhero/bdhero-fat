@@ -755,7 +755,7 @@ namespace BDInfo
 
             FormMovieNameDelegate formMovieNameDelegate = (MovieResult movieResult) => { MovieResult = movieResult; };
 
-            new FormMovieName(BDROM.DiscNameSearchable, BDROM.DiscLanguage.ISO_639_1, formMovieNameDelegate).ShowDialog(this);
+            new FormMovieName(BDROM, formMovieNameDelegate).ShowDialog(this);
 
             if (MovieResult != null)
             {

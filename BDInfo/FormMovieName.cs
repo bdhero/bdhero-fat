@@ -16,6 +16,7 @@ namespace BDInfo
         private readonly string api_key = "b59b366b0f0a457d58995537d847409a";
         private readonly Tmdb api;
 
+        private BDROM BDROM;
         private string DiscNameSearchable;
         private string ISO_639_1;
         private TmdbMovieSearch movieSearch;
@@ -24,13 +25,14 @@ namespace BDInfo
         private FormMovieNameDelegate formMovieNameDelegate;
         private BackgroundWorker worker;
 
-        public FormMovieName(string DiscNameSearchable, string ISO_639_1, FormMovieNameDelegate formMovieNameDelegate)
+        public FormMovieName(BDROM BDROM, FormMovieNameDelegate formMovieNameDelegate)
         {
             InitializeComponent();
 
+            this.BDROM = BDROM;
             this.formMovieNameDelegate = formMovieNameDelegate;
-            this.DiscNameSearchable = DiscNameSearchable;
-            this.ISO_639_1 = ISO_639_1;
+            this.DiscNameSearchable = BDROM.DiscNameSearchable;
+            this.ISO_639_1 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_1 : null;
 
             this.searchTextBox.Text = DiscNameSearchable;
 
