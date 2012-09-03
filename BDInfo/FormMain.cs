@@ -624,6 +624,18 @@ namespace BDInfo
                 }
             }
 
+            foreach (TSPlaylistFile playlistFile in sortedPlaylists)
+            {
+                foreach (TSStream stream in playlistFile.SortedStreams)
+                {
+                    if (stream.LanguageCode != null)
+                    {
+                        Language lang = Language.GetLanguage(stream.LanguageCode);
+                        Languages.Add(lang);
+                    }
+                }
+            }
+
             if (hasHiddenTracks)
             {
                 textBoxDetails.Text += "(*) Some playlists on this disc have hidden tracks. These tracks are marked with an asterisk.";
@@ -633,6 +645,8 @@ namespace BDInfo
 
             ResetColumnWidths();
         }
+
+        private ISet<Language> Languages = new HashSet<Language>();
 
         private List<TSPlaylistFile> sortedPlaylists = new List<TSPlaylistFile>();
         private List<TSPlaylistFile> mainPlaylists = new List<TSPlaylistFile>();
