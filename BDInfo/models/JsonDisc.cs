@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BDInfo.models
 {
-    class JsonDisc
+    public class JsonDisc
     {
         public string disc_name;
         public string volume_label;

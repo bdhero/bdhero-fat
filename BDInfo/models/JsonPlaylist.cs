@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BDInfo.models
 {
-    class JsonPlaylist
+    public class JsonPlaylist
     {
         public string filename;
         public ulong filesize;
