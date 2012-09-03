@@ -94,7 +94,7 @@
     <Compile Include="BDROM\TSInterleavedFile.cs" />
     <Compile Include="BDROM\TSStreamBuffer.cs" />
     <Compile Include="BDROM\TSStreamClipFile.cs" />
-    <Compile Include="BDROM\LanguageCodes.cs" />
+    <Compile Include="BDROM\Language.cs" />
     <Compile Include="BDROM\TSStreamClip.cs" />
     <Compile Include="BDROM\TSStreamFile.cs" />
     <Compile Include="BDROM\TSPlaylistFile.cs" />
