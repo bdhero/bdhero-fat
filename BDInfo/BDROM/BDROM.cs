@@ -424,12 +424,12 @@ namespace BDInfo
         private string GetBdmtPath()
         {
             string path = null;
-            foreach (string code in LanguageCodes.GetISO6392Codes())
+            foreach (string code in Language.GetISO6392Codes())
             {
                 path = Path.Combine(DirectoryBDMV.FullName, @"META\DL\bdmt_" + code + @".xml");
                 if (File.Exists(path))
                 {
-                    DiscLanguage = LanguageCodes.GetLanguage(code);
+                    DiscLanguage = Language.GetLanguage(code);
                     break;
                 }
             }

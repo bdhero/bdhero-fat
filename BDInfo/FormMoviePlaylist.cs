@@ -163,7 +163,7 @@ namespace BDInfo
                 {
                     if (stream.LanguageCode != null && !languageCodes.Contains(stream.LanguageCode))
                     {
-                        Language lang = LanguageCodes.GetLanguage(stream.LanguageCode);
+                        Language lang = Language.GetLanguage(stream.LanguageCode);
                         languages.Add(lang);
                         languageCodes.Add(stream.LanguageCode);
                         languageNames.Add(stream.LanguageName);

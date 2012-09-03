@@ -25,6 +25,10 @@ namespace BDInfo
 {
     public class Language
     {
+        private static readonly List<Language> Languages = new List<Language>();
+        private static readonly Dictionary<string, Language> ISO_639_1_Map = new Dictionary<string, Language>();
+        private static readonly Dictionary<string, Language> ISO_639_2_Map = new Dictionary<string, Language>();
+
         /// 2 digits - e.g., "en"
         public string ISO_639_1 { get; set; }
 
@@ -40,20 +44,8 @@ namespace BDInfo
             this.ISO_639_2 = ISO_639_2;
             this.Name = Name;
         }
-        /*
-        public override string ToString()
-        {
-            return Name;
-        }*/
-    }
 
-    public abstract class LanguageCodes
-    {
-        private static readonly List<Language> Languages = new List<Language>();
-        private static readonly Dictionary<string, Language> ISO_639_1_Map = new Dictionary<string, Language>();
-        private static readonly Dictionary<string, Language> ISO_639_2_Map = new Dictionary<string, Language>();
-
-        static LanguageCodes()
+        static Language()
         {
             Languages.Add(new Language("ab", "abk", "Abkhazian"));
             Languages.Add(new Language(null, "ace", "Achinese"));
