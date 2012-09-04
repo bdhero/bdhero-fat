@@ -341,6 +341,10 @@ namespace BDInfo
 
         private void SubmitJsonDisc()
         {
+            DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to submit to the database?", "Confirm database submit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (dialogResult == DialogResult.No) return;
+
             JsonDisc jsonDisc = new JsonDisc();
 
             jsonDisc.disc_name = BDROM.DiscName;
@@ -364,8 +368,11 @@ namespace BDInfo
             }
             catch (Exception ex)
             {
+                MessageBox.Show(this, "ERROR: \n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            MessageBox.Show(this, "Awesome!  Successfully added disc to database.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             return;
 
