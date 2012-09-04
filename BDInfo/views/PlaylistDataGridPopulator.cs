@@ -33,7 +33,7 @@ namespace BDInfo.views
             playlistDataGridView.Columns.Add(CreateLengthColumn());
             playlistDataGridView.Columns.Add(CreateSizeColumn());
             playlistDataGridView.Columns.Add(CreateVideoLanguageColumn());
-            playlistDataGridView.Columns.Add(CreateReleaseTypeColumn());
+            playlistDataGridView.Columns.Add(CreateCutColumn());
             playlistDataGridView.Columns.Add(CreateHasCommentaryColumn());
 
             foreach (TSPlaylistFile playlist in playlists)
@@ -132,12 +132,12 @@ namespace BDInfo.views
             return combo;
         }
 
-        private DataGridViewComboBoxColumn CreateReleaseTypeColumn()
+        private DataGridViewComboBoxColumn CreateCutColumn()
         {
             DataGridViewComboBoxColumn combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = Enum.GetValues(typeof(ReleaseType));
-            combo.DataPropertyName = "ReleaseType";
-            combo.Name = "Release Type";
+            combo.DataSource = Enum.GetValues(typeof(Cut));
+            combo.DataPropertyName = "Cut";
+            combo.Name = "Cut";
             return combo;
         }
 
@@ -150,7 +150,7 @@ namespace BDInfo.views
         }
     }
 
-    public enum ReleaseType
+    public enum Cut
     {
         Theatrical,
         Special,
@@ -166,7 +166,7 @@ namespace BDInfo.views
         private double length;
         private string size;
         private string ISO_639_2;
-        private ReleaseType releaseType;
+        private Cut cut;
         private bool hasCommentary;
 
         public PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2)
@@ -177,7 +177,7 @@ namespace BDInfo.views
             this.length = playlist.TotalLength;
             this.size = playlist.FileSize.ToString("N0");
             this.ISO_639_2 = ISO_639_2;
-            this.releaseType = ReleaseType.Theatrical;
+            this.cut = Cut.Theatrical;
             this.hasCommentary = false;
         }
 
@@ -213,10 +213,10 @@ namespace BDInfo.views
             set { ISO_639_2 = value; }
         }
 
-        public ReleaseType ReleaseType
+        public Cut Cut
         {
-            get { return releaseType; }
-            set { releaseType = value; }
+            get { return cut; }
+            set { cut = value; }
         }
 
         public bool HasCommentary
@@ -237,10 +237,10 @@ namespace BDInfo.views
                 jsonPlaylist.ISO_639_2 = VideoLanguage;
 
                 jsonPlaylist.is_main = IsMainMovie;
-                jsonPlaylist.is_theatrical = ReleaseType.Equals(ReleaseType.Theatrical);
-                jsonPlaylist.is_special = ReleaseType.Equals(ReleaseType.Special);
-                jsonPlaylist.is_extended = ReleaseType.Equals(ReleaseType.Extended);
-                jsonPlaylist.is_unrated = ReleaseType.Equals(ReleaseType.Unrated);
+                jsonPlaylist.is_theatrical = Cut.Equals(Cut.Theatrical);
+                jsonPlaylist.is_special = Cut.Equals(Cut.Special);
+                jsonPlaylist.is_extended = Cut.Equals(Cut.Extended);
+                jsonPlaylist.is_unrated = Cut.Equals(Cut.Unrated);
                 jsonPlaylist.is_commentary = HasCommentary;
 
                 return jsonPlaylist;
