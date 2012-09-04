@@ -54,6 +54,7 @@ namespace BDInfo
             }
 
             this.populator = new PlaylistDataGridPopulator(playlistDataGridView, playlists, languageCodes);
+            this.populator.SelectionChanged += dataGridView_SelectionChanged;
 
             this.Load += FormDetails_Load;
         }
@@ -65,6 +66,17 @@ namespace BDInfo
 
             ResetPlaylists();
             SearchTmdb();
+        }
+
+        private void dataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            TSPlaylistFile playlistFile = populator.SelectedPlaylist;
+
+            if (playlistFile == null) return;
+
+            string playlistFileName = playlistFile.Name;
+
+            StreamTrackListViewPopulator.Populate(playlistFile, listViewStreamFiles, listViewStreams);
         }
 
         private void SearchTmdb()

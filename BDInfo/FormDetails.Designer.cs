@@ -49,11 +49,22 @@
             this.playlistDataGridView = new System.Windows.Forms.DataGridView();
             this.playlistsSplitContainerInner = new System.Windows.Forms.SplitContainer();
             this.streamsGroupBox = new System.Windows.Forms.GroupBox();
+            this.listViewStreamFiles = new System.Windows.Forms.ListView();
+            this.columnHeaderFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderFileLength = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderFileEstimatedBytes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderFileMeasuredBytes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tracksGroupBox = new System.Windows.Forms.GroupBox();
             this.tabPageRip = new System.Windows.Forms.TabPage();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.listViewStreams = new System.Windows.Forms.ListView();
+            this.columnHeaderStreamCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderStreamLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderBitrate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -68,6 +79,8 @@
             this.playlistsSplitContainerInner.Panel1.SuspendLayout();
             this.playlistsSplitContainerInner.Panel2.SuspendLayout();
             this.playlistsSplitContainerInner.SuspendLayout();
+            this.streamsGroupBox.SuspendLayout();
+            this.tracksGroupBox.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -84,7 +97,7 @@
             // 
             this.continueButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.continueButton.Enabled = false;
-            this.continueButton.Location = new System.Drawing.Point(539, 561);
+            this.continueButton.Location = new System.Drawing.Point(556, 577);
             this.continueButton.Name = "continueButton";
             this.continueButton.Size = new System.Drawing.Size(75, 23);
             this.continueButton.TabIndex = 98;
@@ -96,7 +109,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(620, 561);
+            this.cancelButton.Location = new System.Drawing.Point(637, 577);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 99;
@@ -170,7 +183,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(683, 543);
+            this.tabControl.Size = new System.Drawing.Size(700, 559);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageDisc
@@ -184,7 +197,7 @@
             this.tabPageDisc.Location = new System.Drawing.Point(4, 22);
             this.tabPageDisc.Name = "tabPageDisc";
             this.tabPageDisc.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDisc.Size = new System.Drawing.Size(675, 517);
+            this.tabPageDisc.Size = new System.Drawing.Size(692, 533);
             this.tabPageDisc.TabIndex = 0;
             this.tabPageDisc.Text = "Disc";
             this.tabPageDisc.UseVisualStyleBackColor = true;
@@ -213,7 +226,7 @@
             this.tabPagePlaylists.Location = new System.Drawing.Point(4, 22);
             this.tabPagePlaylists.Name = "tabPagePlaylists";
             this.tabPagePlaylists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePlaylists.Size = new System.Drawing.Size(675, 517);
+            this.tabPagePlaylists.Size = new System.Drawing.Size(692, 533);
             this.tabPagePlaylists.TabIndex = 1;
             this.tabPagePlaylists.Text = "Playlists";
             this.tabPagePlaylists.UseVisualStyleBackColor = true;
@@ -235,8 +248,8 @@
             // playlistsSplitContainerOuter.Panel2
             // 
             this.playlistsSplitContainerOuter.Panel2.Controls.Add(this.playlistsSplitContainerInner);
-            this.playlistsSplitContainerOuter.Size = new System.Drawing.Size(663, 504);
-            this.playlistsSplitContainerOuter.SplitterDistance = 213;
+            this.playlistsSplitContainerOuter.Size = new System.Drawing.Size(680, 520);
+            this.playlistsSplitContainerOuter.SplitterDistance = 219;
             this.playlistsSplitContainerOuter.TabIndex = 5;
             // 
             // playlistsGroupBox
@@ -248,7 +261,7 @@
             this.playlistsGroupBox.Controls.Add(this.panel1);
             this.playlistsGroupBox.Location = new System.Drawing.Point(4, 4);
             this.playlistsGroupBox.Name = "playlistsGroupBox";
-            this.playlistsGroupBox.Size = new System.Drawing.Size(656, 206);
+            this.playlistsGroupBox.Size = new System.Drawing.Size(673, 212);
             this.playlistsGroupBox.TabIndex = 5;
             this.playlistsGroupBox.TabStop = false;
             this.playlistsGroupBox.Text = "Playlists";
@@ -257,7 +270,7 @@
             // 
             this.showAllPlaylistsCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showAllPlaylistsCheckbox.AutoSize = true;
-            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(6, 183);
+            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(6, 189);
             this.showAllPlaylistsCheckbox.Name = "showAllPlaylistsCheckbox";
             this.showAllPlaylistsCheckbox.Size = new System.Drawing.Size(105, 17);
             this.showAllPlaylistsCheckbox.TabIndex = 5;
@@ -273,7 +286,7 @@
             this.panel1.Controls.Add(this.playlistDataGridView);
             this.panel1.Location = new System.Drawing.Point(6, 19);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(644, 158);
+            this.panel1.Size = new System.Drawing.Size(661, 164);
             this.panel1.TabIndex = 4;
             // 
             // playlistDataGridView
@@ -293,7 +306,7 @@
             this.playlistDataGridView.Location = new System.Drawing.Point(3, 3);
             this.playlistDataGridView.MultiSelect = false;
             this.playlistDataGridView.Name = "playlistDataGridView";
-            this.playlistDataGridView.Size = new System.Drawing.Size(638, 152);
+            this.playlistDataGridView.Size = new System.Drawing.Size(655, 158);
             this.playlistDataGridView.TabIndex = 1;
             // 
             // playlistsSplitContainerInner
@@ -312,8 +325,8 @@
             // playlistsSplitContainerInner.Panel2
             // 
             this.playlistsSplitContainerInner.Panel2.Controls.Add(this.tracksGroupBox);
-            this.playlistsSplitContainerInner.Size = new System.Drawing.Size(660, 284);
-            this.playlistsSplitContainerInner.SplitterDistance = 143;
+            this.playlistsSplitContainerInner.Size = new System.Drawing.Size(677, 294);
+            this.playlistsSplitContainerInner.SplitterDistance = 149;
             this.playlistsSplitContainerInner.TabIndex = 0;
             // 
             // streamsGroupBox
@@ -321,21 +334,72 @@
             this.streamsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.streamsGroupBox.Controls.Add(this.listViewStreamFiles);
             this.streamsGroupBox.Location = new System.Drawing.Point(4, 4);
             this.streamsGroupBox.Name = "streamsGroupBox";
-            this.streamsGroupBox.Size = new System.Drawing.Size(653, 136);
+            this.streamsGroupBox.Size = new System.Drawing.Size(670, 142);
             this.streamsGroupBox.TabIndex = 0;
             this.streamsGroupBox.TabStop = false;
             this.streamsGroupBox.Text = "Streams";
+            // 
+            // listViewStreamFiles
+            // 
+            this.listViewStreamFiles.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewStreamFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderFileName,
+            this.columnHeaderIndex,
+            this.columnHeaderFileLength,
+            this.columnHeaderFileEstimatedBytes,
+            this.columnHeaderFileMeasuredBytes});
+            this.listViewStreamFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewStreamFiles.Enabled = false;
+            this.listViewStreamFiles.FullRowSelect = true;
+            this.listViewStreamFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewStreamFiles.HideSelection = false;
+            this.listViewStreamFiles.Location = new System.Drawing.Point(3, 16);
+            this.listViewStreamFiles.MultiSelect = false;
+            this.listViewStreamFiles.Name = "listViewStreamFiles";
+            this.listViewStreamFiles.Size = new System.Drawing.Size(664, 123);
+            this.listViewStreamFiles.TabIndex = 7;
+            this.listViewStreamFiles.UseCompatibleStateImageBehavior = false;
+            this.listViewStreamFiles.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderFileName
+            // 
+            this.columnHeaderFileName.Text = "Stream File";
+            this.columnHeaderFileName.Width = 82;
+            // 
+            // columnHeaderIndex
+            // 
+            this.columnHeaderIndex.Text = "Index";
+            // 
+            // columnHeaderFileLength
+            // 
+            this.columnHeaderFileLength.Text = "Length";
+            this.columnHeaderFileLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeaderFileLength.Width = 77;
+            // 
+            // columnHeaderFileEstimatedBytes
+            // 
+            this.columnHeaderFileEstimatedBytes.Text = "Estimated Bytes";
+            this.columnHeaderFileEstimatedBytes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeaderFileEstimatedBytes.Width = 119;
+            // 
+            // columnHeaderFileMeasuredBytes
+            // 
+            this.columnHeaderFileMeasuredBytes.Text = "Measured Bytes";
+            this.columnHeaderFileMeasuredBytes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeaderFileMeasuredBytes.Width = 125;
             // 
             // tracksGroupBox
             // 
             this.tracksGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tracksGroupBox.Controls.Add(this.listViewStreams);
             this.tracksGroupBox.Location = new System.Drawing.Point(4, 4);
             this.tracksGroupBox.Name = "tracksGroupBox";
-            this.tracksGroupBox.Size = new System.Drawing.Size(653, 130);
+            this.tracksGroupBox.Size = new System.Drawing.Size(670, 134);
             this.tracksGroupBox.TabIndex = 0;
             this.tracksGroupBox.TabStop = false;
             this.tracksGroupBox.Text = "Tracks";
@@ -344,7 +408,7 @@
             // 
             this.tabPageRip.Location = new System.Drawing.Point(4, 22);
             this.tabPageRip.Name = "tabPageRip";
-            this.tabPageRip.Size = new System.Drawing.Size(681, 519);
+            this.tabPageRip.Size = new System.Drawing.Size(692, 533);
             this.tabPageRip.TabIndex = 2;
             this.tabPageRip.Text = "Rip";
             this.tabPageRip.UseVisualStyleBackColor = true;
@@ -354,9 +418,9 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel,
             this.progressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 587);
+            this.statusStrip.Location = new System.Drawing.Point(0, 603);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(707, 22);
+            this.statusStrip.Size = new System.Drawing.Size(724, 22);
             this.statusStrip.TabIndex = 6;
             this.statusStrip.Text = "Status Strip";
             // 
@@ -371,13 +435,52 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(100, 16);
             // 
+            // listViewStreams
+            // 
+            this.listViewStreams.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderStreamCodec,
+            this.columnHeaderStreamLanguage,
+            this.columnHeaderBitrate,
+            this.columnHeaderDescription});
+            this.listViewStreams.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewStreams.Enabled = false;
+            this.listViewStreams.FullRowSelect = true;
+            this.listViewStreams.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewStreams.HideSelection = false;
+            this.listViewStreams.Location = new System.Drawing.Point(3, 16);
+            this.listViewStreams.MultiSelect = false;
+            this.listViewStreams.Name = "listViewStreams";
+            this.listViewStreams.Size = new System.Drawing.Size(664, 115);
+            this.listViewStreams.TabIndex = 8;
+            this.listViewStreams.UseCompatibleStateImageBehavior = false;
+            this.listViewStreams.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderStreamCodec
+            // 
+            this.columnHeaderStreamCodec.Text = "Codec";
+            this.columnHeaderStreamCodec.Width = 103;
+            // 
+            // columnHeaderStreamLanguage
+            // 
+            this.columnHeaderStreamLanguage.Text = "Language";
+            this.columnHeaderStreamLanguage.Width = 151;
+            // 
+            // columnHeaderBitrate
+            // 
+            this.columnHeaderBitrate.Text = "Bit Rate";
+            // 
+            // columnHeaderDescription
+            // 
+            this.columnHeaderDescription.Text = "Description";
+            this.columnHeaderDescription.Width = 306;
+            // 
             // FormDetails
             // 
             this.AcceptButton = this.continueButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(707, 609);
+            this.ClientSize = new System.Drawing.Size(724, 625);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.cancelButton);
@@ -401,6 +504,8 @@
             this.playlistsSplitContainerInner.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.playlistsSplitContainerInner)).EndInit();
             this.playlistsSplitContainerInner.ResumeLayout(false);
+            this.streamsGroupBox.ResumeLayout(false);
+            this.tracksGroupBox.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -436,5 +541,16 @@
         private System.Windows.Forms.SplitContainer playlistsSplitContainerInner;
         private System.Windows.Forms.GroupBox streamsGroupBox;
         private System.Windows.Forms.GroupBox tracksGroupBox;
+        private System.Windows.Forms.ListView listViewStreamFiles;
+        private System.Windows.Forms.ColumnHeader columnHeaderFileName;
+        private System.Windows.Forms.ColumnHeader columnHeaderIndex;
+        private System.Windows.Forms.ColumnHeader columnHeaderFileLength;
+        private System.Windows.Forms.ColumnHeader columnHeaderFileEstimatedBytes;
+        private System.Windows.Forms.ColumnHeader columnHeaderFileMeasuredBytes;
+        private System.Windows.Forms.ListView listViewStreams;
+        private System.Windows.Forms.ColumnHeader columnHeaderStreamCodec;
+        private System.Windows.Forms.ColumnHeader columnHeaderStreamLanguage;
+        private System.Windows.Forms.ColumnHeader columnHeaderBitrate;
+        private System.Windows.Forms.ColumnHeader columnHeaderDescription;
     }
 }

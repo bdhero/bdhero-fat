@@ -19,6 +19,14 @@ namespace BDInfo.views
 
         private IList<PlaylistGridItem> playlistGridItems = new List<PlaylistGridItem>();
 
+        public event EventHandler SelectionChanged;
+
+        private TSPlaylistFile selectedPlaylist = null;
+        public TSPlaylistFile SelectedPlaylist
+        {
+            get { return selectedPlaylist; }
+        }
+
         public PlaylistDataGridPopulator(DataGridView dataGridView, IList<TSPlaylistFile> playlists, IList<string> languageCodes)
         {
             this.playlistDataGridView = dataGridView;
@@ -36,6 +44,8 @@ namespace BDInfo.views
             dataGridView.Columns.Add(CreateVideoLanguageColumn());
             dataGridView.Columns.Add(CreateCutColumn());
             dataGridView.Columns.Add(CreateHasCommentaryColumn());
+
+            this.playlistDataGridView.SelectionChanged += dataGridView_SelectionChanged;
 
             foreach (TSPlaylistFile playlist in playlists)
             {
@@ -95,6 +105,24 @@ namespace BDInfo.views
             PlaylistGridItem item = bindingList[e.RowIndex];
 
             System.Diagnostics.Process.Start(item.Playlist.FullName);
+        }
+
+        private void dataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (playlistDataGridView.SelectedRows.Count == 0) return;
+
+            int index = playlistDataGridView.SelectedRows[0].Index;
+            PlaylistGridItem playlistItem = bindingList[index];
+
+            if (playlistItem == null) return;
+
+            selectedPlaylist = playlistItem.Playlist;
+
+            if (selectedPlaylist == null) return;
+
+            string playlistFileName = selectedPlaylist.Name;
+
+            SelectionChanged.Invoke(this, EventArgs.Empty);
         }
 
         private DataGridViewButtonColumn CreatePlayButtonColumn()

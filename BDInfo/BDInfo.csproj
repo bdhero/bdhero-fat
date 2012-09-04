@@ -117,6 +117,7 @@
     <Compile Include="models\MplsSearchResult.cs" />
     <Compile Include="models\MplsSearchResultError.cs" />
     <Compile Include="views\PlaylistDataGridPopulator.cs" />
+    <Compile Include="views\StreamTrackListViewPopulator.cs" />
     <Compile Include="ZedGraph\ArrowObj.cs" />
     <Compile Include="ZedGraph\Axis.cs" />
     <Compile Include="ZedGraph\AxisLabel.cs" />
