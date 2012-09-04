@@ -100,17 +100,11 @@
     <Compile Include="BDROM\TSPlaylistFile.cs" />
     <Compile Include="BDROM\TSStream.cs" />
     <Compile Include="BDROM\TSCodecVC1.cs" />
-    <Compile Include="FormMovieName.cs">
+    <Compile Include="FormDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMovieName.Designer.cs">
-      <DependentUpon>FormMovieName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormMoviePlaylist.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormMoviePlaylist.Designer.cs">
-      <DependentUpon>FormMoviePlaylist.cs</DependentUpon>
+    <Compile Include="FormDetails.Designer.cs">
+      <DependentUpon>FormDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="FormPlaylist.cs">
       <SubType>Form</SubType>
@@ -272,11 +266,8 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormMovieName.resx">
-      <DependentUpon>FormMovieName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormMoviePlaylist.resx">
-      <DependentUpon>FormMoviePlaylist.cs</DependentUpon>
+    <EmbeddedResource Include="FormDetails.resx">
+      <DependentUpon>FormDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormPlaylist.resx">
       <DependentUpon>FormPlaylist.cs</DependentUpon>

@@ -36,8 +36,6 @@ using WatTmdb.V3;
 
 namespace BDInfo
 {
-    public delegate void FormMovieNameDelegate(MovieResult movieResult);
-
     public partial class FormMain : Form
     {
         private BDROM BDROM = null;
@@ -641,9 +639,9 @@ namespace BDInfo
                 textBoxDetails.Text += "(*) Some playlists on this disc have hidden tracks. These tracks are marked with an asterisk.";
             }
 
-            FindMainPlaylist();
-
             ResetColumnWidths();
+
+            FindMainPlaylist();
         }
 
         private ISet<Language> Languages = new HashSet<Language>();
@@ -766,15 +764,7 @@ namespace BDInfo
             //MessageBox.Show(this, BDROM.DiscLanguage.ISO_639_1 + " - " + BDROM.DiscLanguage.ISO_639_2 + " - " + BDROM.DiscLanguage.Name);
             //MessageBox.Show(this, BDROM.DiscName + "\n" + BDROM.DiscNameSearchable);
 
-
-            FormMovieNameDelegate formMovieNameDelegate = (MovieResult movieResult) => { MovieResult = movieResult; };
-
-            new FormMovieName(BDROM, formMovieNameDelegate).ShowDialog(this);
-
-            if (MovieResult != null)
-            {
-                new FormMoviePlaylist(BDROM, sortedPlaylists, Languages, MovieResult).ShowDialog(this);
-            }
+            new FormDetails(BDROM, sortedPlaylists, Languages).ShowDialog(this);
 
             //QueryDB();
             //PrintResult();
