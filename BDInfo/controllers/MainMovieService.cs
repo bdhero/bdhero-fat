@@ -12,7 +12,7 @@ namespace BDInfo.controllers
 {
     class MainMovieService
     {
-        private static readonly string base_uri = "http://192.168.0.104:3000/api/v1/movies";
+        private static readonly string base_uri = "http://bd.andydvorak.net/api/v1/movies";
 
         public MainMovieService()
         {
