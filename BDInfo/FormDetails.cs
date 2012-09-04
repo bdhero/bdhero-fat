@@ -40,6 +40,7 @@ namespace BDInfo
             this.languages = languages;
 
             string ISO_639_1 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_1 : null;
+            string ISO_639_2 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_2 : null;
 
             // TODO: This will fail if we're unable to auto-detect the disc language (e.g., ID4)
             //       or if the user changes the main disc language manually.
@@ -55,6 +56,7 @@ namespace BDInfo
 
             this.populator = new PlaylistDataGridPopulator(playlistDataGridView, playlists, languageCodes);
             this.populator.SelectionChanged += dataGridView_SelectionChanged;
+            this.populator.MainLanguageCode = ISO_639_2;
 
             this.Load += FormDetails_Load;
         }
@@ -244,6 +246,11 @@ namespace BDInfo
             string filepath = System.IO.Path.Combine(BDROM.DirectorySTREAM.FullName, filename);
 
             System.Diagnostics.Process.Start(filepath);
+        }
+
+        private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            populator.MainLanguageCode = discLanguageComboBox.SelectedValue as string;
         }
     }
 }

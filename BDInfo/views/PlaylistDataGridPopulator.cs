@@ -13,6 +13,7 @@ namespace BDInfo.views
         private DataGridView playlistDataGridView;
         private IList<TSPlaylistFile> playlists;
         private IList<string> languageCodes;
+
         private BindingList<PlaylistGridItem> bindingList = new BindingList<PlaylistGridItem>();
 
         private bool showAllPlaylists = false;
@@ -25,6 +26,22 @@ namespace BDInfo.views
         public TSPlaylistFile SelectedPlaylist
         {
             get { return selectedPlaylist; }
+        }
+
+        public string MainLanguageCode
+        {
+            set
+            {
+                if (value == null) return;
+
+                foreach (PlaylistGridItem item in bindingList)
+                {
+                    if (! item.VideoLanguageHasChanged)
+                    {
+                        item.VideoLanguageAuto = value;
+                    }
+                }
+            }
         }
 
         public PlaylistDataGridPopulator(DataGridView dataGridView, IList<TSPlaylistFile> playlists, IList<string> languageCodes)
@@ -229,6 +246,7 @@ namespace BDInfo.views
         private double length;
         private string size;
         private string ISO_639_2;
+        private bool ISO_639_2_hasChanged = false;
         private Cut cut;
         private bool hasCommentary;
 
@@ -273,7 +291,18 @@ namespace BDInfo.views
         public string VideoLanguage
         {
             get { return ISO_639_2; }
+            set { ISO_639_2 = value; ISO_639_2_hasChanged = true; }
+        }
+
+        public string VideoLanguageAuto
+        {
+            get { return ISO_639_2; }
             set { ISO_639_2 = value; }
+        }
+
+        public bool VideoLanguageHasChanged
+        {
+            get { return ISO_639_2_hasChanged; }
         }
 
         public Cut Cut

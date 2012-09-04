@@ -210,6 +210,7 @@
             this.discLanguageComboBox.Name = "discLanguageComboBox";
             this.discLanguageComboBox.Size = new System.Drawing.Size(121, 21);
             this.discLanguageComboBox.TabIndex = 1;
+            this.discLanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.discLanguageComboBox_SelectedIndexChanged);
             // 
             // discLanguageLabel
             // 
