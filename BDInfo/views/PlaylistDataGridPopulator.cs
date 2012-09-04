@@ -19,22 +19,22 @@ namespace BDInfo.views
 
         private IList<PlaylistGridItem> playlistGridItems = new List<PlaylistGridItem>();
 
-        public PlaylistDataGridPopulator(DataGridView playlistDataGridView, IList<TSPlaylistFile> playlists, IList<string> languageCodes)
+        public PlaylistDataGridPopulator(DataGridView dataGridView, IList<TSPlaylistFile> playlists, IList<string> languageCodes)
         {
-            this.playlistDataGridView = playlistDataGridView;
+            this.playlistDataGridView = dataGridView;
             this.playlists = playlists;
             this.languageCodes = languageCodes;
 
             this.playlistDataGridView.AutoGenerateColumns = false;
             this.playlistDataGridView.AutoSize = true;
 
-            playlistDataGridView.Columns.Add(CreateIsMainMovieColumn());
-            playlistDataGridView.Columns.Add(CreateFilenameColumn());
-            playlistDataGridView.Columns.Add(CreateLengthColumn());
-            playlistDataGridView.Columns.Add(CreateSizeColumn());
-            playlistDataGridView.Columns.Add(CreateVideoLanguageColumn());
-            playlistDataGridView.Columns.Add(CreateCutColumn());
-            playlistDataGridView.Columns.Add(CreateHasCommentaryColumn());
+            dataGridView.Columns.Add(CreateIsMainMovieColumn());
+            dataGridView.Columns.Add(CreateFilenameColumn());
+            dataGridView.Columns.Add(CreateLengthColumn());
+            dataGridView.Columns.Add(CreateSizeColumn());
+            dataGridView.Columns.Add(CreateVideoLanguageColumn());
+            dataGridView.Columns.Add(CreateCutColumn());
+            dataGridView.Columns.Add(CreateHasCommentaryColumn());
 
             foreach (TSPlaylistFile playlist in playlists)
             {
@@ -123,22 +123,20 @@ namespace BDInfo.views
 
         private DataGridViewComboBoxColumn CreateVideoLanguageColumn()
         {
-            DataGridViewComboBoxColumn combo = new DataGridViewComboBoxColumn();
-
-            combo.DataSource = languageCodes;
-            combo.DataPropertyName = "VideoLanguage";
-
-            combo.Name = "Video Language";
-            return combo;
+            DataGridViewComboBoxColumn column = new DataGridViewComboBoxColumn();
+            column.DataSource = languageCodes;
+            column.DataPropertyName = "VideoLanguage";
+            column.Name = "Video Language";
+            return column;
         }
 
         private DataGridViewComboBoxColumn CreateCutColumn()
         {
-            DataGridViewComboBoxColumn combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = Enum.GetValues(typeof(Cut));
-            combo.DataPropertyName = "Cut";
-            combo.Name = "Cut";
-            return combo;
+            DataGridViewComboBoxColumn column = new DataGridViewComboBoxColumn();
+            column.DataSource = Enum.GetValues(typeof(Cut));
+            column.DataPropertyName = "Cut";
+            column.Name = "Cut";
+            return column;
         }
 
         private DataGridViewCheckBoxColumn CreateHasCommentaryColumn()
