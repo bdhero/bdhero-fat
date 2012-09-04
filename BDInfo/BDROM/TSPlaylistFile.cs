@@ -31,7 +31,14 @@ namespace BDInfo
         private FileInfo FileInfo = null;
         public string FileType = null;
         public bool IsInitialized = false;
+        /// <summary>
+        /// Filename of the playlist file (e.g., "00100.MPLS")
+        /// </summary>
         public string Name = null;
+        /// <summary>
+        /// Full path to the playlist file (e.g., "D:\BDMV\PLAYLIST\00100.MPLS").
+        /// </summary>
+        public string FullName = null;
         public BDROM BDROM = null;
         public bool HasHiddenTracks = false;
         public bool HasLoops = false;
@@ -75,6 +82,7 @@ namespace BDInfo
             BDROM = bdrom;
             FileInfo = fileInfo;
             Name = fileInfo.Name.ToUpper();
+            FullName = fileInfo.FullName.ToUpper();
         }
 
         public TSPlaylistFile(
@@ -84,6 +92,7 @@ namespace BDInfo
         {
             BDROM = bdrom;
             Name = name;
+            FullName = System.IO.Path.Combine(bdrom.DirectoryPLAYLIST.FullName, Name).ToUpper();
             IsCustom = true;
             foreach (TSStreamClip clip in clips)
             {
