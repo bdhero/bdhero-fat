@@ -12,7 +12,7 @@ namespace BDInfo.controllers
 {
     class MainMovieService
     {
-        private static readonly string base_uri = "http://bd.andydvorak.net/api/v1";
+        private static readonly string base_uri = "http://192.168.0.104:3000/api/v1/movies";
 
         public MainMovieService()
         {
@@ -21,7 +21,7 @@ namespace BDInfo.controllers
 
         private string GetMainMovieUri(string volume_label, IList<TSPlaylistFile> mainPlaylists)
         {
-            string uri = base_uri + "/mainMovie";
+            string uri = base_uri + "/main";
             uri += "?volume_label=" + Uri.EscapeUriString(volume_label);
             foreach(TSPlaylistFile playlist in mainPlaylists)
             {
@@ -49,6 +49,36 @@ namespace BDInfo.controllers
                 var responseText = streamReader.ReadToEnd();
                 JsonSearchResult searchResult = JsonConvert.DeserializeObject<JsonSearchResult>(responseText);
                 return searchResult;
+            }
+        }
+
+        public void PostDisc(JsonDisc jsonDisc)
+        {
+            string uri = base_uri + "/main";
+
+            string jsonString = JsonConvert.SerializeObject(jsonDisc);
+
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+            request.Method = "POST";
+            request.ContentType = "text/json";
+            request.UserAgent = "BDAutoRip/0.0.6";
+            request.KeepAlive = true;
+
+            var cachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
+            request.CachePolicy = cachePolicy;
+            request.Expect = null;
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                streamWriter.Write(jsonString);
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)request.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                // This actually sends the request
+                var responseText = streamReader.ReadToEnd();
             }
         }
     }

@@ -328,6 +328,10 @@ namespace BDInfo
                         }
                     }
                 }
+                else
+                {
+                    SubmitJsonDisc();
+                }
             }
 
             //Close();
@@ -354,9 +358,20 @@ namespace BDInfo
                 jsonDisc.playlists.Add(jsonPlaylist);
             }
 
-            string jsonString = JsonConvert.SerializeObject(jsonDisc);
-            Clipboard.SetText(jsonString);
-            MessageBox.Show("Copied to clipboard: \n\n" + jsonString);
+            try
+            {
+                mainMovieService.PostDisc(jsonDisc);
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+            return;
+
+            //string jsonString = JsonConvert.SerializeObject(jsonDisc);
+            //Clipboard.SetText(jsonString);
+            //MessageBox.Show("Copied to clipboard: \n\n" + jsonString);
         }
     }
 }
