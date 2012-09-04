@@ -56,15 +56,15 @@
             this.columnHeaderFileEstimatedBytes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderFileMeasuredBytes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tracksGroupBox = new System.Windows.Forms.GroupBox();
-            this.tabPageRip = new System.Windows.Forms.TabPage();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.listViewStreams = new System.Windows.Forms.ListView();
             this.columnHeaderStreamCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderStreamLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderBitrate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tabPageRip = new System.Windows.Forms.TabPage();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -363,6 +363,7 @@
             this.listViewStreamFiles.TabIndex = 7;
             this.listViewStreamFiles.UseCompatibleStateImageBehavior = false;
             this.listViewStreamFiles.View = System.Windows.Forms.View.Details;
+            this.listViewStreamFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewStreamFiles_MouseDoubleClick);
             // 
             // columnHeaderFileName
             // 
@@ -404,37 +405,6 @@
             this.tracksGroupBox.TabStop = false;
             this.tracksGroupBox.Text = "Tracks";
             // 
-            // tabPageRip
-            // 
-            this.tabPageRip.Location = new System.Drawing.Point(4, 22);
-            this.tabPageRip.Name = "tabPageRip";
-            this.tabPageRip.Size = new System.Drawing.Size(692, 533);
-            this.tabPageRip.TabIndex = 2;
-            this.tabPageRip.Text = "Rip";
-            this.tabPageRip.UseVisualStyleBackColor = true;
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabel,
-            this.progressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 603);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(724, 22);
-            this.statusStrip.TabIndex = 6;
-            this.statusStrip.Text = "Status Strip";
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(39, 17);
-            this.statusLabel.Text = "Status";
-            // 
-            // progressBar
-            // 
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(100, 16);
-            // 
             // listViewStreams
             // 
             this.listViewStreams.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -473,6 +443,37 @@
             // 
             this.columnHeaderDescription.Text = "Description";
             this.columnHeaderDescription.Width = 306;
+            // 
+            // tabPageRip
+            // 
+            this.tabPageRip.Location = new System.Drawing.Point(4, 22);
+            this.tabPageRip.Name = "tabPageRip";
+            this.tabPageRip.Size = new System.Drawing.Size(692, 533);
+            this.tabPageRip.TabIndex = 2;
+            this.tabPageRip.Text = "Rip";
+            this.tabPageRip.UseVisualStyleBackColor = true;
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel,
+            this.progressBar});
+            this.statusStrip.Location = new System.Drawing.Point(0, 603);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(724, 22);
+            this.statusStrip.TabIndex = 6;
+            this.statusStrip.Text = "Status Strip";
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(39, 17);
+            this.statusLabel.Text = "Status";
+            // 
+            // progressBar
+            // 
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(100, 16);
             // 
             // FormDetails
             // 

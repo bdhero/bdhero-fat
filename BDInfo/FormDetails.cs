@@ -66,6 +66,8 @@ namespace BDInfo
 
             ResetPlaylists();
             SearchTmdb();
+            listViewStreamFiles.Enabled = true;
+            listViewStreams.Enabled = true;
         }
 
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
@@ -232,6 +234,16 @@ namespace BDInfo
             string jsonString = JsonConvert.SerializeObject(jsonDisc);
             Clipboard.SetText(jsonString);
             MessageBox.Show("Copied to clipboard: \n\n" + jsonString);
+        }
+
+        private void listViewStreamFiles_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listViewStreamFiles.SelectedItems.Count == 0) return;
+
+            string filename = listViewStreamFiles.SelectedItems[0].Text;
+            string filepath = System.IO.Path.Combine(BDROM.DirectorySTREAM.FullName, filename);
+
+            System.Diagnostics.Process.Start(filepath);
         }
     }
 }

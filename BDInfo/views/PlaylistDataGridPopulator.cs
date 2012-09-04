@@ -95,7 +95,7 @@ namespace BDInfo.views
             }
         }
 
-        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void playButton_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignore clicks that are not on button cells.
             //if (e.RowIndex < 0 || e.ColumnIndex != playlistDataGridView.Columns["Preview"].Index)
@@ -109,10 +109,20 @@ namespace BDInfo.views
 
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
-            if (playlistDataGridView.SelectedRows.Count == 0) return;
+            // Skip if nothing is selected
+            if (playlistDataGridView.SelectedRows.Count == 0 &&
+                playlistDataGridView.SelectedCells.Count == 0) return;
 
-            int index = playlistDataGridView.SelectedRows[0].Index;
-            PlaylistGridItem playlistItem = bindingList[index];
+            int rowIndex = -1;
+
+            if (playlistDataGridView.SelectedRows.Count > 0)
+                rowIndex = playlistDataGridView.SelectedRows[0].Index;
+            else
+                rowIndex = playlistDataGridView.SelectedCells[0].RowIndex;
+
+            if (rowIndex == -1) return;
+
+            PlaylistGridItem playlistItem = bindingList[rowIndex];
 
             if (playlistItem == null) return;
 
@@ -134,7 +144,7 @@ namespace BDInfo.views
             column.UseColumnTextForButtonValue = true;
 
             // Add a CellClick handler to handle clicks in the button column.
-            playlistDataGridView.CellClick += new DataGridViewCellEventHandler(dataGridView_CellClick);
+            playlistDataGridView.CellClick += new DataGridViewCellEventHandler(playButton_CellClick);
 
             return column;
         }
