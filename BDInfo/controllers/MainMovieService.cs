@@ -12,7 +12,7 @@ namespace BDInfo.controllers
 {
     class MainMovieService
     {
-        private static readonly string base_uri = "http://bd.andydvorak.net/api/v1/movies";
+        private static readonly string base_uri = "http://192.168.0.104:3000/api/v1/movies";
 
         public MainMovieService()
         {
@@ -54,9 +54,8 @@ namespace BDInfo.controllers
 
         public void PostDisc(JsonDisc jsonDisc)
         {
-            string uri = base_uri + "/main";
-
             string jsonString = JsonConvert.SerializeObject(jsonDisc);
+            string uri = base_uri + "/main?json=" + Uri.EscapeUriString(jsonString);
 
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "POST";
@@ -70,7 +69,8 @@ namespace BDInfo.controllers
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
-                streamWriter.Write(jsonString);
+                streamWriter.Write(jsonString + "\n");
+                streamWriter.Flush();
                 streamWriter.Close();
             }
 
@@ -79,6 +79,9 @@ namespace BDInfo.controllers
             {
                 // This actually sends the request
                 var responseText = streamReader.ReadToEnd();
+                //string path = @"C:\Users\Administrator\Documents\Post.html";
+                //System.IO.File.WriteAllText(path, responseText);
+                //System.Diagnostics.Process.Start(path);
             }
         }
     }
