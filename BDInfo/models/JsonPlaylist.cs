@@ -9,7 +9,7 @@ namespace BDInfo.models
     {
         public string filename;
         public ulong filesize;
-        public double length;
+        public int length_sec;
         public string ISO_639_2;
 
         public bool is_main = false;
@@ -17,6 +17,6 @@ namespace BDInfo.models
         public bool is_special = false;
         public bool is_extended = false;
         public bool is_unrated = false;
-        public bool is_commentary = false;
+        public bool has_commentary = false;
     }
 }

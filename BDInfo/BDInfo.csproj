@@ -100,6 +100,7 @@
     <Compile Include="BDROM\TSPlaylistFile.cs" />
     <Compile Include="BDROM\TSStream.cs" />
     <Compile Include="BDROM\TSCodecVC1.cs" />
+    <Compile Include="controllers\MainMovieService.cs" />
     <Compile Include="FormDetails.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +113,7 @@
     <Compile Include="FormPlaylist.Designer.cs">
       <DependentUpon>FormPlaylist.cs</DependentUpon>
     </Compile>
+    <Compile Include="models\JsonSearchResult.cs" />
     <Compile Include="models\JsonDisc.cs" />
     <Compile Include="models\JsonPlaylist.cs" />
     <Compile Include="models\MplsSearchResult.cs" />

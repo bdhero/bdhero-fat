@@ -97,7 +97,7 @@
             // 
             this.continueButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.continueButton.Enabled = false;
-            this.continueButton.Location = new System.Drawing.Point(556, 577);
+            this.continueButton.Location = new System.Drawing.Point(551, 571);
             this.continueButton.Name = "continueButton";
             this.continueButton.Size = new System.Drawing.Size(75, 23);
             this.continueButton.TabIndex = 98;
@@ -109,7 +109,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(637, 577);
+            this.cancelButton.Location = new System.Drawing.Point(632, 571);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 99;
@@ -122,13 +122,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.movieNameTextBox.Location = new System.Drawing.Point(96, 33);
             this.movieNameTextBox.Name = "movieNameTextBox";
-            this.movieNameTextBox.Size = new System.Drawing.Size(456, 20);
+            this.movieNameTextBox.Size = new System.Drawing.Size(481, 20);
             this.movieNameTextBox.TabIndex = 2;
             // 
             // searchButton
             // 
             this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchButton.Location = new System.Drawing.Point(558, 31);
+            this.searchButton.Location = new System.Drawing.Point(583, 31);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(98, 23);
             this.searchButton.TabIndex = 3;
@@ -150,7 +150,7 @@
             this.searchResultListView.Location = new System.Drawing.Point(6, 60);
             this.searchResultListView.MultiSelect = false;
             this.searchResultListView.Name = "searchResultListView";
-            this.searchResultListView.Size = new System.Drawing.Size(650, 433);
+            this.searchResultListView.Size = new System.Drawing.Size(675, 461);
             this.searchResultListView.TabIndex = 4;
             this.searchResultListView.UseCompatibleStateImageBehavior = false;
             this.searchResultListView.View = System.Windows.Forms.View.Details;
@@ -183,7 +183,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(700, 559);
+            this.tabControl.Size = new System.Drawing.Size(695, 553);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageDisc
@@ -197,7 +197,7 @@
             this.tabPageDisc.Location = new System.Drawing.Point(4, 22);
             this.tabPageDisc.Name = "tabPageDisc";
             this.tabPageDisc.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDisc.Size = new System.Drawing.Size(692, 533);
+            this.tabPageDisc.Size = new System.Drawing.Size(687, 527);
             this.tabPageDisc.TabIndex = 0;
             this.tabPageDisc.Text = "Disc";
             this.tabPageDisc.UseVisualStyleBackColor = true;
@@ -227,7 +227,7 @@
             this.tabPagePlaylists.Location = new System.Drawing.Point(4, 22);
             this.tabPagePlaylists.Name = "tabPagePlaylists";
             this.tabPagePlaylists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePlaylists.Size = new System.Drawing.Size(692, 533);
+            this.tabPagePlaylists.Size = new System.Drawing.Size(687, 527);
             this.tabPagePlaylists.TabIndex = 1;
             this.tabPagePlaylists.Text = "Playlists";
             this.tabPagePlaylists.UseVisualStyleBackColor = true;
@@ -249,8 +249,8 @@
             // playlistsSplitContainerOuter.Panel2
             // 
             this.playlistsSplitContainerOuter.Panel2.Controls.Add(this.playlistsSplitContainerInner);
-            this.playlistsSplitContainerOuter.Size = new System.Drawing.Size(680, 520);
-            this.playlistsSplitContainerOuter.SplitterDistance = 219;
+            this.playlistsSplitContainerOuter.Size = new System.Drawing.Size(675, 514);
+            this.playlistsSplitContainerOuter.SplitterDistance = 216;
             this.playlistsSplitContainerOuter.TabIndex = 5;
             // 
             // playlistsGroupBox
@@ -262,7 +262,7 @@
             this.playlistsGroupBox.Controls.Add(this.panel1);
             this.playlistsGroupBox.Location = new System.Drawing.Point(4, 4);
             this.playlistsGroupBox.Name = "playlistsGroupBox";
-            this.playlistsGroupBox.Size = new System.Drawing.Size(673, 212);
+            this.playlistsGroupBox.Size = new System.Drawing.Size(668, 209);
             this.playlistsGroupBox.TabIndex = 5;
             this.playlistsGroupBox.TabStop = false;
             this.playlistsGroupBox.Text = "Playlists";
@@ -271,7 +271,7 @@
             // 
             this.showAllPlaylistsCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showAllPlaylistsCheckbox.AutoSize = true;
-            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(6, 189);
+            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(6, 186);
             this.showAllPlaylistsCheckbox.Name = "showAllPlaylistsCheckbox";
             this.showAllPlaylistsCheckbox.Size = new System.Drawing.Size(105, 17);
             this.showAllPlaylistsCheckbox.TabIndex = 5;
@@ -287,7 +287,7 @@
             this.panel1.Controls.Add(this.playlistDataGridView);
             this.panel1.Location = new System.Drawing.Point(6, 19);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(661, 164);
+            this.panel1.Size = new System.Drawing.Size(656, 161);
             this.panel1.TabIndex = 4;
             // 
             // playlistDataGridView
@@ -307,7 +307,7 @@
             this.playlistDataGridView.Location = new System.Drawing.Point(3, 3);
             this.playlistDataGridView.MultiSelect = false;
             this.playlistDataGridView.Name = "playlistDataGridView";
-            this.playlistDataGridView.Size = new System.Drawing.Size(655, 158);
+            this.playlistDataGridView.Size = new System.Drawing.Size(650, 155);
             this.playlistDataGridView.TabIndex = 1;
             // 
             // playlistsSplitContainerInner
@@ -326,8 +326,8 @@
             // playlistsSplitContainerInner.Panel2
             // 
             this.playlistsSplitContainerInner.Panel2.Controls.Add(this.tracksGroupBox);
-            this.playlistsSplitContainerInner.Size = new System.Drawing.Size(677, 294);
-            this.playlistsSplitContainerInner.SplitterDistance = 149;
+            this.playlistsSplitContainerInner.Size = new System.Drawing.Size(672, 291);
+            this.playlistsSplitContainerInner.SplitterDistance = 147;
             this.playlistsSplitContainerInner.TabIndex = 0;
             // 
             // streamsGroupBox
@@ -338,7 +338,7 @@
             this.streamsGroupBox.Controls.Add(this.listViewStreamFiles);
             this.streamsGroupBox.Location = new System.Drawing.Point(4, 4);
             this.streamsGroupBox.Name = "streamsGroupBox";
-            this.streamsGroupBox.Size = new System.Drawing.Size(670, 142);
+            this.streamsGroupBox.Size = new System.Drawing.Size(665, 140);
             this.streamsGroupBox.TabIndex = 0;
             this.streamsGroupBox.TabStop = false;
             this.streamsGroupBox.Text = "Streams";
@@ -360,7 +360,7 @@
             this.listViewStreamFiles.Location = new System.Drawing.Point(3, 16);
             this.listViewStreamFiles.MultiSelect = false;
             this.listViewStreamFiles.Name = "listViewStreamFiles";
-            this.listViewStreamFiles.Size = new System.Drawing.Size(664, 123);
+            this.listViewStreamFiles.Size = new System.Drawing.Size(659, 121);
             this.listViewStreamFiles.TabIndex = 7;
             this.listViewStreamFiles.UseCompatibleStateImageBehavior = false;
             this.listViewStreamFiles.View = System.Windows.Forms.View.Details;
@@ -401,7 +401,7 @@
             this.tracksGroupBox.Controls.Add(this.listViewStreams);
             this.tracksGroupBox.Location = new System.Drawing.Point(4, 4);
             this.tracksGroupBox.Name = "tracksGroupBox";
-            this.tracksGroupBox.Size = new System.Drawing.Size(670, 134);
+            this.tracksGroupBox.Size = new System.Drawing.Size(665, 133);
             this.tracksGroupBox.TabIndex = 0;
             this.tracksGroupBox.TabStop = false;
             this.tracksGroupBox.Text = "Tracks";
@@ -421,7 +421,7 @@
             this.listViewStreams.Location = new System.Drawing.Point(3, 16);
             this.listViewStreams.MultiSelect = false;
             this.listViewStreams.Name = "listViewStreams";
-            this.listViewStreams.Size = new System.Drawing.Size(664, 115);
+            this.listViewStreams.Size = new System.Drawing.Size(659, 114);
             this.listViewStreams.TabIndex = 8;
             this.listViewStreams.UseCompatibleStateImageBehavior = false;
             this.listViewStreams.View = System.Windows.Forms.View.Details;
@@ -459,9 +459,9 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel,
             this.progressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 603);
+            this.statusStrip.Location = new System.Drawing.Point(0, 597);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(724, 22);
+            this.statusStrip.Size = new System.Drawing.Size(719, 22);
             this.statusStrip.TabIndex = 6;
             this.statusStrip.Text = "Status Strip";
             // 
@@ -482,7 +482,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(724, 625);
+            this.ClientSize = new System.Drawing.Size(719, 619);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.cancelButton);

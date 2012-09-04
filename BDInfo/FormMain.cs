@@ -321,6 +321,7 @@ namespace BDInfo
             buttonCustomPlaylist.Enabled = false;
             buttonScan.Enabled = false;
             buttonViewReport.Enabled = false;
+            buttonRip.Enabled = false;
             textBoxDetails.Enabled = false;
             listViewPlaylistFiles.Enabled = false;
             listViewStreamFiles.Enabled = false;
@@ -418,6 +419,7 @@ namespace BDInfo
             buttonUnselectAll.Enabled = true;
             buttonCustomPlaylist.Enabled = true;
             buttonViewReport.Enabled = true;
+            buttonRip.Enabled = true;
             textBoxDetails.Enabled = true;
             listViewPlaylistFiles.Enabled = true;
             listViewStreamFiles.Enabled = true;
@@ -1511,6 +1513,11 @@ namespace BDInfo
                     return x.Name.CompareTo(y.Name);
                 }
             }
+        }
+
+        private void buttonRip_Click(object sender, EventArgs e)
+        {
+            FindMainPlaylist();
         }
     }
 

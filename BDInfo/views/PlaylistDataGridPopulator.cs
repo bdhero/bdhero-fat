@@ -19,6 +19,7 @@ namespace BDInfo.views
         private bool showAllPlaylists = false;
 
         private IList<PlaylistGridItem> playlistGridItems = new List<PlaylistGridItem>();
+        private IList<PlaylistGridItem> playlistGridItemsOriginal = new List<PlaylistGridItem>();
 
         public event EventHandler SelectionChanged;
 
@@ -34,11 +35,17 @@ namespace BDInfo.views
             {
                 if (value == null) return;
 
-                foreach (PlaylistGridItem item in bindingList)
+                for (int i = 0; i < playlistGridItems.Count; i++)
                 {
-                    if (! item.VideoLanguageHasChanged)
+                    PlaylistGridItem item1 = playlistGridItems[i];
+                    PlaylistGridItem item2 = playlistGridItemsOriginal[i];
+                    if (! item1.VideoLanguageHasChanged)
                     {
-                        item.VideoLanguageAuto = value;
+                        item1.VideoLanguageAuto = value;
+                    }
+                    if (!item2.VideoLanguageHasChanged)
+                    {
+                        item2.VideoLanguageAuto = value;
                     }
                 }
             }
@@ -67,9 +74,30 @@ namespace BDInfo.views
             foreach (TSPlaylistFile playlist in playlists)
             {
                 playlistGridItems.Add(new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null));
+                playlistGridItemsOriginal.Add(new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null));
             }
 
             ShowAllPlaylists = false;
+        }
+
+        public bool HasChanged
+        {
+            get
+            {
+                bool hasChanged = false;
+                for (int i = 0; i < playlistGridItems.Count && !hasChanged; i++)
+                {
+                    // TODO: Items are never equal.
+                    // playlistGridItems[i] language == "fra" && playlistGridItemsOriginal[i] language == "eng"
+                    // on Toy Story 3.
+                    // One is getting updated correctly but not the other.
+                    if (! playlistGridItems[i].Equals(playlistGridItemsOriginal[i]))
+                    {
+                        hasChanged = true;
+                    }
+                }
+                return hasChanged;
+            }
         }
 
         public bool ShowAllPlaylists
@@ -110,6 +138,42 @@ namespace BDInfo.views
 
                 return jsonPlaylists;
             }
+        }
+
+        public void AutoConfigure(IList<JsonPlaylist> jsonPlaylists)
+        {
+            Dictionary<string, PlaylistGridItem> mainPlaylistGridItems = new Dictionary<string, PlaylistGridItem>();
+            Dictionary<string, PlaylistGridItem> mainPlaylistGridItemsOriginal = new Dictionary<string, PlaylistGridItem>();
+            
+            foreach (PlaylistGridItem item in playlistGridItems)
+            {
+                if (item.Playlist.IsMainPlaylist)
+                {
+                    mainPlaylistGridItems.Add(item.Playlist.Name.ToUpper(), item);
+                    mainPlaylistGridItemsOriginal.Add(item.Playlist.Name.ToUpper(), item);
+                }
+            }
+
+            foreach (JsonPlaylist jsonPlaylist in jsonPlaylists)
+            {
+                AutoConfigure(jsonPlaylist, mainPlaylistGridItems);
+                AutoConfigure(jsonPlaylist, mainPlaylistGridItemsOriginal);
+            }
+        }
+
+        private void AutoConfigure(JsonPlaylist jsonPlaylist, Dictionary<string, PlaylistGridItem> gridItems)
+        {
+            PlaylistGridItem item = gridItems[jsonPlaylist.filename.ToUpper()];
+
+            if (item == null) return;
+
+            item.VideoLanguageAuto = jsonPlaylist.ISO_639_2;
+            item.IsMainMovie = jsonPlaylist.is_main;
+            if (jsonPlaylist.is_theatrical) item.Cut = Cut.Theatrical;
+            else if (jsonPlaylist.is_special) item.Cut = Cut.Special;
+            else if (jsonPlaylist.is_extended) item.Cut = Cut.Extended;
+            else if (jsonPlaylist.is_unrated) item.Cut = Cut.Unrated;
+            item.HasCommentary = jsonPlaylist.has_commentary;
         }
 
         private void playButton_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -325,7 +389,7 @@ namespace BDInfo.views
 
                 jsonPlaylist.filename = Filename;
                 jsonPlaylist.filesize = Playlist.FileSize;
-                jsonPlaylist.length = Playlist.TotalLength;
+                jsonPlaylist.length_sec = (int) Playlist.TotalLength;
                 jsonPlaylist.ISO_639_2 = VideoLanguage;
 
                 jsonPlaylist.is_main = IsMainMovie;
@@ -333,7 +397,7 @@ namespace BDInfo.views
                 jsonPlaylist.is_special = Cut.Equals(Cut.Special);
                 jsonPlaylist.is_extended = Cut.Equals(Cut.Extended);
                 jsonPlaylist.is_unrated = Cut.Equals(Cut.Unrated);
-                jsonPlaylist.is_commentary = HasCommentary;
+                jsonPlaylist.has_commentary = HasCommentary;
 
                 return jsonPlaylist;
             }
@@ -347,6 +411,32 @@ namespace BDInfo.views
                 playlistLengthSpan.Hours,
                 playlistLengthSpan.Minutes,
                 playlistLengthSpan.Seconds);
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            PlaylistGridItem that = obj as PlaylistGridItem;
+            if ((System.Object)that == null)
+            {
+                return false;
+            }
+
+            return
+                this.playlist == that.playlist &&
+                this.isMainMovie == that.isMainMovie &&
+                this.filename == that.filename &&
+                this.length == that.length &&
+                this.size == that.size &&
+                this.ISO_639_2 == that.ISO_639_2 &&
+                this.cut == that.cut &&
+                this.hasCommentary == that.hasCommentary;
         }
     }
 }

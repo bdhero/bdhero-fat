@@ -11,6 +11,7 @@ using System.Globalization;
 using BDInfo.views;
 using Newtonsoft.Json;
 using BDInfo.models;
+using BDInfo.controllers;
 
 namespace BDInfo
 {
@@ -25,11 +26,17 @@ namespace BDInfo
         private IList<string> languageCodes = new List<string>();
 
         private TmdbMovieSearch movieSearch;
+        private MainMovieService mainMovieService = new MainMovieService();
+        private JsonSearchResult mainMovieSearchResult;
 
         private MovieResult movieResult = null;
+        private BackgroundWorker mainMovieBackgroundWorker;
         private BackgroundWorker tmdbBackgroundWorker;
 
         private PlaylistDataGridPopulator populator;
+
+        private bool auto_configured = false;
+        private int auto_tmdb_id = -1;
 
         public FormDetails(BDROM BDROM, List<TSPlaylistFile> playlists, ISet<Language> languages)
         {
@@ -66,10 +73,11 @@ namespace BDInfo
             this.movieNameTextBox.Text = BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = languageCodes;
 
-            ResetPlaylists();
-            SearchTmdb();
             listViewStreamFiles.Enabled = true;
             listViewStreams.Enabled = true;
+
+            ResetPlaylists();
+            QueryMainMovie();
         }
 
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
@@ -81,6 +89,21 @@ namespace BDInfo
             string playlistFileName = playlistFile.Name;
 
             StreamTrackListViewPopulator.Populate(playlistFile, listViewStreamFiles, listViewStreams);
+        }
+
+        #region Web Service Queries
+
+        private void QueryMainMovie()
+        {
+            EnableForm(false);
+
+            mainMovieBackgroundWorker = new BackgroundWorker();
+            mainMovieBackgroundWorker.WorkerReportsProgress = true;
+            mainMovieBackgroundWorker.WorkerSupportsCancellation = true;
+            mainMovieBackgroundWorker.DoWork += mainMovieBackgroundWorker_DoWork;
+            mainMovieBackgroundWorker.ProgressChanged += mainMovieBackgroundWorker_ProgressChanged;
+            mainMovieBackgroundWorker.RunWorkerCompleted += mainMovieBackgroundWorker_RunWorkerCompleted;
+            mainMovieBackgroundWorker.RunWorkerAsync(this.movieNameTextBox.Text);
         }
 
         private void SearchTmdb()
@@ -100,6 +123,10 @@ namespace BDInfo
             tmdbBackgroundWorker.RunWorkerCompleted += tmdbBackgroundWorker_RunWorkerCompleted;
             tmdbBackgroundWorker.RunWorkerAsync(this.movieNameTextBox.Text);
         }
+
+        #endregion
+
+        #region View Manipulation
 
         private void EnableForm(bool enabled)
         {
@@ -128,31 +155,66 @@ namespace BDInfo
             return continueButton.Enabled = searchResultListView.SelectedItems.Count > 0;
         }
 
-        private void FormDetails_Resize(object sender, EventArgs e)
+        #endregion
+
+        #region Main Movie Background Worker
+
+        private void mainMovieBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            ResetColumnWidths();
+            try
+            {
+                IList<TSPlaylistFile> mainPlaylists = new List<TSPlaylistFile>();
+                foreach (TSPlaylistFile playlist in playlists)
+                {
+                    if (playlist.IsMainPlaylist)
+                        mainPlaylists.Add(playlist);
+                }
+                mainMovieSearchResult = mainMovieService.FindMainMovie(BDROM.VolumeLabel, mainPlaylists);
+                e.Result = null;
+            }
+            catch (Exception ex)
+            {
+                e.Result = ex;
+            }
         }
 
-        private void searchResultListView_SelectedIndexChanged(object sender, EventArgs e)
+        private void mainMovieBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            ResetContinueButton();
         }
 
-        private void searchButton_Click(object sender, EventArgs e)
+        private void mainMovieBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (mainMovieSearchResult.error)
+            {
+                string errorMessages = "";
+                foreach (JsonSearchResultError error in mainMovieSearchResult.errors)
+                {
+                    errorMessages += error.textStatus + " - " + error.errorMessage + "\n";
+                }
+                MessageBox.Show(this, "Main movie service returned the following error(s): \n\n" + errorMessages, "Error - main movie service", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if(mainMovieSearchResult.discs.Count == 0)
+            {
+                MessageBox.Show(this, "No matching discs were found in the database.\n\n" + "Please submit one!", "No results found", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                MessageBox.Show(this, "Hooray!  Found " + mainMovieSearchResult.discs.Count + " matching discs in the database.", mainMovieSearchResult.discs.Count + " result(s) found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
+                JsonDisc disc = mainMovieSearchResult.discs[0];
+
+                this.auto_configured = true;
+                this.auto_tmdb_id = disc.tmdb_id;
+                this.movieNameTextBox.Text = disc.movie_title + " (" + disc.year + ")";
+
+                populator.AutoConfigure(disc.playlists);
+            }
             SearchTmdb();
         }
 
-        private void continueButton_Click(object sender, EventArgs e)
-        {
-            if (searchResultListView.SelectedIndices.Count > 0)
-            {
-                int index = searchResultListView.SelectedIndices[0];
-                movieResult = movieSearch.results[index];
-            }
+        #endregion
 
-            Close();
-        }
+        #region TMDb Background Worker
 
         private void tmdbBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -209,10 +271,69 @@ namespace BDInfo
             ResetColumnWidths(0);
         }
 
+        #endregion
+
+        #region Event Handlers
+
         private void showAllPlaylistsCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             ResetPlaylists();
         }
+
+        private void listViewStreamFiles_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listViewStreamFiles.SelectedItems.Count == 0) return;
+
+            string filename = listViewStreamFiles.SelectedItems[0].Text;
+            string filepath = System.IO.Path.Combine(BDROM.DirectorySTREAM.FullName, filename);
+
+            System.Diagnostics.Process.Start(filepath);
+        }
+
+        private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            populator.MainLanguageCode = discLanguageComboBox.SelectedValue as string;
+        }
+
+        private void FormDetails_Resize(object sender, EventArgs e)
+        {
+            ResetColumnWidths();
+        }
+
+        private void searchResultListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ResetContinueButton();
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            SearchTmdb();
+        }
+
+        private void continueButton_Click(object sender, EventArgs e)
+        {
+            if (searchResultListView.SelectedIndices.Count > 0)
+            {
+                int index = searchResultListView.SelectedIndices[0];
+                movieResult = movieSearch.results[index];
+
+                if (auto_configured)
+                {
+                    if (movieResult.id != auto_tmdb_id || populator.HasChanged)
+                    {
+                        DialogResult answer = MessageBox.Show(this, "Submit a new disc to the database?", "Changes detected", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (answer == DialogResult.Yes)
+                        {
+                            SubmitJsonDisc();
+                        }
+                    }
+                }
+            }
+
+            //Close();
+        }
+
+        #endregion
 
         private void SubmitJsonDisc()
         {
@@ -236,21 +357,6 @@ namespace BDInfo
             string jsonString = JsonConvert.SerializeObject(jsonDisc);
             Clipboard.SetText(jsonString);
             MessageBox.Show("Copied to clipboard: \n\n" + jsonString);
-        }
-
-        private void listViewStreamFiles_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (listViewStreamFiles.SelectedItems.Count == 0) return;
-
-            string filename = listViewStreamFiles.SelectedItems[0].Text;
-            string filepath = System.IO.Path.Combine(BDROM.DirectorySTREAM.FullName, filename);
-
-            System.Diagnostics.Process.Start(filepath);
-        }
-
-        private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            populator.MainLanguageCode = discLanguageComboBox.SelectedValue as string;
         }
     }
 }

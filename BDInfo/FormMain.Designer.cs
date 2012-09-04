@@ -84,6 +84,7 @@ namespace BDInfo
             this.columnHeaderBitrate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonRescan = new System.Windows.Forms.Button();
+            this.buttonRip = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerOuter)).BeginInit();
             this.splitContainerOuter.Panel1.SuspendLayout();
             this.splitContainerOuter.Panel2.SuspendLayout();
@@ -107,8 +108,8 @@ namespace BDInfo
             // 
             // textBoxSource
             // 
-            this.textBoxSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxSource.Location = new System.Drawing.Point(17, 24);
             this.textBoxSource.Name = "textBoxSource";
             this.textBoxSource.Size = new System.Drawing.Size(490, 20);
@@ -180,8 +181,8 @@ namespace BDInfo
             // 
             // progressBarScan
             // 
-            this.progressBarScan.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBarScan.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarScan.Location = new System.Drawing.Point(17, 626);
             this.progressBarScan.Name = "progressBarScan";
             this.progressBarScan.Size = new System.Drawing.Size(651, 23);
@@ -222,8 +223,8 @@ namespace BDInfo
             // 
             // textBoxDetails
             // 
-            this.textBoxDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxDetails.Enabled = false;
             this.textBoxDetails.Location = new System.Drawing.Point(16, 545);
             this.textBoxDetails.Multiline = true;
@@ -277,9 +278,9 @@ namespace BDInfo
             // 
             // splitContainerOuter
             // 
-            this.splitContainerOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainerOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerOuter.Location = new System.Drawing.Point(17, 79);
             this.splitContainerOuter.Name = "splitContainerOuter";
             this.splitContainerOuter.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -463,12 +464,25 @@ namespace BDInfo
             this.buttonRescan.UseVisualStyleBackColor = true;
             this.buttonRescan.Click += new System.EventHandler(this.buttonRescan_Click);
             // 
+            // buttonRip
+            // 
+            this.buttonRip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonRip.Enabled = false;
+            this.buttonRip.Location = new System.Drawing.Point(17, 654);
+            this.buttonRip.Name = "buttonRip";
+            this.buttonRip.Size = new System.Drawing.Size(75, 23);
+            this.buttonRip.TabIndex = 39;
+            this.buttonRip.Text = "Rip...";
+            this.buttonRip.UseVisualStyleBackColor = true;
+            this.buttonRip.Click += new System.EventHandler(this.buttonRip_Click);
+            // 
             // FormMain
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(681, 682);
+            this.Controls.Add(this.buttonRip);
             this.Controls.Add(this.buttonRescan);
             this.Controls.Add(this.splitContainerOuter);
             this.Controls.Add(this.buttonCustomPlaylist);
@@ -548,5 +562,6 @@ namespace BDInfo
         private System.Windows.Forms.Button buttonRescan;
         private System.Windows.Forms.ColumnHeader columnHeaderPlaylistGroup;
         private System.Windows.Forms.ColumnHeader columnHeaderIndex;
+        private System.Windows.Forms.Button buttonRip;
     }
 }
