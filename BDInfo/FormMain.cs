@@ -34,6 +34,7 @@ using BDInfo.models;
 using Newtonsoft.Json;
 using WatTmdb.V3;
 using BDInfo.views;
+using BDInfo.controllers;
 
 namespace BDInfo
 {
@@ -68,6 +69,7 @@ namespace BDInfo
         private void FormMain_Load(object sender, EventArgs e)
         {
             ResetColumnWidths();
+            TsMuxer.StaticTest();
         }
 
         private void textBoxSource_TextChanged(object sender, EventArgs e)
