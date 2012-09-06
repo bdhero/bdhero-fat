@@ -72,7 +72,7 @@ namespace BDInfo
         private void FormDetails_Load(object sender, EventArgs e)
         {
             this.movieNameTextBox.Text = BDROM.DiscNameSearchable;
-            this.discLanguageComboBox.DataSource = languages;
+            this.discLanguageComboBox.DataSource = new List<Language>(languages).ToArray();
 
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
 
@@ -126,7 +126,7 @@ namespace BDInfo
             ignoreFilterControlChange = true;
 
             comboBoxAudienceLanguage.DataSource = null;
-            comboBoxAudienceLanguage.DataSource = languages;
+            comboBoxAudienceLanguage.DataSource = new List<Language>(languages).ToArray();
             comboBoxAudienceLanguage.Enabled = languages.Count > 1;
 
             Language[] selectedVideoLanguages = VideoLanguages;
