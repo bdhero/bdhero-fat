@@ -185,8 +185,7 @@ namespace BDInfo.views
         private void playButton_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignore clicks that are not on button cells.
-            //if (e.RowIndex < 0 || e.ColumnIndex != playlistDataGridView.Columns["Preview"].Index)
-            if (e.RowIndex < 0 || e.ColumnIndex != 0)
+            if (e.RowIndex < 0 || e.ColumnIndex != playButtonColumn.Index)
                 return;
 
             PlaylistGridItem item = bindingList[e.RowIndex];
@@ -197,6 +196,10 @@ namespace BDInfo.views
         /// <see cref="http://stackoverflow.com/a/242760/467582"/>
         private void playlistDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            // Ignore clicks on the header cells
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
+
             var column = playlistDataGridView.Columns[e.ColumnIndex];
             if (column is DataGridViewComboBoxColumn)
             {
