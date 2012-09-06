@@ -69,7 +69,6 @@ namespace BDInfo
         private void FormMain_Load(object sender, EventArgs e)
         {
             ResetColumnWidths();
-            TsMuxer.StaticTest();
         }
 
         private void textBoxSource_TextChanged(object sender, EventArgs e)
