@@ -12,6 +12,7 @@ using BDInfo.views;
 using Newtonsoft.Json;
 using BDInfo.models;
 using BDInfo.controllers;
+using System.IO;
 
 namespace BDInfo
 {
@@ -72,6 +73,8 @@ namespace BDInfo
         {
             this.movieNameTextBox.Text = BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = languages;
+
+            textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
 
             InitOutputTab();
 
@@ -331,6 +334,147 @@ namespace BDInfo
             return continueButton.Enabled = searchResultListView.SelectedItems.Count > 0;
         }
 
+        private void buttonOutputDir_Click(
+            object sender,
+            EventArgs e)
+        {
+            string path = null;
+            try
+            {
+                FolderBrowserDialog dialog = new FolderBrowserDialog();
+                dialog.Description = "Select an Output Folder:";
+                dialog.ShowNewFolderButton = false;
+                if (!string.IsNullOrEmpty(textBoxOutputDir.Text))
+                {
+                    dialog.SelectedPath = textBoxOutputDir.Text;
+                }
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    path = dialog.SelectedPath;
+                    textBoxOutputDir.Text = path;
+
+                    // TODO: Validate that the selected directory has enough free space for 2x-3x the playlist size
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format(
+                    "Error opening path {0}: {1}{2}",
+                    path,
+                    ex.Message,
+                    Environment.NewLine);
+
+                MessageBox.Show(msg, "BDInfo Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private bool IsFile(string path)
+        {
+            return !IsDirectory(path);
+        }
+
+        private bool IsDirectory(string path)
+        {
+            return (File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory;
+        }
+
+        private bool HasFile(DragEventArgs e)
+        {
+            return GetFirstFilePath(e) != null;
+        }
+
+        private bool HasDirectory(DragEventArgs e)
+        {
+            return GetFirstDirectoryPath(e) != null;
+        }
+
+        private string[] GetPaths(DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                return (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            }
+            return new string[0];
+        }
+
+        private string GetFirstFilePath(DragEventArgs e)
+        {
+            string[] paths = GetPaths(e);
+            foreach (string path in paths)
+            {
+                FileAttributes attr = File.GetAttributes(path);
+                if ((attr & FileAttributes.Directory) == 0)
+                    return path;
+            }
+            return null;
+        }
+
+        private string GetFirstDirectoryPath(DragEventArgs e)
+        {
+            string[] paths = GetPaths(e);
+            foreach (string path in paths)
+            {
+                FileAttributes attr = File.GetAttributes(path);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    return path;
+            }
+            return null;
+        }
+
+        private string GetFirstPath(DragEventArgs e)
+        {
+            string[] paths = GetPaths(e);
+            return paths.Length > 0 ? paths[0] : null;
+        }
+
+        private void textBoxOutputDir_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void textBoxOutputDir_DragDrop(object sender, DragEventArgs e)
+        {
+            string path = GetFirstPath(e);
+            if (path != null)
+            {
+                if (IsDirectory(path))
+                    textBoxOutputDir.Text = path;
+                else
+                    textBoxOutputDir.Text = Path.GetDirectoryName(path);
+
+                // TODO: Validate that the selected directory has enough free space for 2x-3x the playlist size
+            }
+        }
+
+        private void textBoxOutputFileName_DragEnter(object sender, DragEventArgs e)
+        {
+            if (HasFile(e) && !String.IsNullOrEmpty(GetFirstFileNameWithoutExtension(e)))
+                e.Effect = DragDropEffects.All;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void textBoxOutputFileName_DragDrop(object sender, DragEventArgs e)
+        {
+            string filenameWithoutExtension = GetFirstFileNameWithoutExtension(e);
+            if (!String.IsNullOrEmpty(filenameWithoutExtension))
+                textBoxOutputFileName.Text = filenameWithoutExtension;
+        }
+
+        private string GetFirstFileNameWithoutExtension(DragEventArgs e)
+        {
+            string path = GetFirstFilePath(e);
+            return path == null ? null : Path.GetFileNameWithoutExtension(path);
+        }
+
         #endregion
 
         #region Main Movie Background Worker
@@ -425,6 +569,20 @@ namespace BDInfo
         {
         }
 
+        private string movieTitle = null;
+        private int? movieYear = null;
+
+        private string GetYearString(string tmdb_date)
+        {
+            return String.IsNullOrEmpty(tmdb_date) ? null : Regex.Replace(tmdb_date, @"^(\d{4})-(\d{1,2})-(\d{1,2})$", @"$1", RegexOptions.IgnoreCase);
+        }
+
+        private int? GetYearInt(string tmdb_date)
+        {
+            string yearString = GetYearString(tmdb_date);
+            return String.IsNullOrEmpty(yearString) ? (int?) null : Convert.ToInt32(yearString);
+        }
+
         private void tmdbBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             foreach (MovieResult movieResult in movieSearch.results)
@@ -434,7 +592,7 @@ namespace BDInfo
                 ListViewItem.ListViewSubItem moviePopularitySubItem = new ListViewItem.ListViewSubItem();
 
                 movieNameSubItem.Text = movieResult.title;
-                movieYearSubItem.Text = movieResult.release_date != null ? Regex.Replace(movieResult.release_date, @"^(\d{4})-(\d{1,2})-(\d{1,2})$", @"$1", RegexOptions.IgnoreCase) : null;
+                movieYearSubItem.Text = GetYearString(movieResult.release_date);
                 moviePopularitySubItem.Text = movieResult.popularity.ToString("N3", CultureInfo.CurrentUICulture);
 
                 ListViewItem.ListViewSubItem[] searchResultSubItems =
@@ -494,6 +652,22 @@ namespace BDInfo
 
         private void searchResultListView_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.movieResult = null;
+            this.movieTitle = null;
+            this.movieYear = null;
+
+            if (this.movieSearch != null && searchResultListView.SelectedIndices.Count > 0)
+            {
+                int index = searchResultListView.SelectedIndices[0];
+                this.movieResult = this.movieSearch.results[index];
+
+                if (movieResult != null)
+                {
+                    this.movieTitle = this.movieResult.title;
+                    this.movieYear = GetYearInt(this.movieResult.release_date);
+                }
+            }
+
             ResetContinueButton();
         }
 
@@ -506,9 +680,6 @@ namespace BDInfo
         {
             if (searchResultListView.SelectedIndices.Count > 0)
             {
-                int index = searchResultListView.SelectedIndices[0];
-                movieResult = movieSearch.results[index];
-
                 if (auto_configured)
                 {
                     if (movieResult.id != auto_tmdb_id || populator.HasChanged)
@@ -544,8 +715,8 @@ namespace BDInfo
             jsonDisc.ISO_639_2 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_2 : null;
 
             jsonDisc.tmdb_id = movieResult.id;
-            jsonDisc.movie_title = movieResult.title;
-            jsonDisc.year = Convert.ToInt32(String.IsNullOrEmpty(movieResult.release_date) ? null : Regex.Replace(movieResult.release_date, @"^(\w{4})-.*", "$1", RegexOptions.IgnoreCase));
+            jsonDisc.movie_title = movieTitle;
+            jsonDisc.year = movieYear;
 
             jsonDisc.playlists = new List<JsonPlaylist>();
 
@@ -571,6 +742,59 @@ namespace BDInfo
             //string jsonString = JsonConvert.SerializeObject(jsonDisc);
             //Clipboard.SetText(jsonString);
             //MessageBox.Show("Copied to clipboard: \n\n" + jsonString);
+        }
+
+        private void checkBoxReplaceSpaces_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxReplaceSpaces.Enabled = checkBoxReplaceSpaces.Checked;
+            if (checkBoxReplaceSpaces.Checked)
+            {
+                textBoxReplaceSpaces.Focus();
+                textBoxReplaceSpaces.SelectAll();
+            }
+            textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
+        }
+
+        private void textBoxOutputFileName_TextChanged(object sender, EventArgs e)
+        {
+            string preview = textBoxOutputFileName.Text;
+
+            string title = String.IsNullOrEmpty(this.movieTitle) ? movieNameTextBox.Text : this.movieTitle;
+            string year = movieResult != null ? GetYearString(movieResult.release_date) : null;
+            string res = null;
+
+            year = String.IsNullOrEmpty(year) ? "_2006_" : year;
+            res = String.IsNullOrEmpty(res) ? "_1080p_" : res;
+
+            preview = Regex.Replace(preview, @"%title%", title, RegexOptions.IgnoreCase);
+            preview = Regex.Replace(preview, @"%year%", year, RegexOptions.IgnoreCase);
+            preview = Regex.Replace(preview, @"%res%", res, RegexOptions.IgnoreCase);
+
+            if (checkBoxReplaceSpaces.Checked)
+            {
+                preview = preview.Replace(" ", textBoxReplaceSpaces.Text);
+            }
+
+            labelOutputFileNamePreview.Text = preview +labelOutputFileExtension.Text;
+        }
+
+        private void textBoxReplaceSpaces_TextChanged(object sender, EventArgs e)
+        {
+            textBoxOutputFileName_TextChanged(sender, e);
+        }
+
+        private void textBoxReplaceSpaces_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // TODO: Also handle pasted text
+            if (!IsValidFilename(e.KeyChar + "") && e.KeyChar >= 32 && e.KeyChar != 127)
+                e.Handled = true;
+        }
+
+        /// <see cref="http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows"/>
+        bool IsValidFilename(string testName)
+        {
+            Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
+            return !containsABadCharacter.IsMatch(testName);
         }
     }
 }

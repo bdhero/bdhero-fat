@@ -66,9 +66,9 @@
             this.labelOutputFileNamePreview = new System.Windows.Forms.Label();
             this.labelOutputFileNameHelp = new System.Windows.Forms.Label();
             this.labelOutputFileExtension = new System.Windows.Forms.Label();
-            this.buttonBrowseOutputDir = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.buttonOutputDir = new System.Windows.Forms.Button();
+            this.textBoxOutputDir = new System.Windows.Forms.TextBox();
+            this.textBoxOutputFileName = new System.Windows.Forms.TextBox();
             this.labelOutputPreview = new System.Windows.Forms.Label();
             this.labelOutputFileName = new System.Windows.Forms.Label();
             this.labelOutputDirectory = new System.Windows.Forms.Label();
@@ -104,6 +104,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.checkBoxReplaceSpaces = new System.Windows.Forms.CheckBox();
+            this.textBoxReplaceSpaces = new System.Windows.Forms.TextBox();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -508,12 +510,14 @@
             // 
             this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Controls.Add(this.textBoxReplaceSpaces);
+            this.groupBoxOutput.Controls.Add(this.checkBoxReplaceSpaces);
             this.groupBoxOutput.Controls.Add(this.labelOutputFileNamePreview);
             this.groupBoxOutput.Controls.Add(this.labelOutputFileNameHelp);
             this.groupBoxOutput.Controls.Add(this.labelOutputFileExtension);
-            this.groupBoxOutput.Controls.Add(this.buttonBrowseOutputDir);
-            this.groupBoxOutput.Controls.Add(this.textBox2);
-            this.groupBoxOutput.Controls.Add(this.textBox1);
+            this.groupBoxOutput.Controls.Add(this.buttonOutputDir);
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputDir);
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileName);
             this.groupBoxOutput.Controls.Add(this.labelOutputPreview);
             this.groupBoxOutput.Controls.Add(this.labelOutputFileName);
             this.groupBoxOutput.Controls.Add(this.labelOutputDirectory);
@@ -552,33 +556,42 @@
             this.labelOutputFileExtension.TabIndex = 6;
             this.labelOutputFileExtension.Text = ".m2ts";
             // 
-            // buttonBrowseOutputDir
+            // buttonOutputDir
             // 
-            this.buttonBrowseOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowseOutputDir.Location = new System.Drawing.Point(599, 15);
-            this.buttonBrowseOutputDir.Name = "buttonBrowseOutputDir";
-            this.buttonBrowseOutputDir.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowseOutputDir.TabIndex = 5;
-            this.buttonBrowseOutputDir.Text = "Browse...";
-            this.buttonBrowseOutputDir.UseVisualStyleBackColor = true;
+            this.buttonOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOutputDir.Location = new System.Drawing.Point(599, 15);
+            this.buttonOutputDir.Name = "buttonOutputDir";
+            this.buttonOutputDir.Size = new System.Drawing.Size(75, 23);
+            this.buttonOutputDir.TabIndex = 5;
+            this.buttonOutputDir.Text = "Browse...";
+            this.buttonOutputDir.UseVisualStyleBackColor = true;
+            this.buttonOutputDir.Click += new System.EventHandler(this.buttonOutputDir_Click);
             // 
-            // textBox2
+            // textBoxOutputDir
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxOutputDir.AllowDrop = true;
+            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(67, 17);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(526, 20);
-            this.textBox2.TabIndex = 4;
+            this.textBoxOutputDir.Location = new System.Drawing.Point(67, 17);
+            this.textBoxOutputDir.Name = "textBoxOutputDir";
+            this.textBoxOutputDir.Size = new System.Drawing.Size(526, 20);
+            this.textBoxOutputDir.TabIndex = 4;
+            this.textBoxOutputDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragDrop);
+            this.textBoxOutputDir.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragEnter);
             // 
-            // textBox1
+            // textBoxOutputFileName
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxOutputFileName.AllowDrop = true;
+            this.textBoxOutputFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(67, 43);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(565, 20);
-            this.textBox1.TabIndex = 3;
+            this.textBoxOutputFileName.Location = new System.Drawing.Point(67, 43);
+            this.textBoxOutputFileName.Name = "textBoxOutputFileName";
+            this.textBoxOutputFileName.Size = new System.Drawing.Size(565, 20);
+            this.textBoxOutputFileName.TabIndex = 3;
+            this.textBoxOutputFileName.Text = "%title% (%year%) [%res%]";
+            this.textBoxOutputFileName.TextChanged += new System.EventHandler(this.textBoxOutputFileName_TextChanged);
+            this.textBoxOutputFileName.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragDrop);
+            this.textBoxOutputFileName.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragEnter);
             // 
             // labelOutputPreview
             // 
@@ -911,6 +924,30 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(100, 16);
             // 
+            // checkBoxReplaceSpaces
+            // 
+            this.checkBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxReplaceSpaces.AutoSize = true;
+            this.checkBoxReplaceSpaces.Location = new System.Drawing.Point(504, 72);
+            this.checkBoxReplaceSpaces.Name = "checkBoxReplaceSpaces";
+            this.checkBoxReplaceSpaces.Size = new System.Drawing.Size(128, 17);
+            this.checkBoxReplaceSpaces.TabIndex = 9;
+            this.checkBoxReplaceSpaces.Text = "Replace spaces with:";
+            this.checkBoxReplaceSpaces.UseVisualStyleBackColor = true;
+            this.checkBoxReplaceSpaces.CheckedChanged += new System.EventHandler(this.checkBoxReplaceSpaces_CheckedChanged);
+            // 
+            // textBoxReplaceSpaces
+            // 
+            this.textBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxReplaceSpaces.Enabled = false;
+            this.textBoxReplaceSpaces.Location = new System.Drawing.Point(641, 70);
+            this.textBoxReplaceSpaces.Name = "textBoxReplaceSpaces";
+            this.textBoxReplaceSpaces.Size = new System.Drawing.Size(29, 20);
+            this.textBoxReplaceSpaces.TabIndex = 10;
+            this.textBoxReplaceSpaces.Text = ".";
+            this.textBoxReplaceSpaces.TextChanged += new System.EventHandler(this.textBoxReplaceSpaces_TextChanged);
+            this.textBoxReplaceSpaces.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxReplaceSpaces_KeyPress);
+            // 
             // FormDetails
             // 
             this.AcceptButton = this.continueButton;
@@ -1008,9 +1045,9 @@
         private System.Windows.Forms.Label labelOutputFileNamePreview;
         private System.Windows.Forms.Label labelOutputFileNameHelp;
         private System.Windows.Forms.Label labelOutputFileExtension;
-        private System.Windows.Forms.Button buttonBrowseOutputDir;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button buttonOutputDir;
+        private System.Windows.Forms.TextBox textBoxOutputDir;
+        private System.Windows.Forms.TextBox textBoxOutputFileName;
         private System.Windows.Forms.Label labelOutputPreview;
         private System.Windows.Forms.Label labelOutputFileName;
         private System.Windows.Forms.Label labelOutputDirectory;
@@ -1037,5 +1074,7 @@
         private System.Windows.Forms.Label labelAudioLanguages;
         private System.Windows.Forms.Label labelCommentary;
         private System.Windows.Forms.Label labelCut;
+        private System.Windows.Forms.TextBox textBoxReplaceSpaces;
+        private System.Windows.Forms.CheckBox checkBoxReplaceSpaces;
     }
 }
