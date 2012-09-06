@@ -764,6 +764,7 @@
             this.listBoxSubtitleLanguages.FormattingEnabled = true;
             this.listBoxSubtitleLanguages.Location = new System.Drawing.Point(115, 164);
             this.listBoxSubtitleLanguages.Name = "listBoxSubtitleLanguages";
+            this.listBoxSubtitleLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBoxSubtitleLanguages.Size = new System.Drawing.Size(120, 56);
             this.listBoxSubtitleLanguages.TabIndex = 9;
             // 

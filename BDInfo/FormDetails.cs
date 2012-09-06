@@ -68,14 +68,16 @@ namespace BDInfo
             this.Load += FormDetails_Load;
         }
 
-        private void FormDetails_Load(object sender, System.EventArgs e)
+        private void FormDetails_Load(object sender, EventArgs e)
         {
             this.movieNameTextBox.Text = BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = languages;
 
             InitOutputTab();
 
-            populator.VideoLanguageChanged += VideoLanguageComboSelectionChanged;
+            populator.ItemChanged += OnPlaylistItemChange;
+
+            comboBoxAudienceLanguage.SelectedIndexChanged += OnAudienceLanguageChange;
 
             listViewStreamFiles.Enabled = true;
             listViewStreams.Enabled = true;
@@ -84,9 +86,34 @@ namespace BDInfo
             QueryMainMovie();
         }
 
-        private void VideoLanguageComboSelectionChanged(object sender, EventArgs e)
+        private void OnPlaylistItemChange(object sender, EventArgs e)
         {
             InitOutputTab();
+        }
+
+        private void OnAudienceLanguageChange(object sender, EventArgs e)
+        {
+            SetAudienceLanguage(VideoLanguages, comboBoxVideoLanguage);
+            SetAudienceLanguage(AudioLanguages, listBoxAudioLanguages);
+            SetAudienceLanguage(SubtitleLanguages, listBoxSubtitleLanguages);
+        }
+
+        private void SetAudienceLanguage(Language[] array, ListControl control)
+        {
+            Language audienceLanguage = comboBoxAudienceLanguage.SelectedValue as Language;
+            IList<Language> list = new List<Language>(array);
+            if (list.Contains(audienceLanguage))
+            {
+                try
+                {
+                    control.SelectedIndex = -1;
+                    control.SelectedIndex = list.IndexOf(audienceLanguage);
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
         }
 
         private void InitOutputTab()
@@ -95,20 +122,20 @@ namespace BDInfo
             comboBoxAudienceLanguage.DataSource = languages;
             comboBoxAudienceLanguage.Enabled = languages.Count > 1;
 
-            IList<Language> selectedVideoLanguages = populator.SelectedVideoLanguages;
+            Language[] selectedVideoLanguages = VideoLanguages;
             comboBoxVideoLanguage.DataSource = null;
             comboBoxVideoLanguage.DataSource = selectedVideoLanguages;
-            comboBoxVideoLanguage.Enabled = selectedVideoLanguages.Count > 1;
+            comboBoxVideoLanguage.Enabled = selectedVideoLanguages.Length > 1;
 
-            IList<Cut> selectedCuts = populator.SelectedCuts;
+            Cut[] selectedCuts = Cuts;
             comboBoxCut.DataSource = null;
             comboBoxCut.DataSource = selectedCuts;
-            comboBoxCut.Enabled = selectedCuts.Count > 1;
+            comboBoxCut.Enabled = selectedCuts.Length > 1;
 
-            IList<CommentaryOption> selectedCommentaryOptions = populator.SelectedCommentaryOptions;
+            CommentaryOption[] selectedCommentaryOptions = CommentaryOptions;
             comboBoxCommentary.DataSource = null;
             comboBoxCommentary.DataSource = selectedCommentaryOptions;
-            comboBoxCommentary.Enabled = selectedCommentaryOptions.Count > 1;
+            comboBoxCommentary.Enabled = selectedCommentaryOptions.Length > 1;
 
             Language[] audioLanguages = AudioLanguages;
             listBoxAudioLanguages.DataSource = null;
@@ -119,6 +146,30 @@ namespace BDInfo
             listBoxSubtitleLanguages.DataSource = null;
             listBoxSubtitleLanguages.DataSource = SubtitleLanguages;
             listBoxSubtitleLanguages.Enabled = subtitleLanguages.Length > 1;
+        }
+
+        private Language[] GetSortedLanguageArray(ICollection<Language> collection)
+        {
+            Language[] array = new Language[collection.Count];
+
+            int i = 0;
+            foreach (Language value in languages)
+            {
+                if (collection.Contains(value))
+                {
+                    array[i++] = value;
+                }
+            }
+
+            return array;
+        }
+
+        private Language[] VideoLanguages
+        {
+            get
+            {
+                return GetSortedLanguageArray(populator.SelectedVideoLanguages);
+            }
         }
 
         private Language[] AudioLanguages
@@ -133,16 +184,7 @@ namespace BDInfo
                         audioLanguages.Add(Language.GetLanguage(audioStream.LanguageCode));
                     }
                 }
-                Language[] audioLanguagesArray = new Language[audioLanguages.Count];
-                audioLanguages.CopyTo(audioLanguagesArray, 0);
-
-                // TODO: This doesn't seem to have any effect
-                Array.Sort(audioLanguagesArray, delegate(Language lang1, Language lang2)
-                {
-                    return lang1.ISO_639_2.CompareTo(lang2.ISO_639_2);
-                });
-
-                return audioLanguagesArray;
+                return GetSortedLanguageArray(audioLanguages);
             }
         }
 
@@ -162,16 +204,55 @@ namespace BDInfo
                         subtitleLanguages.Add(Language.GetLanguage(textStream.LanguageCode));
                     }
                 }
-                Language[] subtitleLanguagesArray = new Language[subtitleLanguages.Count];
-                subtitleLanguages.CopyTo(subtitleLanguagesArray, 0);
+                return GetSortedLanguageArray(subtitleLanguages);
+            }
+        }
 
-                // TODO: This doesn't seem to have any effect
-                Array.Sort(subtitleLanguagesArray, delegate(Language lang1, Language lang2)
+        private Cut[] GetSortedCutArray(ICollection<Cut> collection)
+        {
+            Cut[] array = new Cut[collection.Count];
+
+            int i = 0;
+            foreach (Cut value in Enum.GetValues(typeof(Cut)))
+            {
+                if (collection.Contains(value))
                 {
-                    return lang1.ISO_639_2.CompareTo(lang2.ISO_639_2);
-                });
+                    array[i++] = value;
+                }
+            }
 
-                return subtitleLanguagesArray;
+            return array;
+        }
+
+        private Cut[] Cuts
+        {
+            get
+            {
+                return GetSortedCutArray(populator.SelectedCuts);
+            }
+        }
+
+        private CommentaryOption[] GetSortedCommentaryOptionArray(ICollection<CommentaryOption> collection)
+        {
+            CommentaryOption[] array = new CommentaryOption[collection.Count];
+
+            int i = 0;
+            foreach (CommentaryOption value in Enum.GetValues(typeof(CommentaryOption)))
+            {
+                if (collection.Contains(value))
+                {
+                    array[i++] = value;
+                }
+            }
+
+            return array;
+        }
+
+        private CommentaryOption[] CommentaryOptions
+        {
+            get
+            {
+                return GetSortedCommentaryOptionArray(populator.SelectedCommentaryOptions);
             }
         }
 

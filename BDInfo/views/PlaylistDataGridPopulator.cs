@@ -23,7 +23,7 @@ namespace BDInfo.views
         private IList<PlaylistGridItem> playlistGridItemsOriginal = new List<PlaylistGridItem>();
 
         public event EventHandler SelectionChanged;
-        public event EventHandler VideoLanguageChanged;
+        public event EventHandler ItemChanged;
 
         private TSPlaylistFile selectedPlaylist = null;
         public TSPlaylistFile SelectedPlaylist
@@ -71,15 +71,27 @@ namespace BDInfo.views
 
             this.playlistDataGridView.CellClick += playlistDataGridView_CellClick;
             this.playlistDataGridView.SelectionChanged += dataGridView_SelectionChanged;
-            this.playlistDataGridView.EditingControlShowing += dataGridView_EditingControlShowing;
+
+            //this.playlistDataGridView.CurrentCellChanged += dataGridView_CurrentCellChanged;
+            //this.playlistDataGridView.CurrentCellDirtyStateChanged += dataGridView_CurrentCellDirtyStateChanged;
 
             foreach (TSPlaylistFile playlist in playlists)
             {
-                playlistGridItems.Add(new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null));
-                playlistGridItemsOriginal.Add(new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null));
+                PlaylistGridItem item = new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null);
+                PlaylistGridItem clone = item.Clone();
+
+                item.PropertyChanged += OnItemChange;
+
+                playlistGridItems.Add(item);
+                playlistGridItemsOriginal.Add(clone);
             }
 
             ShowAllPlaylists = false;
+        }
+
+        private void OnItemChange(object sender, PropertyChangedEventArgs e)
+        {
+            ItemChanged.Invoke(this, EventArgs.Empty);
         }
 
         public bool HasChanged
@@ -142,7 +154,7 @@ namespace BDInfo.views
             }
         }
 
-        public IList<Language> SelectedVideoLanguages
+        public ISet<Language> SelectedVideoLanguages
         {
             get
             {
@@ -156,11 +168,11 @@ namespace BDInfo.views
                     }
                 }
 
-                return selectedVideoLanguages.ToList();
+                return selectedVideoLanguages;
             }
         }
 
-        public IList<Cut> SelectedCuts
+        public ISet<Cut> SelectedCuts
         {
             get
             {
@@ -174,7 +186,7 @@ namespace BDInfo.views
                     }
                 }
 
-                return selectedCuts.ToList();
+                return selectedCuts;
             }
         }
 
@@ -269,6 +281,8 @@ namespace BDInfo.views
             }
         }
 
+        private int prevRowIndex = -1;
+
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
             // Skip if nothing is selected
@@ -277,8 +291,10 @@ namespace BDInfo.views
 
             int rowIndex = -1;
 
+            // User selected entire row
             if (playlistDataGridView.SelectedRows.Count > 0)
                 rowIndex = playlistDataGridView.SelectedRows[0].Index;
+            // User selected a single cell
             else
                 rowIndex = playlistDataGridView.SelectedCells[0].RowIndex;
 
@@ -292,27 +308,11 @@ namespace BDInfo.views
 
             if (selectedPlaylist == null) return;
 
-            string playlistFileName = selectedPlaylist.Name;
-
-            SelectionChanged.Invoke(this, EventArgs.Empty);
-        }
-
-        private void dataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            if (playlistDataGridView.CurrentCell.ColumnIndex == videoLanguageColumn.Index && e.Control is ComboBox)
+            if (rowIndex != prevRowIndex)
             {
-                ComboBox comboBox = e.Control as ComboBox;
-
-                // TODO: If you select a different index and then blur the combobox by clicking elsewhere,
-                //       this won't get triggered.
-                comboBox.SelectedIndexChanged -= VideoLanguageComboSelectionChanged;
-                comboBox.SelectedIndexChanged += VideoLanguageComboSelectionChanged;
+                prevRowIndex = rowIndex;
+                SelectionChanged.Invoke(this, EventArgs.Empty);
             }
-        }
-
-        private void VideoLanguageComboSelectionChanged(object sender, EventArgs e)
-        {
-            VideoLanguageChanged.Invoke(this, EventArgs.Empty);
         }
 
         private DataGridViewButtonColumn playButtonColumn;
@@ -428,8 +428,12 @@ namespace BDInfo.views
         Any, Yes, No
     }
 
-    public class PlaylistGridItem
+    public class PlaylistGridItem : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private PlaylistGridItem savedState;
+
         private TSPlaylistFile playlist;
         private bool isMainMovie;
         private string filename;
@@ -440,7 +444,11 @@ namespace BDInfo.views
         private Cut cut;
         private bool hasCommentary;
 
-        public PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2)
+        public PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2) : this(playlist, ISO_639_2, true)
+        {
+        }
+
+        private PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2, bool clone)
         {
             this.playlist = playlist;
             this.isMainMovie = playlist.IsMainPlaylist;
@@ -450,6 +458,35 @@ namespace BDInfo.views
             this.ISO_639_2 = ISO_639_2;
             this.cut = Cut.Theatrical;
             this.hasCommentary = false;
+
+            if ( clone )
+                this.savedState = Clone();
+        }
+
+        public PlaylistGridItem Clone()
+        {
+            PlaylistGridItem clone = new PlaylistGridItem(playlist, ISO_639_2, false);
+            this.CopyTo(clone);
+            return clone;
+        }
+
+        public void CopyTo(PlaylistGridItem that)
+        {
+            that.playlist = this.playlist;
+            that.isMainMovie = this.isMainMovie;
+            that.filename = this.filename;
+            that.length = this.length;
+            that.size = this.size;
+            that.ISO_639_2 = this.ISO_639_2;
+            that.cut = this.cut;
+            that.hasCommentary = this.hasCommentary;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public TSPlaylistFile Playlist
@@ -460,7 +497,14 @@ namespace BDInfo.views
         public bool IsMainMovie
         {
             get { return isMainMovie; }
-            set { isMainMovie = value; }
+            set
+            {
+                if (isMainMovie != value)
+                {
+                    isMainMovie = value;
+                    OnPropertyChanged("IsMainMovie");
+                }
+            }
         }
 
         public string Filename
@@ -481,7 +525,15 @@ namespace BDInfo.views
         public string VideoLanguage
         {
             get { return ISO_639_2; }
-            set { ISO_639_2 = value; ISO_639_2_hasChanged = true; }
+            set
+            {
+                if (ISO_639_2 != value)
+                {
+                    ISO_639_2 = value;
+                    ISO_639_2_hasChanged = true;
+                    OnPropertyChanged("VideoLanguage");
+                }
+            }
         }
 
         public string VideoLanguageAuto
@@ -504,13 +556,27 @@ namespace BDInfo.views
         public Cut Cut
         {
             get { return cut; }
-            set { cut = value; }
+            set
+            {
+                if (cut != value)
+                {
+                    cut = value;
+                    OnPropertyChanged("Cut");
+                }
+            }
         }
 
         public bool HasCommentary
         {
             get { return hasCommentary; }
-            set { hasCommentary = value; }
+            set
+            {
+                if (hasCommentary != value)
+                {
+                    hasCommentary = value;
+                    OnPropertyChanged("HasCommentary");
+                }
+            }
         }
 
         public JsonPlaylist JsonPlaylist
