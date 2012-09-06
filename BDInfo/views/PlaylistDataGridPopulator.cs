@@ -22,6 +22,7 @@ namespace BDInfo.views
         private IList<PlaylistGridItem> playlistGridItemsOriginal = new List<PlaylistGridItem>();
 
         public event EventHandler SelectionChanged;
+        public event EventHandler VideoLanguageChanged;
 
         private TSPlaylistFile selectedPlaylist = null;
         public TSPlaylistFile SelectedPlaylist
@@ -64,6 +65,7 @@ namespace BDInfo.views
 
             this.playlistDataGridView.CellClick += playlistDataGridView_CellClick;
             this.playlistDataGridView.SelectionChanged += dataGridView_SelectionChanged;
+            this.playlistDataGridView.EditingControlShowing += dataGridView_EditingControlShowing;
 
             foreach (TSPlaylistFile playlist in playlists)
             {
@@ -134,6 +136,67 @@ namespace BDInfo.views
             }
         }
 
+        public IList<Language> SelectedVideoLanguages
+        {
+            get
+            {
+                ISet<Language> selectedVideoLanguages = new HashSet<Language>();
+
+                foreach (PlaylistGridItem item in playlistGridItems)
+                {
+                    if (item.Playlist.IsMainPlaylist)
+                    {
+                        selectedVideoLanguages.Add(Language.GetLanguage(item.VideoLanguage));
+                    }
+                }
+
+                return selectedVideoLanguages.ToList();
+            }
+        }
+
+        public IList<Cut> SelectedCuts
+        {
+            get
+            {
+                ISet<Cut> selectedCuts = new HashSet<Cut>();
+
+                foreach (PlaylistGridItem item in playlistGridItems)
+                {
+                    if (item.Playlist.IsMainPlaylist)
+                    {
+                        selectedCuts.Add(item.Cut);
+                    }
+                }
+
+                return selectedCuts.ToList();
+            }
+        }
+
+        public IList<CommentaryOption> SelectedCommentaryOptions
+        {
+            get
+            {
+                ISet<CommentaryOption> selectedCommentaryOptionsSet = new HashSet<CommentaryOption>();
+
+                foreach (PlaylistGridItem item in playlistGridItems)
+                {
+                    if (item.Playlist.IsMainPlaylist)
+                    {
+                        selectedCommentaryOptionsSet.Add(item.HasCommentary ? CommentaryOption.Yes : CommentaryOption.No);
+                    }
+                }
+
+                IList<CommentaryOption> selectedCommentaryOptionsList = selectedCommentaryOptionsSet.ToList();
+
+                if (selectedCommentaryOptionsList.Count > 1)
+                {
+                    selectedCommentaryOptionsList.Insert(0, CommentaryOption.Any);
+                }
+
+                return selectedCommentaryOptionsList;
+            }
+        }
+
         public void AutoConfigure(IList<JsonPlaylist> jsonPlaylists)
         {
             Dictionary<string, PlaylistGridItem> mainPlaylistGridItems = new Dictionary<string, PlaylistGridItem>();
@@ -198,7 +261,6 @@ namespace BDInfo.views
                     control.DroppedDown = true;
                 }
             }
-
         }
 
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
@@ -227,6 +289,24 @@ namespace BDInfo.views
             string playlistFileName = selectedPlaylist.Name;
 
             SelectionChanged.Invoke(this, EventArgs.Empty);
+        }
+
+        private void dataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (playlistDataGridView.CurrentCell.ColumnIndex == videoLanguageColumn.Index && e.Control is ComboBox)
+            {
+                ComboBox comboBox = e.Control as ComboBox;
+
+                // TODO: If you select a different index and then blur the combobox by clicking elsewhere,
+                //       this won't get triggered.
+                comboBox.SelectedIndexChanged -= VideoLanguageComboSelectionChanged;
+                comboBox.SelectedIndexChanged += VideoLanguageComboSelectionChanged;
+            }
+        }
+
+        private void VideoLanguageComboSelectionChanged(object sender, EventArgs e)
+        {
+            VideoLanguageChanged.Invoke(this, EventArgs.Empty);
         }
 
         private DataGridViewButtonColumn playButtonColumn;
@@ -334,6 +414,11 @@ namespace BDInfo.views
         Special,
         Extended,
         Unrated
+    }
+
+    public enum CommentaryOption
+    {
+        Any, Yes, No
     }
 
     public class PlaylistGridItem

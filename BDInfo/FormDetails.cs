@@ -73,11 +73,106 @@ namespace BDInfo
             this.movieNameTextBox.Text = BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = languageCodes;
 
+            InitOutputTab();
+
+            populator.VideoLanguageChanged += VideoLanguageComboSelectionChanged;
+
             listViewStreamFiles.Enabled = true;
             listViewStreams.Enabled = true;
 
             ResetPlaylists();
             QueryMainMovie();
+        }
+
+        private void VideoLanguageComboSelectionChanged(object sender, EventArgs e)
+        {
+            InitOutputTab();
+        }
+
+        private void InitOutputTab()
+        {
+            comboBoxAudienceLanguage.DataSource = null;
+            comboBoxAudienceLanguage.DataSource = new List<Language>(languages).ToArray();
+            comboBoxAudienceLanguage.Enabled = languages.Count > 1;
+
+            IList<Language> selectedVideoLanguages = populator.SelectedVideoLanguages;
+            comboBoxVideoLanguage.DataSource = null;
+            comboBoxVideoLanguage.DataSource = selectedVideoLanguages;
+            comboBoxVideoLanguage.Enabled = selectedVideoLanguages.Count > 1;
+
+            IList<Cut> selectedCuts = populator.SelectedCuts;
+            comboBoxCut.DataSource = null;
+            comboBoxCut.DataSource = selectedCuts;
+            comboBoxCut.Enabled = selectedCuts.Count > 1;
+
+            IList<CommentaryOption> selectedCommentaryOptions = populator.SelectedCommentaryOptions;
+            comboBoxCommentary.DataSource = null;
+            comboBoxCommentary.DataSource = selectedCommentaryOptions;
+            comboBoxCommentary.Enabled = selectedCommentaryOptions.Count > 1;
+
+            Language[] audioLanguages = AudioLanguages;
+            listBoxAudioLanguages.DataSource = null;
+            listBoxAudioLanguages.DataSource = audioLanguages;
+            listBoxAudioLanguages.Enabled = audioLanguages.Length > 1;
+
+            Language[] subtitleLanguages = AudioLanguages;
+            listBoxSubtitleLanguages.DataSource = null;
+            listBoxSubtitleLanguages.DataSource = SubtitleLanguages;
+            listBoxSubtitleLanguages.Enabled = subtitleLanguages.Length > 1;
+        }
+
+        private Language[] AudioLanguages
+        {
+            get
+            {
+                ISet<Language> audioLanguages = new HashSet<Language>();
+                foreach (TSPlaylistFile playlist in playlists)
+                {
+                    foreach (TSAudioStream audioStream in playlist.AudioStreams)
+                    {
+                        audioLanguages.Add(Language.GetLanguage(audioStream.LanguageCode));
+                    }
+                }
+                Language[] audioLanguagesArray = new Language[audioLanguages.Count];
+                audioLanguages.CopyTo(audioLanguagesArray, 0);
+
+                // TODO: This doesn't seem to have any effect
+                Array.Sort(audioLanguagesArray, delegate(Language lang1, Language lang2)
+                {
+                    return lang1.ISO_639_2.CompareTo(lang2.ISO_639_2);
+                });
+
+                return audioLanguagesArray;
+            }
+        }
+
+        private Language[] SubtitleLanguages
+        {
+            get
+            {
+                ISet<Language> subtitleLanguages = new HashSet<Language>();
+                foreach (TSPlaylistFile playlist in playlists)
+                {
+                    foreach (TSGraphicsStream graphicsStream in playlist.GraphicsStreams)
+                    {
+                        subtitleLanguages.Add(Language.GetLanguage(graphicsStream.LanguageCode));
+                    }
+                    foreach (TSTextStream textStream in playlist.TextStreams)
+                    {
+                        subtitleLanguages.Add(Language.GetLanguage(textStream.LanguageCode));
+                    }
+                }
+                Language[] subtitleLanguagesArray = new Language[subtitleLanguages.Count];
+                subtitleLanguages.CopyTo(subtitleLanguagesArray, 0);
+
+                // TODO: This doesn't seem to have any effect
+                Array.Sort(subtitleLanguagesArray, delegate(Language lang1, Language lang2)
+                {
+                    return lang1.ISO_639_2.CompareTo(lang2.ISO_639_2);
+                });
+
+                return subtitleLanguagesArray;
+            }
         }
 
         private void dataGridView_SelectionChanged(object sender, EventArgs e)

@@ -61,7 +61,46 @@
             this.columnHeaderStreamLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderBitrate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabPageRip = new System.Windows.Forms.TabPage();
+            this.tabPageOutput = new System.Windows.Forms.TabPage();
+            this.groupBoxOutput = new System.Windows.Forms.GroupBox();
+            this.labelOutputFileNamePreview = new System.Windows.Forms.Label();
+            this.labelOutputFileNameHelp = new System.Windows.Forms.Label();
+            this.labelOutputFileExtension = new System.Windows.Forms.Label();
+            this.buttonBrowseOutputDir = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.labelOutputPreview = new System.Windows.Forms.Label();
+            this.labelOutputFileName = new System.Windows.Forms.Label();
+            this.labelOutputDirectory = new System.Windows.Forms.Label();
+            this.groupBoxTracks = new System.Windows.Forms.GroupBox();
+            this.listViewSubtitleTracks = new System.Windows.Forms.ListView();
+            this.columnHeaderSubtitleId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderSubtitleLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listViewAudioTracks = new System.Windows.Forms.ListView();
+            this.columnHeaderCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderChannels = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.checkedListBoxVideoResolution = new System.Windows.Forms.CheckedListBox();
+            this.labelSubtitleTracks = new System.Windows.Forms.Label();
+            this.labelAudioTracks = new System.Windows.Forms.Label();
+            this.labelVideoResolution = new System.Windows.Forms.Label();
+            this.comboBoxPlaylist = new System.Windows.Forms.ComboBox();
+            this.labelPlaylist = new System.Windows.Forms.Label();
+            this.groupBoxFilter = new System.Windows.Forms.GroupBox();
+            this.listBoxSubtitleLanguages = new System.Windows.Forms.ListBox();
+            this.listBoxAudioLanguages = new System.Windows.Forms.ListBox();
+            this.comboBoxCommentary = new System.Windows.Forms.ComboBox();
+            this.comboBoxCut = new System.Windows.Forms.ComboBox();
+            this.comboBoxVideoLanguage = new System.Windows.Forms.ComboBox();
+            this.labelSubtitleLanguages = new System.Windows.Forms.Label();
+            this.labelAudioLanguages = new System.Windows.Forms.Label();
+            this.labelCommentary = new System.Windows.Forms.Label();
+            this.labelCut = new System.Windows.Forms.Label();
+            this.labelVideoLanguage = new System.Windows.Forms.Label();
+            this.groupBoxMasterOverride = new System.Windows.Forms.GroupBox();
+            this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
+            this.labelAudienceLanguage = new System.Windows.Forms.Label();
+            this.tabPageProgress = new System.Windows.Forms.TabPage();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -81,6 +120,11 @@
             this.playlistsSplitContainerInner.SuspendLayout();
             this.streamsGroupBox.SuspendLayout();
             this.tracksGroupBox.SuspendLayout();
+            this.tabPageOutput.SuspendLayout();
+            this.groupBoxOutput.SuspendLayout();
+            this.groupBoxTracks.SuspendLayout();
+            this.groupBoxFilter.SuspendLayout();
+            this.groupBoxMasterOverride.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -97,7 +141,7 @@
             // 
             this.continueButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.continueButton.Enabled = false;
-            this.continueButton.Location = new System.Drawing.Point(551, 571);
+            this.continueButton.Location = new System.Drawing.Point(551, 613);
             this.continueButton.Name = "continueButton";
             this.continueButton.Size = new System.Drawing.Size(75, 23);
             this.continueButton.TabIndex = 98;
@@ -109,7 +153,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(632, 571);
+            this.cancelButton.Location = new System.Drawing.Point(632, 613);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 99;
@@ -179,11 +223,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageDisc);
             this.tabControl.Controls.Add(this.tabPagePlaylists);
-            this.tabControl.Controls.Add(this.tabPageRip);
+            this.tabControl.Controls.Add(this.tabPageOutput);
+            this.tabControl.Controls.Add(this.tabPageProgress);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(695, 553);
+            this.tabControl.Size = new System.Drawing.Size(695, 595);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageDisc
@@ -197,7 +242,7 @@
             this.tabPageDisc.Location = new System.Drawing.Point(4, 22);
             this.tabPageDisc.Name = "tabPageDisc";
             this.tabPageDisc.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDisc.Size = new System.Drawing.Size(687, 527);
+            this.tabPageDisc.Size = new System.Drawing.Size(687, 569);
             this.tabPageDisc.TabIndex = 0;
             this.tabPageDisc.Text = "Disc";
             this.tabPageDisc.UseVisualStyleBackColor = true;
@@ -227,7 +272,7 @@
             this.tabPagePlaylists.Location = new System.Drawing.Point(4, 22);
             this.tabPagePlaylists.Name = "tabPagePlaylists";
             this.tabPagePlaylists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePlaylists.Size = new System.Drawing.Size(687, 527);
+            this.tabPagePlaylists.Size = new System.Drawing.Size(687, 569);
             this.tabPagePlaylists.TabIndex = 1;
             this.tabPagePlaylists.Text = "Playlists";
             this.tabPagePlaylists.UseVisualStyleBackColor = true;
@@ -249,8 +294,8 @@
             // playlistsSplitContainerOuter.Panel2
             // 
             this.playlistsSplitContainerOuter.Panel2.Controls.Add(this.playlistsSplitContainerInner);
-            this.playlistsSplitContainerOuter.Size = new System.Drawing.Size(675, 514);
-            this.playlistsSplitContainerOuter.SplitterDistance = 216;
+            this.playlistsSplitContainerOuter.Size = new System.Drawing.Size(675, 556);
+            this.playlistsSplitContainerOuter.SplitterDistance = 234;
             this.playlistsSplitContainerOuter.TabIndex = 5;
             // 
             // playlistsGroupBox
@@ -262,7 +307,7 @@
             this.playlistsGroupBox.Controls.Add(this.panel1);
             this.playlistsGroupBox.Location = new System.Drawing.Point(4, 4);
             this.playlistsGroupBox.Name = "playlistsGroupBox";
-            this.playlistsGroupBox.Size = new System.Drawing.Size(668, 209);
+            this.playlistsGroupBox.Size = new System.Drawing.Size(668, 227);
             this.playlistsGroupBox.TabIndex = 5;
             this.playlistsGroupBox.TabStop = false;
             this.playlistsGroupBox.Text = "Playlists";
@@ -271,7 +316,7 @@
             // 
             this.showAllPlaylistsCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showAllPlaylistsCheckbox.AutoSize = true;
-            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(6, 186);
+            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(6, 204);
             this.showAllPlaylistsCheckbox.Name = "showAllPlaylistsCheckbox";
             this.showAllPlaylistsCheckbox.Size = new System.Drawing.Size(105, 17);
             this.showAllPlaylistsCheckbox.TabIndex = 5;
@@ -287,7 +332,7 @@
             this.panel1.Controls.Add(this.playlistDataGridView);
             this.panel1.Location = new System.Drawing.Point(6, 19);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(656, 161);
+            this.panel1.Size = new System.Drawing.Size(656, 179);
             this.panel1.TabIndex = 4;
             // 
             // playlistDataGridView
@@ -304,10 +349,11 @@
             this.playlistDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.playlistDataGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
             this.playlistDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.playlistDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.playlistDataGridView.Location = new System.Drawing.Point(3, 3);
             this.playlistDataGridView.MultiSelect = false;
             this.playlistDataGridView.Name = "playlistDataGridView";
-            this.playlistDataGridView.Size = new System.Drawing.Size(650, 155);
+            this.playlistDataGridView.Size = new System.Drawing.Size(650, 173);
             this.playlistDataGridView.TabIndex = 1;
             // 
             // playlistsSplitContainerInner
@@ -326,8 +372,8 @@
             // playlistsSplitContainerInner.Panel2
             // 
             this.playlistsSplitContainerInner.Panel2.Controls.Add(this.tracksGroupBox);
-            this.playlistsSplitContainerInner.Size = new System.Drawing.Size(672, 291);
-            this.playlistsSplitContainerInner.SplitterDistance = 147;
+            this.playlistsSplitContainerInner.Size = new System.Drawing.Size(672, 315);
+            this.playlistsSplitContainerInner.SplitterDistance = 159;
             this.playlistsSplitContainerInner.TabIndex = 0;
             // 
             // streamsGroupBox
@@ -338,7 +384,7 @@
             this.streamsGroupBox.Controls.Add(this.listViewStreamFiles);
             this.streamsGroupBox.Location = new System.Drawing.Point(4, 4);
             this.streamsGroupBox.Name = "streamsGroupBox";
-            this.streamsGroupBox.Size = new System.Drawing.Size(665, 140);
+            this.streamsGroupBox.Size = new System.Drawing.Size(665, 152);
             this.streamsGroupBox.TabIndex = 0;
             this.streamsGroupBox.TabStop = false;
             this.streamsGroupBox.Text = "Streams";
@@ -360,7 +406,7 @@
             this.listViewStreamFiles.Location = new System.Drawing.Point(3, 16);
             this.listViewStreamFiles.MultiSelect = false;
             this.listViewStreamFiles.Name = "listViewStreamFiles";
-            this.listViewStreamFiles.Size = new System.Drawing.Size(659, 121);
+            this.listViewStreamFiles.Size = new System.Drawing.Size(659, 133);
             this.listViewStreamFiles.TabIndex = 7;
             this.listViewStreamFiles.UseCompatibleStateImageBehavior = false;
             this.listViewStreamFiles.View = System.Windows.Forms.View.Details;
@@ -401,7 +447,7 @@
             this.tracksGroupBox.Controls.Add(this.listViewStreams);
             this.tracksGroupBox.Location = new System.Drawing.Point(4, 4);
             this.tracksGroupBox.Name = "tracksGroupBox";
-            this.tracksGroupBox.Size = new System.Drawing.Size(665, 133);
+            this.tracksGroupBox.Size = new System.Drawing.Size(665, 145);
             this.tracksGroupBox.TabIndex = 0;
             this.tracksGroupBox.TabStop = false;
             this.tracksGroupBox.Text = "Tracks";
@@ -421,7 +467,7 @@
             this.listViewStreams.Location = new System.Drawing.Point(3, 16);
             this.listViewStreams.MultiSelect = false;
             this.listViewStreams.Name = "listViewStreams";
-            this.listViewStreams.Size = new System.Drawing.Size(659, 114);
+            this.listViewStreams.Size = new System.Drawing.Size(659, 126);
             this.listViewStreams.TabIndex = 8;
             this.listViewStreams.UseCompatibleStateImageBehavior = false;
             this.listViewStreams.View = System.Windows.Forms.View.Details;
@@ -445,21 +491,409 @@
             this.columnHeaderDescription.Text = "Description";
             this.columnHeaderDescription.Width = 306;
             // 
-            // tabPageRip
+            // tabPageOutput
             // 
-            this.tabPageRip.Location = new System.Drawing.Point(4, 22);
-            this.tabPageRip.Name = "tabPageRip";
-            this.tabPageRip.Size = new System.Drawing.Size(692, 533);
-            this.tabPageRip.TabIndex = 2;
-            this.tabPageRip.Text = "Rip";
-            this.tabPageRip.UseVisualStyleBackColor = true;
+            this.tabPageOutput.Controls.Add(this.groupBoxOutput);
+            this.tabPageOutput.Controls.Add(this.groupBoxTracks);
+            this.tabPageOutput.Controls.Add(this.groupBoxFilter);
+            this.tabPageOutput.Controls.Add(this.groupBoxMasterOverride);
+            this.tabPageOutput.Location = new System.Drawing.Point(4, 22);
+            this.tabPageOutput.Name = "tabPageOutput";
+            this.tabPageOutput.Size = new System.Drawing.Size(687, 569);
+            this.tabPageOutput.TabIndex = 2;
+            this.tabPageOutput.Text = "Output";
+            this.tabPageOutput.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxOutput
+            // 
+            this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Controls.Add(this.labelOutputFileNamePreview);
+            this.groupBoxOutput.Controls.Add(this.labelOutputFileNameHelp);
+            this.groupBoxOutput.Controls.Add(this.labelOutputFileExtension);
+            this.groupBoxOutput.Controls.Add(this.buttonBrowseOutputDir);
+            this.groupBoxOutput.Controls.Add(this.textBox2);
+            this.groupBoxOutput.Controls.Add(this.textBox1);
+            this.groupBoxOutput.Controls.Add(this.labelOutputPreview);
+            this.groupBoxOutput.Controls.Add(this.labelOutputFileName);
+            this.groupBoxOutput.Controls.Add(this.labelOutputDirectory);
+            this.groupBoxOutput.Location = new System.Drawing.Point(4, 450);
+            this.groupBoxOutput.Name = "groupBoxOutput";
+            this.groupBoxOutput.Size = new System.Drawing.Size(680, 116);
+            this.groupBoxOutput.TabIndex = 3;
+            this.groupBoxOutput.TabStop = false;
+            this.groupBoxOutput.Text = "Output";
+            // 
+            // labelOutputFileNamePreview
+            // 
+            this.labelOutputFileNamePreview.AutoSize = true;
+            this.labelOutputFileNamePreview.Location = new System.Drawing.Point(64, 93);
+            this.labelOutputFileNamePreview.Name = "labelOutputFileNamePreview";
+            this.labelOutputFileNamePreview.Size = new System.Drawing.Size(177, 13);
+            this.labelOutputFileNamePreview.TabIndex = 8;
+            this.labelOutputFileNamePreview.Text = "The Incredibles (2006) [1080p].m2ts";
+            // 
+            // labelOutputFileNameHelp
+            // 
+            this.labelOutputFileNameHelp.AutoSize = true;
+            this.labelOutputFileNameHelp.Location = new System.Drawing.Point(67, 70);
+            this.labelOutputFileNameHelp.Name = "labelOutputFileNameHelp";
+            this.labelOutputFileNameHelp.Size = new System.Drawing.Size(117, 13);
+            this.labelOutputFileNameHelp.TabIndex = 7;
+            this.labelOutputFileNameHelp.Text = "%title%  %year%  %res%";
+            // 
+            // labelOutputFileExtension
+            // 
+            this.labelOutputFileExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelOutputFileExtension.AutoSize = true;
+            this.labelOutputFileExtension.Location = new System.Drawing.Point(638, 46);
+            this.labelOutputFileExtension.Name = "labelOutputFileExtension";
+            this.labelOutputFileExtension.Size = new System.Drawing.Size(32, 13);
+            this.labelOutputFileExtension.TabIndex = 6;
+            this.labelOutputFileExtension.Text = ".m2ts";
+            // 
+            // buttonBrowseOutputDir
+            // 
+            this.buttonBrowseOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowseOutputDir.Location = new System.Drawing.Point(599, 15);
+            this.buttonBrowseOutputDir.Name = "buttonBrowseOutputDir";
+            this.buttonBrowseOutputDir.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseOutputDir.TabIndex = 5;
+            this.buttonBrowseOutputDir.Text = "Browse...";
+            this.buttonBrowseOutputDir.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox2.Location = new System.Drawing.Point(67, 17);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(526, 20);
+            this.textBox2.TabIndex = 4;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(67, 43);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(565, 20);
+            this.textBox1.TabIndex = 3;
+            // 
+            // labelOutputPreview
+            // 
+            this.labelOutputPreview.AutoSize = true;
+            this.labelOutputPreview.Location = new System.Drawing.Point(6, 93);
+            this.labelOutputPreview.Name = "labelOutputPreview";
+            this.labelOutputPreview.Size = new System.Drawing.Size(48, 13);
+            this.labelOutputPreview.TabIndex = 2;
+            this.labelOutputPreview.Text = "Preview:";
+            // 
+            // labelOutputFileName
+            // 
+            this.labelOutputFileName.AutoSize = true;
+            this.labelOutputFileName.Location = new System.Drawing.Point(6, 46);
+            this.labelOutputFileName.Name = "labelOutputFileName";
+            this.labelOutputFileName.Size = new System.Drawing.Size(55, 13);
+            this.labelOutputFileName.TabIndex = 1;
+            this.labelOutputFileName.Text = "File name:";
+            // 
+            // labelOutputDirectory
+            // 
+            this.labelOutputDirectory.AutoSize = true;
+            this.labelOutputDirectory.Location = new System.Drawing.Point(6, 20);
+            this.labelOutputDirectory.Name = "labelOutputDirectory";
+            this.labelOutputDirectory.Size = new System.Drawing.Size(52, 13);
+            this.labelOutputDirectory.TabIndex = 0;
+            this.labelOutputDirectory.Text = "Directory:";
+            // 
+            // groupBoxTracks
+            // 
+            this.groupBoxTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTracks.Controls.Add(this.listViewSubtitleTracks);
+            this.groupBoxTracks.Controls.Add(this.listViewAudioTracks);
+            this.groupBoxTracks.Controls.Add(this.checkedListBoxVideoResolution);
+            this.groupBoxTracks.Controls.Add(this.labelSubtitleTracks);
+            this.groupBoxTracks.Controls.Add(this.labelAudioTracks);
+            this.groupBoxTracks.Controls.Add(this.labelVideoResolution);
+            this.groupBoxTracks.Controls.Add(this.comboBoxPlaylist);
+            this.groupBoxTracks.Controls.Add(this.labelPlaylist);
+            this.groupBoxTracks.Location = new System.Drawing.Point(256, 61);
+            this.groupBoxTracks.Name = "groupBoxTracks";
+            this.groupBoxTracks.Size = new System.Drawing.Size(428, 383);
+            this.groupBoxTracks.TabIndex = 2;
+            this.groupBoxTracks.TabStop = false;
+            this.groupBoxTracks.Text = "Select Playlist / Tracks";
+            // 
+            // listViewSubtitleTracks
+            // 
+            this.listViewSubtitleTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewSubtitleTracks.CheckBoxes = true;
+            this.listViewSubtitleTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderSubtitleId,
+            this.columnHeaderSubtitleLanguage});
+            this.listViewSubtitleTracks.Location = new System.Drawing.Point(99, 250);
+            this.listViewSubtitleTracks.Name = "listViewSubtitleTracks";
+            this.listViewSubtitleTracks.Size = new System.Drawing.Size(323, 127);
+            this.listViewSubtitleTracks.TabIndex = 7;
+            this.listViewSubtitleTracks.UseCompatibleStateImageBehavior = false;
+            this.listViewSubtitleTracks.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderSubtitleId
+            // 
+            this.columnHeaderSubtitleId.Text = "#";
+            this.columnHeaderSubtitleId.Width = 46;
+            // 
+            // columnHeaderSubtitleLanguage
+            // 
+            this.columnHeaderSubtitleLanguage.Text = "Language";
+            this.columnHeaderSubtitleLanguage.Width = 100;
+            // 
+            // listViewAudioTracks
+            // 
+            this.listViewAudioTracks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewAudioTracks.CheckBoxes = true;
+            this.listViewAudioTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderCodec,
+            this.columnHeaderLanguage,
+            this.columnHeaderChannels});
+            this.listViewAudioTracks.Location = new System.Drawing.Point(99, 146);
+            this.listViewAudioTracks.Name = "listViewAudioTracks";
+            this.listViewAudioTracks.Size = new System.Drawing.Size(323, 97);
+            this.listViewAudioTracks.TabIndex = 6;
+            this.listViewAudioTracks.UseCompatibleStateImageBehavior = false;
+            this.listViewAudioTracks.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderCodec
+            // 
+            this.columnHeaderCodec.Text = "Codec";
+            this.columnHeaderCodec.Width = 100;
+            // 
+            // columnHeaderLanguage
+            // 
+            this.columnHeaderLanguage.Text = "Language";
+            this.columnHeaderLanguage.Width = 100;
+            // 
+            // columnHeaderChannels
+            // 
+            this.columnHeaderChannels.Text = "Channels";
+            // 
+            // checkedListBoxVideoResolution
+            // 
+            this.checkedListBoxVideoResolution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkedListBoxVideoResolution.FormattingEnabled = true;
+            this.checkedListBoxVideoResolution.Location = new System.Drawing.Point(99, 45);
+            this.checkedListBoxVideoResolution.Name = "checkedListBoxVideoResolution";
+            this.checkedListBoxVideoResolution.Size = new System.Drawing.Size(323, 94);
+            this.checkedListBoxVideoResolution.TabIndex = 5;
+            // 
+            // labelSubtitleTracks
+            // 
+            this.labelSubtitleTracks.AutoSize = true;
+            this.labelSubtitleTracks.Location = new System.Drawing.Point(7, 253);
+            this.labelSubtitleTracks.Name = "labelSubtitleTracks";
+            this.labelSubtitleTracks.Size = new System.Drawing.Size(77, 13);
+            this.labelSubtitleTracks.TabIndex = 4;
+            this.labelSubtitleTracks.Text = "Subtitle tracks:";
+            // 
+            // labelAudioTracks
+            // 
+            this.labelAudioTracks.AutoSize = true;
+            this.labelAudioTracks.Location = new System.Drawing.Point(7, 149);
+            this.labelAudioTracks.Name = "labelAudioTracks";
+            this.labelAudioTracks.Size = new System.Drawing.Size(69, 13);
+            this.labelAudioTracks.TabIndex = 3;
+            this.labelAudioTracks.Text = "Audio tracks:";
+            // 
+            // labelVideoResolution
+            // 
+            this.labelVideoResolution.AutoSize = true;
+            this.labelVideoResolution.Location = new System.Drawing.Point(7, 48);
+            this.labelVideoResolution.Name = "labelVideoResolution";
+            this.labelVideoResolution.Size = new System.Drawing.Size(85, 13);
+            this.labelVideoResolution.TabIndex = 2;
+            this.labelVideoResolution.Text = "Video resolution:";
+            // 
+            // comboBoxPlaylist
+            // 
+            this.comboBoxPlaylist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPlaylist.FormattingEnabled = true;
+            this.comboBoxPlaylist.Location = new System.Drawing.Point(98, 18);
+            this.comboBoxPlaylist.Name = "comboBoxPlaylist";
+            this.comboBoxPlaylist.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxPlaylist.TabIndex = 1;
+            // 
+            // labelPlaylist
+            // 
+            this.labelPlaylist.AutoSize = true;
+            this.labelPlaylist.Location = new System.Drawing.Point(7, 20);
+            this.labelPlaylist.Name = "labelPlaylist";
+            this.labelPlaylist.Size = new System.Drawing.Size(42, 13);
+            this.labelPlaylist.TabIndex = 0;
+            this.labelPlaylist.Text = "Playlist:";
+            // 
+            // groupBoxFilter
+            // 
+            this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxFilter.Controls.Add(this.listBoxSubtitleLanguages);
+            this.groupBoxFilter.Controls.Add(this.listBoxAudioLanguages);
+            this.groupBoxFilter.Controls.Add(this.comboBoxCommentary);
+            this.groupBoxFilter.Controls.Add(this.comboBoxCut);
+            this.groupBoxFilter.Controls.Add(this.comboBoxVideoLanguage);
+            this.groupBoxFilter.Controls.Add(this.labelSubtitleLanguages);
+            this.groupBoxFilter.Controls.Add(this.labelAudioLanguages);
+            this.groupBoxFilter.Controls.Add(this.labelCommentary);
+            this.groupBoxFilter.Controls.Add(this.labelCut);
+            this.groupBoxFilter.Controls.Add(this.labelVideoLanguage);
+            this.groupBoxFilter.Location = new System.Drawing.Point(4, 61);
+            this.groupBoxFilter.Name = "groupBoxFilter";
+            this.groupBoxFilter.Size = new System.Drawing.Size(246, 383);
+            this.groupBoxFilter.TabIndex = 1;
+            this.groupBoxFilter.TabStop = false;
+            this.groupBoxFilter.Text = "Filter";
+            // 
+            // listBoxSubtitleLanguages
+            // 
+            this.listBoxSubtitleLanguages.FormattingEnabled = true;
+            this.listBoxSubtitleLanguages.Location = new System.Drawing.Point(115, 164);
+            this.listBoxSubtitleLanguages.Name = "listBoxSubtitleLanguages";
+            this.listBoxSubtitleLanguages.Size = new System.Drawing.Size(120, 56);
+            this.listBoxSubtitleLanguages.TabIndex = 9;
+            // 
+            // listBoxAudioLanguages
+            // 
+            this.listBoxAudioLanguages.FormattingEnabled = true;
+            this.listBoxAudioLanguages.Location = new System.Drawing.Point(115, 101);
+            this.listBoxAudioLanguages.Name = "listBoxAudioLanguages";
+            this.listBoxAudioLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxAudioLanguages.Size = new System.Drawing.Size(120, 56);
+            this.listBoxAudioLanguages.TabIndex = 8;
+            // 
+            // comboBoxCommentary
+            // 
+            this.comboBoxCommentary.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCommentary.FormattingEnabled = true;
+            this.comboBoxCommentary.Location = new System.Drawing.Point(115, 73);
+            this.comboBoxCommentary.Name = "comboBoxCommentary";
+            this.comboBoxCommentary.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxCommentary.TabIndex = 7;
+            // 
+            // comboBoxCut
+            // 
+            this.comboBoxCut.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCut.FormattingEnabled = true;
+            this.comboBoxCut.Location = new System.Drawing.Point(115, 45);
+            this.comboBoxCut.Name = "comboBoxCut";
+            this.comboBoxCut.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxCut.TabIndex = 6;
+            // 
+            // comboBoxVideoLanguage
+            // 
+            this.comboBoxVideoLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxVideoLanguage.FormattingEnabled = true;
+            this.comboBoxVideoLanguage.Location = new System.Drawing.Point(115, 17);
+            this.comboBoxVideoLanguage.Name = "comboBoxVideoLanguage";
+            this.comboBoxVideoLanguage.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxVideoLanguage.TabIndex = 5;
+            // 
+            // labelSubtitleLanguages
+            // 
+            this.labelSubtitleLanguages.AutoSize = true;
+            this.labelSubtitleLanguages.Location = new System.Drawing.Point(6, 167);
+            this.labelSubtitleLanguages.Name = "labelSubtitleLanguages";
+            this.labelSubtitleLanguages.Size = new System.Drawing.Size(103, 13);
+            this.labelSubtitleLanguages.TabIndex = 4;
+            this.labelSubtitleLanguages.Text = "Subtitle language(s):";
+            // 
+            // labelAudioLanguages
+            // 
+            this.labelAudioLanguages.AutoSize = true;
+            this.labelAudioLanguages.Location = new System.Drawing.Point(6, 104);
+            this.labelAudioLanguages.Name = "labelAudioLanguages";
+            this.labelAudioLanguages.Size = new System.Drawing.Size(95, 13);
+            this.labelAudioLanguages.TabIndex = 3;
+            this.labelAudioLanguages.Text = "Audio language(s):";
+            // 
+            // labelCommentary
+            // 
+            this.labelCommentary.AutoSize = true;
+            this.labelCommentary.Location = new System.Drawing.Point(6, 76);
+            this.labelCommentary.Name = "labelCommentary";
+            this.labelCommentary.Size = new System.Drawing.Size(68, 13);
+            this.labelCommentary.TabIndex = 2;
+            this.labelCommentary.Text = "Commentary:";
+            // 
+            // labelCut
+            // 
+            this.labelCut.AutoSize = true;
+            this.labelCut.Location = new System.Drawing.Point(6, 48);
+            this.labelCut.Name = "labelCut";
+            this.labelCut.Size = new System.Drawing.Size(26, 13);
+            this.labelCut.TabIndex = 1;
+            this.labelCut.Text = "Cut:";
+            // 
+            // labelVideoLanguage
+            // 
+            this.labelVideoLanguage.AutoSize = true;
+            this.labelVideoLanguage.Location = new System.Drawing.Point(6, 20);
+            this.labelVideoLanguage.Name = "labelVideoLanguage";
+            this.labelVideoLanguage.Size = new System.Drawing.Size(84, 13);
+            this.labelVideoLanguage.TabIndex = 0;
+            this.labelVideoLanguage.Text = "Video language:";
+            // 
+            // groupBoxMasterOverride
+            // 
+            this.groupBoxMasterOverride.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxMasterOverride.Controls.Add(this.comboBoxAudienceLanguage);
+            this.groupBoxMasterOverride.Controls.Add(this.labelAudienceLanguage);
+            this.groupBoxMasterOverride.Location = new System.Drawing.Point(4, 4);
+            this.groupBoxMasterOverride.Name = "groupBoxMasterOverride";
+            this.groupBoxMasterOverride.Size = new System.Drawing.Size(680, 50);
+            this.groupBoxMasterOverride.TabIndex = 0;
+            this.groupBoxMasterOverride.TabStop = false;
+            this.groupBoxMasterOverride.Text = "Master Override";
+            // 
+            // comboBoxAudienceLanguage
+            // 
+            this.comboBoxAudienceLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAudienceLanguage.FormattingEnabled = true;
+            this.comboBoxAudienceLanguage.Location = new System.Drawing.Point(115, 17);
+            this.comboBoxAudienceLanguage.Name = "comboBoxAudienceLanguage";
+            this.comboBoxAudienceLanguage.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxAudienceLanguage.TabIndex = 1;
+            // 
+            // labelAudienceLanguage
+            // 
+            this.labelAudienceLanguage.AutoSize = true;
+            this.labelAudienceLanguage.Location = new System.Drawing.Point(6, 20);
+            this.labelAudienceLanguage.Name = "labelAudienceLanguage";
+            this.labelAudienceLanguage.Size = new System.Drawing.Size(102, 13);
+            this.labelAudienceLanguage.TabIndex = 0;
+            this.labelAudienceLanguage.Text = "Audience language:";
+            // 
+            // tabPageProgress
+            // 
+            this.tabPageProgress.Location = new System.Drawing.Point(4, 22);
+            this.tabPageProgress.Name = "tabPageProgress";
+            this.tabPageProgress.Size = new System.Drawing.Size(687, 569);
+            this.tabPageProgress.TabIndex = 3;
+            this.tabPageProgress.Text = "Progress";
+            this.tabPageProgress.UseVisualStyleBackColor = true;
             // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel,
             this.progressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 597);
+            this.statusStrip.Location = new System.Drawing.Point(0, 639);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(719, 22);
             this.statusStrip.TabIndex = 6;
@@ -482,7 +916,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(719, 619);
+            this.ClientSize = new System.Drawing.Size(719, 661);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.cancelButton);
@@ -508,6 +942,15 @@
             this.playlistsSplitContainerInner.ResumeLayout(false);
             this.streamsGroupBox.ResumeLayout(false);
             this.tracksGroupBox.ResumeLayout(false);
+            this.tabPageOutput.ResumeLayout(false);
+            this.groupBoxOutput.ResumeLayout(false);
+            this.groupBoxOutput.PerformLayout();
+            this.groupBoxTracks.ResumeLayout(false);
+            this.groupBoxTracks.PerformLayout();
+            this.groupBoxFilter.ResumeLayout(false);
+            this.groupBoxFilter.PerformLayout();
+            this.groupBoxMasterOverride.ResumeLayout(false);
+            this.groupBoxMasterOverride.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -529,7 +972,7 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPageDisc;
         private System.Windows.Forms.TabPage tabPagePlaylists;
-        private System.Windows.Forms.TabPage tabPageRip;
+        private System.Windows.Forms.TabPage tabPageOutput;
         private System.Windows.Forms.ComboBox discLanguageComboBox;
         private System.Windows.Forms.Label discLanguageLabel;
         private System.Windows.Forms.StatusStrip statusStrip;
@@ -554,5 +997,44 @@
         private System.Windows.Forms.ColumnHeader columnHeaderStreamLanguage;
         private System.Windows.Forms.ColumnHeader columnHeaderBitrate;
         private System.Windows.Forms.ColumnHeader columnHeaderDescription;
+        private System.Windows.Forms.TabPage tabPageProgress;
+        private System.Windows.Forms.GroupBox groupBoxMasterOverride;
+        private System.Windows.Forms.ComboBox comboBoxAudienceLanguage;
+        private System.Windows.Forms.Label labelAudienceLanguage;
+        private System.Windows.Forms.GroupBox groupBoxFilter;
+        private System.Windows.Forms.Label labelVideoLanguage;
+        private System.Windows.Forms.GroupBox groupBoxOutput;
+        private System.Windows.Forms.Label labelOutputFileNamePreview;
+        private System.Windows.Forms.Label labelOutputFileNameHelp;
+        private System.Windows.Forms.Label labelOutputFileExtension;
+        private System.Windows.Forms.Button buttonBrowseOutputDir;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label labelOutputPreview;
+        private System.Windows.Forms.Label labelOutputFileName;
+        private System.Windows.Forms.Label labelOutputDirectory;
+        private System.Windows.Forms.GroupBox groupBoxTracks;
+        private System.Windows.Forms.ListView listViewSubtitleTracks;
+        private System.Windows.Forms.ColumnHeader columnHeaderSubtitleId;
+        private System.Windows.Forms.ColumnHeader columnHeaderSubtitleLanguage;
+        private System.Windows.Forms.ListView listViewAudioTracks;
+        private System.Windows.Forms.ColumnHeader columnHeaderCodec;
+        private System.Windows.Forms.ColumnHeader columnHeaderLanguage;
+        private System.Windows.Forms.ColumnHeader columnHeaderChannels;
+        private System.Windows.Forms.CheckedListBox checkedListBoxVideoResolution;
+        private System.Windows.Forms.Label labelSubtitleTracks;
+        private System.Windows.Forms.Label labelAudioTracks;
+        private System.Windows.Forms.Label labelVideoResolution;
+        private System.Windows.Forms.ComboBox comboBoxPlaylist;
+        private System.Windows.Forms.Label labelPlaylist;
+        private System.Windows.Forms.ListBox listBoxSubtitleLanguages;
+        private System.Windows.Forms.ListBox listBoxAudioLanguages;
+        private System.Windows.Forms.ComboBox comboBoxCommentary;
+        private System.Windows.Forms.ComboBox comboBoxCut;
+        private System.Windows.Forms.ComboBox comboBoxVideoLanguage;
+        private System.Windows.Forms.Label labelSubtitleLanguages;
+        private System.Windows.Forms.Label labelAudioLanguages;
+        private System.Windows.Forms.Label labelCommentary;
+        private System.Windows.Forms.Label labelCut;
     }
 }
