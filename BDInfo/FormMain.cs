@@ -767,7 +767,10 @@ namespace BDInfo
             //MessageBox.Show(this, BDROM.DiscLanguage.ISO_639_1 + " - " + BDROM.DiscLanguage.ISO_639_2 + " - " + BDROM.DiscLanguage.Name);
             //MessageBox.Show(this, BDROM.DiscName + "\n" + BDROM.DiscNameSearchable);
 
-            new FormDetails(BDROM, sortedPlaylists, Languages).ShowDialog(this);
+            FormDetails formDetails = new FormDetails(BDROM, sortedPlaylists, Languages);
+            formDetails.ShowDialog(this);
+            // TODO: Fix FormDetails initialization so that it doesn't need to be disposed every time
+            formDetails.Dispose();
 
             //QueryDB();
             //PrintResult();
