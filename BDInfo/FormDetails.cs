@@ -111,12 +111,14 @@ namespace BDInfo
             {
                 try
                 {
+                    // TODO: This throws "InvalidIndex" exceptions sometimes - find out why and fix it!
                     control.SelectedIndex = -1;
                     control.SelectedIndex = list.IndexOf(audienceLanguage);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-
+                    MessageBox.Show(ex.Message, "BDInfo Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
