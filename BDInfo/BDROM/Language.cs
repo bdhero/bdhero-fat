@@ -45,6 +45,11 @@ namespace BDInfo
             this.Name = Name;
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         static Language()
         {
             Languages.Add(new Language("ab", "abk", "Abkhazian"));
