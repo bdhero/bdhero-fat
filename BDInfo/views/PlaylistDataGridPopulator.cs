@@ -60,15 +60,9 @@ namespace BDInfo.views
             this.playlistDataGridView.AutoGenerateColumns = false;
             this.playlistDataGridView.AutoSize = true;
 
-            dataGridView.Columns.Add(CreatePlayButtonColumn());
-            dataGridView.Columns.Add(CreateIsMainMovieColumn());
-            dataGridView.Columns.Add(CreateFilenameColumn());
-            dataGridView.Columns.Add(CreateLengthColumn());
-            dataGridView.Columns.Add(CreateSizeColumn());
-            dataGridView.Columns.Add(CreateVideoLanguageColumn());
-            dataGridView.Columns.Add(CreateCutColumn());
-            dataGridView.Columns.Add(CreateHasCommentaryColumn());
+            CreateColumns();
 
+            this.playlistDataGridView.CellClick += playlistDataGridView_CellClick;
             this.playlistDataGridView.SelectionChanged += dataGridView_SelectionChanged;
 
             foreach (TSPlaylistFile playlist in playlists)
@@ -78,6 +72,18 @@ namespace BDInfo.views
             }
 
             ShowAllPlaylists = false;
+        }
+
+        private void CreateColumns()
+        {
+            playlistDataGridView.Columns.Add(CreatePlayButtonColumn());
+            playlistDataGridView.Columns.Add(CreateIsMainMovieColumn());
+            playlistDataGridView.Columns.Add(CreateFilenameColumn());
+            playlistDataGridView.Columns.Add(CreateLengthColumn());
+            playlistDataGridView.Columns.Add(CreateSizeColumn());
+            playlistDataGridView.Columns.Add(CreateVideoLanguageColumn());
+            playlistDataGridView.Columns.Add(CreateCutColumn());
+            playlistDataGridView.Columns.Add(CreateHasCommentaryColumn());
         }
 
         public bool HasChanged
@@ -188,6 +194,22 @@ namespace BDInfo.views
             System.Diagnostics.Process.Start(item.Playlist.FullName);
         }
 
+        /// <see cref="http://stackoverflow.com/a/242760/467582"/>
+        private void playlistDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var column = playlistDataGridView.Columns[e.ColumnIndex];
+            if (column is DataGridViewComboBoxColumn)
+            {
+                playlistDataGridView.BeginEdit(true);
+                if (playlistDataGridView[e.ColumnIndex, e.RowIndex].Selected)
+                {
+                    var control = (DataGridViewComboBoxEditingControl)playlistDataGridView.EditingControl;
+                    control.DroppedDown = true;
+                }
+            }
+
+        }
+
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
             // Skip if nothing is selected
@@ -216,81 +238,90 @@ namespace BDInfo.views
             SelectionChanged.Invoke(this, EventArgs.Empty);
         }
 
+        private DataGridViewButtonColumn playButtonColumn;
+        private DataGridViewCheckBoxColumn isMainMovieColumn;
+        private DataGridViewTextBoxColumn filenameColumn;
+        private DataGridViewTextBoxColumn lengthColumn;
+        private DataGridViewTextBoxColumn sizeColumn;
+        private DataGridViewComboBoxColumn videoLanguageColumn;
+        private DataGridViewComboBoxColumn cutColumn;
+        private DataGridViewCheckBoxColumn hasCommentaryColumn;
+
         private DataGridViewButtonColumn CreatePlayButtonColumn()
         {
-            DataGridViewButtonColumn column = new DataGridViewButtonColumn();
+            playButtonColumn = new DataGridViewButtonColumn();
             //column.Name = "Preview";
-            column.Text = "Play";
+            playButtonColumn.Text = "Play";
             //column.ToolTipText = "Open this file in the default application";
-            column.UseColumnTextForButtonValue = true;
+            playButtonColumn.UseColumnTextForButtonValue = true;
 
             // Add a CellClick handler to handle clicks in the button column.
             playlistDataGridView.CellClick += new DataGridViewCellEventHandler(playButton_CellClick);
 
-            return column;
+            return playButtonColumn;
         }
 
         private DataGridViewCheckBoxColumn CreateIsMainMovieColumn()
         {
-            DataGridViewCheckBoxColumn column = new DataGridViewCheckBoxColumn();
-            column.Name = "Main Movie";
-            column.DataPropertyName = "IsMainMovie";
-            return column;
+            isMainMovieColumn = new DataGridViewCheckBoxColumn();
+            isMainMovieColumn.Name = "Main Movie";
+            isMainMovieColumn.DataPropertyName = "IsMainMovie";
+            return isMainMovieColumn;
         }
 
         private DataGridViewTextBoxColumn CreateFilenameColumn()
         {
-            DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-            column.Name = "Filename";
-            column.DataPropertyName = "Filename";
-            column.ReadOnly = true;
-            return column;
+            filenameColumn = new DataGridViewTextBoxColumn();
+            filenameColumn.Name = "Filename";
+            filenameColumn.DataPropertyName = "Filename";
+            filenameColumn.ReadOnly = true;
+            return filenameColumn;
         }
 
         private DataGridViewTextBoxColumn CreateLengthColumn()
         {
-            DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-            column.Name = "Length";
-            column.DataPropertyName = "Length";
-            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            column.ReadOnly = true;
-            return column;
+            lengthColumn = new DataGridViewTextBoxColumn();
+            lengthColumn.Name = "Length";
+            lengthColumn.DataPropertyName = "Length";
+            lengthColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            lengthColumn.ReadOnly = true;
+            return lengthColumn;
         }
 
         private DataGridViewTextBoxColumn CreateSizeColumn()
         {
-            DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-            column.Name = "Size";
-            column.DataPropertyName = "Size";
-            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            column.ReadOnly = true;
-            return column;
+            sizeColumn = new DataGridViewTextBoxColumn();
+            sizeColumn.Name = "Size";
+            sizeColumn.DataPropertyName = "Size";
+            sizeColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            sizeColumn.ReadOnly = true;
+            return sizeColumn;
         }
 
         private DataGridViewComboBoxColumn CreateVideoLanguageColumn()
         {
-            DataGridViewComboBoxColumn column = new DataGridViewComboBoxColumn();
-            column.Name = "Video Language";
-            column.DataSource = languageCodes;
-            column.DataPropertyName = "VideoLanguage";
-            return column;
+            videoLanguageColumn = new DataGridViewComboBoxColumn();
+            videoLanguageColumn.Name = "Video Language";
+            videoLanguageColumn.DataSource = languageCodes;
+            videoLanguageColumn.DataPropertyName = "VideoLanguage";
+            return videoLanguageColumn;
         }
 
         private DataGridViewComboBoxColumn CreateCutColumn()
         {
-            DataGridViewComboBoxColumn column = new DataGridViewComboBoxColumn();
-            column.Name = "Cut";
-            column.DataSource = Enum.GetValues(typeof(Cut));
-            column.DataPropertyName = "Cut";
-            return column;
+            cutColumn = new DataGridViewComboBoxColumn();
+            cutColumn.Name = "Cut";
+            cutColumn.DataSource = Enum.GetValues(typeof(Cut));
+            cutColumn.DataPropertyName = "Cut";
+            return cutColumn;
         }
 
         private DataGridViewCheckBoxColumn CreateHasCommentaryColumn()
         {
-            DataGridViewCheckBoxColumn column = new DataGridViewCheckBoxColumn();
-            column.Name = "Commentary Available";
-            column.DataPropertyName = "HasCommentary";
-            return column;
+            hasCommentaryColumn = new DataGridViewCheckBoxColumn();
+            hasCommentaryColumn.Name = "Commentary Available";
+            hasCommentaryColumn.DataPropertyName = "HasCommentary";
+            return hasCommentaryColumn;
         }
     }
 
