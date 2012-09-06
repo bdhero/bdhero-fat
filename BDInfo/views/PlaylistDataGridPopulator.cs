@@ -302,7 +302,7 @@ namespace BDInfo.views
         {
             videoLanguageColumn = new DataGridViewComboBoxColumn();
             videoLanguageColumn.Name = "Video Language";
-            videoLanguageColumn.DataSource = languageCodes;
+            videoLanguageColumn.DataSource = languageCodes.ToArray();
             videoLanguageColumn.DataPropertyName = "VideoLanguage";
             return videoLanguageColumn;
         }
