@@ -11,7 +11,7 @@ namespace BDInfo.views
 {
     class PlaylistDataGridPopulator
     {
-        private DataGridView playlistDataGridView;
+        private DataGridView dataGridView;
         private IList<TSPlaylistFile> playlists;
         private IList<Language> languages = new List<Language>();
         private IList<string> languageCodes;
@@ -56,7 +56,7 @@ namespace BDInfo.views
 
         public PlaylistDataGridPopulator(DataGridView dataGridView, IList<TSPlaylistFile> playlists, IList<string> languageCodes)
         {
-            this.playlistDataGridView = dataGridView;
+            this.dataGridView = dataGridView;
             this.playlists = playlists;
             this.languageCodes = languageCodes;
 
@@ -65,13 +65,13 @@ namespace BDInfo.views
                 languages.Add(Language.GetLanguage(code));
             }
 
-            this.playlistDataGridView.AutoGenerateColumns = false;
-            this.playlistDataGridView.AutoSize = true;
+            this.dataGridView.AutoGenerateColumns = false;
+            this.dataGridView.AutoSize = true;
 
             CreateColumns();
 
-            this.playlistDataGridView.CellClick += playlistDataGridView_CellClick;
-            this.playlistDataGridView.SelectionChanged += dataGridView_SelectionChanged;
+            this.dataGridView.CellClick += playlistDataGridView_CellClick;
+            this.dataGridView.SelectionChanged += dataGridView_SelectionChanged;
 
             //this.playlistDataGridView.CurrentCellChanged += dataGridView_CurrentCellChanged;
             //this.playlistDataGridView.CurrentCellDirtyStateChanged += dataGridView_CurrentCellDirtyStateChanged;
@@ -122,7 +122,7 @@ namespace BDInfo.views
             {
                 showAllPlaylists = value;
 
-                playlistDataGridView.DataSource = null;
+                dataGridView.DataSource = null;
                 bindingList.Clear();
 
                 int i = 0;
@@ -140,11 +140,11 @@ namespace BDInfo.views
                     }
                 }
 
-                playlistDataGridView.DataSource = bindingList;
+                dataGridView.DataSource = bindingList;
 
-                for (int rowIndex = 0; rowIndex < playlistDataGridView.Rows.Count; rowIndex++)
+                for (int rowIndex = 0; rowIndex < dataGridView.Rows.Count; rowIndex++)
                 {
-                    enableRow(playlistDataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
+                    enableRow(dataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
                 }
             }
         }
@@ -152,9 +152,9 @@ namespace BDInfo.views
         private void enableRow(DataGridViewRow row, bool enabled)
         {
             row.ReadOnly = !enabled;
-            for (int colIndex = 0; colIndex < playlistDataGridView.Columns.Count; colIndex++)
+            for (int colIndex = 0; colIndex < dataGridView.Columns.Count; colIndex++)
             {
-                DataGridViewCell cell = playlistDataGridView[colIndex, row.Index];
+                DataGridViewCell cell = dataGridView[colIndex, row.Index];
                 enableCell(cell, enabled);
             }
         }
@@ -407,16 +407,16 @@ namespace BDInfo.views
                 return;
 
             // Ignore readonly (i.e., disabled) cells
-            if (playlistDataGridView[e.ColumnIndex, e.RowIndex].ReadOnly)
+            if (dataGridView[e.ColumnIndex, e.RowIndex].ReadOnly)
                 return;
 
-            var column = playlistDataGridView.Columns[e.ColumnIndex];
+            var column = dataGridView.Columns[e.ColumnIndex];
             if (column is DataGridViewComboBoxColumn)
             {
-                playlistDataGridView.BeginEdit(true);
-                if (playlistDataGridView[e.ColumnIndex, e.RowIndex].Selected)
+                dataGridView.BeginEdit(true);
+                if (dataGridView[e.ColumnIndex, e.RowIndex].Selected)
                 {
-                    var control = (DataGridViewComboBoxEditingControl)playlistDataGridView.EditingControl;
+                    var control = (DataGridViewComboBoxEditingControl)dataGridView.EditingControl;
                     control.DroppedDown = true;
                 }
             }
@@ -427,22 +427,22 @@ namespace BDInfo.views
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
             // Skip if nothing is selected
-            if (playlistDataGridView.SelectedRows.Count == 0 &&
-                playlistDataGridView.SelectedCells.Count == 0) return;
+            if (dataGridView.SelectedRows.Count == 0 &&
+                dataGridView.SelectedCells.Count == 0) return;
 
             int rowIndex = -1;
 
             // User selected entire row
-            if (playlistDataGridView.SelectedRows.Count > 0)
-                rowIndex = playlistDataGridView.SelectedRows[0].Index;
+            if (dataGridView.SelectedRows.Count > 0)
+                rowIndex = dataGridView.SelectedRows[0].Index;
             // User selected a single cell
             else
-                rowIndex = playlistDataGridView.SelectedCells[0].RowIndex;
+                rowIndex = dataGridView.SelectedCells[0].RowIndex;
 
             if (rowIndex == -1) return;
 
             // Ignore readonly (i.e., disabled) rows
-            if (playlistDataGridView.Rows[rowIndex].ReadOnly)
+            if (dataGridView.Rows[rowIndex].ReadOnly)
                 return;
 
             PlaylistGridItem playlistItem = bindingList[rowIndex];
@@ -471,14 +471,14 @@ namespace BDInfo.views
 
         private void CreateColumns()
         {
-            playlistDataGridView.Columns.Add(CreatePlayButtonColumn());
-            playlistDataGridView.Columns.Add(CreateIsMainMovieColumn());
-            playlistDataGridView.Columns.Add(CreateFilenameColumn());
-            playlistDataGridView.Columns.Add(CreateLengthColumn());
-            playlistDataGridView.Columns.Add(CreateSizeColumn());
-            playlistDataGridView.Columns.Add(CreateVideoLanguageColumn());
-            playlistDataGridView.Columns.Add(CreateCutColumn());
-            playlistDataGridView.Columns.Add(CreateHasCommentaryColumn());
+            dataGridView.Columns.Add(CreatePlayButtonColumn());
+            dataGridView.Columns.Add(CreateIsMainMovieColumn());
+            dataGridView.Columns.Add(CreateFilenameColumn());
+            dataGridView.Columns.Add(CreateLengthColumn());
+            dataGridView.Columns.Add(CreateSizeColumn());
+            dataGridView.Columns.Add(CreateVideoLanguageColumn());
+            dataGridView.Columns.Add(CreateCutColumn());
+            dataGridView.Columns.Add(CreateHasCommentaryColumn());
         }
 
         private DataGridViewButtonColumn CreatePlayButtonColumn()
@@ -490,7 +490,7 @@ namespace BDInfo.views
             playButtonColumn.UseColumnTextForButtonValue = true;
 
             // Add a CellClick handler to handle clicks in the button column.
-            playlistDataGridView.CellClick += new DataGridViewCellEventHandler(playButton_CellClick);
+            dataGridView.CellClick += new DataGridViewCellEventHandler(playButton_CellClick);
 
             return playButtonColumn;
         }
