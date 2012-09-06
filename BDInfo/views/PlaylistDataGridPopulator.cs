@@ -12,6 +12,7 @@ namespace BDInfo.views
     {
         private DataGridView playlistDataGridView;
         private IList<TSPlaylistFile> playlists;
+        private IList<Language> languages = new List<Language>();
         private IList<string> languageCodes;
 
         private BindingList<PlaylistGridItem> bindingList = new BindingList<PlaylistGridItem>();
@@ -57,6 +58,11 @@ namespace BDInfo.views
             this.playlistDataGridView = dataGridView;
             this.playlists = playlists;
             this.languageCodes = languageCodes;
+
+            foreach (string code in languageCodes)
+            {
+                languages.Add(Language.GetLanguage(code));
+            }
 
             this.playlistDataGridView.AutoGenerateColumns = false;
             this.playlistDataGridView.AutoSize = true;
@@ -387,6 +393,7 @@ namespace BDInfo.views
             videoLanguageColumn.Name = "Video Language";
             videoLanguageColumn.DataSource = languageCodes.ToArray();
             videoLanguageColumn.DataPropertyName = "VideoLanguage";
+            //videoLanguageColumn.DisplayMember = "VideoLanguageName";
             return videoLanguageColumn;
         }
 
@@ -481,6 +488,12 @@ namespace BDInfo.views
         {
             get { return ISO_639_2; }
             set { ISO_639_2 = value; }
+        }
+
+        public string VideoLanguageName
+        {
+            get { return Language.GetName(ISO_639_2); }
+            set { }
         }
 
         public bool VideoLanguageHasChanged
