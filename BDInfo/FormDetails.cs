@@ -89,6 +89,8 @@ namespace BDInfo
             QueryMainMovie();
         }
 
+        private bool ignoreFilterControlChange = false;
+
         private void OnPlaylistItemChange(object sender, EventArgs e)
         {
             InitOutputTab();
@@ -121,6 +123,8 @@ namespace BDInfo
 
         private void InitOutputTab()
         {
+            ignoreFilterControlChange = true;
+
             comboBoxAudienceLanguage.DataSource = null;
             comboBoxAudienceLanguage.DataSource = languages;
             comboBoxAudienceLanguage.Enabled = languages.Count > 1;
@@ -149,6 +153,10 @@ namespace BDInfo
             listBoxSubtitleLanguages.DataSource = null;
             listBoxSubtitleLanguages.DataSource = SubtitleLanguages;
             listBoxSubtitleLanguages.Enabled = subtitleLanguages.Length > 1;
+
+            ignoreFilterControlChange = false;
+
+            FilterPlaylists();
         }
 
         private Language[] GetSortedLanguageArray(ICollection<Language> collection)
@@ -795,6 +803,60 @@ namespace BDInfo
         {
             Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
             return !containsABadCharacter.IsMatch(testName);
+        }
+
+        private void FilterControlChanged(object sender, EventArgs e)
+        {
+            // TODO: This gets called WAY too many times when we set the combobox
+            //       values programmatically, since each one fires this event.
+            FilterPlaylists();
+        }
+
+        private void comboBoxPlaylist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterTracks();
+        }
+
+        private void FilterPlaylists()
+        {
+            if (ignoreFilterControlChange) return;
+
+            ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>(playlists);
+
+            Language videoLanguage = comboBoxVideoLanguage.SelectedValue as Language;
+            Cut cut = (Cut)comboBoxCut.SelectedValue;
+            CommentaryOption commentaryOption = (CommentaryOption)comboBoxCommentary.SelectedValue;
+            IList<Language> audioLanguages = new List<Language>();
+            IList<Language> subtitleLanguages = new List<Language>();
+
+            foreach (Object o in listBoxAudioLanguages.SelectedItems)
+                if (o is Language) audioLanguages.Add(o as Language);
+
+            foreach (Object o in listBoxSubtitleLanguages.SelectedItems)
+                if (o is Language) subtitleLanguages.Add(o as Language);
+
+            if (videoLanguage == null) return;
+
+            ISet<TSPlaylistFile> playlistsWithVideoLanguage = populator.GetPlaylistsWithVideoLanguage(videoLanguage);
+            ISet<TSPlaylistFile> playlistsWithCut = populator.GetPlaylistsWithCut(cut);
+            ISet<TSPlaylistFile> playlistsWithCommentaryOption = populator.GetPlaylistsWithCommentaryOption(commentaryOption);
+            ISet<TSPlaylistFile> playlistsWithAudioLanguages = populator.GetPlaylistsWithAudioLanguages(audioLanguages);
+            ISet<TSPlaylistFile> playlistsWithSubtitleLanguages = populator.GetPlaylistsWithSubtitleLanguages(subtitleLanguages);
+
+            filteredPlaylists.IntersectWith(playlistsWithVideoLanguage);
+            filteredPlaylists.IntersectWith(playlistsWithCut);
+            filteredPlaylists.IntersectWith(playlistsWithCommentaryOption);
+            filteredPlaylists.IntersectWith(playlistsWithAudioLanguages);
+            filteredPlaylists.IntersectWith(playlistsWithSubtitleLanguages);
+
+            comboBoxPlaylist.DataSource = null;
+            comboBoxPlaylist.DataSource = new List<TSPlaylistFile>(filteredPlaylists).ToArray();
+            comboBoxPlaylist.Enabled = filteredPlaylists.Count > 1;
+        }
+
+        private void FilterTracks()
+        {
+
         }
     }
 }

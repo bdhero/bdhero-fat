@@ -63,6 +63,8 @@
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageOutput = new System.Windows.Forms.TabPage();
             this.groupBoxOutput = new System.Windows.Forms.GroupBox();
+            this.textBoxReplaceSpaces = new System.Windows.Forms.TextBox();
+            this.checkBoxReplaceSpaces = new System.Windows.Forms.CheckBox();
             this.labelOutputFileNamePreview = new System.Windows.Forms.Label();
             this.labelOutputFileNameHelp = new System.Windows.Forms.Label();
             this.labelOutputFileExtension = new System.Windows.Forms.Label();
@@ -104,8 +106,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.checkBoxReplaceSpaces = new System.Windows.Forms.CheckBox();
-            this.textBoxReplaceSpaces = new System.Windows.Forms.TextBox();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -528,6 +528,30 @@
             this.groupBoxOutput.TabStop = false;
             this.groupBoxOutput.Text = "Output";
             // 
+            // textBoxReplaceSpaces
+            // 
+            this.textBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxReplaceSpaces.Enabled = false;
+            this.textBoxReplaceSpaces.Location = new System.Drawing.Point(641, 70);
+            this.textBoxReplaceSpaces.Name = "textBoxReplaceSpaces";
+            this.textBoxReplaceSpaces.Size = new System.Drawing.Size(29, 20);
+            this.textBoxReplaceSpaces.TabIndex = 10;
+            this.textBoxReplaceSpaces.Text = ".";
+            this.textBoxReplaceSpaces.TextChanged += new System.EventHandler(this.textBoxReplaceSpaces_TextChanged);
+            this.textBoxReplaceSpaces.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxReplaceSpaces_KeyPress);
+            // 
+            // checkBoxReplaceSpaces
+            // 
+            this.checkBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxReplaceSpaces.AutoSize = true;
+            this.checkBoxReplaceSpaces.Location = new System.Drawing.Point(504, 72);
+            this.checkBoxReplaceSpaces.Name = "checkBoxReplaceSpaces";
+            this.checkBoxReplaceSpaces.Size = new System.Drawing.Size(128, 17);
+            this.checkBoxReplaceSpaces.TabIndex = 9;
+            this.checkBoxReplaceSpaces.Text = "Replace spaces with:";
+            this.checkBoxReplaceSpaces.UseVisualStyleBackColor = true;
+            this.checkBoxReplaceSpaces.CheckedChanged += new System.EventHandler(this.checkBoxReplaceSpaces_CheckedChanged);
+            // 
             // labelOutputFileNamePreview
             // 
             this.labelOutputFileNamePreview.AutoSize = true;
@@ -741,6 +765,7 @@
             this.comboBoxPlaylist.Name = "comboBoxPlaylist";
             this.comboBoxPlaylist.Size = new System.Drawing.Size(121, 21);
             this.comboBoxPlaylist.TabIndex = 1;
+            this.comboBoxPlaylist.SelectedIndexChanged += new System.EventHandler(this.comboBoxPlaylist_SelectedIndexChanged);
             // 
             // labelPlaylist
             // 
@@ -780,6 +805,7 @@
             this.listBoxSubtitleLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBoxSubtitleLanguages.Size = new System.Drawing.Size(120, 56);
             this.listBoxSubtitleLanguages.TabIndex = 9;
+            this.listBoxSubtitleLanguages.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // listBoxAudioLanguages
             // 
@@ -789,6 +815,7 @@
             this.listBoxAudioLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBoxAudioLanguages.Size = new System.Drawing.Size(120, 56);
             this.listBoxAudioLanguages.TabIndex = 8;
+            this.listBoxAudioLanguages.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // comboBoxCommentary
             // 
@@ -798,6 +825,7 @@
             this.comboBoxCommentary.Name = "comboBoxCommentary";
             this.comboBoxCommentary.Size = new System.Drawing.Size(121, 21);
             this.comboBoxCommentary.TabIndex = 7;
+            this.comboBoxCommentary.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // comboBoxCut
             // 
@@ -807,6 +835,7 @@
             this.comboBoxCut.Name = "comboBoxCut";
             this.comboBoxCut.Size = new System.Drawing.Size(121, 21);
             this.comboBoxCut.TabIndex = 6;
+            this.comboBoxCut.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // comboBoxVideoLanguage
             // 
@@ -816,6 +845,7 @@
             this.comboBoxVideoLanguage.Name = "comboBoxVideoLanguage";
             this.comboBoxVideoLanguage.Size = new System.Drawing.Size(121, 21);
             this.comboBoxVideoLanguage.TabIndex = 5;
+            this.comboBoxVideoLanguage.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // labelSubtitleLanguages
             // 
@@ -923,30 +953,6 @@
             // 
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(100, 16);
-            // 
-            // checkBoxReplaceSpaces
-            // 
-            this.checkBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxReplaceSpaces.AutoSize = true;
-            this.checkBoxReplaceSpaces.Location = new System.Drawing.Point(504, 72);
-            this.checkBoxReplaceSpaces.Name = "checkBoxReplaceSpaces";
-            this.checkBoxReplaceSpaces.Size = new System.Drawing.Size(128, 17);
-            this.checkBoxReplaceSpaces.TabIndex = 9;
-            this.checkBoxReplaceSpaces.Text = "Replace spaces with:";
-            this.checkBoxReplaceSpaces.UseVisualStyleBackColor = true;
-            this.checkBoxReplaceSpaces.CheckedChanged += new System.EventHandler(this.checkBoxReplaceSpaces_CheckedChanged);
-            // 
-            // textBoxReplaceSpaces
-            // 
-            this.textBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxReplaceSpaces.Enabled = false;
-            this.textBoxReplaceSpaces.Location = new System.Drawing.Point(641, 70);
-            this.textBoxReplaceSpaces.Name = "textBoxReplaceSpaces";
-            this.textBoxReplaceSpaces.Size = new System.Drawing.Size(29, 20);
-            this.textBoxReplaceSpaces.TabIndex = 10;
-            this.textBoxReplaceSpaces.Text = ".";
-            this.textBoxReplaceSpaces.TextChanged += new System.EventHandler(this.textBoxReplaceSpaces_TextChanged);
-            this.textBoxReplaceSpaces.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxReplaceSpaces_KeyPress);
             // 
             // FormDetails
             // 

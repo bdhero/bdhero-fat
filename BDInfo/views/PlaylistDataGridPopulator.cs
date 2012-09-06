@@ -236,6 +236,92 @@ namespace BDInfo.views
             }
         }
 
+        public ISet<TSPlaylistFile> GetPlaylistsWithVideoLanguage(Language lang)
+        {
+            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
+
+            foreach (PlaylistGridItem item in playlistGridItems)
+            {
+                if (item.Playlist.IsMainPlaylist && Language.GetLanguage(item.VideoLanguage) == lang)
+                    files.Add(item.Playlist);
+            }
+
+            return files;
+        }
+
+        public ISet<TSPlaylistFile> GetPlaylistsWithCut(Cut cut)
+        {
+            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
+
+            foreach (PlaylistGridItem item in playlistGridItems)
+            {
+                if (item.Playlist.IsMainPlaylist && item.Cut == cut)
+                    files.Add(item.Playlist);
+            }
+
+            return files;
+        }
+
+        public ISet<TSPlaylistFile> GetPlaylistsWithCommentaryOption(CommentaryOption commentaryOption)
+        {
+            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
+
+            foreach (PlaylistGridItem item in playlistGridItems)
+            {
+                bool isAny = commentaryOption == CommentaryOption.Any;
+                bool isYes = item.HasCommentary == true && commentaryOption == CommentaryOption.Yes;
+                bool isNo = item.HasCommentary == false && commentaryOption == CommentaryOption.No;
+
+                if (item.Playlist.IsMainPlaylist && (isAny || isYes || isNo))
+                    files.Add(item.Playlist);
+            }
+
+            return files;
+        }
+
+        public ISet<TSPlaylistFile> GetPlaylistsWithAudioLanguages(ICollection<Language> audioLanguages)
+        {
+            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
+
+            foreach (PlaylistGridItem item in playlistGridItems)
+            {
+                if (item.Playlist.IsMainPlaylist)
+                {
+                    foreach (TSAudioStream audioStream in item.Playlist.AudioStreams)
+                    {
+                        if (audioLanguages.Contains(Language.GetLanguage(audioStream.LanguageCode)))
+                            files.Add(item.Playlist);
+                    }
+                }
+            }
+
+            return files;
+        }
+
+        public ISet<TSPlaylistFile> GetPlaylistsWithSubtitleLanguages(ICollection<Language> subtitleLanguages)
+        {
+            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
+
+            foreach (PlaylistGridItem item in playlistGridItems)
+            {
+                if (item.Playlist.IsMainPlaylist)
+                {
+                    foreach (TSGraphicsStream graphicsStream in item.Playlist.GraphicsStreams)
+                    {
+                        if (subtitleLanguages.Contains(Language.GetLanguage(graphicsStream.LanguageCode)))
+                            files.Add(item.Playlist);
+                    }
+                    foreach (TSTextStream textStream in item.Playlist.TextStreams)
+                    {
+                        if (subtitleLanguages.Contains(Language.GetLanguage(textStream.LanguageCode)))
+                            files.Add(item.Playlist);
+                    }
+                }
+            }
+
+            return files;
+        }
+
         private void AutoConfigure(JsonPlaylist jsonPlaylist, Dictionary<string, PlaylistGridItem> gridItems)
         {
             PlaylistGridItem item = gridItems[jsonPlaylist.filename.ToUpper()];
