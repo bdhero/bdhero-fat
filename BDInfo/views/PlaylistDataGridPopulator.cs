@@ -74,18 +74,6 @@ namespace BDInfo.views
             ShowAllPlaylists = false;
         }
 
-        private void CreateColumns()
-        {
-            playlistDataGridView.Columns.Add(CreatePlayButtonColumn());
-            playlistDataGridView.Columns.Add(CreateIsMainMovieColumn());
-            playlistDataGridView.Columns.Add(CreateFilenameColumn());
-            playlistDataGridView.Columns.Add(CreateLengthColumn());
-            playlistDataGridView.Columns.Add(CreateSizeColumn());
-            playlistDataGridView.Columns.Add(CreateVideoLanguageColumn());
-            playlistDataGridView.Columns.Add(CreateCutColumn());
-            playlistDataGridView.Columns.Add(CreateHasCommentaryColumn());
-        }
-
         public bool HasChanged
         {
             get
@@ -249,6 +237,18 @@ namespace BDInfo.views
         private DataGridViewComboBoxColumn videoLanguageColumn;
         private DataGridViewComboBoxColumn cutColumn;
         private DataGridViewCheckBoxColumn hasCommentaryColumn;
+
+        private void CreateColumns()
+        {
+            playlistDataGridView.Columns.Add(CreatePlayButtonColumn());
+            playlistDataGridView.Columns.Add(CreateIsMainMovieColumn());
+            playlistDataGridView.Columns.Add(CreateFilenameColumn());
+            playlistDataGridView.Columns.Add(CreateLengthColumn());
+            playlistDataGridView.Columns.Add(CreateSizeColumn());
+            playlistDataGridView.Columns.Add(CreateVideoLanguageColumn());
+            playlistDataGridView.Columns.Add(CreateCutColumn());
+            playlistDataGridView.Columns.Add(CreateHasCommentaryColumn());
+        }
 
         private DataGridViewButtonColumn CreatePlayButtonColumn()
         {
