@@ -22,7 +22,7 @@ namespace BDInfo
 
         private BDROM BDROM;
         private IList<TSPlaylistFile> playlists;
-        private ISet<Language> languages;
+        private IList<Language> languages;
         private IList<string> languageCodes = new List<string>();
 
         private TmdbMovieSearch movieSearch;
@@ -44,7 +44,7 @@ namespace BDInfo
 
             this.BDROM = BDROM;
             this.playlists = playlists;
-            this.languages = languages;
+            this.languages = new List<Language>(languages).ToArray();
 
             string ISO_639_1 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_1 : null;
             string ISO_639_2 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_2 : null;
@@ -71,7 +71,7 @@ namespace BDInfo
         private void FormDetails_Load(object sender, System.EventArgs e)
         {
             this.movieNameTextBox.Text = BDROM.DiscNameSearchable;
-            this.discLanguageComboBox.DataSource = languageCodes;
+            this.discLanguageComboBox.DataSource = languages;
 
             InitOutputTab();
 
@@ -92,7 +92,7 @@ namespace BDInfo
         private void InitOutputTab()
         {
             comboBoxAudienceLanguage.DataSource = null;
-            comboBoxAudienceLanguage.DataSource = new List<Language>(languages).ToArray();
+            comboBoxAudienceLanguage.DataSource = languages;
             comboBoxAudienceLanguage.Enabled = languages.Count > 1;
 
             IList<Language> selectedVideoLanguages = populator.SelectedVideoLanguages;
