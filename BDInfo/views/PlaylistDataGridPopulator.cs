@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 using BDInfo.models;
+using System.Drawing;
 
 namespace BDInfo.views
 {
@@ -124,15 +125,65 @@ namespace BDInfo.views
                 playlistDataGridView.DataSource = null;
                 bindingList.Clear();
 
+                int i = 0;
+                IList<int> enabledRowIndexes = new List<int>();
                 foreach (PlaylistGridItem item in playlistGridItems)
                 {
                     if (showAllPlaylists || item.Playlist.IsMainPlaylist)
                     {
                         bindingList.Add(item);
+
+                        if (item.Playlist.IsMainPlaylist)
+                            enabledRowIndexes.Add(i);
+
+                        i++;
                     }
                 }
-                
+
                 playlistDataGridView.DataSource = bindingList;
+
+                for (int rowIndex = 0; rowIndex < playlistDataGridView.Rows.Count; rowIndex++)
+                {
+                    enableRow(playlistDataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
+                }
+            }
+        }
+
+        private void enableRow(DataGridViewRow row, bool enabled)
+        {
+            row.ReadOnly = !enabled;
+            for (int colIndex = 0; colIndex < playlistDataGridView.Columns.Count; colIndex++)
+            {
+                DataGridViewCell cell = playlistDataGridView[colIndex, row.Index];
+                enableCell(cell, enabled);
+            }
+        }
+
+        /// <summary>
+        /// Toggles the "enabled" status of a cell in a DataGridView. There is no native
+        /// support for disabling a cell, hence the need for this method. The disabled state
+        /// means that the cell is read-only and grayed out.
+        /// </summary>
+        /// <param name="dc">Cell to enable/disable</param>
+        /// <param name="enabled">Whether the cell is enabled or disabled</param>
+        /// <see cref="http://stackoverflow.com/a/5291514/467582"/>
+        private void enableCell(DataGridViewCell dc, bool enabled)
+        {
+            // toggle read-only state
+            // TODO: Find a better method of disabling cells that disables their controls as well
+            dc.ReadOnly = !enabled;
+            if (enabled)
+            {
+                // restore cell style to the default value
+                dc.Style.BackColor = dc.OwningColumn.DefaultCellStyle.BackColor;
+                dc.Style.ForeColor = dc.OwningColumn.DefaultCellStyle.ForeColor;
+            }
+            else
+            {
+                // gray out the cell
+                // TODO: Use system colors instead of hard-coded ones
+                dc.Style.BackColor = Color.LightGray;
+                dc.Style.ForeColor = Color.DarkGray;
             }
         }
 
@@ -355,6 +406,10 @@ namespace BDInfo.views
             if (e.RowIndex < 0 || e.ColumnIndex < 0)
                 return;
 
+            // Ignore readonly (i.e., disabled) cells
+            if (playlistDataGridView[e.ColumnIndex, e.RowIndex].ReadOnly)
+                return;
+
             var column = playlistDataGridView.Columns[e.ColumnIndex];
             if (column is DataGridViewComboBoxColumn)
             {
@@ -385,6 +440,10 @@ namespace BDInfo.views
                 rowIndex = playlistDataGridView.SelectedCells[0].RowIndex;
 
             if (rowIndex == -1) return;
+
+            // Ignore readonly (i.e., disabled) rows
+            if (playlistDataGridView.Rows[rowIndex].ReadOnly)
+                return;
 
             PlaylistGridItem playlistItem = bindingList[rowIndex];
 
