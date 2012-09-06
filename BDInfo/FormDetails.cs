@@ -184,6 +184,21 @@ namespace BDInfo
 
         private void mainMovieBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (e.Result is Exception)
+            {
+                string msg = ((Exception)e.Result).Message;
+
+                MessageBox.Show(msg, "BDInfo Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // TODO: Disable POST submission only - don't disable ripping completely
+                EnableForm(true);
+                searchResultListView.Enabled = false;
+                continueButton.Enabled = false;
+            }
+
+            if (mainMovieSearchResult == null) return;
+
             if (mainMovieSearchResult.error)
             {
                 string errorMessages = "";
@@ -209,6 +224,7 @@ namespace BDInfo
 
                 populator.AutoConfigure(disc.playlists);
             }
+
             SearchTmdb();
         }
 
