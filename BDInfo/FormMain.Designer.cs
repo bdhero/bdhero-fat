@@ -466,9 +466,9 @@ namespace BDInfo
             // 
             // buttonRip
             // 
-            this.buttonRip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonRip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonRip.Enabled = false;
-            this.buttonRip.Location = new System.Drawing.Point(17, 654);
+            this.buttonRip.Location = new System.Drawing.Point(594, 50);
             this.buttonRip.Name = "buttonRip";
             this.buttonRip.Size = new System.Drawing.Size(75, 23);
             this.buttonRip.TabIndex = 39;
