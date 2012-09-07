@@ -101,6 +101,7 @@
     <Compile Include="BDROM\TSStream.cs" />
     <Compile Include="BDROM\TSCodecVC1.cs" />
     <Compile Include="controllers\AbstractExternalTool.cs" />
+    <Compile Include="controllers\ChapterWriter.cs" />
     <Compile Include="controllers\TsMuxer.cs" />
     <Compile Include="controllers\MainMovieService.cs" />
     <Compile Include="FormDetails.cs">
