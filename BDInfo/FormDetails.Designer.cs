@@ -110,6 +110,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.maskedTextBoxYear = new System.Windows.Forms.MaskedTextBox();
+            this.buttonSubmitToDB = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -172,7 +174,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.movieNameTextBox.Location = new System.Drawing.Point(96, 33);
             this.movieNameTextBox.Name = "movieNameTextBox";
-            this.movieNameTextBox.Size = new System.Drawing.Size(539, 20);
+            this.movieNameTextBox.Size = new System.Drawing.Size(491, 20);
             this.movieNameTextBox.TabIndex = 2;
             // 
             // searchButton
@@ -242,6 +244,7 @@
             // 
             // tabPageDisc
             // 
+            this.tabPageDisc.Controls.Add(this.maskedTextBoxYear);
             this.tabPageDisc.Controls.Add(this.discLanguageComboBox);
             this.tabPageDisc.Controls.Add(this.discLanguageLabel);
             this.tabPageDisc.Controls.Add(this.movieNameLabel);
@@ -992,6 +995,27 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(100, 16);
             // 
+            // maskedTextBoxYear
+            // 
+            this.maskedTextBoxYear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.maskedTextBoxYear.Location = new System.Drawing.Point(593, 33);
+            this.maskedTextBoxYear.Mask = "0000";
+            this.maskedTextBoxYear.Name = "maskedTextBoxYear";
+            this.maskedTextBoxYear.Size = new System.Drawing.Size(42, 20);
+            this.maskedTextBoxYear.TabIndex = 5;
+            // 
+            // buttonSubmitToDB
+            // 
+            this.buttonSubmitToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSubmitToDB.Enabled = false;
+            this.buttonSubmitToDB.Location = new System.Drawing.Point(519, 613);
+            this.buttonSubmitToDB.Name = "buttonSubmitToDB";
+            this.buttonSubmitToDB.Size = new System.Drawing.Size(84, 23);
+            this.buttonSubmitToDB.TabIndex = 100;
+            this.buttonSubmitToDB.Text = "Submit to DB";
+            this.buttonSubmitToDB.UseVisualStyleBackColor = true;
+            this.buttonSubmitToDB.Click += new System.EventHandler(this.buttonSubmitToDB_Click);
+            // 
             // FormDetails
             // 
             this.AcceptButton = this.continueButton;
@@ -999,6 +1023,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(777, 661);
+            this.Controls.Add(this.buttonSubmitToDB);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.cancelButton);
@@ -1123,5 +1148,7 @@
         private System.Windows.Forms.ColumnHeader columnHeaderVideoResolution;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoFrameRate;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoAspectRatio;
+        private System.Windows.Forms.MaskedTextBox maskedTextBoxYear;
+        private System.Windows.Forms.Button buttonSubmitToDB;
     }
 }

@@ -93,6 +93,7 @@ namespace BDInfo
         private void OnPlaylistItemChange(object sender, EventArgs e)
         {
             InitOutputTab();
+            buttonSubmitToDB.Enabled = CanSubmitToDB;
         }
 
         private void OnAudienceLanguageChange(object sender, EventArgs e)
@@ -286,6 +287,9 @@ namespace BDInfo
             EnableForm(false);
             continueButton.Enabled = false;
 
+            this.auto_configured = false;
+            this.auto_tmdb_id = -1;
+
             mainMovieBackgroundWorker = new BackgroundWorker();
             mainMovieBackgroundWorker.WorkerReportsProgress = true;
             mainMovieBackgroundWorker.WorkerSupportsCancellation = true;
@@ -305,13 +309,32 @@ namespace BDInfo
             EnableForm(false);
             continueButton.Enabled = false;
 
+            string query = this.movieNameTextBox.Text;
+            string ISO_639_1 = (this.discLanguageComboBox.SelectedValue as Language).ISO_639_1;
+            int? year = Regex.IsMatch(maskedTextBoxYear.Text, @"^\d{4}$") ? (int?)Int32.Parse(maskedTextBoxYear.Text) : null;
+            
+            TmdbSearchRequestParams reqParams = new TmdbSearchRequestParams(query, year, ISO_639_1);
+
             tmdbBackgroundWorker = new BackgroundWorker();
             tmdbBackgroundWorker.WorkerReportsProgress = true;
             tmdbBackgroundWorker.WorkerSupportsCancellation = true;
             tmdbBackgroundWorker.DoWork += tmdbBackgroundWorker_DoWork;
             tmdbBackgroundWorker.ProgressChanged += tmdbBackgroundWorker_ProgressChanged;
             tmdbBackgroundWorker.RunWorkerCompleted += tmdbBackgroundWorker_RunWorkerCompleted;
-            tmdbBackgroundWorker.RunWorkerAsync(this.movieNameTextBox.Text);
+            tmdbBackgroundWorker.RunWorkerAsync(reqParams);
+        }
+
+        private class TmdbSearchRequestParams
+        {
+            public string query;
+            public int? year;
+            public string ISO_639_1;
+            public TmdbSearchRequestParams(string query, int? year, string ISO_639_1)
+            {
+                this.query = query;
+                this.year = year;
+                this.ISO_639_1 = ISO_639_1;
+            }
         }
 
         #endregion
@@ -546,7 +569,9 @@ namespace BDInfo
 
                 this.auto_configured = true;
                 this.auto_tmdb_id = disc.tmdb_id;
-                this.movieNameTextBox.Text = disc.movie_title + " (" + disc.year + ")";
+                //this.movieNameTextBox.Text = disc.movie_title + " (" + disc.year + ")";
+                this.movieNameTextBox.Text = disc.movie_title;
+                this.maskedTextBoxYear.Text = disc.year != null ? disc.year.ToString() : null;
 
                 populator.AutoConfigure(disc.playlists);
             }
@@ -562,7 +587,8 @@ namespace BDInfo
         {
             try
             {
-                movieSearch = api.SearchMovie((string)e.Argument, 1);
+                TmdbSearchRequestParams reqParams = e.Argument as TmdbSearchRequestParams;
+                movieSearch = api.SearchMovie(reqParams.query, 1, reqParams.ISO_639_1, false, reqParams.year);
                 e.Result = null;
             }
             catch (Exception ex)
@@ -653,7 +679,7 @@ namespace BDInfo
 
         private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            populator.MainLanguageCode = discLanguageComboBox.SelectedValue as string;
+            populator.MainLanguageCode = (discLanguageComboBox.SelectedValue as Language).ISO_639_2;
         }
 
         private void searchResultListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -673,6 +699,8 @@ namespace BDInfo
                     this.movieYear = GetYearInt(this.movieResult.release_date);
                 }
             }
+
+            this.buttonSubmitToDB.Enabled = CanSubmitToDB;
         }
 
         private void searchButton_Click(object sender, EventArgs e)
@@ -711,22 +739,38 @@ namespace BDInfo
 
         }
 
-        private void SubmitJsonDiscIfNecessary()
+        private bool CanSubmitToDB
         {
-            if (searchResultListView.SelectedIndices.Count > 0)
+            get
             {
-                if (auto_configured)
+                // TODO: Remove this once datagrid combobox selection is fixed
+                //       (selecting a different language doesn't always update the model properly)
+                return false;
+
+                if (searchResultListView.SelectedIndices.Count > 0)
                 {
-                    if (movieResult.id != auto_tmdb_id || populator.HasChanged)
+                    if (auto_configured)
                     {
-                        DialogResult answer = MessageBox.Show(this, "Submit a new disc to the database?", "Changes detected", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (answer == DialogResult.Yes)
+                        if (movieResult.id != auto_tmdb_id || populator.HasChanged)
                         {
-                            SubmitJsonDisc();
+                            return true;
                         }
                     }
+                    else
+                    {
+                        return true;
+                    }
                 }
-                else
+                return false;
+            }
+        }
+
+        private void SubmitJsonDiscIfNecessary()
+        {
+            if (CanSubmitToDB)
+            {
+                DialogResult answer = MessageBox.Show(this, "Submit a new disc to the database?", "Changes detected", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (answer == DialogResult.Yes)
                 {
                     SubmitJsonDisc();
                 }
@@ -1082,6 +1126,11 @@ namespace BDInfo
             {
                 continueButton.Enabled = false;
             }
+        }
+
+        private void buttonSubmitToDB_Click(object sender, EventArgs e)
+        {
+            SubmitJsonDisc();
         }
     }
 }
