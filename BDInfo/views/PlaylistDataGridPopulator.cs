@@ -596,7 +596,7 @@ namespace BDInfo.views
         private PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2, bool clone)
         {
             this.playlist = playlist;
-            this.isMainMovie = playlist.IsMainPlaylist;
+            this.isMainMovie = playlist.IsMainPlaylist && !HasDuplicateClips;
             this.filename = playlist.Name;
             this.length = playlist.TotalLength;
             this.size = playlist.FileSize.ToString("N0");
@@ -606,6 +606,24 @@ namespace BDInfo.views
 
             if ( clone )
                 this.savedState = Clone();
+        }
+
+        private bool HasDuplicateClips
+        {
+            get
+            {
+                Dictionary<string, TSStreamClip> clips = new Dictionary<string, TSStreamClip>();
+                foreach (TSStreamClip clip in playlist.StreamClips)
+                {
+                    string key = string.Format("{0}{1}", clip.Length, clip.FileSize);
+                    if (clips.ContainsKey(key))
+                    {
+                        return true;
+                    }
+                    clips.Add(key, clip);
+                }
+                return false;
+            }
         }
 
         public PlaylistGridItem Clone()
