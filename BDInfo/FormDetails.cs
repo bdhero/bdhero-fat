@@ -508,7 +508,8 @@ namespace BDInfo
 
         private void mainMovieBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            continueButton.Enabled = true;
+            // TODO: Uncomment once tab switching works
+            //continueButton.Enabled = true;
 
             if (e.Result is Exception)
             {
@@ -591,9 +592,11 @@ namespace BDInfo
         private void tmdbBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             EnableForm(true);
-            continueButton.Enabled = true;
+            // TODO: Uncomment once tab switching works
+            //continueButton.Enabled = true;
 
-            if (movieResult == null || movieSearch.results == null) return;
+            if (movieSearch == null || movieSearch.results == null)
+                return;
 
             foreach (MovieResult curResult in movieSearch.results)
             {
@@ -1068,7 +1071,8 @@ namespace BDInfo
             TabPage curTab = tabControl.TabPages[tabControl.TabIndex];
 
             continueButton.Text = "Continue";
-            continueButton.Enabled = true;
+            // TODO: Uncomment once tab switching works
+            //continueButton.Enabled = true;
 
             if (curTab == tabPageOutput)
             {
