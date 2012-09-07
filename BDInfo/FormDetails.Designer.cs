@@ -1006,7 +1006,7 @@
             // 
             // buttonSubmitToDB
             // 
-            this.buttonSubmitToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSubmitToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonSubmitToDB.Enabled = false;
             this.buttonSubmitToDB.Location = new System.Drawing.Point(519, 613);
             this.buttonSubmitToDB.Name = "buttonSubmitToDB";
