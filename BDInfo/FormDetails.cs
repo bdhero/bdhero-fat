@@ -284,6 +284,7 @@ namespace BDInfo
         private void QueryMainMovie()
         {
             EnableForm(false);
+            continueButton.Enabled = false;
 
             mainMovieBackgroundWorker = new BackgroundWorker();
             mainMovieBackgroundWorker.WorkerReportsProgress = true;
@@ -302,6 +303,7 @@ namespace BDInfo
             searchResultListView.Items.Clear();
 
             EnableForm(false);
+            continueButton.Enabled = false;
 
             tmdbBackgroundWorker = new BackgroundWorker();
             tmdbBackgroundWorker.WorkerReportsProgress = true;
@@ -322,7 +324,6 @@ namespace BDInfo
             movieNameTextBox.Enabled = enabled;
             searchButton.Enabled = enabled;
             searchResultListView.Enabled = enabled;
-            ResetContinueButton();
         }
 
         private void ResizeDiscTab(object sender = null, EventArgs e = null)
@@ -335,11 +336,6 @@ namespace BDInfo
         private void ResetPlaylists()
         {
             populator.ShowAllPlaylists = showAllPlaylistsCheckbox.Checked;
-        }
-
-        private bool ResetContinueButton()
-        {
-            return continueButton.Enabled = searchResultListView.SelectedItems.Count > 0;
         }
 
         private void buttonOutputDir_Click(
@@ -512,6 +508,8 @@ namespace BDInfo
 
         private void mainMovieBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            continueButton.Enabled = true;
+
             if (e.Result is Exception)
             {
                 string msg = ((Exception)e.Result).Message;
@@ -522,7 +520,6 @@ namespace BDInfo
                 // TODO: Disable POST submission only - don't disable ripping completely
                 EnableForm(true);
                 searchResultListView.Enabled = false;
-                continueButton.Enabled = false;
             }
 
             if (mainMovieSearchResult == null) return;
@@ -593,15 +590,20 @@ namespace BDInfo
 
         private void tmdbBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            foreach (MovieResult movieResult in movieSearch.results)
+            EnableForm(true);
+            continueButton.Enabled = true;
+
+            if (movieResult == null || movieSearch.results == null) return;
+
+            foreach (MovieResult curResult in movieSearch.results)
             {
                 ListViewItem.ListViewSubItem movieNameSubItem = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem movieYearSubItem = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem moviePopularitySubItem = new ListViewItem.ListViewSubItem();
 
-                movieNameSubItem.Text = movieResult.title;
-                movieYearSubItem.Text = GetYearString(movieResult.release_date);
-                moviePopularitySubItem.Text = movieResult.popularity.ToString("N3", CultureInfo.CurrentUICulture);
+                movieNameSubItem.Text = curResult.title;
+                movieYearSubItem.Text = GetYearString(curResult.release_date);
+                moviePopularitySubItem.Text = curResult.popularity.ToString("N3", CultureInfo.CurrentUICulture);
 
                 ListViewItem.ListViewSubItem[] searchResultSubItems =
                     new ListViewItem.ListViewSubItem[]
@@ -616,8 +618,6 @@ namespace BDInfo
 
                 searchResultListView.Items.Add(searchResultListItem);
             }
-
-            EnableForm(true);
 
             searchResultListView.Select();
 
@@ -670,8 +670,6 @@ namespace BDInfo
                     this.movieYear = GetYearInt(this.movieResult.release_date);
                 }
             }
-
-            ResetContinueButton();
         }
 
         private void searchButton_Click(object sender, EventArgs e)
@@ -680,6 +678,37 @@ namespace BDInfo
         }
 
         private void continueButton_Click(object sender, EventArgs e)
+        {
+            // TODO: Fix TabIndexChanged and SelectedIndexChanged
+            return;
+
+            TabPage curTab = tabControl.TabPages[tabControl.TabIndex];
+
+            if (curTab == tabPageDisc)
+            {
+                tabControl.SelectedIndex++;
+                tabControl.TabIndex++;
+            }
+            else if (curTab == tabPagePlaylists)
+            {
+                SubmitJsonDiscIfNecessary();
+                tabControl.SelectedIndex++;
+                tabControl.TabIndex++;
+            }
+            else if (curTab == tabPageOutput)
+            {
+                tabControl.SelectedIndex++;
+                tabControl.TabIndex++;
+                Rip();
+            }
+        }
+
+        private void Rip()
+        {
+
+        }
+
+        private void SubmitJsonDiscIfNecessary()
         {
             if (searchResultListView.SelectedIndices.Count > 0)
             {
@@ -699,14 +728,14 @@ namespace BDInfo
                     SubmitJsonDisc();
                 }
             }
-
-            //Close();
         }
 
         #endregion
 
         private void SubmitJsonDisc()
         {
+            if (searchResultListView.SelectedItems.Count == 0) return;
+
             DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to submit to the database?", "Confirm database submit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (dialogResult == DialogResult.No) return;
@@ -932,7 +961,7 @@ namespace BDInfo
                     };
 
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
-                streamItem.Tag = stream.PID;
+                streamItem.Tag = stream;
                 streamItem.Checked = true;
                 listViewVideoTracks.Items.Add(streamItem);
             }
@@ -965,7 +994,7 @@ namespace BDInfo
                     };
 
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
-                streamItem.Tag = stream.PID;
+                streamItem.Tag = stream;
                 streamItem.Checked = true;
                 listViewAudioTracks.Items.Add(streamItem);
             }
@@ -993,7 +1022,7 @@ namespace BDInfo
                     };
 
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
-                streamItem.Tag = stream.PID;
+                streamItem.Tag = stream;
                 streamItem.Checked = true;
                 listViewSubtitleTracks.Items.Add(streamItem);
             }
@@ -1001,13 +1030,25 @@ namespace BDInfo
 
         private void ResizePlaylistsTab(object sender = null, EventArgs e = null)
         {
-            listViewStreamFiles.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            listViewStreamFiles.AutoResizeColumn(columnHeaderFileName.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
-            listViewStreamFiles.AutoResizeColumn(columnHeaderFileLength.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+            listViewStreamFiles.Columns[0].Width =
+                (int)(listViewStreamFiles.ClientSize.Width * 0.23);
+            listViewStreamFiles.Columns[1].Width =
+                (int)(listViewStreamFiles.ClientSize.Width * 0.08);
+            listViewStreamFiles.Columns[2].Width =
+                (int)(listViewStreamFiles.ClientSize.Width * 0.23);
+            listViewStreamFiles.Columns[3].Width =
+                (int)(listViewStreamFiles.ClientSize.Width * 0.23);
+            listViewStreamFiles.Columns[4].Width =
+                (int)(listViewStreamFiles.ClientSize.Width * 0.23);
 
-            listViewStreams.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            listViewStreams.AutoResizeColumn(columnHeaderStreamCodec.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
-            listViewStreams.AutoResizeColumn(columnHeaderDescription.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+            listViewStreams.Columns[0].Width =
+                (int)(listViewStreams.ClientSize.Width * 0.25);
+            listViewStreams.Columns[1].Width =
+                (int)(listViewStreams.ClientSize.Width * 0.15);
+            listViewStreams.Columns[2].Width =
+                (int)(listViewStreams.ClientSize.Width * 0.15);
+            listViewStreams.Columns[3].Width =
+                (int)(listViewStreams.ClientSize.Width * 0.45);
         }
 
         private void ResizeOutputTab(object sender = null, EventArgs e = null)
@@ -1020,6 +1061,23 @@ namespace BDInfo
 
             listViewSubtitleTracks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             listViewSubtitleTracks.AutoResizeColumn(columnHeaderSubtitleCodec.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+        }
+
+        private void tabControl_TabIndexChanged(object sender, EventArgs e)
+        {
+            TabPage curTab = tabControl.TabPages[tabControl.TabIndex];
+
+            continueButton.Text = "Continue";
+            continueButton.Enabled = true;
+
+            if (curTab == tabPageOutput)
+            {
+                continueButton.Text = "Rip It!";
+            }
+            else if (curTab == tabPageProgress)
+            {
+                continueButton.Enabled = false;
+            }
         }
     }
 }
