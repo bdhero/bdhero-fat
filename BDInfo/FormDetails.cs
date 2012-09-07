@@ -80,6 +80,7 @@ namespace BDInfo
 
             populator.ItemChanged += OnPlaylistItemChange;
             comboBoxAudienceLanguage.SelectedIndexChanged += OnAudienceLanguageChange;
+            playlistDataGridView.CurrentCellDirtyStateChanged += playlistDataGridView_CurrentCellDirtyStateChanged;
 
             listViewStreamFiles.Enabled = true;
             listViewStreams.Enabled = true;
@@ -743,10 +744,6 @@ namespace BDInfo
         {
             get
             {
-                // TODO: Remove this once datagrid combobox selection is fixed
-                //       (selecting a different language doesn't always update the model properly)
-                return false;
-
                 if (searchResultListView.SelectedIndices.Count > 0)
                 {
                     if (auto_configured)
@@ -793,7 +790,7 @@ namespace BDInfo
             jsonDisc.volume_label = BDROM.VolumeLabel;
             jsonDisc.ISO_639_2 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_2 : null;
 
-            jsonDisc.tmdb_id = movieResult.id;
+            jsonDisc.tmdb_id = movieResult != null ? movieResult.id : -1;
             jsonDisc.movie_title = movieTitle;
             jsonDisc.year = movieYear;
 
@@ -1131,6 +1128,14 @@ namespace BDInfo
         private void buttonSubmitToDB_Click(object sender, EventArgs e)
         {
             SubmitJsonDisc();
+        }
+
+        private void playlistDataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (playlistDataGridView.IsCurrentCellDirty)
+            {
+                playlistDataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
         }
     }
 }
