@@ -79,7 +79,6 @@ namespace BDInfo
             InitOutputTab();
 
             populator.ItemChanged += OnPlaylistItemChange;
-
             comboBoxAudienceLanguage.SelectedIndexChanged += OnAudienceLanguageChange;
 
             listViewStreamFiles.Enabled = true;
@@ -117,8 +116,8 @@ namespace BDInfo
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "BDInfo Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //MessageBox.Show(ex.Message, "BDInfo Error",
+                    //    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -326,12 +325,11 @@ namespace BDInfo
             ResetContinueButton();
         }
 
-        private void ResetColumnWidths(int offset = 0)
+        private void ResizeDiscTab(object sender = null, EventArgs e = null)
         {
             var width = searchResultListView.ClientSize.Width;
             var columns = searchResultListView.Columns;
-
-            columns[0].Width = (int)(width - columns[1].Width - columns[2].Width) - offset;
+            columns[0].Width = (int)(width - columns[1].Width - columns[2].Width);
         }
 
         private void ResetPlaylists()
@@ -628,7 +626,7 @@ namespace BDInfo
                 searchResultListView.Items[0].Selected = true;
             }
 
-            ResetColumnWidths(0);
+            ResizeDiscTab();
         }
 
         #endregion
@@ -653,11 +651,6 @@ namespace BDInfo
         private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             populator.MainLanguageCode = discLanguageComboBox.SelectedValue as string;
-        }
-
-        private void FormDetails_Resize(object sender, EventArgs e)
-        {
-            ResetColumnWidths();
         }
 
         private void searchResultListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -819,17 +812,26 @@ namespace BDInfo
             FilterTracks();
         }
 
+        private ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>();
+
+        private IList<Language> audioLanguages = new List<Language>();
+        private IList<Language> subtitleLanguages = new List<Language>();
+
+        private List<TSVideoStream> videoTracks = new List<TSVideoStream>();
+        private List<TSAudioStream> audioTracks = new List<TSAudioStream>();
+        private List<TSStream> subtitleTracks = new List<TSStream>();
+
         private void FilterPlaylists()
         {
             if (ignoreFilterControlChange) return;
 
-            ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>(playlists);
+            filteredPlaylists = new HashSet<TSPlaylistFile>(playlists);
 
             Language videoLanguage = comboBoxVideoLanguage.SelectedValue as Language;
             Cut cut = (Cut)comboBoxCut.SelectedValue;
             CommentaryOption commentaryOption = (CommentaryOption)comboBoxCommentary.SelectedValue;
-            IList<Language> audioLanguages = new List<Language>();
-            IList<Language> subtitleLanguages = new List<Language>();
+            audioLanguages.Clear();
+            subtitleLanguages.Clear();
 
             foreach (Object o in listBoxAudioLanguages.SelectedItems)
                 if (o is Language) audioLanguages.Add(o as Language);
@@ -858,7 +860,166 @@ namespace BDInfo
 
         private void FilterTracks()
         {
+            listViewVideoTracks.Items.Clear();
+            listViewAudioTracks.Items.Clear();
+            listViewSubtitleTracks.Items.Clear();
 
+            videoTracks.Clear();
+            audioTracks.Clear();
+            subtitleTracks.Clear();
+
+            if (filteredPlaylists == null || filteredPlaylists.Count == 0)
+                return;
+
+            TSPlaylistFile playlist = comboBoxPlaylist.SelectedValue as TSPlaylistFile;
+
+            if (playlist == null)
+                return;
+
+            foreach (TSStream stream in playlist.SortedStreams)
+            {
+                if (stream.IsHidden)
+                    continue;
+
+                Language lang = !String.IsNullOrEmpty(stream.LanguageCode) ? Language.GetLanguage(stream.LanguageCode) : null;
+
+                if (stream is TSVideoStream)
+                    videoTracks.Add(stream as TSVideoStream);
+                else if (stream is TSAudioStream && audioLanguages.Contains(lang))
+                    audioTracks.Add(stream as TSAudioStream);
+                else if (stream is TSGraphicsStream && subtitleLanguages.Contains(lang))
+                    subtitleTracks.Add(stream);
+                else if (stream is TSTextStream && subtitleLanguages.Contains(lang))
+                    subtitleTracks.Add(stream);
+            }
+
+            PopulateVideoTracks();
+            PopulateAudioTracks();
+            PopulateSubtitleTracks();
+
+            ResizeOutputTab();
+        }
+
+        private void PopulateVideoTracks()
+        {
+            foreach (TSVideoStream stream in videoTracks)
+            {
+                ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
+                codec.Text = stream.CodecName;
+                if (stream.AngleIndex > 0)
+                    codec.Text += string.Format(" ({0})", stream.AngleIndex);
+                codec.Tag = stream.CodecName;
+
+                ListViewItem.ListViewSubItem resolution = new ListViewItem.ListViewSubItem();
+                resolution.Text = stream.HeightDescription;
+                resolution.Tag = stream.Height;
+
+                ListViewItem.ListViewSubItem frameRate = new ListViewItem.ListViewSubItem();
+                frameRate.Text = stream.FrameRateDescription;
+                frameRate.Tag = stream.FrameRate;
+
+                ListViewItem.ListViewSubItem aspectRatio = new ListViewItem.ListViewSubItem();
+                aspectRatio.Text = stream.AspectRatioDescription;
+                aspectRatio.Tag = stream.AspectRatio;
+
+                ListViewItem.ListViewSubItem[] streamSubItems =
+                    new ListViewItem.ListViewSubItem[]
+                    {
+                        codec,
+                        resolution,
+                        frameRate,
+                        aspectRatio
+                    };
+
+                ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
+                streamItem.Tag = stream.PID;
+                streamItem.Checked = true;
+                listViewVideoTracks.Items.Add(streamItem);
+            }
+        }
+
+        private void PopulateAudioTracks()
+        {
+            foreach (TSAudioStream stream in audioTracks)
+            {
+                ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
+                codec.Text = stream.CodecName;
+                if (stream.AngleIndex > 0)
+                    codec.Text += string.Format(" ({0})", stream.AngleIndex);
+                codec.Tag = stream.CodecName;
+
+                ListViewItem.ListViewSubItem language = new ListViewItem.ListViewSubItem();
+                language.Text = stream.LanguageName;
+                language.Tag = stream.LanguageCode;
+
+                ListViewItem.ListViewSubItem channels = new ListViewItem.ListViewSubItem();
+                channels.Text = stream.ChannelCountDescription;
+                channels.Tag = stream.ChannelCountDescription;
+
+                ListViewItem.ListViewSubItem[] streamSubItems =
+                    new ListViewItem.ListViewSubItem[]
+                    {
+                        codec,
+                        language,
+                        channels
+                    };
+
+                ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
+                streamItem.Tag = stream.PID;
+                streamItem.Checked = true;
+                listViewAudioTracks.Items.Add(streamItem);
+            }
+        }
+
+        private void PopulateSubtitleTracks()
+        {
+            foreach (TSStream stream in subtitleTracks)
+            {
+                ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
+                codec.Text = stream.CodecName;
+                if (stream.AngleIndex > 0)
+                    codec.Text += string.Format(" ({0})", stream.AngleIndex);
+                codec.Tag = stream.CodecName;
+
+                ListViewItem.ListViewSubItem language = new ListViewItem.ListViewSubItem();
+                language.Text = stream.LanguageName;
+                language.Tag = stream.LanguageCode;
+
+                ListViewItem.ListViewSubItem[] streamSubItems =
+                    new ListViewItem.ListViewSubItem[]
+                    {
+                        codec,
+                        language
+                    };
+
+                ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
+                streamItem.Tag = stream.PID;
+                streamItem.Checked = true;
+                listViewSubtitleTracks.Items.Add(streamItem);
+            }
+        }
+
+        private void ResizePlaylistsTab(object sender = null, EventArgs e = null)
+        {
+            listViewStreamFiles.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            listViewStreamFiles.AutoResizeColumn(columnHeaderFileName.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+            listViewStreamFiles.AutoResizeColumn(columnHeaderFileLength.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+
+            listViewStreams.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            listViewStreams.AutoResizeColumn(columnHeaderStreamCodec.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+            listViewStreams.AutoResizeColumn(columnHeaderDescription.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+        }
+
+        private void ResizeOutputTab(object sender = null, EventArgs e = null)
+        {
+            listViewVideoTracks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            listViewVideoTracks.AutoResizeColumn(columnHeaderVideoCodec.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+
+            listViewAudioTracks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            listViewAudioTracks.AutoResizeColumn(columnHeaderAudioCodec.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+
+            listViewSubtitleTracks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            listViewSubtitleTracks.AutoResizeColumn(columnHeaderSubtitleCodec.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
         }
     }
 }

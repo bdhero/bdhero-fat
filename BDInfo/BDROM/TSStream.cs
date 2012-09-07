@@ -526,49 +526,76 @@ namespace BDInfo
             }
         }
 
+        public string HeightDescription
+        {
+            get
+            {
+                if (Height > 0)
+                    return string.Format("{0:D}{1}", Height, IsInterlaced ? "i" : "p");
+                return null;
+            }
+        }
+
+        public string FrameRateDescription
+        {
+            get
+            {
+                if (FrameRateEnumerator > 0 &&
+                    FrameRateDenominator > 0)
+                {
+                    if (FrameRateEnumerator % FrameRateDenominator == 0)
+                    {
+                        return string.Format("{0:D} fps", FrameRateEnumerator / FrameRateDenominator);
+                    }
+                    else
+                    {
+                        return string.Format("{0:F3} fps", (double)FrameRateEnumerator / FrameRateDenominator);
+                    }
+
+                }
+                return null;
+            }
+        }
+
+        public string AspectRatioDescription
+        {
+            get
+            {
+                if (AspectRatio == TSAspectRatio.ASPECT_4_3)
+                    return "4:3";
+                else if (AspectRatio == TSAspectRatio.ASPECT_16_9)
+                    return "16:9";
+                return null;
+            }
+        }
+
+        public string EncodingProfileDescription
+        {
+            get { return EncodingProfile; }
+        }
+
         public override string Description
         {
             get
             {
                 string description = "";
 
-                if (Height > 0)
-                {
-                    description += string.Format("{0:D}{1} / ",
-                        Height,
-                        IsInterlaced ? "i" : "p");
-                }
-                if (FrameRateEnumerator > 0 &&
-                    FrameRateDenominator > 0)
-                {
-                    if (FrameRateEnumerator % FrameRateDenominator == 0)
-                    {
-                        description += string.Format("{0:D} fps / ",
-                            FrameRateEnumerator / FrameRateDenominator);
-                    }
-                    else
-                    {
-                        description += string.Format("{0:F3} fps / ",
-                            (double)FrameRateEnumerator / FrameRateDenominator);
-                    }
+                string[] descs = {
+                                     HeightDescription,
+                                     FrameRateDescription,
+                                     AspectRatioDescription,
+                                     EncodingProfileDescription
+                                 };
 
-                }
-                if (AspectRatio == TSAspectRatio.ASPECT_4_3)
+                foreach (string desc in descs)
                 {
-                    description += "4:3 / ";
+                    if (!String.IsNullOrEmpty(desc))
+                        description += desc + " / ";
                 }
-                else if (AspectRatio == TSAspectRatio.ASPECT_16_9)
-                {
-                    description += "16:9 / ";
-                }
-                if (EncodingProfile != null)
-                {
-                    description += EncodingProfile + " / ";
-                }
+
                 if (description.EndsWith(" / "))
-                {
                     description = description.Substring(0, description.Length - 3);
-                }
+
                 return description;
             }
         }
@@ -635,7 +662,7 @@ namespace BDInfo
             return 0;
         }
 
-        public string ChannelDescription
+        public string ChannelCountDescription
         {
             get
             {
@@ -666,6 +693,16 @@ namespace BDInfo
                             break;
                     }
                 }
+
+                return description;
+            }
+        }
+
+        public string ChannelDescription
+        {
+            get
+            {
+                string description = ChannelCountDescription;
                 if (AudioMode == TSAudioMode.Extended)
                 {
                     if (StreamType == TSStreamType.AC3_AUDIO)
