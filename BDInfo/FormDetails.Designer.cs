@@ -39,6 +39,7 @@
             this.PopularityColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageDisc = new System.Windows.Forms.TabPage();
+            this.maskedTextBoxYear = new System.Windows.Forms.MaskedTextBox();
             this.discLanguageComboBox = new System.Windows.Forms.ComboBox();
             this.discLanguageLabel = new System.Windows.Forms.Label();
             this.tabPagePlaylists = new System.Windows.Forms.TabPage();
@@ -110,8 +111,9 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.maskedTextBoxYear = new System.Windows.Forms.MaskedTextBox();
             this.buttonSubmitToDB = new System.Windows.Forms.Button();
+            this.buttonSelectAll = new System.Windows.Forms.Button();
+            this.buttonUnselectAll = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -260,6 +262,15 @@
             this.tabPageDisc.UseVisualStyleBackColor = true;
             this.tabPageDisc.SizeChanged += new System.EventHandler(this.ResizeDiscTab);
             // 
+            // maskedTextBoxYear
+            // 
+            this.maskedTextBoxYear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.maskedTextBoxYear.Location = new System.Drawing.Point(593, 33);
+            this.maskedTextBoxYear.Mask = "0000";
+            this.maskedTextBoxYear.Name = "maskedTextBoxYear";
+            this.maskedTextBoxYear.Size = new System.Drawing.Size(42, 20);
+            this.maskedTextBoxYear.TabIndex = 5;
+            // 
             // discLanguageComboBox
             // 
             this.discLanguageComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -317,6 +328,8 @@
             this.playlistsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsGroupBox.Controls.Add(this.buttonUnselectAll);
+            this.playlistsGroupBox.Controls.Add(this.buttonSelectAll);
             this.playlistsGroupBox.Controls.Add(this.showAllPlaylistsCheckbox);
             this.playlistsGroupBox.Controls.Add(this.panel1);
             this.playlistsGroupBox.Location = new System.Drawing.Point(4, 4);
@@ -331,7 +344,7 @@
             // 
             this.showAllPlaylistsCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showAllPlaylistsCheckbox.AutoSize = true;
-            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(6, 204);
+            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(9, 204);
             this.showAllPlaylistsCheckbox.Name = "showAllPlaylistsCheckbox";
             this.showAllPlaylistsCheckbox.Size = new System.Drawing.Size(105, 17);
             this.showAllPlaylistsCheckbox.TabIndex = 5;
@@ -345,9 +358,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.playlistDataGridView);
-            this.panel1.Location = new System.Drawing.Point(6, 19);
+            this.panel1.Location = new System.Drawing.Point(6, 49);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(714, 179);
+            this.panel1.Size = new System.Drawing.Size(714, 149);
             this.panel1.TabIndex = 4;
             // 
             // playlistDataGridView
@@ -368,7 +381,7 @@
             this.playlistDataGridView.Location = new System.Drawing.Point(3, 3);
             this.playlistDataGridView.MultiSelect = false;
             this.playlistDataGridView.Name = "playlistDataGridView";
-            this.playlistDataGridView.Size = new System.Drawing.Size(708, 173);
+            this.playlistDataGridView.Size = new System.Drawing.Size(708, 143);
             this.playlistDataGridView.TabIndex = 1;
             // 
             // playlistsSplitContainerInner
@@ -995,15 +1008,6 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(100, 16);
             // 
-            // maskedTextBoxYear
-            // 
-            this.maskedTextBoxYear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.maskedTextBoxYear.Location = new System.Drawing.Point(593, 33);
-            this.maskedTextBoxYear.Mask = "0000";
-            this.maskedTextBoxYear.Name = "maskedTextBoxYear";
-            this.maskedTextBoxYear.Size = new System.Drawing.Size(42, 20);
-            this.maskedTextBoxYear.TabIndex = 5;
-            // 
             // buttonSubmitToDB
             // 
             this.buttonSubmitToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1015,6 +1019,26 @@
             this.buttonSubmitToDB.Text = "Submit to DB";
             this.buttonSubmitToDB.UseVisualStyleBackColor = true;
             this.buttonSubmitToDB.Click += new System.EventHandler(this.buttonSubmitToDB_Click);
+            // 
+            // buttonSelectAll
+            // 
+            this.buttonSelectAll.Location = new System.Drawing.Point(7, 20);
+            this.buttonSelectAll.Name = "buttonSelectAll";
+            this.buttonSelectAll.Size = new System.Drawing.Size(75, 23);
+            this.buttonSelectAll.TabIndex = 6;
+            this.buttonSelectAll.Text = "Select All";
+            this.buttonSelectAll.UseVisualStyleBackColor = true;
+            this.buttonSelectAll.Click += new System.EventHandler(this.buttonSelectAll_Click);
+            // 
+            // buttonUnselectAll
+            // 
+            this.buttonUnselectAll.Location = new System.Drawing.Point(89, 20);
+            this.buttonUnselectAll.Name = "buttonUnselectAll";
+            this.buttonUnselectAll.Size = new System.Drawing.Size(75, 23);
+            this.buttonUnselectAll.TabIndex = 7;
+            this.buttonUnselectAll.Text = "Unselect All";
+            this.buttonUnselectAll.UseVisualStyleBackColor = true;
+            this.buttonUnselectAll.Click += new System.EventHandler(this.buttonUnselectAll_Click);
             // 
             // FormDetails
             // 
@@ -1150,5 +1174,7 @@
         private System.Windows.Forms.ColumnHeader columnHeaderVideoAspectRatio;
         private System.Windows.Forms.MaskedTextBox maskedTextBoxYear;
         private System.Windows.Forms.Button buttonSubmitToDB;
+        private System.Windows.Forms.Button buttonUnselectAll;
+        private System.Windows.Forms.Button buttonSelectAll;
     }
 }

@@ -460,6 +460,17 @@ namespace BDInfo.views
             }
         }
 
+        public bool SelectAll
+        {
+            set
+            {
+                foreach (PlaylistGridItem gridItem in playlistGridItems)
+                {
+                    gridItem.IsMainMovie = value;
+                }
+            }
+        }
+
         private DataGridViewButtonColumn playButtonColumn;
         private DataGridViewCheckBoxColumn isMainMovieColumn;
         private DataGridViewTextBoxColumn filenameColumn;

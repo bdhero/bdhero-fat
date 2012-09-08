@@ -90,6 +90,7 @@ namespace BDInfo
         }
 
         private bool ignoreFilterControlChange = false;
+        private bool ignoreDataGridItemChange = false;
 
         private void OnPlaylistItemChange(object sender, EventArgs e)
         {
@@ -1136,6 +1137,22 @@ namespace BDInfo
             {
                 playlistDataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
+        }
+
+        private void buttonSelectAll_Click(object sender, EventArgs e)
+        {
+            // TODO: Implement ignoreDataGridItemChange
+            //ignoreDataGridItemChange = true;
+            populator.SelectAll = true;
+            //ignoreDataGridItemChange = false;
+        }
+
+        private void buttonUnselectAll_Click(object sender, EventArgs e)
+        {
+            // TODO: Implement ignoreDataGridItemChange
+            //ignoreDataGridItemChange = true;
+            populator.SelectAll = false;
+            //ignoreDataGridItemChange = false;
         }
     }
 }
