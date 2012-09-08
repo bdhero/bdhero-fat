@@ -67,7 +67,6 @@
             this.textBoxReplaceSpaces = new System.Windows.Forms.TextBox();
             this.checkBoxReplaceSpaces = new System.Windows.Forms.CheckBox();
             this.labelOutputFileNamePreview = new System.Windows.Forms.Label();
-            this.labelOutputFileNameHelp = new System.Windows.Forms.Label();
             this.labelOutputFileExtension = new System.Windows.Forms.Label();
             this.buttonOutputDir = new System.Windows.Forms.Button();
             this.textBoxOutputDir = new System.Windows.Forms.TextBox();
@@ -114,6 +113,7 @@
             this.buttonSubmitToDB = new System.Windows.Forms.Button();
             this.buttonSelectAll = new System.Windows.Forms.Button();
             this.buttonUnselectAll = new System.Windows.Forms.Button();
+            this.textBoxOutputFileNameHint = new System.Windows.Forms.TextBox();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -536,10 +536,10 @@
             // 
             this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNameHint);
             this.groupBoxOutput.Controls.Add(this.textBoxReplaceSpaces);
             this.groupBoxOutput.Controls.Add(this.checkBoxReplaceSpaces);
             this.groupBoxOutput.Controls.Add(this.labelOutputFileNamePreview);
-            this.groupBoxOutput.Controls.Add(this.labelOutputFileNameHelp);
             this.groupBoxOutput.Controls.Add(this.labelOutputFileExtension);
             this.groupBoxOutput.Controls.Add(this.buttonOutputDir);
             this.groupBoxOutput.Controls.Add(this.textBoxOutputDir);
@@ -586,15 +586,6 @@
             this.labelOutputFileNamePreview.Size = new System.Drawing.Size(177, 13);
             this.labelOutputFileNamePreview.TabIndex = 8;
             this.labelOutputFileNamePreview.Text = "The Incredibles (2006) [1080p].m2ts";
-            // 
-            // labelOutputFileNameHelp
-            // 
-            this.labelOutputFileNameHelp.AutoSize = true;
-            this.labelOutputFileNameHelp.Location = new System.Drawing.Point(67, 70);
-            this.labelOutputFileNameHelp.Name = "labelOutputFileNameHelp";
-            this.labelOutputFileNameHelp.Size = new System.Drawing.Size(289, 13);
-            this.labelOutputFileNameHelp.TabIndex = 7;
-            this.labelOutputFileNameHelp.Text = "%title%  %year%  %res% %vcodec% %acodec% %channels%";
             // 
             // labelOutputFileExtension
             // 
@@ -1043,6 +1034,20 @@
             this.buttonUnselectAll.UseVisualStyleBackColor = true;
             this.buttonUnselectAll.Click += new System.EventHandler(this.buttonUnselectAll_Click);
             // 
+            // textBoxOutputFileNameHint
+            // 
+            this.textBoxOutputFileNameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileNameHint.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxOutputFileNameHint.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxOutputFileNameHint.Location = new System.Drawing.Point(67, 70);
+            this.textBoxOutputFileNameHint.Name = "textBoxOutputFileNameHint";
+            this.textBoxOutputFileNameHint.ReadOnly = true;
+            this.textBoxOutputFileNameHint.Size = new System.Drawing.Size(489, 13);
+            this.textBoxOutputFileNameHint.TabIndex = 11;
+            this.textBoxOutputFileNameHint.TabStop = false;
+            this.textBoxOutputFileNameHint.Text = "%title% %year% %res% %vcodec% %acodec% %channels%";
+            // 
             // FormDetails
             // 
             this.AcceptButton = this.continueButton;
@@ -1138,7 +1143,6 @@
         private System.Windows.Forms.Label labelVideoLanguage;
         private System.Windows.Forms.GroupBox groupBoxOutput;
         private System.Windows.Forms.Label labelOutputFileNamePreview;
-        private System.Windows.Forms.Label labelOutputFileNameHelp;
         private System.Windows.Forms.Label labelOutputFileExtension;
         private System.Windows.Forms.Button buttonOutputDir;
         private System.Windows.Forms.TextBox textBoxOutputDir;
@@ -1179,5 +1183,6 @@
         private System.Windows.Forms.Button buttonSubmitToDB;
         private System.Windows.Forms.Button buttonUnselectAll;
         private System.Windows.Forms.Button buttonSelectAll;
+        private System.Windows.Forms.TextBox textBoxOutputFileNameHint;
     }
 }
