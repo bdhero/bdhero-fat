@@ -839,20 +839,35 @@ namespace BDInfo
             string preview = textBoxOutputFileName.Text;
 
             string title = String.IsNullOrEmpty(this.movieTitle) ? movieNameTextBox.Text : this.movieTitle;
-            string year = this.movieYear + "";
-            string res = null;
+            string year = this.movieYear == null ? GetYearString(maskedTextBoxYear.Text) : this.movieYear + "";
+            string res = "";
+            string vcodec = "";
+            string acodec = "";
+            string channels = "";
+
+            if (string.IsNullOrEmpty(year))
+                year = "";
 
             if (listViewVideoTracks.CheckedItems.Count > 0)
             {
-                res = (listViewVideoTracks.CheckedItems[0].Tag as TSVideoStream).HeightDescription;
+                TSVideoStream videoStream = listViewVideoTracks.CheckedItems[0].Tag as TSVideoStream;
+                res = videoStream.HeightDescription;
+                vcodec = videoStream.CodecShortName;
             }
 
-            year = String.IsNullOrEmpty(year) ? "xxxx" : year;
-            res = String.IsNullOrEmpty(res) ? "xxxxx" : res;
+            if (listViewAudioTracks.CheckedItems.Count > 0)
+            {
+                TSAudioStream audioStream = listViewAudioTracks.CheckedItems[0].Tag as TSAudioStream;
+                acodec = audioStream.CodecShortName;
+                channels = audioStream.ChannelCountDescription;
+            }
 
             preview = Regex.Replace(preview, @"%title%", title, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%year%", year, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%res%", res, RegexOptions.IgnoreCase);
+            preview = Regex.Replace(preview, @"%vcodec%", vcodec, RegexOptions.IgnoreCase);
+            preview = Regex.Replace(preview, @"%acodec%", acodec, RegexOptions.IgnoreCase);
+            preview = Regex.Replace(preview, @"%channels%", channels, RegexOptions.IgnoreCase);
 
             if (checkBoxReplaceSpaces.Checked)
             {

@@ -592,9 +592,9 @@
             this.labelOutputFileNameHelp.AutoSize = true;
             this.labelOutputFileNameHelp.Location = new System.Drawing.Point(67, 70);
             this.labelOutputFileNameHelp.Name = "labelOutputFileNameHelp";
-            this.labelOutputFileNameHelp.Size = new System.Drawing.Size(117, 13);
+            this.labelOutputFileNameHelp.Size = new System.Drawing.Size(289, 13);
             this.labelOutputFileNameHelp.TabIndex = 7;
-            this.labelOutputFileNameHelp.Text = "%title%  %year%  %res%";
+            this.labelOutputFileNameHelp.Text = "%title%  %year%  %res% %vcodec% %acodec% %channels%";
             // 
             // labelOutputFileExtension
             // 
