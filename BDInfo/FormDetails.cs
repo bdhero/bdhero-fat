@@ -39,6 +39,8 @@ namespace BDInfo
         private bool auto_configured = false;
         private int auto_tmdb_id = -1;
 
+        private bool isMuxing = false;
+
         public FormDetails(BDROM BDROM, List<TSPlaylistFile> playlists, ISet<Language> languages)
         {
             InitializeComponent();
@@ -71,7 +73,7 @@ namespace BDInfo
 
         private void FormDetails_Load(object sender, EventArgs e)
         {
-            this.movieNameTextBox.Text = BDROM.DiscNameSearchable;
+            this.movieNameTextBox.Text = String.IsNullOrEmpty(BDROM.DiscNameSearchable) ? BDROM.VolumeLabel : BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = new List<Language>(languages).ToArray();
 
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
@@ -87,6 +89,19 @@ namespace BDInfo
 
             ResetPlaylists();
             QueryMainMovie();
+        }
+
+        private bool IsMuxing
+        {
+            get { return isMuxing; }
+            set
+            {
+                isMuxing = value;
+                if (isMuxing)
+                {
+
+                }
+            }
         }
 
         private bool ignoreFilterControlChange = false;
@@ -286,8 +301,7 @@ namespace BDInfo
 
         private void QueryMainMovie()
         {
-            EnableForm(false);
-            continueButton.Enabled = false;
+            DiscTabControlsEnabled = false;
 
             this.auto_configured = false;
             this.auto_tmdb_id = -1;
@@ -298,18 +312,22 @@ namespace BDInfo
             mainMovieBackgroundWorker.DoWork += mainMovieBackgroundWorker_DoWork;
             mainMovieBackgroundWorker.ProgressChanged += mainMovieBackgroundWorker_ProgressChanged;
             mainMovieBackgroundWorker.RunWorkerCompleted += mainMovieBackgroundWorker_RunWorkerCompleted;
-            mainMovieBackgroundWorker.RunWorkerAsync(this.movieNameTextBox.Text);
+            mainMovieBackgroundWorker.RunWorkerAsync();
         }
 
         private void SearchTmdb()
         {
             if (String.IsNullOrEmpty(this.movieNameTextBox.Text))
+            {
+                this.discLanguageComboBox.Enabled = true;
+                this.maskedTextBoxYear.Enabled = true;
+                this.searchButton.Enabled = true;
                 return;
+            }
 
             searchResultListView.Items.Clear();
 
-            EnableForm(false);
-            continueButton.Enabled = false;
+            DiscTabControlsEnabled = false;
 
             string query = this.movieNameTextBox.Text;
             string ISO_639_1 = (this.discLanguageComboBox.SelectedValue as Language).ISO_639_1;
@@ -343,12 +361,16 @@ namespace BDInfo
 
         #region View Manipulation
 
-        private void EnableForm(bool enabled)
+        private bool DiscTabControlsEnabled
         {
-            discLanguageComboBox.Enabled = enabled;
-            movieNameTextBox.Enabled = enabled;
-            searchButton.Enabled = enabled;
-            searchResultListView.Enabled = enabled;
+            set
+            {
+                discLanguageComboBox.Enabled = value;
+                movieNameTextBox.Enabled = value;
+                maskedTextBoxYear.Enabled = value;
+                searchButton.Enabled = value;
+                searchResultListView.Enabled = value;
+            }
         }
 
         private void ResizeDiscTab(object sender = null, EventArgs e = null)
@@ -533,9 +555,6 @@ namespace BDInfo
 
         private void mainMovieBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // TODO: Uncomment once tab switching works
-            //continueButton.Enabled = true;
-
             if (e.Result is Exception)
             {
                 string msg = ((Exception)e.Result).Message;
@@ -544,7 +563,7 @@ namespace BDInfo
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 // TODO: Disable POST submission only - don't disable ripping completely
-                EnableForm(true);
+                DiscTabControlsEnabled = true;
                 searchResultListView.Enabled = false;
             }
 
@@ -619,9 +638,7 @@ namespace BDInfo
 
         private void tmdbBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            EnableForm(true);
-            // TODO: Uncomment once tab switching works
-            //continueButton.Enabled = true;
+            DiscTabControlsEnabled = true;
 
             if (movieSearch == null || movieSearch.results == null)
                 return;
@@ -714,23 +731,18 @@ namespace BDInfo
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            // TODO: Fix TabIndexChanged and SelectedIndexChanged
-            return;
-
-            TabPage curTab = tabControl.TabPages[tabControl.TabIndex];
-
-            if (curTab == tabPageDisc)
+            if (tabControl.SelectedTab == tabPageDisc)
             {
                 tabControl.SelectedIndex++;
                 tabControl.TabIndex++;
             }
-            else if (curTab == tabPagePlaylists)
+            else if (tabControl.SelectedTab == tabPagePlaylists)
             {
                 SubmitJsonDiscIfNecessary();
                 tabControl.SelectedIndex++;
                 tabControl.TabIndex++;
             }
-            else if (curTab == tabPageOutput)
+            else if (tabControl.SelectedTab == tabPageOutput)
             {
                 tabControl.SelectedIndex++;
                 tabControl.TabIndex++;
@@ -1135,17 +1147,15 @@ namespace BDInfo
 
         private void tabControl_TabIndexChanged(object sender, EventArgs e)
         {
-            TabPage curTab = tabControl.TabPages[tabControl.TabIndex];
-
             continueButton.Text = "Continue";
-            // TODO: Uncomment once tab switching works
-            //continueButton.Enabled = true;
+            continueButton.Enabled = true;
 
-            if (curTab == tabPageOutput)
+            if (tabControl.SelectedTab == tabPageOutput)
             {
-                continueButton.Text = "Rip It!";
+                if (!isMuxing)
+                    continueButton.Text = "Rip It!";
             }
-            else if (curTab == tabPageProgress)
+            else if (tabControl.SelectedTab == tabPageProgress)
             {
                 continueButton.Enabled = false;
             }
@@ -1221,6 +1231,14 @@ namespace BDInfo
                     selectedStreams.Add(item.Tag as TSStream);
                 }
                 return selectedStreams;
+            }
+        }
+
+        private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isMuxing && MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                e.Cancel = true;
             }
         }
     }

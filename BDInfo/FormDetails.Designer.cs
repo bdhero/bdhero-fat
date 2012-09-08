@@ -150,7 +150,6 @@
             // continueButton
             // 
             this.continueButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.continueButton.Enabled = false;
             this.continueButton.Location = new System.Drawing.Point(609, 613);
             this.continueButton.Name = "continueButton";
             this.continueButton.Size = new System.Drawing.Size(75, 23);
@@ -204,7 +203,7 @@
             this.searchResultListView.Location = new System.Drawing.Point(6, 60);
             this.searchResultListView.MultiSelect = false;
             this.searchResultListView.Name = "searchResultListView";
-            this.searchResultListView.Size = new System.Drawing.Size(733, 461);
+            this.searchResultListView.Size = new System.Drawing.Size(733, 503);
             this.searchResultListView.TabIndex = 4;
             this.searchResultListView.UseCompatibleStateImageBehavior = false;
             this.searchResultListView.View = System.Windows.Forms.View.Details;
@@ -1062,6 +1061,7 @@
             this.Controls.Add(this.continueButton);
             this.Name = "FormDetails";
             this.Text = "Blu-ray Details";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormDetails_FormClosing);
             this.tabControl.ResumeLayout(false);
             this.tabPageDisc.ResumeLayout(false);
             this.tabPageDisc.PerformLayout();
