@@ -1177,5 +1177,49 @@ namespace BDInfo
             populator.SelectAll = false;
             //ignoreDataGridItemChange = false;
         }
+
+        private TSPlaylistFile SelectedPlaylist
+        {
+            get { return comboBoxPlaylist.SelectedValue as TSPlaylistFile; }
+        }
+
+        private List<TSVideoStream> SelectedVideoStreams
+        {
+            get
+            {
+                List<TSVideoStream> selectedStreams = new List<TSVideoStream>();
+                foreach (ListViewItem item in listViewVideoTracks.CheckedItems)
+                {
+                    selectedStreams.Add(item.Tag as TSVideoStream);
+                }
+                return selectedStreams;
+            }
+        }
+
+        private List<TSAudioStream> SelectedAudioStreams
+        {
+            get
+            {
+                List<TSAudioStream> selectedStreams = new List<TSAudioStream>();
+                foreach (ListViewItem item in listViewAudioTracks.CheckedItems)
+                {
+                    selectedStreams.Add(item.Tag as TSAudioStream);
+                }
+                return selectedStreams;
+            }
+        }
+
+        private List<TSStream> SelectedSubtitleStreams
+        {
+            get
+            {
+                List<TSStream> selectedStreams = new List<TSStream>();
+                foreach (ListViewItem item in listViewSubtitleTracks.CheckedItems)
+                {
+                    selectedStreams.Add(item.Tag as TSStream);
+                }
+                return selectedStreams;
+            }
+        }
     }
 }
