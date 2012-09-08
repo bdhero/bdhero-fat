@@ -287,6 +287,19 @@ namespace BDInfo.views
             }
         }
 
+        public ISet<TSPlaylistFile> GetPlaylistsWithMainMovie(bool mainMovie)
+        {
+            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
+
+            foreach (PlaylistGridItem item in playlistGridItems)
+            {
+                if (item.Playlist.IsMainPlaylist && item.IsMainMovie == mainMovie)
+                    files.Add(item.Playlist);
+            }
+
+            return files;
+        }
+
         public ISet<TSPlaylistFile> GetPlaylistsWithVideoLanguage(Language lang)
         {
             ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();

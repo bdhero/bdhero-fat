@@ -937,12 +937,14 @@ namespace BDInfo
 
             if (videoLanguage == null) return;
 
+            ISet<TSPlaylistFile> playlistsWithMainMovie = populator.GetPlaylistsWithMainMovie(true);
             ISet<TSPlaylistFile> playlistsWithVideoLanguage = populator.GetPlaylistsWithVideoLanguage(videoLanguage);
             ISet<TSPlaylistFile> playlistsWithCut = populator.GetPlaylistsWithCut(cut);
             ISet<TSPlaylistFile> playlistsWithCommentaryOption = populator.GetPlaylistsWithCommentaryOption(commentaryOption);
             ISet<TSPlaylistFile> playlistsWithAudioLanguages = populator.GetPlaylistsWithAudioLanguages(audioLanguages);
             ISet<TSPlaylistFile> playlistsWithSubtitleLanguages = populator.GetPlaylistsWithSubtitleLanguages(subtitleLanguages);
 
+            filteredPlaylists.IntersectWith(playlistsWithMainMovie);
             filteredPlaylists.IntersectWith(playlistsWithVideoLanguage);
             filteredPlaylists.IntersectWith(playlistsWithCut);
             filteredPlaylists.IntersectWith(playlistsWithCommentaryOption);
