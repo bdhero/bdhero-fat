@@ -703,6 +703,8 @@ namespace BDInfo
             }
 
             this.buttonSubmitToDB.Enabled = CanSubmitToDB;
+
+            textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
         }
 
         private void searchButton_Click(object sender, EventArgs e)
@@ -837,11 +839,16 @@ namespace BDInfo
             string preview = textBoxOutputFileName.Text;
 
             string title = String.IsNullOrEmpty(this.movieTitle) ? movieNameTextBox.Text : this.movieTitle;
-            string year = movieResult != null ? GetYearString(movieResult.release_date) : null;
+            string year = this.movieYear + "";
             string res = null;
 
-            year = String.IsNullOrEmpty(year) ? "_2006_" : year;
-            res = String.IsNullOrEmpty(res) ? "_1080p_" : res;
+            if (listViewVideoTracks.CheckedItems.Count > 0)
+            {
+                res = (listViewVideoTracks.CheckedItems[0].Tag as TSVideoStream).HeightDescription;
+            }
+
+            year = String.IsNullOrEmpty(year) ? "xxxx" : year;
+            res = String.IsNullOrEmpty(res) ? "xxxxx" : res;
 
             preview = Regex.Replace(preview, @"%title%", title, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%year%", year, RegexOptions.IgnoreCase);
@@ -972,6 +979,7 @@ namespace BDInfo
             PopulateSubtitleTracks();
 
             ResizeOutputTab();
+            textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
         }
 
         private void PopulateVideoTracks()

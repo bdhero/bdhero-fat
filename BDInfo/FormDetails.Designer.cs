@@ -701,6 +701,7 @@
             this.columnHeaderVideoResolution,
             this.columnHeaderVideoFrameRate,
             this.columnHeaderVideoAspectRatio});
+            this.listViewVideoTracks.FullRowSelect = true;
             this.listViewVideoTracks.Location = new System.Drawing.Point(99, 46);
             this.listViewVideoTracks.Name = "listViewVideoTracks";
             this.listViewVideoTracks.Size = new System.Drawing.Size(381, 97);
@@ -737,6 +738,7 @@
             this.listViewSubtitleTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderSubtitleCodec,
             this.columnHeaderSubtitleLanguage});
+            this.listViewSubtitleTracks.FullRowSelect = true;
             this.listViewSubtitleTracks.Location = new System.Drawing.Point(99, 250);
             this.listViewSubtitleTracks.Name = "listViewSubtitleTracks";
             this.listViewSubtitleTracks.Size = new System.Drawing.Size(381, 127);
@@ -763,6 +765,7 @@
             this.columnHeaderAudioCodec,
             this.columnHeaderAudioLanguage,
             this.columnHeaderAudioChannels});
+            this.listViewAudioTracks.FullRowSelect = true;
             this.listViewAudioTracks.Location = new System.Drawing.Point(99, 146);
             this.listViewAudioTracks.Name = "listViewAudioTracks";
             this.listViewAudioTracks.Size = new System.Drawing.Size(381, 97);
