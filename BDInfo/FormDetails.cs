@@ -190,6 +190,7 @@ namespace BDInfo
                 try
                 {
                     // TODO: This throws "InvalidIndex" exceptions sometimes - find out why and fix it!
+                    // TODO: It happens on Saving Private Ryan!
                     control.SelectedIndex = -1;
                     control.SelectedIndex = list.IndexOf(audienceLanguage);
                 }
