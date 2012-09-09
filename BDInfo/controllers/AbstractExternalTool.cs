@@ -5,21 +5,34 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace BDInfo.controllers
 {
-    abstract class AbstractExternalTool
+    abstract class AbstractExternalTool : BackgroundWorker
     {
         IList<string> paths = new List<string>();
 
         protected abstract void ExtractResources();
-        protected abstract string GetToolName();
-        
-        public abstract void Test();
+        protected abstract void HandleOutputLine(string line, object sender, DoWorkEventArgs e);
+        protected abstract string Name { get; }
+        protected abstract string Filename { get; }
+
+        private Process process = null;
+
+        public AbstractExternalTool()
+            : base()
+        { }
+
+        ~AbstractExternalTool()
+        {
+            Cleanup();
+        }
 
         protected string GetTempDirectory()
         {
-            string path = Path.Combine(Path.GetTempPath(), Process.GetCurrentProcess().Id.ToString(), GetToolName());
+            string path = Path.Combine(Path.GetTempPath(), Process.GetCurrentProcess().Id.ToString(), Name);
             DirectoryInfo dir = Directory.CreateDirectory(path);
             return path;
         }
@@ -52,8 +65,57 @@ namespace BDInfo.controllers
             File.WriteAllBytes(destPath, bytes);
         }
 
+        protected void Execute(IList<string> args, object sender, DoWorkEventArgs e)
+        {
+            ExtractResources();
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            worker.ReportProgress(0);
+
+            string[] sanitizedArgs = new string[args.Count];
+
+            for (int i = 0; i < args.Count; i++)
+            {
+                sanitizedArgs[i] = "\"" + (args[i] != null ? args[i].Replace("\"", "\\\"") : "") + "\"";
+            }
+
+            // Start the child process.
+            process = new Process();
+            // Redirect the output stream of the child process.
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.FileName = GetTempPath(Filename);
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.Arguments = string.Join(" ", sanitizedArgs);
+            process.Start();
+
+            while (!this.CancellationPending && !process.StandardOutput.EndOfStream)
+            {
+                string line = process.StandardOutput.ReadLine();
+                HandleOutputLine(line, sender, e);
+                // do something with line
+            }
+
+            if (this.CancellationPending)
+            {
+                if (!process.HasExited)
+                    process.Kill();
+                e.Cancel = true;
+                return;
+            }
+
+            worker.ReportProgress(100);
+        }
+
         protected void Cleanup()
         {
+            if (process != null && !process.HasExited)
+            {
+                process.Kill();
+            }
+
             foreach (string path in paths)
             {
                 File.Delete(path);
@@ -63,12 +125,12 @@ namespace BDInfo.controllers
 
             if (dir.GetFiles().Length == 0 && dir.GetDirectories().Length == 0)
             {
-                MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is empty.  Deleting...");
+                //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is empty.  Deleting...");
                 dir.Delete();
             }
             else
             {
-                MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is NOT empty.  Not deleting.");
+                //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is NOT empty.  Not deleting.");
             }
         }
     }

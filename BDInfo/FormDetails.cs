@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using BDInfo.models;
 using BDInfo.controllers;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace BDInfo
 {
@@ -69,6 +70,11 @@ namespace BDInfo
             this.populator.MainLanguageCode = ISO_639_2;
 
             this.Load += FormDetails_Load;
+        }
+
+        ~FormDetails()
+        {
+            CancelRip();
         }
 
         private void FormDetails_Load(object sender, EventArgs e)
@@ -748,11 +754,113 @@ namespace BDInfo
                 tabControl.TabIndex++;
                 Rip();
             }
+            else if (tabControl.SelectedTab == tabPageProgress)
+            {
+                CancelRip();
+            }
+        }
+
+        private void ShowErrorMessage(string text, string caption)
+        {
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void Rip()
         {
+            if (SelectedPlaylist != null)
+            {
+                try
+                {
+                    Directory.CreateDirectory(textBoxOutputDir.Text);
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorMessage(
+                        "BDInfo Error",
+                        ex.Message
+                    );
+                    return;
+                }
 
+                string outputPath = Path.Combine(textBoxOutputDir.Text, labelOutputFileNamePreview.Text);
+
+                /*
+                if (!FileUtils.IsFileWritableRecursive(outputPath))
+                {
+                    ShowErrorMessage(
+                        "File is not writable",
+                        "File \"" + outputPath + "\" is not writable!"
+                    );
+                    return;
+                }
+                */
+                
+                ulong minFreeSpace = (ulong)(SelectedPlaylist.FileSize * 2.5);
+
+                // TODO: Remove "false"
+                if (false && FileUtils.GetFreeSpace(textBoxOutputDir.Text) < minFreeSpace)
+               { 
+                    ShowErrorMessage(
+                        "Not enough free space",
+                        "At least " + FileUtils.FormatFileSize(textBoxOutputDir.Text) + " (" + minFreeSpace + " bytes) of free space is required."
+                    );
+                    return;
+                }
+
+                ISet<TSStream> selectedStreams = new HashSet<TSStream>();
+                selectedStreams.UnionWith(SelectedVideoStreams);
+                selectedStreams.UnionWith(SelectedAudioStreams);
+                selectedStreams.UnionWith(SelectedSubtitleStreams);
+
+                tsMuxer = new TsMuxer(BDROM, SelectedPlaylist, selectedStreams);
+                tsMuxer.WorkerReportsProgress = true;
+                tsMuxer.WorkerSupportsCancellation = true;
+                //tsMuxer.DoWork += tsMuxerBackgroundWorker_DoWork;
+                tsMuxer.ProgressChanged += tsMuxerBackgroundWorker_ProgressChanged;
+                tsMuxer.RunWorkerCompleted += tsMuxerBackgroundWorker_RunWorkerCompleted;
+                tsMuxer.RunWorkerAsync(outputPath);
+            }
+        }
+
+        private void CancelRip()
+        {
+            if (tsMuxer != null && tsMuxer.IsBusy)
+            {
+                tsMuxer.CancelAsync();
+            }
+        }
+
+        private TsMuxer tsMuxer;
+
+        private void tsMuxerBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void tsMuxerBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            isMuxing = true;
+            progressBarTsMuxer.Value = e.ProgressPercentage;
+            labelTsMuxerProgress.Text = tsMuxer.Progress.ToString("##0.0") + "%";
+        }
+
+        private void tsMuxerBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            isMuxing = false;
+            if ((e.Cancelled == true))
+            {
+                continueButton.Text = "Canceled!";
+            }
+            else if (!(e.Error == null))
+            {
+                continueButton.Text = "Error!";
+                ShowErrorMessage(e.Error.Message, "tsMuxeR Error");
+            }
+            else
+            {
+                continueButton.Text = "Done!";
+                MessageBox.Show(this, "tsMuxeR Completed!", "Finished ripping!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private bool CanSubmitToDB
@@ -1236,9 +1344,16 @@ namespace BDInfo
 
         private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (isMuxing && MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            if (isMuxing)
             {
-                e.Cancel = true;
+                if (MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
+                else
+                {
+                    CancelRip();
+                }
             }
         }
     }

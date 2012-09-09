@@ -100,9 +100,14 @@
     <Compile Include="BDROM\TSPlaylistFile.cs" />
     <Compile Include="BDROM\TSStream.cs" />
     <Compile Include="BDROM\TSCodecVC1.cs" />
-    <Compile Include="controllers\AbstractExternalTool.cs" />
+    <Compile Include="controllers\AbstractExternalTool.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="controllers\ChapterWriter.cs" />
-    <Compile Include="controllers\TsMuxer.cs" />
+    <Compile Include="controllers\FileUtils.cs" />
+    <Compile Include="controllers\TsMuxer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="controllers\MainMovieService.cs" />
     <Compile Include="FormDetails.cs">
       <SubType>Form</SubType>

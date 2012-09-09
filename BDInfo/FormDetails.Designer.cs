@@ -114,6 +114,9 @@
             this.buttonSelectAll = new System.Windows.Forms.Button();
             this.buttonUnselectAll = new System.Windows.Forms.Button();
             this.textBoxOutputFileNameHint = new System.Windows.Forms.TextBox();
+            this.groupBoxTsMuxerProgress = new System.Windows.Forms.GroupBox();
+            this.labelTsMuxerProgress = new System.Windows.Forms.Label();
+            this.progressBarTsMuxer = new System.Windows.Forms.ProgressBar();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -135,7 +138,9 @@
             this.groupBoxTracks.SuspendLayout();
             this.groupBoxFilter.SuspendLayout();
             this.groupBoxMasterOverride.SuspendLayout();
+            this.tabPageProgress.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.groupBoxTsMuxerProgress.SuspendLayout();
             this.SuspendLayout();
             // 
             // movieNameLabel
@@ -972,6 +977,7 @@
             // 
             // tabPageProgress
             // 
+            this.tabPageProgress.Controls.Add(this.groupBoxTsMuxerProgress);
             this.tabPageProgress.Location = new System.Drawing.Point(4, 22);
             this.tabPageProgress.Name = "tabPageProgress";
             this.tabPageProgress.Size = new System.Drawing.Size(745, 569);
@@ -1047,6 +1053,37 @@
             this.textBoxOutputFileNameHint.TabStop = false;
             this.textBoxOutputFileNameHint.Text = "%title% %year% %res% %vcodec% %acodec% %channels%";
             // 
+            // groupBoxTsMuxerProgress
+            // 
+            this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTsMuxerProgress.Controls.Add(this.progressBarTsMuxer);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerProgress);
+            this.groupBoxTsMuxerProgress.Location = new System.Drawing.Point(4, 4);
+            this.groupBoxTsMuxerProgress.Name = "groupBoxTsMuxerProgress";
+            this.groupBoxTsMuxerProgress.Size = new System.Drawing.Size(738, 68);
+            this.groupBoxTsMuxerProgress.TabIndex = 0;
+            this.groupBoxTsMuxerProgress.TabStop = false;
+            this.groupBoxTsMuxerProgress.Text = "tsMuxeR Progress";
+            // 
+            // labelTsMuxerProgress
+            // 
+            this.labelTsMuxerProgress.AutoSize = true;
+            this.labelTsMuxerProgress.Location = new System.Drawing.Point(7, 20);
+            this.labelTsMuxerProgress.Name = "labelTsMuxerProgress";
+            this.labelTsMuxerProgress.Size = new System.Drawing.Size(30, 13);
+            this.labelTsMuxerProgress.TabIndex = 0;
+            this.labelTsMuxerProgress.Text = "0.0%";
+            // 
+            // progressBarTsMuxer
+            // 
+            this.progressBarTsMuxer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBarTsMuxer.Location = new System.Drawing.Point(7, 37);
+            this.progressBarTsMuxer.Name = "progressBarTsMuxer";
+            this.progressBarTsMuxer.Size = new System.Drawing.Size(725, 23);
+            this.progressBarTsMuxer.TabIndex = 1;
+            // 
             // FormDetails
             // 
             this.AcceptButton = this.continueButton;
@@ -1089,8 +1126,11 @@
             this.groupBoxFilter.PerformLayout();
             this.groupBoxMasterOverride.ResumeLayout(false);
             this.groupBoxMasterOverride.PerformLayout();
+            this.tabPageProgress.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.groupBoxTsMuxerProgress.ResumeLayout(false);
+            this.groupBoxTsMuxerProgress.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1184,5 +1224,8 @@
         private System.Windows.Forms.Button buttonUnselectAll;
         private System.Windows.Forms.Button buttonSelectAll;
         private System.Windows.Forms.TextBox textBoxOutputFileNameHint;
+        private System.Windows.Forms.GroupBox groupBoxTsMuxerProgress;
+        private System.Windows.Forms.ProgressBar progressBarTsMuxer;
+        private System.Windows.Forms.Label labelTsMuxerProgress;
     }
 }
