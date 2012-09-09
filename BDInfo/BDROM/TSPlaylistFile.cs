@@ -127,6 +127,24 @@ namespace BDInfo
             return Name;
         }
 
+        public bool HasDuplicateClips
+        {
+            get
+            {
+                Dictionary<string, TSStreamClip> clips = new Dictionary<string, TSStreamClip>();
+                foreach (TSStreamClip clip in StreamClips)
+                {
+                    string key = string.Format("{0}{1}", clip.Length, clip.FileSize);
+                    if (clips.ContainsKey(key))
+                    {
+                        return true;
+                    }
+                    clips.Add(key, clip);
+                }
+                return false;
+            }
+        }
+
         public ulong InterleavedFileSize
         {
             get

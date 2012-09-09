@@ -49,8 +49,11 @@ namespace BDInfo
             InitializeComponent();
 
             this.BDROM = BDROM;
-            this.playlists = playlists;
             this.languages = new List<Language>(languages).ToArray();
+
+            TSPlaylistFile[] playlistArray = playlists.ToArray();
+            Array.Sort(playlistArray, ComparePlaylistFiles);
+            this.playlists = new List<TSPlaylistFile>(playlistArray);
 
             string ISO_639_1 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_1 : null;
             string ISO_639_2 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_2 : null;
@@ -67,11 +70,58 @@ namespace BDInfo
                 languageCodes.Add(lang.ISO_639_2);
             }
 
-            this.populator = new PlaylistDataGridPopulator(playlistDataGridView, playlists, languageCodes);
+            this.populator = new PlaylistDataGridPopulator(playlistDataGridView, this.playlists, languageCodes);
             this.populator.SelectionChanged += dataGridView_SelectionChanged;
             this.populator.MainLanguageCode = ISO_639_2;
 
             this.Load += FormDetails_Load;
+        }
+
+        public static int ComparePlaylistFiles(
+            TSPlaylistFile x,
+            TSPlaylistFile y)
+        {
+            if (x == null && y == null)
+            {
+                return 0;
+            }
+            else if (x == null && y != null)
+            {
+                return 1;
+            }
+            else if (x != null && y == null)
+            {
+                return -1;
+            }
+            else
+            {
+                // x > y --> -1
+                // y > x --> +1
+                
+                if (x.IsMainPlaylist && !y.IsMainPlaylist)
+                    return -1;
+                else if (y.IsMainPlaylist && !x.IsMainPlaylist)
+                    return +1;
+
+                else if (!x.HasDuplicateClips && y.HasDuplicateClips)
+                    return -1;
+                else if (!y.HasDuplicateClips && x.HasDuplicateClips)
+                    return 1;
+
+                else if (x.TotalLength > y.TotalLength)
+                    return -1;
+                else if (y.TotalLength > x.TotalLength)
+                    return 1;
+
+                else
+                {
+                    int xName, yName;
+                    Int32.TryParse(Path.GetFileNameWithoutExtension(x.Name), out xName);
+                    Int32.TryParse(Path.GetFileNameWithoutExtension(y.Name), out yName);
+                    int diff = xName - yName;
+                    return diff > 0 ? +1 : (diff < 0 ? -1 : 0);
+                }
+            }
         }
 
         ~FormDetails()
