@@ -38,5 +38,11 @@
     <Setting Name="EnableSSIF" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="OutputDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="OutputFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%title% (%year%) [%res%]</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -166,5 +166,29 @@ namespace BDInfo.Properties {
                 this["EnableSSIF"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OutputDir {
+            get {
+                return ((string)(this["OutputDir"]));
+            }
+            set {
+                this["OutputDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%title% (%year%) [%res%]")]
+        public string OutputFileName {
+            get {
+                return ((string)(this["OutputFileName"]));
+            }
+            set {
+                this["OutputFileName"] = value;
+            }
+        }
     }
 }

@@ -42,6 +42,8 @@ namespace BDInfo
 
         private bool isMuxing = false;
 
+        BDInfo.Properties.Settings settings = BDInfo.Properties.Settings.Default;
+
         public FormDetails(BDROM BDROM, List<TSPlaylistFile> playlists, ISet<Language> languages)
         {
             InitializeComponent();
@@ -81,6 +83,9 @@ namespace BDInfo
         {
             this.movieNameTextBox.Text = String.IsNullOrEmpty(BDROM.DiscNameSearchable) ? BDROM.VolumeLabel : BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = new List<Language>(languages).ToArray();
+
+            this.textBoxOutputDir.Text = settings.OutputDir;
+            this.textBoxOutputFileName.Text = settings.OutputFileName;
 
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
 
@@ -760,7 +765,7 @@ namespace BDInfo
             }
         }
 
-        private void ShowErrorMessage(string text, string caption)
+        private void ShowErrorMessage(string caption, string text)
         {
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -811,6 +816,9 @@ namespace BDInfo
                 selectedStreams.UnionWith(SelectedVideoStreams);
                 selectedStreams.UnionWith(SelectedAudioStreams);
                 selectedStreams.UnionWith(SelectedSubtitleStreams);
+
+                settings.OutputDir = textBoxOutputDir.Text;
+                settings.OutputFileName = textBoxOutputFileName.Text;
 
                 tsMuxer = new TsMuxer(BDROM, SelectedPlaylist, selectedStreams);
                 tsMuxer.WorkerReportsProgress = true;
