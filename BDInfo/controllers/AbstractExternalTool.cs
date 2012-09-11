@@ -29,6 +29,16 @@ namespace BDInfo.controllers
         /// <example>C:\Program Files (x86)\MKVToolNix\mkvmerge.exe</example>
         public string FullName { get { return GetTempPath(Filename); } }
 
+        /// <summary>
+        /// Base directory for all temp files used by this application.
+        /// </summary>
+        protected static string AppTempDirPath { get { return Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "BDAutoRip")).FullName; } }
+
+        /// <summary>
+        /// Directory for temp files used by this tool instance.
+        /// </summary>
+        protected string ToolTempDirPath { get { return Directory.CreateDirectory(Path.Combine(AppTempDirPath, Process.GetCurrentProcess().Id.ToString(), Name)).FullName; } }
+
         protected abstract void ExtractResources();
         protected abstract void HandleOutputLine(string line, object sender, DoWorkEventArgs e);
         protected abstract string Name { get; }
@@ -43,13 +53,6 @@ namespace BDInfo.controllers
             Cleanup();
         }
 
-        protected string GetTempDirectory()
-        {
-            string path = Path.Combine(Path.GetTempPath(), "BDAutoRip", Process.GetCurrentProcess().Id.ToString(), Name);
-            DirectoryInfo dir = Directory.CreateDirectory(path);
-            return path;
-        }
-
         protected string GetResourceName(string filename)
         {
             return "BDInfo.lib.exe." + filename;
@@ -57,7 +60,7 @@ namespace BDInfo.controllers
 
         protected string GetTempPath(string filename)
         {
-            return Path.Combine(GetTempDirectory(), filename);
+            return Path.Combine(ToolTempDirPath, filename);
         }
 
         protected string ExtractResource(string filename)
@@ -124,27 +127,48 @@ namespace BDInfo.controllers
 
         protected void Cleanup()
         {
-            if (process != null && !process.HasExited)
+            try
             {
-                process.Kill();
-            }
+                if (process != null && !process.HasExited)
+                {
+                    process.Kill();
+                }
 
-            foreach (string path in paths)
-            {
-                File.Delete(path);
-            }
+                foreach (string path in paths)
+                {
+                    File.Delete(path);
+                }
 
-            DirectoryInfo dir = new DirectoryInfo(GetTempDirectory());
+                DirectoryInfo dir = new DirectoryInfo(ToolTempDirPath);
 
-            if (dir.GetFiles().Length == 0 && dir.GetDirectories().Length == 0)
-            {
-                //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is empty.  Deleting...");
-                dir.Delete();
+                while (dir.FullName != AppTempDirPath)
+                {
+                    if (IsEmpty(dir))
+                    {
+                        //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is empty.  Deleting...");
+                        dir.Delete();
+                    }
+                    else
+                    {
+                        //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is NOT empty.  Not deleting.");
+                    }
+                    dir = dir.Parent;
+                }
+
+                DirectoryInfo appTempDir = new DirectoryInfo(ToolTempDirPath);
+
+                if (IsEmpty(appTempDir))
+                    appTempDir.Delete();
             }
-            else
+            catch (Exception ex)
             {
-                //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is NOT empty.  Not deleting.");
+
             }
+        }
+
+        private bool IsEmpty(DirectoryInfo dir)
+        {
+            return dir.GetFiles().Length == 0 && dir.GetDirectories().Length == 0;
         }
     }
 }
