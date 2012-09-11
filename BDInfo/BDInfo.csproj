@@ -104,6 +104,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="controllers\ChapterWriter.cs" />
+    <Compile Include="controllers\DragUtils.cs" />
     <Compile Include="controllers\FileUtils.cs" />
     <Compile Include="controllers\TsMuxer.cs">
       <SubType>Component</SubType>

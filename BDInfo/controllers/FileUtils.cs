@@ -6,11 +6,22 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Security.AccessControl;
+using System.Text.RegularExpressions;
 
 namespace BDInfo.controllers
 {
     public class FileUtils
     {
+        public static bool IsFile(string path)
+        {
+            return !IsDirectory(path);
+        }
+
+        public static bool IsDirectory(string path)
+        {
+            return (File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory;
+        }
+
         public static bool IsFileWritable1(string path)
         {
             FileStream stream = null;
@@ -115,6 +126,13 @@ namespace BDInfo.controllers
             // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
             // show a single decimal place, and no space.
             return String.Format("{0:0" + fractionalFormat + "} {1}", len, sizes[order]);
+        }
+
+        /// <see cref="http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows"/>
+        public static bool IsValidFilename(string testName)
+        {
+            Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
+            return !containsABadCharacter.IsMatch(testName);
         }
     }
 }
