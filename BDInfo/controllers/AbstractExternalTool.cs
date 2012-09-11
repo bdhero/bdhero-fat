@@ -45,7 +45,7 @@ namespace BDInfo.controllers
 
         protected string GetTempDirectory()
         {
-            string path = Path.Combine(Path.GetTempPath(), Process.GetCurrentProcess().Id.ToString(), Name);
+            string path = Path.Combine(Path.GetTempPath(), "BDAutoRip", Process.GetCurrentProcess().Id.ToString(), Name);
             DirectoryInfo dir = Directory.CreateDirectory(path);
             return path;
         }
