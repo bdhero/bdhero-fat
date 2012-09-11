@@ -45,9 +45,6 @@ namespace BDInfo
         public bool IsCustom = false;
         public int HiddenTrackCount = 0;
 
-        public bool HasFewestHiddenTracks = false;
-        public bool IsFirstPlay = false;
-        public bool IsSelectedByService = false;
         public bool IsMainPlaylist = false;
 
         public List<double> Chapters = new List<double>();

@@ -652,7 +652,7 @@ namespace BDInfo
         private List<TSPlaylistFile> sortedPlaylists = new List<TSPlaylistFile>();
         private List<TSPlaylistFile> mainPlaylists = new List<TSPlaylistFile>();
 
-        private void SimpleAutoDetect()
+        private void FindMainPlaylist()
         {
             mainPlaylists.Clear();
 
@@ -669,46 +669,6 @@ namespace BDInfo
                 }
             }
 
-            // We're done!
-            if (mainPlaylists.Count == 1)
-            {
-                //MessageBox.Show("Only one playlist is long enough to be the main movie: " + mainPlaylists[0].Name);
-                return;
-            }
-
-            TSPlaylistFile[] sortedMainPlaylists = new TSPlaylistFile[mainPlaylists.Count];
-            mainPlaylists.CopyTo(sortedMainPlaylists, 0);
-            Array.Sort(sortedMainPlaylists, ComparePlaylistFilesForMainMovie);
-
-            string msg = "";
-
-            foreach (TSPlaylistFile playlist in sortedMainPlaylists)
-            {
-                msg += playlist.Name + ": " + playlist.HiddenTrackCount + " hidden tracks" + "\n";
-            }
-
-            //MessageBox.Show(msg);
-
-            int lowestHiddenTrackCount = sortedMainPlaylists[0].HiddenTrackCount;
-
-            foreach(TSPlaylistFile playlist in sortedMainPlaylists) {
-                if (playlist.HiddenTrackCount <= lowestHiddenTrackCount)
-                    playlist.HasFewestHiddenTracks = true;
-                else
-                    break;
-            }
-            
-        }
-
-        private void FindMainPlaylist()
-        {
-            SimpleAutoDetect();
-
-            foreach (ListViewItem item in listViewPlaylistFiles.Items)
-            {
-                item.Selected = false;
-            }
-
             foreach (TSPlaylistFile mainPlaylist in mainPlaylists)
             {
                 int idx = sortedPlaylists.FindIndex(delegate(TSPlaylistFile sortedPlaylist)
@@ -721,183 +681,10 @@ namespace BDInfo
                 }
             }
 
-            if (mainPlaylists.Count == 1)
-            {
-                int idx = sortedPlaylists.FindIndex(FindMainPlaylistIndex);
-
-                //MessageBox.Show("Found main playlist: " + mainPlaylists[0].Name + ", list index = " + idx);
-
-                if (idx != -1)
-                {
-                    listViewPlaylistFiles.Items[idx].Selected = true;
-                }
-            }
-            // TODO: Only for testing/debugging
-            /*else*/ if (true || mainPlaylists.Count > 1)
-            {
-                string movieName = BDROM.DiscName;
-                int mainTitleIndex = BDROM.MainTitleIndex;
-
-                if (mainTitleIndex != -1)
-                {
-                    listViewPlaylistFiles.Items[mainTitleIndex].Selected = true;
-                    /*MessageBox.Show(
-                        this,
-                        "Found main title index (0-based) for \"" + movieName + "\": " + mainTitleIndex + " ==> " + sortedPlaylists[mainTitleIndex].Name,
-                        "Found main title",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);*/
-                }
-
-                if (movieName == null)
-                {
-                    //new FormMovieName(movieName).ShowDialog(this);
-                }
-                else
-                {
-                    /*MessageBox.Show(
-                        this,
-                        "Found movie name: \"" + movieName + "\"",
-                        "Found movie name",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);*/
-                }
-            }
-
-            //MessageBox.Show(this, BDROM.DiscLanguage.ISO_639_1 + " - " + BDROM.DiscLanguage.ISO_639_2 + " - " + BDROM.DiscLanguage.Name);
-            //MessageBox.Show(this, BDROM.DiscName + "\n" + BDROM.DiscNameSearchable);
-
             FormDetails formDetails = new FormDetails(BDROM, sortedPlaylists, Languages);
             formDetails.ShowDialog(this);
             // TODO: Fix FormDetails initialization so that it doesn't need to be disposed every time
             formDetails.Dispose();
-
-            //QueryDB();
-            //PrintResult();
-        }
-
-        private void QueryDB()
-        {
-            if (BDROM.DiscName == null) return;
-
-            string uri = "http://bd.andydvorak.net/api/v1/mpls?query=" + Uri.EscapeUriString(BDROM.DiscName);
-            foreach (TSPlaylistFile playlist in mainPlaylists)
-            {
-                uri += "&mplsSize=" + playlist.FileSize;
-            }
-
-            var request = (HttpWebRequest)WebRequest.Create(uri);
-            request.Method = "GET";
-            request.UserAgent = "BDAutoRip/0.0.1";
-            request.KeepAlive = true;
-
-            var cachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
-            request.CachePolicy = cachePolicy;
-            request.Expect = null;
-
-            var httpResponse = (HttpWebResponse)request.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var responseText = streamReader.ReadToEnd();
-                
-                //MessageBox.Show(uri + "\n\n" + responseText);
-                
-                MplsSearchResult searchResult = JsonConvert.DeserializeObject<MplsSearchResult>(responseText);
-
-                /*MessageBox.Show(
-                    "success = " + searchResult.success + "\n" +
-                    "error = " + searchResult.error + "\n" +
-                    "errors = " + searchResult.errors + "\n" +
-                    "mainMplsFileSize = " + searchResult.mainMplsFileSize + "\n"
-                );*/
-
-                if (searchResult.success)
-                {
-                    foreach (TSPlaylistFile playlist in mainPlaylists)
-                    {
-                        if (playlist.FileSize == searchResult.mainMplsFileSize)
-                        {
-                            playlist.IsSelectedByService = true;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    string errorMessage = "";
-                    foreach (MplsSearchResultError error in searchResult.errors)
-                    {
-                        errorMessage += error.textStatus + ": " + error.errorMessage + "\n";
-                    }
-
-                    MessageBox.Show(this,
-                        "Error occurred while calling Web service: " + "\n\n" + errorMessage,
-                        "Error calling Web service", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void PrintResult()
-        {
-            bool foundMainMovie = false;
-
-            string mainTitleFilenames;
-            if (mainPlaylists.Count == 1)
-            {
-                mainTitleFilenames = mainPlaylists[0].Name;
-                foundMainMovie = true;
-            }
-            else
-            {
-                mainTitleFilenames = "[ ";
-                for (int i = 0; i < mainPlaylists.Count; i++)
-                {
-                    mainTitleFilenames += mainPlaylists[i].Name + (i < mainPlaylists.Count - 1 ? ", " : "");
-                }
-                mainTitleFilenames += " ]";
-            }
-
-            string quickGuess;
-            // TODO: This isn't a valid test in and of itself - it fails on Tangled (picks 00801.mpls (French render) instead of 00800.mpls (English render))
-            //       The "winner" of this test should simply be marked as having a higher probability of being the correct track (by setting a flag)
-            if (BDROM.MainTitleIndex != -1)
-            {
-                sortedPlaylists[BDROM.MainTitleIndex].IsFirstPlay = true;
-                quickGuess = sortedPlaylists[BDROM.MainTitleIndex].Name;
-                foundMainMovie = true;
-            }
-            else
-            {
-                quickGuess = mainTitleFilenames;
-            }
-
-            string webServiceResult = "";
-            foreach (TSPlaylistFile playlist in mainPlaylists)
-            {
-                if (playlist.IsSelectedByService)
-                {
-                    webServiceResult = playlist.Name;
-                    break;
-                }
-            }
-
-            string bestGuess = webServiceResult != "" ? webServiceResult : quickGuess;
-            bool confidentChoice = !bestGuess.Contains("[");
-
-            MessageBox.Show(
-                this,
-                "Disc name: \"" + BDROM.DiscName + "\"" + "\n" +
-                "\n" +
-                "Main title index: " + BDROM.MainTitleIndex + (BDROM.MainTitleIndex > -1 ? " - " + sortedPlaylists[BDROM.MainTitleIndex].Name : "") + "\n" +
-                "Main title filenames: " + mainTitleFilenames + "\n" +
-                "\n" +
-                "Quick guess: " + quickGuess + "\n" +
-                "Web service result: " + webServiceResult +
-                "\n" +
-                "Best guess: " + bestGuess,
-                "Auto-detect results",
-                MessageBoxButtons.OK,
-                confidentChoice ? MessageBoxIcon.Information : MessageBoxIcon.Exclamation);
         }
 
         private bool FindMainPlaylistIndex(TSPlaylistFile playlist)
