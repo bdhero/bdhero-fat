@@ -14,12 +14,25 @@ namespace BDInfo.controllers
     {
         IList<string> paths = new List<string>();
 
+        private Process process = null;
+        private string strArgs = null;
+
+        /// <summary>
+        /// Command line string used to execute the process, including the full path to the EXE and all arguments.
+        /// </summary>
+        /// <example>"C:\Program Files (x86)\MKVToolNix\mkvmerge.exe" "arg1" "arg 2"</example>
+        public string CommandLine { get { return "\"" + FullName.Replace("\"", "\\\"") + "\"" + " " + strArgs; } }
+
+        /// <summary>
+        /// Full path to the EXE.
+        /// </summary>
+        /// <example>C:\Program Files (x86)\MKVToolNix\mkvmerge.exe</example>
+        public string FullName { get { return GetTempPath(Filename); } }
+
         protected abstract void ExtractResources();
         protected abstract void HandleOutputLine(string line, object sender, DoWorkEventArgs e);
         protected abstract string Name { get; }
         protected abstract string Filename { get; }
-
-        private Process process = null;
 
         public AbstractExternalTool()
             : base()
@@ -85,10 +98,10 @@ namespace BDInfo.controllers
             // Redirect the output stream of the child process.
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.FileName = GetTempPath(Filename);
+            process.StartInfo.FileName = FullName;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.Arguments = string.Join(" ", sanitizedArgs);
+            process.StartInfo.Arguments = this.strArgs = string.Join(" ", sanitizedArgs);
             process.Start();
 
             while (!this.CancellationPending && !process.StandardOutput.EndOfStream)

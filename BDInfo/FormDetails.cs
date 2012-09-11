@@ -831,7 +831,7 @@ namespace BDInfo
 
                 // TODO: Remove "false"
                 if (false && FileUtils.GetFreeSpace(textBoxOutputDir.Text) < minFreeSpace)
-               { 
+                {
                     ShowErrorMessage(
                         "Not enough free space",
                         "At least " + FileUtils.FormatFileSize(textBoxOutputDir.Text) + " (" + minFreeSpace + " bytes) of free space is required."
@@ -875,6 +875,7 @@ namespace BDInfo
             isMuxing = true;
             progressBarTsMuxer.Value = e.ProgressPercentage;
             labelTsMuxerProgress.Text = tsMuxer.Progress.ToString("##0.0") + "%";
+            textBoxTsMuxerCommandLine.Text = tsMuxer.CommandLine;
         }
 
         private void tsMuxerBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1003,6 +1004,11 @@ namespace BDInfo
             populator.MainLanguageCode = (discLanguageComboBox.SelectedValue as Language).ISO_639_2;
         }
 
+        private void maskedTextBoxYear_TextChanged(object sender, EventArgs e)
+        {
+            textBoxOutputFileName_TextChanged(sender, e);
+        }
+
         private void searchResultListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.tmdbMovieResult = null;
@@ -1023,7 +1029,7 @@ namespace BDInfo
 
             this.buttonSubmitToDB.Enabled = CanSubmitToDB;
 
-            textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
+            textBoxOutputFileName_TextChanged(sender, e);
         }
 
         private void searchButton_Click(object sender, EventArgs e)
@@ -1110,7 +1116,7 @@ namespace BDInfo
                 textBoxReplaceSpaces.Focus();
                 textBoxReplaceSpaces.SelectAll();
             }
-            textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
+            textBoxOutputFileName_TextChanged(sender, e);
         }
 
         private void textBoxOutputFileName_TextChanged(object sender, EventArgs e)
