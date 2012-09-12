@@ -104,6 +104,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="controllers\ChapterWriter.cs" />
+    <Compile Include="controllers\MkvMerge.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="controllers\DragUtils.cs" />
     <Compile Include="controllers\FileUtils.cs" />
     <Compile Include="controllers\TsMuxer.cs">
@@ -335,6 +338,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="lib\exe\tsMuxeR.exe" />
+    <EmbeddedResource Include="lib\exe\mkvmerge.exe" />
     <Content Include="lib\Newtonsoft.Json.dll" />
     <Content Include="lib\RestSharp.dll" />
     <Content Include="lib\WatTmdb.dll" />
