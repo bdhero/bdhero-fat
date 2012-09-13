@@ -60,6 +60,8 @@ namespace BDInfo
             this.checkBoxUseImagePrefix = new System.Windows.Forms.CheckBox();
             this.textBoxUseImagePrefixValue = new System.Windows.Forms.TextBox();
             this.checkBoxEnableSSIF = new System.Windows.Forms.CheckBox();
+            this.labelApiKey = new System.Windows.Forms.Label();
+            this.textBoxApiKey = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // checkBoxFilterLoopingPlaylists
@@ -87,7 +89,7 @@ namespace BDInfo
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(126, 196);
+            this.buttonCancel.Location = new System.Drawing.Point(126, 215);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 6;
@@ -97,7 +99,7 @@ namespace BDInfo
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(45, 196);
+            this.buttonOK.Location = new System.Drawing.Point(45, 215);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 5;
@@ -198,13 +200,33 @@ namespace BDInfo
             this.checkBoxEnableSSIF.Text = "Enable SSIF scanning.";
             this.checkBoxEnableSSIF.UseVisualStyleBackColor = true;
             // 
+            // labelApiKey
+            // 
+            this.labelApiKey.AutoSize = true;
+            this.labelApiKey.Location = new System.Drawing.Point(12, 192);
+            this.labelApiKey.Name = "labelApiKey";
+            this.labelApiKey.Size = new System.Drawing.Size(47, 13);
+            this.labelApiKey.TabIndex = 13;
+            this.labelApiKey.Text = "API key:";
+            // 
+            // textBoxApiKey
+            // 
+            this.textBoxApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxApiKey.Location = new System.Drawing.Point(65, 189);
+            this.textBoxApiKey.Name = "textBoxApiKey";
+            this.textBoxApiKey.Size = new System.Drawing.Size(166, 20);
+            this.textBoxApiKey.TabIndex = 14;
+            // 
             // FormSettings
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(243, 231);
+            this.ClientSize = new System.Drawing.Size(243, 245);
+            this.Controls.Add(this.textBoxApiKey);
+            this.Controls.Add(this.labelApiKey);
             this.Controls.Add(this.checkBoxEnableSSIF);
             this.Controls.Add(this.textBoxUseImagePrefixValue);
             this.Controls.Add(this.checkBoxUseImagePrefix);
@@ -243,5 +265,7 @@ namespace BDInfo
         private System.Windows.Forms.CheckBox checkBoxUseImagePrefix;
         private System.Windows.Forms.TextBox textBoxUseImagePrefixValue;
         private System.Windows.Forms.CheckBox checkBoxEnableSSIF;
+        private System.Windows.Forms.Label labelApiKey;
+        private System.Windows.Forms.TextBox textBoxApiKey;
     }
 }

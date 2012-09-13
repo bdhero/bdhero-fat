@@ -52,8 +52,6 @@ namespace BDInfo
         private bool tsMuxerSuccess = false;
         private string tsMuxerOutputPath = null;
 
-        Settings settings = Settings.Default;
-
         private ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>();
 
         private IList<Language> audioLanguages = new List<Language>();
@@ -274,8 +272,8 @@ namespace BDInfo
             this.movieNameTextBox.Text = String.IsNullOrEmpty(BDROM.DiscNameSearchable) ? BDROM.VolumeLabel : BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = new List<Language>(languages).ToArray();
 
-            this.textBoxOutputDir.Text = settings.OutputDir;
-            this.textBoxOutputFileName.Text = settings.OutputFileName;
+            this.textBoxOutputDir.Text = BDInfoSettings.OutputDir;
+            this.textBoxOutputFileName.Text = BDInfoSettings.OutputFileName;
 
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
 
@@ -846,8 +844,9 @@ namespace BDInfo
                 selectedStreams.UnionWith(SelectedAudioStreams);
                 selectedStreams.UnionWith(SelectedSubtitleStreams);
 
-                settings.OutputDir = textBoxOutputDir.Text;
-                settings.OutputFileName = textBoxOutputFileName.Text;
+                BDInfoSettings.OutputDir = textBoxOutputDir.Text;
+                BDInfoSettings.OutputFileName = textBoxOutputFileName.Text;
+                BDInfoSettings.SaveSettings();
 
                 tsMuxer = new TsMuxer(BDROM, SelectedPlaylist, selectedStreams);
                 tsMuxer.WorkerReportsProgress = true;
@@ -911,7 +910,7 @@ namespace BDInfo
         {
             get
             {
-                if (searchResultListView.SelectedIndices.Count > 0)
+                if (!String.IsNullOrEmpty(BDInfoSettings.ApiKey) && searchResultListView.SelectedIndices.Count > 0)
                 {
                     if (auto_configured)
                     {
@@ -968,7 +967,15 @@ namespace BDInfo
 
             try
             {
-                mainMovieService.PostDisc(jsonDisc);
+                JsonSearchResult postResult = mainMovieService.PostDisc(jsonDisc);
+                if (postResult.error)
+                {
+                    if (postResult.errors.Count > 0)
+                        this.ShowErrorMessage("DB POST Error", postResult.errors[0].textStatus + ": " + postResult.errors[0].errorMessage);
+                    else
+                        this.ShowErrorMessage("DB POST Error", "Unknown error occurred while POSTing to the DB");
+                    return;
+                }
             }
             catch (Exception ex)
             {

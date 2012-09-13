@@ -43,6 +43,7 @@ namespace BDInfo
             textBoxUseImagePrefixValue.Text = BDInfoSettings.UseImagePrefixValue;
             checkBoxKeepStreamOrder.Checked = BDInfoSettings.KeepStreamOrder;
             checkBoxEnableSSIF.Checked = BDInfoSettings.EnableSSIF;
+            textBoxApiKey.Text = BDInfoSettings.ApiKey;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -56,6 +57,7 @@ namespace BDInfo
             BDInfoSettings.FilterLoopingPlaylists = checkBoxFilterLoopingPlaylists.Checked;
             BDInfoSettings.FilterShortPlaylists = checkBoxFilterShortPlaylists.Checked;
             BDInfoSettings.EnableSSIF = checkBoxEnableSSIF.Checked;
+            BDInfoSettings.ApiKey = textBoxApiKey.Text;
             int filterShortPlaylistsValue;
             if (int.TryParse(textBoxFilterShortPlaylistsValue.Text, out filterShortPlaylistsValue))
             {
@@ -238,6 +240,21 @@ namespace BDInfo
             }
         }
 
+        public static string ApiKey
+        {
+            get
+            {
+                try { return Properties.Settings.Default.ApiKey; }
+                catch { return ""; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.ApiKey = value; }
+                catch { }
+            }
+        }
+
         public static string LastPath
         {
             get
@@ -249,6 +266,36 @@ namespace BDInfo
             set
             {
                 try { Properties.Settings.Default.LastPath = value; }
+                catch { }
+            }
+        }
+
+        public static string OutputDir
+        {
+            get
+            {
+                try { return Properties.Settings.Default.OutputDir; }
+                catch { return ""; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.OutputDir = value; }
+                catch { }
+            }
+        }
+
+        public static string OutputFileName
+        {
+            get
+            {
+                try { return Properties.Settings.Default.OutputFileName; }
+                catch { return ""; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.OutputFileName = value; }
                 catch { }
             }
         }

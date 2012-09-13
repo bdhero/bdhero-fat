@@ -12,7 +12,7 @@ namespace BDInfo.controllers
 {
     class MainMovieService
     {
-        private static readonly string base_uri = "http://bd.andydvorak.net/api/v1/movies";
+        private static readonly string base_uri = "http://192.168.0.104:3000/api/v1/movies";
 
         public MainMovieService()
         {
@@ -52,15 +52,15 @@ namespace BDInfo.controllers
             }
         }
 
-        public void PostDisc(JsonDisc jsonDisc)
+        public JsonSearchResult PostDisc(JsonDisc jsonDisc)
         {
             string jsonString = JsonConvert.SerializeObject(jsonDisc);
-            string uri = base_uri + "/main?json=" + Uri.EscapeUriString(jsonString);
+            string uri = base_uri + "/main?api_key=" + Uri.EscapeUriString(BDInfoSettings.ApiKey);
 
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "POST";
-            request.ContentType = "text/json";
-            request.UserAgent = "BDAutoRip/0.0.6";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.UserAgent = "BDAutoRip/0.1.4";
             request.KeepAlive = true;
 
             var cachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
@@ -69,7 +69,7 @@ namespace BDInfo.controllers
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
-                streamWriter.Write(jsonString + "\n");
+                streamWriter.Write("json=" + Uri.EscapeUriString(jsonString) + "\n");
                 streamWriter.Flush();
                 streamWriter.Close();
             }
@@ -79,9 +79,12 @@ namespace BDInfo.controllers
             {
                 // This actually sends the request
                 var responseText = streamReader.ReadToEnd();
-                //string path = @"C:\Users\Administrator\Documents\Post.html";
-                //System.IO.File.WriteAllText(path, responseText);
-                //System.Diagnostics.Process.Start(path);
+
+                // TODO: Deserializing throws an exception.  Find out why.
+                // TODO: Rename JsonSearchResult to something more generic.
+                // I know this isn't actually "searching" the DB, but the response format is nearly identical.
+                JsonSearchResult postResult = JsonConvert.DeserializeObject<JsonSearchResult>(responseText);
+                return postResult;
             }
         }
     }
