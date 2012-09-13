@@ -253,7 +253,7 @@ namespace BDInfo.controllers
             }
             catch (Exception ex)
             {
-
+                ex.ToString();
             }
         }
 

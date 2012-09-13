@@ -780,6 +780,11 @@ namespace BDInfo.views
                 playlistLengthSpan.Seconds);
         }
 
+        public override int GetHashCode()
+        {
+            return ("" + this.Playlist.GetHashCode() + this.IsMainMovie + this.Filename + this.Length + this.Size + this.ISO_639_2 + this.Cut + this.HasCommentary).GetHashCode();
+        }
+
         public override bool Equals(System.Object obj)
         {
             // If parameter is null return false.

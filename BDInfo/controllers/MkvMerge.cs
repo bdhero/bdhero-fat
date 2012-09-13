@@ -24,9 +24,6 @@ namespace BDInfo.controllers
 
         private BDROM BDROM;
         private ICollection<TSAudioStream> selectedAudioTracks;
-        private double progress = 0;
-
-        public Double Progress { get { return progress; } }
 
         public MkvMerge(BDROM BDROM, string m2tsPath, ICollection<TSAudioStream> selectedAudioTracks)
             : base()

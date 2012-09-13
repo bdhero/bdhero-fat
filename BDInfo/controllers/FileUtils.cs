@@ -29,7 +29,7 @@ namespace BDInfo.controllers
             if ((fileAttributes & FileAttributes.ReadOnly) != FileAttributes.ReadOnly)
             {
                 try { stream = File.OpenWrite(path); }
-                catch (Exception ex) { }
+                catch (Exception ex) { ex.ToString(); }
             }
             return stream != null && stream.CanWrite;
         }

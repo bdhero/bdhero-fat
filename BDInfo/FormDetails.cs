@@ -49,7 +49,6 @@ namespace BDInfo
 
         private TsMuxer tsMuxer;
         private bool isMuxing = false;
-        private bool tsMuxerSuccess = false;
         private string tsMuxerOutputPath = null;
         private Timer tsMuxerTimer = null;
 
@@ -862,8 +861,9 @@ namespace BDInfo
 
                 ulong minFreeSpace = (ulong)(SelectedPlaylist.FileSize * 2.5);
 
-                // TODO: Remove "false"
-                if (false && FileUtils.GetFreeSpace(textBoxOutputDir.Text) < minFreeSpace)
+                // TODO: Fix this
+                /*
+                if (FileUtils.GetFreeSpace(textBoxOutputDir.Text) < minFreeSpace)
                 {
                     ShowErrorMessage(
                         "Not enough free space",
@@ -871,6 +871,7 @@ namespace BDInfo
                     );
                     return;
                 }
+                */
 
                 ISet<TSStream> selectedStreams = new HashSet<TSStream>();
                 selectedStreams.UnionWith(SelectedVideoStreams);
@@ -912,7 +913,6 @@ namespace BDInfo
         private void tsMuxerBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             IsMuxing = true;
-            tsMuxerSuccess = false;
             UpdateTsMuxerProgress(sender, e);
         }
 
@@ -954,7 +954,6 @@ namespace BDInfo
             else
             {
                 labelTsMuxerProgress.Text += " (done)";
-                tsMuxerSuccess = true;
                 MessageBox.Show(this, "tsMuxeR Completed!", "Finished muxing M2TS!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }

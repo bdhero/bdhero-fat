@@ -13,6 +13,7 @@ namespace BDInfo.controllers
     class MainMovieService
     {
         private static readonly string base_uri = "http://bd.andydvorak.net/api/v1/movies";
+        private static readonly string user_agent = "BDAutoRip/0.1.5";
 
         public MainMovieService()
         {
@@ -36,7 +37,7 @@ namespace BDInfo.controllers
 
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
-            request.UserAgent = "BDAutoRip/0.0.6";
+            request.UserAgent = user_agent;
             request.KeepAlive = true;
 
             var cachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
@@ -60,7 +61,7 @@ namespace BDInfo.controllers
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
-            request.UserAgent = "BDAutoRip/0.1.4";
+            request.UserAgent = user_agent;
             request.KeepAlive = true;
 
             var cachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
