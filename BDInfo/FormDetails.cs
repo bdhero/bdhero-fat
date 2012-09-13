@@ -281,6 +281,8 @@ namespace BDInfo
 
         private void FormDetails_Load(object sender, EventArgs e)
         {
+            this.statusLabel.Text = "";
+
             this.movieNameTextBox.Text = String.IsNullOrEmpty(BDROM.DiscNameSearchable) ? BDROM.VolumeLabel : BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = new List<Language>(languages).ToArray();
 
@@ -297,6 +299,8 @@ namespace BDInfo
 
             listViewStreamFiles.Enabled = true;
             listViewStreams.Enabled = true;
+
+            InitHints(this);
 
             ResetPlaylistDataGrid();
             QueryMainMovie();
@@ -621,6 +625,8 @@ namespace BDInfo
             this.auto_configured = false;
             this.auto_tmdb_id = -1;
 
+            SetTabStatus(tabPageDisc, "Querying main movie database...");
+
             mainMovieBackgroundWorker = new BackgroundWorker();
             mainMovieBackgroundWorker.WorkerReportsProgress = true;
             mainMovieBackgroundWorker.WorkerSupportsCancellation = true;
@@ -643,6 +649,8 @@ namespace BDInfo
             searchResultListView.Items.Clear();
 
             DiscTabControlsEnabled = false;
+
+            SetTabStatus(tabPageDisc, "Searching The Movie Database (TMDb)...");
 
             string query = this.movieNameTextBox.Text;
             string ISO_639_1 = (this.discLanguageComboBox.SelectedValue as Language).ISO_639_1;
@@ -701,16 +709,13 @@ namespace BDInfo
 
         private void mainMovieBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            string errorCaption = "Error querying main movie DB";
+            
             if (e.Result is Exception)
             {
-                string msg = ((Exception)e.Result).Message;
-
-                MessageBox.Show(msg, "BDInfo Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                // TODO: Disable POST submission only - don't disable ripping completely
                 DiscTabControlsEnabled = true;
                 searchResultListView.Enabled = false;
+                ShowErrorMessage(tabPageDisc, errorCaption, ((Exception)e.Result).Message);
             }
 
             if (mainMovieSearchResult == null) return;
@@ -722,25 +727,29 @@ namespace BDInfo
                 {
                     errorMessages += error.textStatus + " - " + error.errorMessage + "\n";
                 }
-                MessageBox.Show(this, "Main movie service returned the following error(s): \n\n" + errorMessages, "Error - main movie service", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string errorMessage = "Main movie service returned the following error(s): \n\n" + errorMessages;
+                ShowErrorMessage(tabPageDisc, errorCaption, errorMessage);
             }
             else if (mainMovieSearchResult.discs.Count == 0)
             {
-                MessageBox.Show(this, "No matching discs were found in the database.\n\n" + "Please submit one!", "No results found", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ShowExclamationMessage(tabPageDisc, "No results found", "No matching discs were found in the database.\n\n" + "Please submit one!");
             }
             else
             {
-                MessageBox.Show(this, "Hooray!  Found " + mainMovieSearchResult.discs.Count + " matching discs in the database.", mainMovieSearchResult.discs.Count + " result(s) found", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 JsonDisc disc = mainMovieSearchResult.discs[0];
 
                 this.auto_configured = true;
                 this.auto_tmdb_id = disc.tmdb_id;
-                //this.movieNameTextBox.Text = disc.movie_title + " (" + disc.year + ")";
                 this.movieNameTextBox.Text = disc.movie_title;
                 this.maskedTextBoxYear.Text = disc.year != null ? disc.year.ToString() : null;
 
                 populator.AutoConfigure(disc.playlists);
+
+                int count = mainMovieSearchResult.discs.Count;
+                string plural = count != 1 ? "s" : "";
+                string caption = string.Format("{0:d} result{1:s} found", count, plural);
+                string message = string.Format("Hooray!  Found {0:d} matching disc{1:s} in the database.", count, plural);
+                ShowMessage(tabPageDisc, caption, message);
             }
 
             SearchTmdb();
@@ -785,6 +794,14 @@ namespace BDInfo
         private void tmdbBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             DiscTabControlsEnabled = true;
+            searchResultListView.Enabled = false;
+
+            string errorCaption = "Error searching The Movie Database (TMDb)";
+            
+            if (e.Result is Exception)
+            {
+                ShowErrorMessage(tabPageDisc, errorCaption, ((Exception)e.Result).Message);
+            }
 
             if (tmdbMovieSearch == null || tmdbMovieSearch.results == null)
                 return;
@@ -813,11 +830,20 @@ namespace BDInfo
                 searchResultListView.Items.Add(searchResultListItem);
             }
 
-            searchResultListView.Select();
-
             if (tmdbMovieSearch.results.Count > 0)
             {
+                int count = tmdbMovieSearch.results.Count;
+                string plural = count != 1 ? "s" : "";
+                SetTabStatus(tabPageDisc, string.Format("{0:d} result{1:s} found", count, plural));
+
+                searchResultListView.Enabled = true;
+                searchResultListView.Select();
                 searchResultListView.Items[0].Selected = true;
+            }
+            else
+            {
+                ShowExclamationMessage(tabPageDisc, "No results found", "No matching movies found in The Movie Database (TMDb)");
+                movieNameTextBox.Select();
             }
 
             ResizeDiscTab();
@@ -839,10 +865,7 @@ namespace BDInfo
                 }
                 catch (Exception ex)
                 {
-                    ShowErrorMessage(
-                        "BDInfo Error",
-                        ex.Message
-                    );
+                    ShowErrorMessage(tabPageProgress, "Unable to create directory", ex.Message);
                     return;
                 }
 
@@ -851,10 +874,7 @@ namespace BDInfo
                 /*
                 if (!FileUtils.IsFileWritableRecursive(tsMuxerOutputPath))
                 {
-                    ShowErrorMessage(
-                        "File is not writable",
-                        "File \"" + tsMuxerOutputPath + "\" is not writable!"
-                    );
+                    ShowErrorMessage(tabPageProgress, "File is not writable", "File \"" + tsMuxerOutputPath + "\" is not writable!");
                     return;
                 }
                 */
@@ -865,10 +885,7 @@ namespace BDInfo
                 /*
                 if (FileUtils.GetFreeSpace(textBoxOutputDir.Text) < minFreeSpace)
                 {
-                    ShowErrorMessage(
-                        "Not enough free space",
-                        "At least " + FileUtils.FormatFileSize(textBoxOutputDir.Text) + " (" + minFreeSpace + " bytes) of free space is required."
-                    );
+                    ShowErrorMessage(tabPageProgress, "Not enough free space", "At least " + FileUtils.FormatFileSize(textBoxOutputDir.Text) + " (" + minFreeSpace + " bytes) of free space is required.");
                     return;
                 }
                 */
@@ -881,6 +898,10 @@ namespace BDInfo
                 BDInfoSettings.OutputDir = textBoxOutputDir.Text;
                 BDInfoSettings.OutputFileName = textBoxOutputFileName.Text;
                 BDInfoSettings.SaveSettings();
+
+                // TODO: Make this status "sticky"
+                SetTabStatus(tabPageProgress, "tsMuxeR: 0.0%");
+                textBoxTsMuxerCommandLine.Text = "";
 
                 tsMuxerTimer = new Timer();
                 tsMuxerTimer.Interval = 1000;
@@ -918,9 +939,17 @@ namespace BDInfo
 
         private void UpdateTsMuxerProgress(object sender = null, EventArgs e = null)
         {
+            // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
             progressBarTsMuxer.Value = (int)(tsMuxer.Progress * 10);
-            labelTsMuxerProgress.Text = tsMuxer.Progress.ToString("##0.0") + "%";
-            textBoxTsMuxerCommandLine.Text = tsMuxer.CommandLine;
+
+            string strProgress = tsMuxer.Progress.ToString("##0.0") + "%";
+            labelTsMuxerProgress.Text = strProgress;
+
+            // TODO: Make this status "sticky"
+            SetTabStatus(tabPageProgress, "tsMuxeR: " + strProgress);
+
+            if (String.IsNullOrEmpty(textBoxTsMuxerCommandLine.Text))
+                textBoxTsMuxerCommandLine.Text = tsMuxer.CommandLine;
 
             labelTsMuxerTimeRemaining.Text = GetElapsedTimeString(tsMuxer.TimeRemaining);
             labelTsMuxerTimeElapsed.Text = GetElapsedTimeString(tsMuxer.TimeElapsed);
@@ -942,19 +971,20 @@ namespace BDInfo
         {
             IsMuxing = false;
 
-            if ((e.Cancelled == true))
+            if (e.Cancelled == true)
             {
                 labelTsMuxerProgress.Text += " (canceled)";
+                SetTabStatus(tabPageProgress, "tsMuxeR canceled");
             }
-            else if (!(e.Error == null))
+            else if (e.Error != null)
             {
                 labelTsMuxerProgress.Text += " (error)";
-                ShowErrorMessage("tsMuxeR Error", e.Error.Message);
+                ShowErrorMessage(tabPageProgress, "tsMuxeR Error", e.Error.Message);
             }
             else
             {
                 labelTsMuxerProgress.Text += " (done)";
-                MessageBox.Show(this, "tsMuxeR Completed!", "Finished muxing M2TS!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage(tabPageProgress, "tsMuxeR completed!", "Finished muxing M2TS with tsMuxeR!");
             }
         }
 
@@ -1027,25 +1057,19 @@ namespace BDInfo
                 if (postResult.error)
                 {
                     if (postResult.errors.Count > 0)
-                        this.ShowErrorMessage("DB POST Error", postResult.errors[0].textStatus + ": " + postResult.errors[0].errorMessage);
+                        ShowErrorMessage("DB POST Error", postResult.errors[0].textStatus + ": " + postResult.errors[0].errorMessage);
                     else
-                        this.ShowErrorMessage("DB POST Error", "Unknown error occurred while POSTing to the DB");
+                        ShowErrorMessage("DB POST Error", "Unknown error occurred while POSTing to the DB");
                     return;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "ERROR: \n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowErrorMessage("DB POST error", "ERROR: \n\n" + ex.Message);
                 return;
             }
 
-            MessageBox.Show(this, "Awesome!  Successfully added disc to database.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            return;
-
-            //string jsonString = JsonConvert.SerializeObject(jsonDisc);
-            //Clipboard.SetText(jsonString);
-            //MessageBox.Show("Copied to clipboard: \n\n" + jsonString);
+            ShowMessage("DB POST successful", "Awesome!  Successfully added disc to database.");
         }
 
         #endregion
@@ -1270,6 +1294,8 @@ namespace BDInfo
             {
                 continueButton.Enabled = false;
             }
+
+            RestoreTabStatus();
         }
 
         private void buttonSubmitToDB_Click(object sender, EventArgs e)
@@ -1411,9 +1437,108 @@ namespace BDInfo
 
         #endregion
 
+        #region User Messages
+
+        private Dictionary<TabPage, string> tabStatusMessages = new Dictionary<TabPage, string>();
+        private Dictionary<Control, String> controlHints = new Dictionary<Control, String>();
+
+        private void InitHints(Control parentControl)
+        {
+            foreach (Control control in ControlFinder.Descendants<Control>(parentControl))
+            {
+                if (control.Tag != null && control.Tag is string)
+                {
+                    controlHints[control] = control.Tag as string;
+
+                    control.MouseEnter += delegate(object sender, EventArgs e)
+                    {
+                        SetTabStatus(controlHints[sender as Control], true);
+                    };
+
+                    control.MouseLeave += delegate(object sender, EventArgs e)
+                    {
+                        RestoreTabStatus();
+                    };
+                }
+            }
+        }
+
+        private void SetTabStatus(TabPage tabPage, string message, bool temporary = false)
+        {
+            if (!temporary)
+                tabStatusMessages[tabPage] = message;
+            if (tabPage == tabControl.SelectedTab)
+                statusLabel.Text = message;
+        }
+
+        private void SetTabStatus(string message, bool temporary = false)
+        {
+            SetTabStatus(tabControl.SelectedTab, message, temporary);
+        }
+
+        private void RestoreTabStatus()
+        {
+            if (tabStatusMessages.ContainsKey(tabControl.SelectedTab))
+                statusLabel.Text = tabStatusMessages[tabControl.SelectedTab];
+            else
+                statusLabel.Text = "";
+        }
+
+        private void ShowMessage(TabPage tabPage, string caption, string text, MessageBoxIcon icon = MessageBoxIcon.Information)
+        {
+            SetTabStatus(tabPage, caption);
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, icon);
+        }
+
+        private void ShowMessage(string caption, string text, MessageBoxIcon icon = MessageBoxIcon.Information)
+        {
+            ShowMessage(tabControl.SelectedTab, caption, text, icon);
+        }
+
+        private void ShowExclamationMessage(TabPage tabPage, string caption, string text)
+        {
+            ShowMessage(caption, text, MessageBoxIcon.Exclamation);
+        }
+
+        private void ShowExclamationMessage(string caption, string text)
+        {
+            ShowExclamationMessage(tabControl.SelectedTab, caption, text);
+        }
+
+        private void ShowErrorMessage(TabPage tabPage, string caption, string text)
+        {
+            ShowMessage(caption, text, MessageBoxIcon.Error);
+        }
+
         private void ShowErrorMessage(string caption, string text)
         {
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            ShowErrorMessage(tabControl.SelectedTab, caption, text);
+        }
+
+        #endregion
+    }
+
+    public static class ControlFinder
+    {
+        /// <see cref="http://stackoverflow.com/a/2735242/467582"/>
+        public static IEnumerable<T> Descendants<T>(this Control control) where T : class
+        {
+            foreach (Control child in control.Controls)
+            {
+                T childOfT = child as T;
+                if (childOfT != null)
+                {
+                    yield return (T)childOfT;
+                }
+
+                if (child.HasChildren)
+                {
+                    foreach (T descendant in Descendants<T>(child))
+                    {
+                        yield return descendant;
+                    }
+                }
+            }
         }
     }
 }

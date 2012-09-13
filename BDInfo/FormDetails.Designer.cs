@@ -111,18 +111,17 @@
             this.labelAudienceLanguage = new System.Windows.Forms.Label();
             this.tabPageProgress = new System.Windows.Forms.TabPage();
             this.groupBoxTsMuxerProgress = new System.Windows.Forms.GroupBox();
+            this.labelTsMuxerTimeRemainingElapsed = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeSeparator = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeRemaining = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeElapsed = new System.Windows.Forms.Label();
             this.textBoxTsMuxerCommandLine = new System.Windows.Forms.TextBox();
             this.labelTsMuxerCommandLine = new System.Windows.Forms.Label();
             this.progressBarTsMuxer = new System.Windows.Forms.ProgressBar();
             this.labelTsMuxerProgress = new System.Windows.Forms.Label();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.buttonSubmitToDB = new System.Windows.Forms.Button();
-            this.labelTsMuxerTimeElapsed = new System.Windows.Forms.Label();
-            this.labelTsMuxerTimeRemaining = new System.Windows.Forms.Label();
-            this.labelTsMuxerTimeSeparator = new System.Windows.Forms.Label();
-            this.labelTsMuxerTimeRemainingElapsed = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -281,6 +280,7 @@
             this.maskedTextBoxYear.Name = "maskedTextBoxYear";
             this.maskedTextBoxYear.Size = new System.Drawing.Size(42, 20);
             this.maskedTextBoxYear.TabIndex = 5;
+            this.maskedTextBoxYear.Tag = "Movie year";
             this.maskedTextBoxYear.TextChanged += new System.EventHandler(this.maskedTextBoxYear_TextChanged);
             // 
             // discLanguageComboBox
@@ -291,6 +291,7 @@
             this.discLanguageComboBox.Name = "discLanguageComboBox";
             this.discLanguageComboBox.Size = new System.Drawing.Size(121, 21);
             this.discLanguageComboBox.TabIndex = 1;
+            this.discLanguageComboBox.Tag = "Primary audience language of the disc";
             this.discLanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.discLanguageComboBox_SelectedIndexChanged);
             // 
             // discLanguageLabel
@@ -358,6 +359,7 @@
             this.buttonUnselectAll.Name = "buttonUnselectAll";
             this.buttonUnselectAll.Size = new System.Drawing.Size(75, 23);
             this.buttonUnselectAll.TabIndex = 7;
+            this.buttonUnselectAll.Tag = "Clear the \"Main Movie\" checkbox on all playlists";
             this.buttonUnselectAll.Text = "Unselect All";
             this.buttonUnselectAll.UseVisualStyleBackColor = true;
             this.buttonUnselectAll.Click += new System.EventHandler(this.buttonUnselectAll_Click);
@@ -368,6 +370,7 @@
             this.buttonSelectAll.Name = "buttonSelectAll";
             this.buttonSelectAll.Size = new System.Drawing.Size(75, 23);
             this.buttonSelectAll.TabIndex = 6;
+            this.buttonSelectAll.Tag = "Mark all enabled playlists as \"Main Movie\"";
             this.buttonSelectAll.Text = "Select All";
             this.buttonSelectAll.UseVisualStyleBackColor = true;
             this.buttonSelectAll.Click += new System.EventHandler(this.buttonSelectAll_Click);
@@ -380,6 +383,7 @@
             this.showAllPlaylistsCheckbox.Name = "showAllPlaylistsCheckbox";
             this.showAllPlaylistsCheckbox.Size = new System.Drawing.Size(105, 17);
             this.showAllPlaylistsCheckbox.TabIndex = 5;
+            this.showAllPlaylistsCheckbox.Tag = "Show short playlists that are unlikely to be the main movie";
             this.showAllPlaylistsCheckbox.Text = "Show all playlists";
             this.showAllPlaylistsCheckbox.UseVisualStyleBackColor = true;
             this.showAllPlaylistsCheckbox.CheckedChanged += new System.EventHandler(this.showAllPlaylistsCheckbox_CheckedChanged);
@@ -468,6 +472,7 @@
             this.listViewStreamFiles.Name = "listViewStreamFiles";
             this.listViewStreamFiles.Size = new System.Drawing.Size(717, 133);
             this.listViewStreamFiles.TabIndex = 7;
+            this.listViewStreamFiles.Tag = "Double-click a stream to open it in the default program";
             this.listViewStreamFiles.UseCompatibleStateImageBehavior = false;
             this.listViewStreamFiles.View = System.Windows.Forms.View.Details;
             this.listViewStreamFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewStreamFiles_MouseDoubleClick);
@@ -939,6 +944,8 @@
             this.comboBoxVideoLanguage.Name = "comboBoxVideoLanguage";
             this.comboBoxVideoLanguage.Size = new System.Drawing.Size(121, 21);
             this.comboBoxVideoLanguage.TabIndex = 5;
+            this.comboBoxVideoLanguage.Tag = "Primary video language (many animated Disney movies contain several video renders" +
+    " - e.g., French, Spanish, and English)";
             this.comboBoxVideoLanguage.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // labelSubtitleLanguages
@@ -1007,6 +1014,7 @@
             this.comboBoxAudienceLanguage.Name = "comboBoxAudienceLanguage";
             this.comboBoxAudienceLanguage.Size = new System.Drawing.Size(121, 21);
             this.comboBoxAudienceLanguage.TabIndex = 1;
+            this.comboBoxAudienceLanguage.Tag = "Set all language filters (video, audio, and subtitle) to a single language";
             // 
             // labelAudienceLanguage
             // 
@@ -1045,6 +1053,47 @@
             this.groupBoxTsMuxerProgress.TabIndex = 0;
             this.groupBoxTsMuxerProgress.TabStop = false;
             this.groupBoxTsMuxerProgress.Text = "tsMuxeR Progress";
+            // 
+            // labelTsMuxerTimeRemainingElapsed
+            // 
+            this.labelTsMuxerTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeRemainingElapsed.AutoSize = true;
+            this.labelTsMuxerTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTsMuxerTimeRemainingElapsed.Location = new System.Drawing.Point(471, 20);
+            this.labelTsMuxerTimeRemainingElapsed.Name = "labelTsMuxerTimeRemainingElapsed";
+            this.labelTsMuxerTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
+            this.labelTsMuxerTimeRemainingElapsed.TabIndex = 36;
+            this.labelTsMuxerTimeRemainingElapsed.Text = "Time Remaining / Elapsed:";
+            // 
+            // labelTsMuxerTimeSeparator
+            // 
+            this.labelTsMuxerTimeSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeSeparator.AutoSize = true;
+            this.labelTsMuxerTimeSeparator.Location = new System.Drawing.Point(667, 20);
+            this.labelTsMuxerTimeSeparator.Name = "labelTsMuxerTimeSeparator";
+            this.labelTsMuxerTimeSeparator.Size = new System.Drawing.Size(12, 13);
+            this.labelTsMuxerTimeSeparator.TabIndex = 6;
+            this.labelTsMuxerTimeSeparator.Text = "/";
+            // 
+            // labelTsMuxerTimeRemaining
+            // 
+            this.labelTsMuxerTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeRemaining.AutoSize = true;
+            this.labelTsMuxerTimeRemaining.Location = new System.Drawing.Point(612, 20);
+            this.labelTsMuxerTimeRemaining.Name = "labelTsMuxerTimeRemaining";
+            this.labelTsMuxerTimeRemaining.Size = new System.Drawing.Size(49, 13);
+            this.labelTsMuxerTimeRemaining.TabIndex = 5;
+            this.labelTsMuxerTimeRemaining.Text = "00:00:00";
+            // 
+            // labelTsMuxerTimeElapsed
+            // 
+            this.labelTsMuxerTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeElapsed.AutoSize = true;
+            this.labelTsMuxerTimeElapsed.Location = new System.Drawing.Point(683, 20);
+            this.labelTsMuxerTimeElapsed.Name = "labelTsMuxerTimeElapsed";
+            this.labelTsMuxerTimeElapsed.Size = new System.Drawing.Size(49, 13);
+            this.labelTsMuxerTimeElapsed.TabIndex = 4;
+            this.labelTsMuxerTimeElapsed.Text = "00:00:00";
             // 
             // textBoxTsMuxerCommandLine
             // 
@@ -1090,8 +1139,7 @@
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabel,
-            this.progressBar});
+            this.statusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 639);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(777, 22);
@@ -1104,11 +1152,6 @@
             this.statusLabel.Size = new System.Drawing.Size(39, 17);
             this.statusLabel.Text = "Status";
             // 
-            // progressBar
-            // 
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(100, 16);
-            // 
             // buttonSubmitToDB
             // 
             this.buttonSubmitToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1117,50 +1160,10 @@
             this.buttonSubmitToDB.Name = "buttonSubmitToDB";
             this.buttonSubmitToDB.Size = new System.Drawing.Size(84, 23);
             this.buttonSubmitToDB.TabIndex = 100;
+            this.buttonSubmitToDB.Tag = "Submit the current Disc and Playlist configuration to the main movie database";
             this.buttonSubmitToDB.Text = "Submit to DB";
             this.buttonSubmitToDB.UseVisualStyleBackColor = true;
             this.buttonSubmitToDB.Click += new System.EventHandler(this.buttonSubmitToDB_Click);
-            // 
-            // labelTsMuxerTimeElapsed
-            // 
-            this.labelTsMuxerTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTsMuxerTimeElapsed.AutoSize = true;
-            this.labelTsMuxerTimeElapsed.Location = new System.Drawing.Point(683, 20);
-            this.labelTsMuxerTimeElapsed.Name = "labelTsMuxerTimeElapsed";
-            this.labelTsMuxerTimeElapsed.Size = new System.Drawing.Size(49, 13);
-            this.labelTsMuxerTimeElapsed.TabIndex = 4;
-            this.labelTsMuxerTimeElapsed.Text = "00:00:00";
-            // 
-            // labelTsMuxerTimeRemaining
-            // 
-            this.labelTsMuxerTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTsMuxerTimeRemaining.AutoSize = true;
-            this.labelTsMuxerTimeRemaining.Location = new System.Drawing.Point(612, 20);
-            this.labelTsMuxerTimeRemaining.Name = "labelTsMuxerTimeRemaining";
-            this.labelTsMuxerTimeRemaining.Size = new System.Drawing.Size(49, 13);
-            this.labelTsMuxerTimeRemaining.TabIndex = 5;
-            this.labelTsMuxerTimeRemaining.Text = "00:00:00";
-            // 
-            // labelTsMuxerTimeSeparator
-            // 
-            this.labelTsMuxerTimeSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTsMuxerTimeSeparator.AutoSize = true;
-            this.labelTsMuxerTimeSeparator.Location = new System.Drawing.Point(667, 20);
-            this.labelTsMuxerTimeSeparator.Name = "labelTsMuxerTimeSeparator";
-            this.labelTsMuxerTimeSeparator.Size = new System.Drawing.Size(12, 13);
-            this.labelTsMuxerTimeSeparator.TabIndex = 6;
-            this.labelTsMuxerTimeSeparator.Text = "/";
-            // 
-            // labelTsMuxerTimeRemainingElapsed
-            // 
-            this.labelTsMuxerTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTsMuxerTimeRemainingElapsed.AutoSize = true;
-            this.labelTsMuxerTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTsMuxerTimeRemainingElapsed.Location = new System.Drawing.Point(471, 20);
-            this.labelTsMuxerTimeRemainingElapsed.Name = "labelTsMuxerTimeRemainingElapsed";
-            this.labelTsMuxerTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
-            this.labelTsMuxerTimeRemainingElapsed.TabIndex = 36;
-            this.labelTsMuxerTimeRemainingElapsed.Text = "Time Remaining / Elapsed:";
             // 
             // FormDetails
             // 
@@ -1234,7 +1237,6 @@
         private System.Windows.Forms.Label discLanguageLabel;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
-        private System.Windows.Forms.ToolStripProgressBar progressBar;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView playlistDataGridView;
         private System.Windows.Forms.SplitContainer playlistsSplitContainerOuter;
