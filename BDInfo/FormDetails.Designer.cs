@@ -119,11 +119,6 @@
             this.buttonSubmitToDB = new System.Windows.Forms.Button();
             this.labelTsMuxerCommandLine = new System.Windows.Forms.Label();
             this.textBoxTsMuxerCommandLine = new System.Windows.Forms.TextBox();
-            this.groupBoxMkvMerge = new System.Windows.Forms.GroupBox();
-            this.labelMkvMergeProgress = new System.Windows.Forms.Label();
-            this.progressBarMkvMerge = new System.Windows.Forms.ProgressBar();
-            this.textBoxMkvMergeCommandLine = new System.Windows.Forms.TextBox();
-            this.labelMkvMergeCommandLine = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -148,7 +143,6 @@
             this.tabPageProgress.SuspendLayout();
             this.groupBoxTsMuxerProgress.SuspendLayout();
             this.statusStrip.SuspendLayout();
-            this.groupBoxMkvMerge.SuspendLayout();
             this.SuspendLayout();
             // 
             // movieNameLabel
@@ -1020,7 +1014,6 @@
             // 
             // tabPageProgress
             // 
-            this.tabPageProgress.Controls.Add(this.groupBoxMkvMerge);
             this.tabPageProgress.Controls.Add(this.groupBoxTsMuxerProgress);
             this.tabPageProgress.Location = new System.Drawing.Point(4, 22);
             this.tabPageProgress.Name = "tabPageProgress";
@@ -1117,60 +1110,6 @@
             this.textBoxTsMuxerCommandLine.Size = new System.Drawing.Size(725, 60);
             this.textBoxTsMuxerCommandLine.TabIndex = 3;
             // 
-            // groupBoxMkvMerge
-            // 
-            this.groupBoxMkvMerge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxMkvMerge.Controls.Add(this.labelMkvMergeCommandLine);
-            this.groupBoxMkvMerge.Controls.Add(this.textBoxMkvMergeCommandLine);
-            this.groupBoxMkvMerge.Controls.Add(this.progressBarMkvMerge);
-            this.groupBoxMkvMerge.Controls.Add(this.labelMkvMergeProgress);
-            this.groupBoxMkvMerge.Location = new System.Drawing.Point(3, 160);
-            this.groupBoxMkvMerge.Name = "groupBoxMkvMerge";
-            this.groupBoxMkvMerge.Size = new System.Drawing.Size(738, 150);
-            this.groupBoxMkvMerge.TabIndex = 1;
-            this.groupBoxMkvMerge.TabStop = false;
-            this.groupBoxMkvMerge.Text = "MkvMerge";
-            // 
-            // labelMkvMergeProgress
-            // 
-            this.labelMkvMergeProgress.AutoSize = true;
-            this.labelMkvMergeProgress.Location = new System.Drawing.Point(7, 20);
-            this.labelMkvMergeProgress.Name = "labelMkvMergeProgress";
-            this.labelMkvMergeProgress.Size = new System.Drawing.Size(30, 13);
-            this.labelMkvMergeProgress.TabIndex = 0;
-            this.labelMkvMergeProgress.Text = "0.0%";
-            // 
-            // progressBarMkvMerge
-            // 
-            this.progressBarMkvMerge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarMkvMerge.Location = new System.Drawing.Point(7, 37);
-            this.progressBarMkvMerge.Name = "progressBarMkvMerge";
-            this.progressBarMkvMerge.Size = new System.Drawing.Size(725, 23);
-            this.progressBarMkvMerge.TabIndex = 1;
-            // 
-            // textBoxMkvMergeCommandLine
-            // 
-            this.textBoxMkvMergeCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxMkvMergeCommandLine.Location = new System.Drawing.Point(6, 83);
-            this.textBoxMkvMergeCommandLine.Multiline = true;
-            this.textBoxMkvMergeCommandLine.Name = "textBoxMkvMergeCommandLine";
-            this.textBoxMkvMergeCommandLine.ReadOnly = true;
-            this.textBoxMkvMergeCommandLine.Size = new System.Drawing.Size(726, 61);
-            this.textBoxMkvMergeCommandLine.TabIndex = 2;
-            // 
-            // labelMkvMergeCommandLine
-            // 
-            this.labelMkvMergeCommandLine.AutoSize = true;
-            this.labelMkvMergeCommandLine.Location = new System.Drawing.Point(6, 67);
-            this.labelMkvMergeCommandLine.Name = "labelMkvMergeCommandLine";
-            this.labelMkvMergeCommandLine.Size = new System.Drawing.Size(76, 13);
-            this.labelMkvMergeCommandLine.TabIndex = 3;
-            this.labelMkvMergeCommandLine.Text = "Command line:";
-            // 
             // FormDetails
             // 
             this.AcceptButton = this.continueButton;
@@ -1218,8 +1157,6 @@
             this.groupBoxTsMuxerProgress.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            this.groupBoxMkvMerge.ResumeLayout(false);
-            this.groupBoxMkvMerge.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1318,10 +1255,5 @@
         private System.Windows.Forms.Label labelTsMuxerProgress;
         private System.Windows.Forms.TextBox textBoxTsMuxerCommandLine;
         private System.Windows.Forms.Label labelTsMuxerCommandLine;
-        private System.Windows.Forms.GroupBox groupBoxMkvMerge;
-        private System.Windows.Forms.Label labelMkvMergeCommandLine;
-        private System.Windows.Forms.TextBox textBoxMkvMergeCommandLine;
-        private System.Windows.Forms.ProgressBar progressBarMkvMerge;
-        private System.Windows.Forms.Label labelMkvMergeProgress;
     }
 }

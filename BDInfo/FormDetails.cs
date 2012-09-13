@@ -52,11 +52,6 @@ namespace BDInfo
         private bool tsMuxerSuccess = false;
         private string tsMuxerOutputPath = null;
 
-        private MkvMerge mkvMerge;
-        private bool isConvertingToMkv = false;
-        private bool mkvMergeSuccess = false;
-        private string mkvMergeOutputPath = null;
-
         Settings settings = Settings.Default;
 
         private ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>();
@@ -903,71 +898,8 @@ namespace BDInfo
             else
             {
                 tsMuxerSuccess = true;
-                //MessageBox.Show(this, "tsMuxeR Completed!", "Finished muxing M2TS!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                RunMkvMerge();
-            }
-        }
-
-        #endregion
-
-        #region MkvMerge Re-Muxing
-
-        private void RunMkvMerge()
-        {
-            if (tsMuxerSuccess)
-            {
-                mkvMerge = new MkvMerge(BDROM, tsMuxerOutputPath, SelectedAudioStreams);
-                mkvMerge.WorkerReportsProgress = true;
-                mkvMerge.WorkerSupportsCancellation = true;
-                //mkvMerge.DoWork += mkvMergeBackgroundWorker_DoWork;
-                mkvMerge.ProgressChanged += mkvMergeBackgroundWorker_ProgressChanged;
-                mkvMerge.RunWorkerCompleted += mkvMergeBackgroundWorker_RunWorkerCompleted;
-                mkvMerge.RunWorkerAsync(tsMuxerOutputPath);
-            }
-        }
-
-        private void CancelMkvMerge()
-        {
-            if (mkvMerge != null && mkvMerge.IsBusy)
-            {
-                mkvMerge.CancelAsync();
-            }
-        }
-
-        private void mkvMergerBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-        }
-
-        private void mkvMergeBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            isConvertingToMkv = true;
-            mkvMergeSuccess = false;
-
-            progressBarMkvMerge.Value = e.ProgressPercentage;
-            labelMkvMergeProgress.Text = mkvMerge.Progress.ToString("##0.0") + "%";
-            textBoxMkvMergeCommandLine.Text = mkvMerge.CommandLine;
-        }
-
-        private void mkvMergeBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            isConvertingToMkv = false;
-            mkvMergeSuccess = false;
-
-            if ((e.Cancelled == true))
-            {
-                continueButton.Text = "Canceled!";
-            }
-            else if (!(e.Error == null))
-            {
-                continueButton.Text = "Error!";
-                ShowErrorMessage("MkvMerge Error", e.Error.Message);
-            }
-            else
-            {
-                mkvMergeSuccess = true;
                 continueButton.Text = "Done!";
-                MessageBox.Show(this, "Ripping completed successfully!", "Finished converting \"" + tsMuxerOutputPath + "\" to MKV!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "tsMuxeR Completed!", "Finished muxing M2TS!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1392,17 +1324,6 @@ namespace BDInfo
                 else
                 {
                     CancelRip();
-                }
-            }
-            if (isConvertingToMkv)
-            {
-                if (MessageBox.Show(this, "Abort converting to MKV?", "Abort converting to MKV?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                {
-                    e.Cancel = true;
-                }
-                else
-                {
-                    CancelMkvMerge();
                 }
             }
         }
