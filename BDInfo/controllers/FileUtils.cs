@@ -134,5 +134,17 @@ namespace BDInfo.controllers
             Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
             return !containsABadCharacter.IsMatch(testName);
         }
+
+        public static string SanitizeFileName(string fileName)
+        {
+            Regex badCharRegex = new Regex("[" + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
+            Regex multiSpaceRegex = new Regex(@"\s{2,}");
+
+            string sanitizedFileName = fileName;
+            sanitizedFileName = badCharRegex.Replace(sanitizedFileName, " - ");
+            sanitizedFileName = multiSpaceRegex.Replace(sanitizedFileName, " ");
+
+            return sanitizedFileName;
+        }
     }
 }

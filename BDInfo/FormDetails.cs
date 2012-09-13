@@ -1159,6 +1159,7 @@ namespace BDInfo
             preview = Regex.Replace(preview, @"%vcodec%", vcodec, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%acodec%", acodec, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%channels%", channels, RegexOptions.IgnoreCase);
+            preview = FileUtils.SanitizeFileName(preview);
 
             if (checkBoxReplaceSpaces.Checked)
             {
