@@ -17,6 +17,20 @@ namespace BDInfo.controllers
         private Process process = null;
         private string strArgs = null;
 
+        private DateTime startTime = DateTime.Now;
+        private DateTime lastProgressUpdate = DateTime.Now;
+        private List<TimeSpan> progressTicks = new List<TimeSpan>();
+        private double lastProgress = 0;
+        private TimeSpan timeRemaining = TimeSpan.MaxValue;
+
+        /// <summary>
+        /// 0.0 to 100.0
+        /// </summary>
+        protected double progress = 0;
+        public Double Progress { get { return progress; } }
+        public TimeSpan TimeRemaining { get { return timeRemaining; } }
+        public TimeSpan TimeElapsed { get { return DateTime.Now - startTime; } }
+
         /// <summary>
         /// Command line string used to execute the process, including the full path to the EXE and all arguments.
         /// </summary>
@@ -85,6 +99,10 @@ namespace BDInfo.controllers
         {
             ExtractResources();
 
+            progress = 0;
+            lastProgress = 0;
+            progressTicks.Clear();
+
             BackgroundWorker worker = sender as BackgroundWorker;
 
             worker.ReportProgress(0);
@@ -107,11 +125,15 @@ namespace BDInfo.controllers
             process.StartInfo.Arguments = this.strArgs = string.Join(" ", sanitizedArgs);
             process.Start();
 
+            startTime = DateTime.Now;
+            lastProgressUpdate = DateTime.Now;
+            timeRemaining = TimeSpan.Zero;
+
             while (!this.CancellationPending && !process.StandardOutput.EndOfStream)
             {
                 string line = process.StandardOutput.ReadLine();
                 HandleOutputLine(line, sender, e);
-                // do something with line
+                UpdateTime();
             }
 
             if (this.CancellationPending)
@@ -123,6 +145,75 @@ namespace BDInfo.controllers
             }
 
             worker.ReportProgress(100);
+        }
+
+        private void UpdateTime()
+        {
+            if (Progress != lastProgress)
+            {
+                progressTicks.Add(DateTime.Now - lastProgressUpdate);
+
+                lastProgressUpdate = DateTime.Now;
+                lastProgress = progress;
+
+                TimeSpan averageSpeed = AverageTimeBetweenTicks();
+
+                if (progressTicks.Count > 20)
+                {
+                    TimeSpan last5 = AverageTimeBetweenTicks(5);
+                    TimeSpan last10 = AverageTimeBetweenTicks(10);
+                    TimeSpan last20 = AverageTimeBetweenTicks(20);
+                    //timeRemaining = EstimateTimeRemaining((last5.TotalMilliseconds * 0.5) + (last10.TotalMilliseconds * 0.35) + (last20.TotalMilliseconds * 0.15));
+                    timeRemaining = EstimateTimeRemaining(last20.TotalMilliseconds, averageSpeed.TotalMilliseconds);
+                }
+                else if (progressTicks.Count > 10)
+                {
+                    TimeSpan last5 = AverageTimeBetweenTicks(5);
+                    TimeSpan last10 = AverageTimeBetweenTicks(10);
+                    //timeRemaining = EstimateTimeRemaining((last5.TotalMilliseconds * 0.75) + (last10.TotalMilliseconds * 0.35));
+                    timeRemaining = EstimateTimeRemaining(last10.TotalMilliseconds, averageSpeed.TotalMilliseconds);
+                }
+                else if (progressTicks.Count > 5)
+                {
+                    TimeSpan last5 = AverageTimeBetweenTicks(5);
+                    //timeRemaining = EstimateTimeRemaining((last5.TotalMilliseconds * 1.0));
+                    timeRemaining = EstimateTimeRemaining(last5.TotalMilliseconds, averageSpeed.TotalMilliseconds);
+                }
+                else
+                {
+                    timeRemaining = TimeSpan.Zero;
+                }
+            }
+        }
+
+        private static readonly double SMOOTHING_FACTOR = 0.75;
+
+        private TimeSpan EstimateTimeRemaining(double lastSpeed, double averageSpeed)
+        {
+            // averageSpeed = SMOOTHING_FACTOR * lastSpeed + (1-SMOOTHING_FACTOR) * averageSpeed;
+            // see http://stackoverflow.com/a/3841706/467582
+
+            double ticksRemaining = 1000.0 - (Progress * 10);
+            double newAverage = SMOOTHING_FACTOR * lastSpeed + (1 - SMOOTHING_FACTOR) * averageSpeed;
+
+            TimeSpan newAvg = TimeSpan.FromMilliseconds(newAverage * ticksRemaining);
+            return newAvg;
+            //return TimeSpan.FromMilliseconds(avgMsPerTick * ticksRemaining);
+        }
+
+        private TimeSpan AverageTimeBetweenTicks(int offsetFromLastIndex = -1, int howMany = 0)
+        {
+            if (offsetFromLastIndex == -1)
+                offsetFromLastIndex = progressTicks.Count;
+
+            if (howMany == 0)
+                howMany = offsetFromLastIndex;
+
+            // See http://stackoverflow.com/a/1301362/467582
+            List<TimeSpan> chunk = progressTicks.Skip(progressTicks.Count - offsetFromLastIndex).Take(howMany).ToList();
+            TimeSpan totalTime = TimeSpan.Zero;
+            chunk.ForEach((TimeSpan ts) => { totalTime += ts; });
+            return TimeSpan.FromMilliseconds(totalTime.TotalMilliseconds / ((double)howMany));
         }
 
         protected void Cleanup()

@@ -119,6 +119,10 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.buttonSubmitToDB = new System.Windows.Forms.Button();
+            this.labelTsMuxerTimeElapsed = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeRemaining = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeSeparator = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeRemainingElapsed = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -1027,6 +1031,10 @@
             // 
             this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemainingElapsed);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeSeparator);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemaining);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeElapsed);
             this.groupBoxTsMuxerProgress.Controls.Add(this.textBoxTsMuxerCommandLine);
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerCommandLine);
             this.groupBoxTsMuxerProgress.Controls.Add(this.progressBarTsMuxer);
@@ -1112,6 +1120,47 @@
             this.buttonSubmitToDB.Text = "Submit to DB";
             this.buttonSubmitToDB.UseVisualStyleBackColor = true;
             this.buttonSubmitToDB.Click += new System.EventHandler(this.buttonSubmitToDB_Click);
+            // 
+            // labelTsMuxerTimeElapsed
+            // 
+            this.labelTsMuxerTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeElapsed.AutoSize = true;
+            this.labelTsMuxerTimeElapsed.Location = new System.Drawing.Point(683, 20);
+            this.labelTsMuxerTimeElapsed.Name = "labelTsMuxerTimeElapsed";
+            this.labelTsMuxerTimeElapsed.Size = new System.Drawing.Size(49, 13);
+            this.labelTsMuxerTimeElapsed.TabIndex = 4;
+            this.labelTsMuxerTimeElapsed.Text = "00:00:00";
+            // 
+            // labelTsMuxerTimeRemaining
+            // 
+            this.labelTsMuxerTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeRemaining.AutoSize = true;
+            this.labelTsMuxerTimeRemaining.Location = new System.Drawing.Point(612, 20);
+            this.labelTsMuxerTimeRemaining.Name = "labelTsMuxerTimeRemaining";
+            this.labelTsMuxerTimeRemaining.Size = new System.Drawing.Size(49, 13);
+            this.labelTsMuxerTimeRemaining.TabIndex = 5;
+            this.labelTsMuxerTimeRemaining.Text = "00:00:00";
+            // 
+            // labelTsMuxerTimeSeparator
+            // 
+            this.labelTsMuxerTimeSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeSeparator.AutoSize = true;
+            this.labelTsMuxerTimeSeparator.Location = new System.Drawing.Point(667, 20);
+            this.labelTsMuxerTimeSeparator.Name = "labelTsMuxerTimeSeparator";
+            this.labelTsMuxerTimeSeparator.Size = new System.Drawing.Size(12, 13);
+            this.labelTsMuxerTimeSeparator.TabIndex = 6;
+            this.labelTsMuxerTimeSeparator.Text = "/";
+            // 
+            // labelTsMuxerTimeRemainingElapsed
+            // 
+            this.labelTsMuxerTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeRemainingElapsed.AutoSize = true;
+            this.labelTsMuxerTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTsMuxerTimeRemainingElapsed.Location = new System.Drawing.Point(471, 20);
+            this.labelTsMuxerTimeRemainingElapsed.Name = "labelTsMuxerTimeRemainingElapsed";
+            this.labelTsMuxerTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
+            this.labelTsMuxerTimeRemainingElapsed.TabIndex = 36;
+            this.labelTsMuxerTimeRemainingElapsed.Text = "Time Remaining / Elapsed:";
             // 
             // FormDetails
             // 
@@ -1259,5 +1308,9 @@
         private System.Windows.Forms.Label labelTsMuxerProgress;
         private System.Windows.Forms.TextBox textBoxTsMuxerCommandLine;
         private System.Windows.Forms.Label labelTsMuxerCommandLine;
+        private System.Windows.Forms.Label labelTsMuxerTimeRemaining;
+        private System.Windows.Forms.Label labelTsMuxerTimeElapsed;
+        private System.Windows.Forms.Label labelTsMuxerTimeSeparator;
+        private System.Windows.Forms.Label labelTsMuxerTimeRemainingElapsed;
     }
 }

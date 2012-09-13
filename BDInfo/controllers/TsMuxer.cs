@@ -30,9 +30,6 @@ namespace BDInfo.controllers
         private string frameRate = null;
         private string videoHeight = null;
         private string videoWidth = null;
-        private double progress = 0;
-
-        public Double Progress { get { return progress; } }
 
         public TsMuxer(BDROM BDROM, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks)
             : base()

@@ -51,6 +51,7 @@ namespace BDInfo
         private bool isMuxing = false;
         private bool tsMuxerSuccess = false;
         private string tsMuxerOutputPath = null;
+        private Timer tsMuxerTimer = null;
 
         private ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>();
 
@@ -77,9 +78,16 @@ namespace BDInfo
                 EnableTabPage(tabPageOutput, !isMuxing);
 
                 if (isMuxing)
+                {
                     cancelButton.Text = "Stop";
+                }
                 else
+                {
                     cancelButton.Text = "Close";
+
+                    if (tsMuxerTimer != null)
+                        tsMuxerTimer.Stop();
+                }
             }
         }
 
@@ -873,6 +881,11 @@ namespace BDInfo
                 BDInfoSettings.OutputFileName = textBoxOutputFileName.Text;
                 BDInfoSettings.SaveSettings();
 
+                tsMuxerTimer = new Timer();
+                tsMuxerTimer.Interval = 1000;
+                tsMuxerTimer.Tick += UpdateTsMuxerProgress;
+                tsMuxerTimer.Start();
+
                 tsMuxer = new TsMuxer(BDROM, SelectedPlaylist, selectedStreams);
                 tsMuxer.WorkerReportsProgress = true;
                 tsMuxer.WorkerSupportsCancellation = true;
@@ -900,10 +913,29 @@ namespace BDInfo
         {
             IsMuxing = true;
             tsMuxerSuccess = false;
+            UpdateTsMuxerProgress(sender, e);
+        }
 
+        private void UpdateTsMuxerProgress(object sender = null, EventArgs e = null)
+        {
             progressBarTsMuxer.Value = (int)(tsMuxer.Progress * 10);
             labelTsMuxerProgress.Text = tsMuxer.Progress.ToString("##0.0") + "%";
             textBoxTsMuxerCommandLine.Text = tsMuxer.CommandLine;
+
+            labelTsMuxerTimeRemaining.Text = GetElapsedTimeString(tsMuxer.TimeRemaining);
+            labelTsMuxerTimeElapsed.Text = GetElapsedTimeString(tsMuxer.TimeElapsed);
+        }
+
+        private string GetElapsedTimeString(TimeSpan elapsedTime)
+        {
+            if (elapsedTime == TimeSpan.MaxValue)
+                elapsedTime = TimeSpan.Zero;
+
+            return string.Format(
+                "{0:D2}:{1:D2}:{2:D2}",
+                elapsedTime.Hours,
+                elapsedTime.Minutes,
+                elapsedTime.Seconds);
         }
 
         private void tsMuxerBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
