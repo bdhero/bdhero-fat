@@ -71,10 +71,15 @@ namespace BDInfo
             set
             {
                 isMuxing = value;
-                if (isMuxing)
-                {
 
-                }
+                EnableTabPage(tabPageDisc, !isMuxing);
+                EnableTabPage(tabPagePlaylists, !isMuxing);
+                EnableTabPage(tabPageOutput, !isMuxing);
+
+                if (isMuxing)
+                    cancelButton.Text = "Stop";
+                else
+                    cancelButton.Text = "Close";
             }
         }
 
@@ -288,6 +293,24 @@ namespace BDInfo
 
             ResetPlaylistDataGrid();
             QueryMainMovie();
+        }
+
+        #endregion
+
+        #region Tab Helpers
+
+        public static void EnableTabPage(TabPage page, bool enable)
+        {
+            EnableControls(page.Controls, enable);
+        }
+
+        private static void EnableControls(Control.ControlCollection ctls, bool enable)
+        {
+            foreach (Control ctl in ctls)
+            {
+                ctl.Enabled = enable;
+                EnableControls(ctl.Controls, enable);
+            }
         }
 
         #endregion
@@ -799,6 +822,8 @@ namespace BDInfo
 
         private void Rip()
         {
+            if (IsMuxing) return;
+
             if (SelectedPlaylist != null)
             {
                 try
@@ -876,7 +901,7 @@ namespace BDInfo
             IsMuxing = true;
             tsMuxerSuccess = false;
 
-            progressBarTsMuxer.Value = e.ProgressPercentage;
+            progressBarTsMuxer.Value = (int)(tsMuxer.Progress * 10);
             labelTsMuxerProgress.Text = tsMuxer.Progress.ToString("##0.0") + "%";
             textBoxTsMuxerCommandLine.Text = tsMuxer.CommandLine;
         }
@@ -887,17 +912,17 @@ namespace BDInfo
 
             if ((e.Cancelled == true))
             {
-                continueButton.Text = "Canceled!";
+                labelTsMuxerProgress.Text += " (canceled)";
             }
             else if (!(e.Error == null))
             {
-                continueButton.Text = "Error!";
+                labelTsMuxerProgress.Text += " (error)";
                 ShowErrorMessage("tsMuxeR Error", e.Error.Message);
             }
             else
             {
+                labelTsMuxerProgress.Text += " (done)";
                 tsMuxerSuccess = true;
-                continueButton.Text = "Done!";
                 MessageBox.Show(this, "tsMuxeR Completed!", "Finished muxing M2TS!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -1321,9 +1346,23 @@ namespace BDInfo
                 textBoxOutputFileName.Text = filenameWithoutExtension;
         }
 
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            cancelButtonHandled = false;
+            if (IsMuxing && MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.No)
+            {
+                CancelRip();
+                cancelButtonHandled = true;
+            }
+        }
+
         private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (IsMuxing)
+            if (cancelButtonHandled)
+            {
+                e.Cancel = true;
+            }
+            else if (IsMuxing)
             {
                 if (MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 {
@@ -1334,7 +1373,10 @@ namespace BDInfo
                     CancelRip();
                 }
             }
+            cancelButtonHandled = false;
         }
+
+        private bool cancelButtonHandled = false;
 
         #endregion
 

@@ -111,14 +111,14 @@
             this.labelAudienceLanguage = new System.Windows.Forms.Label();
             this.tabPageProgress = new System.Windows.Forms.TabPage();
             this.groupBoxTsMuxerProgress = new System.Windows.Forms.GroupBox();
+            this.textBoxTsMuxerCommandLine = new System.Windows.Forms.TextBox();
+            this.labelTsMuxerCommandLine = new System.Windows.Forms.Label();
             this.progressBarTsMuxer = new System.Windows.Forms.ProgressBar();
             this.labelTsMuxerProgress = new System.Windows.Forms.Label();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.buttonSubmitToDB = new System.Windows.Forms.Button();
-            this.labelTsMuxerCommandLine = new System.Windows.Forms.Label();
-            this.textBoxTsMuxerCommandLine = new System.Windows.Forms.TextBox();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPagePlaylists.SuspendLayout();
@@ -173,8 +173,9 @@
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 99;
-            this.cancelButton.Text = "Cancel";
+            this.cancelButton.Text = "Close";
             this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // movieNameTextBox
             // 
@@ -1037,13 +1038,36 @@
             this.groupBoxTsMuxerProgress.TabStop = false;
             this.groupBoxTsMuxerProgress.Text = "tsMuxeR Progress";
             // 
+            // textBoxTsMuxerCommandLine
+            // 
+            this.textBoxTsMuxerCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTsMuxerCommandLine.Location = new System.Drawing.Point(7, 84);
+            this.textBoxTsMuxerCommandLine.Multiline = true;
+            this.textBoxTsMuxerCommandLine.Name = "textBoxTsMuxerCommandLine";
+            this.textBoxTsMuxerCommandLine.ReadOnly = true;
+            this.textBoxTsMuxerCommandLine.Size = new System.Drawing.Size(725, 60);
+            this.textBoxTsMuxerCommandLine.TabIndex = 3;
+            // 
+            // labelTsMuxerCommandLine
+            // 
+            this.labelTsMuxerCommandLine.AutoSize = true;
+            this.labelTsMuxerCommandLine.Location = new System.Drawing.Point(7, 67);
+            this.labelTsMuxerCommandLine.Name = "labelTsMuxerCommandLine";
+            this.labelTsMuxerCommandLine.Size = new System.Drawing.Size(76, 13);
+            this.labelTsMuxerCommandLine.TabIndex = 2;
+            this.labelTsMuxerCommandLine.Text = "Command line:";
+            // 
             // progressBarTsMuxer
             // 
             this.progressBarTsMuxer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarTsMuxer.Location = new System.Drawing.Point(7, 37);
+            this.progressBarTsMuxer.Maximum = 1000;
             this.progressBarTsMuxer.Name = "progressBarTsMuxer";
             this.progressBarTsMuxer.Size = new System.Drawing.Size(725, 23);
+            this.progressBarTsMuxer.Step = 1;
             this.progressBarTsMuxer.TabIndex = 1;
             // 
             // labelTsMuxerProgress
@@ -1089,27 +1113,6 @@
             this.buttonSubmitToDB.UseVisualStyleBackColor = true;
             this.buttonSubmitToDB.Click += new System.EventHandler(this.buttonSubmitToDB_Click);
             // 
-            // labelTsMuxerCommandLine
-            // 
-            this.labelTsMuxerCommandLine.AutoSize = true;
-            this.labelTsMuxerCommandLine.Location = new System.Drawing.Point(7, 67);
-            this.labelTsMuxerCommandLine.Name = "labelTsMuxerCommandLine";
-            this.labelTsMuxerCommandLine.Size = new System.Drawing.Size(76, 13);
-            this.labelTsMuxerCommandLine.TabIndex = 2;
-            this.labelTsMuxerCommandLine.Text = "Command line:";
-            // 
-            // textBoxTsMuxerCommandLine
-            // 
-            this.textBoxTsMuxerCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTsMuxerCommandLine.Location = new System.Drawing.Point(7, 84);
-            this.textBoxTsMuxerCommandLine.Multiline = true;
-            this.textBoxTsMuxerCommandLine.Name = "textBoxTsMuxerCommandLine";
-            this.textBoxTsMuxerCommandLine.ReadOnly = true;
-            this.textBoxTsMuxerCommandLine.Size = new System.Drawing.Size(725, 60);
-            this.textBoxTsMuxerCommandLine.TabIndex = 3;
-            // 
             // FormDetails
             // 
             this.AcceptButton = this.continueButton;
@@ -1123,6 +1126,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.continueButton);
             this.Name = "FormDetails";
+            this.ShowInTaskbar = false;
             this.Text = "Blu-ray Details";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormDetails_FormClosing);
             this.tabControl.ResumeLayout(false);
