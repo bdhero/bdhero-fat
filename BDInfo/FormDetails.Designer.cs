@@ -419,6 +419,9 @@
             this.playlistDataGridView.Name = "playlistDataGridView";
             this.playlistDataGridView.Size = new System.Drawing.Size(708, 143);
             this.playlistDataGridView.TabIndex = 1;
+            this.playlistDataGridView.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDataGridView_CellMouseEnter);
+            this.playlistDataGridView.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDataGridView_CellMouseLeave);
+            this.playlistDataGridView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.playlistDataGridView_MouseClick);
             // 
             // playlistsSplitContainerInner
             // 
@@ -475,6 +478,7 @@
             this.listViewStreamFiles.Tag = "Double-click a stream to open it in the default program";
             this.listViewStreamFiles.UseCompatibleStateImageBehavior = false;
             this.listViewStreamFiles.View = System.Windows.Forms.View.Details;
+            this.listViewStreamFiles.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewStreamFiles_MouseClick);
             this.listViewStreamFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewStreamFiles_MouseDoubleClick);
             // 
             // columnHeaderFileName

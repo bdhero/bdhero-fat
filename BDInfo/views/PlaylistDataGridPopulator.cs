@@ -73,13 +73,10 @@ namespace BDInfo.views
             this.dataGridView.CellClick += playlistDataGridView_CellClick;
             this.dataGridView.SelectionChanged += dataGridView_SelectionChanged;
 
-            //this.playlistDataGridView.CurrentCellChanged += dataGridView_CurrentCellChanged;
-            //this.playlistDataGridView.CurrentCellDirtyStateChanged += dataGridView_CurrentCellDirtyStateChanged;
-
             foreach (TSPlaylistFile playlist in playlists)
             {
                 PlaylistGridItem item = new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null);
-                PlaylistGridItem clone = item.Clone();
+                PlaylistGridItem clone = new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null);
 
                 item.PropertyChanged += OnItemChange;
 
@@ -102,10 +99,6 @@ namespace BDInfo.views
                 bool hasChanged = false;
                 for (int i = 0; i < playlistGridItems.Count && !hasChanged; i++)
                 {
-                    // TODO: Items are never equal.
-                    // playlistGridItems[i] language == "fra" && playlistGridItemsOriginal[i] language == "eng"
-                    // on Toy Story 3.
-                    // One is getting updated correctly but not the other.
                     if (! playlistGridItems[i].Equals(playlistGridItemsOriginal[i]))
                     {
                         hasChanged = true;
@@ -147,6 +140,21 @@ namespace BDInfo.views
                     enableRow(dataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
                 }
             }
+        }
+
+        public TSPlaylistFile PlaylistAt(int rowIndex)
+        {
+            if (rowIndex < 0 || rowIndex >= dataGridView.Rows.Count)
+            {
+                throw new IndexOutOfRangeException("Playlist row index " + rowIndex + " is out of range [0, " + dataGridView.Rows.Count + "]");
+            }
+            
+            object item = dataGridView.Rows[rowIndex].DataBoundItem;
+            
+            if (!(item is PlaylistGridItem))
+                return null;
+
+            return (item as PlaylistGridItem).Playlist;
         }
 
         private void enableRow(DataGridViewRow row, bool enabled)
@@ -270,13 +278,16 @@ namespace BDInfo.views
         {
             Dictionary<string, PlaylistGridItem> mainPlaylistGridItems = new Dictionary<string, PlaylistGridItem>();
             Dictionary<string, PlaylistGridItem> mainPlaylistGridItemsOriginal = new Dictionary<string, PlaylistGridItem>();
-            
-            foreach (PlaylistGridItem item in playlistGridItems)
+
+            for (int i = 0; i < playlistGridItems.Count; i++)
             {
+                PlaylistGridItem item = playlistGridItems[i];
+                PlaylistGridItem itemOriginal = playlistGridItemsOriginal[i];
+
                 if (item.Playlist.IsMainPlaylist)
                 {
                     mainPlaylistGridItems.Add(item.Playlist.Name.ToUpper(), item);
-                    mainPlaylistGridItemsOriginal.Add(item.Playlist.Name.ToUpper(), item);
+                    mainPlaylistGridItemsOriginal.Add(item.Playlist.Name.ToUpper(), itemOriginal);
                 }
             }
 

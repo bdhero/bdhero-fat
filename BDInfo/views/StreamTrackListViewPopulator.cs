@@ -95,6 +95,7 @@ namespace BDInfo.views
 
                 ListViewItem streamFileItem =
                     new ListViewItem(streamFileSubItems, 0);
+                streamFileItem.Tag = clip;
                 streams.Items.Add(streamFileItem);
             }
 

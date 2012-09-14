@@ -42,6 +42,8 @@ namespace BDInfo
 
         private PlaylistDataGridPopulator populator;
 
+        private int currentMouseOverRow = -1;
+
         private bool auto_configured = false;
         private int auto_tmdb_id = -1;
 
@@ -272,7 +274,7 @@ namespace BDInfo
                 languageCodes.Add(lang.ISO_639_2);
 
             this.populator = new PlaylistDataGridPopulator(playlistDataGridView, this.playlists, languageCodes);
-            this.populator.SelectionChanged += dataGridView_SelectionChanged;
+            this.populator.SelectionChanged += playlistDataGridView_SelectionChanged;
             this.populator.MainLanguageCode = ISO_639_2;
 
             this.Load += FormDetails_Load;
@@ -1099,7 +1101,7 @@ namespace BDInfo
             string filename = listViewStreamFiles.SelectedItems[0].Text;
             string filepath = System.IO.Path.Combine(BDROM.DirectorySTREAM.FullName, filename);
 
-            System.Diagnostics.Process.Start(filepath);
+            playFile(filepath);
         }
 
         private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1175,7 +1177,7 @@ namespace BDInfo
             }
         }
 
-        private void dataGridView_SelectionChanged(object sender, EventArgs e)
+        private void playlistDataGridView_SelectionChanged(object sender, EventArgs e)
         {
             TSPlaylistFile playlistFile = populator.SelectedPlaylist;
 
@@ -1184,6 +1186,95 @@ namespace BDInfo
             string playlistFileName = playlistFile.Name;
 
             StreamTrackListViewPopulator.Populate(playlistFile, listViewStreamFiles, listViewStreams);
+        }
+
+        private void playlistDataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (playlistDataGridView.IsCurrentCellDirty)
+            {
+                playlistDataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void playlistDataGridView_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int currentMouseOverRow = playlistDataGridView.HitTest(e.X, e.Y).RowIndex;
+
+                if (currentMouseOverRow >= 0)
+                {
+                    TSPlaylistFile playlist = populator.PlaylistAt(currentMouseOverRow);
+                    showPlayableFileContextMenu(playlistDataGridView, playlist.FullName, e.X, e.Y);
+                }
+            }
+        }
+
+        private void listViewStreamFiles_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ListViewItem item = listViewStreamFiles.HitTest(e.X, e.Y).Item;
+                int currentMouseOverRow = item.Index;
+
+                if (currentMouseOverRow >= 0)
+                {
+                    if (item.Tag is TSStreamClip)
+                    {
+                        TSStreamClip clip = item.Tag as TSStreamClip;
+
+                        string filename = clip.DisplayName;
+                        string filepath = Path.Combine(BDROM.DirectorySTREAM.FullName, filename);
+
+                        showPlayableFileContextMenu(listViewStreamFiles, filepath, e.X, e.Y);
+                    }
+                }
+            }
+        }
+
+        private void showPlayableFileContextMenu(Control control, string filePath, int x, int y)
+        {
+            ContextMenu contextMenu = new ContextMenu();
+
+            MenuItem menuItemOpen = new MenuItem(string.Format("Open \"{0}\"", Path.GetFileName(filePath)));
+            menuItemOpen.DefaultItem = true;
+            menuItemOpen.Click += (object s1, EventArgs e1) => { playFile(filePath); };
+
+            MenuItem menuItemShow = new MenuItem("Show in folder");
+            menuItemShow.Click += (object s1, EventArgs e1) => { showInFolder(filePath); };
+
+            contextMenu.MenuItems.Add(menuItemOpen);
+            contextMenu.MenuItems.Add("-");
+            contextMenu.MenuItems.Add(menuItemShow);
+
+            contextMenu.Show(control, new Point(x, y));
+        }
+
+        private void playFile(string filePath)
+        {
+            System.Diagnostics.Process.Start(filePath);
+        }
+
+        private void showInFolder(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return;
+
+            // combine the arguments together
+            // it doesn't matter if there is a space after ','
+            string argument = "/select, \"" + filePath + "\"";
+
+            System.Diagnostics.Process.Start("explorer.exe", argument);
+        }
+
+        private void playlistDataGridView_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            currentMouseOverRow = e.RowIndex;
+        }
+
+        private void playlistDataGridView_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            currentMouseOverRow = -1;
         }
 
         private void continueButton_Click(object sender, EventArgs e)
@@ -1311,14 +1402,6 @@ namespace BDInfo
         private void buttonSubmitToDB_Click(object sender, EventArgs e)
         {
             SubmitJsonDisc();
-        }
-
-        private void playlistDataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
-        {
-            if (playlistDataGridView.IsCurrentCellDirty)
-            {
-                playlistDataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            }
         }
 
         private void buttonSelectAll_Click(object sender, EventArgs e)
