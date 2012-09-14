@@ -7,9 +7,11 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 
 namespace BDInfo.controllers
 {
+    // TODO: Add pause support to remaining time estimator
     abstract class AbstractExternalTool : BackgroundWorker
     {
         IList<string> paths = new List<string>();
@@ -188,6 +190,7 @@ namespace BDInfo.controllers
 
         private static readonly double SMOOTHING_FACTOR = 0.75;
 
+        // TODO: Add pause support to remaining time estimator
         private TimeSpan EstimateTimeRemaining(double lastSpeed, double averageSpeed)
         {
             // averageSpeed = SMOOTHING_FACTOR * lastSpeed + (1-SMOOTHING_FACTOR) * averageSpeed;
@@ -260,6 +263,97 @@ namespace BDInfo.controllers
         private bool IsEmpty(DirectoryInfo dir)
         {
             return dir.GetFiles().Length == 0 && dir.GetDirectories().Length == 0;
+        }
+
+        private bool isPaused = false;
+        public bool IsPaused { get { return isPaused; } }
+
+        private bool CanSuspendResumeProcess
+        {
+            get
+            {
+                return process != null && !process.HasExited & !this.CancellationPending;
+            }
+        }
+
+        public void Pause()
+        {
+            if (CanSuspendResumeProcess && !IsPaused)
+            {
+                SuspendProcess(process.Id);
+                isPaused = true;
+            }
+        }
+
+        public void Resume()
+        {
+            if (CanSuspendResumeProcess && IsPaused)
+            {
+                ResumeProcess(process.Id);
+                isPaused = false;
+            }
+        }
+
+        [Flags]
+        private enum ThreadAccess : int
+        {
+            TERMINATE = (0x0001),
+            SUSPEND_RESUME = (0x0002),
+            GET_CONTEXT = (0x0008),
+            SET_CONTEXT = (0x0010),
+            SET_INFORMATION = (0x0020),
+            QUERY_INFORMATION = (0x0040),
+            SET_THREAD_TOKEN = (0x0080),
+            IMPERSONATE = (0x0100),
+            DIRECT_IMPERSONATION = (0x0200)
+        }
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
+        [DllImport("kernel32.dll")]
+        private static extern uint SuspendThread(IntPtr hThread);
+        [DllImport("kernel32.dll")]
+        private static extern int ResumeThread(IntPtr hThread);
+
+        /// <see cref="http://stackoverflow.com/questions/71257/suspend-process-in-c-sharp"/>
+        private void SuspendProcess(int PID)
+        {
+            Process proc = Process.GetProcessById(PID);
+
+            if (proc.ProcessName == string.Empty)
+                return;
+
+            foreach (ProcessThread pT in proc.Threads)
+            {
+                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+
+                if (pOpenThread == IntPtr.Zero)
+                {
+                    break;
+                }
+
+                SuspendThread(pOpenThread);
+            }
+        }
+
+        private void ResumeProcess(int PID)
+        {
+            Process proc = Process.GetProcessById(PID);
+
+            if (proc.ProcessName == string.Empty)
+                return;
+
+            foreach (ProcessThread pT in proc.Threads)
+            {
+                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+
+                if (pOpenThread == IntPtr.Zero)
+                {
+                    break;
+                }
+
+                ResumeThread(pOpenThread);
+            }
         }
     }
 }

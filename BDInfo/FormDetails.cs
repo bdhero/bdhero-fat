@@ -90,6 +90,8 @@ namespace BDInfo
                     if (tsMuxerTimer != null)
                         tsMuxerTimer.Stop();
                 }
+
+                ResetButtons();
             }
         }
 
@@ -925,6 +927,7 @@ namespace BDInfo
         {
             if (tsMuxer != null && tsMuxer.IsBusy)
             {
+                tsMuxer.Resume();
                 tsMuxer.CancelAsync();
             }
         }
@@ -938,6 +941,7 @@ namespace BDInfo
         {
             IsMuxing = true;
             UpdateTsMuxerProgress(sender, e);
+            ResetButtons();
         }
 
         private void UpdateTsMuxerProgress(object sender = null, EventArgs e = null)
@@ -959,6 +963,19 @@ namespace BDInfo
 
             labelTsMuxerTimeRemaining.Text = GetElapsedTimeString(tsMuxer.TimeRemaining);
             labelTsMuxerTimeElapsed.Text = GetElapsedTimeString(tsMuxer.TimeElapsed);
+
+            // TODO: Refactor this logic into a separate method
+            if (tsMuxer.IsPaused)
+            {
+                if (!labelTsMuxerProgress.Text.EndsWith(" (paused}"))
+                {
+                    labelTsMuxerProgress.Text += " (paused}";
+                }
+            }
+            else
+            {
+                labelTsMuxerProgress.Text = labelTsMuxerProgress.Text.Replace(" (paused}", "");
+            }
         }
 
         private string GetElapsedTimeString(TimeSpan elapsedTime)
@@ -995,6 +1012,8 @@ namespace BDInfo
                 labelTsMuxerProgress.Text += " (done)";
                 ShowMessage(tabPageProgress, "tsMuxeR completed!", "Finished muxing M2TS with tsMuxeR!");
             }
+
+            ResetButtons();
         }
 
         #endregion
@@ -1275,6 +1294,30 @@ namespace BDInfo
             currentMouseOverRow = -1;
         }
 
+        private void ResetButtons()
+        {
+            continueButton.Text = "Continue";
+            continueButton.Enabled = true;
+
+            if (tabControl.SelectedTab == tabPageOutput)
+            {
+                if (!IsMuxing)
+                    continueButton.Text = "Rip It!";
+            }
+            else if (tabControl.SelectedTab == tabPageProgress)
+            {
+                if (IsMuxing)
+                {
+                    if (tsMuxer.IsPaused)
+                        continueButton.Text = "Resume";
+                    else
+                        continueButton.Text = "Pause";
+                }
+                else
+                    continueButton.Enabled = false;
+            }
+        }
+
         private void continueButton_Click(object sender, EventArgs e)
         {
             if (tabControl.SelectedTab == tabPageDisc)
@@ -1290,14 +1333,29 @@ namespace BDInfo
             }
             else if (tabControl.SelectedTab == tabPageOutput)
             {
+                Rip();
                 tabControl.SelectedIndex++;
                 tabControl.TabIndex++;
-                Rip();
             }
             else if (tabControl.SelectedTab == tabPageProgress)
             {
-                CancelRip();
+                if (tsMuxer != null)
+                {
+                    // TODO: Refactor label text logic into a separate method
+                    if (tsMuxer.IsPaused)
+                    {
+                        tsMuxer.Resume();
+                        labelTsMuxerProgress.Text = labelTsMuxerProgress.Text.Replace(" (paused}", "");
+                    }
+                    else
+                    {
+                        tsMuxer.Pause();
+                        labelTsMuxerProgress.Text += " (paused}";
+                    }
+                }
             }
+
+            ResetButtons();
         }
 
         private void checkBoxReplaceSpaces_CheckedChanged(object sender, EventArgs e)
@@ -1381,19 +1439,7 @@ namespace BDInfo
 
         private void tabControl_TabIndexChanged(object sender, EventArgs e)
         {
-            continueButton.Text = "Continue";
-            continueButton.Enabled = true;
-
-            if (tabControl.SelectedTab == tabPageOutput)
-            {
-                if (!IsMuxing)
-                    continueButton.Text = "Rip It!";
-            }
-            else if (tabControl.SelectedTab == tabPageProgress)
-            {
-                continueButton.Enabled = false;
-            }
-
+            ResetButtons();
             RestoreTabStatus();
         }
 
