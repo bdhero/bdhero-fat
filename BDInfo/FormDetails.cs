@@ -15,6 +15,7 @@ using BDInfo.controllers;
 using System.IO;
 using System.Runtime.InteropServices;
 using BDInfo.Properties;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace BDInfo
 {
@@ -51,6 +52,9 @@ namespace BDInfo
         private bool isMuxing = false;
         private string tsMuxerOutputPath = null;
         private Timer tsMuxerTimer = null;
+
+        // Keep a reference to the Taskbar instance
+        private TaskbarManager windowsTaskbar = TaskbarManager.Instance;
 
         private ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>();
 
@@ -942,6 +946,9 @@ namespace BDInfo
             // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
             progressBarTsMuxer.Value = (int)(tsMuxer.Progress * 10);
 
+            windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+            windowsTaskbar.SetProgressValue(progressBarTsMuxer.Value, 1000);
+
             string strProgress = tsMuxer.Progress.ToString("##0.0") + "%";
             labelTsMuxerProgress.Text = strProgress;
 
@@ -971,6 +978,8 @@ namespace BDInfo
         {
             IsMuxing = false;
 
+            windowsTaskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
+
             if (e.Cancelled == true)
             {
                 labelTsMuxerProgress.Text += " (canceled)";
@@ -978,6 +987,7 @@ namespace BDInfo
             }
             else if (e.Error != null)
             {
+                windowsTaskbar.SetProgressState(TaskbarProgressBarState.Error);
                 labelTsMuxerProgress.Text += " (error)";
                 ShowErrorMessage(tabPageProgress, "tsMuxeR Error", e.Error.Message);
             }
