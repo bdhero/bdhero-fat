@@ -75,6 +75,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="RestSharp, Version=103.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\RestSharp.dll</HintPath>
@@ -87,6 +89,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WatTmdb, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -122,6 +125,7 @@
     </Compile>
     <Compile Include="controllers\DragUtils.cs" />
     <Compile Include="controllers\FileUtils.cs" />
+    <Compile Include="controllers\TaskbarProgress.cs" />
     <Compile Include="controllers\TsMuxer.cs">
       <SubType>Component</SubType>
     </Compile>

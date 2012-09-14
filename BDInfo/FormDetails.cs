@@ -55,9 +55,6 @@ namespace BDInfo
         private string tsMuxerOutputPath = null;
         private Timer tsMuxerTimer = null;
 
-        // Keep a reference to the Taskbar instance
-        private TaskbarManager windowsTaskbar = TaskbarManager.Instance;
-
         private ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>();
 
         private IList<Language> audioLanguages = new List<Language>();
@@ -948,8 +945,8 @@ namespace BDInfo
             // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
             progressBarTsMuxer.Value = (int)(tsMuxer.Progress * 10);
 
-            windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-            windowsTaskbar.SetProgressValue(progressBarTsMuxer.Value, 1000);
+            TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal);
+            TaskbarProgress.SetProgressValue(progressBarTsMuxer.Value, 1000);
 
             string strProgress = tsMuxer.Progress.ToString("##0.0") + "%";
             labelTsMuxerProgress.Text = strProgress;
@@ -980,7 +977,7 @@ namespace BDInfo
         {
             IsMuxing = false;
 
-            windowsTaskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
+            TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress);
 
             if (e.Cancelled == true)
             {
@@ -989,7 +986,7 @@ namespace BDInfo
             }
             else if (e.Error != null)
             {
-                windowsTaskbar.SetProgressState(TaskbarProgressBarState.Error);
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error);
                 labelTsMuxerProgress.Text += " (error)";
                 ShowErrorMessage(tabPageProgress, "tsMuxeR Error", e.Error.Message);
             }
@@ -1239,6 +1236,7 @@ namespace BDInfo
             MenuItem menuItemOpen = new MenuItem(string.Format("Open \"{0}\"", Path.GetFileName(filePath)));
             menuItemOpen.DefaultItem = true;
             menuItemOpen.Click += (object s1, EventArgs e1) => { playFile(filePath); };
+            menuItemOpen.Enabled = FileUtils.HasProgramAssociation(filePath);
 
             MenuItem menuItemShow = new MenuItem("Show in folder");
             menuItemShow.Click += (object s1, EventArgs e1) => { showInFolder(filePath); };
@@ -1252,7 +1250,7 @@ namespace BDInfo
 
         private void playFile(string filePath)
         {
-            System.Diagnostics.Process.Start(filePath);
+            FileUtils.OpenFile(filePath);
         }
 
         private void showInFolder(string filePath)
