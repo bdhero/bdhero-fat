@@ -862,7 +862,7 @@ namespace BDInfo
             {
                 try
                 {
-                    Directory.CreateDirectory(textBoxOutputDir.Text);
+                    Directory.CreateDirectory(textBoxOutputDirPreview.Text);
                 }
                 catch (Exception ex)
                 {
@@ -870,7 +870,7 @@ namespace BDInfo
                     return;
                 }
 
-                tsMuxerOutputPath = Path.Combine(textBoxOutputDir.Text, labelOutputFileNamePreview.Text);
+                tsMuxerOutputPath = Path.Combine(textBoxOutputDirPreview.Text, textBoxOutputFileNamePreview.Text);
 
                 /*
                 if (!FileUtils.IsFileWritableRecursive(tsMuxerOutputPath))
@@ -884,9 +884,9 @@ namespace BDInfo
 
                 // TODO: Fix this
                 /*
-                if (FileUtils.GetFreeSpace(textBoxOutputDir.Text) < minFreeSpace)
+                if (FileUtils.GetFreeSpace(textBoxOutputDirPreview.Text) < minFreeSpace)
                 {
-                    ShowErrorMessage(tabPageProgress, "Not enough free space", "At least " + FileUtils.FormatFileSize(textBoxOutputDir.Text) + " (" + minFreeSpace + " bytes) of free space is required.");
+                    ShowErrorMessage(tabPageProgress, "Not enough free space", "At least " + FileUtils.FormatFileSize(textBoxOutputDirPreview.Text) + " (" + minFreeSpace + " bytes) of free space is required.");
                     return;
                 }
                 */
@@ -1348,13 +1348,15 @@ namespace BDInfo
                 textBoxReplaceSpaces.Focus();
                 textBoxReplaceSpaces.SelectAll();
             }
+            textBoxOutputDir_TextChanged(sender, e);
             textBoxOutputFileName_TextChanged(sender, e);
         }
 
-        private void textBoxOutputFileName_TextChanged(object sender, EventArgs e)
+        private string ReplacePlaceholders(string text)
         {
-            string preview = textBoxOutputFileName.Text;
+            string preview = text;
 
+            string volume = BDROM.VolumeLabel;
             string title = String.IsNullOrEmpty(this.movieTitle) ? movieNameTextBox.Text : this.movieTitle;
             string year = this.movieYear == null ? GetYearString(maskedTextBoxYear.Text) : this.movieYear + "";
             string res = "";
@@ -1379,24 +1381,36 @@ namespace BDInfo
                 channels = audioStream.ChannelCountDescription;
             }
 
+            preview = Regex.Replace(preview, @"%volume%", volume, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%title%", title, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%year%", year, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%res%", res, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%vcodec%", vcodec, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%acodec%", acodec, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%channels%", channels, RegexOptions.IgnoreCase);
-            preview = FileUtils.SanitizeFileName(preview);
+            preview = Environment.ExpandEnvironmentVariables(preview);
 
             if (checkBoxReplaceSpaces.Checked)
             {
                 preview = preview.Replace(" ", textBoxReplaceSpaces.Text);
             }
 
-            labelOutputFileNamePreview.Text = preview + labelOutputFileExtension.Text;
+            return preview;
+        }
+
+        private void textBoxOutputDir_TextChanged(object sender, EventArgs e)
+        {
+            textBoxOutputDirPreview.Text = ReplacePlaceholders(textBoxOutputDir.Text);
+        }
+
+        private void textBoxOutputFileName_TextChanged(object sender, EventArgs e)
+        {
+            textBoxOutputFileNamePreview.Text = FileUtils.SanitizeFileName(ReplacePlaceholders(textBoxOutputFileName.Text)) + labelOutputFileExtension.Text;
         }
 
         private void textBoxReplaceSpaces_TextChanged(object sender, EventArgs e)
         {
+            textBoxOutputDir_TextChanged(sender, e);
             textBoxOutputFileName_TextChanged(sender, e);
         }
 
@@ -1456,9 +1470,10 @@ namespace BDInfo
                 FolderBrowserDialog dialog = new FolderBrowserDialog();
                 dialog.Description = "Select an Output Folder:";
                 dialog.ShowNewFolderButton = false;
-                if (!string.IsNullOrEmpty(textBoxOutputDir.Text))
+                string dir = textBoxOutputDirPreview.Text;
+                if (!string.IsNullOrEmpty(dir))
                 {
-                    dialog.SelectedPath = textBoxOutputDir.Text;
+                    dialog.SelectedPath = dir;
                 }
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {

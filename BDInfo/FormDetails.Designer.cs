@@ -66,15 +66,16 @@
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageOutput = new System.Windows.Forms.TabPage();
             this.groupBoxOutput = new System.Windows.Forms.GroupBox();
+            this.textBoxOutputFileNamePreview = new System.Windows.Forms.TextBox();
+            this.textBoxOutputDirPreview = new System.Windows.Forms.TextBox();
+            this.labelOutputPlaceholders = new System.Windows.Forms.Label();
             this.textBoxOutputFileNameHint = new System.Windows.Forms.TextBox();
             this.textBoxReplaceSpaces = new System.Windows.Forms.TextBox();
             this.checkBoxReplaceSpaces = new System.Windows.Forms.CheckBox();
-            this.labelOutputFileNamePreview = new System.Windows.Forms.Label();
             this.labelOutputFileExtension = new System.Windows.Forms.Label();
             this.buttonOutputDir = new System.Windows.Forms.Button();
             this.textBoxOutputDir = new System.Windows.Forms.TextBox();
             this.textBoxOutputFileName = new System.Windows.Forms.TextBox();
-            this.labelOutputPreview = new System.Windows.Forms.Label();
             this.labelOutputFileName = new System.Windows.Forms.Label();
             this.labelOutputDirectory = new System.Windows.Forms.Label();
             this.groupBoxTracks = new System.Windows.Forms.GroupBox();
@@ -160,7 +161,7 @@
             // continueButton
             // 
             this.continueButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.continueButton.Location = new System.Drawing.Point(609, 613);
+            this.continueButton.Location = new System.Drawing.Point(609, 603);
             this.continueButton.Name = "continueButton";
             this.continueButton.Size = new System.Drawing.Size(75, 23);
             this.continueButton.TabIndex = 98;
@@ -172,7 +173,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(690, 613);
+            this.cancelButton.Location = new System.Drawing.Point(690, 603);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 99;
@@ -187,7 +188,7 @@
             this.movieNameTextBox.Location = new System.Drawing.Point(96, 33);
             this.movieNameTextBox.Name = "movieNameTextBox";
             this.movieNameTextBox.Size = new System.Drawing.Size(491, 20);
-            this.movieNameTextBox.TabIndex = 2;
+            this.movieNameTextBox.TabIndex = 1;
             // 
             // searchButton
             // 
@@ -249,7 +250,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(753, 595);
+            this.tabControl.Size = new System.Drawing.Size(753, 585);
             this.tabControl.TabIndex = 0;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_TabIndexChanged);
             this.tabControl.TabIndexChanged += new System.EventHandler(this.tabControl_TabIndexChanged);
@@ -266,7 +267,7 @@
             this.tabPageDisc.Location = new System.Drawing.Point(4, 22);
             this.tabPageDisc.Name = "tabPageDisc";
             this.tabPageDisc.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDisc.Size = new System.Drawing.Size(745, 569);
+            this.tabPageDisc.Size = new System.Drawing.Size(745, 559);
             this.tabPageDisc.TabIndex = 0;
             this.tabPageDisc.Text = "Disc";
             this.tabPageDisc.UseVisualStyleBackColor = true;
@@ -279,7 +280,7 @@
             this.maskedTextBoxYear.Mask = "0000";
             this.maskedTextBoxYear.Name = "maskedTextBoxYear";
             this.maskedTextBoxYear.Size = new System.Drawing.Size(42, 20);
-            this.maskedTextBoxYear.TabIndex = 5;
+            this.maskedTextBoxYear.TabIndex = 2;
             this.maskedTextBoxYear.Tag = "Movie year";
             this.maskedTextBoxYear.TextChanged += new System.EventHandler(this.maskedTextBoxYear_TextChanged);
             // 
@@ -290,7 +291,7 @@
             this.discLanguageComboBox.Location = new System.Drawing.Point(96, 6);
             this.discLanguageComboBox.Name = "discLanguageComboBox";
             this.discLanguageComboBox.Size = new System.Drawing.Size(121, 21);
-            this.discLanguageComboBox.TabIndex = 1;
+            this.discLanguageComboBox.TabIndex = 0;
             this.discLanguageComboBox.Tag = "Primary audience language of the disc";
             this.discLanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.discLanguageComboBox_SelectedIndexChanged);
             // 
@@ -309,7 +310,7 @@
             this.tabPagePlaylists.Location = new System.Drawing.Point(4, 22);
             this.tabPagePlaylists.Name = "tabPagePlaylists";
             this.tabPagePlaylists.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePlaylists.Size = new System.Drawing.Size(745, 569);
+            this.tabPagePlaylists.Size = new System.Drawing.Size(745, 559);
             this.tabPagePlaylists.TabIndex = 1;
             this.tabPagePlaylists.Text = "Playlists";
             this.tabPagePlaylists.UseVisualStyleBackColor = true;
@@ -348,7 +349,7 @@
             this.playlistsGroupBox.Location = new System.Drawing.Point(4, 4);
             this.playlistsGroupBox.Name = "playlistsGroupBox";
             this.playlistsGroupBox.Size = new System.Drawing.Size(726, 227);
-            this.playlistsGroupBox.TabIndex = 5;
+            this.playlistsGroupBox.TabIndex = 0;
             this.playlistsGroupBox.TabStop = false;
             this.playlistsGroupBox.Text = "Playlists";
             this.playlistsGroupBox.VisibleChanged += new System.EventHandler(this.ResizePlaylistsTab);
@@ -358,7 +359,7 @@
             this.buttonUnselectAll.Location = new System.Drawing.Point(89, 20);
             this.buttonUnselectAll.Name = "buttonUnselectAll";
             this.buttonUnselectAll.Size = new System.Drawing.Size(75, 23);
-            this.buttonUnselectAll.TabIndex = 7;
+            this.buttonUnselectAll.TabIndex = 1;
             this.buttonUnselectAll.Tag = "Clear the \"Main Movie\" checkbox on all playlists";
             this.buttonUnselectAll.Text = "Unselect All";
             this.buttonUnselectAll.UseVisualStyleBackColor = true;
@@ -369,7 +370,7 @@
             this.buttonSelectAll.Location = new System.Drawing.Point(7, 20);
             this.buttonSelectAll.Name = "buttonSelectAll";
             this.buttonSelectAll.Size = new System.Drawing.Size(75, 23);
-            this.buttonSelectAll.TabIndex = 6;
+            this.buttonSelectAll.TabIndex = 0;
             this.buttonSelectAll.Tag = "Mark all enabled playlists as \"Main Movie\"";
             this.buttonSelectAll.Text = "Select All";
             this.buttonSelectAll.UseVisualStyleBackColor = true;
@@ -418,7 +419,7 @@
             this.playlistDataGridView.MultiSelect = false;
             this.playlistDataGridView.Name = "playlistDataGridView";
             this.playlistDataGridView.Size = new System.Drawing.Size(708, 143);
-            this.playlistDataGridView.TabIndex = 1;
+            this.playlistDataGridView.TabIndex = 0;
             this.playlistDataGridView.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDataGridView_CellMouseEnter);
             this.playlistDataGridView.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDataGridView_CellMouseLeave);
             this.playlistDataGridView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.playlistDataGridView_MouseClick);
@@ -474,7 +475,7 @@
             this.listViewStreamFiles.MultiSelect = false;
             this.listViewStreamFiles.Name = "listViewStreamFiles";
             this.listViewStreamFiles.Size = new System.Drawing.Size(717, 133);
-            this.listViewStreamFiles.TabIndex = 7;
+            this.listViewStreamFiles.TabIndex = 0;
             this.listViewStreamFiles.Tag = "Double-click a stream to open it in the default program";
             this.listViewStreamFiles.UseCompatibleStateImageBehavior = false;
             this.listViewStreamFiles.View = System.Windows.Forms.View.Details;
@@ -537,7 +538,7 @@
             this.listViewStreams.MultiSelect = false;
             this.listViewStreams.Name = "listViewStreams";
             this.listViewStreams.Size = new System.Drawing.Size(717, 126);
-            this.listViewStreams.TabIndex = 8;
+            this.listViewStreams.TabIndex = 0;
             this.listViewStreams.UseCompatibleStateImageBehavior = false;
             this.listViewStreams.View = System.Windows.Forms.View.Details;
             // 
@@ -568,7 +569,7 @@
             this.tabPageOutput.Controls.Add(this.groupBoxMasterOverride);
             this.tabPageOutput.Location = new System.Drawing.Point(4, 22);
             this.tabPageOutput.Name = "tabPageOutput";
-            this.tabPageOutput.Size = new System.Drawing.Size(745, 569);
+            this.tabPageOutput.Size = new System.Drawing.Size(745, 559);
             this.tabPageOutput.TabIndex = 2;
             this.tabPageOutput.Text = "Output";
             this.tabPageOutput.UseVisualStyleBackColor = true;
@@ -577,23 +578,61 @@
             // 
             this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNamePreview);
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputDirPreview);
+            this.groupBoxOutput.Controls.Add(this.labelOutputPlaceholders);
             this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNameHint);
             this.groupBoxOutput.Controls.Add(this.textBoxReplaceSpaces);
             this.groupBoxOutput.Controls.Add(this.checkBoxReplaceSpaces);
-            this.groupBoxOutput.Controls.Add(this.labelOutputFileNamePreview);
             this.groupBoxOutput.Controls.Add(this.labelOutputFileExtension);
             this.groupBoxOutput.Controls.Add(this.buttonOutputDir);
             this.groupBoxOutput.Controls.Add(this.textBoxOutputDir);
             this.groupBoxOutput.Controls.Add(this.textBoxOutputFileName);
-            this.groupBoxOutput.Controls.Add(this.labelOutputPreview);
             this.groupBoxOutput.Controls.Add(this.labelOutputFileName);
             this.groupBoxOutput.Controls.Add(this.labelOutputDirectory);
-            this.groupBoxOutput.Location = new System.Drawing.Point(4, 450);
+            this.groupBoxOutput.Location = new System.Drawing.Point(4, 415);
             this.groupBoxOutput.Name = "groupBoxOutput";
-            this.groupBoxOutput.Size = new System.Drawing.Size(738, 116);
+            this.groupBoxOutput.Size = new System.Drawing.Size(738, 141);
             this.groupBoxOutput.TabIndex = 3;
             this.groupBoxOutput.TabStop = false;
             this.groupBoxOutput.Text = "Output";
+            // 
+            // textBoxOutputFileNamePreview
+            // 
+            this.textBoxOutputFileNamePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileNamePreview.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxOutputFileNamePreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxOutputFileNamePreview.Location = new System.Drawing.Point(84, 119);
+            this.textBoxOutputFileNamePreview.Name = "textBoxOutputFileNamePreview";
+            this.textBoxOutputFileNamePreview.ReadOnly = true;
+            this.textBoxOutputFileNamePreview.Size = new System.Drawing.Size(648, 13);
+            this.textBoxOutputFileNamePreview.TabIndex = 14;
+            this.textBoxOutputFileNamePreview.TabStop = false;
+            this.textBoxOutputFileNamePreview.Text = "The Incredibles (2006) [1080p].m2ts";
+            // 
+            // textBoxOutputDirPreview
+            // 
+            this.textBoxOutputDirPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputDirPreview.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxOutputDirPreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxOutputDirPreview.Location = new System.Drawing.Point(84, 72);
+            this.textBoxOutputDirPreview.Name = "textBoxOutputDirPreview";
+            this.textBoxOutputDirPreview.ReadOnly = true;
+            this.textBoxOutputDirPreview.Size = new System.Drawing.Size(648, 13);
+            this.textBoxOutputDirPreview.TabIndex = 13;
+            this.textBoxOutputDirPreview.TabStop = false;
+            this.textBoxOutputDirPreview.Text = "%TEMP%";
+            // 
+            // labelOutputPlaceholders
+            // 
+            this.labelOutputPlaceholders.AutoSize = true;
+            this.labelOutputPlaceholders.Location = new System.Drawing.Point(7, 20);
+            this.labelOutputPlaceholders.Name = "labelOutputPlaceholders";
+            this.labelOutputPlaceholders.Size = new System.Drawing.Size(71, 13);
+            this.labelOutputPlaceholders.TabIndex = 12;
+            this.labelOutputPlaceholders.Text = "Placeholders:";
             // 
             // textBoxOutputFileNameHint
             // 
@@ -601,22 +640,22 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputFileNameHint.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxOutputFileNameHint.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxOutputFileNameHint.Location = new System.Drawing.Point(67, 70);
+            this.textBoxOutputFileNameHint.Location = new System.Drawing.Point(84, 20);
             this.textBoxOutputFileNameHint.Name = "textBoxOutputFileNameHint";
             this.textBoxOutputFileNameHint.ReadOnly = true;
-            this.textBoxOutputFileNameHint.Size = new System.Drawing.Size(489, 13);
+            this.textBoxOutputFileNameHint.Size = new System.Drawing.Size(472, 13);
             this.textBoxOutputFileNameHint.TabIndex = 11;
             this.textBoxOutputFileNameHint.TabStop = false;
-            this.textBoxOutputFileNameHint.Text = "%title% %year% %res% %vcodec% %acodec% %channels%";
+            this.textBoxOutputFileNameHint.Text = "%volume% %title% %year% %res% %vcodec% %acodec% %channels%";
             // 
             // textBoxReplaceSpaces
             // 
             this.textBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxReplaceSpaces.Enabled = false;
-            this.textBoxReplaceSpaces.Location = new System.Drawing.Point(699, 70);
+            this.textBoxReplaceSpaces.Location = new System.Drawing.Point(699, 17);
             this.textBoxReplaceSpaces.Name = "textBoxReplaceSpaces";
             this.textBoxReplaceSpaces.Size = new System.Drawing.Size(29, 20);
-            this.textBoxReplaceSpaces.TabIndex = 10;
+            this.textBoxReplaceSpaces.TabIndex = 1;
             this.textBoxReplaceSpaces.Text = ".";
             this.textBoxReplaceSpaces.TextChanged += new System.EventHandler(this.textBoxReplaceSpaces_TextChanged);
             this.textBoxReplaceSpaces.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxReplaceSpaces_KeyPress);
@@ -625,40 +664,31 @@
             // 
             this.checkBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxReplaceSpaces.AutoSize = true;
-            this.checkBoxReplaceSpaces.Location = new System.Drawing.Point(562, 72);
+            this.checkBoxReplaceSpaces.Location = new System.Drawing.Point(562, 19);
             this.checkBoxReplaceSpaces.Name = "checkBoxReplaceSpaces";
             this.checkBoxReplaceSpaces.Size = new System.Drawing.Size(128, 17);
-            this.checkBoxReplaceSpaces.TabIndex = 9;
+            this.checkBoxReplaceSpaces.TabIndex = 0;
             this.checkBoxReplaceSpaces.Text = "Replace spaces with:";
             this.checkBoxReplaceSpaces.UseVisualStyleBackColor = true;
             this.checkBoxReplaceSpaces.CheckedChanged += new System.EventHandler(this.checkBoxReplaceSpaces_CheckedChanged);
-            // 
-            // labelOutputFileNamePreview
-            // 
-            this.labelOutputFileNamePreview.AutoSize = true;
-            this.labelOutputFileNamePreview.Location = new System.Drawing.Point(64, 93);
-            this.labelOutputFileNamePreview.Name = "labelOutputFileNamePreview";
-            this.labelOutputFileNamePreview.Size = new System.Drawing.Size(177, 13);
-            this.labelOutputFileNamePreview.TabIndex = 8;
-            this.labelOutputFileNamePreview.Text = "The Incredibles (2006) [1080p].m2ts";
             // 
             // labelOutputFileExtension
             // 
             this.labelOutputFileExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelOutputFileExtension.AutoSize = true;
-            this.labelOutputFileExtension.Location = new System.Drawing.Point(696, 46);
+            this.labelOutputFileExtension.Location = new System.Drawing.Point(696, 96);
             this.labelOutputFileExtension.Name = "labelOutputFileExtension";
             this.labelOutputFileExtension.Size = new System.Drawing.Size(32, 13);
-            this.labelOutputFileExtension.TabIndex = 6;
+            this.labelOutputFileExtension.TabIndex = 3;
             this.labelOutputFileExtension.Text = ".m2ts";
             // 
             // buttonOutputDir
             // 
             this.buttonOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOutputDir.Location = new System.Drawing.Point(657, 15);
+            this.buttonOutputDir.Location = new System.Drawing.Point(657, 43);
             this.buttonOutputDir.Name = "buttonOutputDir";
             this.buttonOutputDir.Size = new System.Drawing.Size(75, 23);
-            this.buttonOutputDir.TabIndex = 5;
+            this.buttonOutputDir.TabIndex = 3;
             this.buttonOutputDir.Text = "Browse...";
             this.buttonOutputDir.UseVisualStyleBackColor = true;
             this.buttonOutputDir.Click += new System.EventHandler(this.buttonOutputDir_Click);
@@ -668,10 +698,11 @@
             this.textBoxOutputDir.AllowDrop = true;
             this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputDir.Location = new System.Drawing.Point(67, 17);
+            this.textBoxOutputDir.Location = new System.Drawing.Point(84, 45);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
-            this.textBoxOutputDir.Size = new System.Drawing.Size(584, 20);
-            this.textBoxOutputDir.TabIndex = 4;
+            this.textBoxOutputDir.Size = new System.Drawing.Size(567, 20);
+            this.textBoxOutputDir.TabIndex = 2;
+            this.textBoxOutputDir.TextChanged += new System.EventHandler(this.textBoxOutputDir_TextChanged);
             this.textBoxOutputDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragDrop);
             this.textBoxOutputDir.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragEnter);
             // 
@@ -680,28 +711,19 @@
             this.textBoxOutputFileName.AllowDrop = true;
             this.textBoxOutputFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputFileName.Location = new System.Drawing.Point(67, 43);
+            this.textBoxOutputFileName.Location = new System.Drawing.Point(84, 93);
             this.textBoxOutputFileName.Name = "textBoxOutputFileName";
-            this.textBoxOutputFileName.Size = new System.Drawing.Size(623, 20);
-            this.textBoxOutputFileName.TabIndex = 3;
+            this.textBoxOutputFileName.Size = new System.Drawing.Size(606, 20);
+            this.textBoxOutputFileName.TabIndex = 4;
             this.textBoxOutputFileName.Text = "%title% (%year%) [%res%]";
             this.textBoxOutputFileName.TextChanged += new System.EventHandler(this.textBoxOutputFileName_TextChanged);
             this.textBoxOutputFileName.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragDrop);
             this.textBoxOutputFileName.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragEnter);
             // 
-            // labelOutputPreview
-            // 
-            this.labelOutputPreview.AutoSize = true;
-            this.labelOutputPreview.Location = new System.Drawing.Point(6, 93);
-            this.labelOutputPreview.Name = "labelOutputPreview";
-            this.labelOutputPreview.Size = new System.Drawing.Size(48, 13);
-            this.labelOutputPreview.TabIndex = 2;
-            this.labelOutputPreview.Text = "Preview:";
-            // 
             // labelOutputFileName
             // 
             this.labelOutputFileName.AutoSize = true;
-            this.labelOutputFileName.Location = new System.Drawing.Point(6, 46);
+            this.labelOutputFileName.Location = new System.Drawing.Point(6, 96);
             this.labelOutputFileName.Name = "labelOutputFileName";
             this.labelOutputFileName.Size = new System.Drawing.Size(55, 13);
             this.labelOutputFileName.TabIndex = 1;
@@ -710,7 +732,7 @@
             // labelOutputDirectory
             // 
             this.labelOutputDirectory.AutoSize = true;
-            this.labelOutputDirectory.Location = new System.Drawing.Point(6, 20);
+            this.labelOutputDirectory.Location = new System.Drawing.Point(6, 48);
             this.labelOutputDirectory.Name = "labelOutputDirectory";
             this.labelOutputDirectory.Size = new System.Drawing.Size(52, 13);
             this.labelOutputDirectory.TabIndex = 0;
@@ -731,7 +753,7 @@
             this.groupBoxTracks.Controls.Add(this.labelPlaylist);
             this.groupBoxTracks.Location = new System.Drawing.Point(256, 61);
             this.groupBoxTracks.Name = "groupBoxTracks";
-            this.groupBoxTracks.Size = new System.Drawing.Size(486, 383);
+            this.groupBoxTracks.Size = new System.Drawing.Size(486, 348);
             this.groupBoxTracks.TabIndex = 2;
             this.groupBoxTracks.TabStop = false;
             this.groupBoxTracks.Text = "Select Playlist / Tracks";
@@ -751,7 +773,7 @@
             this.listViewVideoTracks.Location = new System.Drawing.Point(99, 46);
             this.listViewVideoTracks.Name = "listViewVideoTracks";
             this.listViewVideoTracks.Size = new System.Drawing.Size(381, 97);
-            this.listViewVideoTracks.TabIndex = 8;
+            this.listViewVideoTracks.TabIndex = 1;
             this.listViewVideoTracks.UseCompatibleStateImageBehavior = false;
             this.listViewVideoTracks.View = System.Windows.Forms.View.Details;
             // 
@@ -787,8 +809,8 @@
             this.listViewSubtitleTracks.FullRowSelect = true;
             this.listViewSubtitleTracks.Location = new System.Drawing.Point(99, 250);
             this.listViewSubtitleTracks.Name = "listViewSubtitleTracks";
-            this.listViewSubtitleTracks.Size = new System.Drawing.Size(381, 127);
-            this.listViewSubtitleTracks.TabIndex = 7;
+            this.listViewSubtitleTracks.Size = new System.Drawing.Size(381, 92);
+            this.listViewSubtitleTracks.TabIndex = 3;
             this.listViewSubtitleTracks.UseCompatibleStateImageBehavior = false;
             this.listViewSubtitleTracks.View = System.Windows.Forms.View.Details;
             // 
@@ -815,7 +837,7 @@
             this.listViewAudioTracks.Location = new System.Drawing.Point(99, 146);
             this.listViewAudioTracks.Name = "listViewAudioTracks";
             this.listViewAudioTracks.Size = new System.Drawing.Size(381, 97);
-            this.listViewAudioTracks.TabIndex = 6;
+            this.listViewAudioTracks.TabIndex = 2;
             this.listViewAudioTracks.UseCompatibleStateImageBehavior = false;
             this.listViewAudioTracks.View = System.Windows.Forms.View.Details;
             // 
@@ -867,7 +889,7 @@
             this.comboBoxPlaylist.Location = new System.Drawing.Point(98, 18);
             this.comboBoxPlaylist.Name = "comboBoxPlaylist";
             this.comboBoxPlaylist.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxPlaylist.TabIndex = 1;
+            this.comboBoxPlaylist.TabIndex = 0;
             this.comboBoxPlaylist.SelectedIndexChanged += new System.EventHandler(this.comboBoxPlaylist_SelectedIndexChanged);
             // 
             // labelPlaylist
@@ -895,7 +917,7 @@
             this.groupBoxFilter.Controls.Add(this.labelVideoLanguage);
             this.groupBoxFilter.Location = new System.Drawing.Point(4, 61);
             this.groupBoxFilter.Name = "groupBoxFilter";
-            this.groupBoxFilter.Size = new System.Drawing.Size(246, 383);
+            this.groupBoxFilter.Size = new System.Drawing.Size(246, 348);
             this.groupBoxFilter.TabIndex = 1;
             this.groupBoxFilter.TabStop = false;
             this.groupBoxFilter.Text = "Filter";
@@ -907,7 +929,7 @@
             this.listBoxSubtitleLanguages.Name = "listBoxSubtitleLanguages";
             this.listBoxSubtitleLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBoxSubtitleLanguages.Size = new System.Drawing.Size(120, 56);
-            this.listBoxSubtitleLanguages.TabIndex = 9;
+            this.listBoxSubtitleLanguages.TabIndex = 4;
             this.listBoxSubtitleLanguages.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // listBoxAudioLanguages
@@ -917,7 +939,7 @@
             this.listBoxAudioLanguages.Name = "listBoxAudioLanguages";
             this.listBoxAudioLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBoxAudioLanguages.Size = new System.Drawing.Size(120, 56);
-            this.listBoxAudioLanguages.TabIndex = 8;
+            this.listBoxAudioLanguages.TabIndex = 3;
             this.listBoxAudioLanguages.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // comboBoxCommentary
@@ -927,7 +949,7 @@
             this.comboBoxCommentary.Location = new System.Drawing.Point(115, 73);
             this.comboBoxCommentary.Name = "comboBoxCommentary";
             this.comboBoxCommentary.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxCommentary.TabIndex = 7;
+            this.comboBoxCommentary.TabIndex = 2;
             this.comboBoxCommentary.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // comboBoxCut
@@ -937,7 +959,7 @@
             this.comboBoxCut.Location = new System.Drawing.Point(115, 45);
             this.comboBoxCut.Name = "comboBoxCut";
             this.comboBoxCut.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxCut.TabIndex = 6;
+            this.comboBoxCut.TabIndex = 1;
             this.comboBoxCut.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // comboBoxVideoLanguage
@@ -947,7 +969,7 @@
             this.comboBoxVideoLanguage.Location = new System.Drawing.Point(115, 17);
             this.comboBoxVideoLanguage.Name = "comboBoxVideoLanguage";
             this.comboBoxVideoLanguage.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxVideoLanguage.TabIndex = 5;
+            this.comboBoxVideoLanguage.TabIndex = 0;
             this.comboBoxVideoLanguage.Tag = "Primary video language (many animated Disney movies contain several video renders" +
     " - e.g., French, Spanish, and English)";
             this.comboBoxVideoLanguage.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
@@ -1017,7 +1039,7 @@
             this.comboBoxAudienceLanguage.Location = new System.Drawing.Point(115, 17);
             this.comboBoxAudienceLanguage.Name = "comboBoxAudienceLanguage";
             this.comboBoxAudienceLanguage.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxAudienceLanguage.TabIndex = 1;
+            this.comboBoxAudienceLanguage.TabIndex = 0;
             this.comboBoxAudienceLanguage.Tag = "Set all language filters (video, audio, and subtitle) to a single language";
             // 
             // labelAudienceLanguage
@@ -1034,7 +1056,7 @@
             this.tabPageProgress.Controls.Add(this.groupBoxTsMuxerProgress);
             this.tabPageProgress.Location = new System.Drawing.Point(4, 22);
             this.tabPageProgress.Name = "tabPageProgress";
-            this.tabPageProgress.Size = new System.Drawing.Size(745, 569);
+            this.tabPageProgress.Size = new System.Drawing.Size(745, 559);
             this.tabPageProgress.TabIndex = 3;
             this.tabPageProgress.Text = "Progress";
             this.tabPageProgress.UseVisualStyleBackColor = true;
@@ -1144,7 +1166,7 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 639);
+            this.statusStrip.Location = new System.Drawing.Point(0, 629);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(777, 22);
             this.statusStrip.TabIndex = 6;
@@ -1160,7 +1182,7 @@
             // 
             this.buttonSubmitToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonSubmitToDB.Enabled = false;
-            this.buttonSubmitToDB.Location = new System.Drawing.Point(519, 613);
+            this.buttonSubmitToDB.Location = new System.Drawing.Point(519, 603);
             this.buttonSubmitToDB.Name = "buttonSubmitToDB";
             this.buttonSubmitToDB.Size = new System.Drawing.Size(84, 23);
             this.buttonSubmitToDB.TabIndex = 100;
@@ -1175,7 +1197,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(777, 661);
+            this.ClientSize = new System.Drawing.Size(777, 651);
             this.Controls.Add(this.buttonSubmitToDB);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.tabControl);
@@ -1267,12 +1289,10 @@
         private System.Windows.Forms.GroupBox groupBoxFilter;
         private System.Windows.Forms.Label labelVideoLanguage;
         private System.Windows.Forms.GroupBox groupBoxOutput;
-        private System.Windows.Forms.Label labelOutputFileNamePreview;
         private System.Windows.Forms.Label labelOutputFileExtension;
         private System.Windows.Forms.Button buttonOutputDir;
         private System.Windows.Forms.TextBox textBoxOutputDir;
         private System.Windows.Forms.TextBox textBoxOutputFileName;
-        private System.Windows.Forms.Label labelOutputPreview;
         private System.Windows.Forms.Label labelOutputFileName;
         private System.Windows.Forms.Label labelOutputDirectory;
         private System.Windows.Forms.GroupBox groupBoxTracks;
@@ -1318,5 +1338,8 @@
         private System.Windows.Forms.Label labelTsMuxerTimeElapsed;
         private System.Windows.Forms.Label labelTsMuxerTimeSeparator;
         private System.Windows.Forms.Label labelTsMuxerTimeRemainingElapsed;
+        private System.Windows.Forms.TextBox textBoxOutputFileNamePreview;
+        private System.Windows.Forms.TextBox textBoxOutputDirPreview;
+        private System.Windows.Forms.Label labelOutputPlaceholders;
     }
 }
