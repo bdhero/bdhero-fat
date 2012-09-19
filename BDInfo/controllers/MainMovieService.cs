@@ -13,7 +13,7 @@ namespace BDInfo.controllers
     class MainMovieService
     {
         private static readonly string base_uri = "http://bd.andydvorak.net/api/v1/movies";
-        private static readonly string user_agent = "BDAutoRip/0.1.7";
+        private static readonly string user_agent = "BDAutoRip/0.2.0";
 
         public MainMovieService()
         {
