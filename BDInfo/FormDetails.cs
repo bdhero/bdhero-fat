@@ -282,6 +282,15 @@ namespace BDInfo
 
         private void FormDetails_Load(object sender, EventArgs e)
         {
+            if (BDInfoSettings.DetailsWindowMaximized)
+                WindowState = FormWindowState.Maximized;
+
+            if (BDInfoSettings.DetailsWindowLocation != Point.Empty)
+                Location = BDInfoSettings.DetailsWindowLocation;
+
+            if (BDInfoSettings.DetailsWindowSize != Size.Empty)
+                Size = BDInfoSettings.DetailsWindowSize;
+
             this.statusLabel.Text = "";
 
             this.movieNameTextBox.Text = String.IsNullOrEmpty(BDROM.DiscNameSearchable) ? BDROM.VolumeLabel : BDROM.DiscNameSearchable;
@@ -1563,6 +1572,22 @@ namespace BDInfo
                 {
                     CancelRip();
                 }
+            }
+            if (!e.Cancel)
+            {
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    BDInfoSettings.DetailsWindowLocation = RestoreBounds.Location;
+                    BDInfoSettings.DetailsWindowSize = RestoreBounds.Size;
+                    BDInfoSettings.DetailsWindowMaximized = true;
+                }
+                else
+                {
+                    BDInfoSettings.DetailsWindowLocation = Location;
+                    BDInfoSettings.DetailsWindowSize = Size;
+                    BDInfoSettings.DetailsWindowMaximized = false;
+                }
+                BDInfoSettings.SaveSettings();
             }
             cancelButtonHandled = false;
         }

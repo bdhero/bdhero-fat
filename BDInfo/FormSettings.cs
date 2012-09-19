@@ -300,6 +300,96 @@ namespace BDInfo
             }
         }
 
+        public static bool MainWindowMaximized
+        {
+            get
+            {
+                try { return Properties.Settings.Default.MainWindowMaximized; }
+                catch { return false; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.MainWindowMaximized = value; }
+                catch { }
+            }
+        }
+
+        public static Size MainWindowSize
+        {
+            get
+            {
+                try { return Properties.Settings.Default.MainWindowSize; }
+                catch { return Size.Empty; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.MainWindowSize = value; }
+                catch { }
+            }
+        }
+
+        public static Point MainWindowLocation
+        {
+            get
+            {
+                try { return Properties.Settings.Default.MainWindowLocation; }
+                catch { return Point.Empty; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.MainWindowLocation = value; }
+                catch { }
+            }
+        }
+
+        public static bool DetailsWindowMaximized
+        {
+            get
+            {
+                try { return Properties.Settings.Default.DetailsWindowMaximized; }
+                catch { return false; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.DetailsWindowMaximized = value; }
+                catch { }
+            }
+        }
+
+        public static Size DetailsWindowSize
+        {
+            get
+            {
+                try { return Properties.Settings.Default.DetailsWindowSize; }
+                catch { return Size.Empty; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.DetailsWindowSize = value; }
+                catch { }
+            }
+        }
+
+        public static Point DetailsWindowLocation
+        {
+            get
+            {
+                try { return Properties.Settings.Default.DetailsWindowLocation; }
+                catch { return Point.Empty; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.DetailsWindowLocation = value; }
+                catch { }
+            }
+        }
+
         public static void SaveSettings()
         {
             try

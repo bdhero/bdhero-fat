@@ -68,6 +68,15 @@ namespace BDInfo
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            if (BDInfoSettings.MainWindowMaximized)
+                WindowState = FormWindowState.Maximized;
+
+            if (BDInfoSettings.MainWindowLocation != Point.Empty)
+                Location = BDInfoSettings.MainWindowLocation;
+
+            if (BDInfoSettings.MainWindowSize != Size.Empty)
+                Size = BDInfoSettings.MainWindowSize;
+
             ResetColumnWidths();
         }
 
@@ -284,6 +293,18 @@ namespace BDInfo
             FormClosingEventArgs e)
         {
             BDInfoSettings.LastPath = textBoxSource.Text;
+            if (WindowState == FormWindowState.Maximized)
+            {
+                BDInfoSettings.MainWindowLocation = RestoreBounds.Location;
+                BDInfoSettings.MainWindowSize = RestoreBounds.Size;
+                BDInfoSettings.MainWindowMaximized = true;
+            }
+            else
+            {
+                BDInfoSettings.MainWindowLocation = Location;
+                BDInfoSettings.MainWindowSize = Size;
+                BDInfoSettings.MainWindowMaximized = false;
+            }
             BDInfoSettings.SaveSettings();
 
             if (InitBDROMWorker != null &&
