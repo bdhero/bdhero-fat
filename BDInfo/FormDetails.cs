@@ -53,7 +53,6 @@ namespace BDInfo
         private TsMuxer tsMuxer;
         private bool isMuxing = false;
         private string tsMuxerOutputPath = null;
-        private Timer tsMuxerTimer = null;
 
         private ISet<TSPlaylistFile> filteredPlaylists = new HashSet<TSPlaylistFile>();
 
@@ -86,9 +85,6 @@ namespace BDInfo
                 else
                 {
                     cancelButton.Text = "Close";
-
-                    if (tsMuxerTimer != null)
-                        tsMuxerTimer.Stop();
                 }
 
                 ResetButtons();
@@ -908,17 +904,13 @@ namespace BDInfo
                 SetTabStatus(tabPageProgress, "tsMuxeR: 0.0%");
                 textBoxTsMuxerCommandLine.Text = "";
 
-                tsMuxerTimer = new Timer();
-                tsMuxerTimer.Interval = 1000;
-                tsMuxerTimer.Tick += UpdateTsMuxerProgress;
-                tsMuxerTimer.Start();
-
                 tsMuxer = new TsMuxer(BDROM, SelectedPlaylist, selectedStreams);
                 tsMuxer.WorkerReportsProgress = true;
                 tsMuxer.WorkerSupportsCancellation = true;
                 //tsMuxer.DoWork += tsMuxerBackgroundWorker_DoWork;
                 tsMuxer.ProgressChanged += tsMuxerBackgroundWorker_ProgressChanged;
                 tsMuxer.RunWorkerCompleted += tsMuxerBackgroundWorker_RunWorkerCompleted;
+
                 tsMuxer.RunWorkerAsync(tsMuxerOutputPath);
             }
         }
@@ -965,16 +957,9 @@ namespace BDInfo
             labelTsMuxerTimeElapsed.Text = GetElapsedTimeString(tsMuxer.TimeElapsed);
 
             // TODO: Refactor this logic into a separate method
-            if (tsMuxer.IsPaused)
+            if (!String.IsNullOrEmpty(tsMuxer.State))
             {
-                if (!labelTsMuxerProgress.Text.EndsWith(" (paused}"))
-                {
-                    labelTsMuxerProgress.Text += " (paused}";
-                }
-            }
-            else
-            {
-                labelTsMuxerProgress.Text = labelTsMuxerProgress.Text.Replace(" (paused}", "");
+                labelTsMuxerProgress.Text += String.Format(" ({0})", tsMuxer.State);
             }
         }
 
@@ -998,18 +983,15 @@ namespace BDInfo
 
             if (e.Cancelled == true)
             {
-                labelTsMuxerProgress.Text += " (canceled)";
                 SetTabStatus(tabPageProgress, "tsMuxeR canceled");
             }
             else if (e.Error != null)
             {
                 TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error);
-                labelTsMuxerProgress.Text += " (error)";
                 ShowErrorMessage(tabPageProgress, "tsMuxeR Error", e.Error.Message);
             }
             else
             {
-                labelTsMuxerProgress.Text += " (done)";
                 ShowMessage(tabPageProgress, "tsMuxeR completed!", "Finished muxing M2TS with tsMuxeR!");
             }
 
@@ -1674,6 +1656,24 @@ namespace BDInfo
                     {
                         yield return descendant;
                     }
+                }
+            }
+        }
+    }
+
+    public static class ControlExtension
+    {
+        public static void ThreadSafeInvoke(this Control control, MethodInvoker method)
+        {
+            if (control != null)
+            {
+                if (control.InvokeRequired)
+                {
+                    control.Invoke(method);
+                }
+                else
+                {
+                    method.Invoke();
                 }
             }
         }

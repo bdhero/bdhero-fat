@@ -177,9 +177,6 @@ namespace BDInfo.controllers
             }
 
             File.WriteAllLines(metaFilePath, lines);
-
-            //Clipboard.SetText(meta);
-            //MessageBox.Show(meta);
         }
 
         protected override void ExtractResources()
@@ -189,13 +186,11 @@ namespace BDInfo.controllers
 
         protected override void HandleOutputLine(string line, object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
             string regex = @"^(\d+\.\d+)\%";
             if (Regex.IsMatch(line, regex))
             {
                 Match match = Regex.Match(line, regex);
                 Double.TryParse(match.Groups[1].Value, out progress);
-                worker.ReportProgress((int)progress);
             }
         }
     }

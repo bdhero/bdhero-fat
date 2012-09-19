@@ -148,6 +148,11 @@ namespace BDInfo.controllers
             return sanitizedFileName;
         }
 
+        public static bool IsEmpty(DirectoryInfo dir)
+        {
+            return dir.GetFiles().Length == 0 && dir.GetDirectories().Length == 0;
+        }
+
         public static void OpenFile(string filePath)
         {
             if (HasProgramAssociation(filePath))
@@ -168,7 +173,9 @@ namespace BDInfo.controllers
                     hasAssoc = !String.IsNullOrEmpty(defaultProgram) && File.Exists(defaultProgram);
                 }
                 catch (Exception ex)
-                { }
+                {
+                    ex.ToString();
+                }
             }
             return hasAssoc;
         }

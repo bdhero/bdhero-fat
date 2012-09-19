@@ -14,36 +14,153 @@ namespace BDInfo.controllers
     // TODO: Add pause support to remaining time estimator
     abstract class AbstractExternalTool : BackgroundWorker
     {
-        IList<string> paths = new List<string>();
+        #region Fields (private / protected)
 
-        private Process process = null;
+        private IList<string> paths = new List<string>();
         private string strArgs = null;
+        private Process process = null;
 
-        private DateTime startTime = DateTime.Now;
-        private DateTime lastProgressUpdate = DateTime.Now;
-        private List<TimeSpan> progressTicks = new List<TimeSpan>();
-        private double lastProgress = 0;
-        private TimeSpan timeRemaining = TimeSpan.MaxValue;
+        private bool _isStarted = false;
+        private bool _isPaused = false;
+        private bool _isCompleted = false;
+        private bool _isCanceled = false;
+        private bool _isError = false;
+
+        private Timer timer = new Timer();
+        private DateTime lastTick = DateTime.Now;
+        private DateTime lastEstimate = DateTime.Now;
+        private TimeSpan elapsedTime = TimeSpan.Zero;
+        private TimeSpan remainingTime = TimeSpan.Zero;
 
         /// <summary>
         /// 0.0 to 100.0
         /// </summary>
         protected double progress = 0;
-        public Double Progress { get { return progress; } }
-        public TimeSpan TimeRemaining { get { return timeRemaining; } }
-        public TimeSpan TimeElapsed { get { return DateTime.Now - startTime; } }
 
-        /// <summary>
-        /// Command line string used to execute the process, including the full path to the EXE and all arguments.
-        /// </summary>
-        /// <example>"C:\Program Files (x86)\MKVToolNix\mkvmerge.exe" "arg1" "arg 2"</example>
-        public string CommandLine { get { return "\"" + FullName.Replace("\"", "\\\"") + "\"" + " " + strArgs; } }
+        #endregion
+
+        #region Properties (private / protected)
+
+        private bool isStarted
+        {
+            get { return _isStarted; }
+            set
+            {
+                _isStarted = value;
+                if (value)
+                {
+                    timer.Start();
+                    UpdateTime();
+                }
+            }
+        }
+
+        private bool isPaused
+        {
+            get { return _isPaused; }
+            set
+            {
+                _isPaused = value;
+                if (value)
+                {
+                    UpdateTime();
+                    timer.Stop();
+                }
+                else
+                {
+                    lastTick = DateTime.Now;
+                    timer.Start();
+                    UpdateTime();
+                }
+            }
+        }
+
+        private bool isCompleted
+        {
+            get { return _isCompleted; }
+            set
+            {
+                _isCompleted = value;
+                if (value)
+                {
+                    UpdateTime();
+                    timer.Stop();
+                }
+            }
+        }
+
+        private bool isCanceled
+        {
+            get { return _isCanceled; }
+            set
+            {
+                _isCanceled = value;
+                if (value)
+                {
+                    UpdateTime();
+                    timer.Stop();
+                }
+            }
+        }
+
+        protected bool isError
+        {
+            get { return _isError; }
+            set
+            {
+                _isError = value;
+                if (value)
+                {
+                    UpdateTime();
+                    timer.Stop();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Properties (public)
 
         /// <summary>
         /// Full path to the EXE.
         /// </summary>
-        /// <example>C:\Program Files (x86)\MKVToolNix\mkvmerge.exe</example>
+        /// <example>C:\Users\Administrator\AppData\Local\Temp\BDAutoRip\584\TsMuxer\tsMuxeR.exe</example>
         public string FullName { get { return GetTempPath(Filename); } }
+
+        /// <summary>
+        /// Command line string used to execute the process, including the full path to the EXE and all arguments.
+        /// </summary>
+        /// <example>"C:\Users\Administrator\AppData\Local\Temp\BDAutoRip\584\TsMuxer\tsMuxeR.exe" "arg1" "arg 2"</example>
+        public string CommandLine { get { return "\"" + FullName.Replace("\"", "\\\"") + "\"" + " " + strArgs; } }
+
+        public bool IsStarted { get { return _isStarted; } }
+        public bool IsPaused { get { return _isPaused; } }
+        public bool IsCompleted { get { return _isCompleted; } }
+        public bool IsCanceled { get { return _isCanceled; } }
+        public bool IsError { get { return _isError; } }
+
+        /// <summary>
+        /// 0.0 to 100.0
+        /// </summary>
+        public Double Progress { get { return progress; } }
+        public TimeSpan TimeElapsed { get { return elapsedTime; } }
+        public TimeSpan TimeRemaining { get { return remainingTime; } }
+
+        public string State
+        {
+            get
+            {
+                if (this.IsError) return "error";
+                if (this.IsCanceled) return "canceled";
+                if (this.IsCompleted) return "completed";
+                if (this.IsPaused) return "paused";
+                return "";
+            }
+        }
+
+        #endregion
+
+        #region Properties (protected)
 
         /// <summary>
         /// Base directory for all temp files used by this application.
@@ -60,6 +177,10 @@ namespace BDInfo.controllers
         protected abstract string Name { get; }
         protected abstract string Filename { get; }
 
+        #endregion
+
+        #region Constructor / Destructor
+
         public AbstractExternalTool()
             : base()
         { }
@@ -68,6 +189,10 @@ namespace BDInfo.controllers
         {
             Cleanup();
         }
+
+        #endregion
+
+        #region Resource Paths & Extraction
 
         protected string GetResourceName(string filename)
         {
@@ -97,24 +222,36 @@ namespace BDInfo.controllers
             File.WriteAllBytes(destPath, bytes);
         }
 
+        #endregion
+
+        private BackgroundWorker worker;
+
         protected void Execute(IList<string> args, object sender, DoWorkEventArgs e)
         {
             ExtractResources();
 
-            progress = 0;
-            lastProgress = 0;
-            progressTicks.Clear();
-
-            BackgroundWorker worker = sender as BackgroundWorker;
-
+            worker = sender as BackgroundWorker;
             worker.ReportProgress(0);
 
             string[] sanitizedArgs = new string[args.Count];
 
             for (int i = 0; i < args.Count; i++)
-            {
                 sanitizedArgs[i] = "\"" + (args[i] != null ? args[i].Replace("\"", "\\\"") : "") + "\"";
-            }
+
+            progress = 0;
+            timer = new Timer();
+            timer.Interval = 1000;
+            timer.Tick += UpdateTime;
+            lastTick = DateTime.Now;
+            lastEstimate = DateTime.Now;
+            elapsedTime = TimeSpan.Zero;
+            remainingTime = TimeSpan.Zero;
+            
+            _isStarted = false;
+            _isPaused = false;
+            _isCompleted = false;
+            _isCanceled = false;
+            _isError = false;
 
             // Start the child process.
             process = new Process();
@@ -127,14 +264,11 @@ namespace BDInfo.controllers
             process.StartInfo.Arguments = this.strArgs = string.Join(" ", sanitizedArgs);
             process.Start();
 
-            startTime = DateTime.Now;
-            lastProgressUpdate = DateTime.Now;
-            timeRemaining = TimeSpan.Zero;
+            isStarted = true;
 
             while (!this.CancellationPending && !process.StandardOutput.EndOfStream)
             {
-                string line = process.StandardOutput.ReadLine();
-                HandleOutputLine(line, sender, e);
+                HandleOutputLine(process.StandardOutput.ReadLine(), sender, e);
                 UpdateTime();
             }
 
@@ -143,82 +277,50 @@ namespace BDInfo.controllers
                 if (!process.HasExited)
                     process.Kill();
                 e.Cancel = true;
+                isCanceled = true;
                 return;
             }
 
             worker.ReportProgress(100);
+
+            isCompleted = true;
         }
 
-        private void UpdateTime()
+        private void UpdateTime(object sender = null, EventArgs e = null)
         {
-            if (Progress != lastProgress)
+            if (this.isStarted && this.IsBusy && !(this.isCanceled || this.isCompleted || this.isError || this.isPaused))
             {
-                progressTicks.Add(DateTime.Now - lastProgressUpdate);
+                double newMS = elapsedTime.TotalMilliseconds + (DateTime.Now - lastTick).TotalMilliseconds;
+                elapsedTime = TimeSpan.FromMilliseconds(newMS);
+                lastTick = DateTime.Now;
 
-                lastProgressUpdate = DateTime.Now;
-                lastProgress = progress;
+                if ((DateTime.Now - lastEstimate).TotalSeconds >= 1)
+                {
+                    double p = progress / 100;
+                    TimeSpan tmpEst;
 
-                TimeSpan averageSpeed = AverageTimeBetweenTicks();
+                    if (p > 0 && p < 1)
+                        tmpEst = new TimeSpan((long)((double)elapsedTime.Ticks / p) - elapsedTime.Ticks);
+                    else
+                        tmpEst = TimeSpan.Zero;
 
-                if (progressTicks.Count > 20)
-                {
-                    TimeSpan last5 = AverageTimeBetweenTicks(5);
-                    TimeSpan last10 = AverageTimeBetweenTicks(10);
-                    TimeSpan last20 = AverageTimeBetweenTicks(20);
-                    //timeRemaining = EstimateTimeRemaining((last5.TotalMilliseconds * 0.5) + (last10.TotalMilliseconds * 0.35) + (last20.TotalMilliseconds * 0.15));
-                    timeRemaining = EstimateTimeRemaining(last20.TotalMilliseconds, averageSpeed.TotalMilliseconds);
-                }
-                else if (progressTicks.Count > 10)
-                {
-                    TimeSpan last5 = AverageTimeBetweenTicks(5);
-                    TimeSpan last10 = AverageTimeBetweenTicks(10);
-                    //timeRemaining = EstimateTimeRemaining((last5.TotalMilliseconds * 0.75) + (last10.TotalMilliseconds * 0.35));
-                    timeRemaining = EstimateTimeRemaining(last10.TotalMilliseconds, averageSpeed.TotalMilliseconds);
-                }
-                else if (progressTicks.Count > 5)
-                {
-                    TimeSpan last5 = AverageTimeBetweenTicks(5);
-                    //timeRemaining = EstimateTimeRemaining((last5.TotalMilliseconds * 1.0));
-                    timeRemaining = EstimateTimeRemaining(last5.TotalMilliseconds, averageSpeed.TotalMilliseconds);
-                }
-                else
-                {
-                    timeRemaining = TimeSpan.Zero;
+                    if (progress < .5 || progress > 95 || Math.Abs(tmpEst.TotalMinutes - remainingTime.TotalMinutes) > 2)
+                    {
+                        // Update estimate
+                        remainingTime = tmpEst;
+                    }
+                    else
+                    {
+                        // Decrement by 1 second
+                        remainingTime = TimeSpan.FromMilliseconds(remainingTime.TotalMilliseconds - 1000);
+                    }
+                    lastEstimate = DateTime.Now;
                 }
             }
+            worker.ReportProgress((int)progress);
         }
 
-        private static readonly double SMOOTHING_FACTOR = 0.75;
-
-        // TODO: Add pause support to remaining time estimator
-        private TimeSpan EstimateTimeRemaining(double lastSpeed, double averageSpeed)
-        {
-            // averageSpeed = SMOOTHING_FACTOR * lastSpeed + (1-SMOOTHING_FACTOR) * averageSpeed;
-            // see http://stackoverflow.com/a/3841706/467582
-
-            double ticksRemaining = 1000.0 - (Progress * 10);
-            double newAverage = SMOOTHING_FACTOR * lastSpeed + (1 - SMOOTHING_FACTOR) * averageSpeed;
-
-            TimeSpan newAvg = TimeSpan.FromMilliseconds(newAverage * ticksRemaining);
-            return newAvg;
-            //return TimeSpan.FromMilliseconds(avgMsPerTick * ticksRemaining);
-        }
-
-        private TimeSpan AverageTimeBetweenTicks(int offsetFromLastIndex = -1, int howMany = 0)
-        {
-            if (offsetFromLastIndex == -1)
-                offsetFromLastIndex = progressTicks.Count;
-
-            if (howMany == 0)
-                howMany = offsetFromLastIndex;
-
-            // See http://stackoverflow.com/a/1301362/467582
-            List<TimeSpan> chunk = progressTicks.Skip(progressTicks.Count - offsetFromLastIndex).Take(howMany).ToList();
-            TimeSpan totalTime = TimeSpan.Zero;
-            chunk.ForEach((TimeSpan ts) => { totalTime += ts; });
-            return TimeSpan.FromMilliseconds(totalTime.TotalMilliseconds / ((double)howMany));
-        }
-
+        // TODO: Refactor.  Start at top level temp dir and recursively delete empty dirs
         protected void Cleanup()
         {
             try
@@ -237,7 +339,7 @@ namespace BDInfo.controllers
 
                 while (dir.FullName != AppTempDirPath)
                 {
-                    if (IsEmpty(dir))
+                    if (FileUtils.IsEmpty(dir))
                     {
                         //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is empty.  Deleting...");
                         dir.Delete();
@@ -251,7 +353,7 @@ namespace BDInfo.controllers
 
                 DirectoryInfo appTempDir = new DirectoryInfo(ToolTempDirPath);
 
-                if (IsEmpty(appTempDir))
+                if (FileUtils.IsEmpty(appTempDir))
                     appTempDir.Delete();
             }
             catch (Exception ex)
@@ -260,13 +362,7 @@ namespace BDInfo.controllers
             }
         }
 
-        private bool IsEmpty(DirectoryInfo dir)
-        {
-            return dir.GetFiles().Length == 0 && dir.GetDirectories().Length == 0;
-        }
-
-        private bool isPaused = false;
-        public bool IsPaused { get { return isPaused; } }
+        #region Suspend / Resume Thread
 
         private bool CanSuspendResumeProcess
         {
@@ -355,5 +451,7 @@ namespace BDInfo.controllers
                 ResumeThread(pOpenThread);
             }
         }
+
+        #endregion
     }
 }
