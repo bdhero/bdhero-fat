@@ -8,7 +8,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
-namespace BDAutoMuxer.controllers
+namespace BDAutoMuxer.tools
 {
     class MkvMerge : AbstractExternalTool
     {

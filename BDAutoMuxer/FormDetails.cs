@@ -16,6 +16,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using BDAutoMuxer.Properties;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using BDAutoMuxer.tools;
 
 namespace BDAutoMuxer
 {

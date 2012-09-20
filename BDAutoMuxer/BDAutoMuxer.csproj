@@ -116,20 +116,18 @@
     <Compile Include="BDROM\TSPlaylistFile.cs" />
     <Compile Include="BDROM\TSStream.cs" />
     <Compile Include="BDROM\TSCodecVC1.cs" />
-    <Compile Include="controllers\AbstractExternalTool.cs">
+    <Compile Include="tools\AbstractExternalTool.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="controllers\ChapterWriter.cs" />
     <Compile Include="controllers\HttpRequest.cs" />
-    <Compile Include="controllers\MkvMerge.cs">
+    <Compile Include="tools\MkvMerge.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="controllers\DragUtils.cs" />
     <Compile Include="controllers\FileUtils.cs" />
-    <Compile Include="controllers\TaskbarProgress.cs" />
-    <Compile Include="controllers\TsMuxer.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="views\TaskbarProgress.cs" />
+    <Compile Include="tools\TsMuxer.cs" />
     <Compile Include="controllers\MainMovieService.cs" />
     <Compile Include="controllers\UpdateNotifier.cs">
       <SubType>Component</SubType>
