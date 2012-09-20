@@ -11,6 +11,8 @@ using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.tools
 {
+    /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
+    [System.ComponentModel.DesignerCategory("Code")]
     class TsMuxer : AbstractExternalTool
     {
         private string exe_path;
