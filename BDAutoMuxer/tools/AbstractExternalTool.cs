@@ -12,7 +12,6 @@ using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.tools
 {
-    // TODO: Add pause support to remaining time estimator
     abstract class AbstractExternalTool : BackgroundWorker
     {
         #region Fields (private / protected)
