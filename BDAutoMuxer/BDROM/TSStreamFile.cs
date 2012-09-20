@@ -182,7 +182,7 @@ namespace BDAutoMuxer
         {
             get
             {
-                if (BDInfoSettings.EnableSSIF &&
+                if (BDAutoMuxerSettings.EnableSSIF &&
                     InterleavedFile != null)
                 {
                     return InterleavedFile.Name;
@@ -457,7 +457,7 @@ namespace BDAutoMuxer
             try
             {                
                 string fileName;
-                if (BDInfoSettings.EnableSSIF &&
+                if (BDAutoMuxerSettings.EnableSSIF &&
                     InterleavedFile != null)
                 {
                     fileName = InterleavedFile.FileInfo.FullName;

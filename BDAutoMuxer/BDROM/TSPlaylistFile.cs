@@ -801,7 +801,7 @@ namespace BDAutoMuxer
             if (referenceClip.StreamFile != null)
             {
                 // TODO: Better way to add this in?
-                if (BDInfoSettings.EnableSSIF &&
+                if (BDAutoMuxerSettings.EnableSSIF &&
                     referenceClip.StreamFile.InterleavedFile != null &&
                     referenceClip.StreamFile.Streams.ContainsKey(4114) &&
                     !Streams.ContainsKey(4114))
@@ -881,7 +881,7 @@ namespace BDAutoMuxer
                 AngleStreams.Add(new Dictionary<ushort, TSStream>());
             }
 
-            if (!BDInfoSettings.KeepStreamOrder)
+            if (!BDAutoMuxerSettings.KeepStreamOrder)
             {
                 VideoStreams.Sort(CompareVideoStreams);
             }
@@ -897,7 +897,7 @@ namespace BDAutoMuxer
                 }
             }
 
-            if (!BDInfoSettings.KeepStreamOrder)
+            if (!BDAutoMuxerSettings.KeepStreamOrder)
             {
                 AudioStreams.Sort(CompareAudioStreams);
             }
@@ -906,7 +906,7 @@ namespace BDAutoMuxer
                 SortedStreams.Add(stream);
             }
 
-            if (!BDInfoSettings.KeepStreamOrder)
+            if (!BDAutoMuxerSettings.KeepStreamOrder)
             {
                 GraphicsStreams.Sort(CompareGraphicsStreams);
             }
@@ -915,7 +915,7 @@ namespace BDAutoMuxer
                 SortedStreams.Add(stream);
             }
 
-            if (!BDInfoSettings.KeepStreamOrder)
+            if (!BDAutoMuxerSettings.KeepStreamOrder)
             {
                 TextStreams.Sort(CompareTextStreams);
             }
@@ -964,14 +964,14 @@ namespace BDAutoMuxer
             {
                 if (!IsInitialized) return false;
 
-                if (BDInfoSettings.FilterShortPlaylists &&
-                    TotalLength < BDInfoSettings.FilterShortPlaylistsValue)
+                if (BDAutoMuxerSettings.FilterShortPlaylists &&
+                    TotalLength < BDAutoMuxerSettings.FilterShortPlaylistsValue)
                 {
                     return false;
                 }
 
                 if (HasLoops &&
-                    BDInfoSettings.FilterLoopingPlaylists)
+                    BDAutoMuxerSettings.FilterLoopingPlaylists)
                 {
                     return false;
                 }

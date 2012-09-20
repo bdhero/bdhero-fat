@@ -45,7 +45,7 @@ namespace BDAutoMuxer
             Playlists = playlists;
 
             StreamWriter reportFile = null;
-            if (BDInfoSettings.AutosaveReport)
+            if (BDAutoMuxerSettings.AutosaveReport)
             {
                 string reportName = string.Format(
                     "BDINFO.{0}.txt",
@@ -948,7 +948,7 @@ namespace BDAutoMuxer
                     }
                 }
 
-                if (BDInfoSettings.GenerateStreamDiagnostics)
+                if (BDAutoMuxerSettings.GenerateStreamDiagnostics)
                 {                        
                     report += "\r\n";
                     report += "STREAM DIAGNOSTICS:\r\n";
@@ -1035,14 +1035,14 @@ namespace BDAutoMuxer
                 report += "<---- END FORUMS PASTE ---->\r\n";
                 report += "\r\n";
 
-                if (BDInfoSettings.GenerateTextSummary)
+                if (BDAutoMuxerSettings.GenerateTextSummary)
                 {
                     report += "QUICK SUMMARY:\r\n\r\n";
                     report += summary;
                     report += "\r\n";
                 }
 
-                if (BDInfoSettings.AutosaveReport && reportFile != null)
+                if (BDAutoMuxerSettings.AutosaveReport && reportFile != null)
                 {
                     try { reportFile.Write(report); }
                     catch { }
@@ -1052,7 +1052,7 @@ namespace BDAutoMuxer
                 GC.Collect();
             }
 
-            if (BDInfoSettings.AutosaveReport && reportFile != null)
+            if (BDAutoMuxerSettings.AutosaveReport && reportFile != null)
             {
                 try { reportFile.Write(report); }
                 catch { }

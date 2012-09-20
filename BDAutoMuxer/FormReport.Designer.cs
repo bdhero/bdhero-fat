@@ -194,7 +194,7 @@ namespace BDAutoMuxer
             this.Controls.Add(this.buttonCopy);
             this.Controls.Add(this.textBoxReport);
             this.Name = "FormReport";
-            this.Text = "BDInfo Report";
+            this.Text = "BDAutoMuxer Report";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormReport_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -24,6 +24,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace BDAutoMuxer
 {
@@ -33,37 +35,37 @@ namespace BDAutoMuxer
         {
             InitializeComponent();
 
-            checkBoxAutosaveReport.Checked = BDInfoSettings.AutosaveReport;
-            checkBoxGenerateStreamDiagnostics.Checked = BDInfoSettings.GenerateStreamDiagnostics;
-            checkBoxGenerateTextSummary.Checked = BDInfoSettings.GenerateTextSummary;
-            checkBoxFilterLoopingPlaylists.Checked = BDInfoSettings.FilterLoopingPlaylists;
-            checkBoxFilterShortPlaylists.Checked = BDInfoSettings.FilterShortPlaylists;
-            textBoxFilterShortPlaylistsValue.Text = BDInfoSettings.FilterShortPlaylistsValue.ToString();
-            checkBoxUseImagePrefix.Checked = BDInfoSettings.UseImagePrefix;
-            textBoxUseImagePrefixValue.Text = BDInfoSettings.UseImagePrefixValue;
-            checkBoxKeepStreamOrder.Checked = BDInfoSettings.KeepStreamOrder;
-            checkBoxEnableSSIF.Checked = BDInfoSettings.EnableSSIF;
-            textBoxApiKey.Text = BDInfoSettings.ApiKey;
+            checkBoxAutosaveReport.Checked = BDAutoMuxerSettings.AutosaveReport;
+            checkBoxGenerateStreamDiagnostics.Checked = BDAutoMuxerSettings.GenerateStreamDiagnostics;
+            checkBoxGenerateTextSummary.Checked = BDAutoMuxerSettings.GenerateTextSummary;
+            checkBoxFilterLoopingPlaylists.Checked = BDAutoMuxerSettings.FilterLoopingPlaylists;
+            checkBoxFilterShortPlaylists.Checked = BDAutoMuxerSettings.FilterShortPlaylists;
+            textBoxFilterShortPlaylistsValue.Text = BDAutoMuxerSettings.FilterShortPlaylistsValue.ToString();
+            checkBoxUseImagePrefix.Checked = BDAutoMuxerSettings.UseImagePrefix;
+            textBoxUseImagePrefixValue.Text = BDAutoMuxerSettings.UseImagePrefixValue;
+            checkBoxKeepStreamOrder.Checked = BDAutoMuxerSettings.KeepStreamOrder;
+            checkBoxEnableSSIF.Checked = BDAutoMuxerSettings.EnableSSIF;
+            textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            BDInfoSettings.AutosaveReport = checkBoxAutosaveReport.Checked;
-            BDInfoSettings.GenerateStreamDiagnostics = checkBoxGenerateStreamDiagnostics.Checked;
-            BDInfoSettings.GenerateTextSummary = checkBoxGenerateTextSummary.Checked;
-            BDInfoSettings.KeepStreamOrder = checkBoxKeepStreamOrder.Checked;
-            BDInfoSettings.UseImagePrefix = checkBoxUseImagePrefix.Checked;
-            BDInfoSettings.UseImagePrefixValue = textBoxUseImagePrefixValue.Text;
-            BDInfoSettings.FilterLoopingPlaylists = checkBoxFilterLoopingPlaylists.Checked;
-            BDInfoSettings.FilterShortPlaylists = checkBoxFilterShortPlaylists.Checked;
-            BDInfoSettings.EnableSSIF = checkBoxEnableSSIF.Checked;
-            BDInfoSettings.ApiKey = textBoxApiKey.Text;
+            BDAutoMuxerSettings.AutosaveReport = checkBoxAutosaveReport.Checked;
+            BDAutoMuxerSettings.GenerateStreamDiagnostics = checkBoxGenerateStreamDiagnostics.Checked;
+            BDAutoMuxerSettings.GenerateTextSummary = checkBoxGenerateTextSummary.Checked;
+            BDAutoMuxerSettings.KeepStreamOrder = checkBoxKeepStreamOrder.Checked;
+            BDAutoMuxerSettings.UseImagePrefix = checkBoxUseImagePrefix.Checked;
+            BDAutoMuxerSettings.UseImagePrefixValue = textBoxUseImagePrefixValue.Text;
+            BDAutoMuxerSettings.FilterLoopingPlaylists = checkBoxFilterLoopingPlaylists.Checked;
+            BDAutoMuxerSettings.FilterShortPlaylists = checkBoxFilterShortPlaylists.Checked;
+            BDAutoMuxerSettings.EnableSSIF = checkBoxEnableSSIF.Checked;
+            BDAutoMuxerSettings.ApiKey = textBoxApiKey.Text;
             int filterShortPlaylistsValue;
             if (int.TryParse(textBoxFilterShortPlaylistsValue.Text, out filterShortPlaylistsValue))
             {
-                BDInfoSettings.FilterShortPlaylistsValue = filterShortPlaylistsValue;
+                BDAutoMuxerSettings.FilterShortPlaylistsValue = filterShortPlaylistsValue;
             }
-            BDInfoSettings.SaveSettings();
+            BDAutoMuxerSettings.SaveSettings();
             Close();
         }
 
@@ -73,8 +75,27 @@ namespace BDAutoMuxer
         }
     }
 
-    public class BDInfoSettings
+    public class BDAutoMuxerSettings
     {
+        public static string AssemblyName
+        {
+            get
+            {
+                Assembly asm = Properties.Settings.Default.GetType().Assembly;
+                return asm.GetName().Name;
+            }
+        }
+
+        public static string AssemblyVersion
+        {
+            get
+            {
+                Assembly asm = Properties.Settings.Default.GetType().Assembly;
+                Version version = asm.GetName().Version;
+                return Regex.Replace(version.ToString(), @"^(\d+\.\d+\.\d+)\.\d+)$", "$1");
+            }
+        }
+
         public static bool GenerateStreamDiagnostics
         {
             get

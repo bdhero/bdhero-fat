@@ -67,7 +67,7 @@ namespace BDAutoMuxer
             {
                 if (StreamFile != null &&
                     StreamFile.InterleavedFile != null &&
-                    BDInfoSettings.EnableSSIF)
+                    BDAutoMuxerSettings.EnableSSIF)
                 {
                     return StreamFile.InterleavedFile.Name;
                 }

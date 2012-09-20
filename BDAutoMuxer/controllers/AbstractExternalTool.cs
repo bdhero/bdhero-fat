@@ -196,7 +196,7 @@ namespace BDAutoMuxer.controllers
 
         protected string GetResourceName(string filename)
         {
-            return "BDInfo.lib.exe." + filename;
+            return "BDAutoMuxer.lib.exe." + filename;
         }
 
         protected string GetTempPath(string filename)

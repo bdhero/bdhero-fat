@@ -128,7 +128,7 @@ namespace BDAutoMuxer
 
                 ListViewItem.ListViewSubItem playlistSize =
                     new ListViewItem.ListViewSubItem();
-                if (BDInfoSettings.EnableSSIF &&
+                if (BDAutoMuxerSettings.EnableSSIF &&
                     playlist.InterleavedFileSize > 0)
                 {
                     playlistSize.Text = playlist.InterleavedFileSize.ToString("N0");
@@ -241,7 +241,7 @@ namespace BDAutoMuxer
 
                 ListViewItem.ListViewSubItem clipSize =
                     new ListViewItem.ListViewSubItem();
-                if (BDInfoSettings.EnableSSIF &&
+                if (BDAutoMuxerSettings.EnableSSIF &&
                     clip.InterleavedFileSize > 0)
                 {
                     clipSize.Text = clip.InterleavedFileSize.ToString("N0");

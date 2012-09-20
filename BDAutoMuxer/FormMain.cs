@@ -35,6 +35,7 @@ using Newtonsoft.Json;
 using WatTmdb.V3;
 using BDAutoMuxer.views;
 using BDAutoMuxer.controllers;
+using System.Reflection;
 
 namespace BDAutoMuxer
 {
@@ -62,20 +63,22 @@ namespace BDAutoMuxer
             }
             else
             {
-                textBoxSource.Text = BDInfoSettings.LastPath;
+                textBoxSource.Text = BDAutoMuxerSettings.LastPath;
             }
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            if (BDInfoSettings.MainWindowMaximized)
+            if (BDAutoMuxerSettings.MainWindowMaximized)
                 WindowState = FormWindowState.Maximized;
 
-            if (BDInfoSettings.MainWindowLocation != Point.Empty)
-                Location = BDInfoSettings.MainWindowLocation;
+            if (BDAutoMuxerSettings.MainWindowLocation != Point.Empty)
+                Location = BDAutoMuxerSettings.MainWindowLocation;
 
-            if (BDInfoSettings.MainWindowSize != Size.Empty)
-                Size = BDInfoSettings.MainWindowSize;
+            if (BDAutoMuxerSettings.MainWindowSize != Size.Empty)
+                Size = BDAutoMuxerSettings.MainWindowSize;
+
+            this.Text = BDAutoMuxerSettings.AssemblyName + " v" + BDAutoMuxerSettings.AssemblyVersion;
 
             ResetColumnWidths();
         }
@@ -144,7 +147,7 @@ namespace BDAutoMuxer
                     ex.Message,
                     Environment.NewLine);
 
-                MessageBox.Show(msg, "BDInfo Error", 
+                MessageBox.Show(msg, "BDAutoMuxer Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -164,7 +167,7 @@ namespace BDAutoMuxer
                     ex.Message,
                     Environment.NewLine);
 
-                MessageBox.Show(msg, "BDInfo Error",
+                MessageBox.Show(msg, "BDAutoMuxer Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -292,20 +295,20 @@ namespace BDAutoMuxer
             object sender, 
             FormClosingEventArgs e)
         {
-            BDInfoSettings.LastPath = textBoxSource.Text;
+            BDAutoMuxerSettings.LastPath = textBoxSource.Text;
             if (WindowState == FormWindowState.Maximized)
             {
-                BDInfoSettings.MainWindowLocation = RestoreBounds.Location;
-                BDInfoSettings.MainWindowSize = RestoreBounds.Size;
-                BDInfoSettings.MainWindowMaximized = true;
+                BDAutoMuxerSettings.MainWindowLocation = RestoreBounds.Location;
+                BDAutoMuxerSettings.MainWindowSize = RestoreBounds.Size;
+                BDAutoMuxerSettings.MainWindowMaximized = true;
             }
             else
             {
-                BDInfoSettings.MainWindowLocation = Location;
-                BDInfoSettings.MainWindowSize = Size;
-                BDInfoSettings.MainWindowMaximized = false;
+                BDAutoMuxerSettings.MainWindowLocation = Location;
+                BDAutoMuxerSettings.MainWindowSize = Size;
+                BDAutoMuxerSettings.MainWindowMaximized = false;
             }
-            BDInfoSettings.SaveSettings();
+            BDAutoMuxerSettings.SaveSettings();
 
             if (InitBDROMWorker != null &&
                 InitBDROMWorker.IsBusy)
@@ -385,7 +388,7 @@ namespace BDAutoMuxer
         {
             DialogResult result = MessageBox.Show(string.Format(
                 "An error occurred while scanning the playlist file {0}.\n\nThe disc may be copy-protected or damaged.\n\nDo you want to continue scanning the playlist files?", playlistFile.Name), 
-                "BDInfo Scan Error", MessageBoxButtons.YesNo);
+                "BDAutoMuxer Scan Error", MessageBoxButtons.YesNo);
             
             if (result == DialogResult.Yes) return true;
             else return false;
@@ -395,7 +398,7 @@ namespace BDAutoMuxer
         {
             DialogResult result = MessageBox.Show(string.Format(
                 "An error occurred while scanning the stream file {0}.\n\nThe disc may be copy-protected or damaged.\n\nDo you want to continue scanning the stream files?", streamFile.Name),
-                "BDInfo Scan Error", MessageBoxButtons.YesNo);
+                "BDAutoMuxer Scan Error", MessageBoxButtons.YesNo);
 
             if (result == DialogResult.Yes) return true;
             else return false;
@@ -405,7 +408,7 @@ namespace BDAutoMuxer
         {
             DialogResult result = MessageBox.Show(string.Format(
                 "An error occurred while scanning the stream clip file {0}.\n\nThe disc may be copy-protected or damaged.\n\nDo you want to continue scanning the stream clip files?", streamClipFile.Name),
-                "BDInfo Scan Error", MessageBoxButtons.YesNo);
+                "BDAutoMuxer Scan Error", MessageBoxButtons.YesNo);
 
             if (result == DialogResult.Yes) return true;
             else return false;
@@ -427,7 +430,7 @@ namespace BDAutoMuxer
             {
                 string msg = string.Format(
                     "{0}", ((Exception)e.Result).Message);
-                MessageBox.Show(msg, "BDInfo Error",
+                MessageBox.Show(msg, "BDAutoMuxer Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 buttonBrowse.Enabled = true;
                 buttonRescan.Enabled = true;
@@ -599,7 +602,7 @@ namespace BDAutoMuxer
 
                     ListViewItem.ListViewSubItem playlistSize =
                         new ListViewItem.ListViewSubItem();
-                    if (BDInfoSettings.EnableSSIF &&
+                    if (BDAutoMuxerSettings.EnableSSIF &&
                         playlist.InterleavedFileSize > 0)
                     {
                         playlistSize.Text = playlist.InterleavedFileSize.ToString("N0");
@@ -904,7 +907,7 @@ namespace BDAutoMuxer
                 ScanBDROMState scanState = new ScanBDROMState();
                 foreach (TSStreamFile streamFile in streamFiles)
                 {
-                    if (BDInfoSettings.EnableSSIF &&
+                    if (BDAutoMuxerSettings.EnableSSIF &&
                         streamFile.InterleavedFile != null)
                     {
                         scanState.TotalBytes += streamFile.InterleavedFile.FileInfo.Length;
@@ -1080,25 +1083,25 @@ namespace BDAutoMuxer
                 string msg = string.Format(
                     "{0}", ScanResult.ScanException.Message);
 
-                MessageBox.Show(msg, "BDInfo Error",
+                MessageBox.Show(msg, "BDAutoMuxer Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                if (BDInfoSettings.AutosaveReport)
+                if (BDAutoMuxerSettings.AutosaveReport)
                 {
                     GenerateReport();
                 }
                 else if (ScanResult.FileExceptions.Count > 0)
                 {
                     MessageBox.Show(
-                        "Scan completed with errors (see report).", "BDInfo Scan",
+                        "Scan completed with errors (see report).", "BDAutoMuxer Scan",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
                     MessageBox.Show(
-                        "Scan completed successfully.", "BDInfo Scan",
+                        "Scan completed successfully.", "BDAutoMuxer Scan",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -1190,7 +1193,7 @@ namespace BDAutoMuxer
                     string msg = string.Format(
                         "{0}", ((Exception)e.Result).Message);
 
-                    MessageBox.Show(msg, "BDInfo Error",
+                    MessageBox.Show(msg, "BDAutoMuxer Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

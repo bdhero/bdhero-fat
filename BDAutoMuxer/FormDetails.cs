@@ -282,22 +282,22 @@ namespace BDAutoMuxer
 
         private void FormDetails_Load(object sender, EventArgs e)
         {
-            if (BDInfoSettings.DetailsWindowMaximized)
+            if (BDAutoMuxerSettings.DetailsWindowMaximized)
                 WindowState = FormWindowState.Maximized;
 
-            if (BDInfoSettings.DetailsWindowLocation != Point.Empty)
-                Location = BDInfoSettings.DetailsWindowLocation;
+            if (BDAutoMuxerSettings.DetailsWindowLocation != Point.Empty)
+                Location = BDAutoMuxerSettings.DetailsWindowLocation;
 
-            if (BDInfoSettings.DetailsWindowSize != Size.Empty)
-                Size = BDInfoSettings.DetailsWindowSize;
+            if (BDAutoMuxerSettings.DetailsWindowSize != Size.Empty)
+                Size = BDAutoMuxerSettings.DetailsWindowSize;
 
             this.statusLabel.Text = "";
 
             this.movieNameTextBox.Text = String.IsNullOrEmpty(BDROM.DiscNameSearchable) ? BDROM.VolumeLabel : BDROM.DiscNameSearchable;
             this.discLanguageComboBox.DataSource = new List<Language>(languages).ToArray();
 
-            this.textBoxOutputDir.Text = BDInfoSettings.OutputDir;
-            this.textBoxOutputFileName.Text = BDInfoSettings.OutputFileName;
+            this.textBoxOutputDir.Text = BDAutoMuxerSettings.OutputDir;
+            this.textBoxOutputFileName.Text = BDAutoMuxerSettings.OutputFileName;
 
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
 
@@ -905,9 +905,9 @@ namespace BDAutoMuxer
                 selectedStreams.UnionWith(SelectedAudioStreams);
                 selectedStreams.UnionWith(SelectedSubtitleStreams);
 
-                BDInfoSettings.OutputDir = textBoxOutputDir.Text;
-                BDInfoSettings.OutputFileName = textBoxOutputFileName.Text;
-                BDInfoSettings.SaveSettings();
+                BDAutoMuxerSettings.OutputDir = textBoxOutputDir.Text;
+                BDAutoMuxerSettings.OutputFileName = textBoxOutputFileName.Text;
+                BDAutoMuxerSettings.SaveSettings();
 
                 // TODO: Make this status "sticky"
                 SetTabStatus(tabPageProgress, "tsMuxeR: 0.0%");
@@ -1015,7 +1015,7 @@ namespace BDAutoMuxer
         {
             get
             {
-                if (!String.IsNullOrEmpty(BDInfoSettings.ApiKey) && searchResultListView.SelectedIndices.Count > 0)
+                if (!String.IsNullOrEmpty(BDAutoMuxerSettings.ApiKey) && searchResultListView.SelectedIndices.Count > 0)
                 {
                     if (auto_configured)
                     {
@@ -1178,7 +1178,7 @@ namespace BDAutoMuxer
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, ex.Message, "BDInfo Error",
+                    MessageBox.Show(this, ex.Message, "BDAutoMuxer Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -1500,7 +1500,7 @@ namespace BDAutoMuxer
                     ex.Message,
                     Environment.NewLine);
 
-                MessageBox.Show(msg, "BDInfo Error",
+                MessageBox.Show(msg, "BDAutoMuxer Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1577,17 +1577,17 @@ namespace BDAutoMuxer
             {
                 if (WindowState == FormWindowState.Maximized)
                 {
-                    BDInfoSettings.DetailsWindowLocation = RestoreBounds.Location;
-                    BDInfoSettings.DetailsWindowSize = RestoreBounds.Size;
-                    BDInfoSettings.DetailsWindowMaximized = true;
+                    BDAutoMuxerSettings.DetailsWindowLocation = RestoreBounds.Location;
+                    BDAutoMuxerSettings.DetailsWindowSize = RestoreBounds.Size;
+                    BDAutoMuxerSettings.DetailsWindowMaximized = true;
                 }
                 else
                 {
-                    BDInfoSettings.DetailsWindowLocation = Location;
-                    BDInfoSettings.DetailsWindowSize = Size;
-                    BDInfoSettings.DetailsWindowMaximized = false;
+                    BDAutoMuxerSettings.DetailsWindowLocation = Location;
+                    BDAutoMuxerSettings.DetailsWindowSize = Size;
+                    BDAutoMuxerSettings.DetailsWindowMaximized = false;
                 }
-                BDInfoSettings.SaveSettings();
+                BDAutoMuxerSettings.SaveSettings();
             }
             cancelButtonHandled = false;
         }

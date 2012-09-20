@@ -57,8 +57,6 @@ namespace BDAutoMuxer
             this.labelTimeRemaining = new System.Windows.Forms.Label();
             this.progressBarScan = new System.Windows.Forms.ProgressBar();
             this.labelPlaylistFiles = new System.Windows.Forms.Label();
-            this.buttonViewReport = new System.Windows.Forms.Button();
-            this.buttonScan = new System.Windows.Forms.Button();
             this.textBoxDetails = new System.Windows.Forms.TextBox();
             this.labelProgress = new System.Windows.Forms.Label();
             this.buttonSelectAll = new System.Windows.Forms.Button();
@@ -85,6 +83,8 @@ namespace BDAutoMuxer
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonRescan = new System.Windows.Forms.Button();
             this.buttonRip = new System.Windows.Forms.Button();
+            this.buttonViewReport = new System.Windows.Forms.Button();
+            this.buttonScan = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerOuter)).BeginInit();
             this.splitContainerOuter.Panel1.SuspendLayout();
             this.splitContainerOuter.Panel2.SuspendLayout();
@@ -196,30 +196,6 @@ namespace BDAutoMuxer
             this.labelPlaylistFiles.Size = new System.Drawing.Size(86, 13);
             this.labelPlaylistFiles.TabIndex = 28;
             this.labelPlaylistFiles.Text = "Select Playlist(s):";
-            // 
-            // buttonViewReport
-            // 
-            this.buttonViewReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonViewReport.Enabled = false;
-            this.buttonViewReport.Location = new System.Drawing.Point(382, 655);
-            this.buttonViewReport.Name = "buttonViewReport";
-            this.buttonViewReport.Size = new System.Drawing.Size(108, 23);
-            this.buttonViewReport.TabIndex = 9;
-            this.buttonViewReport.Text = "View Report...";
-            this.buttonViewReport.UseVisualStyleBackColor = true;
-            this.buttonViewReport.Click += new System.EventHandler(this.buttonViewReport_Click);
-            // 
-            // buttonScan
-            // 
-            this.buttonScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonScan.Enabled = false;
-            this.buttonScan.Location = new System.Drawing.Point(265, 655);
-            this.buttonScan.Name = "buttonScan";
-            this.buttonScan.Size = new System.Drawing.Size(108, 23);
-            this.buttonScan.TabIndex = 8;
-            this.buttonScan.Text = "Scan Bitrates";
-            this.buttonScan.UseVisualStyleBackColor = true;
-            this.buttonScan.Click += new System.EventHandler(this.buttonScan_Click);
             // 
             // textBoxDetails
             // 
@@ -476,6 +452,30 @@ namespace BDAutoMuxer
             this.buttonRip.UseVisualStyleBackColor = true;
             this.buttonRip.Click += new System.EventHandler(this.buttonRip_Click);
             // 
+            // buttonViewReport
+            // 
+            this.buttonViewReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonViewReport.Enabled = false;
+            this.buttonViewReport.Location = new System.Drawing.Point(382, 655);
+            this.buttonViewReport.Name = "buttonViewReport";
+            this.buttonViewReport.Size = new System.Drawing.Size(108, 23);
+            this.buttonViewReport.TabIndex = 9;
+            this.buttonViewReport.Text = "View Report...";
+            this.buttonViewReport.UseVisualStyleBackColor = true;
+            this.buttonViewReport.Click += new System.EventHandler(this.buttonViewReport_Click);
+            // 
+            // buttonScan
+            // 
+            this.buttonScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonScan.Enabled = false;
+            this.buttonScan.Location = new System.Drawing.Point(265, 655);
+            this.buttonScan.Name = "buttonScan";
+            this.buttonScan.Size = new System.Drawing.Size(108, 23);
+            this.buttonScan.TabIndex = 8;
+            this.buttonScan.Text = "Scan Bitrates";
+            this.buttonScan.UseVisualStyleBackColor = true;
+            this.buttonScan.Click += new System.EventHandler(this.buttonScan_Click);
+            // 
             // FormMain
             // 
             this.AcceptButton = this.buttonRescan;
@@ -536,8 +536,6 @@ namespace BDAutoMuxer
         private System.Windows.Forms.Label labelTimeRemaining;
         private System.Windows.Forms.ProgressBar progressBarScan;
         private System.Windows.Forms.Label labelPlaylistFiles;
-        private System.Windows.Forms.Button buttonViewReport;
-        private System.Windows.Forms.Button buttonScan;
         private System.Windows.Forms.TextBox textBoxDetails;
         private System.Windows.Forms.Label labelProgress;
         private System.Windows.Forms.Button buttonSelectAll;
@@ -564,5 +562,7 @@ namespace BDAutoMuxer
         private System.Windows.Forms.ColumnHeader columnHeaderPlaylistGroup;
         private System.Windows.Forms.ColumnHeader columnHeaderIndex;
         private System.Windows.Forms.Button buttonRip;
+        private System.Windows.Forms.Button buttonViewReport;
+        private System.Windows.Forms.Button buttonScan;
     }
 }

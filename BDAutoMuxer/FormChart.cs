@@ -106,9 +106,9 @@ namespace BDAutoMuxer
             GraphControl.GraphPane.XAxis.Scale.IsUseTenPower = false;
             GraphControl.GraphPane.YAxis.Scale.IsUseTenPower = false;
 
-            if (BDInfoSettings.UseImagePrefix)
+            if (BDAutoMuxerSettings.UseImagePrefix)
             {
-                DefaultFileName = BDInfoSettings.UseImagePrefixValue;
+                DefaultFileName = BDAutoMuxerSettings.UseImagePrefixValue;
             }
             else
             {

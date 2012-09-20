@@ -7,17 +7,18 @@ using System.Net.Cache;
 using System.IO;
 using Newtonsoft.Json;
 using BDAutoMuxer.models;
+using System.Reflection;
 
 namespace BDAutoMuxer.controllers
 {
     class MainMovieService
     {
-        private static readonly string base_uri = "http://bd.andydvorak.net/api/v1/movies";
-        private static readonly string user_agent = "BDAutoRip/0.2.0";
+        private readonly string base_uri = "http://bd.andydvorak.net/api/v1/movies";
+        private readonly string user_agent;
 
         public MainMovieService()
         {
-
+            user_agent = BDAutoMuxerSettings.AssemblyName + "/" + BDAutoMuxerSettings.AssemblyVersion;
         }
 
         private string GetMainMovieUri(string volume_label, IList<TSPlaylistFile> mainPlaylists)
@@ -56,7 +57,7 @@ namespace BDAutoMuxer.controllers
         public JsonSearchResult PostDisc(JsonDisc jsonDisc)
         {
             string jsonString = JsonConvert.SerializeObject(jsonDisc);
-            string uri = base_uri + "/main?api_key=" + Uri.EscapeUriString(BDInfoSettings.ApiKey);
+            string uri = base_uri + "/main?api_key=" + Uri.EscapeUriString(BDAutoMuxerSettings.ApiKey);
 
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "POST";

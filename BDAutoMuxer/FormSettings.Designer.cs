@@ -244,7 +244,7 @@ namespace BDAutoMuxer
             this.MaximizeBox = false;
             this.Name = "FormSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "BDInfo Settings";
+            this.Text = "BDAutoMuxer Settings";
             this.ResumeLayout(false);
             this.PerformLayout();
 

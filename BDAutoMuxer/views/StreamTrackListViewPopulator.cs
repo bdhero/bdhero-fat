@@ -54,7 +54,7 @@ namespace BDAutoMuxer.views
 
                 ListViewItem.ListViewSubItem clipSize =
                     new ListViewItem.ListViewSubItem();
-                if (BDInfoSettings.EnableSSIF &&
+                if (BDAutoMuxerSettings.EnableSSIF &&
                     clip.InterleavedFileSize > 0)
                 {
                     clipSize.Text = clip.InterleavedFileSize.ToString("N0");

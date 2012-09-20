@@ -257,7 +257,7 @@ namespace ZedGraph
 				{
 					string str = "Image copied to clipboard.";
 					//MessageBox.Show( "Image Copied to ClipBoard" );
-					MessageBox.Show( str, "BDInfo", MessageBoxButtons.OK, MessageBoxIcon.Information );
+					MessageBox.Show( str, "BDAutoMuxer", MessageBoxButtons.OK, MessageBoxIcon.Information );
 				}
 			}
 		}
