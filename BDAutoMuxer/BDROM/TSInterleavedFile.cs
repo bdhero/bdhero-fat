@@ -24,7 +24,7 @@ using System.Text;
 
 // TODO: Do more interesting things here...
 
-namespace BDInfo
+namespace BDAutoMuxer
 {
     public class TSInterleavedFile
     {

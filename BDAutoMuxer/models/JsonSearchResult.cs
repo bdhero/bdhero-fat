@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BDInfo.models
+namespace BDAutoMuxer.models
 {
     public class JsonSearchResult
     {

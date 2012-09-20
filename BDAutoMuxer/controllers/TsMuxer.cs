@@ -8,7 +8,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
-namespace BDInfo.controllers
+namespace BDAutoMuxer.controllers
 {
     class TsMuxer : AbstractExternalTool
     {

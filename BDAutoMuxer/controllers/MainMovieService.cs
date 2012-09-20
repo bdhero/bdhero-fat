@@ -6,9 +6,9 @@ using System.Net;
 using System.Net.Cache;
 using System.IO;
 using Newtonsoft.Json;
-using BDInfo.models;
+using BDAutoMuxer.models;
 
-namespace BDInfo.controllers
+namespace BDAutoMuxer.controllers
 {
     class MainMovieService
     {

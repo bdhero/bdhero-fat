@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BDInfo")]
-[assembly: AssemblyDescription("Blu-ray Video and Audio Specifications Collection Tool")]
+[assembly: AssemblyTitle("BDAutoMuxer")]
+[assembly: AssemblyDescription("Blu-ray Muxing Tool")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Cinema Squid")]
-[assembly: AssemblyProduct("BDInfo")]
-[assembly: AssemblyCopyright("Copyright © Cinema Squid 2011")]
+[assembly: AssemblyCompany("AndyDvorak.net")]
+[assembly: AssemblyProduct("BDAutoMuxer")]
+[assembly: AssemblyCopyright("Copyright © AndyDvorak.net 2012, Cinema Squid 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6a516a5c-6c0d-4ab0-bb8d-f113d544355e")]
+[assembly: Guid("6ed5ad21-8a71-4e03-885d-67b693dbfc3a")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.5.8")]
-[assembly: AssemblyFileVersion("0.5.8")]
+[assembly: AssemblyVersion("0.2.1")]
+[assembly: AssemblyFileVersion("0.2.1")]

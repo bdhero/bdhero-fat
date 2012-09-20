@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BDInfo
+namespace BDAutoMuxer
 {
     public abstract class TSCodecMPEG2
     {

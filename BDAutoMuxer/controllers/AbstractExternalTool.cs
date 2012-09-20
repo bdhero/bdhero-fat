@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 
-namespace BDInfo.controllers
+namespace BDAutoMuxer.controllers
 {
     // TODO: Add pause support to remaining time estimator
     abstract class AbstractExternalTool : BackgroundWorker

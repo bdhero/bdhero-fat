@@ -23,7 +23,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BDInfo
+namespace BDAutoMuxer
 {
     public abstract class TSCodecAC3
     {

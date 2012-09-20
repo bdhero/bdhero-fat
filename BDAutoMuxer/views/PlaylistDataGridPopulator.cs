@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
-using BDInfo.models;
+using BDAutoMuxer.models;
 using System.Drawing;
 
-namespace BDInfo.views
+namespace BDAutoMuxer.views
 {
     class PlaylistDataGridPopulator
     {

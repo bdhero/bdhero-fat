@@ -8,8 +8,8 @@
     <ProjectGuid>{3209AF1D-4762-4960-9DE5-13E90E77EE96}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BDInfo</RootNamespace>
-    <AssemblyName>BDInfo</AssemblyName>
+    <RootNamespace>BDAutoMuxer</RootNamespace>
+    <AssemblyName>BDAutoMuxer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -56,7 +56,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>BDInfo.Program</StartupObject>
+    <StartupObject>BDAutoMuxer.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

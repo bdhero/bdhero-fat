@@ -9,7 +9,7 @@ using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace BDInfo.controllers
+namespace BDAutoMuxer.controllers
 {
     public class FileUtils
     {

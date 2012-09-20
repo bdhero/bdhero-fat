@@ -1,4 +1,4 @@
-﻿namespace BDInfo
+﻿namespace BDAutoMuxer
 {
     partial class FormDetails
     {

@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Drawing;
 
-namespace BDInfo.controllers
+namespace BDAutoMuxer.controllers
 {
     /// <summary>
     /// XP-safe static wrapper for Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager

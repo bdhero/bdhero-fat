@@ -8,16 +8,16 @@ using System.Windows.Forms;
 using WatTmdb.V3;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using BDInfo.views;
+using BDAutoMuxer.views;
 using Newtonsoft.Json;
-using BDInfo.models;
-using BDInfo.controllers;
+using BDAutoMuxer.models;
+using BDAutoMuxer.controllers;
 using System.IO;
 using System.Runtime.InteropServices;
-using BDInfo.Properties;
+using BDAutoMuxer.Properties;
 using Microsoft.WindowsAPICodePack.Taskbar;
 
-namespace BDInfo
+namespace BDAutoMuxer
 {
     public partial class FormDetails : Form
     {

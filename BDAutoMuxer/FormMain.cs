@@ -30,13 +30,13 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.Cache;
-using BDInfo.models;
+using BDAutoMuxer.models;
 using Newtonsoft.Json;
 using WatTmdb.V3;
-using BDInfo.views;
-using BDInfo.controllers;
+using BDAutoMuxer.views;
+using BDAutoMuxer.controllers;
 
-namespace BDInfo
+namespace BDAutoMuxer
 {
     public partial class FormMain : Form
     {

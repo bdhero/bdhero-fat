@@ -27,7 +27,7 @@ using System.Text;
 using System.Windows.Forms;
 using ZedGraph;
 
-namespace BDInfo
+namespace BDAutoMuxer
 {
     public partial class FormChart : Form
     {

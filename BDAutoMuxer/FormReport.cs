@@ -26,7 +26,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BDInfo
+namespace BDAutoMuxer
 {
     public partial class FormReport : Form
     {

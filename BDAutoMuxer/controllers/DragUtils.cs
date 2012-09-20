@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace BDInfo.controllers
+namespace BDAutoMuxer.controllers
 {
     public class DragUtils
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Globalization;
 using System.IO;
 
-namespace BDInfo.controllers
+namespace BDAutoMuxer.controllers
 {
     public class ChapterWriter
     {

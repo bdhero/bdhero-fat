@@ -24,7 +24,7 @@ using System.Reflection;
 using System.Globalization;
 using System.IO;
 
-namespace BDInfo
+namespace BDAutoMuxer
 {
     static class Program
     {
