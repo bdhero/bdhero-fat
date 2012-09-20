@@ -1,6 +1,6 @@
 *.suo
 .DS_Store
 ._.DS_Store
-/BDInfo/bin
-/BDInfo/obj
+/BDAutoMuxer/bin
+/BDAutoMuxer/obj
 
