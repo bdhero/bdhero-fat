@@ -12,6 +12,8 @@ namespace BDAutoMuxer.controllers
 {
     public delegate void UpdateNotifierCompleteDelegate();
 
+    /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
+    [System.ComponentModel.DesignerCategory("Code")]
     public class UpdateNotifier : BackgroundWorker
     {
         private static readonly string download_url = "https://github.com/acdvorak/bdautomuxer/downloads";
