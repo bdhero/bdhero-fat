@@ -125,9 +125,7 @@
     <Compile Include="views\TaskbarProgress.cs" />
     <Compile Include="tools\TsMuxer.cs" />
     <Compile Include="controllers\MainMovieService.cs" />
-    <Compile Include="controllers\UpdateNotifier.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="controllers\UpdateNotifier.cs" />
     <Compile Include="FormDetails.cs">
       <SubType>Form</SubType>
     </Compile>

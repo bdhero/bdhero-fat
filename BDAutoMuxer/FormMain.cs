@@ -21,21 +21,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Net;
-using System.Net.Cache;
-using BDAutoMuxer.models;
-using Newtonsoft.Json;
-using WatTmdb.V3;
-using BDAutoMuxer.views;
 using BDAutoMuxer.controllers;
-using System.Reflection;
+using BDAutoMuxer.views;
 
 namespace BDAutoMuxer
 {

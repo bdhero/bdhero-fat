@@ -18,14 +18,10 @@
 //=============================================================================
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer

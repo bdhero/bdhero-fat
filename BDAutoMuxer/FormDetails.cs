@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using WatTmdb.V3;
-using System.Text.RegularExpressions;
 using System.Globalization;
-using BDAutoMuxer.views;
-using Newtonsoft.Json;
-using BDAutoMuxer.models;
-using BDAutoMuxer.controllers;
 using System.IO;
-using System.Runtime.InteropServices;
-using BDAutoMuxer.Properties;
-using Microsoft.WindowsAPICodePack.Taskbar;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using BDAutoMuxer.controllers;
+using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
+using BDAutoMuxer.views;
+using Microsoft.WindowsAPICodePack.Taskbar;
+using WatTmdb.V3;
 
 namespace BDAutoMuxer
 {

@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net;
-using System.Net.Cache;
-using System.IO;
-using Newtonsoft.Json;
 using BDAutoMuxer.models;
-using System.Reflection;
+using Newtonsoft.Json;
 
 namespace BDAutoMuxer.controllers
 {
