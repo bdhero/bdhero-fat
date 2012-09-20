@@ -57,15 +57,15 @@ namespace BDAutoMuxer.controllers
                         strData += (strData.Length > 0 ? "&" : "") + Uri.EscapeUriString(key) + "=" + Uri.EscapeUriString(data[key]);
                     }
                 }
-                streamWriter.Write(strData);
+                streamWriter.Write(strData + "\n");
                 streamWriter.Flush();
                 streamWriter.Close();
             }
 
+            // This actually sends the request
             var httpResponse = (HttpWebResponse)request.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
-                // This actually sends the request
                 var responseText = streamReader.ReadToEnd();
                 return responseText;
             }
