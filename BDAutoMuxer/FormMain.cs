@@ -78,9 +78,19 @@ namespace BDAutoMuxer
             if (BDAutoMuxerSettings.MainWindowSize != Size.Empty)
                 Size = BDAutoMuxerSettings.MainWindowSize;
 
-            this.Text = BDAutoMuxerSettings.AssemblyName + " v" + BDAutoMuxerSettings.AssemblyVersion;
+            this.Text = BDAutoMuxerSettings.AssemblyName + " v" + BDAutoMuxerSettings.AssemblyVersionDisplay;
 
             ResetColumnWidths();
+
+            this.CheckForUpdates();
+        }
+
+        private void CheckForUpdates()
+        {
+            if (BDAutoMuxerSettings.CheckForUpdates)
+            {
+                UpdateNotifier.CheckForUpdate(this);
+            }
         }
 
         private void textBoxSource_TextChanged(object sender, EventArgs e)

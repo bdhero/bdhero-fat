@@ -120,6 +120,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="controllers\ChapterWriter.cs" />
+    <Compile Include="controllers\HttpRequest.cs" />
     <Compile Include="controllers\MkvMerge.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -130,6 +131,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="controllers\MainMovieService.cs" />
+    <Compile Include="controllers\UpdateNotifier.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormDetails.cs">
       <SubType>Form</SubType>
     </Compile>

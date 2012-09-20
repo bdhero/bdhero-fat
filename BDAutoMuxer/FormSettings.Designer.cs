@@ -62,6 +62,8 @@ namespace BDAutoMuxer
             this.checkBoxEnableSSIF = new System.Windows.Forms.CheckBox();
             this.labelApiKey = new System.Windows.Forms.Label();
             this.textBoxApiKey = new System.Windows.Forms.TextBox();
+            this.checkBoxCheckForUpdates = new System.Windows.Forms.CheckBox();
+            this.buttonCheckForUpdates = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // checkBoxFilterLoopingPlaylists
@@ -89,7 +91,7 @@ namespace BDAutoMuxer
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(126, 215);
+            this.buttonCancel.Location = new System.Drawing.Point(126, 243);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 6;
@@ -99,7 +101,7 @@ namespace BDAutoMuxer
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(45, 215);
+            this.buttonOK.Location = new System.Drawing.Point(45, 243);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 5;
@@ -203,7 +205,7 @@ namespace BDAutoMuxer
             // labelApiKey
             // 
             this.labelApiKey.AutoSize = true;
-            this.labelApiKey.Location = new System.Drawing.Point(12, 192);
+            this.labelApiKey.Location = new System.Drawing.Point(12, 220);
             this.labelApiKey.Name = "labelApiKey";
             this.labelApiKey.Size = new System.Drawing.Size(47, 13);
             this.labelApiKey.TabIndex = 13;
@@ -213,10 +215,33 @@ namespace BDAutoMuxer
             // 
             this.textBoxApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxApiKey.Location = new System.Drawing.Point(65, 189);
+            this.textBoxApiKey.Location = new System.Drawing.Point(65, 217);
             this.textBoxApiKey.Name = "textBoxApiKey";
-            this.textBoxApiKey.Size = new System.Drawing.Size(166, 20);
+            this.textBoxApiKey.Size = new System.Drawing.Size(189, 20);
             this.textBoxApiKey.TabIndex = 14;
+            // 
+            // checkBoxCheckForUpdates
+            // 
+            this.checkBoxCheckForUpdates.AutoSize = true;
+            this.checkBoxCheckForUpdates.Checked = global::BDAutoMuxer.Properties.Settings.Default.CheckForUpdates;
+            this.checkBoxCheckForUpdates.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCheckForUpdates.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::BDAutoMuxer.Properties.Settings.Default, "CheckForUpdates", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkBoxCheckForUpdates.Location = new System.Drawing.Point(11, 192);
+            this.checkBoxCheckForUpdates.Name = "checkBoxCheckForUpdates";
+            this.checkBoxCheckForUpdates.Size = new System.Drawing.Size(163, 17);
+            this.checkBoxCheckForUpdates.TabIndex = 15;
+            this.checkBoxCheckForUpdates.Text = "Check for updates on startup";
+            this.checkBoxCheckForUpdates.UseVisualStyleBackColor = true;
+            // 
+            // buttonCheckForUpdates
+            // 
+            this.buttonCheckForUpdates.Location = new System.Drawing.Point(180, 188);
+            this.buttonCheckForUpdates.Name = "buttonCheckForUpdates";
+            this.buttonCheckForUpdates.Size = new System.Drawing.Size(75, 23);
+            this.buttonCheckForUpdates.TabIndex = 16;
+            this.buttonCheckForUpdates.Text = "Check now";
+            this.buttonCheckForUpdates.UseVisualStyleBackColor = true;
+            this.buttonCheckForUpdates.Click += new System.EventHandler(this.buttonCheckForUpdates_Click);
             // 
             // FormSettings
             // 
@@ -224,7 +249,9 @@ namespace BDAutoMuxer
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(243, 245);
+            this.ClientSize = new System.Drawing.Size(266, 275);
+            this.Controls.Add(this.buttonCheckForUpdates);
+            this.Controls.Add(this.checkBoxCheckForUpdates);
             this.Controls.Add(this.textBoxApiKey);
             this.Controls.Add(this.labelApiKey);
             this.Controls.Add(this.checkBoxEnableSSIF);
@@ -267,5 +294,7 @@ namespace BDAutoMuxer
         private System.Windows.Forms.CheckBox checkBoxEnableSSIF;
         private System.Windows.Forms.Label labelApiKey;
         private System.Windows.Forms.TextBox textBoxApiKey;
+        private System.Windows.Forms.CheckBox checkBoxCheckForUpdates;
+        private System.Windows.Forms.Button buttonCheckForUpdates;
     }
 }

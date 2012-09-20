@@ -18,7 +18,7 @@ namespace BDAutoMuxer.controllers
 
         public MainMovieService()
         {
-            user_agent = BDAutoMuxerSettings.AssemblyName + "/" + BDAutoMuxerSettings.AssemblyVersion;
+            user_agent = BDAutoMuxerSettings.AssemblyName + "/" + BDAutoMuxerSettings.AssemblyVersionDisplay;
         }
 
         private string GetMainMovieUri(string volume_label, IList<TSPlaylistFile> mainPlaylists)

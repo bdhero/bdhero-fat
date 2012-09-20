@@ -26,6 +26,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer
 {
@@ -73,6 +74,12 @@ namespace BDAutoMuxer
         {
             Close();
         }
+
+        private void buttonCheckForUpdates_Click(object sender, EventArgs e)
+        {
+            buttonCheckForUpdates.Enabled = false;
+            UpdateNotifier.CheckForUpdate(this, true, delegate() { buttonCheckForUpdates.Enabled = true; });
+        }
     }
 
     public class BDAutoMuxerSettings
@@ -86,12 +93,19 @@ namespace BDAutoMuxer
             }
         }
 
-        public static string AssemblyVersion
+        public static Version AssemblyVersion
         {
             get
             {
-                Assembly asm = Properties.Settings.Default.GetType().Assembly;
-                return Regex.Replace(asm.GetName().Version.ToString(), @"^(\d+\.\d+\.\d+)\.\d+$", "$1");
+                return Properties.Settings.Default.GetType().Assembly.GetName().Version;
+            }
+        }
+
+        public static string AssemblyVersionDisplay
+        {
+            get
+            {
+                return Regex.Replace(AssemblyVersion.ToString(), @"^(\d+\.\d+\.\d+)\.\d+$", "$1");
             }
         }
 
@@ -406,6 +420,21 @@ namespace BDAutoMuxer
             set
             {
                 try { Properties.Settings.Default.DetailsWindowLocation = value; }
+                catch { }
+            }
+        }
+
+        public static bool CheckForUpdates
+        {
+            get
+            {
+                try { return Properties.Settings.Default.CheckForUpdates; }
+                catch { return true; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.CheckForUpdates = value; }
                 catch { }
             }
         }
