@@ -41,8 +41,7 @@ namespace BDAutoMuxer.controllers
             IList<string> filePaths = new List<string>();
             foreach (string path in paths)
             {
-                FileAttributes attr = File.GetAttributes(path);
-                if ((attr & FileAttributes.Directory) == 0)
+                if (FileUtils.IsFile(path))
                     filePaths.Add(path);
             }
             return filePaths.ToArray();
@@ -53,8 +52,7 @@ namespace BDAutoMuxer.controllers
             string[] paths = GetPaths(e);
             foreach (string path in paths)
             {
-                FileAttributes attr = File.GetAttributes(path);
-                if ((attr & FileAttributes.Directory) == 0)
+                if (FileUtils.IsFile(path))
                     return path;
             }
             return null;
@@ -66,8 +64,7 @@ namespace BDAutoMuxer.controllers
             IList<string> directoryPaths = new List<string>();
             foreach (string path in paths)
             {
-                FileAttributes attr = File.GetAttributes(path);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                if (FileUtils.IsDirectory(path))
                     directoryPaths.Add(path);
             }
             return directoryPaths.ToArray();
@@ -78,8 +75,7 @@ namespace BDAutoMuxer.controllers
             string[] paths = GetPaths(e);
             foreach (string path in paths)
             {
-                FileAttributes attr = File.GetAttributes(path);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                if (FileUtils.IsDirectory(path))
                     return path;
             }
             return null;
