@@ -91,8 +91,7 @@ namespace BDAutoMuxer
             get
             {
                 Assembly asm = Properties.Settings.Default.GetType().Assembly;
-                Version version = asm.GetName().Version;
-                return Regex.Replace(version.ToString(), @"^(\d+\.\d+\.\d+)\.\d+)$", "$1");
+                return Regex.Replace(asm.GetName().Version.ToString(), @"^(\d+\.\d+\.\d+)\.\d+$", "$1");
             }
         }
 
