@@ -29,6 +29,25 @@ namespace BDAutoMuxer.controllers
             return new string[0];
         }
 
+        public static string GetFirstPath(DragEventArgs e)
+        {
+            string[] paths = GetPaths(e);
+            return paths.Length > 0 ? paths[0] : null;
+        }
+
+        public static string[] GetFilePaths(DragEventArgs e)
+        {
+            string[] paths = GetPaths(e);
+            IList<string> filePaths = new List<string>();
+            foreach (string path in paths)
+            {
+                FileAttributes attr = File.GetAttributes(path);
+                if ((attr & FileAttributes.Directory) == 0)
+                    filePaths.Add(path);
+            }
+            return filePaths.ToArray();
+        }
+
         public static string GetFirstFilePath(DragEventArgs e)
         {
             string[] paths = GetPaths(e);
@@ -41,6 +60,19 @@ namespace BDAutoMuxer.controllers
             return null;
         }
 
+        public static string[] GetDirectoryPaths(DragEventArgs e)
+        {
+            string[] paths = GetPaths(e);
+            IList<string> directoryPaths = new List<string>();
+            foreach (string path in paths)
+            {
+                FileAttributes attr = File.GetAttributes(path);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    directoryPaths.Add(path);
+            }
+            return directoryPaths.ToArray();
+        }
+
         public static string GetFirstDirectoryPath(DragEventArgs e)
         {
             string[] paths = GetPaths(e);
@@ -51,12 +83,6 @@ namespace BDAutoMuxer.controllers
                     return path;
             }
             return null;
-        }
-
-        public static string GetFirstPath(DragEventArgs e)
-        {
-            string[] paths = GetPaths(e);
-            return paths.Length > 0 ? paths[0] : null;
         }
 
         public static string GetFirstFileNameWithoutExtension(DragEventArgs e)
