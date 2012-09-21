@@ -85,6 +85,7 @@ namespace BDAutoMuxer
             this.buttonRip = new System.Windows.Forms.Button();
             this.buttonViewReport = new System.Windows.Forms.Button();
             this.buttonScan = new System.Windows.Forms.Button();
+            this.buttonRemux = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerOuter)).BeginInit();
             this.splitContainerOuter.Panel1.SuspendLayout();
             this.splitContainerOuter.Panel2.SuspendLayout();
@@ -225,7 +226,7 @@ namespace BDAutoMuxer
             this.buttonSelectAll.Location = new System.Drawing.Point(106, 50);
             this.buttonSelectAll.Name = "buttonSelectAll";
             this.buttonSelectAll.Size = new System.Drawing.Size(75, 23);
-            this.buttonSelectAll.TabIndex = 2;
+            this.buttonSelectAll.TabIndex = 3;
             this.buttonSelectAll.Text = "Select All";
             this.buttonSelectAll.UseVisualStyleBackColor = true;
             this.buttonSelectAll.Click += new System.EventHandler(this.buttonSelectAll_Click);
@@ -236,7 +237,7 @@ namespace BDAutoMuxer
             this.buttonUnselectAll.Location = new System.Drawing.Point(187, 50);
             this.buttonUnselectAll.Name = "buttonUnselectAll";
             this.buttonUnselectAll.Size = new System.Drawing.Size(75, 23);
-            this.buttonUnselectAll.TabIndex = 3;
+            this.buttonUnselectAll.TabIndex = 4;
             this.buttonUnselectAll.Text = "Unselect All";
             this.buttonUnselectAll.UseVisualStyleBackColor = true;
             this.buttonUnselectAll.Click += new System.EventHandler(this.buttonUnselectAll_Click);
@@ -247,7 +248,7 @@ namespace BDAutoMuxer
             this.buttonCustomPlaylist.Location = new System.Drawing.Point(268, 50);
             this.buttonCustomPlaylist.Name = "buttonCustomPlaylist";
             this.buttonCustomPlaylist.Size = new System.Drawing.Size(75, 23);
-            this.buttonCustomPlaylist.TabIndex = 4;
+            this.buttonCustomPlaylist.TabIndex = 5;
             this.buttonCustomPlaylist.Text = "Custom...";
             this.buttonCustomPlaylist.UseVisualStyleBackColor = true;
             this.buttonCustomPlaylist.Click += new System.EventHandler(this.buttonCustomPlaylist_Click);
@@ -447,7 +448,7 @@ namespace BDAutoMuxer
             this.buttonRip.Location = new System.Drawing.Point(594, 50);
             this.buttonRip.Name = "buttonRip";
             this.buttonRip.Size = new System.Drawing.Size(75, 23);
-            this.buttonRip.TabIndex = 39;
+            this.buttonRip.TabIndex = 7;
             this.buttonRip.Text = "Rip...";
             this.buttonRip.UseVisualStyleBackColor = true;
             this.buttonRip.Click += new System.EventHandler(this.buttonRip_Click);
@@ -476,6 +477,17 @@ namespace BDAutoMuxer
             this.buttonScan.UseVisualStyleBackColor = true;
             this.buttonScan.Click += new System.EventHandler(this.buttonScan_Click);
             // 
+            // buttonRemux
+            // 
+            this.buttonRemux.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRemux.Location = new System.Drawing.Point(513, 50);
+            this.buttonRemux.Name = "buttonRemux";
+            this.buttonRemux.Size = new System.Drawing.Size(75, 23);
+            this.buttonRemux.TabIndex = 6;
+            this.buttonRemux.Text = "Remux...";
+            this.buttonRemux.UseVisualStyleBackColor = true;
+            this.buttonRemux.Click += new System.EventHandler(this.buttonRemux_Click);
+            // 
             // FormMain
             // 
             this.AcceptButton = this.buttonRescan;
@@ -483,6 +495,7 @@ namespace BDAutoMuxer
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(681, 682);
+            this.Controls.Add(this.buttonRemux);
             this.Controls.Add(this.buttonRip);
             this.Controls.Add(this.buttonRescan);
             this.Controls.Add(this.splitContainerOuter);
@@ -564,5 +577,6 @@ namespace BDAutoMuxer
         private System.Windows.Forms.Button buttonRip;
         private System.Windows.Forms.Button buttonViewReport;
         private System.Windows.Forms.Button buttonScan;
+        private System.Windows.Forms.Button buttonRemux;
     }
 }

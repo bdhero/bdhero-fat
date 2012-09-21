@@ -17,6 +17,46 @@ namespace BDAutoMuxer.controllers
             return GetFirstDirectoryPath(e) != null;
         }
 
+        /// <summary>
+        /// Returns true if at least one (>= 1) of the dragged files has an extension that matches
+        /// at least one (>= 1) of the given file extensions.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="extension">File extension of the form ".ext" or "ext" (case insensitive)</param>
+        /// <returns></returns>
+        public static bool HasFileExtension(DragEventArgs e, string extension)
+        {
+            return HasFileExtension(e, new string[] { extension });
+        }
+
+        /// <summary>
+        /// Returns true if at least one (>= 1) of the dragged files has an extension that matches
+        /// at least one (>= 1) of the given file extensions.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="extensions">Collection of file extensions of the form ".ext" or "ext" (case insensitive)</param>
+        /// <returns></returns>
+        public static bool HasFileExtension(DragEventArgs e, ICollection<string> extensions)
+        {
+            // Make sure ever extension starts with a period (e.g., ".ext")
+            ISet<string> normalizedExtensions = new HashSet<string>();
+            foreach (string ext in extensions)
+            {
+                string extNorm = ext.Trim().ToLower();
+                if (!ext.StartsWith("."))
+                    extNorm = "." + extNorm;
+                normalizedExtensions.Add(extNorm);
+            }
+
+            foreach (string path in GetFilePaths(e))
+            {
+                if (normalizedExtensions.Contains(Path.GetExtension(path).ToLower()))
+                    return true;
+            }
+
+            return false;
+        }
+
         public static string[] GetPaths(DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))

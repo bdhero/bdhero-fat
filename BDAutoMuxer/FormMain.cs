@@ -1334,6 +1334,11 @@ namespace BDAutoMuxer
         {
             FindMainPlaylist();
         }
+
+        private void buttonRemux_Click(object sender, EventArgs e)
+        {
+            new FormRemux().Show(this);
+        }
     }
 
     public class ListViewColumnSorter : IComparer
