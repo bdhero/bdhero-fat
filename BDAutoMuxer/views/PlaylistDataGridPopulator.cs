@@ -398,9 +398,16 @@ namespace BDAutoMuxer.views
 
         private void AutoConfigure(JsonPlaylist jsonPlaylist, Dictionary<string, PlaylistGridItem> gridItems)
         {
-            PlaylistGridItem item = gridItems[jsonPlaylist.filename.ToUpper()];
+            string key = jsonPlaylist.filename.ToUpper();
 
-            if (item == null) return;
+            // TODO: Figure out why this fails on "The Hunger Games"
+            if (!gridItems.ContainsKey(key))
+                return;
+
+            PlaylistGridItem item = gridItems[key];
+
+            if (item == null)
+                return;
 
             item.VideoLanguageAuto = jsonPlaylist.ISO_639_2;
             item.IsMainMovie = jsonPlaylist.is_main;
