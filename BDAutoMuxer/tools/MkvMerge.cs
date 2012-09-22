@@ -12,27 +12,26 @@ namespace BDAutoMuxer.tools
     {
         private string exe_path;
 
-        private string basePath;
-        private string m2tsPath;
-        private string chapterTxtPath;
-        private string mkvPath;
+        private string inputM2tsPath;
+        private string inputMkvPath;
+        private string inputChaptersPath;
+        private string outputMkvPath;
+        private bool keepM2tsAudio;
 
         protected override string Name { get { return "MkvMerge"; } }
         protected override string Filename { get { return "mkvmerge.exe"; } }
 
         private BDROM BDROM;
-        private ICollection<TSAudioStream> selectedAudioTracks;
 
-        public MkvMerge(BDROM BDROM, string m2tsPath, ICollection<TSAudioStream> selectedAudioTracks)
+        public MkvMerge(/*BDROM BDROM, */string inputM2tsPath, string inputMkvPath, string inputChaptersPath, string outputMkvPath, bool keepM2tsAudio = true)
             : base()
         {
-            this.BDROM = BDROM;
-            this.m2tsPath = m2tsPath;
-            this.selectedAudioTracks = selectedAudioTracks;
-
-            this.basePath = Path.Combine(Path.GetDirectoryName(m2tsPath), Path.GetFileNameWithoutExtension(m2tsPath));
-            this.chapterTxtPath = basePath + ".chapters.txt";
-            this.mkvPath = basePath + ".mkv";
+            //this.BDROM = BDROM;
+            this.inputM2tsPath = inputM2tsPath;
+            this.inputMkvPath = inputMkvPath;
+            this.inputChaptersPath = inputChaptersPath;
+            this.outputMkvPath = outputMkvPath;
+            this.keepM2tsAudio = keepM2tsAudio;
 
             this.DoWork += Mux;
         }
@@ -43,7 +42,11 @@ namespace BDAutoMuxer.tools
 
             ExtractResources();
 
-            Execute(new List<string>() { "-o", mkvPath, "--chapters", chapterTxtPath, m2tsPath }, sender, e);
+            string inputM2tsFlags = keepM2tsAudio ? "" : "--no-audio";
+            string inputMkvFlags = keepM2tsAudio ? "--no-audio" : "";
+
+            // TODO: Don't pass empty args
+            Execute(new List<string>() { "--chapters", inputChaptersPath, "-o", outputMkvPath, "--no-video", inputM2tsFlags, inputM2tsPath, inputMkvFlags, inputMkvPath }, sender, e);
         }
 
         protected override void ExtractResources()
@@ -53,14 +56,13 @@ namespace BDAutoMuxer.tools
 
         protected override void HandleOutputLine(string line, object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
             string regex = @"^Progress: ([\d\.]+)\%";
             if (Regex.IsMatch(line, regex))
             {
                 Match match = Regex.Match(line, regex);
                 Double.TryParse(match.Groups[1].Value, out progress);
-                worker.ReportProgress((int)progress);
             }
+            // TODO: Check for errors here
         }
     }
 }

@@ -33,8 +33,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButtonUseM2tsAudio = new System.Windows.Forms.RadioButton();
+            this.radioButtonUseMkvAudio = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.buttonInputM2tsBrowse = new System.Windows.Forms.Button();
@@ -64,8 +64,8 @@
             // 
             // textBoxInputM2ts
             // 
-            this.textBoxInputM2ts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxInputM2ts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxInputM2ts.Location = new System.Drawing.Point(116, 15);
             this.textBoxInputM2ts.Name = "textBoxInputM2ts";
             this.textBoxInputM2ts.Size = new System.Drawing.Size(362, 20);
@@ -98,32 +98,32 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Keep audio from:";
             // 
-            // radioButton1
+            // radioButtonUseM2tsAudio
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(3, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(95, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "M2TS (source)";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButtonUseM2tsAudio.AutoSize = true;
+            this.radioButtonUseM2tsAudio.Checked = true;
+            this.radioButtonUseM2tsAudio.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonUseM2tsAudio.Name = "radioButtonUseM2tsAudio";
+            this.radioButtonUseM2tsAudio.Size = new System.Drawing.Size(95, 17);
+            this.radioButtonUseM2tsAudio.TabIndex = 0;
+            this.radioButtonUseM2tsAudio.TabStop = true;
+            this.radioButtonUseM2tsAudio.Text = "M2TS (source)";
+            this.radioButtonUseM2tsAudio.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // radioButtonUseMkvAudio
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(3, 27);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(111, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "MKV (HandBrake)";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButtonUseMkvAudio.AutoSize = true;
+            this.radioButtonUseMkvAudio.Location = new System.Drawing.Point(3, 27);
+            this.radioButtonUseMkvAudio.Name = "radioButtonUseMkvAudio";
+            this.radioButtonUseMkvAudio.Size = new System.Drawing.Size(111, 17);
+            this.radioButtonUseMkvAudio.TabIndex = 1;
+            this.radioButtonUseMkvAudio.Text = "MKV (HandBrake)";
+            this.radioButtonUseMkvAudio.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.radioButton1);
-            this.panel1.Controls.Add(this.radioButton2);
+            this.panel1.Controls.Add(this.radioButtonUseM2tsAudio);
+            this.panel1.Controls.Add(this.radioButtonUseMkvAudio);
             this.panel1.Location = new System.Drawing.Point(116, 99);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(118, 48);
@@ -173,8 +173,8 @@
             // 
             // textBoxInputMkv
             // 
-            this.textBoxInputMkv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxInputMkv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxInputMkv.Location = new System.Drawing.Point(116, 44);
             this.textBoxInputMkv.Name = "textBoxInputMkv";
             this.textBoxInputMkv.Size = new System.Drawing.Size(362, 20);
@@ -182,8 +182,8 @@
             // 
             // textBoxInputChapters
             // 
-            this.textBoxInputChapters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxInputChapters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxInputChapters.Location = new System.Drawing.Point(116, 73);
             this.textBoxInputChapters.Name = "textBoxInputChapters";
             this.textBoxInputChapters.Size = new System.Drawing.Size(362, 20);
@@ -191,8 +191,8 @@
             // 
             // textBoxOutputMkv
             // 
-            this.textBoxOutputMkv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputMkv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputMkv.Location = new System.Drawing.Point(116, 153);
             this.textBoxOutputMkv.Name = "textBoxOutputMkv";
             this.textBoxOutputMkv.Size = new System.Drawing.Size(362, 20);
@@ -223,15 +223,14 @@
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(354, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(323, 17);
             this.toolStripStatusLabel.Spring = true;
-            this.toolStripStatusLabel.Text = "Drag and drop files onto this window";
+            this.toolStripStatusLabel.Text = "Drag files onto this window";
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressBar.Maximum = 1000;
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(200, 16);
             this.toolStripProgressBar.Step = 1;
@@ -258,6 +257,7 @@
             this.buttonRemux.TabIndex = 8;
             this.buttonRemux.Text = "Mux!";
             this.buttonRemux.UseVisualStyleBackColor = true;
+            this.buttonRemux.Click += new System.EventHandler(this.buttonRemux_Click);
             // 
             // FormRemux
             // 
@@ -307,8 +307,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButtonUseM2tsAudio;
+        private System.Windows.Forms.RadioButton radioButtonUseMkvAudio;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button buttonInputM2tsBrowse;

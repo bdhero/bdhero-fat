@@ -8,11 +8,15 @@ using System.Text;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
 using System.Text.RegularExpressions;
+using System.IO;
+using BDAutoMuxer.tools;
 
 namespace BDAutoMuxer
 {
     public partial class FormRemux : Form
     {
+        private MkvMerge mkvMerge;
+
         public FormRemux()
         {
             InitializeComponent();
@@ -38,10 +42,12 @@ namespace BDAutoMuxer
 
         private void FormRemux_DragDrop(object sender, DragEventArgs e)
         {
-            string path = DragUtils.GetFirstPath(e);
-            if (path != null)
-            {
-            }
+            if (DragUtils.HasFileExtension(e, "m2ts"))
+                textBoxInputM2ts.Text = DragUtils.GetFirstFileWithExtension(e, "m2ts");
+            if (DragUtils.HasFileExtension(e, "mkv"))
+                textBoxInputMkv.Text = DragUtils.GetFirstFileWithExtension(e, "mkv");
+            if (DragUtils.HasFileExtension(e, new string[] { "txt", "xml" }))
+                textBoxInputChapters.Text = DragUtils.GetFirstFileWithExtension(e, new string[] { "txt", "xml" });
         }
 
         /// <see cref="http://stackoverflow.com/a/2140908/467582"/>
@@ -141,6 +147,33 @@ namespace BDAutoMuxer
                 MessageBox.Show(msg, "BDAutoMuxer Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void buttonRemux_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(textBoxInputM2ts.Text) &&
+                File.Exists(textBoxInputMkv.Text) &&
+                File.Exists(textBoxInputChapters.Text))
+            {
+                buttonRemux.Enabled = false;
+
+                mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked);
+                mkvMerge.WorkerReportsProgress = true;
+                mkvMerge.WorkerSupportsCancellation = true;
+                mkvMerge.ProgressChanged += mkvMerge_ProgressChanged;
+                mkvMerge.RunWorkerCompleted += mkvMerge_RunWorkerCompleted;
+                mkvMerge.RunWorkerAsync();
+            }
+        }
+
+        private void mkvMerge_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            toolStripProgressBar.Value = e.ProgressPercentage;
+        }
+
+        private void mkvMerge_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            buttonRemux.Enabled = true;
         }
     }
 }

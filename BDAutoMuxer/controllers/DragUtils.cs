@@ -38,7 +38,51 @@ namespace BDAutoMuxer.controllers
         /// <returns></returns>
         public static bool HasFileExtension(DragEventArgs e, ICollection<string> extensions)
         {
-            // Make sure ever extension starts with a period (e.g., ".ext")
+            ICollection<string> normalizedExtensions = NormalizeFileExtensions(extensions);
+            foreach (string path in GetFilePaths(e))
+            {
+                if (normalizedExtensions.Contains(Path.GetExtension(path).ToLower()))
+                    return true;
+            }
+            return false;
+        }
+
+        public static IList<string> GetFilesWithExtension(DragEventArgs e, string extension)
+        {
+            return GetFilesWithExtension(e, new string[] { extension });
+        }
+
+        public static IList<string> GetFilesWithExtension(DragEventArgs e, ICollection<string> extensions)
+        {
+            IList<string> paths = new List<string>();
+            ICollection<string> normalizedExtensions = NormalizeFileExtensions(extensions);
+
+            foreach (string path in GetFilePaths(e))
+            {
+                if (normalizedExtensions.Contains(Path.GetExtension(path).ToLower()))
+                    paths.Add(path);
+            }
+
+            return paths;
+        }
+
+        public static string GetFirstFileWithExtension(DragEventArgs e, string extension)
+        {
+            return GetFirstFileWithExtension(e, new string[] { extension });
+        }
+
+        public static string GetFirstFileWithExtension(DragEventArgs e, ICollection<string> extensions)
+        {
+            IList<string> files = GetFilesWithExtension(e, extensions);
+            if (files.Count > 0)
+                return files[0];
+            else
+                return null;
+        }
+
+        private static ICollection<string> NormalizeFileExtensions(ICollection<string> extensions)
+        {
+            // Make sure every extension starts with a period (e.g., ".ext")
             ISet<string> normalizedExtensions = new HashSet<string>();
             foreach (string ext in extensions)
             {
@@ -47,14 +91,7 @@ namespace BDAutoMuxer.controllers
                     extNorm = "." + extNorm;
                 normalizedExtensions.Add(extNorm);
             }
-
-            foreach (string path in GetFilePaths(e))
-            {
-                if (normalizedExtensions.Contains(Path.GetExtension(path).ToLower()))
-                    return true;
-            }
-
-            return false;
+            return normalizedExtensions;
         }
 
         public static string[] GetPaths(DragEventArgs e)
