@@ -225,17 +225,21 @@ namespace BDAutoMuxer.tools
 
         private BackgroundWorker worker;
 
-        protected void Execute(IList<string> args, object sender, DoWorkEventArgs e)
+        protected void Execute(IList<string> args, object sender, DoWorkEventArgs e, bool skipNullArgs = true)
         {
             ExtractResources();
 
             worker = sender as BackgroundWorker;
             worker.ReportProgress(0);
 
-            string[] sanitizedArgs = new string[args.Count];
+            IList<string> sanitizedArgs = new List<string>();
 
             for (int i = 0; i < args.Count; i++)
-                sanitizedArgs[i] = "\"" + (args[i] != null ? args[i].Replace("\"", "\\\"") : "") + "\"";
+            {
+                bool skip = args[i] == null && skipNullArgs;
+                if (!skip)
+                    sanitizedArgs.Add("\"" + (args[i] != null ? args[i].Replace("\"", "\\\"") : "") + "\"");
+            }
 
             progress = 0;
             timer = new Timer();

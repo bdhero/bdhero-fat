@@ -44,13 +44,13 @@
             this.textBoxInputChapters = new System.Windows.Forms.TextBox();
             this.textBoxOutputMkv = new System.Windows.Forms.TextBox();
             this.buttonOutputMkvBrowse = new System.Windows.Forms.Button();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusStripLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.buttonClose = new System.Windows.Forms.Button();
             this.buttonRemux = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -209,32 +209,33 @@
             this.buttonOutputMkvBrowse.UseVisualStyleBackColor = true;
             this.buttonOutputMkvBrowse.Click += new System.EventHandler(this.buttonOutputMkvBrowse_Click);
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel,
-            this.toolStripProgressBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 212);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(571, 22);
-            this.statusStrip1.TabIndex = 19;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStripLabel,
+            this.statusStripProgressBar});
+            this.statusStrip.Location = new System.Drawing.Point(0, 212);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(571, 22);
+            this.statusStrip.TabIndex = 19;
+            this.statusStrip.Text = "statusStrip";
             // 
-            // toolStripStatusLabel
+            // statusStripLabel
             // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(323, 17);
-            this.toolStripStatusLabel.Spring = true;
-            this.toolStripStatusLabel.Text = "Drag files onto this window";
-            this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.statusStripLabel.Name = "statusStripLabel";
+            this.statusStripLabel.Size = new System.Drawing.Size(323, 17);
+            this.statusStripLabel.Spring = true;
+            this.statusStripLabel.Text = "Drag files onto this window";
+            this.statusStripLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // toolStripProgressBar
+            // statusStripProgressBar
             // 
-            this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(200, 16);
-            this.toolStripProgressBar.Step = 1;
-            this.toolStripProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.statusStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.statusStripProgressBar.Maximum = 1000;
+            this.statusStripProgressBar.Name = "statusStripProgressBar";
+            this.statusStripProgressBar.Size = new System.Drawing.Size(200, 16);
+            this.statusStripProgressBar.Step = 1;
+            this.statusStripProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // buttonClose
             // 
@@ -269,7 +270,7 @@
             this.ClientSize = new System.Drawing.Size(571, 234);
             this.Controls.Add(this.buttonRemux);
             this.Controls.Add(this.buttonClose);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.textBoxOutputMkv);
             this.Controls.Add(this.buttonOutputMkvBrowse);
             this.Controls.Add(this.textBoxInputChapters);
@@ -288,13 +289,14 @@
             this.Name = "FormRemux";
             this.ShowIcon = false;
             this.Text = "Remuxer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormRemux_FormClosing);
             this.Load += new System.EventHandler(this.FormRemux_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormRemux_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FormRemux_DragEnter);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -318,9 +320,9 @@
         private System.Windows.Forms.TextBox textBoxInputChapters;
         private System.Windows.Forms.TextBox textBoxOutputMkv;
         private System.Windows.Forms.Button buttonOutputMkvBrowse;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripLabel;
+        private System.Windows.Forms.ToolStripProgressBar statusStripProgressBar;
         private System.Windows.Forms.Button buttonClose;
         private System.Windows.Forms.Button buttonRemux;
     }

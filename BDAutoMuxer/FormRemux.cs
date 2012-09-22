@@ -86,11 +86,6 @@ namespace BDAutoMuxer
             Border = 18
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
         private void buttonInputM2tsBrowse_Click(object sender, EventArgs e)
         {
             BrowseFile(textBoxInputM2ts, "Select an Input M2TS File:", "BDAV Transport Stream", "m2ts");
@@ -151,11 +146,24 @@ namespace BDAutoMuxer
 
         private void buttonRemux_Click(object sender, EventArgs e)
         {
-            if (File.Exists(textBoxInputM2ts.Text) &&
+            buttonRemux.Text = "Pause";
+            buttonClose.Text = "Stop";
+
+            if (mkvMerge != null && mkvMerge.IsBusy)
+            {
+                if (mkvMerge.IsPaused)
+                    mkvMerge.Resume();
+                else
+                {
+                    mkvMerge.Pause();
+                    buttonRemux.Text = "Resume";
+                }
+            }
+            else if(
+                File.Exists(textBoxInputM2ts.Text) &&
                 File.Exists(textBoxInputMkv.Text) &&
                 File.Exists(textBoxInputChapters.Text))
             {
-                buttonRemux.Enabled = false;
 
                 mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked);
                 mkvMerge.WorkerReportsProgress = true;
@@ -164,16 +172,61 @@ namespace BDAutoMuxer
                 mkvMerge.RunWorkerCompleted += mkvMerge_RunWorkerCompleted;
                 mkvMerge.RunWorkerAsync();
             }
+
+            mkvMerge_ProgressChanged(this, null);
         }
 
         private void mkvMerge_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            toolStripProgressBar.Value = e.ProgressPercentage;
+            // TODO: This throws a NPE if the window is closed while muxing is in progress
+            statusStripProgressBar.Value = (int)(10 * mkvMerge.Progress);
+            statusStripLabel.Text = mkvMerge.Progress.ToString("##0.0") + "%";
+
+            if (mkvMerge.IsPaused)
+                statusStripLabel.Text += " (paused)";
+            if (mkvMerge.IsError)
+                statusStripLabel.Text += " (error)";
+            if (mkvMerge.IsCanceled)
+                statusStripLabel.Text += " (canceled)";
+            if (mkvMerge.IsCompleted)
+                statusStripLabel.Text += " (completed)";
         }
 
         private void mkvMerge_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            buttonRemux.Enabled = true;
+            buttonRemux.Text = "Mux!";
+            buttonClose.Text = "Close";
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            if (mkvMerge != null && mkvMerge.IsBusy)
+            {
+                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    return;
+
+                mkvMerge.Resume();
+                mkvMerge.CancelAsync();
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        private void FormRemux_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (mkvMerge != null && mkvMerge.IsBusy)
+            {
+                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                mkvMerge.Resume();
+                mkvMerge.CancelAsync();
+            }
         }
     }
 }

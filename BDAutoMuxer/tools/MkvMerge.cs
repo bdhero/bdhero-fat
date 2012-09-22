@@ -42,8 +42,8 @@ namespace BDAutoMuxer.tools
 
             ExtractResources();
 
-            string inputM2tsFlags = keepM2tsAudio ? "" : "--no-audio";
-            string inputMkvFlags = keepM2tsAudio ? "--no-audio" : "";
+            string inputM2tsFlags = keepM2tsAudio ? null : "--no-audio";
+            string inputMkvFlags = keepM2tsAudio ? "--no-audio" : null;
 
             // TODO: Don't pass empty args
             Execute(new List<string>() { "--chapters", inputChaptersPath, "-o", outputMkvPath, "--no-video", inputM2tsFlags, inputM2tsPath, inputMkvFlags, inputMkvPath }, sender, e);
