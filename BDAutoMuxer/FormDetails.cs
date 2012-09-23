@@ -1424,6 +1424,8 @@ namespace BDAutoMuxer
             // TODO: Also handle pasted text
             if (!FileUtils.IsValidFilename(e.KeyChar + "") && e.KeyChar >= 32 && e.KeyChar != 127)
                 e.Handled = true;
+
+            TextBox_KeyPress(sender, e);
         }
 
         private void FilterControlChanged(object sender, EventArgs e)
@@ -1540,6 +1542,16 @@ namespace BDAutoMuxer
             string filenameWithoutExtension = DragUtils.GetFirstFileNameWithoutExtension(e);
             if (!String.IsNullOrEmpty(filenameWithoutExtension))
                 textBoxOutputFileName.Text = filenameWithoutExtension;
+        }
+
+        /// <see cref="http://www.dzone.com/snippets/ctrl-shortcut-select-all-text"/>
+        private void TextBox_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\x1')
+            {
+                ((TextBox)sender).SelectAll();
+                e.Handled = true;
+            }
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
