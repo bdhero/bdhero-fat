@@ -32,28 +32,35 @@ namespace BDAutoMuxer.controllers
             this.DoWork += CheckForUpdate;
         }
 
-        private void CheckForUpdate(object sender, EventArgs e)
+        private void CheckForUpdate(object sender, DoWorkEventArgs e)
         {
-            string versionTxt = HttpRequest.Get(version_url);
-
-            if (Regex.IsMatch(versionTxt, regex))
+            try
             {
-                Match match = Regex.Match(versionTxt, regex);
+                string versionTxt = HttpRequest.Get(version_url);
 
-                string strLatestVersion = match.Groups[1].Value;
-                string strLatestDate = match.Groups[2].Value;
-
-                if (Version.TryParse(strLatestVersion, out latestVersion) && DateTime.TryParse(strLatestDate, out latestDate))
+                if (Regex.IsMatch(versionTxt, regex))
                 {
-                    isUpdateAvailable = latestVersion > currentVersion;
+                    Match match = Regex.Match(versionTxt, regex);
+
+                    string strLatestVersion = match.Groups[1].Value;
+                    string strLatestDate = match.Groups[2].Value;
+
+                    if (Version.TryParse(strLatestVersion, out latestVersion) && DateTime.TryParse(strLatestDate, out latestDate))
+                    {
+                        isUpdateAvailable = latestVersion > currentVersion;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                e.Result = ex;
             }
         }
 
         public static void CheckForUpdate(Form form, bool notifyIfUpToDate = false, UpdateNotifierCompleteDelegate onComplete = null)
         {
             UpdateNotifier updateNotifier = new UpdateNotifier();
-            updateNotifier.RunWorkerCompleted += (object sender2, RunWorkerCompletedEventArgs e2) =>
+            updateNotifier.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
             {
                 if (updateNotifier.IsUpdateAvailable)
                 {
@@ -69,10 +76,20 @@ namespace BDAutoMuxer.controllers
                 }
                 else if (notifyIfUpToDate)
                 {
-                    MessageBox.Show(form,
-                        string.Format("You are using the latest version of {0} ({1}).", BDAutoMuxerSettings.AssemblyName, BDAutoMuxerSettings.AssemblyVersionDisplay),
-                        "No updates available",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (e.Result != null && e.Result is Exception)
+                    {
+                        MessageBox.Show(form,
+                            string.Format("{0}", ((Exception)e.Result).Message),
+                            "BDAutoMuxer Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show(form,
+                            string.Format("You are using the latest version of {0} ({1}).", BDAutoMuxerSettings.AssemblyName, BDAutoMuxerSettings.AssemblyVersionDisplay),
+                            "No updates available",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
                 if (onComplete != null)
                 {
