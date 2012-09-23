@@ -164,7 +164,7 @@ namespace BDAutoMuxer.tools
         /// <summary>
         /// Base directory for all temp files used by this application.
         /// </summary>
-        protected static string AppTempDirPath { get { return Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "BDAutoRip")).FullName; } }
+        protected static string AppTempDirPath { get { return Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), BDAutoMuxerSettings.AssemblyName)).FullName; } }
 
         /// <summary>
         /// Directory for temp files used by this tool instance.
