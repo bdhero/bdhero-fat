@@ -623,7 +623,7 @@
             this.textBoxOutputDirPreview.Size = new System.Drawing.Size(648, 13);
             this.textBoxOutputDirPreview.TabIndex = 13;
             this.textBoxOutputDirPreview.TabStop = false;
-            this.textBoxOutputDirPreview.Text = "%TEMP%";
+            this.textBoxOutputDirPreview.Text = "C:\\Users\\Administrator\\AppData\\Local\\Temp\\INCREDIBLES";
             // 
             // labelOutputPlaceholders
             // 
@@ -715,7 +715,6 @@
             this.textBoxOutputFileName.Name = "textBoxOutputFileName";
             this.textBoxOutputFileName.Size = new System.Drawing.Size(606, 20);
             this.textBoxOutputFileName.TabIndex = 4;
-            this.textBoxOutputFileName.Text = "%title% (%year%) [%res%]";
             this.textBoxOutputFileName.TextChanged += new System.EventHandler(this.textBoxOutputFileName_TextChanged);
             this.textBoxOutputFileName.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragDrop);
             this.textBoxOutputFileName.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragEnter);
