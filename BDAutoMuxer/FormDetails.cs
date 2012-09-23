@@ -268,6 +268,8 @@ namespace BDAutoMuxer
             this.populator.SelectionChanged += playlistDataGridView_SelectionChanged;
             this.populator.MainLanguageCode = ISO_639_2;
 
+            FormUtils.TextBox_EnableSelectAll(this);
+
             this.Load += FormDetails_Load;
         }
 
@@ -1683,47 +1685,5 @@ namespace BDAutoMuxer
         }
 
         #endregion
-    }
-
-    public static class ControlFinder
-    {
-        /// <see cref="http://stackoverflow.com/a/2735242/467582"/>
-        public static IEnumerable<T> Descendants<T>(this Control control) where T : class
-        {
-            foreach (Control child in control.Controls)
-            {
-                T childOfT = child as T;
-                if (childOfT != null)
-                {
-                    yield return (T)childOfT;
-                }
-
-                if (child.HasChildren)
-                {
-                    foreach (T descendant in Descendants<T>(child))
-                    {
-                        yield return descendant;
-                    }
-                }
-            }
-        }
-    }
-
-    public static class ControlExtension
-    {
-        public static void ThreadSafeInvoke(this Control control, MethodInvoker method)
-        {
-            if (control != null)
-            {
-                if (control.InvokeRequired)
-                {
-                    control.Invoke(method);
-                }
-                else
-                {
-                    method.Invoke();
-                }
-            }
-        }
     }
 }

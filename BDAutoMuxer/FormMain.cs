@@ -43,6 +43,8 @@ namespace BDAutoMuxer
         {
             InitializeComponent();
 
+            FormUtils.TextBox_EnableSelectAll(this);
+
             PlaylistColumnSorter = new ListViewColumnSorter();
             listViewPlaylistFiles.ListViewItemSorter = PlaylistColumnSorter;
             if (args.Length > 0)

@@ -70,7 +70,6 @@
             this.textBoxInputM2ts.Name = "textBoxInputM2ts";
             this.textBoxInputM2ts.Size = new System.Drawing.Size(362, 20);
             this.textBoxInputM2ts.TabIndex = 0;
-            this.textBoxInputM2ts.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // label2
             // 
@@ -180,7 +179,6 @@
             this.textBoxInputMkv.Name = "textBoxInputMkv";
             this.textBoxInputMkv.Size = new System.Drawing.Size(362, 20);
             this.textBoxInputMkv.TabIndex = 2;
-            this.textBoxInputMkv.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // textBoxInputChapters
             // 
@@ -190,7 +188,6 @@
             this.textBoxInputChapters.Name = "textBoxInputChapters";
             this.textBoxInputChapters.Size = new System.Drawing.Size(362, 20);
             this.textBoxInputChapters.TabIndex = 4;
-            this.textBoxInputChapters.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // textBoxOutputMkv
             // 
@@ -200,7 +197,6 @@
             this.textBoxOutputMkv.Name = "textBoxOutputMkv";
             this.textBoxOutputMkv.Size = new System.Drawing.Size(362, 20);
             this.textBoxOutputMkv.TabIndex = 6;
-            this.textBoxOutputMkv.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // buttonOutputMkvBrowse
             // 

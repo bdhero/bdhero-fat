@@ -189,7 +189,6 @@
             this.movieNameTextBox.Name = "movieNameTextBox";
             this.movieNameTextBox.Size = new System.Drawing.Size(491, 20);
             this.movieNameTextBox.TabIndex = 1;
-            this.movieNameTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // searchButton
             // 
@@ -611,7 +610,6 @@
             this.textBoxOutputFileNamePreview.TabIndex = 14;
             this.textBoxOutputFileNamePreview.TabStop = false;
             this.textBoxOutputFileNamePreview.Text = "The Incredibles (2006) [1080p].m2ts";
-            this.textBoxOutputFileNamePreview.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // textBoxOutputDirPreview
             // 
@@ -626,7 +624,6 @@
             this.textBoxOutputDirPreview.TabIndex = 13;
             this.textBoxOutputDirPreview.TabStop = false;
             this.textBoxOutputDirPreview.Text = "%TEMP%";
-            this.textBoxOutputDirPreview.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // labelOutputPlaceholders
             // 
@@ -650,7 +647,6 @@
             this.textBoxOutputFileNameHint.TabIndex = 11;
             this.textBoxOutputFileNameHint.TabStop = false;
             this.textBoxOutputFileNameHint.Text = "%volume% %title% %year% %res% %vcodec% %acodec% %channels%";
-            this.textBoxOutputFileNameHint.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // textBoxReplaceSpaces
             // 
@@ -709,7 +705,6 @@
             this.textBoxOutputDir.TextChanged += new System.EventHandler(this.textBoxOutputDir_TextChanged);
             this.textBoxOutputDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragDrop);
             this.textBoxOutputDir.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragEnter);
-            this.textBoxOutputDir.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // textBoxOutputFileName
             // 
@@ -724,7 +719,6 @@
             this.textBoxOutputFileName.TextChanged += new System.EventHandler(this.textBoxOutputFileName_TextChanged);
             this.textBoxOutputFileName.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragDrop);
             this.textBoxOutputFileName.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragEnter);
-            this.textBoxOutputFileName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // labelOutputFileName
             // 
@@ -1138,7 +1132,6 @@
             this.textBoxTsMuxerCommandLine.ReadOnly = true;
             this.textBoxTsMuxerCommandLine.Size = new System.Drawing.Size(725, 60);
             this.textBoxTsMuxerCommandLine.TabIndex = 3;
-            this.textBoxTsMuxerCommandLine.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // labelTsMuxerCommandLine
             // 

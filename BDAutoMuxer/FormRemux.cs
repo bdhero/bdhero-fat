@@ -10,6 +10,7 @@ using BDAutoMuxer.controllers;
 using System.Text.RegularExpressions;
 using System.IO;
 using BDAutoMuxer.tools;
+using BDAutoMuxer.views;
 
 namespace BDAutoMuxer
 {
@@ -20,6 +21,7 @@ namespace BDAutoMuxer
         public FormRemux()
         {
             InitializeComponent();
+            FormUtils.TextBox_EnableSelectAll(this);
         }
 
         private void FormRemux_Load(object sender, EventArgs e)
@@ -141,16 +143,6 @@ namespace BDAutoMuxer
 
                 MessageBox.Show(msg, "BDAutoMuxer Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <see cref="http://www.dzone.com/snippets/ctrl-shortcut-select-all-text"/>
-        private void TextBox_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            if (e.KeyChar == '\x1')
-            {
-                ((TextBox)sender).SelectAll();
-                e.Handled = true;
             }
         }
 
