@@ -43,14 +43,14 @@
             this.discLanguageComboBox = new System.Windows.Forms.ComboBox();
             this.discLanguageLabel = new System.Windows.Forms.Label();
             this.tabPagePlaylists = new System.Windows.Forms.TabPage();
-            this.playlistsSplitContainerOuter = new System.Windows.Forms.SplitContainer();
+            this.playlistsSplitContainerOuter = new BDAutoMuxer.views.SplitContainerWithDivider();
             this.playlistsGroupBox = new System.Windows.Forms.GroupBox();
             this.buttonUnselectAll = new System.Windows.Forms.Button();
             this.buttonSelectAll = new System.Windows.Forms.Button();
             this.showAllPlaylistsCheckbox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.playlistDataGridView = new System.Windows.Forms.DataGridView();
-            this.playlistsSplitContainerInner = new System.Windows.Forms.SplitContainer();
+            this.playlistsSplitContainerInner = new BDAutoMuxer.views.SplitContainerWithDivider();
             this.streamsGroupBox = new System.Windows.Forms.GroupBox();
             this.listViewStreamFiles = new System.Windows.Forms.ListView();
             this.columnHeaderFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -1264,10 +1264,8 @@
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView playlistDataGridView;
-        private System.Windows.Forms.SplitContainer playlistsSplitContainerOuter;
         private System.Windows.Forms.GroupBox playlistsGroupBox;
         private System.Windows.Forms.CheckBox showAllPlaylistsCheckbox;
-        private System.Windows.Forms.SplitContainer playlistsSplitContainerInner;
         private System.Windows.Forms.GroupBox streamsGroupBox;
         private System.Windows.Forms.GroupBox tracksGroupBox;
         private System.Windows.Forms.ListView listViewStreamFiles;
@@ -1340,5 +1338,7 @@
         private System.Windows.Forms.TextBox textBoxOutputFileNameHint;
         private System.Windows.Forms.TextBox textBoxOutputFileNamePreview;
         private System.Windows.Forms.TextBox textBoxOutputDirPreview;
+        private views.SplitContainerWithDivider playlistsSplitContainerOuter;
+        private views.SplitContainerWithDivider playlistsSplitContainerInner;
     }
 }
