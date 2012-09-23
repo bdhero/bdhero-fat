@@ -21,8 +21,6 @@ namespace BDAutoMuxer.tools
         protected override string Name { get { return "MkvMerge"; } }
         protected override string Filename { get { return "mkvmerge.exe"; } }
 
-        private BDROM BDROM;
-
         public MkvMerge(/*BDROM BDROM, */string inputM2tsPath, string inputMkvPath, string inputChaptersPath, string outputMkvPath, bool keepM2tsAudio = true)
             : base()
         {
