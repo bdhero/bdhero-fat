@@ -21,10 +21,9 @@ namespace BDAutoMuxer.tools
         protected override string Name { get { return "MkvMerge"; } }
         protected override string Filename { get { return "mkvmerge.exe"; } }
 
-        public MkvMerge(/*BDROM BDROM, */string inputM2tsPath, string inputMkvPath, string inputChaptersPath, string outputMkvPath, bool keepM2tsAudio = true)
+        public MkvMerge(string inputM2tsPath, string inputMkvPath, string inputChaptersPath, string outputMkvPath, bool keepM2tsAudio = true)
             : base()
         {
-            //this.BDROM = BDROM;
             this.inputM2tsPath = inputM2tsPath;
             this.inputMkvPath = inputMkvPath;
             this.inputChaptersPath = inputChaptersPath;
@@ -36,14 +35,11 @@ namespace BDAutoMuxer.tools
 
         private void Mux(object sender, DoWorkEventArgs e)
         {
-            //outputFilePath = e.Argument as string;
-
             ExtractResources();
 
             string inputM2tsFlags = keepM2tsAudio ? null : "--no-audio";
             string inputMkvFlags = keepM2tsAudio ? "--no-audio" : null;
 
-            // TODO: Don't pass empty args
             Execute(new List<string>() { "--chapters", inputChaptersPath, "-o", outputMkvPath, "--no-video", inputM2tsFlags, inputM2tsPath, inputMkvFlags, inputMkvPath }, sender, e);
         }
 
