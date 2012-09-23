@@ -183,8 +183,8 @@
             // 
             // movieNameTextBox
             // 
-            this.movieNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.movieNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.movieNameTextBox.Location = new System.Drawing.Point(96, 33);
             this.movieNameTextBox.Name = "movieNameTextBox";
             this.movieNameTextBox.Size = new System.Drawing.Size(491, 20);
@@ -204,9 +204,9 @@
             // 
             // searchResultListView
             // 
-            this.searchResultListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchResultListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.searchResultListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.NameColumn,
             this.YearColumn,
@@ -241,9 +241,9 @@
             // 
             // tabControl
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageDisc);
             this.tabControl.Controls.Add(this.tabPagePlaylists);
             this.tabControl.Controls.Add(this.tabPageOutput);
@@ -319,9 +319,9 @@
             // 
             // playlistsSplitContainerOuter
             // 
-            this.playlistsSplitContainerOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsSplitContainerOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.playlistsSplitContainerOuter.BackColor = System.Drawing.Color.Transparent;
             this.playlistsSplitContainerOuter.Location = new System.Drawing.Point(6, 7);
             this.playlistsSplitContainerOuter.Name = "playlistsSplitContainerOuter";
@@ -340,9 +340,9 @@
             // 
             // playlistsGroupBox
             // 
-            this.playlistsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.playlistsGroupBox.Controls.Add(this.buttonUnselectAll);
             this.playlistsGroupBox.Controls.Add(this.buttonSelectAll);
             this.playlistsGroupBox.Controls.Add(this.showAllPlaylistsCheckbox);
@@ -392,9 +392,9 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.playlistDataGridView);
             this.panel1.Location = new System.Drawing.Point(6, 49);
             this.panel1.Name = "panel1";
@@ -406,9 +406,9 @@
             this.playlistDataGridView.AllowUserToAddRows = false;
             this.playlistDataGridView.AllowUserToDeleteRows = false;
             this.playlistDataGridView.AllowUserToResizeRows = false;
-            this.playlistDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.playlistDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.playlistDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.playlistDataGridView.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
@@ -427,9 +427,9 @@
             // 
             // playlistsSplitContainerInner
             // 
-            this.playlistsSplitContainerInner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsSplitContainerInner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.playlistsSplitContainerInner.Location = new System.Drawing.Point(0, 0);
             this.playlistsSplitContainerInner.Name = "playlistsSplitContainerInner";
             this.playlistsSplitContainerInner.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -447,9 +447,9 @@
             // 
             // streamsGroupBox
             // 
-            this.streamsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.streamsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.streamsGroupBox.Controls.Add(this.listViewStreamFiles);
             this.streamsGroupBox.Location = new System.Drawing.Point(4, 4);
             this.streamsGroupBox.Name = "streamsGroupBox";
@@ -512,9 +512,9 @@
             // 
             // tracksGroupBox
             // 
-            this.tracksGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tracksGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tracksGroupBox.Controls.Add(this.listViewStreams);
             this.tracksGroupBox.Location = new System.Drawing.Point(4, 4);
             this.tracksGroupBox.Name = "tracksGroupBox";
@@ -577,8 +577,8 @@
             // 
             // groupBoxOutput
             // 
-            this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNamePreview);
             this.groupBoxOutput.Controls.Add(this.textBoxOutputDirPreview);
             this.groupBoxOutput.Controls.Add(this.labelOutputPlaceholders);
@@ -600,8 +600,8 @@
             // 
             // textBoxOutputFileNamePreview
             // 
-            this.textBoxOutputFileNamePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileNamePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputFileNamePreview.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxOutputFileNamePreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxOutputFileNamePreview.Location = new System.Drawing.Point(84, 119);
@@ -611,11 +611,12 @@
             this.textBoxOutputFileNamePreview.TabIndex = 14;
             this.textBoxOutputFileNamePreview.TabStop = false;
             this.textBoxOutputFileNamePreview.Text = "The Incredibles (2006) [1080p].m2ts";
+            this.textBoxOutputFileNamePreview.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // textBoxOutputDirPreview
             // 
-            this.textBoxOutputDirPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputDirPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputDirPreview.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxOutputDirPreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxOutputDirPreview.Location = new System.Drawing.Point(84, 72);
@@ -638,8 +639,8 @@
             // 
             // textBoxOutputFileNameHint
             // 
-            this.textBoxOutputFileNameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileNameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputFileNameHint.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxOutputFileNameHint.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxOutputFileNameHint.Location = new System.Drawing.Point(84, 20);
@@ -699,8 +700,8 @@
             // textBoxOutputDir
             // 
             this.textBoxOutputDir.AllowDrop = true;
-            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputDir.Location = new System.Drawing.Point(84, 45);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
             this.textBoxOutputDir.Size = new System.Drawing.Size(567, 20);
@@ -713,8 +714,8 @@
             // textBoxOutputFileName
             // 
             this.textBoxOutputFileName.AllowDrop = true;
-            this.textBoxOutputFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputFileName.Location = new System.Drawing.Point(84, 93);
             this.textBoxOutputFileName.Name = "textBoxOutputFileName";
             this.textBoxOutputFileName.Size = new System.Drawing.Size(606, 20);
@@ -745,9 +746,9 @@
             // 
             // groupBoxTracks
             // 
-            this.groupBoxTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTracks.Controls.Add(this.listViewVideoTracks);
             this.groupBoxTracks.Controls.Add(this.listViewSubtitleTracks);
             this.groupBoxTracks.Controls.Add(this.listViewAudioTracks);
@@ -766,8 +767,8 @@
             // 
             // listViewVideoTracks
             // 
-            this.listViewVideoTracks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewVideoTracks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewVideoTracks.CheckBoxes = true;
             this.listViewVideoTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderVideoCodec,
@@ -804,9 +805,9 @@
             // 
             // listViewSubtitleTracks
             // 
-            this.listViewSubtitleTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewSubtitleTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewSubtitleTracks.CheckBoxes = true;
             this.listViewSubtitleTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderSubtitleCodec,
@@ -831,8 +832,8 @@
             // 
             // listViewAudioTracks
             // 
-            this.listViewAudioTracks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewAudioTracks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewAudioTracks.CheckBoxes = true;
             this.listViewAudioTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderAudioCodec,
@@ -908,8 +909,8 @@
             // 
             // groupBoxFilter
             // 
-            this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBoxFilter.Controls.Add(this.listBoxSubtitleLanguages);
             this.groupBoxFilter.Controls.Add(this.listBoxAudioLanguages);
             this.groupBoxFilter.Controls.Add(this.comboBoxCommentary);
@@ -976,7 +977,7 @@
             this.comboBoxVideoLanguage.Size = new System.Drawing.Size(121, 21);
             this.comboBoxVideoLanguage.TabIndex = 0;
             this.comboBoxVideoLanguage.Tag = "Primary video language (many animated Disney movies contain several video renders" +
-    " - e.g., French, Spanish, and English)";
+                " - e.g., French, Spanish, and English)";
             this.comboBoxVideoLanguage.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // labelSubtitleLanguages
@@ -1026,8 +1027,8 @@
             // 
             // groupBoxMasterOverride
             // 
-            this.groupBoxMasterOverride.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxMasterOverride.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxMasterOverride.Controls.Add(this.comboBoxAudienceLanguage);
             this.groupBoxMasterOverride.Controls.Add(this.labelAudienceLanguage);
             this.groupBoxMasterOverride.Location = new System.Drawing.Point(4, 4);
@@ -1068,8 +1069,8 @@
             // 
             // groupBoxTsMuxerProgress
             // 
-            this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemainingElapsed);
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeSeparator);
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemaining);
@@ -1128,9 +1129,9 @@
             // 
             // textBoxTsMuxerCommandLine
             // 
-            this.textBoxTsMuxerCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTsMuxerCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxTsMuxerCommandLine.Location = new System.Drawing.Point(7, 84);
             this.textBoxTsMuxerCommandLine.Multiline = true;
             this.textBoxTsMuxerCommandLine.Name = "textBoxTsMuxerCommandLine";
@@ -1150,8 +1151,8 @@
             // 
             // progressBarTsMuxer
             // 
-            this.progressBarTsMuxer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBarTsMuxer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarTsMuxer.Location = new System.Drawing.Point(7, 37);
             this.progressBarTsMuxer.Maximum = 1000;
             this.progressBarTsMuxer.Name = "progressBarTsMuxer";
@@ -1181,7 +1182,7 @@
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(39, 17);
+            this.statusLabel.Size = new System.Drawing.Size(38, 17);
             this.statusLabel.Text = "Status";
             // 
             // buttonSubmitToDB
@@ -1334,7 +1335,6 @@
         private System.Windows.Forms.Button buttonSubmitToDB;
         private System.Windows.Forms.Button buttonUnselectAll;
         private System.Windows.Forms.Button buttonSelectAll;
-        private System.Windows.Forms.TextBox textBoxOutputFileNameHint;
         private System.Windows.Forms.GroupBox groupBoxTsMuxerProgress;
         private System.Windows.Forms.ProgressBar progressBarTsMuxer;
         private System.Windows.Forms.Label labelTsMuxerProgress;
@@ -1344,8 +1344,9 @@
         private System.Windows.Forms.Label labelTsMuxerTimeElapsed;
         private System.Windows.Forms.Label labelTsMuxerTimeSeparator;
         private System.Windows.Forms.Label labelTsMuxerTimeRemainingElapsed;
+        private System.Windows.Forms.Label labelOutputPlaceholders;
+        private System.Windows.Forms.TextBox textBoxOutputFileNameHint;
         private System.Windows.Forms.TextBox textBoxOutputFileNamePreview;
         private System.Windows.Forms.TextBox textBoxOutputDirPreview;
-        private System.Windows.Forms.Label labelOutputPlaceholders;
     }
 }
