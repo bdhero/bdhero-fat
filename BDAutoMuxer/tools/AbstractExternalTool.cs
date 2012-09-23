@@ -215,6 +215,8 @@ namespace BDAutoMuxer.tools
         // extracts [resource] into the the file specified by [destPath]
         protected void ExtractResource(string resource, string destPath)
         {
+            string dir = Path.GetDirectoryName(destPath);
+            Directory.CreateDirectory(dir);
             Stream stream = GetType().Assembly.GetManifestResourceStream(resource);
             byte[] bytes = new byte[(int)stream.Length];
             stream.Read(bytes, 0, bytes.Length);
