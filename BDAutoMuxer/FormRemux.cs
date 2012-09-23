@@ -24,6 +24,11 @@ namespace BDAutoMuxer
             FormUtils.TextBox_EnableSelectAll(this);
         }
 
+        ~FormRemux()
+        {
+            CancelRemux();
+        }
+
         private void FormRemux_Load(object sender, EventArgs e)
         {
             this.MinimumSize = new Size(0, Size.Height);
@@ -148,24 +153,40 @@ namespace BDAutoMuxer
 
         private void buttonRemux_Click(object sender, EventArgs e)
         {
+            Remux();
+        }
+
+        private void mkvMerge_Started()
+        {
             buttonRemux.Text = "Pause";
             buttonClose.Text = "Stop";
+        }
 
+        private void Remux()
+        {
             if (mkvMerge != null && mkvMerge.IsBusy)
             {
+                mkvMerge_Started();
+
                 if (mkvMerge.IsPaused)
+                {
                     mkvMerge.Resume();
+                }
                 else
                 {
                     mkvMerge.Pause();
                     buttonRemux.Text = "Resume";
                 }
+
+                mkvMerge_ProgressChanged(this, null);
             }
-            else if(
+            else if (
                 File.Exists(textBoxInputM2ts.Text) &&
                 File.Exists(textBoxInputMkv.Text) &&
-                File.Exists(textBoxInputChapters.Text))
+                File.Exists(textBoxInputChapters.Text) &&
+                !string.IsNullOrEmpty(textBoxOutputMkv.Text))
             {
+                mkvMerge_Started();
 
                 mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked);
                 mkvMerge.WorkerReportsProgress = true;
@@ -173,25 +194,82 @@ namespace BDAutoMuxer
                 mkvMerge.ProgressChanged += mkvMerge_ProgressChanged;
                 mkvMerge.RunWorkerCompleted += mkvMerge_RunWorkerCompleted;
                 mkvMerge.RunWorkerAsync();
-            }
 
-            mkvMerge_ProgressChanged(this, null);
+                mkvMerge_ProgressChanged(this, null);
+            }
+            else
+            {
+                string msg = "Whoops!  The programmer made a boo-boo :-(";
+                TextBox tb = null;
+
+                if (!File.Exists(textBoxInputM2ts.Text))
+                {
+                    msg = "Please select a valid input M2TS file.";
+                    tb = textBoxInputM2ts;
+                }
+                else if (!File.Exists(textBoxInputMkv.Text))
+                {
+                    msg = "Please select a valid input MKV file.";
+                    tb = textBoxInputMkv;
+                }
+                else if (!File.Exists(textBoxInputChapters.Text))
+                {
+                    msg = "Please select a valid input chapter file.";
+                    tb = textBoxInputChapters;
+                }
+                else if (string.IsNullOrEmpty(textBoxOutputMkv.Text))
+                {
+                    msg = "Please enter a valid output MKV file.";
+                    tb = textBoxOutputMkv;
+                }
+
+                MessageBox.Show(this, msg, BDAutoMuxerSettings.AssemblyName + " Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                if (tb != null)
+                {
+                    tb.Focus();
+                    tb.SelectAll();
+                }
+            }
+        }
+
+        private void CancelRemux()
+        {
+            if (mkvMerge != null && mkvMerge.IsBusy)
+            {
+                mkvMerge.Resume();
+                mkvMerge.CancelAsync();
+            }
         }
 
         private void mkvMerge_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            // TODO: This throws a NPE if the window is closed while muxing is in progress
-            statusStripProgressBar.Value = (int)(10 * mkvMerge.Progress);
-            statusStripLabel.Text = mkvMerge.Progress.ToString("##0.0") + "%";
+            
+            if (mkvMerge != null)
+            {
+                int progress = (int)(10 * mkvMerge.Progress);
 
-            if (mkvMerge.IsPaused)
-                statusStripLabel.Text += " (paused)";
-            if (mkvMerge.IsError)
-                statusStripLabel.Text += " (error)";
-            if (mkvMerge.IsCanceled)
-                statusStripLabel.Text += " (canceled)";
-            if (mkvMerge.IsCompleted)
-                statusStripLabel.Text += " (completed)";
+                try
+                {
+                    // TODO: This throws a NPE if the window is closed while muxing is in progress
+                    statusStripProgressBar.Value = progress;
+                }
+                catch (Exception ex)
+                {
+                    ex.ToString();
+                }
+
+                statusStripLabel.Text = mkvMerge.Progress.ToString("##0.0") + "%";
+
+                if (mkvMerge.IsPaused)
+                    statusStripLabel.Text += " (paused)";
+                if (mkvMerge.IsError)
+                    statusStripLabel.Text += " (error)";
+                if (mkvMerge.IsCanceled)
+                    statusStripLabel.Text += " (canceled)";
+                if (mkvMerge.IsCompleted)
+                    statusStripLabel.Text += " (completed)";
+            }
         }
 
         private void mkvMerge_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -207,8 +285,7 @@ namespace BDAutoMuxer
                 if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                     return;
 
-                mkvMerge.Resume();
-                mkvMerge.CancelAsync();
+                CancelRemux();
             }
             else
             {
@@ -226,8 +303,7 @@ namespace BDAutoMuxer
                     return;
                 }
 
-                mkvMerge.Resume();
-                mkvMerge.CancelAsync();
+                CancelRemux();
             }
         }
     }
