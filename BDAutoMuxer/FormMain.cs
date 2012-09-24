@@ -33,11 +33,10 @@ namespace BDAutoMuxer
     {
         private BDROM BDROM = null;
         private int CustomPlaylistCount = 0;
-        ScanBDROMResult ScanResult = new ScanBDROMResult();
-
-        #region UI Handlers
-
+        private ScanBDROMResult ScanResult = new ScanBDROMResult();
         private ListViewColumnSorter PlaylistColumnSorter;
+
+        #region Initialization
 
         public FormMain(string[] args)
         {
@@ -76,6 +75,10 @@ namespace BDAutoMuxer
 
             this.CheckForUpdates();
         }
+
+        #endregion
+
+        #region Event Handlers
 
         private void CheckForUpdates()
         {
@@ -291,6 +294,16 @@ namespace BDAutoMuxer
                 (int)(listViewStreams.ClientSize.Width * 0.15);
             listViewStreams.Columns[3].Width =
                 (int)(listViewStreams.ClientSize.Width * 0.45);
+        }
+
+        private void buttonRip_Click(object sender, EventArgs e)
+        {
+            FindMainPlaylist();
+        }
+
+        private void buttonRemux_Click(object sender, EventArgs e)
+        {
+            new FormRemux().Show(this);
         }
 
         private void FormMain_FormClosing(
@@ -1266,6 +1279,8 @@ namespace BDAutoMuxer
 
         #endregion
 
+        #region Comparison
+
         public static int ComparePlaylistFiles(
             TSPlaylistFile x,
             TSPlaylistFile y)
@@ -1332,16 +1347,10 @@ namespace BDAutoMuxer
             }
         }
 
-        private void buttonRip_Click(object sender, EventArgs e)
-        {
-            FindMainPlaylist();
-        }
-
-        private void buttonRemux_Click(object sender, EventArgs e)
-        {
-            new FormRemux().Show(this);
-        }
+        #endregion
     }
+
+    #region Sorting
 
     public class ListViewColumnSorter : IComparer
     {
@@ -1405,6 +1414,8 @@ namespace BDAutoMuxer
             }
         }
     }
+
+    #endregion
 
     public class ScanBDROMResult
     {
