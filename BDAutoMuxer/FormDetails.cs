@@ -988,7 +988,7 @@ namespace BDAutoMuxer
 
             TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress);
 
-            if (e.Cancelled == true)
+            if (e.Cancelled == true && tsMuxer.IsCanceled)
             {
                 SetTabStatus(tabPageProgress, "tsMuxeR canceled");
             }

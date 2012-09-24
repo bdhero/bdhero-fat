@@ -36,6 +36,8 @@ namespace BDAutoMuxer.tools
         /// </summary>
         protected double progress = 0;
 
+        protected IList<string> errorMessages = new List<string>();
+
         #endregion
 
         #region Properties (private / protected)
@@ -157,6 +159,8 @@ namespace BDAutoMuxer.tools
             }
         }
 
+        public string ErrorMessage { get { return string.Join("\n", errorMessages); } }
+
         #endregion
 
         #region Properties (protected)
@@ -258,11 +262,14 @@ namespace BDAutoMuxer.tools
             _isCanceled = false;
             _isError = false;
 
+            errorMessages.Clear();
+
             // Start the child process.
             process = new Process();
             // Redirect the output stream of the child process.
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
             process.StartInfo.FileName = FullName;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -271,24 +278,40 @@ namespace BDAutoMuxer.tools
 
             isStarted = true;
 
-            while (!this.CancellationPending && !process.StandardOutput.EndOfStream)
+            while (!this.CancellationPending && !process.StandardOutput.EndOfStream && !this.isError)
             {
                 HandleOutputLine(process.StandardOutput.ReadLine(), sender, e);
                 UpdateTime();
             }
 
-            if (this.CancellationPending)
+            while (!this.CancellationPending && !process.StandardError.EndOfStream && !this.isError)
+            {
+                errorMessages.Add(process.StandardError.ReadLine());
+            }
+
+            if (errorMessages.Count > 0)
+            {
+                isError = true;
+
+                // TODO: Should we use e.Result instead?
+                throw new Exception(ErrorMessage);
+            }
+            else if (this.CancellationPending)
+            {
+                isCanceled = true;
+            }
+
+            if (this.isCanceled || this.isError)
             {
                 if (!process.HasExited)
                     process.Kill();
                 e.Cancel = true;
-                isCanceled = true;
                 return;
             }
 
-            worker.ReportProgress(100);
-
             isCompleted = true;
+
+            worker.ReportProgress(100);
         }
 
         private void UpdateTime(object sender = null, EventArgs e = null)

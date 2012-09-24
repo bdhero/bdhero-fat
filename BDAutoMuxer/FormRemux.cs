@@ -276,6 +276,14 @@ namespace BDAutoMuxer
         {
             buttonRemux.Text = "Mux!";
             buttonClose.Text = "Close";
+
+            if (mkvMerge != null)
+            {
+                if (mkvMerge.IsError)
+                {
+                    MessageBox.Show(this, mkvMerge.ErrorMessage, "mkvmerge Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void buttonClose_Click(object sender, EventArgs e)

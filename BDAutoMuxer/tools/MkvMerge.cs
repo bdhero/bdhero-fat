@@ -50,13 +50,19 @@ namespace BDAutoMuxer.tools
 
         protected override void HandleOutputLine(string line, object sender, DoWorkEventArgs e)
         {
-            string regex = @"^Progress: ([\d\.]+)\%";
-            if (Regex.IsMatch(line, regex))
+            string progressRegex = @"^Progress: ([\d\.]+)\%";
+            string errorRegex = @"^Error:";
+
+            if (Regex.IsMatch(line, progressRegex))
             {
-                Match match = Regex.Match(line, regex);
+                Match match = Regex.Match(line, progressRegex);
                 Double.TryParse(match.Groups[1].Value, out progress);
             }
-            // TODO: Check for errors here
+            else if (Regex.IsMatch(line, errorRegex))
+            {
+                this.isError = true;
+                this.errorMessages.Add(line);
+            }
         }
     }
 }

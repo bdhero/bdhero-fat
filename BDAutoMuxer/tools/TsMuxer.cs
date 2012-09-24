@@ -186,10 +186,17 @@ namespace BDAutoMuxer.tools
         protected override void HandleOutputLine(string line, object sender, DoWorkEventArgs e)
         {
             string regex = @"^(\d+\.\d+)\%";
+            string errorRegex = @"^(?:Can't)";
+
             if (Regex.IsMatch(line, regex))
             {
                 Match match = Regex.Match(line, regex);
                 Double.TryParse(match.Groups[1].Value, out progress);
+            }
+            else if (Regex.IsMatch(line, errorRegex))
+            {
+                this.isError = true;
+                this.errorMessages.Add(line);
             }
         }
     }
