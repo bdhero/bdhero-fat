@@ -630,8 +630,10 @@ namespace BDAutoMuxer.views
         private Cut cut;
         private bool hasCommentary;
 
-        public PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2) : this(playlist, ISO_639_2, true)
+        public PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2)
+            : this(playlist, ISO_639_2, true)
         {
+
         }
 
         private PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2, bool clone)
