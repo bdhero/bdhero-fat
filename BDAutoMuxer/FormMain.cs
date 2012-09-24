@@ -36,6 +36,10 @@ namespace BDAutoMuxer
         private ScanBDROMResult ScanResult = new ScanBDROMResult();
         private ListViewColumnSorter PlaylistColumnSorter;
 
+        private ISet<Language> Languages = new HashSet<Language>();
+        private List<TSPlaylistFile> sortedPlaylists = new List<TSPlaylistFile>();
+        private List<TSPlaylistFile> mainPlaylists = new List<TSPlaylistFile>();
+
         #region Initialization
 
         public FormMain(string[] args)
@@ -685,11 +689,6 @@ namespace BDAutoMuxer
 
             FindMainPlaylist();
         }
-
-        private ISet<Language> Languages = new HashSet<Language>();
-
-        private List<TSPlaylistFile> sortedPlaylists = new List<TSPlaylistFile>();
-        private List<TSPlaylistFile> mainPlaylists = new List<TSPlaylistFile>();
 
         private void FindMainPlaylist()
         {
