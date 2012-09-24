@@ -639,7 +639,7 @@ namespace BDAutoMuxer.views
         private PlaylistGridItem(TSPlaylistFile playlist, string ISO_639_2, bool clone)
         {
             this.playlist = playlist;
-            this.isMainMovie = playlist.IsMainPlaylist && !playlist.HasDuplicateClips;
+            this.isMainMovie = playlist.IsMainPlaylist && !playlist.HasDuplicateClips && !playlist.IsDuplicate;
             this.filename = playlist.Name;
             this.length = playlist.TotalLength;
             this.size = playlist.FileSize.ToString("N0");

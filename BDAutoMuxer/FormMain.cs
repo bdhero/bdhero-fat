@@ -22,6 +22,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
@@ -716,6 +717,35 @@ namespace BDAutoMuxer
                 if (idx != -1)
                 {
                     listViewPlaylistFiles.Items[idx].Checked = true;
+                }
+            }
+
+            Dictionary<string, IList<TSPlaylistFile>> duplicateMap = new Dictionary<string, IList<TSPlaylistFile>>();
+            foreach (TSPlaylistFile mainPlaylist in mainPlaylists)
+            {
+                IList<string> streamClips = new List<string>();
+                foreach (TSStreamClip clip in mainPlaylist.StreamClips)
+                    streamClips.Add(clip.Name + "/" + clip.Length + "/" + clip.FileSize);
+                
+                string key = mainPlaylist.TotalLength + "/" + mainPlaylist.FileSize + "=[" + string.Join(",", streamClips) + "]";
+                
+                if (!duplicateMap.ContainsKey(key))
+                    duplicateMap[key] = new List<TSPlaylistFile>();
+
+                duplicateMap[key].Add(mainPlaylist);
+            }
+            foreach (string key in duplicateMap.Keys)
+            {
+                // Sort
+                IList<TSPlaylistFile> sorted = duplicateMap[key].OrderBy(x => x.HiddenTrackCount).ToList();
+
+                // Mark [1, ... n] as duplicates
+                if (sorted.Count > 0)
+                {
+                    foreach (TSPlaylistFile playlist in duplicateMap[key].Skip(1))
+                    {
+                        playlist.IsDuplicate = true;
+                    }
                 }
             }
 

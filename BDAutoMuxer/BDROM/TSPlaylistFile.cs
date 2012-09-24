@@ -46,6 +46,7 @@ namespace BDAutoMuxer
         public int HiddenTrackCount = 0;
 
         public bool IsMainPlaylist = false;
+        public bool IsDuplicate = false;
 
         public List<double> Chapters = new List<double>();
 
