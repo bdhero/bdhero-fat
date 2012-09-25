@@ -1307,6 +1307,11 @@ namespace BDAutoMuxer
             }
         }
 
+        private string OutputFilePath
+        {
+            get { return Path.Combine(textBoxOutputDirPreview.Text, textBoxOutputFileNamePreview.Text); }
+        }
+
         private void continueButton_Click(object sender, EventArgs e)
         {
             if (tabControl.SelectedTab == tabPageDisc)
@@ -1322,6 +1327,16 @@ namespace BDAutoMuxer
             }
             else if (tabControl.SelectedTab == tabPageOutput)
             {
+                if (File.Exists(OutputFilePath))
+                {
+                    if (DialogResult.Yes != MessageBox.Show(this,
+                        string.Format("Overwrite \"{0}\"?", OutputFilePath),
+                        "File already exists",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
+                    {
+                        return;
+                    }
+                }
                 Rip();
                 tabControl.SelectedIndex++;
                 tabControl.TabIndex++;

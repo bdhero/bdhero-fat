@@ -153,6 +153,16 @@ namespace BDAutoMuxer
 
         private void buttonRemux_Click(object sender, EventArgs e)
         {
+            if (File.Exists(textBoxOutputMkv.Text))
+            {
+                if (DialogResult.Yes != MessageBox.Show(this,
+                    string.Format("Overwrite \"{0}\"?", textBoxOutputMkv.Text),
+                    "File already exists",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
+                {
+                    return;
+                }
+            }
             Remux();
         }
 
