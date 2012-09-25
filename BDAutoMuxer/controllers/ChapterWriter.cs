@@ -45,8 +45,9 @@ namespace BDAutoMuxer.controllers
             foreach (ChapterTimeSpan c in Chapters)
             {
                 i++;
-                lines.Add("CHAPTER" + i.ToString("00") + "=" + c);
-                lines.Add("CHAPTER" + i.ToString("00") + "NAME=" + "");
+                string istr = i.ToString("00");
+                lines.Add("CHAPTER" + istr + "=" + c);
+                lines.Add("CHAPTER" + istr + "NAME=" + "Chapter " + istr);
             }
             File.WriteAllLines(filename, lines.ToArray());
         }
