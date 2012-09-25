@@ -280,6 +280,11 @@ namespace BDAutoMuxer.tools
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo.Arguments = this.strArgs = string.Join(" ", sanitizedArgs);
+
+            // See http://stackoverflow.com/a/2279346/467582
+            process.Exited += (object p, EventArgs e2) => process_Exited(p, e);
+            process.EnableRaisingEvents = true;
+
             process.Start();
 
             isStarted = true;
@@ -297,29 +302,7 @@ namespace BDAutoMuxer.tools
                 errorMessages.Add(process.StandardError.ReadLine());
             }
 
-            if (errorMessages.Count > 0)
-            {
-                isError = true;
-
-                // TODO: Should we use e.Result instead?
-                throw new Exception(ErrorMessage);
-            }
-            else if (this.CancellationPending)
-            {
-                isCanceled = true;
-            }
-
-            if (this.isCanceled || this.isError)
-            {
-                if (!process.HasExited)
-                    process.Kill();
-                e.Cancel = true;
-                return;
-            }
-
-            isCompleted = true;
-
-            worker.ReportProgress(100);
+            OnComplete(e);
         }
 
         private void UpdateTime(object sender = null, EventArgs e = null)
@@ -354,6 +337,50 @@ namespace BDAutoMuxer.tools
                 }
             }
             worker.ReportProgress((int)progress);
+        }
+
+        private void process_Exited(object sender, DoWorkEventArgs e)
+        {
+            Process p = sender as Process;
+            
+            if (p == null || p.ExitCode != 0)
+            {
+                isError = true;
+
+                string extraDetails = p != null ? string.Format(" with exit code {0}", p.ExitCode) : "";
+                string errorMessage = string.Format("tsMuxeR terminated unexpectedly{0}.", extraDetails);
+
+                errorMessages.Add(errorMessage);
+            }
+
+            OnComplete(e);
+        }
+
+        private void OnComplete(DoWorkEventArgs e)
+        {
+            if (errorMessages.Count > 0)
+            {
+                isError = true;
+
+                // TODO: Should we use e.Result instead?
+                throw new Exception(ErrorMessage);
+            }
+            else if (this.CancellationPending)
+            {
+                isCanceled = true;
+            }
+
+            if (this.isCanceled || this.isError)
+            {
+                if (!process.HasExited)
+                    process.Kill();
+                e.Cancel = true;
+                return;
+            }
+
+            isCompleted = true;
+
+            worker.ReportProgress(100);
         }
 
         // TODO: Refactor.  Start at top level temp dir and recursively delete empty dirs
