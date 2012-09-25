@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
-using System.Text.RegularExpressions;
-using System.IO;
 using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
 
