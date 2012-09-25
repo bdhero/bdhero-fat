@@ -32,6 +32,8 @@ namespace BDAutoMuxer.tools
         private TimeSpan elapsedTime = TimeSpan.Zero;
         private TimeSpan remainingTime = TimeSpan.Zero;
 
+        private bool onCompleteHandled = false;
+
         /// <summary>
         /// 0.0 to 100.0
         /// </summary>
@@ -265,6 +267,8 @@ namespace BDAutoMuxer.tools
             _isCanceled = false;
             _isError = false;
 
+            onCompleteHandled = false;
+
             errorMessages.Clear();
 
             if (job == null)
@@ -345,19 +349,26 @@ namespace BDAutoMuxer.tools
             
             if (p == null || p.ExitCode != 0)
             {
-                isError = true;
+                // Use underscored field name to avoid crashing BDAutoMuxer by calling UpdateTime() unnecessarily
+                _isError = true;
 
                 string extraDetails = p != null ? string.Format(" with exit code {0}", p.ExitCode) : "";
                 string errorMessage = string.Format("tsMuxeR terminated unexpectedly{0}.", extraDetails);
 
                 errorMessages.Add(errorMessage);
             }
-
+            
             OnComplete(e);
         }
 
         private void OnComplete(DoWorkEventArgs e)
         {
+            // Prevent this method from being called twice (which crashes BDAutoMuxer)
+            if (onCompleteHandled)
+                return;
+
+            onCompleteHandled = true;
+
             if (errorMessages.Count > 0)
             {
                 isError = true;
