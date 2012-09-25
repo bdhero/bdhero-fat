@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
+using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.tools
 {
@@ -40,7 +43,21 @@ namespace BDAutoMuxer.tools
             string inputM2tsFlags = keepM2tsAudio ? null : "--no-audio";
             string inputMkvFlags = keepM2tsAudio ? "--no-audio" : null;
 
-            Execute(new List<string>() { "--chapters", inputChaptersPath, "-o", outputMkvPath, "--no-video", inputM2tsFlags, inputM2tsPath, inputMkvFlags, inputMkvPath }, sender, e);
+            var args = new Args();
+
+            // Chapter file
+            args.AddIfAllNonEmpty("--chapters", inputChaptersPath);
+
+            // Output file
+            args.AddAll("-o", outputMkvPath);
+
+            // Input M2TS file
+            args.AddNonEmpty("--no-video", inputM2tsFlags, inputM2tsPath);
+
+            // Input MKV file
+            args.AddNonEmpty(inputMkvFlags, inputMkvPath);
+            
+            Execute(args, sender, e);
         }
 
         protected override void ExtractResources()
