@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
+using BDAutoMuxer.views;
 
 namespace BDAutoMuxer.tools
 {
@@ -231,6 +232,8 @@ namespace BDAutoMuxer.tools
 
         private BackgroundWorker worker;
 
+        private Job job;
+
         protected void Execute(IList<string> args, object sender, DoWorkEventArgs e, bool skipNullArgs = true)
         {
             ExtractResources();
@@ -264,6 +267,9 @@ namespace BDAutoMuxer.tools
 
             errorMessages.Clear();
 
+            if (job == null)
+                job = new Job();
+
             // Start the child process.
             process = new Process();
             // Redirect the output stream of the child process.
@@ -277,6 +283,8 @@ namespace BDAutoMuxer.tools
             process.Start();
 
             isStarted = true;
+
+            job.AddProcess(process.Handle);
 
             while (!this.CancellationPending && !process.StandardOutput.EndOfStream && !this.isError)
             {

@@ -129,6 +129,7 @@
     <Compile Include="controllers\DragUtils.cs" />
     <Compile Include="controllers\FileUtils.cs" />
     <Compile Include="views\FormUtils.cs" />
+    <Compile Include="views\Job.cs" />
     <Compile Include="views\SplitContainerWithDivider.cs" />
     <Compile Include="views\TaskbarProgress.cs" />
     <Compile Include="tools\TsMuxer.cs" />
