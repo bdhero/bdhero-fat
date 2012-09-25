@@ -153,16 +153,6 @@ namespace BDAutoMuxer
 
         private void buttonRemux_Click(object sender, EventArgs e)
         {
-            if (File.Exists(textBoxOutputMkv.Text))
-            {
-                if (DialogResult.Yes != MessageBox.Show(this,
-                    string.Format("Overwrite \"{0}\"?", textBoxOutputMkv.Text),
-                    "File already exists",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
-                {
-                    return;
-                }
-            }
             Remux();
         }
 
@@ -172,8 +162,10 @@ namespace BDAutoMuxer
             buttonClose.Text = "Stop";
         }
 
-        private void Remux()
+        private CancelEventArgs PauseOrResume()
         {
+            var e = new CancelEventArgs();
+
             if (mkvMerge != null && mkvMerge.IsBusy)
             {
                 mkvMerge_Started();
@@ -189,45 +181,56 @@ namespace BDAutoMuxer
                 }
 
                 mkvMerge_ProgressChanged(this, null);
+
+                e.Cancel = true;
             }
-            else if (
-                File.Exists(textBoxInputM2ts.Text) &&
-                File.Exists(textBoxInputMkv.Text) &&
-                File.Exists(textBoxInputChapters.Text) &&
-                !string.IsNullOrEmpty(textBoxOutputMkv.Text))
+
+            return e;
+        }
+
+        private CancelEventArgs OverwriteExistingFile()
+        {
+            var e = new CancelEventArgs();
+
+            if (File.Exists(textBoxOutputMkv.Text))
             {
-                mkvMerge_Started();
-
-                mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked);
-                mkvMerge.WorkerReportsProgress = true;
-                mkvMerge.WorkerSupportsCancellation = true;
-                mkvMerge.ProgressChanged += mkvMerge_ProgressChanged;
-                mkvMerge.RunWorkerCompleted += mkvMerge_RunWorkerCompleted;
-                mkvMerge.RunWorkerAsync();
-
-                mkvMerge_ProgressChanged(this, null);
+                if (DialogResult.Yes != MessageBox.Show(this,
+                    string.Format("Overwrite \"{0}\"?", textBoxOutputMkv.Text),
+                    "File already exists",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
+                {
+                    e.Cancel = true;
+                }
             }
-            else
+
+            return e;
+        }
+
+        private CancelEventArgs CheckInvalidFilePaths()
+        {
+            var e = new CancelEventArgs();
+
+            if (!ValidFilePaths)
             {
                 string msg = "Whoops!  The programmer made a boo-boo :-(";
                 TextBox tb = null;
 
-                if (!File.Exists(textBoxInputM2ts.Text))
+                if (!IsInputM2tsFileValid)
                 {
                     msg = "Please select a valid input M2TS file.";
                     tb = textBoxInputM2ts;
                 }
-                else if (!File.Exists(textBoxInputMkv.Text))
+                else if (!IsInputMkvFileValid)
                 {
                     msg = "Please select a valid input MKV file.";
                     tb = textBoxInputMkv;
                 }
-                else if (!File.Exists(textBoxInputChapters.Text))
+                else if (!IsInputChapterFileValid)
                 {
                     msg = "Please select a valid input chapter file.";
                     tb = textBoxInputChapters;
                 }
-                else if (string.IsNullOrEmpty(textBoxOutputMkv.Text))
+                else if (!IsOutputMkvFileValid)
                 {
                     msg = "Please enter a valid output MKV file.";
                     tb = textBoxOutputMkv;
@@ -240,7 +243,67 @@ namespace BDAutoMuxer
                     tb.Focus();
                     tb.SelectAll();
                 }
+
+                e.Cancel = true;
             }
+
+            return e;
+        }
+
+        private void Remux()
+        {
+            if (PauseOrResume().Cancel)
+                return;
+
+            if (CheckInvalidFilePaths().Cancel)
+                return;
+
+            if (OverwriteExistingFile().Cancel)
+                return;
+
+            mkvMerge_Started();
+
+            mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked);
+            mkvMerge.WorkerReportsProgress = true;
+            mkvMerge.WorkerSupportsCancellation = true;
+            mkvMerge.ProgressChanged += mkvMerge_ProgressChanged;
+            mkvMerge.RunWorkerCompleted += mkvMerge_RunWorkerCompleted;
+            mkvMerge.RunWorkerAsync();
+
+            mkvMerge_ProgressChanged(this, null);
+        }
+
+        private bool ValidFilePaths
+        {
+            get
+            {
+                return
+                    IsInputM2tsFileValid &&
+                    IsInputMkvFileValid &&
+                    IsInputChapterFileValid &&
+                    IsOutputMkvFileValid;
+            }
+        }
+
+        private bool IsInputM2tsFileValid
+        {
+            get { return File.Exists(textBoxInputM2ts.Text); }
+        }
+
+        private bool IsInputMkvFileValid
+        {
+            get { return File.Exists(textBoxInputMkv.Text); }
+        }
+
+        private bool IsInputChapterFileValid
+        {
+            // Allow chapter file to be optional, but if specified, it must be a valid file
+            get { return File.Exists(textBoxInputChapters.Text) || string.IsNullOrEmpty(textBoxInputChapters.Text); }
+        }
+
+        private bool IsOutputMkvFileValid
+        {
+            get { return !string.IsNullOrEmpty(textBoxOutputMkv.Text); }
         }
 
         private void CancelRemux()
