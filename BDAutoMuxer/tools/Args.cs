@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace BDAutoMuxer.controllers
+namespace BDAutoMuxer.tools
 {
     public class Args : List<string>
     {
