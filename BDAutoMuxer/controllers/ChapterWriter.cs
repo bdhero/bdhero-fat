@@ -1,234 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace BDAutoMuxer.controllers
 {
     public class ChapterWriter
     {
-        private TSPlaylistFile Playlist;
-        private List<ChapterTimeSpan> Chapters;
-        private ChapterTimeSpan Duration;
-        private double FramesPerSecond;
+        private List<ChapterTimeSpan> _chapters;
+        private ChapterTimeSpan _duration;
+        private double _framesPerSecond;
 
         public ChapterWriter(TSPlaylistFile playlist)
         {
-            this.Playlist = playlist;
-            this.Chapters = new List<ChapterTimeSpan>();
-            foreach (double d in playlist.Chapters)
-            {
-                this.Chapters.Add(new ChapterTimeSpan(d));
-            }
-            this.Duration = new ChapterTimeSpan(playlist.TotalLength);
+            _chapters = playlist.Chapters.Select(d => new ChapterTimeSpan(d)).ToList();
+            _duration = new ChapterTimeSpan(playlist.TotalLength);
         }
 
-        public void ChangeFps(double fps)
+        public void ChangeFps(double newFps)
         {
-            List<ChapterTimeSpan> newChapters = new List<ChapterTimeSpan>();
+            _chapters = _chapters.Select(cts => ChangeFps(cts, newFps)).ToList();
+            _duration = ChapterTimeSpan.FromFrameRate(_duration.TotalSeconds, _framesPerSecond, newFps);
+            _framesPerSecond = newFps;
+        }
 
-            foreach (ChapterTimeSpan timeSpan in Chapters)
-            {
-                double frames = timeSpan.TotalSeconds * FramesPerSecond;
-                newChapters.Add(new ChapterTimeSpan((long)Math.Round(frames / fps * TimeSpan.TicksPerSecond)));
-            }
-
-            double totalFrames = Duration.TotalSeconds * FramesPerSecond;
-            Duration = new ChapterTimeSpan((long)Math.Round((totalFrames / fps) * TimeSpan.TicksPerSecond));
-            FramesPerSecond = fps;
-            Chapters = newChapters;
+        private ChapterTimeSpan ChangeFps(ChapterTimeSpan timeSpan, double fps)
+        {
+            return ChapterTimeSpan.FromFrameRate(timeSpan.TotalSeconds, _framesPerSecond, fps);
         }
 
         public void SaveText(string filename)
         {
-            List<string> lines = new List<string>();
-            int i = 0;
-            foreach (ChapterTimeSpan c in Chapters)
+            var lines = new List<string>();
+            var i = 0;
+            foreach (var c in _chapters)
             {
                 i++;
-                string istr = i.ToString("00");
+                var istr = i.ToString("00");
                 lines.Add("CHAPTER" + istr + "=" + c);
                 lines.Add("CHAPTER" + istr + "NAME=" + "Chapter " + istr);
             }
             File.WriteAllLines(filename, lines.ToArray());
         }
 
-        public void SaveCelltimes(string filename)
+        public void SaveCellTimes(string filename)
         {
-            List<string> lines = new List<string>();
-            foreach (ChapterTimeSpan c in Chapters)
-            {
-                lines.Add(((long)Math.Round(c.TotalSeconds * FramesPerSecond)).ToString());
-            }
-            File.WriteAllLines(filename, lines.ToArray());
+            File.WriteAllLines(filename, _chapters.Select(GetCellTime).ToArray());
         }
 
-        public void SaveTsmuxerMeta(string filename)
+        private string GetCellTime(ChapterTimeSpan c)
         {
-            string text = "--custom-" + Environment.NewLine + "chapters=";
-            foreach (ChapterTimeSpan c in Chapters)
-            {
-                text += c + ";";
-            }
+            return ((long)Math.Round(c.TotalSeconds * _framesPerSecond)).ToString(CultureInfo.InvariantCulture);
+        }
+
+        public void SaveTsMuxerMeta(string filename)
+        {
+            var text = "--custom-" + Environment.NewLine + "chapters=";
+            text = _chapters.Aggregate(text, (current, c) => current + (c + ";"));
             text = text.Substring(0, text.Length - 1);
             File.WriteAllText(filename, text);
         }
 
         public void SaveTimecodes(string filename)
         {
-            List<string> lines = new List<string>();
-            foreach (ChapterTimeSpan c in Chapters)
-            {
-                lines.Add(c.ToString());
-            }
-            File.WriteAllLines(filename, lines.ToArray());
+            File.WriteAllLines(filename, _chapters.Select(c => c.ToString()).ToArray());
         }
 
         private class ChapterTimeSpan
         {
-            private TimeSpan timeSpan;
+            private TimeSpan _timeSpan;
 
-            public double TotalSeconds { get { return timeSpan.TotalSeconds; } }
-
-            public ChapterTimeSpan(TimeSpan timeSpan)
-            {
-                this.timeSpan = timeSpan;
-            }
+            public double TotalSeconds { get { return _timeSpan.TotalSeconds; } }
 
             public ChapterTimeSpan(double d)
             {
-                this.timeSpan = new TimeSpan((long)(d * (double)TimeSpan.TicksPerSecond));
+                _timeSpan = new TimeSpan((long)(d * TimeSpan.TicksPerSecond));
             }
 
             public override string ToString()
             {
                 return string.Format(
                         "{0}:{1}:{2}.{3}",
-                        timeSpan.Hours.ToString("00"),
-                        timeSpan.Minutes.ToString("00"),
-                        timeSpan.Seconds.ToString("00"),
-                        timeSpan.Milliseconds.ToString("000")
+                        _timeSpan.Hours.ToString("00"),
+                        _timeSpan.Minutes.ToString("00"),
+                        _timeSpan.Seconds.ToString("00"),
+                        _timeSpan.Milliseconds.ToString("000")
                     );
             }
-        }
 
-        /*
-        public static readonly XNamespace CgNs = "http://jvance.com/2008/ChapterGrabber";
-
-        public static ChapterInfo Load(XmlReader r)
-        {
-            XDocument doc = XDocument.Load(r);
-            return ChapterInfo.Load(doc.Root);
-        }
-
-        public static ChapterInfo Load(string filename)
-        {
-            XDocument doc = XDocument.Load(filename);
-            return ChapterInfo.Load(doc.Root);
-        }
-
-
-        public static ChapterInfo Load(XElement root)
-        {
-            ChapterInfo ci = new ChapterInfo();
-            ci.LangCode = (string)root.Attribute(XNamespace.Xml + "lang");
-            ci.Extractor = (string)root.Attribute("extractor");
-
-            if (root.Element(CgNs + "title") != null)
-                ci.Title = (string)root.Element(CgNs + "title");
-
-            XElement @ref = root.Element(CgNs + "ref");
-            if (@ref != null)
+            public static ChapterTimeSpan FromFrameRate(double seconds, double oldFps, double newFps)
             {
-                ci.ChapterSetId = (int?)@ref.Element(CgNs + "chapterSetId");
-                ci.ImdbId = (string)@ref.Element(CgNs + "imdbId");
-                ci.MovieDbId = (int?)@ref.Element(CgNs + "movieDbId");
+                return FromFrameRate(seconds * oldFps, newFps);
             }
 
-            XElement src = root.Element(CgNs + "source");
-            if (src != null)
+            public static ChapterTimeSpan FromFrameRate(double frames, double newFps)
             {
-                ci.SourceName = (string)src.Element(CgNs + "name");
-                if (src.Element(CgNs + "type") != null)
-                    ci.SourceType = (string)src.Element(CgNs + "type");
-                ci.SourceHash = (string)src.Element(CgNs + "hash");
-                ci.FramesPerSecond = Convert.ToDouble(src.Element(CgNs + "fps").Value, new System.Globalization.NumberFormatInfo());
-                ci.Duration = TimeSpan.Parse(src.Element(CgNs + "duration").Value);
+                return new ChapterTimeSpan((long)Math.Round(frames / newFps * TimeSpan.TicksPerSecond));
             }
-
-            ci.Chapters = root.Element(CgNs + "chapters").Elements(CgNs + "chapter")
-              .Select(e => new ChapterEntry() { Name = (string)e.Attribute("name"), Time = TimeSpan.Parse((string)e.Attribute("time")) }).ToList();
-            return ci;
         }
-
-        public void Save(string filename)
-        {
-            ToXElement().Save(filename);
-        }
-
-        public void Save(XmlWriter x)
-        {
-            ToXElement().Save(x);
-        }
-
-        public XElement ToXElement()
-        {
-            var reference = new XElement(CgNs + "ref");
-            if (ChapterSetId.HasValue) reference.Add(new XElement(CgNs + "chapterSetId", ChapterSetId));
-            if (MovieDbId.HasValue) reference.Add(new XElement(CgNs + "movieDbId", MovieDbId));
-            if (ImdbId != null) reference.Add(new XElement(CgNs + "imdbId", ImdbId));
-
-            return new XElement(new XElement(CgNs + "chapterInfo",
-              new XAttribute(XNamespace.Xml + "lang", LangCode),
-              new XAttribute("version", "2"),
-              Extractor != null ? new XAttribute("extractor", Extractor) : null,
-              Title != null ? new XElement(CgNs + "title", Title) : null,
-              reference.Elements().Count() > 0 ? reference : null,
-              new XElement(CgNs + "source",
-                new XElement(CgNs + "name", SourceName),
-                SourceType != null ? new XElement(CgNs + "type", SourceType) : null,
-                new XElement(CgNs + "hash", SourceHash),
-                new XElement(CgNs + "fps", FramesPerSecond),
-                new XElement(CgNs + "duration", Duration.ToString())),
-              new XElement(CgNs + "chapters",
-                Chapters.Select(c =>
-                  new XElement(CgNs + "chapter",
-                    new XAttribute("time", c.Time.ToString()),
-                    new XAttribute("name", c.Name))))));
-        }
-
-        public void SaveXml(string filename)
-        {
-            new XDocument(new XElement("Chapters",
-              new XElement("EditionEntry",
-                new XElement("EditionFlagHidden", "0"),
-                new XElement("EditionFlagDefault", "0"),
-                //new XElement("EditionUID", "1"),
-                Chapters.Select(c =>
-                  new XElement("ChapterAtom",
-                  new XElement("ChapterDisplay",
-                    new XElement("ChapterString", c.Name),
-                    new XElement("ChapterLanguage", LangCode == null ? "und" : LangCode)),
-                  new XElement("ChapterTimeStart", c.Time.ToString()),
-                  new XElement("ChapterFlagHidden", "0"),
-                  new XElement("ChapterFlagEnabled", "1")))
-                ))).Save(filename);
-
-            //    <Chapters>
-            //<EditionEntry>
-            //  <EditionFlagHidden>0</EditionFlagHidden>
-            //  <EditionFlagDefault>0</EditionFlagDefault>
-            //  <EditionUID>62811788</EditionUID>
-            //  <ChapterAtom>
-            //    <ChapterDisplay>
-            //      <ChapterString>Test1</ChapterString>
-            //      <ChapterLanguage>und</ChapterLanguage>
-            //    </ChapterDisplay>
-            //    <ChapterUID>2401693056</ChapterUID>
-            //    <ChapterTimeStart>00:01:40.000000000</ChapterTimeStart>
-            //    <ChapterFlagHidden>0</ChapterFlagHidden>
-            //    <ChapterFlagEnabled>1</ChapterFlagEnabled>
-            //  </ChapterAtom>
-        }
-        */
     }
 }

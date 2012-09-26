@@ -9,7 +9,9 @@ namespace BDAutoMuxer.views
     /// </summary>
     public class TaskbarProgress // : TaskbarManager
     {
-        private static TaskbarManager taskbarManager;
+// ReSharper disable InconsistentNaming
+        private static readonly TaskbarManager taskbarManager;
+// ReSharper restore InconsistentNaming
 
         static TaskbarProgress()
         {

@@ -1,6 +1,7 @@
 ﻿
 namespace BDAutoMuxer.models
 {
+// ReSharper disable InconsistentNaming
     public class JsonPlaylist
     {
         public string filename;
@@ -15,4 +16,5 @@ namespace BDAutoMuxer.models
         public bool is_unrated = false;
         public bool has_commentary = false;
     }
+// ReSharper restore InconsistentNaming
 }

@@ -12,26 +12,21 @@ namespace BDAutoMuxer.views
         /// Iterates through the Control's child Controls recursively and adds an event handler
         /// to each TextBox that allows the user to press CTRL + A to select all text.
         /// </summary>
-        /// <param name="control"></param>
+        /// <param name="parentControl"></param>
         public static void TextBox_EnableSelectAll(Control parentControl)
         {
-            foreach (Control control in ControlFinder.Descendants<Control>(parentControl))
+            foreach (var control in parentControl.Descendants<Control>().OfType<TextBox>())
             {
-                if (control is TextBox)
-                {
-                    (control as TextBox).KeyPress += TextBox_KeyPress;
-                }
+                (control as TextBox).KeyPress += TextBox_KeyPress;
             }
         }
 
         /// <see cref="http://www.dzone.com/snippets/ctrl-shortcut-select-all-text"/>
         public static void TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == '\x1')
-            {
-                ((TextBox)sender).SelectAll();
-                e.Handled = true;
-            }
+            if (e.KeyChar != '\x1') return;
+            ((TextBox)sender).SelectAll();
+            e.Handled = true;
         }
     }
 
@@ -42,18 +37,18 @@ namespace BDAutoMuxer.views
         {
             foreach (Control child in control.Controls)
             {
-                T childOfT = child as T;
+                var childOfT = child as T;
+
                 if (childOfT != null)
                 {
-                    yield return (T)childOfT;
+                    yield return childOfT;
                 }
 
-                if (child.HasChildren)
+                if (!child.HasChildren) continue;
+
+                foreach (var descendant in Descendants<T>(child))
                 {
-                    foreach (T descendant in Descendants<T>(child))
-                    {
-                        yield return descendant;
-                    }
+                    yield return descendant;
                 }
             }
         }

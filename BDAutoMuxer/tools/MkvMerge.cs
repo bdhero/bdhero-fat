@@ -1,84 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.tools
 {
     /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
+// ReSharper disable LocalizableElement
+// ReSharper disable RedundantNameQualifier
     [System.ComponentModel.DesignerCategory("Code")]
+// ReSharper restore RedundantNameQualifier
+// ReSharper restore LocalizableElement
     class MkvMerge : AbstractExternalTool
     {
-        private string exe_path;
-
-        private string inputM2tsPath;
-        private string inputMkvPath;
-        private string inputChaptersPath;
-        private string outputMkvPath;
-        private bool keepM2tsAudio;
+        private readonly string _inputM2TsPath;
+        private readonly string _inputMkvPath;
+        private readonly string _inputChaptersPath;
+        private readonly string _outputMkvPath;
+        private readonly bool _keepM2TsAudio;
 
         protected override string Name { get { return "MkvMerge"; } }
         protected override string Filename { get { return "mkvmerge.exe"; } }
 
-        public MkvMerge(string inputM2tsPath, string inputMkvPath, string inputChaptersPath, string outputMkvPath, bool keepM2tsAudio = true)
-            : base()
+        public MkvMerge(string inputM2TsPath, string inputMkvPath, string inputChaptersPath, string outputMkvPath, bool keepM2TsAudio = true)
         {
-            this.inputM2tsPath = inputM2tsPath;
-            this.inputMkvPath = inputMkvPath;
-            this.inputChaptersPath = inputChaptersPath;
-            this.outputMkvPath = outputMkvPath;
-            this.keepM2tsAudio = keepM2tsAudio;
+            _inputM2TsPath = inputM2TsPath;
+            _inputMkvPath = inputMkvPath;
+            _inputChaptersPath = inputChaptersPath;
+            _outputMkvPath = outputMkvPath;
+            _keepM2TsAudio = keepM2TsAudio;
 
-            this.DoWork += Mux;
+            DoWork += Mux;
         }
 
         private void Mux(object sender, DoWorkEventArgs e)
         {
             ExtractResources();
 
-            string inputM2tsFlags = keepM2tsAudio ? null : "--no-audio";
-            string inputMkvFlags = keepM2tsAudio ? "--no-audio" : null;
+            var inputM2TsFlags = _keepM2TsAudio ? null : "--no-audio";
+            var inputMkvFlags = _keepM2TsAudio ? "--no-audio" : null;
 
             var args = new Args();
 
             // Chapter file
-            args.AddIfAllNonEmpty("--chapters", inputChaptersPath);
+            args.AddIfAllNonEmpty("--chapters", _inputChaptersPath);
 
             // Output file
-            args.AddAll("-o", outputMkvPath);
+            args.AddAll("-o", _outputMkvPath);
 
             // Input M2TS file
-            args.AddNonEmpty("--no-video", inputM2tsFlags, inputM2tsPath);
+            args.AddNonEmpty("--no-video", inputM2TsFlags, _inputM2TsPath);
 
             // Input MKV file
-            args.AddNonEmpty(inputMkvFlags, inputMkvPath);
+            args.AddNonEmpty(inputMkvFlags, _inputMkvPath);
             
             Execute(args, sender, e);
         }
 
         protected override void ExtractResources()
         {
-            exe_path = this.ExtractResource(Filename);
+            ExtractResource(Filename);
         }
 
         protected override void HandleOutputLine(string line, object sender, DoWorkEventArgs e)
         {
-            string progressRegex = @"^Progress: ([\d\.]+)\%";
-            string errorRegex = @"^Error:";
+            const string progressRegex = @"^Progress: ([\d\.]+)\%";
+            const string errorRegex = @"^Error:";
 
             if (Regex.IsMatch(line, progressRegex))
             {
-                Match match = Regex.Match(line, progressRegex);
+                var match = Regex.Match(line, progressRegex);
                 Double.TryParse(match.Groups[1].Value, out progress);
             }
             else if (Regex.IsMatch(line, errorRegex))
             {
-                this.isError = true;
-                this.errorMessages.Add(line);
+                isError = true;
+                errorMessages.Add(line);
             }
         }
     }

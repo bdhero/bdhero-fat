@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace BDAutoMuxer.views
@@ -14,43 +15,38 @@ namespace BDAutoMuxer.views
             streams.Items.Clear();
             tracks.Items.Clear();
 
-            int clipCount = 0;
-            foreach (TSStreamClip clip in playlist.StreamClips)
+            var clipCount = 0;
+
+            foreach (var clip in playlist.StreamClips)
             {
                 if (clip.AngleIndex == 0)
                 {
                     ++clipCount;
                 }
 
-                ListViewItem.ListViewSubItem clipIndex =
-                    new ListViewItem.ListViewSubItem();
-                clipIndex.Text = clipCount.ToString();
-                clipIndex.Tag = clipCount;
+                var clipIndex = new ListViewItem.ListViewSubItem {Text = clipCount.ToString(CultureInfo.InvariantCulture), Tag = clipCount};
+                var clipName = new ListViewItem.ListViewSubItem {Text = clip.DisplayName, Tag = clip.Name};
 
-                ListViewItem.ListViewSubItem clipName =
-                    new ListViewItem.ListViewSubItem();
-                clipName.Text = clip.DisplayName;
-                clipName.Tag = clip.Name;
                 if (clip.AngleIndex > 0)
                 {
                     clipName.Text += string.Format(
                         " ({0})", clip.AngleIndex);
                 }
 
-                TimeSpan clipLengthSpan =
-                    new TimeSpan((long)(clip.Length * 10000000));
+                var clipLengthSpan = new TimeSpan((long)(clip.Length * 10000000));
+                var clipLength =
+                    new ListViewItem.ListViewSubItem
+                        {
+                            Text = string.Format(
+                                "{0:D2}:{1:D2}:{2:D2}",
+                                clipLengthSpan.Hours,
+                                clipLengthSpan.Minutes,
+                                clipLengthSpan.Seconds),
+                            Tag = clip.Length
+                        };
 
-                ListViewItem.ListViewSubItem clipLength =
-                    new ListViewItem.ListViewSubItem();
-                clipLength.Text = string.Format(
-                    "{0:D2}:{1:D2}:{2:D2}",
-                    clipLengthSpan.Hours,
-                    clipLengthSpan.Minutes,
-                    clipLengthSpan.Seconds);
-                clipLength.Tag = clip.Length;
+                var clipSize = new ListViewItem.ListViewSubItem();
 
-                ListViewItem.ListViewSubItem clipSize =
-                    new ListViewItem.ListViewSubItem();
                 if (BDAutoMuxerSettings.EnableSSIF &&
                     clip.InterleavedFileSize > 0)
                 {
@@ -64,24 +60,16 @@ namespace BDAutoMuxer.views
                 }
                 else
                 {
+// ReSharper disable LocalizableElement
                     clipSize.Text = "-";
+// ReSharper restore LocalizableElement
                     clipSize.Tag = clip.FileSize;
                 }
 
-                ListViewItem.ListViewSubItem clipSize2 =
-                    new ListViewItem.ListViewSubItem();
-                if (clip.PacketSize > 0)
-                {
-                    clipSize2.Text = clip.PacketSize.ToString("N0");
-                }
-                else
-                {
-                    clipSize2.Text = "-";
-                }
-                clipSize2.Tag = clip.PacketSize;
+                var clipSize2 = new ListViewItem.ListViewSubItem {Text = clip.PacketSize > 0 ? clip.PacketSize.ToString("N0") : "-", Tag = clip.PacketSize};
 
-                ListViewItem.ListViewSubItem[] streamFileSubItems =
-                    new ListViewItem.ListViewSubItem[]
+                var streamFileSubItems =
+                    new[]
                     {
                         clipName,
                         clipIndex,
@@ -90,17 +78,12 @@ namespace BDAutoMuxer.views
                         clipSize2
                     };
 
-                ListViewItem streamFileItem =
-                    new ListViewItem(streamFileSubItems, 0);
-                streamFileItem.Tag = clip;
-                streams.Items.Add(streamFileItem);
+                streams.Items.Add(new ListViewItem(streamFileSubItems, 0) {Tag = clip});
             }
 
-            foreach (TSStream stream in playlist.SortedStreams)
+            foreach (var stream in playlist.SortedStreams)
             {
-                ListViewItem.ListViewSubItem codec =
-                    new ListViewItem.ListViewSubItem();
-                codec.Text = stream.CodecName;
+                var codec = new ListViewItem.ListViewSubItem {Text = stream.CodecName};
                 if (stream.AngleIndex > 0)
                 {
                     codec.Text += string.Format(
@@ -110,16 +93,13 @@ namespace BDAutoMuxer.views
 
                 if (stream.IsHidden)
                 {
+// ReSharper disable LocalizableElement
                     codec.Text = "* " + codec.Text;
+// ReSharper restore LocalizableElement
                 }
 
-                ListViewItem.ListViewSubItem language =
-                    new ListViewItem.ListViewSubItem();
-                language.Text = stream.LanguageName;
-                language.Tag = stream.LanguageName;
-
-                ListViewItem.ListViewSubItem bitrate =
-                    new ListViewItem.ListViewSubItem();
+                var language = new ListViewItem.ListViewSubItem {Text = stream.LanguageName, Tag = stream.LanguageName};
+                var bitrate = new ListViewItem.ListViewSubItem();
 
                 if (stream.AngleIndex > 0)
                 {
@@ -130,7 +110,9 @@ namespace BDAutoMuxer.views
                     }
                     else
                     {
+// ReSharper disable LocalizableElement
                         bitrate.Text = "-";
+// ReSharper restore LocalizableElement
                     }
                     bitrate.Tag = stream.ActiveBitRate;
                 }
@@ -143,18 +125,17 @@ namespace BDAutoMuxer.views
                     }
                     else
                     {
+// ReSharper disable LocalizableElement
                         bitrate.Text = "-";
+// ReSharper restore LocalizableElement
                     }
                     bitrate.Tag = stream.BitRate;
                 }
 
-                ListViewItem.ListViewSubItem description =
-                    new ListViewItem.ListViewSubItem();
-                description.Text = stream.Description;
-                description.Tag = stream.Description;
+                var description = new ListViewItem.ListViewSubItem {Text = stream.Description, Tag = stream.Description};
 
-                ListViewItem.ListViewSubItem[] streamSubItems =
-                    new ListViewItem.ListViewSubItem[]
+                var streamSubItems =
+                    new[]
                     {
                         codec,
                         language,
@@ -162,10 +143,7 @@ namespace BDAutoMuxer.views
                         description
                     };
 
-                ListViewItem streamItem =
-                    new ListViewItem(streamSubItems, 0);
-                streamItem.Tag = stream.PID;
-                tracks.Items.Add(streamItem);
+                tracks.Items.Add(new ListViewItem(streamSubItems, 0) {Tag = stream.PID});
             }
         }
     }

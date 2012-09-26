@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BDAutoMuxer.models;
 using Newtonsoft.Json;
 
@@ -7,45 +8,40 @@ namespace BDAutoMuxer.controllers
 {
     class MainMovieService
     {
-        private readonly string base_uri = "http://bd.andydvorak.net/api/v1/movies";
-        private readonly string user_agent;
+        private const string BaseUri = "http://bd.andydvorak.net/api/v1/movies";
 
-        public MainMovieService()
+        private static string GetMainMovieUri(string volumeLabel, IEnumerable<TSPlaylistFile> mainPlaylists)
         {
-            user_agent = BDAutoMuxerSettings.AssemblyName + "/" + BDAutoMuxerSettings.AssemblyVersionDisplay;
+            const string uri = BaseUri + "/main";
+
+            var qs = new List<string> {"volume_label=" + Uri.EscapeUriString(volumeLabel)};
+            qs.AddRange(mainPlaylists.Select(ToParam));
+
+            return string.Format("{0}?{1}", uri, string.Join("&", qs));
         }
 
-        private string GetMainMovieUri(string volume_label, IList<TSPlaylistFile> mainPlaylists)
+        private static string ToParam(TSPlaylistFile playlist)
         {
-            string uri = base_uri + "/main";
-            uri += "?volume_label=" + Uri.EscapeUriString(volume_label);
-            foreach(TSPlaylistFile playlist in mainPlaylists)
-            {
-                uri += "&playlist=" + playlist.Name + ";" + playlist.FileSize + ";" + (int)playlist.TotalLength;
-            }
-            return uri;
+            return "playlist=" + playlist.Name + ";" + playlist.FileSize + ";" + (int) playlist.TotalLength;
         }
 
-        public JsonSearchResult FindMainMovie(string volume_label, IList<TSPlaylistFile> mainPlaylists)
+        public JsonSearchResult FindMainMovie(string volumeLabel, IList<TSPlaylistFile> mainPlaylists)
         {
-            string uri = GetMainMovieUri(volume_label, mainPlaylists);
-            string responseText = HttpRequest.Get(uri);
-            JsonSearchResult searchResult = JsonConvert.DeserializeObject<JsonSearchResult>(responseText);
-            return searchResult;
+            var uri = GetMainMovieUri(volumeLabel, mainPlaylists);
+            var responseText = HttpRequest.Get(uri);
+            return JsonConvert.DeserializeObject<JsonSearchResult>(responseText);
         }
 
         public JsonSearchResult PostDisc(JsonDisc jsonDisc)
         {
-            string uri = base_uri + "/main?api_key=" + Uri.EscapeUriString(BDAutoMuxerSettings.ApiKey);
-            string jsonString = JsonConvert.SerializeObject(jsonDisc);
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("json", jsonString);
+            var uri = BaseUri + "/main?api_key=" + Uri.EscapeUriString(BDAutoMuxerSettings.ApiKey);
+            var jsonString = JsonConvert.SerializeObject(jsonDisc);
+            var data = new Dictionary<string, string> {{"json", jsonString}};
 
-            string responseText = HttpRequest.Post(uri, data);
+            var responseText = HttpRequest.Post(uri, data);
 
             // TODO: Rename JsonSearchResult to something more generic.
-            JsonSearchResult postResult = JsonConvert.DeserializeObject<JsonSearchResult>(responseText);
-            return postResult;
+            return JsonConvert.DeserializeObject<JsonSearchResult>(responseText);
         }
     }
 }

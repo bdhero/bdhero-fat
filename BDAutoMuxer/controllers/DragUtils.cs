@@ -26,7 +26,7 @@ namespace BDAutoMuxer.controllers
         /// <returns></returns>
         public static bool HasFileExtension(DragEventArgs e, string extension)
         {
-            return HasFileExtension(e, new string[] { extension });
+            return HasFileExtension(e, new[] { extension });
         }
 
         /// <summary>
@@ -38,60 +38,50 @@ namespace BDAutoMuxer.controllers
         /// <returns></returns>
         public static bool HasFileExtension(DragEventArgs e, ICollection<string> extensions)
         {
-            ICollection<string> normalizedExtensions = NormalizeFileExtensions(extensions);
-            foreach (string path in GetFilePaths(e))
-            {
-                if (normalizedExtensions.Contains(Path.GetExtension(path).ToLower()))
-                    return true;
-            }
-            return false;
+            var normalizedExtensions = NormalizeFileExtensions(extensions);
+            return GetFilePaths(e).Any(path => IsIn(normalizedExtensions, path));
         }
 
         public static IList<string> GetFilesWithExtension(DragEventArgs e, string extension)
         {
-            return GetFilesWithExtension(e, new string[] { extension });
+            return GetFilesWithExtension(e, new[] { extension });
         }
 
         public static IList<string> GetFilesWithExtension(DragEventArgs e, ICollection<string> extensions)
         {
-            IList<string> paths = new List<string>();
-            ICollection<string> normalizedExtensions = NormalizeFileExtensions(extensions);
+            var normalizedExtensions = NormalizeFileExtensions(extensions);
+            return GetFilePaths(e).Where(path => IsIn(normalizedExtensions, path)).ToList();
+        }
 
-            foreach (string path in GetFilePaths(e))
-            {
-                if (normalizedExtensions.Contains(Path.GetExtension(path).ToLower()))
-                    paths.Add(path);
-            }
-
-            return paths;
+        private static bool IsIn(ICollection<string> normalizedExtensions, string path)
+        {
+            var extension = Path.GetExtension(path);
+            return extension != null && normalizedExtensions.Contains(extension.ToLower());
         }
 
         public static string GetFirstFileWithExtension(DragEventArgs e, string extension)
         {
-            return GetFirstFileWithExtension(e, new string[] { extension });
+            return GetFirstFileWithExtension(e, new[] { extension });
         }
 
         public static string GetFirstFileWithExtension(DragEventArgs e, ICollection<string> extensions)
         {
-            IList<string> files = GetFilesWithExtension(e, extensions);
-            if (files.Count > 0)
-                return files[0];
-            else
-                return null;
+            var files = GetFilesWithExtension(e, extensions);
+            return files.Count > 0 ? files[0] : null;
         }
 
-        private static ICollection<string> NormalizeFileExtensions(ICollection<string> extensions)
+        private static ICollection<string> NormalizeFileExtensions(IEnumerable<string> extensions)
+        {
+            return extensions.Select(NormalizeFileExtension).ToList();
+        }
+
+        private static string NormalizeFileExtension(string ext)
         {
             // Make sure every extension starts with a period (e.g., ".ext")
-            ISet<string> normalizedExtensions = new HashSet<string>();
-            foreach (string ext in extensions)
-            {
-                string extNorm = ext.Trim().ToLower();
-                if (!ext.StartsWith("."))
-                    extNorm = "." + extNorm;
-                normalizedExtensions.Add(extNorm);
-            }
-            return normalizedExtensions;
+            var extNorm = ext.Trim().ToLower();
+            if (!ext.StartsWith("."))
+                extNorm = "." + extNorm;
+            return extNorm;
         }
 
         public static string[] GetPaths(DragEventArgs e)
@@ -105,59 +95,34 @@ namespace BDAutoMuxer.controllers
 
         public static string GetFirstPath(DragEventArgs e)
         {
-            string[] paths = GetPaths(e);
+            var paths = GetPaths(e);
             return paths.Length > 0 ? paths[0] : null;
         }
 
         public static string[] GetFilePaths(DragEventArgs e)
         {
-            string[] paths = GetPaths(e);
-            IList<string> filePaths = new List<string>();
-            foreach (string path in paths)
-            {
-                if (FileUtils.IsFile(path))
-                    filePaths.Add(path);
-            }
-            return filePaths.ToArray();
+            return GetPaths(e).Where(FileUtils.IsFile).ToArray();
         }
 
         public static string GetFirstFilePath(DragEventArgs e)
         {
-            string[] paths = GetPaths(e);
-            foreach (string path in paths)
-            {
-                if (FileUtils.IsFile(path))
-                    return path;
-            }
-            return null;
+            return GetPaths(e).FirstOrDefault(FileUtils.IsFile);
         }
 
         public static string[] GetDirectoryPaths(DragEventArgs e)
         {
-            string[] paths = GetPaths(e);
-            IList<string> directoryPaths = new List<string>();
-            foreach (string path in paths)
-            {
-                if (FileUtils.IsDirectory(path))
-                    directoryPaths.Add(path);
-            }
-            return directoryPaths.ToArray();
+            return GetPaths(e).Where(FileUtils.IsDirectory).ToArray();
         }
 
         public static string GetFirstDirectoryPath(DragEventArgs e)
         {
-            string[] paths = GetPaths(e);
-            foreach (string path in paths)
-            {
-                if (FileUtils.IsDirectory(path))
-                    return path;
-            }
-            return null;
+            var paths = GetPaths(e);
+            return paths.FirstOrDefault(FileUtils.IsDirectory);
         }
 
         public static string GetFirstFileNameWithoutExtension(DragEventArgs e)
         {
-            string path = DragUtils.GetFirstFilePath(e);
+            var path = DragUtils.GetFirstFilePath(e);
             return path == null ? null : Path.GetFileNameWithoutExtension(path);
         }
     }

@@ -2,6 +2,7 @@
 
 namespace BDAutoMuxer.models
 {
+// ReSharper disable InconsistentNaming
     public class JsonSearchResult
     {
         public bool success = false;
@@ -15,4 +16,5 @@ namespace BDAutoMuxer.models
         public string textStatus = null;
         public string errorMessage = null;
     }
+// ReSharper restore InconsistentNaming
 }

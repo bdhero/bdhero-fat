@@ -2,6 +2,7 @@
 
 namespace BDAutoMuxer.models
 {
+// ReSharper disable InconsistentNaming
     public class JsonDisc
     {
         public string disc_name;
@@ -14,4 +15,5 @@ namespace BDAutoMuxer.models
 
         public IList<JsonPlaylist> playlists;
     }
+// ReSharper restore InconsistentNaming
 }

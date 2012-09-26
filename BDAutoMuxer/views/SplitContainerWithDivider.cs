@@ -8,20 +8,23 @@ using System.Drawing;
 namespace BDAutoMuxer.views
 {
     /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
+// ReSharper disable LocalizableElement
+// ReSharper disable RedundantNameQualifier
     [System.ComponentModel.DesignerCategory("Code")]
+// ReSharper restore RedundantNameQualifier
+// ReSharper restore LocalizableElement
     public class SplitContainerWithDivider : SplitContainer
     {
         public SplitContainerWithDivider()
-            : base()
         {
-            this.Paint += SplitContainer_Paint;
+            Paint += SplitContainer_Paint;
         }
 
         /// <see cref="http://stackoverflow.com/a/4405758/467582"/>
-        private void SplitContainer_Paint(object sender, PaintEventArgs e)
+        private static void SplitContainer_Paint(object sender, PaintEventArgs e)
         {
-            var control = sender as SplitContainer;
-            Point[] points = new Point[3];
+            var control = (SplitContainer)sender;
+            var points = new Point[3];
             var w = control.Width;
             var h = control.Height;
             var d = control.SplitterDistance;
@@ -41,7 +44,7 @@ namespace BDAutoMuxer.views
                 points[2] = new Point(points[0].X, points[0].Y + 10);
             }
 
-            foreach (Point p in points)
+            foreach (var p in points)
             {
                 p.Offset(-2, -2);
                 e.Graphics.FillEllipse(SystemBrushes.ControlDark,

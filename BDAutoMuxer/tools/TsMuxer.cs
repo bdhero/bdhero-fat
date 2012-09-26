@@ -2,62 +2,66 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.tools
 {
     /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
+// ReSharper disable LocalizableElement
+// ReSharper disable RedundantNameQualifier
     [System.ComponentModel.DesignerCategory("Code")]
+// ReSharper restore RedundantNameQualifier
+// ReSharper restore LocalizableElement
     class TsMuxer : AbstractExternalTool
     {
-        private string exe_path;
-
-        private string outputFilePath;
-        private string basePath;
-        private string metaFilePath;
-        private string chapterTextFilePath;
+        private string _outputFilePath;
+        private string _basePath;
+        private string _metaFilePath;
+        private string _chapterTextFilePath;
 
         protected override string Name { get { return "TsMuxer"; } }
         protected override string Filename { get { return "tsMuxeR.exe"; } }
 
-        private BDROM BDROM;
-        private TSPlaylistFile playlist;
-        private ICollection<TSStream> selectedTracks;
-        private string streamClipPaths;
-        private string mplsFileName;
-        private string frameRate = null;
-        private string videoHeight = null;
-        private string videoWidth = null;
+        private readonly BDROM _bdrom;
+        private readonly TSPlaylistFile _playlist;
+        private readonly ICollection<TSStream> _selectedTracks;
+        private readonly string _streamClipPaths;
+        private readonly string _mplsFileName;
+        private readonly string _videoHeight;
+        private readonly string _videoWidth;
 
-        public TsMuxer(BDROM BDROM, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks)
-            : base()
+        public TsMuxer(BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks)
         {
-            this.BDROM = BDROM;
-            this.playlist = playlist;
-            this.selectedTracks = selectedTracks;
-
-            List<string> streamClipPathList = new List<string>();
-            foreach (TSStreamClip clip in playlist.StreamClips)
-            {
-                streamClipPathList.Add("\"" + Path.Combine(BDROM.DirectorySTREAM.FullName, clip.DisplayName.Replace("\"", "\\\"")) + "\"");
-            }
-            this.streamClipPaths = string.Join("+", streamClipPathList.ToArray());
-
-            this.mplsFileName = Path.GetFileNameWithoutExtension(playlist.FullName);
+            _bdrom = bdrom;
+            _playlist = playlist;
+            _selectedTracks = selectedTracks;
+            _streamClipPaths = GetStreamClipPaths();
+            _mplsFileName = Path.GetFileNameWithoutExtension(playlist.FullName);
 
             if (playlist.VideoStreams.Count > 0)
             {
-                TSVideoStream videoTrack = playlist.VideoStreams[0];
-                frameRate = videoTrack.FrameRateDescription;
-                videoHeight = videoTrack.Height + "";
-                videoWidth = videoTrack.Width + "";
+                var videoTrack = playlist.VideoStreams[0];
+                _videoHeight = videoTrack.Height + "";
+                // TODO: Width is always 0
+                _videoWidth = videoTrack.Width + "";
             }
 
-            this.DoWork += Mux;
+            DoWork += Mux;
         }
 
-        private string CodecMetaName(TSStream stream)
+        private string GetStreamClipPaths()
+        {
+            return string.Join("+", _playlist.StreamClips.Select(GetClipPath));
+        }
+
+        private string GetClipPath(TSStreamClip clip)
+        {
+            return Args.ForCommandLine(Path.Combine(_bdrom.DirectorySTREAM.FullName, clip.DisplayName));
+        }
+
+        private static string CodecMetaName(TSStream stream)
         {
             switch (stream.StreamType)
             {
@@ -102,40 +106,37 @@ namespace BDAutoMuxer.tools
 
         private void Mux(object sender, DoWorkEventArgs e)
         {
-            outputFilePath = e.Argument as string;
+            _outputFilePath = (string)e.Argument;
+
+            if (string.IsNullOrEmpty(_outputFilePath))
+                throw new ArgumentNullException();
 
             ExtractResources();
-            
-            basePath = Path.Combine(Path.GetDirectoryName(outputFilePath), Path.GetFileNameWithoutExtension(outputFilePath));
-            
-            metaFilePath = basePath + ".meta.txt";
-            chapterTextFilePath = basePath + ".chapters.txt";
 
-            WriteChapterTextFile(chapterTextFilePath);
-            WriteMetaFile(metaFilePath);
+            _basePath = Path.Combine(Path.GetDirectoryName(_outputFilePath), Path.GetFileNameWithoutExtension(_outputFilePath));
+            _metaFilePath = _basePath + ".meta.txt";
+            _chapterTextFilePath = _basePath + ".chapters.txt";
 
-            Execute(new List<string>() { metaFilePath, outputFilePath }, sender, e);
+            WriteChapterTextFile(_chapterTextFilePath);
+            WriteMetaFile(_metaFilePath);
+
+            Execute(new List<string> { _metaFilePath, _outputFilePath }, sender, e);
         }
 
         private void WriteChapterTextFile(string chapterTextFilePath)
         {
-            new ChapterWriter(playlist).SaveText(chapterTextFilePath);
+            new ChapterWriter(_playlist).SaveText(chapterTextFilePath);
         }
 
         private void WriteMetaFile(string metaFilePath)
         {
-            List<string> lines = new List<string>();
-            
-            lines.Add("MUXOPT --no-pcr-on-video-pid --new-audio-pes --vbr --vbv-len=500");
+            var lines = new List<string> {"MUXOPT --no-pcr-on-video-pid --new-audio-pes --vbr --vbv-len=500"};
 
-            foreach (TSStream track in playlist.SortedStreams)
+            foreach (var track in _playlist.SortedStreams)
             {
-                List<string> line = new List<string>();
+                var line = new List<string> {CodecMetaName(track), _streamClipPaths};
 
-                line.Add(CodecMetaName(track));
-                line.Add(streamClipPaths);
-
-                if (track.IsVideoStream && (track as TSVideoStream).StreamType == TSStreamType.AVC_VIDEO)
+                if (track.IsVideoStream && track.StreamType == TSStreamType.AVC_VIDEO)
                 {
                     line.Add("insertSEI");
                     line.Add("contSPS");
@@ -145,8 +146,8 @@ namespace BDAutoMuxer.tools
                     line.Add("bottom-offset=24");
                     line.Add("font-border=2");
                     line.Add("text-align=center");
-                    line.Add("video-width=" + videoWidth);
-                    line.Add("video-height=" + videoHeight);
+                    line.Add("video-width=" + _videoWidth);
+                    line.Add("video-height=" + _videoHeight);
                 }
                 if (track.IsGraphicsStream || track.IsTextStream || track.IsVideoStream)
                 {
@@ -159,9 +160,9 @@ namespace BDAutoMuxer.tools
                 }
 
                 line.Add("track=" + track.PID);
-                line.Add("mplsFile=" + mplsFileName);
+                line.Add("mplsFile=" + _mplsFileName);
 
-                string comment = selectedTracks.Contains(track) ? "" : "#";
+                var comment = _selectedTracks.Contains(track) ? "" : "#";
 
                 lines.Add(comment + string.Join(", ", line));
 
@@ -180,23 +181,23 @@ namespace BDAutoMuxer.tools
 
         protected override void ExtractResources()
         {
-            exe_path = this.ExtractResource(Filename);
+            ExtractResource(Filename);
         }
 
         protected override void HandleOutputLine(string line, object sender, DoWorkEventArgs e)
         {
-            string regex = @"^(\d+\.\d+)\%";
-            string errorRegex = @"^(?:Can't)";
+            const string regex = @"^(\d+\.\d+)\%";
+            const string errorRegex = @"^(?:Can't)";
 
             if (Regex.IsMatch(line, regex))
             {
-                Match match = Regex.Match(line, regex);
+                var match = Regex.Match(line, regex);
                 Double.TryParse(match.Groups[1].Value, out progress);
             }
             else if (Regex.IsMatch(line, errorRegex))
             {
-                this.isError = true;
-                this.errorMessages.Add(line);
+                isError = true;
+                errorMessages.Add(line);
             }
         }
     }

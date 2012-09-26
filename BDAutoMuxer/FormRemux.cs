@@ -12,7 +12,7 @@ namespace BDAutoMuxer
 {
     public partial class FormRemux : Form
     {
-        private MkvMerge mkvMerge;
+        private MkvMerge _mkvMerge;
 
         public FormRemux()
         {
@@ -109,7 +109,7 @@ namespace BDAutoMuxer
             BrowseFile(textBoxOutputMkv, "Select an Output MKV File:", "Matroska Video", "mkv", false);
         }
 
-        private void BrowseFile(TextBox textBox, string title, string fileTypeName, string fileExt, bool checkFileExists = true)
+        private static void BrowseFile(Control textBox, string title, string fileTypeName, string fileExt, bool checkFileExists = true)
         {
             string path = null;
             try
@@ -162,17 +162,17 @@ namespace BDAutoMuxer
         {
             var e = new CancelEventArgs();
 
-            if (mkvMerge != null && mkvMerge.IsBusy)
+            if (_mkvMerge != null && _mkvMerge.IsBusy)
             {
                 mkvMerge_Started();
 
-                if (mkvMerge.IsPaused)
+                if (_mkvMerge.IsPaused)
                 {
-                    mkvMerge.Resume();
+                    _mkvMerge.Resume();
                 }
                 else
                 {
-                    mkvMerge.Pause();
+                    _mkvMerge.Pause();
                     buttonRemux.Text = "Resume";
                 }
 
@@ -259,12 +259,11 @@ namespace BDAutoMuxer
 
             mkvMerge_Started();
 
-            mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked);
-            mkvMerge.WorkerReportsProgress = true;
-            mkvMerge.WorkerSupportsCancellation = true;
-            mkvMerge.ProgressChanged += mkvMerge_ProgressChanged;
-            mkvMerge.RunWorkerCompleted += mkvMerge_RunWorkerCompleted;
-            mkvMerge.RunWorkerAsync();
+            _mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked)
+                            {WorkerReportsProgress = true, WorkerSupportsCancellation = true};
+            _mkvMerge.ProgressChanged += mkvMerge_ProgressChanged;
+            _mkvMerge.RunWorkerCompleted += mkvMerge_RunWorkerCompleted;
+            _mkvMerge.RunWorkerAsync();
 
             mkvMerge_ProgressChanged(this, null);
         }
@@ -304,41 +303,39 @@ namespace BDAutoMuxer
 
         private void CancelRemux()
         {
-            if (mkvMerge != null && mkvMerge.IsBusy)
+            if (_mkvMerge != null && _mkvMerge.IsBusy)
             {
-                mkvMerge.Resume();
-                mkvMerge.CancelAsync();
+                _mkvMerge.Resume();
+                _mkvMerge.CancelAsync();
             }
         }
 
         private void mkvMerge_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            
-            if (mkvMerge != null)
+            if (_mkvMerge == null) return;
+
+            var progress = (int)(10 * _mkvMerge.Progress);
+
+            try
             {
-                int progress = (int)(10 * mkvMerge.Progress);
-
-                try
-                {
-                    // TODO: This throws a NPE if the window is closed while muxing is in progress
-                    statusStripProgressBar.Value = progress;
-                }
-                catch (Exception ex)
-                {
-                    ex.ToString();
-                }
-
-                statusStripLabel.Text = mkvMerge.Progress.ToString("##0.0") + "%";
-
-                if (mkvMerge.IsPaused)
-                    statusStripLabel.Text += " (paused)";
-                if (mkvMerge.IsError)
-                    statusStripLabel.Text += " (error)";
-                if (mkvMerge.IsCanceled)
-                    statusStripLabel.Text += " (canceled)";
-                if (mkvMerge.IsCompleted)
-                    statusStripLabel.Text += " (completed)";
+                // TODO: This throws a NPE if the window is closed while muxing is in progress
+                statusStripProgressBar.Value = progress;
             }
+            catch
+            {
+                
+            }
+
+            statusStripLabel.Text = _mkvMerge.Progress.ToString("##0.0") + "%";
+
+            if (_mkvMerge.IsPaused)
+                statusStripLabel.Text += " (paused)";
+            if (_mkvMerge.IsError)
+                statusStripLabel.Text += " (error)";
+            if (_mkvMerge.IsCanceled)
+                statusStripLabel.Text += " (canceled)";
+            if (_mkvMerge.IsCompleted)
+                statusStripLabel.Text += " (completed)";
         }
 
         private void mkvMerge_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -346,18 +343,18 @@ namespace BDAutoMuxer
             buttonRemux.Text = "Mux!";
             buttonClose.Text = "Close";
 
-            if (mkvMerge != null)
+            if (_mkvMerge != null)
             {
-                if (mkvMerge.IsError)
+                if (_mkvMerge.IsError)
                 {
-                    MessageBox.Show(this, mkvMerge.ErrorMessage, "mkvmerge Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, _mkvMerge.ErrorMessage, "mkvmerge Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
         {
-            if (mkvMerge != null && mkvMerge.IsBusy)
+            if (_mkvMerge != null && _mkvMerge.IsBusy)
             {
                 if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                     return;
@@ -372,7 +369,7 @@ namespace BDAutoMuxer
 
         private void FormRemux_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (mkvMerge != null && mkvMerge.IsBusy)
+            if (_mkvMerge != null && _mkvMerge.IsBusy)
             {
                 if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {

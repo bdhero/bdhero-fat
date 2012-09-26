@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Cache;
 
@@ -8,24 +9,16 @@ namespace BDAutoMuxer.controllers
 {
     public class HttpRequest
     {
-        private static readonly string user_agent;
+        private static readonly string UserAgent;
 
         static HttpRequest()
         {
-            user_agent = BDAutoMuxerSettings.AssemblyName + "/" + BDAutoMuxerSettings.AssemblyVersionDisplay;
+            UserAgent = BDAutoMuxerSettings.AssemblyName + "/" + BDAutoMuxerSettings.AssemblyVersionDisplay;
         }
 
         public static string Get(string uri)
         {
-            var request = (HttpWebRequest)WebRequest.Create(uri);
-            request.Method = "GET";
-            request.UserAgent = user_agent;
-            request.KeepAlive = true;
-
-            var cachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
-            request.CachePolicy = cachePolicy;
-            request.Expect = null;
-
+            var request = BuildRequest("GET", uri);
             var httpResponse = (HttpWebResponse)request.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
@@ -35,27 +28,16 @@ namespace BDAutoMuxer.controllers
 
         public static string Post(string uri, IDictionary<string, string> data = null)
         {
-            var request = (HttpWebRequest)WebRequest.Create(uri);
-            request.Method = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.UserAgent = user_agent;
-            request.KeepAlive = true;
-
-            var cachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
-            request.CachePolicy = cachePolicy;
-            request.Expect = null;
+            var request = BuildRequest("POST", uri);
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
-                string strData = "";
+                var body = new List<string>();
                 if (data != null)
                 {
-                    foreach (string key in data.Keys)
-                    {
-                        strData += (strData.Length > 0 ? "&" : "") + Uri.EscapeUriString(key) + "=" + Uri.EscapeUriString(data[key]);
-                    }
+                    body.AddRange(data.Keys.Select(key => EncodeForPostBody(key, data[key])));
                 }
-                streamWriter.Write(strData + "\n");
+                streamWriter.Write(string.Join("&", body) + "\n");
                 streamWriter.Flush();
                 streamWriter.Close();
             }
@@ -67,6 +49,27 @@ namespace BDAutoMuxer.controllers
                 var responseText = streamReader.ReadToEnd();
                 return responseText;
             }
+        }
+
+        private static HttpWebRequest BuildRequest(string method, string uri)
+        {
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+
+            request.Method = method;
+            request.UserAgent = UserAgent;
+            request.KeepAlive = true;
+            request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
+            request.Expect = null;
+
+            if ("POST" == method)
+                request.ContentType = "application/x-www-form-urlencoded";
+
+            return request;
+        }
+
+        private static string EncodeForPostBody(string key, string value)
+        {
+            return Uri.EscapeUriString(key) + "=" + Uri.EscapeUriString(value);
         }
     }
 }

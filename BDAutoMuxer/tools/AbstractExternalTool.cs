@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
@@ -11,28 +13,33 @@ using BDAutoMuxer.views;
 namespace BDAutoMuxer.tools
 {
     /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
+// ReSharper disable LocalizableElement
+// ReSharper disable RedundantNameQualifier
     [System.ComponentModel.DesignerCategory("Code")]
+// ReSharper restore RedundantNameQualifier
+// ReSharper restore LocalizableElement
     abstract class AbstractExternalTool : BackgroundWorker
     {
-        #region Fields (private / protected)
+        #region Fields (private)
 
-        private IList<string> paths = new List<string>();
-        private string strArgs = null;
-        private Process process = null;
+        private Job _job;
+        private BackgroundWorker _worker;
 
-        private bool _isStarted = false;
-        private bool _isPaused = false;
-        private bool _isCompleted = false;
-        private bool _isCanceled = false;
-        private bool _isError = false;
+        private readonly IList<string> _paths = new List<string>();
+        private string _strArgs;
+        private Process _process;
 
-        private Timer timer = new Timer();
-        private DateTime lastTick = DateTime.Now;
-        private DateTime lastEstimate = DateTime.Now;
-        private TimeSpan elapsedTime = TimeSpan.Zero;
-        private TimeSpan remainingTime = TimeSpan.Zero;
+        private Timer _timer = new Timer();
+        private DateTime _lastTick = DateTime.Now;
+        private DateTime _lastEstimate = DateTime.Now;
+        private TimeSpan _elapsedTime = TimeSpan.Zero;
+        private TimeSpan _remainingTime = TimeSpan.Zero;
 
-        private bool onCompleteHandled = false;
+        private bool _onCompleteHandled;
+
+        #endregion
+
+        #region Fields (protected)
 
         /// <summary>
         /// 0.0 to 100.0
@@ -43,37 +50,35 @@ namespace BDAutoMuxer.tools
 
         #endregion
 
-        #region Properties (private / protected)
+        #region Properties (private)
 
         private bool isStarted
         {
-            get { return _isStarted; }
+            get { return IsStarted; }
             set
             {
-                _isStarted = value;
-                if (value)
-                {
-                    timer.Start();
-                    UpdateTime();
-                }
+                IsStarted = value;
+                if (!value) return;
+                _timer.Start();
+                UpdateTime();
             }
         }
 
         private bool isPaused
         {
-            get { return _isPaused; }
+            get { return IsPaused; }
             set
             {
-                _isPaused = value;
+                IsPaused = value;
                 if (value)
                 {
                     UpdateTime();
-                    timer.Stop();
+                    _timer.Stop();
                 }
                 else
                 {
-                    lastTick = DateTime.Now;
-                    timer.Start();
+                    _lastTick = DateTime.Now;
+                    _timer.Start();
                     UpdateTime();
                 }
             }
@@ -81,45 +86,64 @@ namespace BDAutoMuxer.tools
 
         private bool isCompleted
         {
-            get { return _isCompleted; }
+            get { return IsCompleted; }
             set
             {
-                _isCompleted = value;
+                IsCompleted = value;
                 if (value)
                 {
                     UpdateTime();
-                    timer.Stop();
+                    _timer.Stop();
                 }
             }
         }
 
         private bool isCanceled
         {
-            get { return _isCanceled; }
+            get { return IsCanceled; }
             set
             {
-                _isCanceled = value;
+                IsCanceled = value;
                 if (value)
                 {
                     UpdateTime();
-                    timer.Stop();
+                    _timer.Stop();
                 }
             }
         }
 
+        #endregion
+
+        #region Properties (protected)
+
         protected bool isError
         {
-            get { return _isError; }
+            get { return IsError; }
             set
             {
-                _isError = value;
+                IsError = value;
                 if (value)
                 {
                     UpdateTime();
-                    timer.Stop();
+                    _timer.Stop();
                 }
             }
         }
+
+        /// <summary>
+        /// Base directory for all temp files used by this application.
+        /// </summary>
+        protected static string AppTempDirPath { get { return Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), BDAutoMuxerSettings.AssemblyName)).FullName; } }
+
+        /// <summary>
+        /// Directory for temp files used by this tool instance.
+        /// </summary>
+        protected string ToolTempDirPath { get { return Directory.CreateDirectory(Path.Combine(AppTempDirPath, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture), Name)).FullName; } }
+
+        protected abstract void ExtractResources();
+        protected abstract void HandleOutputLine(string line, object sender, DoWorkEventArgs e);
+        protected abstract string Name { get; }
+        protected abstract string Filename { get; }
 
         #endregion
 
@@ -135,29 +159,29 @@ namespace BDAutoMuxer.tools
         /// Command line string used to execute the process, including the full path to the EXE and all arguments.
         /// </summary>
         /// <example>"C:\Users\Administrator\AppData\Local\Temp\BDAutoRip\584\TsMuxer\tsMuxeR.exe" "arg1" "arg 2"</example>
-        public string CommandLine { get { return "\"" + FullName.Replace("\"", "\\\"") + "\"" + " " + strArgs; } }
+        public string CommandLine { get { return Args.ForCommandLine(FullName) + " " + _strArgs; } }
 
-        public bool IsStarted { get { return _isStarted; } }
-        public bool IsPaused { get { return _isPaused; } }
-        public bool IsCompleted { get { return _isCompleted; } }
-        public bool IsCanceled { get { return _isCanceled; } }
-        public bool IsError { get { return _isError; } }
+        public bool IsStarted { get; private set; }
+        public bool IsPaused { get; private set; }
+        public bool IsCompleted { get; private set; }
+        public bool IsCanceled { get; private set; }
+        public bool IsError { get; private set; }
 
         /// <summary>
         /// 0.0 to 100.0
         /// </summary>
         public Double Progress { get { return progress; } }
-        public TimeSpan TimeElapsed { get { return elapsedTime; } }
-        public TimeSpan TimeRemaining { get { return remainingTime; } }
+        public TimeSpan TimeElapsed { get { return _elapsedTime; } }
+        public TimeSpan TimeRemaining { get { return _remainingTime; } }
 
         public string State
         {
             get
             {
-                if (this.IsError) return "error";
-                if (this.IsCanceled) return "canceled";
-                if (this.IsCompleted) return "completed";
-                if (this.IsPaused) return "paused";
+                if (IsError) return "error";
+                if (IsCanceled) return "canceled";
+                if (IsCompleted) return "completed";
+                if (IsPaused) return "paused";
                 return "";
             }
         }
@@ -166,30 +190,7 @@ namespace BDAutoMuxer.tools
 
         #endregion
 
-        #region Properties (protected)
-
-        /// <summary>
-        /// Base directory for all temp files used by this application.
-        /// </summary>
-        protected static string AppTempDirPath { get { return Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), BDAutoMuxerSettings.AssemblyName)).FullName; } }
-
-        /// <summary>
-        /// Directory for temp files used by this tool instance.
-        /// </summary>
-        protected string ToolTempDirPath { get { return Directory.CreateDirectory(Path.Combine(AppTempDirPath, Process.GetCurrentProcess().Id.ToString(), Name)).FullName; } }
-
-        protected abstract void ExtractResources();
-        protected abstract void HandleOutputLine(string line, object sender, DoWorkEventArgs e);
-        protected abstract string Name { get; }
-        protected abstract string Filename { get; }
-
-        #endregion
-
         #region Constructor / Destructor
-
-        public AbstractExternalTool()
-            : base()
-        { }
 
         ~AbstractExternalTool()
         {
@@ -215,95 +216,84 @@ namespace BDAutoMuxer.tools
             string resource = GetResourceName(filename);
             string destPath = GetTempPath(filename);
             ExtractResource(resource, destPath);
-            paths.Add(destPath);
+            _paths.Add(destPath);
             return destPath;
         }
 
         // extracts [resource] into the the file specified by [destPath]
         protected void ExtractResource(string resource, string destPath)
         {
-            string dir = Path.GetDirectoryName(destPath);
+            var dir = Path.GetDirectoryName(destPath);
             Directory.CreateDirectory(dir);
-            Stream stream = GetType().Assembly.GetManifestResourceStream(resource);
-            byte[] bytes = new byte[(int)stream.Length];
+            var stream = GetType().Assembly.GetManifestResourceStream(resource);
+            var bytes = new byte[(int)stream.Length];
             stream.Read(bytes, 0, bytes.Length);
             File.WriteAllBytes(destPath, bytes);
         }
 
         #endregion
 
-        private BackgroundWorker worker;
-
-        private Job job;
-
-        protected void Execute(IList<string> args, object sender, DoWorkEventArgs e, bool skipNullArgs = true)
+        protected void Execute(IList<string> args, object sender, DoWorkEventArgs e)
         {
             ExtractResources();
 
-            worker = sender as BackgroundWorker;
-            worker.ReportProgress(0);
-
-            IList<string> sanitizedArgs = new List<string>();
-
-            for (int i = 0; i < args.Count; i++)
-            {
-                bool skip = args[i] == null && skipNullArgs;
-                if (!skip)
-                    sanitizedArgs.Add("\"" + (args[i] != null ? args[i].Replace("\"", "\\\"") : "") + "\"");
-            }
+            _worker = (BackgroundWorker)sender;
+            _worker.ReportProgress(0);
 
             progress = 0;
-            timer = new Timer();
-            timer.Interval = 1000;
-            timer.Tick += UpdateTime;
-            lastTick = DateTime.Now;
-            lastEstimate = DateTime.Now;
-            elapsedTime = TimeSpan.Zero;
-            remainingTime = TimeSpan.Zero;
+            _timer = new Timer {Interval = 1000};
+            _timer.Tick += UpdateTime;
+            _lastTick = DateTime.Now;
+            _lastEstimate = DateTime.Now;
+            _elapsedTime = TimeSpan.Zero;
+            _remainingTime = TimeSpan.Zero;
             
-            _isStarted = false;
-            _isPaused = false;
-            _isCompleted = false;
-            _isCanceled = false;
-            _isError = false;
+            IsStarted = false;
+            IsPaused = false;
+            IsCompleted = false;
+            IsCanceled = false;
+            IsError = false;
 
-            onCompleteHandled = false;
+            _onCompleteHandled = false;
 
             errorMessages.Clear();
 
-            if (job == null)
-                job = new Job();
+            if (_job == null)
+                _job = new Job();
 
-            // Start the child process.
-            process = new Process();
-            // Redirect the output stream of the child process.
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.FileName = FullName;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.Arguments = this.strArgs = string.Join(" ", sanitizedArgs);
+            _process = new Process
+                           {
+                               StartInfo =
+                                   {
+                                       UseShellExecute = false,
+                                       RedirectStandardOutput = true,
+                                       RedirectStandardError = true,
+                                       FileName = FullName,
+                                       CreateNoWindow = true,
+                                       WindowStyle = ProcessWindowStyle.Hidden,
+                                       Arguments = _strArgs = new Args(args).ToString()
+                                   }
+                           };
 
             // See http://stackoverflow.com/a/2279346/467582
-            process.Exited += (object p, EventArgs e2) => process_Exited(p, e);
-            process.EnableRaisingEvents = true;
+            _process.Exited += (p, e2) => ProcessExited(p, e);
+            _process.EnableRaisingEvents = true;
 
-            process.Start();
+            _process.Start();
 
             isStarted = true;
 
-            job.AddProcess(process.Handle);
+            _job.AddProcess(_process.Handle);
 
-            while (!this.CancellationPending && !process.StandardOutput.EndOfStream && !this.isError)
+            while (!CancellationPending && !_process.StandardOutput.EndOfStream && !isError)
             {
-                HandleOutputLine(process.StandardOutput.ReadLine(), sender, e);
+                HandleOutputLine(_process.StandardOutput.ReadLine(), sender, e);
                 UpdateTime();
             }
 
-            while (!this.CancellationPending && !process.StandardError.EndOfStream && !this.isError)
+            while (!CancellationPending && !_process.StandardError.EndOfStream && !isError)
             {
-                errorMessages.Add(process.StandardError.ReadLine());
+                errorMessages.Add(_process.StandardError.ReadLine());
             }
 
             OnComplete(e);
@@ -311,49 +301,50 @@ namespace BDAutoMuxer.tools
 
         private void UpdateTime(object sender = null, EventArgs e = null)
         {
-            if (this.isStarted && this.IsBusy && !(this.isCanceled || this.isCompleted || this.isError || this.isPaused))
+            if (isStarted && IsBusy && !(isCanceled || isCompleted || isError || isPaused))
             {
-                double newMS = elapsedTime.TotalMilliseconds + (DateTime.Now - lastTick).TotalMilliseconds;
-                elapsedTime = TimeSpan.FromMilliseconds(newMS);
-                lastTick = DateTime.Now;
+                var newMs = _elapsedTime.TotalMilliseconds + (DateTime.Now - _lastTick).TotalMilliseconds;
 
-                if ((DateTime.Now - lastEstimate).TotalSeconds >= 1)
+                _elapsedTime = TimeSpan.FromMilliseconds(newMs);
+                _lastTick = DateTime.Now;
+
+                if ((DateTime.Now - _lastEstimate).TotalSeconds >= 1)
                 {
-                    double p = progress / 100;
+                    var p = progress / 100;
                     TimeSpan tmpEst;
 
                     if (p > 0 && p < 1)
-                        tmpEst = new TimeSpan((long)((double)elapsedTime.Ticks / p) - elapsedTime.Ticks);
+                        tmpEst = new TimeSpan((long)(_elapsedTime.Ticks / p) - _elapsedTime.Ticks);
                     else
                         tmpEst = TimeSpan.Zero;
 
-                    if (progress < .5 || progress > 95 || Math.Abs(tmpEst.TotalMinutes - remainingTime.TotalMinutes) > 2)
+                    if (progress < .5 || progress > 95 || Math.Abs(tmpEst.TotalMinutes - _remainingTime.TotalMinutes) > 2)
                     {
                         // Update estimate
-                        remainingTime = tmpEst;
+                        _remainingTime = tmpEst;
                     }
                     else
                     {
                         // Decrement by 1 second
-                        remainingTime = TimeSpan.FromMilliseconds(remainingTime.TotalMilliseconds - 1000);
+                        _remainingTime = TimeSpan.FromMilliseconds(_remainingTime.TotalMilliseconds - 1000);
                     }
-                    lastEstimate = DateTime.Now;
+                    _lastEstimate = DateTime.Now;
                 }
             }
-            worker.ReportProgress((int)progress);
+            _worker.ReportProgress((int)progress);
         }
 
-        private void process_Exited(object sender, DoWorkEventArgs e)
+        private void ProcessExited(object sender, CancelEventArgs e)
         {
-            Process p = sender as Process;
+            var p = sender as Process;
             
             if (p == null || p.ExitCode != 0)
             {
                 // Use underscored field name to avoid crashing BDAutoMuxer by calling UpdateTime() unnecessarily
-                _isError = true;
+                IsError = true;
 
-                string extraDetails = p != null ? string.Format(" with exit code {0}", p.ExitCode) : "";
-                string errorMessage = string.Format("tsMuxeR terminated unexpectedly{0}.", extraDetails);
+                var extraDetails = p != null ? string.Format(" with exit code {0}", p.ExitCode) : "";
+                var errorMessage = string.Format("tsMuxeR terminated unexpectedly{0}.", extraDetails);
 
                 errorMessages.Add(errorMessage);
             }
@@ -361,13 +352,13 @@ namespace BDAutoMuxer.tools
             OnComplete(e);
         }
 
-        private void OnComplete(DoWorkEventArgs e)
+        private void OnComplete(CancelEventArgs e)
         {
             // Prevent this method from being called twice (which crashes BDAutoMuxer)
-            if (onCompleteHandled)
+            if (_onCompleteHandled)
                 return;
 
-            onCompleteHandled = true;
+            _onCompleteHandled = true;
 
             if (errorMessages.Count > 0)
             {
@@ -376,63 +367,60 @@ namespace BDAutoMuxer.tools
                 // TODO: Should we use e.Result instead?
                 throw new Exception(ErrorMessage);
             }
-            else if (this.CancellationPending)
+            
+            if (CancellationPending)
             {
                 isCanceled = true;
             }
 
-            if (this.isCanceled || this.isError)
+            if (isCanceled || isError)
             {
-                if (!process.HasExited)
-                    process.Kill();
+                if (!_process.HasExited)
+                    _process.Kill();
                 e.Cancel = true;
                 return;
             }
 
             isCompleted = true;
 
-            worker.ReportProgress(100);
+            _worker.ReportProgress(100);
         }
 
-        // TODO: Refactor.  Start at top level temp dir and recursively delete empty dirs
         protected void Cleanup()
         {
             try
             {
-                if (process != null && !process.HasExited)
-                {
-                    process.Kill();
-                }
+                if (_process != null && !_process.HasExited)
+                    _process.Kill();
 
-                foreach (string path in paths)
+                foreach (var path in _paths)
                 {
                     File.Delete(path);
                 }
 
-                DirectoryInfo dir = new DirectoryInfo(ToolTempDirPath);
+                var dir = new DirectoryInfo(ToolTempDirPath);
 
-                while (dir.FullName != AppTempDirPath)
+                while (dir != null && dir.FullName != AppTempDirPath)
                 {
                     if (FileUtils.IsEmpty(dir))
                     {
-                        //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is empty.  Deleting...");
                         dir.Delete();
-                    }
-                    else
-                    {
-                        //MessageBox.Show("Temp Directory \"" + GetTempDirectory() + "\" is NOT empty.  Not deleting.");
                     }
                     dir = dir.Parent;
                 }
 
-                DirectoryInfo appTempDir = new DirectoryInfo(ToolTempDirPath);
+                var appTempDir = new DirectoryInfo(AppTempDirPath);
+
+                foreach (var d in appTempDir.EnumerateDirectories().Where(FileUtils.IsEmpty))
+                {
+                    d.Delete();
+                }
 
                 if (FileUtils.IsEmpty(appTempDir))
                     appTempDir.Delete();
             }
-            catch (Exception ex)
+            catch
             {
-                ex.ToString();
             }
         }
 
@@ -442,30 +430,29 @@ namespace BDAutoMuxer.tools
         {
             get
             {
-                return process != null && !process.HasExited & !this.CancellationPending;
+                return _process != null && !_process.HasExited & !CancellationPending;
             }
         }
 
         public void Pause()
         {
-            if (CanSuspendResumeProcess && !IsPaused)
-            {
-                SuspendProcess(process.Id);
-                isPaused = true;
-            }
+            if (!CanSuspendResumeProcess || IsPaused) return;
+            SuspendProcess(_process.Id);
+            isPaused = true;
         }
 
         public void Resume()
         {
-            if (CanSuspendResumeProcess && IsPaused)
-            {
-                ResumeProcess(process.Id);
-                isPaused = false;
-            }
+            if (!CanSuspendResumeProcess || !IsPaused) return;
+            ResumeProcess(_process.Id);
+            isPaused = false;
         }
 
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Local
+
         [Flags]
-        private enum ThreadAccess : int
+        private enum ThreadAccess
         {
             TERMINATE = (0x0001),
             SUSPEND_RESUME = (0x0002),
@@ -486,16 +473,16 @@ namespace BDAutoMuxer.tools
         private static extern int ResumeThread(IntPtr hThread);
 
         /// <see cref="http://stackoverflow.com/questions/71257/suspend-process-in-c-sharp"/>
-        private void SuspendProcess(int PID)
+        private static void SuspendProcess(int pid)
         {
-            Process proc = Process.GetProcessById(PID);
+            var proc = Process.GetProcessById(pid);
 
             if (proc.ProcessName == string.Empty)
                 return;
 
             foreach (ProcessThread pT in proc.Threads)
             {
-                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+                var pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
 
                 if (pOpenThread == IntPtr.Zero)
                 {
@@ -506,16 +493,16 @@ namespace BDAutoMuxer.tools
             }
         }
 
-        private void ResumeProcess(int PID)
+        private static void ResumeProcess(int pid)
         {
-            Process proc = Process.GetProcessById(PID);
+            var proc = Process.GetProcessById(pid);
 
             if (proc.ProcessName == string.Empty)
                 return;
 
             foreach (ProcessThread pT in proc.Threads)
             {
-                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+                var pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
 
                 if (pOpenThread == IntPtr.Zero)
                 {
@@ -525,6 +512,9 @@ namespace BDAutoMuxer.tools
                 ResumeThread(pOpenThread);
             }
         }
+
+// ReSharper restore UnusedMember.Local
+// ReSharper restore InconsistentNaming
 
         #endregion
     }
