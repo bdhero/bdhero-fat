@@ -223,7 +223,7 @@
             // statusStripLabel
             // 
             this.statusStripLabel.Name = "statusStripLabel";
-            this.statusStripLabel.Size = new System.Drawing.Size(323, 17);
+            this.statusStripLabel.Size = new System.Drawing.Size(354, 17);
             this.statusStripLabel.Spring = true;
             this.statusStripLabel.Text = "Drag files onto this window";
             this.statusStripLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -287,7 +287,6 @@
             this.Controls.Add(this.label1);
             this.MaximizeBox = false;
             this.Name = "FormRemux";
-            this.ShowIcon = false;
             this.Text = "Remuxer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormRemux_FormClosing);
             this.Load += new System.EventHandler(this.FormRemux_Load);

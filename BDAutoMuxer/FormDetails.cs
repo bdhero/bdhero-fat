@@ -71,7 +71,6 @@ namespace BDAutoMuxer
                 isMuxing = value;
 
                 EnableTabPage(tabPageDisc, !isMuxing);
-                EnableTabPage(tabPagePlaylists, !isMuxing);
                 EnableTabPage(tabPageOutput, !isMuxing);
 
                 if (isMuxing)
@@ -366,6 +365,8 @@ namespace BDAutoMuxer
 
         private void ResizePlaylistsTab(object sender = null, EventArgs e = null)
         {
+            ResizeDiscTab();
+
             listViewStreamFiles.Columns[0].Width =
                 (int)(listViewStreamFiles.ClientSize.Width * 0.23);
             listViewStreamFiles.Columns[1].Width =
@@ -1319,7 +1320,7 @@ namespace BDAutoMuxer
                 tabControl.SelectedIndex++;
                 tabControl.TabIndex++;
             }
-            else if (tabControl.SelectedTab == tabPagePlaylists)
+            else if (tabControl.SelectedTab == tabPageDisc)
             {
                 SubmitJsonDiscIfNecessary();
                 tabControl.SelectedIndex++;
