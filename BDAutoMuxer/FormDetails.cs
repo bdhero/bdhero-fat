@@ -311,6 +311,24 @@ namespace BDAutoMuxer
 
             ResetPlaylistDataGrid();
             QueryMainMovie();
+
+            textBoxOutputFileNameHint.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
+            textBoxOutputFileNamePreview.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
+            textBoxOutputDirPreview.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
+            UpdateBackgroundColors();
+        }
+
+        private void UpdateBackgroundColors()
+        {
+            try
+            {
+                textBoxOutputFileNameHint.BackColor = textBoxOutputFileNameHint.Parent.BackColor;
+                textBoxOutputFileNamePreview.BackColor = textBoxOutputFileNamePreview.Parent.BackColor;
+                textBoxOutputDirPreview.BackColor = textBoxOutputDirPreview.Parent.BackColor;
+            }
+            catch
+            {
+            }
         }
 
         #endregion

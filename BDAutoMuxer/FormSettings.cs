@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
+using BDAutoMuxer.views;
 
 namespace BDAutoMuxer
 {
@@ -43,6 +44,8 @@ namespace BDAutoMuxer
             checkBoxKeepStreamOrder.Checked = BDAutoMuxerSettings.KeepStreamOrder;
             checkBoxEnableSSIF.Checked = BDAutoMuxerSettings.EnableSSIF;
             textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
+
+            FormUtils.TextBox_EnableSelectAll(this);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
