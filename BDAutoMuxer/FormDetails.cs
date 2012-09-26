@@ -307,15 +307,18 @@ namespace BDAutoMuxer
             listViewStreamFiles.Enabled = true;
             listViewStreams.Enabled = true;
 
-            InitHints(this);
-
-            ResetPlaylistDataGrid();
-            QueryMainMovie();
+            progressLabel.Text = "";
+            toolStripProgressBar.Visible = false;
 
             textBoxOutputFileNameHint.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
             textBoxOutputFileNamePreview.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
             textBoxOutputDirPreview.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
             UpdateBackgroundColors();
+
+            InitHints(this);
+
+            ResetPlaylistDataGrid();
+            QueryMainMovie();
         }
 
         private void UpdateBackgroundColors()
@@ -884,6 +887,17 @@ namespace BDAutoMuxer
         {
             if (IsMuxing) return;
 
+            if (File.Exists(OutputFilePath))
+            {
+                if (DialogResult.Yes != MessageBox.Show(this,
+                    string.Format("Overwrite \"{0}\"?", OutputFilePath),
+                    "File already exists",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
+                {
+                    return;
+                }
+            }
+
             if (SelectedPlaylist != null)
             {
                 try
@@ -929,6 +943,7 @@ namespace BDAutoMuxer
                 // TODO: Make this status "sticky"
                 SetTabStatus(tabPageProgress, "tsMuxeR: 0.0%");
                 textBoxTsMuxerCommandLine.Text = "";
+                toolStripProgressBar.Visible = true;
 
                 tsMuxer = new TsMuxer(BDROM, SelectedPlaylist, selectedStreams);
                 tsMuxer.WorkerReportsProgress = true;
@@ -967,11 +982,21 @@ namespace BDAutoMuxer
             // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
             progressBarTsMuxer.Value = (int)(tsMuxer.Progress * 10);
 
-            TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal);
-            TaskbarProgress.SetProgressValue(progressBarTsMuxer.Value, 1000);
+            try
+            {
+                // TODO: This throws a NPE if the window is closed while muxing is in progress
+                toolStripProgressBar.Value = progressBarTsMuxer.Value;
+            }
+            catch
+            {
+            }
+
+            TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
+            TaskbarProgress.SetProgressValue(progressBarTsMuxer.Value, 1000, Handle);
 
             string strProgress = tsMuxer.Progress.ToString("##0.0") + "%";
             labelTsMuxerProgress.Text = strProgress;
+            progressLabel.Text = strProgress;
 
             // TODO: Make this status "sticky"
             SetTabStatus(tabPageProgress, "tsMuxeR: " + strProgress);
@@ -1005,7 +1030,12 @@ namespace BDAutoMuxer
         {
             IsMuxing = false;
 
-            TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress);
+            TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
+
+            ResetButtons();
+
+            progressLabel.Text = "";
+            toolStripProgressBar.Visible = false;
 
             if (e.Cancelled == true && tsMuxer.IsCanceled)
             {
@@ -1013,15 +1043,13 @@ namespace BDAutoMuxer
             }
             else if (e.Error != null)
             {
-                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error);
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
                 ShowErrorMessage(tabPageProgress, "tsMuxeR Error", e.Error.Message);
             }
             else
             {
                 ShowMessage(tabPageProgress, "tsMuxeR completed!", "Finished muxing M2TS with tsMuxeR!");
             }
-
-            ResetButtons();
         }
 
         #endregion
@@ -1346,16 +1374,6 @@ namespace BDAutoMuxer
             }
             else if (tabControl.SelectedTab == tabPageOutput)
             {
-                if (File.Exists(OutputFilePath))
-                {
-                    if (DialogResult.Yes != MessageBox.Show(this,
-                        string.Format("Overwrite \"{0}\"?", OutputFilePath),
-                        "File already exists",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
-                    {
-                        return;
-                    }
-                }
                 Rip();
                 tabControl.SelectedIndex++;
                 tabControl.TabIndex++;

@@ -49,6 +49,7 @@
             this.statusStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.buttonClose = new System.Windows.Forms.Button();
             this.buttonRemux = new System.Windows.Forms.Button();
+            this.progressLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -213,6 +214,7 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusStripLabel,
+            this.progressLabel,
             this.statusStripProgressBar});
             this.statusStrip.Location = new System.Drawing.Point(0, 212);
             this.statusStrip.Name = "statusStrip";
@@ -223,7 +225,7 @@
             // statusStripLabel
             // 
             this.statusStripLabel.Name = "statusStripLabel";
-            this.statusStripLabel.Size = new System.Drawing.Size(354, 17);
+            this.statusStripLabel.Size = new System.Drawing.Size(289, 17);
             this.statusStripLabel.Spring = true;
             this.statusStripLabel.Text = "Drag files onto this window";
             this.statusStripLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -259,6 +261,13 @@
             this.buttonRemux.Text = "Mux!";
             this.buttonRemux.UseVisualStyleBackColor = true;
             this.buttonRemux.Click += new System.EventHandler(this.buttonRemux_Click);
+            // 
+            // progressLabel
+            // 
+            this.progressLabel.Name = "progressLabel";
+            this.progressLabel.Size = new System.Drawing.Size(34, 17);
+            this.progressLabel.Text = "0.0%";
+            this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // FormRemux
             // 
@@ -324,5 +333,6 @@
         private System.Windows.Forms.ToolStripProgressBar statusStripProgressBar;
         private System.Windows.Forms.Button buttonClose;
         private System.Windows.Forms.Button buttonRemux;
+        private System.Windows.Forms.ToolStripStatusLabel progressLabel;
     }
 }

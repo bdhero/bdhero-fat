@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace BDAutoMuxer
 {
@@ -27,8 +28,11 @@ namespace BDAutoMuxer
 
         private void FormRemux_Load(object sender, EventArgs e)
         {
-            this.MinimumSize = new Size(0, Size.Height);
-            this.MaximumSize = new Size(Screen.FromHandle(Handle).Bounds.Width, Size.Height);
+            progressLabel.Text = "";
+            statusStripProgressBar.Visible = false;
+
+            MinimumSize = new Size(0, Size.Height);
+            MaximumSize = new Size(Screen.FromHandle(Handle).Bounds.Width, Size.Height);
         }
 
         private void FormRemux_DragEnter(object sender, DragEventArgs e)
@@ -257,6 +261,8 @@ namespace BDAutoMuxer
             if (OverwriteExistingFile().Cancel)
                 return;
 
+            statusStripProgressBar.Visible = true;
+
             mkvMerge_Started();
 
             _mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked)
@@ -320,10 +326,12 @@ namespace BDAutoMuxer
             {
                 // TODO: This throws a NPE if the window is closed while muxing is in progress
                 statusStripProgressBar.Value = progress;
+
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
+                TaskbarProgress.SetProgressValue(progress, 1000, Handle);
             }
             catch
             {
-                
             }
 
             statusStripLabel.Text = _mkvMerge.Progress.ToString("##0.0") + "%";
@@ -343,10 +351,15 @@ namespace BDAutoMuxer
             buttonRemux.Text = "Mux!";
             buttonClose.Text = "Close";
 
+            TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
+
+            statusStripProgressBar.Visible = false;
+
             if (_mkvMerge != null)
             {
                 if (_mkvMerge.IsError)
                 {
+                    TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
                     MessageBox.Show(this, _mkvMerge.ErrorMessage, "mkvmerge Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
