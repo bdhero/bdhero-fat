@@ -11,7 +11,6 @@ namespace BDAutoMuxer.views
     class PlaylistDataGridPopulator
     {
         private DataGridView dataGridView;
-        private IList<TSPlaylistFile> playlists;
         private IList<Language> languages = new List<Language>();
         private IList<string> languageCodes;
 
@@ -41,7 +40,7 @@ namespace BDAutoMuxer.views
                 {
                     PlaylistGridItem item1 = playlistGridItems[i];
                     PlaylistGridItem item2 = playlistGridItemsOriginal[i];
-                    if (! item1.VideoLanguageHasChanged)
+                    if (!item1.VideoLanguageHasChanged)
                     {
                         item1.VideoLanguageAuto = value;
                     }
@@ -53,11 +52,31 @@ namespace BDAutoMuxer.views
             }
         }
 
-        public PlaylistDataGridPopulator(DataGridView dataGridView, IList<TSPlaylistFile> playlists, IList<string> languageCodes)
+        public IList<TSPlaylistFile> SortPlaylists(IEnumerable<TSPlaylistFile> playlists)
+        {
+            var array = playlists.ToArray();
+            Array.Sort(array, Comparison);
+            return new List<TSPlaylistFile>(array);
+        }
+
+        private static int Comparison(TSPlaylistFile playlist1, TSPlaylistFile playlist2)
+        {
+            // XOR - One is a main movie but not the other
+            if (playlist1.IsMainMovie && !playlist2.IsMainMovie) return -1;
+            if (playlist2.IsMainMovie && !playlist1.IsMainMovie) return +1;
+
+            // AND - Both are main movies
+            if (playlist1.IsMainMovie && playlist2.IsMainMovie) return String.Compare(playlist1.Name, playlist2.Name, StringComparison.OrdinalIgnoreCase);
+
+            return 0;
+        }
+
+        public PlaylistDataGridPopulator(DataGridView dataGridView, IEnumerable<TSPlaylistFile> playlists, IList<string> languageCodes)
         {
             this.dataGridView = dataGridView;
-            this.playlists = playlists;
             this.languageCodes = languageCodes;
+
+            playlists = SortPlaylists(playlists);
 
             foreach (string code in languageCodes)
             {

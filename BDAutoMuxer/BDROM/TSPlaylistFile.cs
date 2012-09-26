@@ -28,25 +28,25 @@ namespace BDAutoMuxer
 {
     public class TSPlaylistFile
     {
-        private FileInfo FileInfo = null;
-        public string FileType = null;
-        public bool IsInitialized = false;
+        private FileInfo FileInfo;
+        public string FileType;
+        public bool IsInitialized;
         /// <summary>
         /// Filename of the playlist file (e.g., "00100.MPLS")
         /// </summary>
-        public string Name = null;
+        public string Name;
         /// <summary>
         /// Full path to the playlist file (e.g., "D:\BDMV\PLAYLIST\00100.MPLS").
         /// </summary>
-        public string FullName = null;
-        public BDROM BDROM = null;
-        public bool HasHiddenTracks = false;
-        public bool HasLoops = false;
-        public bool IsCustom = false;
-        public int HiddenTrackCount = 0;
+        public string FullName;
+        public BDROM BDROM;
+        public bool HasHiddenTracks;
+        public bool HasLoops;
+        public bool IsCustom;
+        public int HiddenTrackCount;
 
-        public bool IsMainPlaylist = false;
-        public bool IsDuplicate = false;
+        public bool IsMainPlaylist;
+        public bool IsDuplicate;
 
         public List<double> Chapters = new List<double>();
 
@@ -142,6 +142,8 @@ namespace BDAutoMuxer
                 return false;
             }
         }
+
+        public bool IsMainMovie { get { return IsMainPlaylist && !HasDuplicateClips && !IsDuplicate; } }
 
         public ulong InterleavedFileSize
         {
