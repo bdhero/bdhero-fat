@@ -22,63 +22,78 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace BDAutoMuxer
 {
     public class TSPlaylistFile
     {
-        private FileInfo FileInfo;
-        public string FileType;
-        public bool IsInitialized;
+        private readonly FileInfo _fileInfo;
+
         /// <summary>
-        /// Filename of the playlist file (e.g., "00100.MPLS")
+        /// "MPLS0100" or "MPLS0200"
         /// </summary>
-        public string Name;
+        private string _fileType;
+
+        private bool _isInitialized;
+
+        /// <summary>
+        /// Name of the playlist file in all uppercase (e.g., "00100.MPLS")
+        /// </summary>
+        public readonly string Name;
+
         /// <summary>
         /// Full path to the playlist file (e.g., "D:\BDMV\PLAYLIST\00100.MPLS").
         /// </summary>
-        public string FullName;
-        public BDROM BDROM;
-        public bool HasHiddenTracks;
+        public readonly string FullName;
+
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+        public readonly BDROM BDROM;
         public bool HasLoops;
         public bool IsCustom;
         public int HiddenTrackCount;
+        public bool HasHiddenTracks { get { return HiddenTrackCount > 0; }}
+// ReSharper restore FieldCanBeMadeReadOnly.Global
+// ReSharper restore MemberCanBePrivate.Global
 
         public bool IsMainPlaylist;
         public bool IsDuplicate;
 
-        public List<double> Chapters = new List<double>();
+// ReSharper disable MemberCanBePrivate.Global
+        public readonly List<double> Chapters = new List<double>();
 
-        public Dictionary<ushort, TSStream> Streams = 
+        public readonly Dictionary<ushort, TSStream> Streams = 
             new Dictionary<ushort, TSStream>();
-        public Dictionary<ushort, TSStream> PlaylistStreams =
+        public readonly Dictionary<ushort, TSStream> PlaylistStreams =
             new Dictionary<ushort, TSStream>();
-        public List<TSStreamClip> StreamClips =
+        public readonly List<TSStreamClip> StreamClips =
             new List<TSStreamClip>();
-        public List<Dictionary<ushort, TSStream>> AngleStreams =
+        public readonly List<Dictionary<ushort, TSStream>> AngleStreams =
             new List<Dictionary<ushort, TSStream>>();
-        public List<Dictionary<double, TSStreamClip>> AngleClips = 
+        public readonly List<Dictionary<double, TSStreamClip>> AngleClips = 
             new List<Dictionary<double, TSStreamClip>>();
-        public int AngleCount = 0;
+        public int AngleCount;
 
-        public List<TSStream> SortedStreams = 
+        public readonly List<TSStream> SortedStreams = 
             new List<TSStream>();
-        public List<TSVideoStream> VideoStreams = 
+        public readonly List<TSVideoStream> VideoStreams = 
             new List<TSVideoStream>();
-        public List<TSAudioStream> AudioStreams = 
+        public readonly List<TSAudioStream> AudioStreams = 
             new List<TSAudioStream>();
-        public List<TSTextStream> TextStreams = 
+        public readonly List<TSTextStream> TextStreams = 
             new List<TSTextStream>();
-        public List<TSGraphicsStream> GraphicsStreams = 
+        public readonly List<TSGraphicsStream> GraphicsStreams = 
             new List<TSGraphicsStream>();
+// ReSharper restore MemberCanBePrivate.Global
 
         public TSPlaylistFile(
             BDROM bdrom,
             FileInfo fileInfo)
         {
             BDROM = bdrom;
-            FileInfo = fileInfo;
+            _fileInfo = fileInfo;
             Name = fileInfo.Name.ToUpper();
             FullName = fileInfo.FullName.ToUpper();
         }
@@ -86,25 +101,28 @@ namespace BDAutoMuxer
         public TSPlaylistFile(
             BDROM bdrom,
             string name,
-            List<TSStreamClip> clips)
+            IEnumerable<TSStreamClip> clips)
         {
             BDROM = bdrom;
             Name = name;
-            FullName = System.IO.Path.Combine(bdrom.DirectoryPLAYLIST.FullName, Name).ToUpper();
+            FullName = Path.Combine(bdrom.DirectoryPLAYLIST.FullName, Name).ToUpper();
             IsCustom = true;
-            foreach (TSStreamClip clip in clips)
-            {
-                TSStreamClip newClip = new TSStreamClip(
-                    clip.StreamFile, clip.StreamClipFile);
 
-                newClip.Name = clip.Name;
-                newClip.TimeIn = clip.TimeIn;
-                newClip.TimeOut = clip.TimeOut;
+            foreach (var clip in clips)
+            {
+                var newClip = new TSStreamClip(clip.StreamFile, clip.StreamClipFile)
+                                  {
+                                      Name = clip.Name,
+                                      TimeIn = clip.TimeIn,
+                                      TimeOut = clip.TimeOut,
+                                      RelativeTimeIn = TotalLength,
+                                      AngleIndex = clip.AngleIndex
+                                  };
+
                 newClip.Length = newClip.TimeOut - newClip.TimeIn;
-                newClip.RelativeTimeIn = TotalLength;
                 newClip.RelativeTimeOut = newClip.RelativeTimeIn + newClip.Length;
-                newClip.AngleIndex = clip.AngleIndex;
                 newClip.Chapters.Add(clip.TimeIn);
+
                 StreamClips.Add(newClip);
 
                 if (newClip.AngleIndex > AngleCount)
@@ -116,8 +134,9 @@ namespace BDAutoMuxer
                     Chapters.Add(newClip.RelativeTimeIn);
                 }
             }
+
             LoadStreamClips();
-            IsInitialized = true;
+            _isInitialized = true;
         }
 
         public override string ToString()
@@ -129,10 +148,10 @@ namespace BDAutoMuxer
         {
             get
             {
-                Dictionary<string, TSStreamClip> clips = new Dictionary<string, TSStreamClip>();
-                foreach (TSStreamClip clip in StreamClips)
+                var clips = new Dictionary<string, TSStreamClip>();
+                foreach (var clip in StreamClips)
                 {
-                    string key = string.Format("{0}{1}", clip.Length, clip.FileSize);
+                    var key = GetClipKey(clip);
                     if (clips.ContainsKey(key))
                     {
                         return true;
@@ -143,45 +162,32 @@ namespace BDAutoMuxer
             }
         }
 
+        private static string GetClipKey(TSStreamClip clip)
+        {
+            return string.Format("{0}{1}", clip.Length, clip.FileSize);
+        }
+
         public bool IsMainMovie { get { return IsMainPlaylist && !HasDuplicateClips && !IsDuplicate; } }
 
         public ulong InterleavedFileSize
         {
             get
             {
-                ulong size = 0;
-                foreach (TSStreamClip clip in StreamClips)
-                {
-                    size += clip.InterleavedFileSize;
-                }
-                return size;
+                return StreamClips.Aggregate<TSStreamClip, ulong>(0, (current, clip) => current + clip.InterleavedFileSize);
             }
         }
         public ulong FileSize
         {
             get
             {
-                ulong size = 0;
-                foreach (TSStreamClip clip in StreamClips)
-                {
-                    size += clip.FileSize;
-                }
-                return size;
+                return StreamClips.Aggregate<TSStreamClip, ulong>(0, (current, clip) => current + clip.FileSize);
             }
         }
         public double TotalLength
         {
             get
             {
-                double length = 0;
-                foreach (TSStreamClip clip in StreamClips)
-                {
-                    if (clip.AngleIndex == 0)
-                    {
-                        length += clip.Length;
-                    }
-                }
-                return length;
+                return StreamClips.Where(clip => clip.AngleIndex == 0).Sum(clip => clip.Length);
             }
         }
 
@@ -189,12 +195,7 @@ namespace BDAutoMuxer
         {
             get
             {
-                double length = 0;
-                foreach (TSStreamClip clip in StreamClips)
-                {
-                    length += clip.Length;
-                }
-                return length;
+                return StreamClips.Sum(clip => clip.Length);
             }
         }
 
@@ -202,15 +203,7 @@ namespace BDAutoMuxer
         {
             get
             {
-                ulong size = 0;
-                foreach (TSStreamClip clip in StreamClips)
-                {
-                    if (clip.AngleIndex == 0)
-                    {
-                        size += clip.PacketSize;
-                    }
-                }
-                return size;
+                return StreamClips.Where(clip => clip.AngleIndex == 0).Aggregate<TSStreamClip, ulong>(0, (current, clip) => current + clip.PacketSize);
             }
         }
 
@@ -218,37 +211,18 @@ namespace BDAutoMuxer
         {
             get
             {
-                ulong size = 0;
-                foreach (TSStreamClip clip in StreamClips)
-                {
-                    size += clip.PacketSize;
-                }
-                return size;
+                return StreamClips.Aggregate<TSStreamClip, ulong>(0, (current, clip) => current + clip.PacketSize);
             }
         }
 
         public ulong TotalBitRate
         {
-            get
-            {
-                if (TotalLength > 0)
-                {
-                    return (ulong)Math.Round(((TotalSize * 8.0) / TotalLength));
-                }
-                return 0;
-            }
+            get { return TotalLength > 0 ? (ulong) Math.Round(((TotalSize*8.0)/TotalLength)) : 0; }
         }
 
         public ulong TotalAngleBitRate
         {
-            get
-            {
-                if (TotalAngleLength > 0)
-                {
-                    return (ulong)Math.Round(((TotalAngleSize * 8.0) / TotalAngleLength));
-                }
-                return 0;
-            }
+            get { return TotalAngleLength > 0 ? (ulong) Math.Round(((TotalAngleSize*8.0)/TotalAngleLength)) : 0; }
         }
 
         public void Scan(
@@ -263,7 +237,7 @@ namespace BDAutoMuxer
                 Streams.Clear();
                 StreamClips.Clear();
 
-                fileStream = File.OpenRead(FileInfo.FullName);
+                fileStream = File.OpenRead(_fileInfo.FullName);
                 fileReader = new BinaryReader(fileStream);
 
                 byte[] data = new byte[fileStream.Length];
@@ -271,12 +245,12 @@ namespace BDAutoMuxer
 
                 int pos = 0;
 
-                FileType = ReadString(data, 8, ref pos);
-                if (FileType != "MPLS0100" && FileType != "MPLS0200")
+                _fileType = ReadString(data, 8, ref pos);
+                if (_fileType != "MPLS0100" && _fileType != "MPLS0200")
                 {
                     throw new Exception(string.Format(
                         "Playlist {0} has an unknown file type {1}.",
-                        FileInfo.Name, FileType));
+                        _fileInfo.Name, _fileType));
                 }
 
                 int playlistOffset = ReadInt32(data, ref pos);
@@ -309,7 +283,7 @@ namespace BDAutoMuxer
                     {
                         Debug.WriteLine(string.Format(
                             "Playlist {0} referenced missing file {1}.",
-                            FileInfo.Name, streamFileName));
+                            _fileInfo.Name, streamFileName));
                     }
 
                     TSStreamClipFile streamClipFile = null;
@@ -323,7 +297,7 @@ namespace BDAutoMuxer
                     {
                         throw new Exception(string.Format(
                             "Playlist {0} referenced missing file {1}.",
-                            FileInfo.Name, streamFileName));
+                            _fileInfo.Name, streamFileName));
                     }
 
                     pos += 1;
@@ -373,7 +347,7 @@ namespace BDAutoMuxer
                             {
                                 throw new Exception(string.Format(
                                     "Playlist {0} referenced missing angle file {1}.",
-                                    FileInfo.Name, angleFileName));
+                                    _fileInfo.Name, angleFileName));
                             }
 
                             TSStreamClipFile angleClipFile = null;
@@ -387,7 +361,7 @@ namespace BDAutoMuxer
                             {
                                 throw new Exception(string.Format(
                                     "Playlist {0} referenced missing angle file {1}.",
-                                    FileInfo.Name, angleClipFileName));
+                                    _fileInfo.Name, angleClipFileName));
                             }
 
                             TSStreamClip angleClip =
@@ -551,7 +525,7 @@ namespace BDAutoMuxer
                 }
             }
             ClearBitrates();
-            IsInitialized = true;
+            _isInitialized = true;
         }
 
         protected TSStream CreatePlaylistStream(byte[] data, ref int pos)
@@ -778,7 +752,6 @@ namespace BDAutoMuxer
                     if (!IsCustom && !PlaylistStreams.ContainsKey(stream.PID))
                     {
                         stream.IsHidden = true;
-                        HasHiddenTracks = true;
                         HiddenTrackCount++;
                     }
 
@@ -965,7 +938,7 @@ namespace BDAutoMuxer
         {
             get
             {
-                if (!IsInitialized) return false;
+                if (!_isInitialized) return false;
 
                 if (BDAutoMuxerSettings.FilterShortPlaylists &&
                     TotalLength < BDAutoMuxerSettings.FilterShortPlaylistsValue)
@@ -982,6 +955,8 @@ namespace BDAutoMuxer
                 return true;
             }
         }
+
+        #region Sorting
 
         public static int CompareVideoStreams(
             TSVideoStream x, 
@@ -1104,52 +1079,40 @@ namespace BDAutoMuxer
             {
                 return 0;
             }
-            else if (x == null && y == null)
+            if (x == null && y == null)
             {
                 return 0;
             }
-            else if (x == null && y != null)
+            if (x == null)
             {
                 return -1;
             }
-            else if (x != null && y == null)
+            if (y == null)
             {
                 return 1;
             }
-            else
+            if (x.LanguageCode == "eng")
             {
-                if (x.LanguageCode == "eng")
-                {
-                    return -1;
-                }
-                else if (y.LanguageCode == "eng")
+                return -1;
+            }
+            if (y.LanguageCode == "eng")
+            {
+                return 1;
+            }
+            if (x.LanguageCode == y.LanguageCode)
+            {
+                if (x.PID > y.PID)
                 {
                     return 1;
                 }
-                else
+                if (y.PID > x.PID)
                 {
-                    if (x.LanguageCode == y.LanguageCode)
-                    {
-                        if (x.PID > y.PID)
-                        {
-                            return 1;
-                        }
-                        else if (y.PID > x.PID)
-                        {
-                            return -1;
-                        }
-                        else
-                        {
-                            return 0;
-                        }
-                    }
-                    else
-                    {
-                        return string.Compare(
-                            x.LanguageName, y.LanguageName);
-                    }
+                    return -1;
                 }
+                return 0;
             }
+            return string.Compare(
+                x.LanguageName, y.LanguageName);
         }
 
         private static int CompareGraphicsStreams(
@@ -1327,6 +1290,10 @@ namespace BDAutoMuxer
             }
         }
 
+        #endregion
+
+        #region I/O
+
         protected string ReadString(
             byte[] data,
             int count,
@@ -1374,5 +1341,7 @@ namespace BDAutoMuxer
         {
             return data[pos++];
         }
+
+        #endregion
     }
 }
