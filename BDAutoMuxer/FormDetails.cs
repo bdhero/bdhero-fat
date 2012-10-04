@@ -471,12 +471,12 @@ namespace BDAutoMuxer
 
             if (videoLanguage == null) return;
 
-            ISet<TSPlaylistFile> playlistsWithMainMovie = populator.GetPlaylistsWithMainMovie(true);
-            ISet<TSPlaylistFile> playlistsWithVideoLanguage = populator.GetPlaylistsWithVideoLanguage(videoLanguage);
-            ISet<TSPlaylistFile> playlistsWithCut = populator.GetPlaylistsWithCut(cut);
-            ISet<TSPlaylistFile> playlistsWithCommentaryOption = populator.GetPlaylistsWithCommentaryOption(commentaryOption);
-            ISet<TSPlaylistFile> playlistsWithAudioLanguages = populator.GetPlaylistsWithAudioLanguages(audioLanguages);
-            ISet<TSPlaylistFile> playlistsWithSubtitleLanguages = populator.GetPlaylistsWithSubtitleLanguages(subtitleLanguages);
+            IEnumerable<TSPlaylistFile> playlistsWithMainMovie = populator.GetPlaylistsWithMainMovie(true);
+            IEnumerable<TSPlaylistFile> playlistsWithVideoLanguage = populator.GetPlaylistsWithVideoLanguage(videoLanguage);
+            IEnumerable<TSPlaylistFile> playlistsWithCut = populator.GetPlaylistsWithCut(cut);
+            IEnumerable<TSPlaylistFile> playlistsWithCommentaryOption = populator.GetPlaylistsWithCommentaryOption(commentaryOption);
+            IEnumerable<TSPlaylistFile> playlistsWithAudioLanguages = populator.GetPlaylistsWithAudioLanguages(audioLanguages);
+            IEnumerable<TSPlaylistFile> playlistsWithSubtitleLanguages = populator.GetPlaylistsWithSubtitleLanguages(subtitleLanguages);
 
             filteredPlaylists.IntersectWith(playlistsWithMainMovie);
             filteredPlaylists.IntersectWith(playlistsWithVideoLanguage);
