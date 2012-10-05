@@ -283,6 +283,8 @@ namespace BDAutoMuxer.views
                 AutoConfigure(jsonPlaylist, mainPlaylistGridItems);
                 AutoConfigure(jsonPlaylist, mainPlaylistGridItemsOriginal);
             }
+
+            _dataGridView.Refresh();
         }
 
         public IEnumerable<TSPlaylistFile> GetPlaylistsWithMainMovie(bool mainMovie)
