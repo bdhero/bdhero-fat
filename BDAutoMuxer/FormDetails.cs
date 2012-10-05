@@ -231,6 +231,11 @@ namespace BDAutoMuxer
             }
         }
 
+        private string OutputFilePath
+        {
+            get { return Path.Combine(textBoxOutputDirPreview.Text, textBoxOutputFileNamePreview.Text); }
+        }
+
         #endregion
 
         #region Initialization
@@ -1330,11 +1335,6 @@ namespace BDAutoMuxer
                 continueButton.Text = tsMuxer.IsPaused ? "Resume" : "Pause";
             else if (tabControl.SelectedTab != tabPageOutput)
                 continueButton.Enabled = false;
-        }
-
-        private string OutputFilePath
-        {
-            get { return Path.Combine(textBoxOutputDirPreview.Text, textBoxOutputFileNamePreview.Text); }
         }
 
         private void continueButton_Click(object sender, EventArgs e)
