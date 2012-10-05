@@ -73,14 +73,7 @@ namespace BDAutoMuxer
                 EnableTabPage(tabPageDisc, !isMuxing);
                 EnableTabPage(tabPageOutput, !isMuxing);
 
-                if (isMuxing)
-                {
-                    cancelButton.Text = "Stop";
-                }
-                else
-                {
-                    cancelButton.Text = "Close";
-                }
+                cancelButton.Text = isMuxing ? "Stop" : "Close";
 
                 ResetButtons();
             }
@@ -114,15 +107,15 @@ namespace BDAutoMuxer
         {
             get
             {
-                ISet<Language> audioLanguages = new HashSet<Language>();
+                ISet<Language> audioLanguagesSet = new HashSet<Language>();
                 foreach (TSPlaylistFile playlist in playlists)
                 {
                     foreach (TSAudioStream audioStream in playlist.AudioStreams)
                     {
-                        audioLanguages.Add(Language.GetLanguage(audioStream.LanguageCode));
+                        audioLanguagesSet.Add(Language.GetLanguage(audioStream.LanguageCode));
                     }
                 }
-                return GetSortedLanguageArray(audioLanguages);
+                return GetSortedLanguageArray(audioLanguagesSet);
             }
         }
 
@@ -130,19 +123,19 @@ namespace BDAutoMuxer
         {
             get
             {
-                ISet<Language> subtitleLanguages = new HashSet<Language>();
+                ISet<Language> subtitleLanguagesSet = new HashSet<Language>();
                 foreach (TSPlaylistFile playlist in playlists)
                 {
                     foreach (TSGraphicsStream graphicsStream in playlist.GraphicsStreams)
                     {
-                        subtitleLanguages.Add(Language.GetLanguage(graphicsStream.LanguageCode));
+                        subtitleLanguagesSet.Add(Language.GetLanguage(graphicsStream.LanguageCode));
                     }
                     foreach (TSTextStream textStream in playlist.TextStreams)
                     {
-                        subtitleLanguages.Add(Language.GetLanguage(textStream.LanguageCode));
+                        subtitleLanguagesSet.Add(Language.GetLanguage(textStream.LanguageCode));
                     }
                 }
-                return GetSortedLanguageArray(subtitleLanguages);
+                return GetSortedLanguageArray(subtitleLanguagesSet);
             }
         }
 
@@ -242,23 +235,20 @@ namespace BDAutoMuxer
 
         #region Initialization
 
-        public FormDetails(BDROM BDROM, List<TSPlaylistFile> playlists, ISet<Language> languages)
+        public FormDetails(BDROM bdrom, List<TSPlaylistFile> playlists, ISet<Language> languages)
         {
             InitializeComponent();
 
-            this.BDROM = BDROM;
+            this.BDROM = bdrom;
             this.languages = new List<Language>(languages).ToArray();
             this.playlists = TSPlaylistFile.Sort(playlists);
 
-            string ISO_639_1 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_1 : null;
-            string ISO_639_2 = BDROM.DiscLanguage != null ? BDROM.DiscLanguage.ISO_639_2 : null;
+            string ISO_639_1 = bdrom.DiscLanguage != null ? bdrom.DiscLanguage.ISO_639_1 : null;
+            string ISO_639_2 = bdrom.DiscLanguage != null ? bdrom.DiscLanguage.ISO_639_2 : null;
 
             // TODO: This will fail if we're unable to auto-detect the disc language (e.g., ID4)
             //       or if the user changes the main disc language manually.
-            if (String.IsNullOrEmpty(ISO_639_1))
-                tmdb_api = new Tmdb(tmdb_api_key);
-            else
-                tmdb_api = new Tmdb(tmdb_api_key, ISO_639_1);
+            tmdb_api = new Tmdb(tmdb_api_key, ISO_639_1);
 
             foreach (Language lang in languages)
                 languageCodes.Add(lang.ISO_639_2);
@@ -316,6 +306,7 @@ namespace BDAutoMuxer
             UpdateBackgroundColors();
 
             InitHints(this);
+            ResetButtons();
 
             ResetPlaylistDataGrid();
             QueryMainMovie();
@@ -1332,26 +1323,13 @@ namespace BDAutoMuxer
 
         private void ResetButtons()
         {
-            continueButton.Text = "Continue";
+            continueButton.Text = "Mux it!";
             continueButton.Enabled = true;
-
-            if (tabControl.SelectedTab == tabPageOutput)
-            {
-                if (!IsMuxing)
-                    continueButton.Text = "Rip It!";
-            }
-            else if (tabControl.SelectedTab == tabPageProgress)
-            {
-                if (IsMuxing)
-                {
-                    if (tsMuxer.IsPaused)
-                        continueButton.Text = "Resume";
-                    else
-                        continueButton.Text = "Pause";
-                }
-                else
-                    continueButton.Enabled = false;
-            }
+            
+            if (IsMuxing)
+                continueButton.Text = tsMuxer.IsPaused ? "Resume" : "Pause";
+            else if (tabControl.SelectedTab != tabPageOutput)
+                continueButton.Enabled = false;
         }
 
         private string OutputFilePath
@@ -1361,39 +1339,25 @@ namespace BDAutoMuxer
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            if (tabControl.SelectedTab == tabPageDisc)
+            if (IsMuxing && tsMuxer != null)
             {
-                tabControl.SelectedIndex++;
-                tabControl.TabIndex++;
-            }
-            else if (tabControl.SelectedTab == tabPageDisc)
-            {
-                SubmitJsonDiscIfNecessary();
-                tabControl.SelectedIndex++;
-                tabControl.TabIndex++;
+                // TODO: Refactor label text logic into a separate method
+                if (tsMuxer.IsPaused)
+                {
+                    tsMuxer.Resume();
+                    labelTsMuxerProgress.Text = labelTsMuxerProgress.Text.Replace(" (paused}", "");
+                }
+                else
+                {
+                    tsMuxer.Pause();
+                    labelTsMuxerProgress.Text += " (paused}";
+                }
             }
             else if (tabControl.SelectedTab == tabPageOutput)
             {
                 Rip();
                 tabControl.SelectedIndex++;
                 tabControl.TabIndex++;
-            }
-            else if (tabControl.SelectedTab == tabPageProgress)
-            {
-                if (tsMuxer != null)
-                {
-                    // TODO: Refactor label text logic into a separate method
-                    if (tsMuxer.IsPaused)
-                    {
-                        tsMuxer.Resume();
-                        labelTsMuxerProgress.Text = labelTsMuxerProgress.Text.Replace(" (paused}", "");
-                    }
-                    else
-                    {
-                        tsMuxer.Pause();
-                        labelTsMuxerProgress.Text += " (paused}";
-                    }
-                }
             }
 
             ResetButtons();
