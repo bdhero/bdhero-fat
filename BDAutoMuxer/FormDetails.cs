@@ -1113,13 +1113,16 @@ namespace BDAutoMuxer
 
             try
             {
-                JsonSearchResult postResult = mainMovieService.PostDisc(jsonDisc);
+                var postResult = mainMovieService.PostDisc(jsonDisc);
                 if (postResult.error)
                 {
+                    var errorMessage = "Unknown error occurred while POSTing to the DB";
                     if (postResult.errors.Count > 0)
-                        ShowErrorMessage("DB POST Error", postResult.errors[0].textStatus + ": " + postResult.errors[0].errorMessage);
-                    else
-                        ShowErrorMessage("DB POST Error", "Unknown error occurred while POSTing to the DB");
+                    {
+                        var error = postResult.errors[0];
+                        errorMessage = string.IsNullOrEmpty(error.errorMessage) ? error.textStatus : error.errorMessage;
+                    }
+                    ShowErrorMessage("DB POST Error", errorMessage);
                     return;
                 }
             }
