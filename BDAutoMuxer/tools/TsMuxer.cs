@@ -20,6 +20,7 @@ namespace BDAutoMuxer.tools
         private string _basePath;
         private string _metaFilePath;
         private string _chapterTextFilePath;
+        private string _chapterXMLFilePath;
 
         protected override string Name { get { return "TsMuxer"; } }
         protected override string Filename { get { return "tsMuxeR.exe"; } }
@@ -116,8 +117,11 @@ namespace BDAutoMuxer.tools
             _basePath = Path.Combine(Path.GetDirectoryName(_outputFilePath), Path.GetFileNameWithoutExtension(_outputFilePath));
             _metaFilePath = _basePath + ".meta.txt";
             _chapterTextFilePath = _basePath + ".chapters.txt";
+             _chapterXMLFilePath = _basePath + ".chapters.xml";
 
             WriteChapterTextFile(_chapterTextFilePath);
+            WriteChapterXMLFile(_chapterXMLFilePath);
+
             WriteMetaFile(_metaFilePath);
 
             Execute(new List<string> { _metaFilePath, _outputFilePath }, sender, e);
@@ -126,6 +130,11 @@ namespace BDAutoMuxer.tools
         private void WriteChapterTextFile(string chapterTextFilePath)
         {
             new ChapterWriter(_playlist).SaveText(chapterTextFilePath);
+        }
+        
+        private void WriteChapterXMLFile(string chapterXMLFilePath)
+        {
+            new ChapterWriter(_playlist).SaveXML(chapterXMLFilePath);
         }
 
         private void WriteMetaFile(string metaFilePath)

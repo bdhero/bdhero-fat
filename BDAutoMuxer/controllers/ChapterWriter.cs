@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Text;
 
 namespace BDAutoMuxer.controllers
 {
@@ -42,6 +44,40 @@ namespace BDAutoMuxer.controllers
                 lines.Add("CHAPTER" + istr + "NAME=" + "Chapter " + istr);
             }
             File.WriteAllLines(filename, lines.ToArray());
+
+        }
+        public void SaveXML(string filename)
+        {   
+            string Doctype = "<!DOCTYPE Chapters SYSTEM \"matroskachapters.dtd\">";
+            string Lng = "eng";
+            var i = 0;
+
+            XmlTextWriter Writer = new XmlTextWriter(filename, Encoding.GetEncoding("ISO-8859-1"));
+            Writer.Formatting = Formatting.Indented;
+            Writer.WriteStartDocument();
+                Writer.WriteComment(Doctype);
+                Writer.WriteStartElement("Chapters");
+                    foreach (var c in _chapters)
+                    {
+                        i++;
+                        var istr = i.ToString("00");
+                        Writer.WriteStartElement("ChapterAtom");
+                            Writer.WriteStartElement("ChapterTimeStart");
+                            Writer.WriteString(c.ToString());
+                            Writer.WriteEndElement();
+                            Writer.WriteStartElement("ChapterDisplay");
+                                Writer.WriteStartElement("ChapterString");
+                                Writer.WriteString("Chapter " + istr);
+                                Writer.WriteEndElement();
+                                Writer.WriteStartElement("ChapterLanguage");
+                                Writer.WriteString(Lng);
+                                Writer.WriteEndElement();
+                            Writer.WriteEndElement();
+                        Writer.WriteEndElement();
+                    }
+                    Writer.WriteEndElement();
+                Writer.WriteEndDocument();
+            Writer.Close();  
         }
 
         public void SaveCellTimes(string filename)
