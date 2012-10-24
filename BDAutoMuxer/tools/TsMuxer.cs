@@ -117,24 +117,18 @@ namespace BDAutoMuxer.tools
             _basePath = Path.Combine(Path.GetDirectoryName(_outputFilePath), Path.GetFileNameWithoutExtension(_outputFilePath));
             _metaFilePath = _basePath + ".meta.txt";
             _chapterTextFilePath = _basePath + ".chapters.txt";
-             _chapterXMLFilePath = _basePath + ".chapters.xml";
+            _chapterXMLFilePath = _basePath + ".chapters.xml";
 
-            WriteChapterTextFile(_chapterTextFilePath);
-            WriteChapterXMLFile(_chapterXMLFilePath);
+            WriteChapterXmlFile(_chapterXMLFilePath);
 
             WriteMetaFile(_metaFilePath);
 
             Execute(new List<string> { _metaFilePath, _outputFilePath }, sender, e);
         }
-
-        private void WriteChapterTextFile(string chapterTextFilePath)
-        {
-            new ChapterWriter(_playlist).SaveText(chapterTextFilePath);
-        }
         
-        private void WriteChapterXMLFile(string chapterXMLFilePath)
+        private void WriteChapterXmlFile(string chapterXmlFilePath)
         {
-            new ChapterWriter(_playlist).SaveXML(chapterXMLFilePath);
+            new ChapterWriter(_playlist).SaveXml(chapterXmlFilePath);
         }
 
         private void WriteMetaFile(string metaFilePath)

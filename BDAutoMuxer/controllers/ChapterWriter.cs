@@ -46,7 +46,7 @@ namespace BDAutoMuxer.controllers
             File.WriteAllLines(filename, lines.ToArray());
         }
 
-        public void SaveXML(string filename)
+        public void SaveXml(string filename)
         {
             const string lng = "eng";
             var i = 0;
