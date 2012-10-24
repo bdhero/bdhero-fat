@@ -51,7 +51,7 @@ namespace BDAutoMuxer.tools
             args.AddNonEmpty("--no-video", inputM2TsFlags, _inputM2TsPath);
 
             // Input MKV file
-            args.AddNonEmpty(inputMkvFlags, _inputMkvPath);
+            args.AddNonEmpty("--no-chapters", inputMkvFlags, _inputMkvPath);
             
             Execute(args, sender, e);
         }
