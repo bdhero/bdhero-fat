@@ -116,7 +116,6 @@
     <Compile Include="BDROM\TSPlaylistFile.cs" />
     <Compile Include="BDROM\TSStream.cs" />
     <Compile Include="BDROM\TSCodecVC1.cs" />
-    <Compile Include="controllers\XMLChapters.cs" />
     <Compile Include="tools\Args.cs" />
     <Compile Include="FormRemux.cs">
       <SubType>Form</SubType>
