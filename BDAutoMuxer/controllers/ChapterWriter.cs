@@ -44,40 +44,41 @@ namespace BDAutoMuxer.controllers
                 lines.Add("CHAPTER" + istr + "NAME=" + "Chapter " + istr);
             }
             File.WriteAllLines(filename, lines.ToArray());
-
         }
+
         public void SaveXML(string filename)
-        {   
-            string Doctype = "<!DOCTYPE Chapters SYSTEM \"matroskachapters.dtd\">";
-            string Lng = "eng";
+        {
+            const string lng = "eng";
             var i = 0;
 
-            XmlTextWriter Writer = new XmlTextWriter(filename, Encoding.GetEncoding("ISO-8859-1"));
-            Writer.Formatting = Formatting.Indented;
-            Writer.WriteStartDocument();
-                Writer.WriteComment(Doctype);
-                Writer.WriteStartElement("Chapters");
+            var writer = new XmlTextWriter(filename, Encoding.GetEncoding("ISO-8859-1"));
+            writer.Formatting = Formatting.Indented;
+            writer.WriteStartDocument();
+                writer.WriteDocType("Chapters", null, "matroskachapters.dtd", null);
+                writer.WriteStartElement("Chapters");
                     foreach (var c in _chapters)
                     {
                         i++;
                         var istr = i.ToString("00");
-                        Writer.WriteStartElement("ChapterAtom");
-                            Writer.WriteStartElement("ChapterTimeStart");
-                            Writer.WriteString(c.ToString());
-                            Writer.WriteEndElement();
-                            Writer.WriteStartElement("ChapterDisplay");
-                                Writer.WriteStartElement("ChapterString");
-                                Writer.WriteString("Chapter " + istr);
-                                Writer.WriteEndElement();
-                                Writer.WriteStartElement("ChapterLanguage");
-                                Writer.WriteString(Lng);
-                                Writer.WriteEndElement();
-                            Writer.WriteEndElement();
-                        Writer.WriteEndElement();
+                        writer.WriteStartElement("EditionEntry");
+                            writer.WriteStartElement("ChapterAtom");
+                                writer.WriteStartElement("ChapterTimeStart");
+                                writer.WriteString(c.ToString());
+                                writer.WriteEndElement();
+                                writer.WriteStartElement("ChapterDisplay");
+                                    writer.WriteStartElement("ChapterString");
+                                    writer.WriteString("Chapter " + istr);
+                                    writer.WriteEndElement();
+                                    writer.WriteStartElement("ChapterLanguage");
+                                    writer.WriteString(lng);
+                                    writer.WriteEndElement();
+                                writer.WriteEndElement();
+                            writer.WriteEndElement();
+                        writer.WriteEndElement();
                     }
-                    Writer.WriteEndElement();
-                Writer.WriteEndDocument();
-            Writer.Close();  
+                    writer.WriteEndElement();
+                writer.WriteEndDocument();
+            writer.Close();  
         }
 
         public void SaveCellTimes(string filename)
