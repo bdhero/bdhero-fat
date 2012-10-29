@@ -3,9 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
+// ReSharper disable ReturnTypeCanBeEnumerable.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
 namespace BDAutoMuxer.controllers
 {
-    public class DragUtils
+    public static class DragUtils
     {
         public static bool HasFile(DragEventArgs e)
         {
@@ -70,7 +73,7 @@ namespace BDAutoMuxer.controllers
             return files.Count > 0 ? files[0] : null;
         }
 
-        private static ICollection<string> NormalizeFileExtensions(IEnumerable<string> extensions)
+        private static ICollection<string> NormalizeFileExtensions(ICollection<string> extensions)
         {
             return extensions.Select(NormalizeFileExtension).ToList();
         }
@@ -84,7 +87,7 @@ namespace BDAutoMuxer.controllers
             return extNorm;
         }
 
-        public static string[] GetPaths(DragEventArgs e)
+        public static ICollection<string> GetPaths(DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -96,10 +99,11 @@ namespace BDAutoMuxer.controllers
         public static string GetFirstPath(DragEventArgs e)
         {
             var paths = GetPaths(e);
-            return paths.Length > 0 ? paths[0] : null;
+            var enumerable = paths as List<string> ?? paths.ToList();
+            return enumerable.Any() ? enumerable[0] : null;
         }
 
-        public static string[] GetFilePaths(DragEventArgs e)
+        public static ICollection<string> GetFilePaths(DragEventArgs e)
         {
             return GetPaths(e).Where(FileUtils.IsFile).ToArray();
         }
@@ -109,7 +113,7 @@ namespace BDAutoMuxer.controllers
             return GetPaths(e).FirstOrDefault(FileUtils.IsFile);
         }
 
-        public static string[] GetDirectoryPaths(DragEventArgs e)
+        public static ICollection<string> GetDirectoryPaths(DragEventArgs e)
         {
             return GetPaths(e).Where(FileUtils.IsDirectory).ToArray();
         }
@@ -122,7 +126,7 @@ namespace BDAutoMuxer.controllers
 
         public static string GetFirstFileNameWithoutExtension(DragEventArgs e)
         {
-            var path = DragUtils.GetFirstFilePath(e);
+            var path = GetFirstFilePath(e);
             return path == null ? null : Path.GetFileNameWithoutExtension(path);
         }
     }
