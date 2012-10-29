@@ -264,7 +264,6 @@ namespace BDAutoMuxer
             populator = new PlaylistDataGridPopulator(playlistDataGridView, this.playlists, languageCodes);
             populator.SelectionChanged += playlistDataGridView_SelectionChanged;
             populator.MainLanguageCode = ISO_639_2;
-            
 
             FormUtils.TextBox_EnableSelectAll(this);
 
@@ -1185,6 +1184,8 @@ namespace BDAutoMuxer
             movieYear = null;
 
             pictureBoxMoviePoster.ImageLocation = null;
+            pictureBoxMoviePoster.Tag = null;
+            pictureBoxMoviePoster.Cursor = Cursors.Default;
 
             if (tmdbMovieSearch != null && searchResultListView.SelectedIndices.Count > 0)
             {
@@ -1195,7 +1196,12 @@ namespace BDAutoMuxer
                 {
                     movieTitle = tmdbMovieResult.title;
                     movieYear = GetYearInt(tmdbMovieResult.release_date);
-                    pictureBoxMoviePoster.ImageLocation = string.IsNullOrEmpty(tmdbMovieResult.poster_path) ? null : _rootUrl + tmdbMovieResult.poster_path;
+
+                    if (!string.IsNullOrEmpty(tmdbMovieResult.poster_path))
+                        pictureBoxMoviePoster.ImageLocation = _rootUrl + tmdbMovieResult.poster_path;
+
+                    pictureBoxMoviePoster.Tag = string.Format("http://www.themoviedb.org/movie/{0}", tmdbMovieResult.id);
+                    pictureBoxMoviePoster.Cursor = Cursors.Hand;
                 }
             }
 
@@ -1720,5 +1726,12 @@ namespace BDAutoMuxer
         }
 
         #endregion
+
+        private void pictureBoxMoviePoster_MouseClick(object sender, MouseEventArgs e)
+        {
+            var url = pictureBoxMoviePoster.Tag as string;
+            if (url != null)
+                Process.Start(url);
+        }
     }
 }
