@@ -61,6 +61,10 @@ namespace BDAutoMuxer
         private List<TSAudioStream> audioTracks = new List<TSAudioStream>();
         private List<TSStream> subtitleTracks = new List<TSStream>();
 
+        private Dictionary<TabPage, string> tabStatusMessages = new Dictionary<TabPage, string>();
+        private Dictionary<Control, String> controlHints = new Dictionary<Control, String>();
+        private string MoviePosterTag;
+
         #endregion
 
         #region Properties
@@ -249,6 +253,7 @@ namespace BDAutoMuxer
             this.BDROM = bdrom;
             this.languages = new List<Language>(languages).ToArray();
             this.playlists = TSPlaylistFile.Sort(playlists);
+            MoviePosterTag = null;
 
             string ISO_639_1 = bdrom.DiscLanguage != null ? bdrom.DiscLanguage.ISO_639_1 : null;
             string ISO_639_2 = bdrom.DiscLanguage != null ? bdrom.DiscLanguage.ISO_639_2 : null;
@@ -1184,7 +1189,7 @@ namespace BDAutoMuxer
             movieYear = null;
 
             pictureBoxMoviePoster.ImageLocation = null;
-            pictureBoxMoviePoster.Tag = null;
+            MoviePosterTag = null;
             pictureBoxMoviePoster.Cursor = Cursors.Default;
 
             if (tmdbMovieSearch != null && searchResultListView.SelectedIndices.Count > 0)
@@ -1200,7 +1205,10 @@ namespace BDAutoMuxer
                     if (!string.IsNullOrEmpty(tmdbMovieResult.poster_path))
                         pictureBoxMoviePoster.ImageLocation = _rootUrl + tmdbMovieResult.poster_path;
 
-                    pictureBoxMoviePoster.Tag = string.Format("http://www.themoviedb.org/movie/{0}", tmdbMovieResult.id);
+                    MoviePosterTag = string.Format("http://www.themoviedb.org/movie/{0}", tmdbMovieResult.id);
+                    //ToDo: Add Tag to MoviePoster
+                    //pictureBoxMoviePoster.Tag = MoviePosterTag;
+                    
                     pictureBoxMoviePoster.Cursor = Cursors.Hand;
                 }
             }
@@ -1648,9 +1656,6 @@ namespace BDAutoMuxer
         #endregion
 
         #region User Messages
-
-        private Dictionary<TabPage, string> tabStatusMessages = new Dictionary<TabPage, string>();
-        private Dictionary<Control, String> controlHints = new Dictionary<Control, String>();
 
         private void InitHints(Control parentControl)
         {
