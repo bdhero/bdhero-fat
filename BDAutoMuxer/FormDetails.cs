@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -671,20 +672,20 @@ namespace BDAutoMuxer
         {
             if (String.IsNullOrEmpty(this.movieNameTextBox.Text))
             {
-                this.discLanguageComboBox.Enabled = true;
-                this.maskedTextBoxYear.Enabled = true;
-                this.searchButton.Enabled = true;
+                discLanguageComboBox.Enabled = true;
+                maskedTextBoxYear.Enabled = true;
+                searchButton.Enabled = true;
                 return;
             }
 
             searchResultListView.Items.Clear();
-
+            pictureBoxMoviePoster.ImageLocation = null;
             DiscTabControlsEnabled = false;
 
             SetTabStatus(tabPageDisc, "Searching The Movie Database (TMDb)...");
 
-            string query = this.movieNameTextBox.Text;
-            string ISO_639_1 = (this.discLanguageComboBox.SelectedValue as Language).ISO_639_1;
+            string query = movieNameTextBox.Text;
+            string ISO_639_1 = (discLanguageComboBox.SelectedValue as Language).ISO_639_1;
             int? year = Regex.IsMatch(maskedTextBoxYear.Text, @"^\d{4}$") ? (int?)Int32.Parse(maskedTextBoxYear.Text) : null;
             
             TmdbSearchRequestParams reqParams = new TmdbSearchRequestParams(query, year, ISO_639_1);
@@ -794,12 +795,15 @@ namespace BDAutoMuxer
         {
             try
             {
-                TmdbSearchRequestParams reqParams = e.Argument as TmdbSearchRequestParams;
+                var reqParams = e.Argument as TmdbSearchRequestParams;
+
+                Debug.Assert(reqParams != null, "reqParams != null");
+
                 tmdbMovieSearch = tmdb_api.SearchMovie(reqParams.query, 1, reqParams.ISO_639_1, false, reqParams.year);
+
                 if (_rootUrl == null)
-                {
                     _rootUrl = tmdb_api.GetConfiguration().images.base_url + "w185";
-                }
+
                 e.Result = null;
             }
             catch (Exception ex)
@@ -1159,7 +1163,7 @@ namespace BDAutoMuxer
             if (listViewStreamFiles.SelectedItems.Count == 0) return;
 
             string filename = listViewStreamFiles.SelectedItems[0].Text;
-            string filepath = System.IO.Path.Combine(BDROM.DirectorySTREAM.FullName, filename);
+            string filepath = Path.Combine(BDROM.DirectorySTREAM.FullName, filename);
 
             playFile(filepath);
         }
