@@ -50,6 +50,10 @@ namespace BDAutoMuxer.tools
             // Input M2TS file
             args.AddNonEmpty("--no-video", inputM2TsFlags, _inputM2TsPath);
 
+            // If an input chapter file is specified, exclude chapters from the input MKV file
+            if (!string.IsNullOrEmpty(_inputChaptersPath))
+                args.Add("--no-chapters");
+
             // Input MKV file
             args.AddNonEmpty(inputMkvFlags, _inputMkvPath);
             

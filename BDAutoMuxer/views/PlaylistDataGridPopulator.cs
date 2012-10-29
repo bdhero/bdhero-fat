@@ -88,6 +88,7 @@ namespace BDAutoMuxer.views
 
             _dataGridView.CellClick += playlistDataGridView_CellClick;
             _dataGridView.SelectionChanged += dataGridView_SelectionChanged;
+            _dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
 
             foreach (var playlist in playlists)
             {
@@ -404,6 +405,12 @@ namespace BDAutoMuxer.views
             else if (jsonPlaylist.is_unrated) item.Cut = Cut.Unrated;
 
             item.HasCommentary = jsonPlaylist.has_commentary;
+        }
+
+        private void dataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.ColumnIndex == _filenameColumn.Index || e.ColumnIndex == _lengthColumn.Index || e.ColumnIndex == _sizeColumn.Index)
+                e.Cancel = true;
         }
 
         private void playButton_CellClick(object sender, DataGridViewCellEventArgs e)
