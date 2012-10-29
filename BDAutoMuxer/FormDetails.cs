@@ -487,6 +487,8 @@ namespace BDAutoMuxer
             comboBoxPlaylist.DataSource = null;
             comboBoxPlaylist.DataSource = new List<TSPlaylistFile>(filteredPlaylists).ToArray();
             comboBoxPlaylist.Enabled = filteredPlaylists.Count > 1;
+
+            ResetButtons();
         }
 
         private void FilterTracks()
@@ -1344,7 +1346,7 @@ namespace BDAutoMuxer
             
             if (IsMuxing)
                 continueButton.Text = tsMuxer.IsPaused ? "Resume" : "Pause";
-            else if (tabControl.SelectedTab != tabPageOutput)
+            else if (tabControl.SelectedTab != tabPageOutput || comboBoxPlaylist.Items.Count == 0)
                 continueButton.Enabled = false;
         }
 
