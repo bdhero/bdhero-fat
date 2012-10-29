@@ -261,14 +261,14 @@ namespace BDAutoMuxer
             foreach (Language lang in languages)
                 languageCodes.Add(lang.ISO_639_2);
 
-            this.populator = new PlaylistDataGridPopulator(playlistDataGridView, this.playlists, languageCodes);
-            this.populator.SelectionChanged += playlistDataGridView_SelectionChanged;
-            this.populator.MainLanguageCode = ISO_639_2;
+            populator = new PlaylistDataGridPopulator(playlistDataGridView, this.playlists, languageCodes);
+            populator.SelectionChanged += playlistDataGridView_SelectionChanged;
+            populator.MainLanguageCode = ISO_639_2;
             
 
             FormUtils.TextBox_EnableSelectAll(this);
 
-            this.Load += FormDetails_Load;
+            Load += FormDetails_Load;
         }
 
         ~FormDetails()
@@ -287,13 +287,13 @@ namespace BDAutoMuxer
             if (BDAutoMuxerSettings.DetailsWindowSize != Size.Empty)
                 Size = BDAutoMuxerSettings.DetailsWindowSize;
 
-            this.statusLabel.Text = "";
+            statusLabel.Text = "";
 
-            this.movieNameTextBox.Text = String.IsNullOrEmpty(BDROM.DiscNameSearchable) ? BDROM.VolumeLabel : BDROM.DiscNameSearchable;
-            this.discLanguageComboBox.DataSource = new List<Language>(languages).ToArray();
+            movieNameTextBox.Text = String.IsNullOrEmpty(BDROM.DiscNameSearchable) ? BDROM.VolumeLabel : BDROM.DiscNameSearchable;
+            discLanguageComboBox.DataSource = new List<Language>(languages).ToArray();
 
-            this.textBoxOutputDir.Text = BDAutoMuxerSettings.OutputDir;
-            this.textBoxOutputFileName.Text = BDAutoMuxerSettings.OutputFileName;
+            textBoxOutputDir.Text = BDAutoMuxerSettings.OutputDir;
+            textBoxOutputFileName.Text = BDAutoMuxerSettings.OutputFileName;
 
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
 
@@ -654,8 +654,8 @@ namespace BDAutoMuxer
         {
             DiscTabControlsEnabled = false;
 
-            this.auto_configured = false;
-            this.auto_tmdb_id = -1;
+            auto_configured = false;
+            auto_tmdb_id = -1;
 
             SetTabStatus(tabPageDisc, "Querying main movie database...");
 
@@ -670,7 +670,7 @@ namespace BDAutoMuxer
 
         private void SearchTmdb()
         {
-            if (String.IsNullOrEmpty(this.movieNameTextBox.Text))
+            if (String.IsNullOrEmpty(movieNameTextBox.Text))
             {
                 discLanguageComboBox.Enabled = true;
                 maskedTextBoxYear.Enabled = true;
@@ -770,10 +770,10 @@ namespace BDAutoMuxer
             {
                 JsonDisc disc = mainMovieSearchResult.discs[0];
 
-                this.auto_configured = true;
-                this.auto_tmdb_id = disc.tmdb_id;
-                this.movieNameTextBox.Text = disc.movie_title;
-                this.maskedTextBoxYear.Text = disc.year != null ? disc.year.ToString() : null;
+                auto_configured = true;
+                auto_tmdb_id = disc.tmdb_id;
+                movieNameTextBox.Text = disc.movie_title;
+                maskedTextBoxYear.Text = disc.year != null ? disc.year.ToString() : null;
 
                 populator.AutoConfigure(disc.playlists);
 
@@ -1180,24 +1180,26 @@ namespace BDAutoMuxer
 
         private void searchResultListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.tmdbMovieResult = null;
-            this.movieTitle = null;
-            this.movieYear = null;
+            tmdbMovieResult = null;
+            movieTitle = null;
+            movieYear = null;
 
-            if (this.tmdbMovieSearch != null && searchResultListView.SelectedIndices.Count > 0)
+            pictureBoxMoviePoster.ImageLocation = null;
+
+            if (tmdbMovieSearch != null && searchResultListView.SelectedIndices.Count > 0)
             {
                 int index = searchResultListView.SelectedIndices[0];
-                this.tmdbMovieResult = this.tmdbMovieSearch.results[index];
+                tmdbMovieResult = tmdbMovieSearch.results[index];
 
                 if (tmdbMovieResult != null)
                 {
-                    this.movieTitle = this.tmdbMovieResult.title;
-                    this.movieYear = GetYearInt(this.tmdbMovieResult.release_date);
+                    movieTitle = tmdbMovieResult.title;
+                    movieYear = GetYearInt(tmdbMovieResult.release_date);
                     pictureBoxMoviePoster.ImageLocation = string.IsNullOrEmpty(tmdbMovieResult.poster_path) ? null : _rootUrl + tmdbMovieResult.poster_path;
                 }
             }
 
-            this.buttonSubmitToDB.Enabled = CanSubmitToDB;
+            buttonSubmitToDB.Enabled = CanSubmitToDB;
 
             textBoxOutputFileName_TextChanged(sender, e);
         }
@@ -1397,8 +1399,8 @@ namespace BDAutoMuxer
             string preview = text;
 
             string volume = BDROM.VolumeLabel;
-            string title = String.IsNullOrEmpty(this.movieTitle) ? movieNameTextBox.Text : this.movieTitle;
-            string year = this.movieYear == null ? GetYearString(maskedTextBoxYear.Text) : this.movieYear + "";
+            string title = String.IsNullOrEmpty(movieTitle) ? movieNameTextBox.Text : movieTitle;
+            string year = movieYear == null ? GetYearString(maskedTextBoxYear.Text) : movieYear + "";
             string res = "";
             string vcodec = "";
             string acodec = "";
