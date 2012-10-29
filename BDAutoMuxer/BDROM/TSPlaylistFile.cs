@@ -470,7 +470,8 @@ namespace BDAutoMuxer
                             streamClip.TimeIn +
                             streamClip.RelativeTimeIn;
 
-                        // TODO: Ignore short last chapter?
+                        // Ignore short last chapter
+                        // If the last chapter is < 1.0 Second before end of film Ignore
                         if (TotalLength - relativeSeconds > 1.0)
                         {
                             streamClip.Chapters.Add(chapterSeconds);

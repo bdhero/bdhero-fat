@@ -29,6 +29,7 @@ namespace BDAutoMuxer
 
         private TmdbMovieSearch tmdbMovieSearch;
         private MovieResult tmdbMovieResult = null;
+        private string _rootUrl;
 
         private MainMovieService mainMovieService = new MainMovieService();
         private JsonSearchResult mainMovieSearchResult;
@@ -254,6 +255,7 @@ namespace BDAutoMuxer
             // TODO: This will fail if we're unable to auto-detect the disc language (e.g., ID4)
             //       or if the user changes the main disc language manually.
             tmdb_api = new Tmdb(tmdb_api_key, ISO_639_1);
+          
 
             foreach (Language lang in languages)
                 languageCodes.Add(lang.ISO_639_2);
@@ -261,6 +263,7 @@ namespace BDAutoMuxer
             this.populator = new PlaylistDataGridPopulator(playlistDataGridView, this.playlists, languageCodes);
             this.populator.SelectionChanged += playlistDataGridView_SelectionChanged;
             this.populator.MainLanguageCode = ISO_639_2;
+            
 
             FormUtils.TextBox_EnableSelectAll(this);
 
@@ -791,6 +794,10 @@ namespace BDAutoMuxer
             {
                 TmdbSearchRequestParams reqParams = e.Argument as TmdbSearchRequestParams;
                 tmdbMovieSearch = tmdb_api.SearchMovie(reqParams.query, 1, reqParams.ISO_639_1, false, reqParams.year);
+                if (_rootUrl == null)
+                {
+                    _rootUrl = tmdb_api.GetConfiguration().images.base_url + "w185";
+                }
                 e.Result = null;
             }
             catch (Exception ex)
@@ -1180,6 +1187,7 @@ namespace BDAutoMuxer
                 {
                     this.movieTitle = this.tmdbMovieResult.title;
                     this.movieYear = GetYearInt(this.tmdbMovieResult.release_date);
+                    pictureBoxMoviePoster.ImageLocation = string.IsNullOrEmpty(tmdbMovieResult.poster_path) ? null : _rootUrl + tmdbMovieResult.poster_path;
                 }
             }
 
