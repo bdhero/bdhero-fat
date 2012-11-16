@@ -56,29 +56,29 @@ namespace BDAutoMuxer.controllers
             writer.WriteStartDocument();
                 writer.WriteDocType("Chapters", null, "matroskachapters.dtd", null);
                 writer.WriteStartElement("Chapters");
+                    writer.WriteStartElement("EditionEntry");
                     foreach (var c in _chapters)
                     {
                         i++;
                         var istr = i.ToString("00");
-                        writer.WriteStartElement("EditionEntry");
-                            writer.WriteStartElement("ChapterAtom");
-                                writer.WriteStartElement("ChapterTimeStart");
-                                writer.WriteString(c.ToString());
+                        writer.WriteStartElement("ChapterAtom");
+                            writer.WriteStartElement("ChapterTimeStart");
+                            writer.WriteString(c.ToString());
+                            writer.WriteEndElement();
+                            writer.WriteStartElement("ChapterDisplay");
+                                writer.WriteStartElement("ChapterString");
+                                writer.WriteString("Chapter " + istr);
                                 writer.WriteEndElement();
-                                writer.WriteStartElement("ChapterDisplay");
-                                    writer.WriteStartElement("ChapterString");
-                                    writer.WriteString("Chapter " + istr);
-                                    writer.WriteEndElement();
-                                    writer.WriteStartElement("ChapterLanguage");
-                                    writer.WriteString(lng);
-                                    writer.WriteEndElement();
+                                writer.WriteStartElement("ChapterLanguage");
+                                writer.WriteString(lng);
                                 writer.WriteEndElement();
                             writer.WriteEndElement();
                         writer.WriteEndElement();
                     }
                     writer.WriteEndElement();
-                writer.WriteEndDocument();
-            writer.Close();  
+                writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Close();
         }
 
         public void SaveCellTimes(string filename)
