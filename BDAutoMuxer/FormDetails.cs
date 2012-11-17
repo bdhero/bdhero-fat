@@ -1734,9 +1734,8 @@ namespace BDAutoMuxer
 
         private void pictureBoxMoviePoster_MouseClick(object sender, MouseEventArgs e)
         {
-            var url = pictureBoxMoviePoster.Tag as string;
-            if (url != null)
-                Process.Start(url);
+            if (MoviePosterTag != null)
+                Process.Start(MoviePosterTag);
         }
     }
 }
