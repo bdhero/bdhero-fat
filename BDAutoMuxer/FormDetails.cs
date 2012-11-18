@@ -310,6 +310,12 @@ namespace BDAutoMuxer
             _populator.ItemChanged += OnPlaylistItemChange;
             comboBoxAudienceLanguage.SelectedIndexChanged += OnAudienceLanguageChange;
             playlistDataGridView.CurrentCellDirtyStateChanged += playlistDataGridView_CurrentCellDirtyStateChanged;
+            pictureBoxMoviePoster.MouseEnter += (o, args) =>
+                                                    {
+                                                        if (_tmdbMovieUrl != null)
+                                                            SetTabStatus(_tmdbMovieUrl, true);
+                                                    };
+            pictureBoxMoviePoster.MouseLeave += (o, args) => RestoreTabStatus();
 
             listViewStreamFiles.Enabled = true;
             listViewStreams.Enabled = true;
