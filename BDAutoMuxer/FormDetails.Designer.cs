@@ -511,8 +511,6 @@
             this.playlistDataGridView.Name = "playlistDataGridView";
             this.playlistDataGridView.Size = new System.Drawing.Size(712, 102);
             this.playlistDataGridView.TabIndex = 0;
-            this.playlistDataGridView.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDataGridView_CellMouseEnter);
-            this.playlistDataGridView.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDataGridView_CellMouseLeave);
             this.playlistDataGridView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.playlistDataGridView_MouseClick);
             // 
             // playlistsSplitContainerInner

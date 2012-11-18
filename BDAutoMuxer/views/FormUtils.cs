@@ -17,7 +17,7 @@ namespace BDAutoMuxer.views
         {
             foreach (var control in parentControl.Descendants<Control>().OfType<TextBox>())
             {
-                (control as TextBox).KeyPress += TextBox_KeyPress;
+                control.KeyPress += TextBox_KeyPress;
             }
         }
 
@@ -25,8 +25,23 @@ namespace BDAutoMuxer.views
         public static void TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar != '\x1') return;
+
             ((TextBox)sender).SelectAll();
             e.Handled = true;
+        }
+
+        public static void EnableControls(TabPage page, bool enable)
+        {
+            EnableControls(page.Controls, enable);
+        }
+
+        public static void EnableControls(Control.ControlCollection ctls, bool enable)
+        {
+            foreach (Control ctl in ctls)
+            {
+                ctl.Enabled = enable;
+                EnableControls(ctl.Controls, enable);
+            }
         }
     }
 
