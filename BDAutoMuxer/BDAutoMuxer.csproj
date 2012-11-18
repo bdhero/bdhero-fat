@@ -361,6 +361,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\no-poster-w185.png" />
     <EmbeddedResource Include="lib\exe\tsMuxeR.exe" />
     <EmbeddedResource Include="lib\exe\mkvmerge.exe" />
     <Content Include="lib\Microsoft.WindowsAPICodePack.dll" />
