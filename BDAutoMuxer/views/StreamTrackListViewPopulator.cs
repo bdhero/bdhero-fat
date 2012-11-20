@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace BDAutoMuxer.views
 {
-    class StreamTrackListViewPopulator
+    static class StreamTrackListViewPopulator
     {
         public static void Populate(
             TSPlaylistFile playlist,
