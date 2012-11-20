@@ -310,11 +310,7 @@ namespace BDAutoMuxer
             _populator.ItemChanged += OnPlaylistItemChange;
             comboBoxAudienceLanguage.SelectedIndexChanged += OnAudienceLanguageChange;
             playlistDataGridView.CurrentCellDirtyStateChanged += playlistDataGridView_CurrentCellDirtyStateChanged;
-            pictureBoxMoviePoster.MouseEnter += (o, args) =>
-                                                    {
-                                                        if (_tmdbMovieUrl != null)
-                                                            SetTabStatus(_tmdbMovieUrl, true);
-                                                    };
+            pictureBoxMoviePoster.MouseEnter += (o, args) => SetTabStatus(_tmdbMovieUrl, true);
             pictureBoxMoviePoster.MouseLeave += (o, args) => RestoreTabStatus();
 
             listViewStreamFiles.Enabled = true;
@@ -1172,9 +1168,10 @@ namespace BDAutoMuxer
             _tmdbMovieResult = null;
             _tmdbMovieTitle = null;
             _tmdbMovieYear = null;
-
-            pictureBoxMoviePoster.ImageLocation = null;
             _tmdbMovieUrl = null;
+
+            pictureBoxMoviePoster.Image = null;
+            pictureBoxMoviePoster.ImageLocation = null;
             pictureBoxMoviePoster.Cursor = Cursors.Default;
 
             if (_tmdbMovieSearch != null && searchResultListView.SelectedIndices.Count > 0)
@@ -1187,7 +1184,9 @@ namespace BDAutoMuxer
                     _tmdbMovieTitle = _tmdbMovieResult.title;
                     _tmdbMovieYear = GetYearInt(_tmdbMovieResult.release_date);
 
-                    if (!string.IsNullOrEmpty(_tmdbMovieResult.poster_path))
+                    if (string.IsNullOrEmpty(_tmdbMovieResult.poster_path))
+                        pictureBoxMoviePoster.Image = Properties.Resources.no_poster_w185;
+                    else
                         pictureBoxMoviePoster.ImageLocation = _rootUrl + _tmdbMovieResult.poster_path;
 
                     _tmdbMovieUrl = string.Format("http://www.themoviedb.org/movie/{0}", _tmdbMovieResult.id);
