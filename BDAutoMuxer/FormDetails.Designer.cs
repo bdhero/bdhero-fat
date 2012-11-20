@@ -230,11 +230,11 @@
             this.hiddenTrackLabel.AutoSize = true;
             this.hiddenTrackLabel.Location = new System.Drawing.Point(7, 633);
             this.hiddenTrackLabel.Name = "hiddenTrackLabel";
-            this.hiddenTrackLabel.Size = new System.Drawing.Size(278, 13);
+            this.hiddenTrackLabel.Size = new System.Drawing.Size(165, 13);
             this.hiddenTrackLabel.TabIndex = 101;
             this.hiddenTrackLabel.Tag = "The Track is physically present in the Stream file but absent from the Playlist f" +
                 "ile.  ";
-            this.hiddenTrackLabel.Text = "* Hidden Track.  BDAutomuxer will not DeMux these files.";
+            this.hiddenTrackLabel.Text = "* Hidden track - will not be muxed";
             // 
             // buttonSubmitToDB
             // 
