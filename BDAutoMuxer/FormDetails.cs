@@ -265,7 +265,6 @@ namespace BDAutoMuxer
             // TODO: This will fail if we're unable to auto-detect the disc language (e.g., ID4)
             //       or if the user changes the main disc language manually.
             _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
-          
 
             foreach (Language lang in languages)
                 _languageCodes.Add(lang.ISO_639_2);
@@ -318,6 +317,7 @@ namespace BDAutoMuxer
 
             progressLabel.Text = "";
             toolStripProgressBar.Visible = false;
+            hiddenTrackLabel.Visible = false;
 
             textBoxOutputFileNameHint.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
             textBoxOutputFileNamePreview.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
@@ -1248,6 +1248,8 @@ namespace BDAutoMuxer
             if (playlistFile == null) return;
 
             StreamTrackListViewPopulator.Populate(playlistFile, listViewStreamFiles, listViewStreams);
+
+            hiddenTrackLabel.Visible = playlistFile.SortedStreams.Any(stream => stream.IsHidden);
         }
 
         private void playlistDataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
