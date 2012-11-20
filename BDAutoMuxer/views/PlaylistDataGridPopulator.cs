@@ -455,8 +455,8 @@ namespace BDAutoMuxer.views
             // User selected entire row
             var rowIndex = _dataGridView.SelectedRows.Count > 0 ? _dataGridView.SelectedRows[0].Index : _dataGridView.SelectedCells[0].RowIndex;
 
-            // Ignore header cells and readonly (i.e., disabled) rows
-            if (rowIndex == -1 || _dataGridView.Rows[rowIndex].ReadOnly) return;
+            // Ignore header cells
+            if (rowIndex == -1) return;
 
             var playlistItem = _bindingList[rowIndex];
 
