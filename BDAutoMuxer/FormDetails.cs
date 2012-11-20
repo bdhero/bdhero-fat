@@ -294,6 +294,8 @@ namespace BDAutoMuxer
             if (BDAutoMuxerSettings.DetailsWindowSize != Size.Empty)
                 Size = BDAutoMuxerSettings.DetailsWindowSize;
 
+            Text = BDAutoMuxerSettings.AssemblyName + " v" + BDAutoMuxerSettings.AssemblyVersionDisplay;
+
             statusLabel.Text = "";
 
             movieNameTextBox.Text = String.IsNullOrEmpty(_bdrom.DiscNameSearchable) ? _bdrom.VolumeLabel : _bdrom.DiscNameSearchable;

@@ -1332,7 +1332,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.continueButton);
             this.Name = "FormDetails";
-            this.Text = "Auto Muxer";
+            this.Text = "BDAutoMuxer v0.0.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormDetails_FormClosing);
             this.tabControl.ResumeLayout(false);
             this.tabPageDisc.ResumeLayout(false);
