@@ -37,7 +37,7 @@ namespace BDAutoMuxer
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain(args));
+            Application.Run(new FormDetails(args));
         }
 
         // From http://blogs.interknowlogy.com/2011/07/13/merging-a-wpf-application-into-a-single-exe/

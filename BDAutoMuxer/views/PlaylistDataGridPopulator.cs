@@ -74,6 +74,10 @@ namespace BDAutoMuxer.views
             _dataGridView = dataGridView;
             _languageCodes = languageCodes;
 
+            dataGridView.DataSource = null;
+            dataGridView.Rows.Clear();
+            dataGridView.Columns.Clear();
+
             playlists = SortPlaylists(playlists);
 
             foreach (var code in languageCodes)
@@ -102,6 +106,25 @@ namespace BDAutoMuxer.views
             }
 
             ShowAllPlaylists = false;
+        }
+
+        ~PlaylistDataGridPopulator()
+        {
+            Destroy();
+        }
+
+        public void Destroy()
+        {
+            _dataGridView.CellClick -= playlistDataGridView_CellClick;
+            _dataGridView.SelectionChanged -= dataGridView_SelectionChanged;
+            _dataGridView.CellBeginEdit -= dataGridView_CellBeginEdit;
+
+            foreach (var pgi in _playlistGridItems)
+            {
+                pgi.PropertyChanged -= OnItemChange;
+            }
+
+            _dataGridView.CellClick -= playButton_CellClick;
         }
 
         private void OnItemChange(object sender, PropertyChangedEventArgs e)
@@ -467,7 +490,9 @@ namespace BDAutoMuxer.views
             if (SelectedPlaylist == null || rowIndex == _prevRowIndex) return;
 
             _prevRowIndex = rowIndex;
-            SelectionChanged.Invoke(this, EventArgs.Empty);
+
+            if (SelectionChanged != null)
+                SelectionChanged.Invoke(this, EventArgs.Empty);
         }
 
         public bool SelectAll

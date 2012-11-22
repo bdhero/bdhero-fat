@@ -22,12 +22,15 @@ namespace BDAutoMuxer
         #region Fields
 
         private const string TmdbApiKey = "b59b366b0f0a457d58995537d847409a";
-        private readonly Tmdb _tmdbApi;
 
-        private readonly BDROM _bdrom;
-        private readonly IList<TSPlaylistFile> _playlists;
-        private readonly IList<Language> _languages;
-        private readonly IList<string> _languageCodes = new List<string>();
+        private bool _initialized;
+
+        private Tmdb _tmdbApi;
+
+        private BDROM _bdrom;
+        private IList<TSPlaylistFile> _playlists;
+        private IList<Language> _languages;
+        private IList<string> _languageCodes;
 
         private TmdbMovieSearch _tmdbMovieSearch;
         private MovieResult _tmdbMovieResult;
@@ -39,7 +42,7 @@ namespace BDAutoMuxer
         private BackgroundWorker _mainMovieBackgroundWorker;
         private BackgroundWorker _tmdbBackgroundWorker;
 
-        private readonly PlaylistDataGridPopulator _populator;
+        private PlaylistDataGridPopulator _populator;
 
         private bool _autoConfigured;
         private int _autoTmdbId = -1;
@@ -68,6 +71,8 @@ namespace BDAutoMuxer
         private readonly Dictionary<Control, String> _controlHints = new Dictionary<Control, String>();
 
         private bool _cancelButtonHandled;
+
+        private readonly PlaylistFinder _playlistFinder = new PlaylistFinder();
 
         #endregion
 
@@ -250,30 +255,20 @@ namespace BDAutoMuxer
 
         #region Initialization
 
-        public FormDetails(BDROM bdrom, List<TSPlaylistFile> playlists, ISet<Language> languages)
+        public FormDetails(string[] args)
         {
             InitializeComponent();
 
-            _bdrom = bdrom;
-            _languages = new List<Language>(languages).ToArray();
-            _playlists = TSPlaylistFile.Sort(playlists);
-            _tmdbMovieUrl = null;
-
-            string ISO_639_1 = bdrom.DiscLanguage != null ? bdrom.DiscLanguage.ISO_639_1 : null;
-            string ISO_639_2 = bdrom.DiscLanguage != null ? bdrom.DiscLanguage.ISO_639_2 : null;
-
-            // TODO: This will fail if we're unable to auto-detect the disc language (e.g., ID4)
-            //       or if the user changes the main disc language manually.
-            _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
-
-            foreach (Language lang in languages)
-                _languageCodes.Add(lang.ISO_639_2);
-
-            _populator = new PlaylistDataGridPopulator(playlistDataGridView, this._playlists, _languageCodes);
-            _populator.SelectionChanged += playlistDataGridView_SelectionChanged;
-            _populator.MainLanguageCode = ISO_639_2;
-
-            FormUtils.TextBox_EnableSelectAll(this);
+            if (args.Length > 0)
+            {
+                string path = args[0];
+                textBoxSource.Text = path;
+                Scan(path);
+            }
+            else
+            {
+                textBoxSource.Text = BDAutoMuxerSettings.LastPath;
+            }
 
             Load += FormDetails_Load;
         }
@@ -296,30 +291,18 @@ namespace BDAutoMuxer
 
             Text = BDAutoMuxerSettings.AssemblyName + " v" + BDAutoMuxerSettings.AssemblyVersionDisplay;
 
-            statusLabel.Text = "";
+            FormUtils.TextBox_EnableSelectAll(this);
 
-            movieNameTextBox.Text = String.IsNullOrEmpty(_bdrom.DiscNameSearchable) ? _bdrom.VolumeLabel : _bdrom.DiscNameSearchable;
-            discLanguageComboBox.DataSource = new List<Language>(_languages).ToArray();
+            tabControl.Enabled = false;
 
             textBoxOutputDir.Text = BDAutoMuxerSettings.OutputDir;
             textBoxOutputFileName.Text = BDAutoMuxerSettings.OutputFileName;
 
-            textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
-
-            PopulateOutputTab();
-
-            _populator.ItemChanged += OnPlaylistItemChange;
             comboBoxAudienceLanguage.SelectedIndexChanged += OnAudienceLanguageChange;
             playlistDataGridView.CurrentCellDirtyStateChanged += playlistDataGridView_CurrentCellDirtyStateChanged;
             pictureBoxMoviePoster.MouseEnter += (o, args) => SetTabStatus(_tmdbMovieUrl, true);
             pictureBoxMoviePoster.MouseLeave += (o, args) => RestoreTabStatus();
-
-            listViewStreamFiles.Enabled = true;
-            listViewStreams.Enabled = true;
-
-            progressLabel.Text = "";
-            toolStripProgressBar.Visible = false;
-            hiddenTrackLabel.Visible = false;
+            _playlistFinder.ScanFinished += ScanFinished;
 
             textBoxOutputFileNameHint.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
             textBoxOutputFileNamePreview.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
@@ -327,10 +310,74 @@ namespace BDAutoMuxer
             UpdateBackgroundColors();
 
             InitHints(this);
+
+            CheckForUpdates();
+
+            ResetButtons();
+        }
+
+        private void Init(BDROM bdrom, ICollection<Language> languages, List<TSPlaylistFile> playlists)
+        {
+            _initialized = false;
+
+            _bdrom = bdrom;
+            _languages = new List<Language>(languages).ToArray();
+            _languageCodes = new List<string>();
+            _playlists = TSPlaylistFile.Sort(playlists);
+            _tmdbMovieUrl = null;
+
+            string ISO_639_1 = bdrom.DiscLanguage != null ? bdrom.DiscLanguage.ISO_639_1 : null;
+            string ISO_639_2 = bdrom.DiscLanguage != null ? bdrom.DiscLanguage.ISO_639_2 : null;
+
+            // TODO: This will fail if we're unable to auto-detect the disc language (e.g., ID4)
+            //       or if the user changes the main disc language manually.
+            _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
+
+            foreach (Language lang in languages)
+                _languageCodes.Add(lang.ISO_639_2);
+
+            if (_populator != null)
+            {
+                _populator.Destroy();
+            }
+
+            _populator = new PlaylistDataGridPopulator(playlistDataGridView, _playlists, _languageCodes);
+            _populator.ItemChanged += OnPlaylistItemChange;
+            _populator.SelectionChanged += playlistDataGridView_SelectionChanged;
+            _populator.MainLanguageCode = ISO_639_2;
+
+            _initialized = true;
+
+            statusLabel.Text = "";
+
+            movieNameTextBox.Text = String.IsNullOrEmpty(_bdrom.DiscNameSearchable) ? _bdrom.VolumeLabel : _bdrom.DiscNameSearchable;
+            discLanguageComboBox.DataSource = new List<Language>(_languages).ToArray();
+
+            searchResultListView.Items.Clear();
+            pictureBoxMoviePoster.Image = null;
+            pictureBoxMoviePoster.ImageLocation = null;
+
+            PopulateOutputTab();
+
+            listViewStreamFiles.Enabled = true;
+            listViewStreams.Enabled = true;
+
+            progressLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            hiddenTrackLabel.Visible = false;
             ResetButtons();
 
             ResetPlaylistDataGrid();
             QueryMainMovie();
+
+            textBoxOutputDir_TextChanged(this, EventArgs.Empty);
+            textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
+
+            if (playlistDataGridView.Rows.Count > 0)
+            {
+                playlistDataGridView.Rows[0].Selected = true;
+                playlistDataGridView_SelectionChanged(this, EventArgs.Empty);
+            }
         }
 
         private void UpdateBackgroundColors()
@@ -367,20 +414,6 @@ namespace BDAutoMuxer
             var width = searchResultListView.ClientSize.Width;
             var columns = searchResultListView.Columns;
             columns[0].Width = width - columns[1].Width - columns[2].Width;
-        }
-
-        #endregion
-
-        #region "Playlists" Tab
-
-        private void ResetPlaylistDataGrid()
-        {
-            _populator.ShowAllPlaylists = showAllPlaylistsCheckbox.Checked;
-        }
-
-        private void ResizePlaylistsTab(object sender = null, EventArgs e = null)
-        {
-            ResizeDiscTab();
 
             listViewStreamFiles.Columns[0].Width =
                 (int)(listViewStreamFiles.ClientSize.Width * 0.23);
@@ -401,6 +434,12 @@ namespace BDAutoMuxer
                 (int)(listViewStreams.ClientSize.Width * 0.15);
             listViewStreams.Columns[3].Width =
                 (int)(listViewStreams.ClientSize.Width * 0.45);
+        }
+
+        private void ResetPlaylistDataGrid()
+        {
+            if (_populator != null)
+                _populator.ShowAllPlaylists = showAllPlaylistsCheckbox.Checked;
         }
 
         #endregion
@@ -447,7 +486,8 @@ namespace BDAutoMuxer
 
         private void FilterPlaylists()
         {
-            if (_ignoreFilterControlChange) return;
+            if (_ignoreFilterControlChange || !_initialized)
+                return;
 
             _filteredPlaylists = new HashSet<TSPlaylistFile>(_playlists);
 
@@ -1056,6 +1096,8 @@ namespace BDAutoMuxer
         {
             get
             {
+                if (!_initialized)
+                    return false;
                 if (!String.IsNullOrEmpty(BDAutoMuxerSettings.ApiKey) && searchResultListView.SelectedIndices.Count > 0)
                 {
                     if (_autoConfigured)
@@ -1086,9 +1128,10 @@ namespace BDAutoMuxer
             }
         }
 
-        private void SubmitJsonDisc()
+        private void SubmitJsonDisc(object sender = null, EventArgs e = null)
         {
-            if (searchResultListView.SelectedItems.Count == 0) return;
+            if (searchResultListView.SelectedItems.Count == 0 || !_initialized)
+                return;
 
             DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to submit to the database?", "Confirm database submit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -1157,7 +1200,8 @@ namespace BDAutoMuxer
 
         private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _populator.MainLanguageCode = (discLanguageComboBox.SelectedValue as Language).ISO_639_2;
+            if (_populator != null)
+                _populator.MainLanguageCode = (discLanguageComboBox.SelectedValue as Language).ISO_639_2;
         }
 
         private void maskedTextBoxYear_TextChanged(object sender, EventArgs e)
@@ -1229,7 +1273,7 @@ namespace BDAutoMuxer
             Language audienceLanguage = comboBoxAudienceLanguage.SelectedValue as Language;
             IList<Language> list = new List<Language>(array);
             
-            if (!list.Contains(audienceLanguage)) return;
+            if (!list.Contains(audienceLanguage) || control.DataSource == null) return;
 
             try
             {
@@ -1245,6 +1289,9 @@ namespace BDAutoMuxer
 
         private void playlistDataGridView_SelectionChanged(object sender, EventArgs e)
         {
+            if (!_initialized)
+                return;
+
             TSPlaylistFile playlistFile = _populator.SelectedPlaylist;
 
             if (playlistFile == null) return;
@@ -1252,6 +1299,9 @@ namespace BDAutoMuxer
             StreamTrackListViewPopulator.Populate(playlistFile, listViewStreamFiles, listViewStreams);
 
             hiddenTrackLabel.Visible = playlistFile.SortedStreams.Any(stream => stream.IsHidden);
+
+            ResizeDiscTab();
+            ResizeOutputTab();
         }
 
         private void playlistDataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
@@ -1264,6 +1314,8 @@ namespace BDAutoMuxer
 
         private void playlistDataGridView_MouseClick(object sender, MouseEventArgs e)
         {
+            if (!_initialized)
+                return;
             if (e.Button != MouseButtons.Right) return;
 
             int currentMouseOverRow = playlistDataGridView.HitTest(e.X, e.Y).RowIndex;
@@ -1332,11 +1384,16 @@ namespace BDAutoMuxer
         {
             continueButton.Text = "Mux it!";
             continueButton.Enabled = true;
-            
-            if (IsMuxing)
+
+            if (!_initialized)
+                continueButton.Enabled = false;
+            else if (IsMuxing)
                 continueButton.Text = _tsMuxer.IsPaused ? "Resume" : "Pause";
             else if (tabControl.SelectedTab != tabPageOutput || comboBoxPlaylist.Items.Count == 0)
                 continueButton.Enabled = false;
+
+            // TODO: Make this dynamic based on whether scan / mux is running
+            buttonRescan.Enabled = true;
         }
 
         private void continueButton_Click(object sender, EventArgs e)
@@ -1379,6 +1436,9 @@ namespace BDAutoMuxer
 
         private string ReplacePlaceholders(string text)
         {
+            if (!_initialized)
+                return text;
+
             string preview = text;
 
             string volume = _bdrom.VolumeLabel;
@@ -1562,6 +1622,8 @@ namespace BDAutoMuxer
 
             CancelRip();
             _cancelButtonHandled = true;
+
+            Close();
         }
 
         private void pictureBoxMoviePoster_MouseClick(object sender, MouseEventArgs e)
@@ -1603,6 +1665,7 @@ namespace BDAutoMuxer
                 }
                 BDAutoMuxerSettings.SaveSettings();
             }
+            _playlistFinder.CancelScan();
             _cancelButtonHandled = false;
         }
 
@@ -1672,6 +1735,111 @@ namespace BDAutoMuxer
             ShowErrorMessage(tabControl.SelectedTab, caption, text);
         }
 
+        private void CheckForUpdates()
+        {
+            if (BDAutoMuxerSettings.CheckForUpdates)
+            {
+                UpdateNotifier.CheckForUpdate(this);
+            }
+        }
+
         #endregion
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FormSettings().ShowDialog();
+        }
+
+        private void Scan(string path)
+        {
+            _initialized = false;
+
+            tabControl.Enabled = false;
+            buttonRescan.Enabled = false;
+
+            SetTabStatus("Scanning BD-ROM...");
+
+            _playlistFinder.InitBDROM(path);
+        }
+
+        private void ScanFinished(object sender, EventArgs e)
+        {
+            var scanResult = _playlistFinder.ScanResult;
+
+            Init(scanResult.BDROM, scanResult.Languages, scanResult.SortedPlaylists);
+
+            tabControl.Enabled = true;
+
+            ResetButtons();
+
+            buttonRescan.Enabled = true;
+
+            SetTabStatus("");
+        }
+
+        private void buttonBrowse_Click(
+            object sender,
+            EventArgs e)
+        {
+            string path = null;
+            try
+            {
+                FolderBrowserDialog dialog = new FolderBrowserDialog();
+                dialog.Description = "Select a Blu-ray BDMV Folder:";
+                dialog.ShowNewFolderButton = false;
+                if (!string.IsNullOrEmpty(textBoxSource.Text))
+                {
+                    dialog.SelectedPath = textBoxSource.Text;
+                }
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    path = dialog.SelectedPath;
+                    textBoxSource.Text = path;
+                    Scan(path);
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format(
+                    "Error opening path {0}: {1}{2}",
+                    path,
+                    ex.Message,
+                    Environment.NewLine);
+
+                MessageBox.Show(msg, "BDAutoMuxer Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonRescan_Click(object sender, EventArgs e)
+        {
+            string path = textBoxSource.Text;
+            try
+            {
+                Scan(path);
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format(
+                    "Error opening path {0}: {1}{2}",
+                    path,
+                    ex.Message,
+                    Environment.NewLine);
+
+                MessageBox.Show(msg, "BDAutoMuxer Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateNotifier.CheckForUpdate(this, true);
+        }
+
+        private void remuxerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FormRemux().Show();
+        }
+
     }
 }
