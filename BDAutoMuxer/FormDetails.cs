@@ -275,6 +275,10 @@ namespace BDAutoMuxer
             tabControl.Enabled = false;
             hiddenTrackLabel.Visible = false;
 
+            progressLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            hiddenTrackLabel.Visible = false;
+
             textBoxOutputDir.Text = BDAutoMuxerSettings.OutputDir;
             textBoxOutputFileName.Text = BDAutoMuxerSettings.OutputFileName;
 
