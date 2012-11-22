@@ -396,6 +396,36 @@ namespace BDAutoMuxer
             }
         }
 
+        public static bool ReplaceSpaces
+        {
+            get
+            {
+                try { return Properties.Settings.Default.ReplaceSpaces; }
+                catch { return false; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.ReplaceSpaces = value; }
+                catch { }
+            }
+        }
+
+        public static string ReplaceSpacesWith
+        {
+            get
+            {
+                try { return Properties.Settings.Default.ReplaceSpacesWith; }
+                catch { return ""; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.ReplaceSpacesWith = value; }
+                catch { }
+            }
+        }
+
         public static void SaveSettings()
         {
             try

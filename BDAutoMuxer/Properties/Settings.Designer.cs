@@ -248,5 +248,29 @@ namespace BDAutoMuxer.Properties {
                 this["CheckForUpdates"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ReplaceSpaces {
+            get {
+                return ((bool)(this["ReplaceSpaces"]));
+            }
+            set {
+                this["ReplaceSpaces"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".")]
+        public string ReplaceSpacesWith {
+            get {
+                return ((string)(this["ReplaceSpacesWith"]));
+            }
+            set {
+                this["ReplaceSpacesWith"] = value;
+            }
+        }
     }
 }

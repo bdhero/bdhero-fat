@@ -262,6 +262,9 @@ namespace BDAutoMuxer
             textBoxOutputDir.Text = BDAutoMuxerSettings.OutputDir;
             textBoxOutputFileName.Text = BDAutoMuxerSettings.OutputFileName;
 
+            textBoxReplaceSpaces.Text = BDAutoMuxerSettings.ReplaceSpacesWith;
+            checkBoxReplaceSpaces.Checked = BDAutoMuxerSettings.ReplaceSpaces;
+
             comboBoxAudienceLanguage.SelectedIndexChanged += OnAudienceLanguageChange;
             playlistDataGridView.CurrentCellDirtyStateChanged += playlistDataGridView_CurrentCellDirtyStateChanged;
             pictureBoxMoviePoster.MouseEnter += (o, args) => SetTabStatus(_tmdbMovieUrl, true);
@@ -991,6 +994,8 @@ namespace BDAutoMuxer
 
             BDAutoMuxerSettings.OutputDir = textBoxOutputDir.Text;
             BDAutoMuxerSettings.OutputFileName = textBoxOutputFileName.Text;
+            BDAutoMuxerSettings.ReplaceSpaces = checkBoxReplaceSpaces.Checked;
+            BDAutoMuxerSettings.ReplaceSpacesWith = textBoxReplaceSpaces.Text;
             BDAutoMuxerSettings.SaveSettings();
 
             // TODO: Make this status "sticky"
@@ -1419,7 +1424,7 @@ namespace BDAutoMuxer
                 groupBoxFilter.Enabled = value;
                 groupBoxTracks.Enabled = value;
                 checkBoxReplaceSpaces.Enabled = value;
-                textBoxReplaceSpaces.Enabled = value;
+                textBoxReplaceSpaces.Enabled = value && checkBoxReplaceSpaces.Checked;
                 textBoxOutputDir.Enabled = value;
                 buttonOutputDir.Enabled = value;
                 textBoxOutputFileName.Enabled = value;
