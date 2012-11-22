@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.views;
 
+// ReSharper disable EmptyGeneralCatchClause
 namespace BDAutoMuxer
 {
     public partial class FormSettings : Form
