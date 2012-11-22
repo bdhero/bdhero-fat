@@ -427,17 +427,6 @@ namespace BDAutoMuxer
             var columns = searchResultListView.Columns;
             columns[0].Width = width - columns[1].Width - columns[2].Width;
 
-            listViewStreamFiles.Columns[0].Width =
-                (int)(listViewStreamFiles.ClientSize.Width * 0.23);
-            listViewStreamFiles.Columns[1].Width =
-                (int)(listViewStreamFiles.ClientSize.Width * 0.08);
-            listViewStreamFiles.Columns[2].Width =
-                (int)(listViewStreamFiles.ClientSize.Width * 0.23);
-            listViewStreamFiles.Columns[3].Width =
-                (int)(listViewStreamFiles.ClientSize.Width * 0.23);
-            listViewStreamFiles.Columns[4].Width =
-                (int)(listViewStreamFiles.ClientSize.Width * 0.23);
-
             listViewStreams.Columns[0].Width =
                 (int)(listViewStreams.ClientSize.Width * 0.25);
             listViewStreams.Columns[1].Width =

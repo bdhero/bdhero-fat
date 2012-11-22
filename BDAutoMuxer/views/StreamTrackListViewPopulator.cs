@@ -66,16 +66,13 @@ namespace BDAutoMuxer.views
                     clipSize.Tag = clip.FileSize;
                 }
 
-                var clipSize2 = new ListViewItem.ListViewSubItem {Text = clip.PacketSize > 0 ? clip.PacketSize.ToString("N0") : "-", Tag = clip.PacketSize};
-
                 var streamFileSubItems =
                     new[]
                     {
                         clipName,
                         clipIndex,
                         clipLength,
-                        clipSize,
-                        clipSize2
+                        clipSize
                     };
 
                 streams.Items.Add(new ListViewItem(streamFileSubItems, 0) {Tag = clip});

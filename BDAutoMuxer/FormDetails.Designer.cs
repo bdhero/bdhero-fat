@@ -122,8 +122,7 @@
             this.columnHeaderFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderFileLength = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderFileEstimatedBytes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderFileMeasuredBytes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderFileSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tracksGroupBox = new System.Windows.Forms.GroupBox();
             this.listViewStreams = new System.Windows.Forms.ListView();
             this.columnHeaderStreamCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -1215,8 +1214,7 @@
             this.columnHeaderFileName,
             this.columnHeaderIndex,
             this.columnHeaderFileLength,
-            this.columnHeaderFileEstimatedBytes,
-            this.columnHeaderFileMeasuredBytes});
+            this.columnHeaderFileSize});
             this.listViewStreamFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewStreamFiles.FullRowSelect = true;
             this.listViewStreamFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -1247,17 +1245,11 @@
             this.columnHeaderFileLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.columnHeaderFileLength.Width = 77;
             // 
-            // columnHeaderFileEstimatedBytes
+            // columnHeaderFileSize
             // 
-            this.columnHeaderFileEstimatedBytes.Text = "Estimated Bytes";
-            this.columnHeaderFileEstimatedBytes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeaderFileEstimatedBytes.Width = 119;
-            // 
-            // columnHeaderFileMeasuredBytes
-            // 
-            this.columnHeaderFileMeasuredBytes.Text = "Measured Bytes";
-            this.columnHeaderFileMeasuredBytes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeaderFileMeasuredBytes.Width = 125;
+            this.columnHeaderFileSize.Text = "Size (Bytes)";
+            this.columnHeaderFileSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeaderFileSize.Width = 119;
             // 
             // tracksGroupBox
             // 
@@ -1662,8 +1654,7 @@
         private System.Windows.Forms.ColumnHeader columnHeaderFileName;
         private System.Windows.Forms.ColumnHeader columnHeaderIndex;
         private System.Windows.Forms.ColumnHeader columnHeaderFileLength;
-        private System.Windows.Forms.ColumnHeader columnHeaderFileEstimatedBytes;
-        private System.Windows.Forms.ColumnHeader columnHeaderFileMeasuredBytes;
+        private System.Windows.Forms.ColumnHeader columnHeaderFileSize;
         private System.Windows.Forms.GroupBox tracksGroupBox;
         private System.Windows.Forms.ListView listViewStreams;
         private System.Windows.Forms.ColumnHeader columnHeaderStreamCodec;
