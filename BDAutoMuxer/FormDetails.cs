@@ -370,6 +370,46 @@ namespace BDAutoMuxer
 
         #endregion
 
+        #region BD-ROM Scanning
+
+        private void Scan(string path)
+        {
+            ResetState();
+
+            _initialized = false;
+            _isScanningBDROM = true;
+
+            ResetUI();
+
+            SetTabStatus("Scanning BD-ROM...");
+
+            _playlistFinder.InitBDROM(path);
+        }
+
+        private void ScanSuccess(object sender, EventArgs e)
+        {
+            var scanResult = _playlistFinder.ScanResult;
+
+            Init(scanResult.BDROM, scanResult.Languages, scanResult.SortedPlaylists);
+
+            tabControl.SelectedIndex = 0;
+
+            SetTabStatus("");
+        }
+
+        private void ScanError(object sender, ErrorEventArgs e)
+        {
+            SetTabStatus(e.GetException().Message);
+        }
+
+        private void ScanCompleted(object sender, EventArgs e)
+        {
+            _isScanningBDROM = false;
+            ResetUI();
+        }
+
+        #endregion
+
         #region "Disc" Tab
 
         private void ResizeDiscTab(object sender = null, EventArgs e = null)
@@ -1685,155 +1725,9 @@ namespace BDAutoMuxer
                 Process.Start(_tmdbMovieUrl);
         }
 
-        private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (_isMuxing)
-            {
-                if (ShouldAbortMuxing())
-                {
-                    CancelRip();
-                }
-                else
-                {
-                    e.Cancel = true;
-                }
-            }
-            if (!e.Cancel)
-            {
-                if (WindowState == FormWindowState.Maximized)
-                {
-                    BDAutoMuxerSettings.DetailsWindowLocation = RestoreBounds.Location;
-                    BDAutoMuxerSettings.DetailsWindowSize = RestoreBounds.Size;
-                    BDAutoMuxerSettings.DetailsWindowMaximized = true;
-                }
-                else
-                {
-                    BDAutoMuxerSettings.DetailsWindowLocation = Location;
-                    BDAutoMuxerSettings.DetailsWindowSize = Size;
-                    BDAutoMuxerSettings.DetailsWindowMaximized = false;
-                }
-                BDAutoMuxerSettings.SaveSettings();
-                _playlistFinder.CancelScan();
-            }
-        }
-
-        #endregion
-
-        #region User Messages
-
-        private void InitHints(Control parentControl)
-        {
-            foreach (Control control in parentControl.Descendants<Control>().Where(control => control.Tag is string))
-            {
-                _controlHints[control] = control.Tag as string;
-                control.MouseEnter += (sender, e) => SetTabStatus(_controlHints[sender as Control], true);
-                control.MouseLeave += (sender, e) => RestoreTabStatus();
-            }
-        }
-
-        private void SetTabStatus(TabPage tabPage, string message, bool temporary = false)
-        {
-            if (!temporary)
-                _tabStatusMessages[tabPage] = message;
-            if (tabPage == tabControl.SelectedTab)
-                statusLabel.Text = message;
-        }
-
-        private void SetTabStatus(string message, bool temporary = false)
-        {
-            SetTabStatus(tabControl.SelectedTab, message, temporary);
-        }
-
-        private void RestoreTabStatus()
-        {
-            statusLabel.Text = _tabStatusMessages.ContainsKey(tabControl.SelectedTab) ? _tabStatusMessages[tabControl.SelectedTab] : "";
-        }
-
-        private void ShowMessage(TabPage tabPage, string caption, string text, MessageBoxIcon icon = MessageBoxIcon.Information)
-        {
-            SetTabStatus(tabPage, caption);
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, icon);
-        }
-
-        private void ShowMessage(string caption, string text, MessageBoxIcon icon = MessageBoxIcon.Information)
-        {
-            ShowMessage(tabControl.SelectedTab, caption, text, icon);
-        }
-
-        private void ShowExclamationMessage(TabPage tabPage, string caption, string text)
-        {
-            ShowMessage(caption, text, MessageBoxIcon.Exclamation);
-        }
-
-        private void ShowExclamationMessage(string caption, string text)
-        {
-            ShowExclamationMessage(tabControl.SelectedTab, caption, text);
-        }
-
-        private void ShowErrorMessage(TabPage tabPage, string caption, string text)
-        {
-            ShowMessage(caption, text, MessageBoxIcon.Error);
-        }
-
-        private void ShowErrorMessage(string caption, string text)
-        {
-            ShowErrorMessage(tabControl.SelectedTab, caption, text);
-        }
-
-        private void CheckForUpdates()
-        {
-            if (BDAutoMuxerSettings.CheckForUpdates)
-            {
-                UpdateNotifier.CheckForUpdate(this);
-            }
-        }
-
-        private bool ShouldAbortMuxing()
-        {
-            return MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
-        }
-
-        #endregion
-
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new FormSettings().ShowDialog();
-            ResetUI();
-        }
-
-        private void Scan(string path)
-        {
-            ResetState();
-
-            _initialized = false;
-            _isScanningBDROM = true;
-
-            ResetUI();
-
-            SetTabStatus("Scanning BD-ROM...");
-
-            _playlistFinder.InitBDROM(path);
-        }
-
-        private void ScanSuccess(object sender, EventArgs e)
-        {
-            var scanResult = _playlistFinder.ScanResult;
-
-            Init(scanResult.BDROM, scanResult.Languages, scanResult.SortedPlaylists);
-
-            tabControl.SelectedIndex = 0;
-
-            SetTabStatus("");
-        }
-
-        private void ScanError(object sender, ErrorEventArgs e)
-        {
-            SetTabStatus(e.GetException().Message);
-        }
-
-        private void ScanCompleted(object sender, EventArgs e)
-        {
-            _isScanningBDROM = false;
             ResetUI();
         }
 
@@ -1971,5 +1865,115 @@ namespace BDAutoMuxer
             textBoxSource.Text = firstDirectoryPath;
             buttonRescan_Click();
         }
+
+        private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_isMuxing)
+            {
+                if (ShouldAbortMuxing())
+                {
+                    CancelRip();
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            if (!e.Cancel)
+            {
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    BDAutoMuxerSettings.DetailsWindowLocation = RestoreBounds.Location;
+                    BDAutoMuxerSettings.DetailsWindowSize = RestoreBounds.Size;
+                    BDAutoMuxerSettings.DetailsWindowMaximized = true;
+                }
+                else
+                {
+                    BDAutoMuxerSettings.DetailsWindowLocation = Location;
+                    BDAutoMuxerSettings.DetailsWindowSize = Size;
+                    BDAutoMuxerSettings.DetailsWindowMaximized = false;
+                }
+                BDAutoMuxerSettings.SaveSettings();
+                _playlistFinder.CancelScan();
+            }
+        }
+
+        #endregion
+
+        #region User Messages
+
+        private void InitHints(Control parentControl)
+        {
+            foreach (Control control in parentControl.Descendants<Control>().Where(control => control.Tag is string))
+            {
+                _controlHints[control] = control.Tag as string;
+                control.MouseEnter += (sender, e) => SetTabStatus(_controlHints[sender as Control], true);
+                control.MouseLeave += (sender, e) => RestoreTabStatus();
+            }
+        }
+
+        private void SetTabStatus(TabPage tabPage, string message, bool temporary = false)
+        {
+            if (!temporary)
+                _tabStatusMessages[tabPage] = message;
+            if (tabPage == tabControl.SelectedTab)
+                statusLabel.Text = message;
+        }
+
+        private void SetTabStatus(string message, bool temporary = false)
+        {
+            SetTabStatus(tabControl.SelectedTab, message, temporary);
+        }
+
+        private void RestoreTabStatus()
+        {
+            statusLabel.Text = _tabStatusMessages.ContainsKey(tabControl.SelectedTab) ? _tabStatusMessages[tabControl.SelectedTab] : "";
+        }
+
+        private void ShowMessage(TabPage tabPage, string caption, string text, MessageBoxIcon icon = MessageBoxIcon.Information)
+        {
+            SetTabStatus(tabPage, caption);
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, icon);
+        }
+
+        private void ShowMessage(string caption, string text, MessageBoxIcon icon = MessageBoxIcon.Information)
+        {
+            ShowMessage(tabControl.SelectedTab, caption, text, icon);
+        }
+
+        private void ShowExclamationMessage(TabPage tabPage, string caption, string text)
+        {
+            ShowMessage(caption, text, MessageBoxIcon.Exclamation);
+        }
+
+        private void ShowExclamationMessage(string caption, string text)
+        {
+            ShowExclamationMessage(tabControl.SelectedTab, caption, text);
+        }
+
+        private void ShowErrorMessage(TabPage tabPage, string caption, string text)
+        {
+            ShowMessage(caption, text, MessageBoxIcon.Error);
+        }
+
+        private void ShowErrorMessage(string caption, string text)
+        {
+            ShowErrorMessage(tabControl.SelectedTab, caption, text);
+        }
+
+        private void CheckForUpdates()
+        {
+            if (BDAutoMuxerSettings.CheckForUpdates)
+            {
+                UpdateNotifier.CheckForUpdate(this);
+            }
+        }
+
+        private bool ShouldAbortMuxing()
+        {
+            return MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
+        #endregion
     }
 }
