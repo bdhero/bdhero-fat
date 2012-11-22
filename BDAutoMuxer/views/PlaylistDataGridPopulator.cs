@@ -499,7 +499,7 @@ namespace BDAutoMuxer.views
         {
             set
             {
-                foreach (var gridItem in _playlistGridItems)
+                foreach (var gridItem in _playlistGridItems.Where(pgi => pgi.Playlist.IsMainPlaylist))
                 {
                     gridItem.IsMainMovie = value;
                 }
