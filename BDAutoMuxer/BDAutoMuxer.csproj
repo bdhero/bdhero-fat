@@ -209,6 +209,20 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\mpeg2-video.png" />
+    <None Include="Resources\mpeg1-video.png" />
+    <None Include="Resources\vc1.png" />
+    <None Include="Resources\txt.png" />
+    <None Include="Resources\pgs.png" />
+    <None Include="Resources\true-hd.png" />
+    <None Include="Resources\mpeg2-audio.png" />
+    <None Include="Resources\mpeg1-audio.png" />
+    <None Include="Resources\lpcm.png" />
+    <None Include="Resources\dd.png" />
+    <None Include="Resources\dd-plus.png" />
+    <None Include="Resources\dts.png" />
+    <None Include="Resources\dts-hd.png" />
+    <None Include="Resources\avc.png" />
     <None Include="Resources\no-poster-w185.png" />
     <EmbeddedResource Include="lib\exe\tsMuxeR.exe" />
     <EmbeddedResource Include="lib\exe\mkvmerge.exe" />

@@ -60,9 +60,107 @@ namespace BDAutoMuxer.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap avc {
+            get {
+                object obj = ResourceManager.GetObject("avc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap dd {
+            get {
+                object obj = ResourceManager.GetObject("dd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap dd_plus {
+            get {
+                object obj = ResourceManager.GetObject("dd_plus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap dts {
+            get {
+                object obj = ResourceManager.GetObject("dts", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap dts_hd {
+            get {
+                object obj = ResourceManager.GetObject("dts_hd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap lpcm {
+            get {
+                object obj = ResourceManager.GetObject("lpcm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap mpeg1_audio {
+            get {
+                object obj = ResourceManager.GetObject("mpeg1_audio", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap mpeg1_video {
+            get {
+                object obj = ResourceManager.GetObject("mpeg1_video", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap mpeg2_audio {
+            get {
+                object obj = ResourceManager.GetObject("mpeg2_audio", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap mpeg2_video {
+            get {
+                object obj = ResourceManager.GetObject("mpeg2_video", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap no_poster_w185 {
             get {
                 object obj = ResourceManager.GetObject("no_poster_w185", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap pgs {
+            get {
+                object obj = ResourceManager.GetObject("pgs", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap true_hd {
+            get {
+                object obj = ResourceManager.GetObject("true_hd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap txt {
+            get {
+                object obj = ResourceManager.GetObject("txt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap vc1 {
+            get {
+                object obj = ResourceManager.GetObject("vc1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
