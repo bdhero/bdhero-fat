@@ -273,6 +273,7 @@ namespace BDAutoMuxer
             FormUtils.TextBox_EnableSelectAll(this);
 
             tabControl.Enabled = false;
+            hiddenTrackLabel.Visible = false;
 
             textBoxOutputDir.Text = BDAutoMuxerSettings.OutputDir;
             textBoxOutputFileName.Text = BDAutoMuxerSettings.OutputFileName;
