@@ -79,7 +79,7 @@ namespace BDAutoMuxer.views
                 streams.Items.Add(new ListViewItem(streamFileSubItems, 0) {Tag = clip});
             }
 
-            var i = 0;
+            //var i = 0;
             ImageList trackIcons = new ImageList();
 
             foreach (var stream in playlist.SortedStreams)
@@ -144,9 +144,10 @@ namespace BDAutoMuxer.views
                         description
                     };
 
-                trackIcons.Images.Add(CodecIcon(stream.StreamType));
+                // TODO: Handle unknown types (icon cannot be null)
+                //trackIcons.Images.Add(CodecIcon(stream.StreamType));
 
-                tracks.Items.Add(new ListViewItem(streamSubItems, 0) {Tag = stream.PID, ImageIndex = i++});
+                tracks.Items.Add(new ListViewItem(streamSubItems, 0) {Tag = stream.PID /*, ImageIndex = i++*/});
             }
 
             //tracks.SmallImageList = trackIcons;
