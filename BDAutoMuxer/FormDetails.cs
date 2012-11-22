@@ -1924,5 +1924,52 @@ namespace BDAutoMuxer
             e.Handled = true;
         }
 
+        private static bool IsBDROMDir(DirectoryInfo dir)
+        {
+            return dir != null && dir.Name.ToLowerInvariant() == "bdmv";
+        }
+
+        private static string GetBDROMDirectory(DragEventArgs e)
+        {
+            return DragUtils.GetPaths(e).Select(GetBDROMDirectory).FirstOrDefault(path => path != null);
+        }
+
+        private static string GetBDROMDirectory(string path)
+        {
+            var dir = FileUtils.IsDirectory(path) ? new DirectoryInfo(path) : new FileInfo(path).Directory;
+
+            if (dir == null)
+                return null;
+
+            if (IsBDROMDir(dir))
+                return path;
+
+            if (dir.GetDirectories().Any(IsBDROMDir))
+                return path;
+
+            while (dir != null)
+            {
+                if (IsBDROMDir(dir))
+                    return dir.FullName;
+                dir = dir.Parent;
+            }
+
+            return null;
+        }
+
+        private void FormDetails_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = !String.IsNullOrEmpty(GetBDROMDirectory(e)) ? DragDropEffects.All : DragDropEffects.None;
+        }
+
+        private void FormDetails_DragDrop(object sender, DragEventArgs e)
+        {
+            var firstDirectoryPath = GetBDROMDirectory(e);
+
+            if (String.IsNullOrEmpty(firstDirectoryPath)) return;
+
+            textBoxSource.Text = firstDirectoryPath;
+            buttonRescan_Click();
+        }
     }
 }
