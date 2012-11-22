@@ -286,7 +286,10 @@ namespace BDAutoMuxer
             playlistDataGridView.CurrentCellDirtyStateChanged += playlistDataGridView_CurrentCellDirtyStateChanged;
             pictureBoxMoviePoster.MouseEnter += (o, args) => SetTabStatus(_tmdbMovieUrl, true);
             pictureBoxMoviePoster.MouseLeave += (o, args) => RestoreTabStatus();
-            _playlistFinder.ScanFinished += ScanFinished;
+
+            _playlistFinder.ScanSuccess += ScanSuccess;
+            _playlistFinder.ScanError += ScanError;
+            _playlistFinder.ScanCompleted += ScanCompleted;
 
             textBoxOutputFileNameHint.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
             textBoxOutputFileNamePreview.Parent.BackColorChanged += (o, args) => UpdateBackgroundColors();
@@ -349,6 +352,7 @@ namespace BDAutoMuxer
             progressLabel.Text = "";
             toolStripProgressBar.Visible = false;
             hiddenTrackLabel.Visible = false;
+
             ResetButtons();
 
             ResetPlaylistDataGrid();
@@ -1234,9 +1238,10 @@ namespace BDAutoMuxer
             textBoxOutputFileName_TextChanged(sender, e);
         }
 
-        private void searchButton_Click(object sender, EventArgs e)
+        private void searchButton_Click(object sender = null, EventArgs e = null)
         {
-            SearchTmdb();
+            if (searchButton.Enabled)
+                SearchTmdb();
         }
 
         private void OnPlaylistItemChange(object sender, EventArgs e)
@@ -1749,7 +1754,7 @@ namespace BDAutoMuxer
             _playlistFinder.InitBDROM(path);
         }
 
-        private void ScanFinished(object sender, EventArgs e)
+        private void ScanSuccess(object sender, EventArgs e)
         {
             var scanResult = _playlistFinder.ScanResult;
 
@@ -1759,9 +1764,17 @@ namespace BDAutoMuxer
 
             ResetButtons();
 
-            buttonRescan.Enabled = true;
-
             SetTabStatus("");
+        }
+
+        private void ScanError(object sender, ErrorEventArgs e)
+        {
+            SetTabStatus(e.GetException().Message);
+        }
+
+        private void ScanCompleted(object sender, EventArgs e)
+        {
+            ResetButtons();
         }
 
         private void buttonBrowse_Click(
@@ -1798,8 +1811,10 @@ namespace BDAutoMuxer
             }
         }
 
-        private void buttonRescan_Click(object sender, EventArgs e)
+        private void buttonRescan_Click(object sender = null, EventArgs e = null)
         {
+            if (!buttonRescan.Enabled) return;
+
             string path = textBoxSource.Text;
             try
             {
@@ -1831,6 +1846,22 @@ namespace BDAutoMuxer
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void textBoxSource_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != (char)Keys.Return) return;
+
+            buttonRescan_Click();
+            e.Handled = true;
+        }
+
+        private void movieNameTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != (char)Keys.Return) return;
+
+            searchButton_Click();
+            e.Handled = true;
         }
 
     }

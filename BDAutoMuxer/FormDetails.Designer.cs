@@ -709,7 +709,7 @@
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(530, 17);
+            this.statusLabel.Size = new System.Drawing.Size(499, 17);
             this.statusLabel.Spring = true;
             this.statusLabel.Text = "Status";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -881,6 +881,7 @@
             this.textBoxSource.Name = "textBoxSource";
             this.textBoxSource.Size = new System.Drawing.Size(592, 20);
             this.textBoxSource.TabIndex = 101;
+            this.textBoxSource.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSource_KeyPress);
             // 
             // labelSource
             // 
@@ -1012,6 +1013,7 @@
             this.maskedTextBoxYear.TabIndex = 2;
             this.maskedTextBoxYear.Tag = "Movie year";
             this.maskedTextBoxYear.TextChanged += new System.EventHandler(this.maskedTextBoxYear_TextChanged);
+            this.maskedTextBoxYear.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.movieNameTextBox_KeyPress);
             // 
             // searchButton
             // 
@@ -1043,6 +1045,7 @@
             this.movieNameTextBox.Name = "movieNameTextBox";
             this.movieNameTextBox.Size = new System.Drawing.Size(386, 20);
             this.movieNameTextBox.TabIndex = 1;
+            this.movieNameTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.movieNameTextBox_KeyPress);
             // 
             // discLanguageLabel
             // 
@@ -1505,10 +1508,8 @@
             // 
             // FormDetails
             // 
-            this.AcceptButton = this.continueButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(781, 749);
             this.Controls.Add(this.buttonRescan);
             this.Controls.Add(this.buttonBrowse);

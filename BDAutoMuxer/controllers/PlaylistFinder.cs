@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
@@ -13,7 +14,9 @@ namespace BDAutoMuxer.controllers
     {
         public PlaylistScanResult ScanResult { get; private set; }
 
-        public event EventHandler ScanFinished;
+        public event EventHandler ScanSuccess;
+        public event ErrorEventHandler ScanError;
+        public event EventHandler ScanCompleted;
 
         private BackgroundWorker _initBDROMWorker;
 
@@ -82,10 +85,18 @@ namespace BDAutoMuxer.controllers
 
         private void InitBDROMCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Result != null)
+            var exception = e.Result as Exception;
+
+            if (exception != null)
             {
-                string msg = string.Format("{0}", ((Exception)e.Result).Message);
-                MessageBox.Show(msg, "BDAutoMuxer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(exception.Message, "BDAutoMuxer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (ScanError != null)
+                    ScanError.Invoke(this, new ErrorEventArgs(exception));
+
+                if (ScanCompleted != null)
+                    ScanCompleted.Invoke(this, EventArgs.Empty);
+
                 return;
             }
 
@@ -252,7 +263,12 @@ namespace BDAutoMuxer.controllers
             }
 
             // DONE!
-            ScanFinished.Invoke(this, EventArgs.Empty);
+
+            if (ScanSuccess != null)
+                ScanSuccess.Invoke(this, EventArgs.Empty);
+
+            if (ScanCompleted != null)
+                ScanCompleted.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
