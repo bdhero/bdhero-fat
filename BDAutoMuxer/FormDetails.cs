@@ -15,6 +15,9 @@ using BDAutoMuxer.views;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using WatTmdb.V3;
 
+// ReSharper disable SuggestUseVarKeywordEvident
+// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable LocalizableElement
 namespace BDAutoMuxer
 {
     public partial class FormDetails : Form
@@ -96,15 +99,12 @@ namespace BDAutoMuxer
 
         private Language[] GetSortedLanguageArray(ICollection<Language> collection)
         {
+            int i = 0;
             Language[] array = new Language[collection.Count];
 
-            int i = 0;
-            foreach (Language value in _languages)
+            foreach (var value in _languages.Where(collection.Contains))
             {
-                if (collection.Contains(value))
-                {
-                    array[i++] = value;
-                }
+                array[i++] = value;
             }
 
             return array;
@@ -123,12 +123,9 @@ namespace BDAutoMuxer
             get
             {
                 ISet<Language> audioLanguagesSet = new HashSet<Language>();
-                foreach (TSPlaylistFile playlist in _playlists)
+                foreach (TSAudioStream audioStream in _playlists.SelectMany(playlist => playlist.AudioStreams))
                 {
-                    foreach (TSAudioStream audioStream in playlist.AudioStreams)
-                    {
-                        audioLanguagesSet.Add(Language.GetLanguage(audioStream.LanguageCode));
-                    }
+                    audioLanguagesSet.Add(Language.GetLanguage(audioStream.LanguageCode));
                 }
                 return GetSortedLanguageArray(audioLanguagesSet);
             }
@@ -156,15 +153,12 @@ namespace BDAutoMuxer
 
         private Cut[] GetSortedCutArray(ICollection<Cut> collection)
         {
+            int i = 0;
             Cut[] array = new Cut[collection.Count];
 
-            int i = 0;
-            foreach (Cut value in Enum.GetValues(typeof(Cut)))
+            foreach (Cut value in Enum.GetValues(typeof(Cut)).Cast<Cut>().Where(collection.Contains))
             {
-                if (collection.Contains(value))
-                {
-                    array[i++] = value;
-                }
+                array[i++] = value;
             }
 
             return array;
@@ -180,15 +174,12 @@ namespace BDAutoMuxer
 
         private CommentaryOption[] GetSortedCommentaryOptionArray(ICollection<CommentaryOption> collection)
         {
+            int i = 0;
             CommentaryOption[] array = new CommentaryOption[collection.Count];
 
-            int i = 0;
-            foreach (CommentaryOption value in Enum.GetValues(typeof(CommentaryOption)))
+            foreach (CommentaryOption value in Enum.GetValues(typeof(CommentaryOption)).Cast<CommentaryOption>().Where(collection.Contains))
             {
-                if (collection.Contains(value))
-                {
-                    array[i++] = value;
-                }
+                array[i++] = value;
             }
 
             return array;
@@ -211,12 +202,8 @@ namespace BDAutoMuxer
         {
             get
             {
-                List<TSVideoStream> selectedStreams = new List<TSVideoStream>();
-                foreach (ListViewItem item in listViewVideoTracks.CheckedItems)
-                {
-                    selectedStreams.Add(item.Tag as TSVideoStream);
-                }
-                return selectedStreams;
+                return (from ListViewItem item in listViewVideoTracks.CheckedItems
+                        select item.Tag as TSVideoStream).ToList();
             }
         }
 
@@ -224,12 +211,8 @@ namespace BDAutoMuxer
         {
             get
             {
-                List<TSAudioStream> selectedStreams = new List<TSAudioStream>();
-                foreach (ListViewItem item in listViewAudioTracks.CheckedItems)
-                {
-                    selectedStreams.Add(item.Tag as TSAudioStream);
-                }
-                return selectedStreams;
+                return (from ListViewItem item in listViewAudioTracks.CheckedItems
+                        select item.Tag as TSAudioStream).ToList();
             }
         }
 
@@ -237,12 +220,8 @@ namespace BDAutoMuxer
         {
             get
             {
-                List<TSStream> selectedStreams = new List<TSStream>();
-                foreach (ListViewItem item in listViewSubtitleTracks.CheckedItems)
-                {
-                    selectedStreams.Add(item.Tag as TSStream);
-                }
-                return selectedStreams;
+                return (from ListViewItem item in listViewSubtitleTracks.CheckedItems
+                        select item.Tag as TSStream).ToList();
             }
         }
 
@@ -382,6 +361,7 @@ namespace BDAutoMuxer
 
         private void UpdateBackgroundColors()
         {
+            // ReSharper disable EmptyGeneralCatchClause
             try
             {
                 textBoxOutputFileNameHint.BackColor = textBoxOutputFileNameHint.Parent.BackColor;
@@ -391,6 +371,7 @@ namespace BDAutoMuxer
             catch
             {
             }
+            // ReSharper restore EmptyGeneralCatchClause
         }
 
         #endregion
@@ -592,7 +573,7 @@ namespace BDAutoMuxer
                 aspectRatio.Tag = stream.AspectRatio;
 
                 ListViewItem.ListViewSubItem[] streamSubItems =
-                    new ListViewItem.ListViewSubItem[]
+                    new[]
                     {
                         codec,
                         resolution,
@@ -626,7 +607,7 @@ namespace BDAutoMuxer
                 channels.Tag = stream.ChannelCountDescription;
 
                 ListViewItem.ListViewSubItem[] streamSubItems =
-                    new ListViewItem.ListViewSubItem[]
+                    new[]
                     {
                         codec,
                         language,
@@ -655,7 +636,7 @@ namespace BDAutoMuxer
                 language.Tag = stream.LanguageCode;
 
                 ListViewItem.ListViewSubItem[] streamSubItems =
-                    new ListViewItem.ListViewSubItem[]
+                    new[]
                     {
                         codec,
                         language
@@ -719,7 +700,11 @@ namespace BDAutoMuxer
             SetTabStatus(tabPageDisc, "Searching The Movie Database (TMDb)...");
 
             string query = movieNameTextBox.Text;
-            string ISO_639_1 = (discLanguageComboBox.SelectedValue as Language).ISO_639_1;
+            Language language = discLanguageComboBox.SelectedValue as Language;
+            
+            if (language == null) return;
+
+            string ISO_639_1 = language.ISO_639_1;
             int? year = Regex.IsMatch(maskedTextBoxYear.Text, @"^\d{4}$") ? (int?)Int32.Parse(maskedTextBoxYear.Text) : null;
             
             TmdbSearchRequestParams reqParams = new TmdbSearchRequestParams(query, year, ISO_639_1);
@@ -735,13 +720,13 @@ namespace BDAutoMuxer
 
         private class TmdbSearchRequestParams
         {
-            public string query;
-            public int? year;
-            public string ISO_639_1;
+            public readonly string Query;
+            public readonly int? Year;
+            public readonly string ISO_639_1;
             public TmdbSearchRequestParams(string query, int? year, string ISO_639_1)
             {
-                this.query = query;
-                this.year = year;
+                Query = query;
+                Year = year;
                 this.ISO_639_1 = ISO_639_1;
             }
         }
@@ -754,12 +739,7 @@ namespace BDAutoMuxer
         {
             try
             {
-                IList<TSPlaylistFile> mainPlaylists = new List<TSPlaylistFile>();
-                foreach (TSPlaylistFile playlist in _playlists)
-                {
-                    if (playlist.IsMainPlaylist)
-                        mainPlaylists.Add(playlist);
-                }
+                IList<TSPlaylistFile> mainPlaylists = _playlists.Where(playlist => playlist.IsMainPlaylist).ToList();
                 _mainMovieSearchResult = _mainMovieService.FindMainMovie(_bdrom.VolumeLabel, mainPlaylists);
                 e.Result = null;
             }
@@ -810,8 +790,8 @@ namespace BDAutoMuxer
 
                 int count = _mainMovieSearchResult.discs.Count;
                 string plural = count != 1 ? "s" : "";
-                string caption = string.Format("{0:d} result{1:s} found", count, plural);
-                string message = string.Format("Hooray!  Found {0:d} matching disc{1:s} in the database.", count, plural);
+                string caption = string.Format("{0:d} result{1} found", count, plural);
+                string message = string.Format("Hooray!  Found {0:d} matching disc{1} in the database.", count, plural);
                 ShowMessage(tabPageDisc, caption, message);
             }
 
@@ -830,7 +810,7 @@ namespace BDAutoMuxer
 
                 Debug.Assert(reqParams != null, "reqParams != null");
 
-                _tmdbMovieSearch = _tmdbApi.SearchMovie(reqParams.query, 1, reqParams.ISO_639_1, false, reqParams.year);
+                _tmdbMovieSearch = _tmdbApi.SearchMovie(reqParams.Query, 1, reqParams.ISO_639_1, false, reqParams.Year);
 
                 if (_rootUrl == null)
                     _rootUrl = _tmdbApi.GetConfiguration().images.base_url + "w185";
@@ -847,14 +827,14 @@ namespace BDAutoMuxer
         {
         }
 
-        private string GetYearString(string tmdb_date)
+        private static string GetYearString(string tmdbDate)
         {
-            return String.IsNullOrEmpty(tmdb_date) ? null : Regex.Replace(tmdb_date, @"^(\d{4})-(\d{1,2})-(\d{1,2})$", @"$1", RegexOptions.IgnoreCase);
+            return String.IsNullOrEmpty(tmdbDate) ? null : Regex.Replace(tmdbDate, @"^(\d{4})-(\d{1,2})-(\d{1,2})$", @"$1", RegexOptions.IgnoreCase);
         }
 
-        private int? GetYearInt(string tmdb_date)
+        private static int? GetYearInt(string tmdbDate)
         {
-            string yearString = GetYearString(tmdb_date);
+            string yearString = GetYearString(tmdbDate);
             return String.IsNullOrEmpty(yearString) ? (int?)null : Convert.ToInt32(yearString);
         }
 
@@ -885,7 +865,7 @@ namespace BDAutoMuxer
                 moviePopularitySubItem.Text = curResult.popularity.ToString("N3", CultureInfo.CurrentUICulture);
 
                 ListViewItem.ListViewSubItem[] searchResultSubItems =
-                    new ListViewItem.ListViewSubItem[]
+                    new[]
                         {
                             movieNameSubItem,
                             movieYearSubItem,
@@ -1018,6 +998,7 @@ namespace BDAutoMuxer
             // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
             progressBarTsMuxer.Value = (int)(_tsMuxer.Progress * 10);
 
+// ReSharper disable EmptyGeneralCatchClause
             try
             {
                 // TODO: This throws a NPE if the window is closed while muxing is in progress
@@ -1026,6 +1007,7 @@ namespace BDAutoMuxer
             catch
             {
             }
+// ReSharper restore EmptyGeneralCatchClause
 
             TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
             TaskbarProgress.SetProgressValue(progressBarTsMuxer.Value, 1000, Handle);
@@ -1073,7 +1055,7 @@ namespace BDAutoMuxer
             progressLabel.Text = "";
             toolStripProgressBar.Visible = false;
 
-            if (e.Cancelled == true && _tsMuxer.IsCanceled)
+            if (e.Cancelled && _tsMuxer.IsCanceled)
             {
                 SetTabStatus(tabPageProgress, "tsMuxeR canceled");
             }
@@ -1200,8 +1182,9 @@ namespace BDAutoMuxer
 
         private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_populator != null)
-                _populator.MainLanguageCode = (discLanguageComboBox.SelectedValue as Language).ISO_639_2;
+            var language = discLanguageComboBox.SelectedValue as Language;
+            if (_populator != null && language != null)
+                _populator.MainLanguageCode = language.ISO_639_2;
         }
 
         private void maskedTextBoxYear_TextChanged(object sender, EventArgs e)
@@ -1236,8 +1219,6 @@ namespace BDAutoMuxer
                         pictureBoxMoviePoster.ImageLocation = _rootUrl + _tmdbMovieResult.poster_path;
 
                     _tmdbMovieUrl = string.Format("http://www.themoviedb.org/movie/{0}", _tmdbMovieResult.id);
-                    //ToDo: Add Tag to MoviePoster
-                    //pictureBoxMoviePoster.Tag = MoviePosterTag;
                     
                     pictureBoxMoviePoster.Cursor = Cursors.Hand;
                 }
@@ -1268,7 +1249,7 @@ namespace BDAutoMuxer
             SetAudienceLanguage(SubtitleLanguages, listBoxSubtitleLanguages);
         }
 
-        private void SetAudienceLanguage(Language[] array, ListControl control)
+        private void SetAudienceLanguage(IEnumerable<Language> array, ListControl control)
         {
             Language audienceLanguage = comboBoxAudienceLanguage.SelectedValue as Language;
             IList<Language> list = new List<Language>(array);
@@ -1350,11 +1331,11 @@ namespace BDAutoMuxer
 
             MenuItem menuItemOpen = new MenuItem(string.Format("Open \"{0}\"", Path.GetFileName(filePath)));
             menuItemOpen.DefaultItem = true;
-            menuItemOpen.Click += (object s1, EventArgs e1) => { playFile(filePath); };
+            menuItemOpen.Click += (s1, e1) => playFile(filePath);
             menuItemOpen.Enabled = FileUtils.HasProgramAssociation(filePath);
 
             MenuItem menuItemShow = new MenuItem("Show in folder");
-            menuItemShow.Click += (object s1, EventArgs e1) => { showInFolder(filePath); };
+            menuItemShow.Click += (s1, e1) => showInFolder(filePath);
 
             contextMenu.MenuItems.Add(menuItemOpen);
             contextMenu.MenuItems.Add("-");
@@ -1455,15 +1436,21 @@ namespace BDAutoMuxer
             if (listViewVideoTracks.CheckedItems.Count > 0)
             {
                 TSVideoStream videoStream = listViewVideoTracks.CheckedItems[0].Tag as TSVideoStream;
-                res = videoStream.HeightDescription;
-                vcodec = videoStream.CodecShortName;
+                if (videoStream != null)
+                {
+                    res = videoStream.HeightDescription;
+                    vcodec = videoStream.CodecShortName;
+                }
             }
 
             if (listViewAudioTracks.CheckedItems.Count > 0)
             {
                 TSAudioStream audioStream = listViewAudioTracks.CheckedItems[0].Tag as TSAudioStream;
-                acodec = audioStream.CodecShortName;
-                channels = audioStream.ChannelCountDescription;
+                if (audioStream != null)
+                {
+                    acodec = audioStream.CodecShortName;
+                    channels = audioStream.ChannelCountDescription;
+                }
             }
 
             preview = Regex.Replace(preview, @"%volume%", volume, RegexOptions.IgnoreCase);
@@ -1614,16 +1601,13 @@ namespace BDAutoMuxer
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            _cancelButtonHandled = false;
-
-            if (!IsMuxing ||
-                MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
-                DialogResult.No) return;
-
-            CancelRip();
-            _cancelButtonHandled = true;
-
-            Close();
+            if (IsMuxing)
+            {
+                if (ShouldAbortMuxing())
+                    CancelRip();
+            }
+            else
+                Close();
         }
 
         private void pictureBoxMoviePoster_MouseClick(object sender, MouseEventArgs e)
@@ -1634,19 +1618,15 @@ namespace BDAutoMuxer
 
         private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_cancelButtonHandled)
+            if (IsMuxing)
             {
-                e.Cancel = true;
-            }
-            else if (IsMuxing)
-            {
-                if (MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                if (ShouldAbortMuxing())
                 {
-                    e.Cancel = true;
+                    CancelRip();
                 }
                 else
                 {
-                    CancelRip();
+                    e.Cancel = true;
                 }
             }
             if (!e.Cancel)
@@ -1664,8 +1644,8 @@ namespace BDAutoMuxer
                     BDAutoMuxerSettings.DetailsWindowMaximized = false;
                 }
                 BDAutoMuxerSettings.SaveSettings();
+                _playlistFinder.CancelScan();
             }
-            _playlistFinder.CancelScan();
             _cancelButtonHandled = false;
         }
 
@@ -1698,10 +1678,7 @@ namespace BDAutoMuxer
 
         private void RestoreTabStatus()
         {
-            if (_tabStatusMessages.ContainsKey(tabControl.SelectedTab))
-                statusLabel.Text = _tabStatusMessages[tabControl.SelectedTab];
-            else
-                statusLabel.Text = "";
+            statusLabel.Text = _tabStatusMessages.ContainsKey(tabControl.SelectedTab) ? _tabStatusMessages[tabControl.SelectedTab] : "";
         }
 
         private void ShowMessage(TabPage tabPage, string caption, string text, MessageBoxIcon icon = MessageBoxIcon.Information)
@@ -1735,12 +1712,17 @@ namespace BDAutoMuxer
             ShowErrorMessage(tabControl.SelectedTab, caption, text);
         }
 
-        private void CheckForUpdates()
+        private void CheckForUpdates(bool srsly = false)
         {
-            if (BDAutoMuxerSettings.CheckForUpdates)
+            if (BDAutoMuxerSettings.CheckForUpdates || srsly)
             {
                 UpdateNotifier.CheckForUpdate(this);
             }
+        }
+
+        private bool ShouldAbortMuxing()
+        {
+            return MessageBox.Show(this, "Abort muxing?", "Abort muxing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
         #endregion
@@ -1833,12 +1815,17 @@ namespace BDAutoMuxer
 
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateNotifier.CheckForUpdate(this, true);
+            CheckForUpdates(true);
         }
 
         private void remuxerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new FormRemux().Show();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
     }
