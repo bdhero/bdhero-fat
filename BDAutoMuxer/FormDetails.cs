@@ -1712,9 +1712,9 @@ namespace BDAutoMuxer
             ShowErrorMessage(tabControl.SelectedTab, caption, text);
         }
 
-        private void CheckForUpdates(bool srsly = false)
+        private void CheckForUpdates()
         {
-            if (BDAutoMuxerSettings.CheckForUpdates || srsly)
+            if (BDAutoMuxerSettings.CheckForUpdates)
             {
                 UpdateNotifier.CheckForUpdate(this);
             }
@@ -1815,7 +1815,7 @@ namespace BDAutoMuxer
 
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CheckForUpdates(true);
+            UpdateNotifier.CheckForUpdate(this, true);
         }
 
         private void remuxerToolStripMenuItem_Click(object sender, EventArgs e)
