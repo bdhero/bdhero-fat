@@ -623,7 +623,7 @@ namespace BDAutoMuxer
 
         private void PopulateSubtitleTracks()
         {
-            foreach (TSStream stream in _subtitleTracks)
+            foreach (TSStream stream in _subtitleTracks.Where(track => track.StreamType != TSStreamType.INTERACTIVE_GRAPHICS))
             {
                 ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
                 codec.Text = stream.CodecName;
