@@ -925,6 +925,8 @@ namespace BDAutoMuxer
 
             if (SelectedPlaylist == null) return;
 
+            tabControl.SelectedTab = tabPageProgress;
+
             try
             {
                 Directory.CreateDirectory(textBoxOutputDirPreview.Text);
@@ -1407,8 +1409,6 @@ namespace BDAutoMuxer
             else if (tabControl.SelectedTab == tabPageOutput)
             {
                 Rip();
-                tabControl.SelectedIndex++;
-                tabControl.TabIndex++;
             }
 
             ResetButtons();
