@@ -81,7 +81,7 @@ namespace BDAutoMuxer
         }
     }
 
-    public class BDAutoMuxerSettings
+    public static class BDAutoMuxerSettings
     {
         public static string AssemblyName
         {
