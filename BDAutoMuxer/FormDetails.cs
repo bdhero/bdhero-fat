@@ -1758,6 +1758,7 @@ namespace BDAutoMuxer
             Init(scanResult.BDROM, scanResult.Languages, scanResult.SortedPlaylists);
 
             tabControl.Enabled = true;
+            tabControl.SelectedIndex = 0;
 
             ResetButtons();
 
