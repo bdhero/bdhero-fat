@@ -1311,6 +1311,9 @@ namespace BDAutoMuxer
 
             if (currentMouseOverRow < 0) return;
 
+            playlistDataGridView.ClearSelection();
+            playlistDataGridView.Rows[currentMouseOverRow].Selected = true;
+
             TSPlaylistFile playlist = _populator.PlaylistAt(currentMouseOverRow);
             showPlayableFileContextMenu(playlistDataGridView, playlist.FullName, e.X, e.Y);
         }
