@@ -44,6 +44,7 @@ namespace BDAutoMuxer
             checkBoxKeepStreamOrder.Checked = BDAutoMuxerSettings.KeepStreamOrder;
             checkBoxEnableSSIF.Checked = BDAutoMuxerSettings.EnableSSIF;
             textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
+            checkBoxCheckForUpdates.Checked = BDAutoMuxerSettings.CheckForUpdates;
 
             FormUtils.TextBox_EnableSelectAll(this);
         }
@@ -60,6 +61,7 @@ namespace BDAutoMuxer
             BDAutoMuxerSettings.FilterShortPlaylists = checkBoxFilterShortPlaylists.Checked;
             BDAutoMuxerSettings.EnableSSIF = checkBoxEnableSSIF.Checked;
             BDAutoMuxerSettings.ApiKey = textBoxApiKey.Text;
+            BDAutoMuxerSettings.CheckForUpdates = checkBoxCheckForUpdates.Checked;
             int filterShortPlaylistsValue;
             if (int.TryParse(textBoxFilterShortPlaylistsValue.Text, out filterShortPlaylistsValue))
             {
