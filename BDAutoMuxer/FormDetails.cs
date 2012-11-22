@@ -389,9 +389,6 @@ namespace BDAutoMuxer
 
             SetTabStatus("Scanning BD-ROM...");
 
-            BDAutoMuxerSettings.LastPath = path;
-            BDAutoMuxerSettings.SaveSettings();
-
             _playlistFinder.InitBDROM(path);
         }
 
@@ -404,6 +401,9 @@ namespace BDAutoMuxer
             tabControl.SelectedIndex = 0;
 
             SetTabStatus("");
+
+            BDAutoMuxerSettings.LastPath = textBoxSource.Text;
+            BDAutoMuxerSettings.SaveSettings();
         }
 
         private void ScanError(object sender, ErrorEventArgs e)
