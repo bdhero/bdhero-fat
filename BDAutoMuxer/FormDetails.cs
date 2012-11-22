@@ -386,6 +386,9 @@ namespace BDAutoMuxer
 
             SetTabStatus("Scanning BD-ROM...");
 
+            BDAutoMuxerSettings.LastPath = path;
+            BDAutoMuxerSettings.SaveSettings();
+
             _playlistFinder.InitBDROM(path);
         }
 
@@ -1896,7 +1899,9 @@ namespace BDAutoMuxer
                     BDAutoMuxerSettings.DetailsWindowSize = Size;
                     BDAutoMuxerSettings.DetailsWindowMaximized = false;
                 }
+
                 BDAutoMuxerSettings.SaveSettings();
+
                 _playlistFinder.CancelScan();
             }
         }
