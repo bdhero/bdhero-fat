@@ -573,7 +573,7 @@ namespace BDAutoMuxer.views
         {
             return new DataGridViewTextBoxColumn
                        {
-                           Name = "Size",
+                           Name = "Size (Bytes)",
                            DataPropertyName = "Size",
                            DefaultCellStyle = {Alignment = DataGridViewContentAlignment.MiddleRight},
                            ReadOnly = true
