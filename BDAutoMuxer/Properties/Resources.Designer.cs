@@ -144,9 +144,9 @@ namespace BDAutoMuxer.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap true_hd {
+        internal static System.Drawing.Bitmap truehd {
             get {
-                object obj = ResourceManager.GetObject("true_hd", resourceCulture);
+                object obj = ResourceManager.GetObject("truehd", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

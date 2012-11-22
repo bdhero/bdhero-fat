@@ -154,8 +154,8 @@
   <data name="pgs" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pgs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="true_hd" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\true-hd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="truehd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\truehd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="txt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\txt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

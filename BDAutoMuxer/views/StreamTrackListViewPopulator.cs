@@ -79,7 +79,7 @@ namespace BDAutoMuxer.views
                 streams.Items.Add(new ListViewItem(streamFileSubItems, 0) {Tag = clip});
             }
 
-            //var i = 0;
+            var i = 0;
             ImageList trackIcons = new ImageList();
 
             foreach (var stream in playlist.SortedStreams)
@@ -145,12 +145,12 @@ namespace BDAutoMuxer.views
                     };
 
                 // TODO: Handle unknown types (icon cannot be null)
-                //trackIcons.Images.Add(CodecIcon(stream.StreamType));
+                trackIcons.Images.Add(CodecIcon(stream.StreamType));
 
-                tracks.Items.Add(new ListViewItem(streamSubItems, 0) {Tag = stream.PID /*, ImageIndex = i++*/});
+                tracks.Items.Add(new ListViewItem(streamSubItems, 0) {Tag = stream.PID, ImageIndex = i++});
             }
 
-            //tracks.SmallImageList = trackIcons;
+            tracks.SmallImageList = trackIcons;
         }
 
         private static Bitmap CodecIcon(TSStreamType streamType)
@@ -164,7 +164,7 @@ namespace BDAutoMuxer.views
                 case TSStreamType.AC3_PLUS_SECONDARY_AUDIO:
                     return Properties.Resources.dd_plus;
                 case TSStreamType.AC3_TRUE_HD_AUDIO:
-                    return Properties.Resources.true_hd;
+                    return Properties.Resources.truehd;
                 case TSStreamType.DTS_AUDIO:
                     return Properties.Resources.dts;
                 case TSStreamType.DTS_HD_AUDIO:

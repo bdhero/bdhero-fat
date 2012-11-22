@@ -209,6 +209,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\truehd.png" />
     <None Include="Resources\mpeg2-video.png" />
     <None Include="Resources\mpeg1-video.png" />
     <None Include="Resources\vc1.png" />
