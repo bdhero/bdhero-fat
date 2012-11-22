@@ -73,8 +73,6 @@ namespace BDAutoMuxer
         private readonly Dictionary<TabPage, string> _tabStatusMessages = new Dictionary<TabPage, string>();
         private readonly Dictionary<Control, String> _controlHints = new Dictionary<Control, String>();
 
-        private bool _cancelButtonHandled;
-
         private readonly PlaylistFinder _playlistFinder = new PlaylistFinder();
 
         #endregion
@@ -1656,7 +1654,6 @@ namespace BDAutoMuxer
                 BDAutoMuxerSettings.SaveSettings();
                 _playlistFinder.CancelScan();
             }
-            _cancelButtonHandled = false;
         }
 
         #endregion
