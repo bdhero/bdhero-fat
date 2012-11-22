@@ -27,6 +27,10 @@ namespace BDAutoMuxer
         private const string TmdbApiKey = "b59b366b0f0a457d58995537d847409a";
 
         private bool _initialized;
+        private bool _isScanningBDROM;
+        private bool _isSearchingMainMovieDb;
+        private bool _isSearchingTmdb;
+        private bool _isMuxing;
 
         private Tmdb _tmdbApi;
 
@@ -58,7 +62,6 @@ namespace BDAutoMuxer
         private bool _ignoreDataGridItemChange;
 
         private TsMuxer _tsMuxer;
-        private bool _isMuxing;
         private string _tsMuxerOutputPath;
 
         private ISet<TSPlaylistFile> _filteredPlaylists = new HashSet<TSPlaylistFile>();
@@ -78,22 +81,6 @@ namespace BDAutoMuxer
         #endregion
 
         #region Properties
-
-        private bool IsMuxing
-        {
-            get { return _isMuxing; }
-            set
-            {
-                _isMuxing = value;
-
-                FormUtils.EnableControls(tabPageDisc, !_isMuxing);
-                FormUtils.EnableControls(tabPageOutput, !_isMuxing);
-
-                cancelButton.Text = _isMuxing ? "Stop" : "Close";
-
-                ResetButtons();
-            }
-        }
 
         private Language[] GetSortedLanguageArray(ICollection<Language> collection)
         {
@@ -270,12 +257,7 @@ namespace BDAutoMuxer
 
             FormUtils.TextBox_EnableSelectAll(this);
 
-            tabControl.Enabled = false;
-            hiddenTrackLabel.Visible = false;
-
-            progressLabel.Text = "";
-            toolStripProgressBar.Visible = false;
-            hiddenTrackLabel.Visible = false;
+            ShowProgressTabPage = false;
 
             textBoxOutputDir.Text = BDAutoMuxerSettings.OutputDir;
             textBoxOutputFileName.Text = BDAutoMuxerSettings.OutputFileName;
@@ -296,15 +278,34 @@ namespace BDAutoMuxer
 
             InitHints(this);
 
-            CheckForUpdates();
+            ResetUI();
 
-            ResetButtons();
+            CheckForUpdates();
+        }
+
+        private void ResetState()
+        {
+            _initialized = false;
+            _isScanningBDROM = false;
+            _isSearchingMainMovieDb = false;
+            _isSearchingTmdb = false;
+            _isMuxing = false;
+
+            _autoConfigured = false;
+            _autoTmdbId = -1;
+
+            _filteredPlaylists.Clear();
+
+            _audioLanguages.Clear();
+            _subtitleLanguages.Clear();
+
+            _videoTracks.Clear();
+            _audioTracks.Clear();
+            _subtitleTracks.Clear();
         }
 
         private void Init(BDROM bdrom, ICollection<Language> languages, List<TSPlaylistFile> playlists)
         {
-            _initialized = false;
-
             _bdrom = bdrom;
             _languages = new List<Language>(languages).ToArray();
             _languageCodes = new List<string>();
@@ -318,12 +319,12 @@ namespace BDAutoMuxer
             //       or if the user changes the main disc language manually.
             _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
 
-            foreach (Language lang in languages)
-                _languageCodes.Add(lang.ISO_639_2);
+            _languageCodes.AddRange(languages.Select(lang => lang.ISO_639_2));
 
             if (_populator != null)
             {
                 _populator.Destroy();
+                _populator = null;
             }
 
             _populator = new PlaylistDataGridPopulator(playlistDataGridView, _playlists, _languageCodes);
@@ -333,27 +334,13 @@ namespace BDAutoMuxer
 
             _initialized = true;
 
-            statusLabel.Text = "";
+            ResetUI();
 
             movieNameTextBox.Text = String.IsNullOrEmpty(_bdrom.DiscNameSearchable) ? _bdrom.VolumeLabel : _bdrom.DiscNameSearchable;
             discLanguageComboBox.DataSource = new List<Language>(_languages).ToArray();
 
-            searchResultListView.Items.Clear();
-            pictureBoxMoviePoster.Image = null;
-            pictureBoxMoviePoster.ImageLocation = null;
-
-            PopulateOutputTab();
-
-            listViewStreamFiles.Enabled = true;
-            listViewStreams.Enabled = true;
-
-            progressLabel.Text = "";
-            toolStripProgressBar.Visible = false;
-            hiddenTrackLabel.Visible = false;
-
-            ResetButtons();
-
             ResetPlaylistDataGrid();
+            PopulateOutputTab();
             QueryMainMovie();
 
             textBoxOutputDir_TextChanged(this, EventArgs.Empty);
@@ -384,18 +371,6 @@ namespace BDAutoMuxer
         #endregion
 
         #region "Disc" Tab
-
-        private bool DiscTabControlsEnabled
-        {
-            set
-            {
-                discLanguageComboBox.Enabled = value;
-                movieNameTextBox.Enabled = value;
-                maskedTextBoxYear.Enabled = value;
-                searchButton.Enabled = value;
-                searchResultListView.Enabled = value;
-            }
-        }
 
         private void ResizeDiscTab(object sender = null, EventArgs e = null)
         {
@@ -485,11 +460,11 @@ namespace BDAutoMuxer
             _audioLanguages.Clear();
             _subtitleLanguages.Clear();
 
-            foreach (Object o in listBoxAudioLanguages.SelectedItems)
-                if (o is Language) _audioLanguages.Add(o as Language);
+            foreach (Language lang in listBoxAudioLanguages.SelectedItems.OfType<Language>())
+                _audioLanguages.Add(lang);
 
-            foreach (Object o in listBoxSubtitleLanguages.SelectedItems)
-                if (o is Language) _subtitleLanguages.Add(o as Language);
+            foreach (Language lang in listBoxSubtitleLanguages.SelectedItems.OfType<Language>())
+                _subtitleLanguages.Add(lang);
 
             if (videoLanguage == null) return;
 
@@ -511,7 +486,7 @@ namespace BDAutoMuxer
             comboBoxPlaylist.DataSource = new List<TSPlaylistFile>(_filteredPlaylists).ToArray();
             comboBoxPlaylist.Enabled = _filteredPlaylists.Count > 1;
 
-            ResetButtons();
+            ResetUI();
         }
 
         private void FilterTracks()
@@ -554,6 +529,7 @@ namespace BDAutoMuxer
             PopulateSubtitleTracks();
 
             ResizeOutputTab();
+
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
         }
 
@@ -674,7 +650,9 @@ namespace BDAutoMuxer
 
         private void QueryMainMovie()
         {
-            DiscTabControlsEnabled = false;
+            _isSearchingMainMovieDb = true;
+
+            ResetUI();
 
             _autoConfigured = false;
             _autoTmdbId = -1;
@@ -692,26 +670,22 @@ namespace BDAutoMuxer
 
         private void SearchTmdb()
         {
-            if (String.IsNullOrEmpty(movieNameTextBox.Text))
+            Language language = discLanguageComboBox.SelectedValue as Language;
+
+            if (String.IsNullOrEmpty(movieNameTextBox.Text) || language == null)
             {
-                discLanguageComboBox.Enabled = true;
-                maskedTextBoxYear.Enabled = true;
-                searchButton.Enabled = true;
                 return;
             }
 
-            searchResultListView.Items.Clear();
-            pictureBoxMoviePoster.ImageLocation = null;
-            DiscTabControlsEnabled = false;
+            _isSearchingTmdb = true;
+
+            ResetUI();
+            ClearTmdb();
 
             SetTabStatus(tabPageDisc, "Searching The Movie Database (TMDb)...");
 
-            string query = movieNameTextBox.Text;
-            Language language = discLanguageComboBox.SelectedValue as Language;
-            
-            if (language == null) return;
-
             string ISO_639_1 = language.ISO_639_1;
+            string query = movieNameTextBox.Text;
             int? year = Regex.IsMatch(maskedTextBoxYear.Text, @"^\d{4}$") ? (int?)Int32.Parse(maskedTextBoxYear.Text) : null;
             
             TmdbSearchRequestParams reqParams = new TmdbSearchRequestParams(query, year, ISO_639_1);
@@ -762,12 +736,15 @@ namespace BDAutoMuxer
 
         private void mainMovieBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            _isSearchingMainMovieDb = false;
+
+            ResetUI();
+
             string errorCaption = "Error querying main movie DB";
 
             var exception = e.Result as Exception;
             if (exception != null)
             {
-                DiscTabControlsEnabled = true;
                 searchResultListView.Enabled = false;
                 ShowErrorMessage(tabPageDisc, errorCaption, exception.Message);
             }
@@ -790,6 +767,7 @@ namespace BDAutoMuxer
 
                 _autoConfigured = true;
                 _autoTmdbId = disc.tmdb_id;
+
                 movieNameTextBox.Text = disc.movie_title;
                 maskedTextBoxYear.Text = disc.year != null ? disc.year.ToString() : null;
 
@@ -847,8 +825,9 @@ namespace BDAutoMuxer
 
         private void tmdbBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            DiscTabControlsEnabled = true;
-            searchResultListView.Enabled = false;
+            _isSearchingTmdb = false;
+
+            ResetUI();
 
             string errorCaption = "Error searching The Movie Database (TMDb)";
 
@@ -910,7 +889,7 @@ namespace BDAutoMuxer
 
         private void Rip()
         {
-            if (IsMuxing) return;
+            if (_isMuxing) return;
 
             if (File.Exists(OutputFilePath))
             {
@@ -925,6 +904,7 @@ namespace BDAutoMuxer
 
             if (SelectedPlaylist == null) return;
 
+            ShowProgressTabPage = true;
             tabControl.SelectedTab = tabPageProgress;
 
             try
@@ -975,7 +955,6 @@ namespace BDAutoMuxer
             _tsMuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams);
             _tsMuxer.WorkerReportsProgress = true;
             _tsMuxer.WorkerSupportsCancellation = true;
-            //tsMuxer.DoWork += tsMuxerBackgroundWorker_DoWork;
             _tsMuxer.ProgressChanged += tsMuxerBackgroundWorker_ProgressChanged;
             _tsMuxer.RunWorkerCompleted += tsMuxerBackgroundWorker_RunWorkerCompleted;
 
@@ -990,16 +969,11 @@ namespace BDAutoMuxer
             _tsMuxer.CancelAsync();
         }
 
-        private void tsMuxerBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-        }
-
         private void tsMuxerBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            IsMuxing = true;
+            _isMuxing = true;
+            ResetUI();
             UpdateTsMuxerProgress(sender, e);
-            ResetButtons();
         }
 
         private void UpdateTsMuxerProgress(object sender = null, EventArgs e = null)
@@ -1055,14 +1029,11 @@ namespace BDAutoMuxer
 
         private void tsMuxerBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            IsMuxing = false;
+            _isMuxing = false;
+
+            ResetUI();
 
             TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
-
-            ResetButtons();
-
-            progressLabel.Text = "";
-            toolStripProgressBar.Visible = false;
 
             if (e.Cancelled && _tsMuxer.IsCanceled)
             {
@@ -1174,21 +1145,6 @@ namespace BDAutoMuxer
         // TODO: Organize Event Handlers into separate regions for each tab
         #region Event Handlers
 
-        private void showAllPlaylistsCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            ResetPlaylistDataGrid();
-        }
-
-        private void listViewStreamFiles_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (listViewStreamFiles.SelectedItems.Count == 0) return;
-
-            string filename = listViewStreamFiles.SelectedItems[0].Text;
-            string filepath = Path.Combine(_bdrom.DirectorySTREAM.FullName, filename);
-
-            playFile(filepath);
-        }
-
         private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var language = discLanguageComboBox.SelectedValue as Language;
@@ -1244,6 +1200,21 @@ namespace BDAutoMuxer
                 SearchTmdb();
         }
 
+        private void showAllPlaylistsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            ResetPlaylistDataGrid();
+        }
+
+        private void listViewStreamFiles_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listViewStreamFiles.SelectedItems.Count == 0) return;
+
+            string filename = listViewStreamFiles.SelectedItems[0].Text;
+            string filepath = Path.Combine(_bdrom.DirectorySTREAM.FullName, filename);
+
+            PlayFile(filepath);
+        }
+
         private void OnPlaylistItemChange(object sender, EventArgs e)
         {
             if (_ignoreDataGridItemChange) return;
@@ -1289,10 +1260,7 @@ namespace BDAutoMuxer
 
             StreamTrackListViewPopulator.Populate(playlistFile, listViewStreamFiles, listViewStreams);
 
-            hiddenTrackLabel.Visible = playlistFile.SortedStreams.Any(stream => stream.IsHidden);
-
-            ResizeDiscTab();
-            ResizeOutputTab();
+            ResetUI();
         }
 
         private void playlistDataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
@@ -1317,7 +1285,7 @@ namespace BDAutoMuxer
             playlistDataGridView.Rows[currentMouseOverRow].Selected = true;
 
             TSPlaylistFile playlist = _populator.PlaylistAt(currentMouseOverRow);
-            showPlayableFileContextMenu(playlistDataGridView, playlist.FullName, e.X, e.Y);
+            ShowPlayableFileContextMenu(playlistDataGridView, playlist.FullName, e.X, e.Y);
         }
 
         private void listViewStreamFiles_MouseClick(object sender, MouseEventArgs e)
@@ -1335,64 +1303,154 @@ namespace BDAutoMuxer
             string filename = clip.DisplayName;
             string filepath = Path.Combine(_bdrom.DirectorySTREAM.FullName, filename);
 
-            showPlayableFileContextMenu(listViewStreamFiles, filepath, e.X, e.Y);
+            ShowPlayableFileContextMenu(listViewStreamFiles, filepath, e.X, e.Y);
         }
 
-        private void showPlayableFileContextMenu(Control control, string filePath, int x, int y)
+        private void ShowPlayableFileContextMenu(Control control, string filePath, int x, int y)
         {
             ContextMenu contextMenu = new ContextMenu();
 
             MenuItem menuItemOpen = new MenuItem(string.Format("Open \"{0}\"", Path.GetFileName(filePath)));
             menuItemOpen.DefaultItem = true;
-            menuItemOpen.Click += (s1, e1) => playFile(filePath);
+            menuItemOpen.Click += (s1, e1) => PlayFile(filePath);
             menuItemOpen.Enabled = FileUtils.HasProgramAssociation(filePath);
 
             MenuItem menuItemShow = new MenuItem("Show in folder");
-            menuItemShow.Click += (s1, e1) => showInFolder(filePath);
+            menuItemShow.Click += (s1, e1) => ShowInFolder(filePath);
+
+            MenuItem menuItemCopyPath = new MenuItem("Copy path");
+            menuItemCopyPath.Click += (s1, e1) => Clipboard.SetText(filePath);
 
             contextMenu.MenuItems.Add(menuItemOpen);
-            contextMenu.MenuItems.Add("-");
             contextMenu.MenuItems.Add(menuItemShow);
+            contextMenu.MenuItems.Add(menuItemCopyPath);
 
             contextMenu.Show(control, new Point(x, y));
         }
 
-        private void playFile(string filePath)
+        private static void PlayFile(string filePath)
         {
             FileUtils.OpenFile(filePath);
         }
 
-        private void showInFolder(string filePath)
+        private static void ShowInFolder(string filePath)
         {
-            if (!File.Exists(filePath))
-                return;
-
-            // combine the arguments together
-            // it doesn't matter if there is a space after ','
-            string argument = "/select, \"" + filePath + "\"";
-
-            Process.Start("explorer.exe", argument);
+            FileUtils.ShowInFolder(filePath);
         }
 
-        private void ResetButtons()
+        private bool EnableScanControls
         {
+            set
+            {
+                textBoxSource.Enabled = value;
+
+                buttonBrowse.Enabled = value;
+                buttonRescan.Enabled = value;
+
+                openFolderToolStripMenuItem.Enabled = value;
+                rescanToolStripMenuItem.Enabled = value;
+            }
+        }
+
+        private bool SelectedPlaylistHasHiddenTracks
+        {
+            get
+            {
+                return _populator != null && _populator.SelectedPlaylist != null && _populator.SelectedPlaylist.SortedStreams.Any(stream => stream.IsHidden);
+            }
+        }
+
+        private bool DiscTabEnabled
+        {
+            set { panelMovieDetails.Enabled = value; }
+        }
+
+        private bool OutputTabEnabled
+        {
+            set
+            {
+                groupBoxMasterOverride.Enabled = value;
+                groupBoxFilter.Enabled = value;
+                groupBoxTracks.Enabled = value;
+                checkBoxReplaceSpaces.Enabled = value;
+                textBoxReplaceSpaces.Enabled = value;
+                textBoxOutputDir.Enabled = value;
+                buttonOutputDir.Enabled = value;
+                textBoxOutputFileName.Enabled = value;
+            }
+        }
+
+        private bool ShowProgressTabPage
+        {
+            get { return tabControl.TabPages.Contains(tabPageProgress); }
+            set
+            {
+                if (value)
+                {
+                    if (!ShowProgressTabPage)
+                        tabControl.TabPages.Add(tabPageProgress);
+                }
+                else
+                {
+                    tabControl.TabPages.Remove(tabPageProgress);
+                }
+            }
+        }
+
+        private void ClearTmdb()
+        {
+            searchResultListView.Items.Clear();
+            pictureBoxMoviePoster.Image = null;
+            pictureBoxMoviePoster.ImageLocation = null;
+        }
+
+        private void ResetUI()
+        {
+            EnableScanControls = !_isScanningBDROM && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
+
+            tabControl.Enabled = _initialized && !_isSearchingMainMovieDb;
+
+            DiscTabEnabled = _initialized && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
+            OutputTabEnabled = !_isMuxing;
+            ShowProgressTabPage = ShowProgressTabPage || _isMuxing;
+
+            hiddenTrackLabel.Visible = SelectedPlaylistHasHiddenTracks;
+
+            toolStripProgressBar.Visible = _isMuxing;
+
+            if (!_initialized)
+            {
+                ClearTmdb();
+                statusLabel.Text = "";
+            }
+
+            if (!_isMuxing)
+            {
+                progressLabel.Text = "";
+            }
+
+            buttonSubmitToDB.Enabled = CanSubmitToDb;
+            submitToDbToolStripMenuItem.Enabled = CanSubmitToDb;
+
             continueButton.Text = "Mux it!";
             continueButton.Enabled = true;
 
             if (!_initialized)
                 continueButton.Enabled = false;
-            else if (IsMuxing)
+            else if (_isMuxing)
                 continueButton.Text = _tsMuxer.IsPaused ? "Resume" : "Pause";
             else if (tabControl.SelectedTab != tabPageOutput || comboBoxPlaylist.Items.Count == 0)
                 continueButton.Enabled = false;
 
-            // TODO: Make this dynamic based on whether scan / mux is running
-            buttonRescan.Enabled = true;
+            cancelButton.Text = _isMuxing ? "Stop" : "Close";
+
+            ResizeDiscTab();
+            ResizeOutputTab();
         }
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            if (IsMuxing && _tsMuxer != null)
+            if (_isMuxing && _tsMuxer != null)
             {
                 // TODO: Refactor label text logic into a separate method
                 if (_tsMuxer.IsPaused)
@@ -1411,7 +1469,7 @@ namespace BDAutoMuxer
                 Rip();
             }
 
-            ResetButtons();
+            ResetUI();
         }
 
         private void checkBoxReplaceSpaces_CheckedChanged(object sender, EventArgs e)
@@ -1518,7 +1576,7 @@ namespace BDAutoMuxer
 
         private void tabControl_TabIndexChanged(object sender, EventArgs e)
         {
-            ResetButtons();
+            ResetUI();
             RestoreTabStatus();
         }
 
@@ -1612,7 +1670,7 @@ namespace BDAutoMuxer
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            if (IsMuxing)
+            if (_isMuxing)
             {
                 if (ShouldAbortMuxing())
                     CancelRip();
@@ -1629,7 +1687,7 @@ namespace BDAutoMuxer
 
         private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (IsMuxing)
+            if (_isMuxing)
             {
                 if (ShouldAbortMuxing())
                 {
@@ -1740,14 +1798,17 @@ namespace BDAutoMuxer
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new FormSettings().ShowDialog();
+            ResetUI();
         }
 
         private void Scan(string path)
         {
-            _initialized = false;
+            ResetState();
 
-            tabControl.Enabled = false;
-            buttonRescan.Enabled = false;
+            _initialized = false;
+            _isScanningBDROM = true;
+
+            ResetUI();
 
             SetTabStatus("Scanning BD-ROM...");
 
@@ -1760,10 +1821,7 @@ namespace BDAutoMuxer
 
             Init(scanResult.BDROM, scanResult.Languages, scanResult.SortedPlaylists);
 
-            tabControl.Enabled = true;
             tabControl.SelectedIndex = 0;
-
-            ResetButtons();
 
             SetTabStatus("");
         }
@@ -1775,7 +1833,8 @@ namespace BDAutoMuxer
 
         private void ScanCompleted(object sender, EventArgs e)
         {
-            ResetButtons();
+            _isScanningBDROM = false;
+            ResetUI();
         }
 
         private void buttonBrowse_Click(

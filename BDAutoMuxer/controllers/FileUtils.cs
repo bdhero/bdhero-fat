@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -100,6 +101,18 @@ namespace BDAutoMuxer.controllers
         {
             if (HasProgramAssociation(filePath))
                 System.Diagnostics.Process.Start(filePath);
+        }
+
+        public static void ShowInFolder(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return;
+
+            // combine the arguments together
+            // it doesn't matter if there is a space after ','
+            string argument = "/select, \"" + filePath + "\"";
+
+            Process.Start("explorer.exe", argument);
         }
 
         [DllImport("shell32.dll")]
