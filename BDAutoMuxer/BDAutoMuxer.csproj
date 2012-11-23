@@ -209,6 +209,20 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\unknown.ico" />
+    <None Include="Resources\txt.ico" />
+    <None Include="Resources\truehd.ico" />
+    <None Include="Resources\pgs.ico" />
+    <None Include="Resources\mpeg2-video.ico" />
+    <None Include="Resources\mpeg2-audio.ico" />
+    <None Include="Resources\mpeg1-video.ico" />
+    <None Include="Resources\mpeg1-audio.ico" />
+    <None Include="Resources\lpcm.ico" />
+    <None Include="Resources\dts-hd.ico" />
+    <None Include="Resources\dts.ico" />
+    <None Include="Resources\dd-plus.ico" />
+    <None Include="Resources\dd.ico" />
+    <None Include="Resources\avc.ico" />
     <None Include="Resources\truehd.png" />
     <None Include="Resources\mpeg2-video.png" />
     <None Include="Resources\mpeg1-video.png" />

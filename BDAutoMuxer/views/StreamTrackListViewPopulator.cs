@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
@@ -7,6 +8,7 @@ namespace BDAutoMuxer.views
 {
     static class StreamTrackListViewPopulator
     {
+
         public static void Populate(
             TSPlaylistFile playlist,
             ListView streams,
@@ -144,57 +146,12 @@ namespace BDAutoMuxer.views
                         description
                     };
 
-                // TODO: Handle unknown types (icon cannot be null)
-                trackIcons.Images.Add(CodecIcon(stream.StreamType));
+                trackIcons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
 
                 tracks.Items.Add(new ListViewItem(streamSubItems, 0) {Tag = stream.PID, ImageIndex = i++});
             }
 
             tracks.SmallImageList = trackIcons;
-        }
-
-        private static Bitmap CodecIcon(TSStreamType streamType)
-        {
-            switch (streamType)
-            {
-                case TSStreamType.AC3_AUDIO:
-                    return Properties.Resources.dd;
-                case TSStreamType.AC3_PLUS_AUDIO:
-                    return Properties.Resources.dd_plus;
-                case TSStreamType.AC3_PLUS_SECONDARY_AUDIO:
-                    return Properties.Resources.dd_plus;
-                case TSStreamType.AC3_TRUE_HD_AUDIO:
-                    return Properties.Resources.truehd;
-                case TSStreamType.DTS_AUDIO:
-                    return Properties.Resources.dts;
-                case TSStreamType.DTS_HD_AUDIO:
-                    return Properties.Resources.dts_hd;
-                case TSStreamType.DTS_HD_MASTER_AUDIO:
-                    return Properties.Resources.dts_hd;
-                case TSStreamType.DTS_HD_SECONDARY_AUDIO:
-                    return Properties.Resources.dts_hd;
-                case TSStreamType.LPCM_AUDIO:
-                    return Properties.Resources.lpcm;
-                case TSStreamType.MPEG1_AUDIO:
-                    return Properties.Resources.mpeg1_audio;
-                case TSStreamType.MPEG2_AUDIO:
-                    return Properties.Resources.mpeg2_audio;
-
-                case TSStreamType.AVC_VIDEO:
-                    return Properties.Resources.avc;
-                case TSStreamType.MPEG1_VIDEO:
-                    return Properties.Resources.mpeg1_video;
-                case TSStreamType.MPEG2_VIDEO:
-                    return Properties.Resources.mpeg2_video;
-
-                case TSStreamType.PRESENTATION_GRAPHICS:
-                    return Properties.Resources.pgs;
-                case TSStreamType.SUBTITLE:
-                    return Properties.Resources.txt;
-
-                default:
-                    return null;
-            }
         }
     }
 }

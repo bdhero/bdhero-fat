@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace BDAutoMuxer
@@ -119,6 +120,37 @@ namespace BDAutoMuxer
 
     public abstract class TSStream
     {
+        public static readonly IDictionary<TSStreamType, Icon> CodecIcons
+            = new Dictionary<TSStreamType, Icon>()
+                  {
+                      { TSStreamType.AC3_AUDIO, Properties.Resources.dd },
+                      { TSStreamType.AC3_PLUS_AUDIO, Properties.Resources.dd_plus },
+                      { TSStreamType.AC3_PLUS_SECONDARY_AUDIO, Properties.Resources.dd_plus },
+                      { TSStreamType.AC3_TRUE_HD_AUDIO, Properties.Resources.truehd },
+
+                      { TSStreamType.DTS_AUDIO, Properties.Resources.dts },
+                      { TSStreamType.DTS_HD_AUDIO, Properties.Resources.dts_hd },
+                      { TSStreamType.DTS_HD_MASTER_AUDIO, Properties.Resources.dts_hd },
+                      { TSStreamType.DTS_HD_SECONDARY_AUDIO, Properties.Resources.dts_hd },
+
+                      { TSStreamType.LPCM_AUDIO, Properties.Resources.lpcm },
+
+                      { TSStreamType.MPEG1_AUDIO, Properties.Resources.mpeg1_audio },
+                      { TSStreamType.MPEG2_AUDIO, Properties.Resources.mpeg2_audio },
+
+                      { TSStreamType.AVC_VIDEO, Properties.Resources.avc },
+                      { TSStreamType.MPEG1_VIDEO, Properties.Resources.mpeg1_video },
+                      { TSStreamType.MPEG2_VIDEO, Properties.Resources.mpeg2_video },
+
+                      { TSStreamType.PRESENTATION_GRAPHICS, Properties.Resources.pgs },
+                      { TSStreamType.SUBTITLE, Properties.Resources.txt }
+                  };
+
+        public static Icon GetCodecIcon(TSStreamType streamType)
+        {
+            return CodecIcons.ContainsKey(streamType) ? CodecIcons[streamType] : Properties.Resources.unknown;
+        }
+
         public TSStream()
         {
         }

@@ -60,73 +60,73 @@ namespace BDAutoMuxer.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap avc {
+        internal static System.Drawing.Icon avc {
             get {
                 object obj = ResourceManager.GetObject("avc", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap dd {
+        internal static System.Drawing.Icon dd {
             get {
                 object obj = ResourceManager.GetObject("dd", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap dd_plus {
+        internal static System.Drawing.Icon dd_plus {
             get {
                 object obj = ResourceManager.GetObject("dd_plus", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap dts {
+        internal static System.Drawing.Icon dts {
             get {
                 object obj = ResourceManager.GetObject("dts", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap dts_hd {
+        internal static System.Drawing.Icon dts_hd {
             get {
                 object obj = ResourceManager.GetObject("dts_hd", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap lpcm {
+        internal static System.Drawing.Icon lpcm {
             get {
                 object obj = ResourceManager.GetObject("lpcm", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap mpeg1_audio {
+        internal static System.Drawing.Icon mpeg1_audio {
             get {
                 object obj = ResourceManager.GetObject("mpeg1_audio", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap mpeg1_video {
+        internal static System.Drawing.Icon mpeg1_video {
             get {
                 object obj = ResourceManager.GetObject("mpeg1_video", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap mpeg2_audio {
+        internal static System.Drawing.Icon mpeg2_audio {
             get {
                 object obj = ResourceManager.GetObject("mpeg2_audio", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap mpeg2_video {
+        internal static System.Drawing.Icon mpeg2_video {
             get {
                 object obj = ResourceManager.GetObject("mpeg2_video", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -137,31 +137,31 @@ namespace BDAutoMuxer.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap pgs {
+        internal static System.Drawing.Icon pgs {
             get {
                 object obj = ResourceManager.GetObject("pgs", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap truehd {
+        internal static System.Drawing.Icon truehd {
             get {
                 object obj = ResourceManager.GetObject("truehd", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap txt {
+        internal static System.Drawing.Icon txt {
             get {
                 object obj = ResourceManager.GetObject("txt", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap vc1 {
+        internal static System.Drawing.Icon unknown {
             get {
-                object obj = ResourceManager.GetObject("vc1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("unknown", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }
