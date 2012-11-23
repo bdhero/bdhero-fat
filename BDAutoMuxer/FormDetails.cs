@@ -82,6 +82,11 @@ namespace BDAutoMuxer
 
         #region Properties
 
+        private bool CanDragAndDrop
+        {
+            get { return !_isScanningBDROM && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing; }
+        }
+
         private Language[] GetSortedLanguageArray(ICollection<Language> collection)
         {
             int i = 0;
@@ -1712,14 +1717,14 @@ namespace BDAutoMuxer
 
         private void textBoxOutputDir_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.All : DragDropEffects.None;
+            e.Effect = CanDragAndDrop && e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.All : DragDropEffects.None;
         }
 
         private void textBoxOutputDir_DragDrop(object sender, DragEventArgs e)
         {
             string path = DragUtils.GetFirstPath(e);
-            
-            if (path == null) return;
+
+            if (!CanDragAndDrop || path == null) return;
 
             textBoxOutputDir.Text = FileUtils.IsDirectory(path) ? path : Path.GetDirectoryName(path);
 
@@ -1728,7 +1733,7 @@ namespace BDAutoMuxer
 
         private void textBoxOutputFileName_DragEnter(object sender, DragEventArgs e)
         {
-            if (DragUtils.HasFile(e) && !String.IsNullOrEmpty(DragUtils.GetFirstFileNameWithoutExtension(e)))
+            if (CanDragAndDrop && DragUtils.HasFile(e) && !String.IsNullOrEmpty(DragUtils.GetFirstFileNameWithoutExtension(e)))
                 e.Effect = DragDropEffects.All;
             else
                 e.Effect = DragDropEffects.None;
@@ -1737,7 +1742,7 @@ namespace BDAutoMuxer
         private void textBoxOutputFileName_DragDrop(object sender, DragEventArgs e)
         {
             string filenameWithoutExtension = DragUtils.GetFirstFileNameWithoutExtension(e);
-            if (!String.IsNullOrEmpty(filenameWithoutExtension))
+            if (!CanDragAndDrop || !String.IsNullOrEmpty(filenameWithoutExtension))
                 textBoxOutputFileName.Text = filenameWithoutExtension;
         }
 
@@ -1886,14 +1891,14 @@ namespace BDAutoMuxer
 
         private void FormDetails_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = !String.IsNullOrEmpty(GetBDROMDirectory(e)) ? DragDropEffects.All : DragDropEffects.None;
+            e.Effect = CanDragAndDrop && !String.IsNullOrEmpty(GetBDROMDirectory(e)) ? DragDropEffects.All : DragDropEffects.None;
         }
 
         private void FormDetails_DragDrop(object sender, DragEventArgs e)
         {
             var firstDirectoryPath = GetBDROMDirectory(e);
 
-            if (String.IsNullOrEmpty(firstDirectoryPath)) return;
+            if (!CanDragAndDrop || String.IsNullOrEmpty(firstDirectoryPath)) return;
 
             textBoxSource.Text = firstDirectoryPath;
             buttonRescan_Click();
