@@ -148,6 +148,7 @@
             this.columnHeaderSubtitleCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderSubtitleLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelSubtitleTracks = new System.Windows.Forms.Label();
+            this.buttonPlaylistOpen = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.tabPageOutput.SuspendLayout();
@@ -1312,6 +1313,7 @@
             // 
             // splitContainerTracksOuter.Panel1
             // 
+            this.splitContainerTracksOuter.Panel1.Controls.Add(this.buttonPlaylistOpen);
             this.splitContainerTracksOuter.Panel1.Controls.Add(this.labelPlaylist);
             this.splitContainerTracksOuter.Panel1.Controls.Add(this.comboBoxPlaylist);
             this.splitContainerTracksOuter.Panel1.Controls.Add(this.listViewVideoTracks);
@@ -1321,13 +1323,13 @@
             // 
             this.splitContainerTracksOuter.Panel2.Controls.Add(this.splitContainerTracksInner);
             this.splitContainerTracksOuter.Size = new System.Drawing.Size(480, 363);
-            this.splitContainerTracksOuter.SplitterDistance = 118;
+            this.splitContainerTracksOuter.SplitterDistance = 126;
             this.splitContainerTracksOuter.TabIndex = 5;
             // 
             // labelPlaylist
             // 
             this.labelPlaylist.AutoSize = true;
-            this.labelPlaylist.Location = new System.Drawing.Point(5, 4);
+            this.labelPlaylist.Location = new System.Drawing.Point(3, 5);
             this.labelPlaylist.Name = "labelPlaylist";
             this.labelPlaylist.Size = new System.Drawing.Size(42, 13);
             this.labelPlaylist.TabIndex = 0;
@@ -1337,7 +1339,7 @@
             // 
             this.comboBoxPlaylist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPlaylist.FormattingEnabled = true;
-            this.comboBoxPlaylist.Location = new System.Drawing.Point(92, 1);
+            this.comboBoxPlaylist.Location = new System.Drawing.Point(90, 2);
             this.comboBoxPlaylist.Name = "comboBoxPlaylist";
             this.comboBoxPlaylist.Size = new System.Drawing.Size(121, 21);
             this.comboBoxPlaylist.TabIndex = 0;
@@ -1355,9 +1357,9 @@
             this.columnHeaderVideoFrameRate,
             this.columnHeaderVideoAspectRatio});
             this.listViewVideoTracks.FullRowSelect = true;
-            this.listViewVideoTracks.Location = new System.Drawing.Point(92, 28);
+            this.listViewVideoTracks.Location = new System.Drawing.Point(90, 29);
             this.listViewVideoTracks.Name = "listViewVideoTracks";
-            this.listViewVideoTracks.Size = new System.Drawing.Size(384, 88);
+            this.listViewVideoTracks.Size = new System.Drawing.Size(384, 94);
             this.listViewVideoTracks.TabIndex = 1;
             this.listViewVideoTracks.UseCompatibleStateImageBehavior = false;
             this.listViewVideoTracks.View = System.Windows.Forms.View.Details;
@@ -1385,7 +1387,7 @@
             // labelVideoTracks
             // 
             this.labelVideoTracks.AutoSize = true;
-            this.labelVideoTracks.Location = new System.Drawing.Point(5, 32);
+            this.labelVideoTracks.Location = new System.Drawing.Point(3, 33);
             this.labelVideoTracks.Name = "labelVideoTracks";
             this.labelVideoTracks.Size = new System.Drawing.Size(69, 13);
             this.labelVideoTracks.TabIndex = 4;
@@ -1407,8 +1409,8 @@
             // 
             this.splitContainerTracksInner.Panel2.Controls.Add(this.listViewSubtitleTracks);
             this.splitContainerTracksInner.Panel2.Controls.Add(this.labelSubtitleTracks);
-            this.splitContainerTracksInner.Size = new System.Drawing.Size(480, 241);
-            this.splitContainerTracksInner.SplitterDistance = 120;
+            this.splitContainerTracksInner.Size = new System.Drawing.Size(480, 233);
+            this.splitContainerTracksInner.SplitterDistance = 116;
             this.splitContainerTracksInner.TabIndex = 0;
             // 
             // listViewAudioTracks
@@ -1424,7 +1426,7 @@
             this.listViewAudioTracks.FullRowSelect = true;
             this.listViewAudioTracks.Location = new System.Drawing.Point(91, 3);
             this.listViewAudioTracks.Name = "listViewAudioTracks";
-            this.listViewAudioTracks.Size = new System.Drawing.Size(386, 114);
+            this.listViewAudioTracks.Size = new System.Drawing.Size(386, 110);
             this.listViewAudioTracks.TabIndex = 0;
             this.listViewAudioTracks.UseCompatibleStateImageBehavior = false;
             this.listViewAudioTracks.View = System.Windows.Forms.View.Details;
@@ -1464,7 +1466,7 @@
             this.listViewSubtitleTracks.FullRowSelect = true;
             this.listViewSubtitleTracks.Location = new System.Drawing.Point(91, 3);
             this.listViewSubtitleTracks.Name = "listViewSubtitleTracks";
-            this.listViewSubtitleTracks.Size = new System.Drawing.Size(386, 111);
+            this.listViewSubtitleTracks.Size = new System.Drawing.Size(386, 107);
             this.listViewSubtitleTracks.TabIndex = 0;
             this.listViewSubtitleTracks.UseCompatibleStateImageBehavior = false;
             this.listViewSubtitleTracks.View = System.Windows.Forms.View.Details;
@@ -1487,6 +1489,16 @@
             this.labelSubtitleTracks.Size = new System.Drawing.Size(77, 13);
             this.labelSubtitleTracks.TabIndex = 6;
             this.labelSubtitleTracks.Text = "Subtitle tracks:";
+            // 
+            // buttonPlaylistOpen
+            // 
+            this.buttonPlaylistOpen.Location = new System.Drawing.Point(219, 0);
+            this.buttonPlaylistOpen.Name = "buttonPlaylistOpen";
+            this.buttonPlaylistOpen.Size = new System.Drawing.Size(75, 23);
+            this.buttonPlaylistOpen.TabIndex = 5;
+            this.buttonPlaylistOpen.Text = "Play";
+            this.buttonPlaylistOpen.UseVisualStyleBackColor = true;
+            this.buttonPlaylistOpen.Click += new System.EventHandler(this.buttonPlaylistOpen_Click);
             // 
             // FormDetails
             // 
@@ -1687,5 +1699,6 @@
         private System.Windows.Forms.Label labelSource;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private System.Windows.Forms.Button buttonPlaylistOpen;
     }
 }

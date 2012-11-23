@@ -1498,6 +1498,7 @@ namespace BDAutoMuxer
             ShowProgressTabPage = ShowProgressTabPage || _isMuxing;
 
             hiddenTrackLabel.Visible = SelectedPlaylistHasHiddenTracks;
+            buttonPlaylistOpen.Enabled = SelectedPlaylist != null;
 
             toolStripProgressBar.Visible = _isMuxing;
 
@@ -1515,16 +1516,8 @@ namespace BDAutoMuxer
             buttonSubmitToDB.Enabled = CanSubmitToDb;
             submitToDbToolStripMenuItem.Enabled = CanSubmitToDb;
 
-            continueButton.Text = "Mux it!";
-            continueButton.Enabled = true;
-
-            if (!_initialized)
-                continueButton.Enabled = false;
-            else if (_isMuxing)
-                continueButton.Text = _tsMuxer.IsPaused ? "Resume" : "Pause";
-            else if (tabControl.SelectedTab != tabPageOutput || comboBoxPlaylist.Items.Count == 0)
-                continueButton.Enabled = false;
-
+            continueButton.Text = _isMuxing ? (_tsMuxer.IsPaused ? "Resume" : "Pause") : "Mux it!";
+            continueButton.Enabled = _initialized && (_isMuxing || tabControl.SelectedTab == tabPageOutput) && SelectedPlaylist != null;
             cancelButton.Text = _isMuxing ? "Stop" : "Close";
 
             ResizeDiscTab();
@@ -1874,6 +1867,12 @@ namespace BDAutoMuxer
 
             searchButton_Click();
             e.Handled = true;
+        }
+
+        private void buttonPlaylistOpen_Click(object sender, EventArgs e)
+        {
+            if (SelectedPlaylist != null)
+                PlayFile(SelectedPlaylist.FullName);
         }
 
         private static bool IsBDROMDir(DirectoryInfo dir)
