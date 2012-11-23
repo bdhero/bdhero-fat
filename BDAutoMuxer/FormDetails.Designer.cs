@@ -233,6 +233,7 @@
             // 
             this.hiddenTrackLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.hiddenTrackLabel.AutoSize = true;
+            this.hiddenTrackLabel.ForeColor = System.Drawing.SystemColors.GrayText;
             this.hiddenTrackLabel.Location = new System.Drawing.Point(10, 571);
             this.hiddenTrackLabel.Name = "hiddenTrackLabel";
             this.hiddenTrackLabel.Size = new System.Drawing.Size(165, 13);

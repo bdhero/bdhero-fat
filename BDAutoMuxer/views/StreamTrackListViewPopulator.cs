@@ -148,7 +148,12 @@ namespace BDAutoMuxer.views
 
                 trackIcons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
 
-                tracks.Items.Add(new ListViewItem(streamSubItems, 0) {Tag = stream.PID, ImageIndex = i++});
+                var listViewItem = new ListViewItem(streamSubItems, 0) {Tag = stream.PID, ImageIndex = i++};
+
+                if (stream.IsHidden)
+                    listViewItem.ForeColor = SystemColors.GrayText;
+
+                tracks.Items.Add(listViewItem);
             }
 
             tracks.SmallImageList = trackIcons;
