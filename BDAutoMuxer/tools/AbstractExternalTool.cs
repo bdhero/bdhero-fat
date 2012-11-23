@@ -186,7 +186,7 @@ namespace BDAutoMuxer.tools
             }
         }
 
-        public string ErrorMessage { get { return string.Join("\n", errorMessages); } }
+        public string ErrorMessage { get { return String.Join("\n", errorMessages); } }
 
         #endregion
 
@@ -194,7 +194,7 @@ namespace BDAutoMuxer.tools
 
         ~AbstractExternalTool()
         {
-            Cleanup();
+            DeleteTempFiles();
         }
 
         #endregion
@@ -343,8 +343,8 @@ namespace BDAutoMuxer.tools
                 // Use underscored field name to avoid crashing BDAutoMuxer by calling UpdateTime() unnecessarily
                 IsError = true;
 
-                var extraDetails = p != null ? string.Format(" with exit code {0}", p.ExitCode) : "";
-                var errorMessage = string.Format("tsMuxeR terminated unexpectedly{0}.", extraDetails);
+                var extraDetails = p != null ? String.Format(" with exit code {0}", p.ExitCode) : "";
+                var errorMessage = String.Format("tsMuxeR terminated unexpectedly{0}.", extraDetails);
 
                 errorMessages.Add(errorMessage);
             }
@@ -377,7 +377,12 @@ namespace BDAutoMuxer.tools
             {
                 if (!_process.HasExited)
                     _process.Kill();
+
                 e.Cancel = true;
+
+                if (HasOutputFiles() && PromptToDeleteOutputFiles())
+                    DeleteOutputFiles();
+
                 return;
             }
 
@@ -386,7 +391,7 @@ namespace BDAutoMuxer.tools
             _worker.ReportProgress(100);
         }
 
-        protected void Cleanup()
+        protected void DeleteTempFiles()
         {
             try
             {
@@ -422,6 +427,67 @@ namespace BDAutoMuxer.tools
             catch
             {
             }
+        }
+
+        protected ISet<string> GetOutputFiles()
+        {
+            return new HashSet<string>(GetOutputFilesImpl().Where(File.Exists).Select(Path.GetFullPath));
+        }
+
+        protected abstract ISet<string> GetOutputFilesImpl();
+
+        protected bool HasOutputFiles()
+        {
+            return GetOutputFiles().Any();
+        }
+
+        protected void DeleteOutputFiles()
+        {
+            ISet<string> parents = new HashSet<string>();
+
+            // Delete output files
+            foreach (var path in GetOutputFiles().Where(path => !string.IsNullOrWhiteSpace(path)))
+            {
+                var parent = Path.GetDirectoryName(path);
+                if (parent != null)
+                    parents.Add(parent);
+                DeleteOutputFile(path);
+            }
+
+            // Delete empty parent directories
+            foreach (var parentDir in parents.Select(parentPath => new DirectoryInfo(parentPath)).Where(parentDir => !parentDir.GetFiles().Any() && !parentDir.GetDirectories().Any()))
+            {
+                DeleteOutputDir(parentDir);
+            }
+        }
+
+        protected static void DeleteOutputFile(string path)
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch
+            {
+            }
+        }
+
+        protected static void DeleteOutputDir(DirectoryInfo dir)
+        {
+            try
+            {
+                dir.Delete();
+            }
+            catch
+            {
+            }
+        }
+
+        private bool PromptToDeleteOutputFiles()
+        {
+            var files = String.Join("\n", GetOutputFiles().Select(path => string.Format("\t{0}", path)));
+            var message = String.Format("The following files are incomplete and unusable:\n\n{0}\n\nDo you want to delete them?", files);
+            return MessageBox.Show(message, "Delete output files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
         #region Suspend / Resume Thread
@@ -477,7 +543,7 @@ namespace BDAutoMuxer.tools
         {
             var proc = Process.GetProcessById(pid);
 
-            if (proc.ProcessName == string.Empty)
+            if (proc.ProcessName == String.Empty)
                 return;
 
             foreach (ProcessThread pT in proc.Threads)
@@ -497,7 +563,7 @@ namespace BDAutoMuxer.tools
         {
             var proc = Process.GetProcessById(pid);
 
-            if (proc.ProcessName == string.Empty)
+            if (proc.ProcessName == String.Empty)
                 return;
 
             foreach (ProcessThread pT in proc.Threads)

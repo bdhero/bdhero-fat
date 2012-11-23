@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
@@ -80,6 +81,11 @@ namespace BDAutoMuxer.tools
                 isError = true;
                 errorMessages.Add(line);
             }
+        }
+
+        protected override ISet<string> GetOutputFilesImpl()
+        {
+            return new HashSet<string>() { _outputMkvPath };
         }
     }
 }

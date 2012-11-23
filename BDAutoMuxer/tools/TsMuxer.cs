@@ -203,5 +203,10 @@ namespace BDAutoMuxer.tools
                 errorMessages.Add(line);
             }
         }
+
+        protected override ISet<string> GetOutputFilesImpl()
+        {
+            return new HashSet<string>() { _metaFilePath, _chapterTextFilePath, _chapterXMLFilePath, _outputFilePath };
+        }
     }
 }
