@@ -582,6 +582,9 @@ namespace BDAutoMuxer
 
         private void PopulateVideoTracks()
         {
+            var i = 0;
+            ImageList icons = new ImageList();
+
             foreach (TSVideoStream stream in _videoTracks)
             {
                 ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
@@ -614,12 +617,20 @@ namespace BDAutoMuxer
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
                 streamItem.Tag = stream;
                 streamItem.Checked = true;
+                streamItem.ImageIndex = i++;
                 listViewVideoTracks.Items.Add(streamItem);
+
+                icons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
             }
+
+            listViewVideoTracks.SmallImageList = icons;
         }
 
         private void PopulateAudioTracks()
         {
+            var i = 0;
+            ImageList icons = new ImageList();
+
             foreach (TSAudioStream stream in _audioTracks)
             {
                 ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
@@ -647,12 +658,20 @@ namespace BDAutoMuxer
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
                 streamItem.Tag = stream;
                 streamItem.Checked = true;
+                streamItem.ImageIndex = i++;
                 listViewAudioTracks.Items.Add(streamItem);
+
+                icons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
             }
+
+            listViewAudioTracks.SmallImageList = icons;
         }
 
         private void PopulateSubtitleTracks()
         {
+            var i = 0;
+            ImageList icons = new ImageList();
+
             foreach (TSStream stream in _subtitleTracks.Where(track => track.StreamType != TSStreamType.INTERACTIVE_GRAPHICS))
             {
                 ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
@@ -675,8 +694,13 @@ namespace BDAutoMuxer
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
                 streamItem.Tag = stream;
                 streamItem.Checked = true;
+                streamItem.ImageIndex = i++;
                 listViewSubtitleTracks.Items.Add(streamItem);
+
+                icons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
             }
+
+            listViewSubtitleTracks.SmallImageList = icons;
         }
 
         private void ResizeOutputTab(object sender = null, EventArgs e = null)
