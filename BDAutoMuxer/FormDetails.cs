@@ -275,6 +275,10 @@ namespace BDAutoMuxer
             pictureBoxMoviePoster.MouseEnter += (o, args) => SetTabStatus(_tmdbMovieUrl, true);
             pictureBoxMoviePoster.MouseLeave += (o, args) => RestoreTabStatus();
 
+            DragLeave += FormDetails_DragLeave;
+            textBoxOutputDir.DragLeave += textBoxOutputDir_DragLeave;
+            textBoxOutputFileName.DragLeave += textBoxOutputFileName_DragLeave;
+
             _playlistFinder.ScanSuccess += ScanSuccess;
             _playlistFinder.ScanError += ScanError;
             _playlistFinder.ScanCompleted += ScanCompleted;
@@ -1717,33 +1721,48 @@ namespace BDAutoMuxer
 
         private void textBoxOutputDir_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = CanDragAndDrop && e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.All : DragDropEffects.None;
+            var accept = CanDragAndDrop && e.Data.GetDataPresent(DataFormats.FileDrop);
+            e.Effect = accept ? DragDropEffects.All : DragDropEffects.None;
+            textBoxOutputDir.BorderStyle = accept ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
         }
 
         private void textBoxOutputDir_DragDrop(object sender, DragEventArgs e)
         {
             string path = DragUtils.GetFirstPath(e);
 
-            if (!CanDragAndDrop || path == null) return;
+            if (CanDragAndDrop && path != null)
+                textBoxOutputDir.Text = FileUtils.IsDirectory(path) ? path : Path.GetDirectoryName(path);
 
-            textBoxOutputDir.Text = FileUtils.IsDirectory(path) ? path : Path.GetDirectoryName(path);
+            textBoxOutputDir.BorderStyle = BorderStyle.Fixed3D;
 
             // TODO: Validate that the selected directory has enough free space for 2x-3x the playlist size
         }
 
+        private void textBoxOutputDir_DragLeave(object sender, EventArgs e)
+        {
+            textBoxOutputDir.BorderStyle = BorderStyle.Fixed3D;
+        }
+
         private void textBoxOutputFileName_DragEnter(object sender, DragEventArgs e)
         {
-            if (CanDragAndDrop && DragUtils.HasFile(e) && !String.IsNullOrEmpty(DragUtils.GetFirstFileNameWithoutExtension(e)))
-                e.Effect = DragDropEffects.All;
-            else
-                e.Effect = DragDropEffects.None;
+            var accept = CanDragAndDrop && DragUtils.HasFile(e) && !String.IsNullOrEmpty(DragUtils.GetFirstFileNameWithoutExtension(e));
+            e.Effect = accept ? DragDropEffects.All : DragDropEffects.None;
+            textBoxOutputFileName.BorderStyle = accept ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
         }
 
         private void textBoxOutputFileName_DragDrop(object sender, DragEventArgs e)
         {
             string filenameWithoutExtension = DragUtils.GetFirstFileNameWithoutExtension(e);
-            if (!CanDragAndDrop || !String.IsNullOrEmpty(filenameWithoutExtension))
+
+            if (CanDragAndDrop && !String.IsNullOrEmpty(filenameWithoutExtension))
                 textBoxOutputFileName.Text = filenameWithoutExtension;
+
+            textBoxOutputFileName.BorderStyle = BorderStyle.Fixed3D;
+        }
+
+        private void textBoxOutputFileName_DragLeave(object sender, EventArgs e)
+        {
+            textBoxOutputFileName.BorderStyle = BorderStyle.Fixed3D;
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -1891,17 +1910,26 @@ namespace BDAutoMuxer
 
         private void FormDetails_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = CanDragAndDrop && !String.IsNullOrEmpty(GetBDROMDirectory(e)) ? DragDropEffects.All : DragDropEffects.None;
+            var accept = CanDragAndDrop && !String.IsNullOrEmpty(GetBDROMDirectory(e));
+            e.Effect = accept ? DragDropEffects.All : DragDropEffects.None;
+            textBoxSource.BorderStyle = accept ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
         }
 
         private void FormDetails_DragDrop(object sender, DragEventArgs e)
         {
             var firstDirectoryPath = GetBDROMDirectory(e);
 
+            textBoxSource.BorderStyle = BorderStyle.Fixed3D;
+
             if (!CanDragAndDrop || String.IsNullOrEmpty(firstDirectoryPath)) return;
 
             textBoxSource.Text = firstDirectoryPath;
             buttonRescan_Click();
+        }
+
+        private void FormDetails_DragLeave(object sender, EventArgs e)
+        {
+            textBoxSource.BorderStyle = BorderStyle.Fixed3D;
         }
 
         private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
