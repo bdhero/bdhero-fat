@@ -1397,15 +1397,16 @@ namespace BDAutoMuxer
             menuItemOpen.Click += (s1, e1) => PlayFile(filePath);
             menuItemOpen.Enabled = FileUtils.HasProgramAssociation(filePath);
 
+            MenuItem menuItemCopyPath = new MenuItem("Copy path to clipboard");
+            menuItemCopyPath.Click += (s1, e1) => Clipboard.SetText(filePath);
+
             MenuItem menuItemShow = new MenuItem("Show in folder");
             menuItemShow.Click += (s1, e1) => ShowInFolder(filePath);
 
-            MenuItem menuItemCopyPath = new MenuItem("Copy path");
-            menuItemCopyPath.Click += (s1, e1) => Clipboard.SetText(filePath);
-
             contextMenu.MenuItems.Add(menuItemOpen);
-            contextMenu.MenuItems.Add(menuItemShow);
+            contextMenu.MenuItems.Add("-");
             contextMenu.MenuItems.Add(menuItemCopyPath);
+            contextMenu.MenuItems.Add(menuItemShow);
 
             contextMenu.Show(control, new Point(x, y));
         }
