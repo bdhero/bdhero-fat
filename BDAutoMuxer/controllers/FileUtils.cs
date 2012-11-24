@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,8 +8,19 @@ using System.Text.RegularExpressions;
 
 namespace BDAutoMuxer.controllers
 {
-    public class FileUtils
+    public static class FileUtils
     {
+        public static Icon ExtractIcon(string exePath)
+        {
+            return Icon.ExtractAssociatedIcon(exePath);
+        }
+
+        public static Image ExtractIconAsBitmap(string exePath)
+        {
+            var icon = ExtractIcon(exePath);
+            return icon != null ? icon.ToBitmap() : null;
+        }
+
         public static bool IsFile(string path)
         {
             return !IsDirectory(path);

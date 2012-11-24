@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using BDAutoMuxer.Properties;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
@@ -541,6 +542,15 @@ namespace BDAutoMuxer
             comboBoxPlaylist.DataSource = null;
             comboBoxPlaylist.DataSource = new List<TSPlaylistFile>(_filteredPlaylists).ToArray();
             comboBoxPlaylist.Enabled = _filteredPlaylists.Count > 1;
+
+            buttonPlaylistOpen.Enabled = SelectedPlaylist != null;
+
+            if (SelectedPlaylist != null)
+            {
+                var icon = FileUtils.ExtractIconAsBitmap(SelectedPlaylist.FullName);
+                if (icon != null)
+                    buttonPlaylistOpen.Image = new Bitmap(icon, 16, 16);
+            }
 
             ResetUI();
         }
@@ -1390,23 +1400,29 @@ namespace BDAutoMuxer
 
         private void ShowPlayableFileContextMenu(Control control, string filePath, int x, int y)
         {
-            ContextMenu contextMenu = new ContextMenu();
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
 
-            MenuItem menuItemOpen = new MenuItem(string.Format("Open \"{0}\"", Path.GetFileName(filePath)));
-            menuItemOpen.DefaultItem = true;
+            ToolStripMenuItem menuItemOpen = new ToolStripMenuItem(string.Format("&Open \"{0}\"", Path.GetFileName(filePath)));
+            //menuItemOpen.DefaultItem = true;
+            menuItemOpen.Font = new Font(menuItemOpen.Font, FontStyle.Bold);
+            menuItemOpen.Image = FileUtils.ExtractIconAsBitmap(filePath);
             menuItemOpen.Click += (s1, e1) => PlayFile(filePath);
             menuItemOpen.Enabled = FileUtils.HasProgramAssociation(filePath);
 
-            MenuItem menuItemCopyPath = new MenuItem("Copy path to clipboard");
+            ToolStripMenuItem menuItemCopyPath = new ToolStripMenuItem("&Copy path to clipboard");
+            menuItemCopyPath.Image = Resources.copy;
             menuItemCopyPath.Click += (s1, e1) => Clipboard.SetText(filePath);
 
-            MenuItem menuItemShow = new MenuItem("Show in folder");
+            ToolStripMenuItem menuItemShow = new ToolStripMenuItem("Show in &folder");
+            menuItemShow.Image = Resources.folder_open;
             menuItemShow.Click += (s1, e1) => ShowInFolder(filePath);
 
-            contextMenu.MenuItems.Add(menuItemOpen);
-            contextMenu.MenuItems.Add("-");
-            contextMenu.MenuItems.Add(menuItemCopyPath);
-            contextMenu.MenuItems.Add(menuItemShow);
+            contextMenu.Items.Add(menuItemOpen);
+            contextMenu.Items.Add("-");
+            contextMenu.Items.Add(menuItemCopyPath);
+            contextMenu.Items.Add(menuItemShow);
+
+//            contextMenu.Opening += (s, e) => menuItemOpen.Select();
 
             contextMenu.Show(control, new Point(x, y));
         }
@@ -2043,5 +2059,19 @@ namespace BDAutoMuxer
         }
 
         #endregion
+
+        private void contextMenuStripTmdb_Opened(object sender, EventArgs e)
+        {
+            if (toolStripMenuItemTmdb.Image == null)
+                toolStripMenuItemTmdb.Image = Win32.Win32.DefaultBrowserIconAsBitmap;
+            toolStripMenuItemTmdb.Enabled = _tmdbMovieUrl != null;
+        }
+
+        private void toolStripMenuItemTmdb_Click(object sender, EventArgs e)
+        {
+            if (_tmdbMovieUrl != null)
+                Process.Start(_tmdbMovieUrl);
+        }
+
     }
 }
