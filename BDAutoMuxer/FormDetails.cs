@@ -547,9 +547,13 @@ namespace BDAutoMuxer
 
             if (SelectedPlaylist != null)
             {
-                var icon = FileUtils.ExtractIconAsBitmap(SelectedPlaylist.FullName);
+//                var icon = FileUtils.ExtractIcon(SelectedPlaylist.FullName);
+                var icon = FileUtils.GetDefaultProgramIcon(SelectedPlaylist.FullName);
                 if (icon != null)
-                    buttonPlaylistOpen.Image = new Bitmap(icon, 16, 16);
+                {
+                    var iconSized = new Icon(icon, 16, 16);
+                    buttonPlaylistOpen.Image = new Bitmap(iconSized.ToBitmap(), 16, 16);
+                }
             }
 
             ResetUI();
@@ -1505,6 +1509,8 @@ namespace BDAutoMuxer
 
         private void ResetUI()
         {
+            if (Disposing || IsDisposed) return;
+
             EnableScanControls = !_isScanningBDROM && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
 
             tabControl.Enabled = _initialized && !_isSearchingMainMovieDb;
@@ -1533,7 +1539,7 @@ namespace BDAutoMuxer
             submitToDbToolStripMenuItem.Enabled = CanSubmitToDb;
 
             continueButton.Text = _isMuxing ? (_tsMuxer.IsPaused ? "Resume" : "Pause") : "Mux it!";
-            continueButton.Enabled = _initialized && (_isMuxing || tabControl.SelectedTab == tabPageOutput) && SelectedPlaylist != null;
+            continueButton.Visible = _initialized && (_isMuxing || tabControl.SelectedTab == tabPageOutput) && SelectedPlaylist != null;
             cancelButton.Text = _isMuxing ? "Stop" : "Close";
 
             ResizeDiscTab();
