@@ -22,48 +22,6 @@ namespace BDAutoMuxer.controllers
             return icon != null ? icon.ToBitmap() : null;
         }
 
-        /// <summary>
-        /// Returns the absolute path to the default program associated with the given file type, or null if no association exists.
-        /// </summary>
-        /// <param name="fileNameOrExt"></param>
-        /// <returns></returns>
-        public static String GetDefaultProgram(string fileNameOrExt)
-        {
-            string program = null;
-            string filePath = fileNameOrExt;
-            if (!File.Exists(filePath))
-            {
-                var fileName = Path.GetFileName(filePath);
-                var fileExt = fileName != null && fileName.Contains(".") ? Path.GetExtension(fileName) : "." + fileName;
-                filePath = Path.Combine(Path.GetTempPath(), "empty" + fileExt);
-                File.Create(filePath, 8, FileOptions.DeleteOnClose);
-            }
-            var process = new Process {StartInfo = {FileName = filePath, ErrorDialog = false}};
-            try
-            {
-                process.Start();
-                process.PriorityClass = ProcessPriorityClass.Idle;
-                program = process.MainModule.FileName;
-                process.Kill();
-            }
-            catch
-            {
-            }
-            return program;
-        }
-
-        public static Icon GetDefaultProgramIcon(string fileNameOrExt)
-        {
-            var defaultProgram = GetDefaultProgram(fileNameOrExt);
-            return defaultProgram != null ? ExtractIcon(defaultProgram) : null;
-        }
-
-        public static Image GetDefaultProgramIconAsBitmap(string filenameOrExt)
-        {
-            var defaultProgramIcon = GetDefaultProgramIcon(filenameOrExt);
-            return defaultProgramIcon != null ? defaultProgramIcon.ToBitmap() : null;
-        }
-
         public static bool IsFile(string path)
         {
             return !IsDirectory(path);

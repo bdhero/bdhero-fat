@@ -547,8 +547,7 @@ namespace BDAutoMuxer
 
             if (SelectedPlaylist != null)
             {
-//                var icon = FileUtils.ExtractIcon(SelectedPlaylist.FullName);
-                var icon = FileUtils.GetDefaultProgramIcon(SelectedPlaylist.FullName);
+                var icon = FileUtils.ExtractIcon(SelectedPlaylist.FullName);
                 if (icon != null)
                 {
                     var iconSized = new Icon(icon, 16, 16);
@@ -1108,6 +1107,11 @@ namespace BDAutoMuxer
             if (!String.IsNullOrEmpty(_tsMuxer.State))
             {
                 labelTsMuxerProgress.Text += String.Format(" ({0})", _tsMuxer.State);
+
+                if (_tsMuxer.IsPaused)
+                    TaskbarProgress.SetProgressState(TaskbarProgressBarState.Paused, Handle);
+                else if (_tsMuxer.IsCanceled || _tsMuxer.IsError)
+                    TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
             }
         }
 
@@ -1129,10 +1133,9 @@ namespace BDAutoMuxer
 
             ResetUI();
 
-            TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
-
             if (e.Cancelled && _tsMuxer.IsCanceled)
             {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
                 SetTabStatus(tabPageProgress, "tsMuxeR canceled");
             }
             else if (e.Error != null)
@@ -1142,6 +1145,7 @@ namespace BDAutoMuxer
             }
             else
             {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
                 ShowMessage(tabPageProgress, "tsMuxeR completed!", "Finished muxing M2TS with tsMuxeR!");
             }
         }
