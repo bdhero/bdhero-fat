@@ -4,7 +4,7 @@
 
 BDAutoMuxer is an intelligent, automatic tool for detecting main movie playlist(s) on Blu-ray Discs™ and muxing them to M2TS / MKV containers.
 
-### Our Goal
+## Our Goal
 
 Our goal is simple:
 
@@ -12,7 +12,7 @@ Our goal is simple:
 2.  Make it easy for users to rip only the languages, subtitles, and audio codecs they want
 3.  Never require manual intervention from more than one user for a given disc
 
-### The Problem
+## The Problem
 
 From a technical perspective, the Blu-ray Disc™ standard is a total disaster.  It's arbitrarily and unnecessarily complex and gives third party tools almost no useful information to work with.
 
@@ -39,7 +39,7 @@ The major issues we intend to solve are:
 
     _\* Most newer discs actually **do** contain the movie name and occasionally the year, but they vary greatly in how they format it, and they typically tack a bunch of useless crap on the end; e.g., "Amazing Spider-Man, The - Blu-ray™", "Beauty and the Beast (Disc 1) - Blu-ray™".  Although human beings have no trouble extracting the movie name, parsing these strings **correctly** in software (and getting it right 100% of the time) is a bit trickier.  Not impossible, but definitely a pain in the ass._
 
-### The Solution
+## The Solution
 
 BDAutoMuxer achieves our goals and solves the aforementioned issues with the following features:
 
@@ -73,17 +73,17 @@ BDAutoMuxer achieves our goals and solves the aforementioned issues with the fol
         =>
         C:\Users\BobaFett\AppData\Local\Temp\CONTACT\Contact (1997) [1080p] [AVC] [DTS-HD MA].m2ts
 
-## Screenshots
+# Screenshots
 
-### 1 - Disc tab
+## 1 - Disc tab
 
 ![Disc tab screenshot](https://raw.github.com/acdvorak/bdautomuxer/master/Screenshots/1-Disc.png)
 
-### 2 - Output tab
+## 2 - Output tab
 
 ![Output tab screenshot](https://raw.github.com/acdvorak/bdautomuxer/master/Screenshots/2-Output.png)
 
-### 3 - Progress tab
+## 3 - Progress tab
 
 ![Progress tab screenshot](https://raw.github.com/acdvorak/bdautomuxer/master/Screenshots/3-Progress.png)
 
@@ -91,21 +91,21 @@ BDAutoMuxer achieves our goals and solves the aforementioned issues with the fol
 
 BDAutoMuxer would not be possible without the **exceptional** work of these amazing free and open source projects:
 
-### BDInfo
+*  **BDInfo**
 
-BDAutoMuxer is a fork of the **fantastic** [BDInfo][bdinfo] tool by [CinemaSquid][cinemasquid].
+    BDAutoMuxer is a fork of the **fantastic** [BDInfo][bdinfo] tool by [CinemaSquid][cinemasquid].
 
-### tsMuxeR
+*  **tsMuxeR**
 
-BD-ROM to M2TS muxing is made possible by [tsMuxeR][tsmuxer], a (sadly) discontinued product from SmartLabs.
+    BD-ROM to M2TS muxing is made possible by [tsMuxeR][tsmuxer], a (sadly) discontinued product from SmartLabs.
 
-### mkvmerge
+*  **mkvmerge**
 
-Remuxing from M2TS to MKV is done with [mkvmerge][mkvmerge], part of the **outstanding** [MKVToolNix][mkvtoolnix] suite.
+    Remuxing from M2TS to MKV is done with [mkvmerge][mkvmerge], part of the **outstanding** [MKVToolNix][mkvtoolnix] suite.
 
-### BDAutoMuxer
+*  **BDAutoMuxer**
 
-BDAutoMuxer is developed and maintained by [Andy Dvorak][andydvorak] and [Chris Spencer][chrisspencer].
+    BDAutoMuxer is developed and maintained by [Andy Dvorak][andydvorak] and [Chris Spencer][chrisspencer].
 
 # License
 
