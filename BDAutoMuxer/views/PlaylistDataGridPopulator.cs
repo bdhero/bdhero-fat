@@ -250,11 +250,10 @@ namespace BDAutoMuxer.views
         {
             get
             {
-                return
-                    new HashSet<Language>(
-                        (from item in _playlistGridItems
-                         where item.IsMainMovie
-                         select Language.GetLanguage(item.VideoLanguage)));
+                return new HashSet<Language>(
+                    (from item in _playlistGridItems
+                     where item.IsMainMovie
+                     select item.VideoLanguageObject));
             }
         }
 
