@@ -34,6 +34,8 @@ namespace BDAutoMuxer.views
             {
                 if (value == null) return;
 
+                _dataGridView.EndEdit();
+
                 for (var i = 0; i < _playlistGridItems.Count; i++)
                 {
                     var item1 = _playlistGridItems[i];
@@ -47,6 +49,8 @@ namespace BDAutoMuxer.views
                         item2.VideoLanguageAuto = value;
                     }
                 }
+
+                _dataGridView.Refresh();
             }
         }
 

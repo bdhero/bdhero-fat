@@ -373,7 +373,7 @@
             this.maskedTextBoxYear.Size = new System.Drawing.Size(42, 20);
             this.maskedTextBoxYear.TabIndex = 2;
             this.maskedTextBoxYear.Tag = "Movie year";
-            this.maskedTextBoxYear.TextChanged += new System.EventHandler(this.maskedTextBoxYear_TextChanged);
+            this.maskedTextBoxYear.TextChanged += new System.EventHandler(this.TmdbSearchTextChanged);
             this.maskedTextBoxYear.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.movieNameTextBox_KeyPress);
             // 
             // searchButton
@@ -406,6 +406,7 @@
             this.movieNameTextBox.Name = "movieNameTextBox";
             this.movieNameTextBox.Size = new System.Drawing.Size(386, 20);
             this.movieNameTextBox.TabIndex = 1;
+            this.movieNameTextBox.TextChanged += new System.EventHandler(this.TmdbSearchTextChanged);
             this.movieNameTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.movieNameTextBox_KeyPress);
             // 
             // discLanguageLabel

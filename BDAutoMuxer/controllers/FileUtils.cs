@@ -95,11 +95,13 @@ namespace BDAutoMuxer.controllers
 
         public static string SanitizeFileName(string fileName)
         {
-            var badCharRegex = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+            var badCharRegex = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]+");
+            var multiBadCharRegex = new Regex(@"-(?:\s+-)+");
             var multiSpaceRegex = new Regex(@"\s{2,}");
 
             var sanitizedFileName = fileName;
             sanitizedFileName = badCharRegex.Replace(sanitizedFileName, " - ");
+            sanitizedFileName = multiBadCharRegex.Replace(sanitizedFileName, "-");
             sanitizedFileName = multiSpaceRegex.Replace(sanitizedFileName, " ");
 
             return sanitizedFileName;

@@ -1248,12 +1248,13 @@ namespace BDAutoMuxer
         private void discLanguageComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var language = discLanguageComboBox.SelectedValue as Language;
-            if (_populator != null && language != null)
+            if (_populator != null && language != null && !_autoConfigured)
                 _populator.MainLanguageCode = language.ISO_639_2;
         }
 
-        private void maskedTextBoxYear_TextChanged(object sender, EventArgs e)
+        private void TmdbSearchTextChanged(object sender, EventArgs e)
         {
+            textBoxOutputDir_TextChanged(sender, e);
             textBoxOutputFileName_TextChanged(sender, e);
         }
 
@@ -1586,6 +1587,11 @@ namespace BDAutoMuxer
             textBoxOutputFileName_TextChanged(sender, e);
         }
 
+        private static string Sanitize(string text)
+        {
+            return FileUtils.SanitizeFileName(text);
+        }
+
         private string ReplacePlaceholders(string text)
         {
             if (!_initialized)
@@ -1624,6 +1630,14 @@ namespace BDAutoMuxer
                 }
             }
 
+            volume = Sanitize(volume);
+            title = Sanitize(title);
+            year = Sanitize(year);
+            res = Sanitize(res);
+            vcodec = Sanitize(vcodec);
+            acodec = Sanitize(acodec);
+            channels = Sanitize(channels);
+
             preview = Regex.Replace(preview, @"%volume%", volume, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%title%", title, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%year%", year, RegexOptions.IgnoreCase);
@@ -1635,7 +1649,7 @@ namespace BDAutoMuxer
 
             if (checkBoxReplaceSpaces.Checked)
             {
-                preview = preview.Replace(" ", textBoxReplaceSpaces.Text);
+                preview = preview.Replace(" ", Sanitize(textBoxReplaceSpaces.Text));
             }
 
             return preview;
@@ -1648,7 +1662,7 @@ namespace BDAutoMuxer
 
         private void textBoxOutputFileName_TextChanged(object sender, EventArgs e)
         {
-            textBoxOutputFileNamePreview.Text = FileUtils.SanitizeFileName(ReplacePlaceholders(textBoxOutputFileName.Text)) + labelOutputFileExtension.Text;
+            textBoxOutputFileNamePreview.Text = Sanitize(ReplacePlaceholders(textBoxOutputFileName.Text)) + labelOutputFileExtension.Text;
         }
 
         private void textBoxReplaceSpaces_TextChanged(object sender, EventArgs e)
