@@ -44,7 +44,6 @@ namespace BDAutoMuxer
         private MovieResult _tmdbMovieResult;
         private string _rootUrl;
 
-        private readonly MainMovieService _mainMovieService = new MainMovieService();
         private JsonSearchResult _mainMovieSearchResult;
 
         private BackgroundWorker _mainMovieBackgroundWorker;
@@ -809,7 +808,8 @@ namespace BDAutoMuxer
             try
             {
                 IList<TSPlaylistFile> mainPlaylists = _playlists.Where(playlist => playlist.IsFeatureLength).ToList();
-                _mainMovieSearchResult = _mainMovieService.FindMainMovie(_bdrom.VolumeLabel, mainPlaylists);
+                _mainMovieSearchResult = null;
+                _mainMovieSearchResult = MainMovieService.FindMainMovie(_bdrom.VolumeLabel, mainPlaylists);
                 e.Result = null;
             }
             catch (Exception ex)
@@ -1213,7 +1213,7 @@ namespace BDAutoMuxer
 
             try
             {
-                var postResult = _mainMovieService.PostDisc(jsonDisc);
+                var postResult = MainMovieService.PostDisc(jsonDisc);
                 if (postResult.error)
                 {
                     var errorMessage = "Unknown error occurred while POSTing to the DB";

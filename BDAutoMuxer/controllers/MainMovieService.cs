@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace BDAutoMuxer.controllers
 {
-    class MainMovieService
+    static class MainMovieService
     {
         private const string BaseUri = "http://bd.andydvorak.net/api/v1/movies";
 
@@ -25,14 +25,14 @@ namespace BDAutoMuxer.controllers
             return "playlist=" + playlist.Name + ";" + playlist.FileSize + ";" + (int) playlist.TotalLength;
         }
 
-        public JsonSearchResult FindMainMovie(string volumeLabel, IList<TSPlaylistFile> mainPlaylists)
+        public static JsonSearchResult FindMainMovie(string volumeLabel, IList<TSPlaylistFile> mainPlaylists)
         {
             var uri = GetMainMovieUri(volumeLabel, mainPlaylists);
             var responseText = HttpRequest.Get(uri);
             return JsonConvert.DeserializeObject<JsonSearchResult>(responseText);
         }
 
-        public JsonSearchResult PostDisc(JsonDisc jsonDisc)
+        public static JsonSearchResult PostDisc(JsonDisc jsonDisc)
         {
             var uri = BaseUri + "/main?api_key=" + Uri.EscapeUriString(BDAutoMuxerSettings.ApiKey);
             var jsonString = JsonConvert.SerializeObject(jsonDisc);
