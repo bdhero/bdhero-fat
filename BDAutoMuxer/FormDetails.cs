@@ -351,6 +351,7 @@ namespace BDAutoMuxer
             movieNameTextBox.Text = String.IsNullOrEmpty(_bdrom.DiscNameSearchable) ? _bdrom.VolumeLabel : _bdrom.DiscNameSearchable;
             movieNameTextBox.Text = Regex.Replace(movieNameTextBox.Text.Trim(), @"^(.*), (A|The)$", "$2 $1", RegexOptions.IgnoreCase);
             movieNameTextBox.Text = movieNameTextBox.Text.Replace("-", " ");
+            maskedTextBoxYear.Text = "";
 
             discLanguageComboBox.DataSource = new List<Language>(_languages).ToArray();
 
