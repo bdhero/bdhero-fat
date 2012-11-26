@@ -366,7 +366,7 @@ namespace BDAutoMuxer.views
             return files;
         }
 
-        private static void AutoConfigure(JsonPlaylist jsonPlaylist, Dictionary<string, PlaylistGridItem> gridItems)
+        private static void AutoConfigure(JsonPlaylist jsonPlaylist, IDictionary<string, PlaylistGridItem> gridItems)
         {
             var key = jsonPlaylist.filename.ToUpper();
 
