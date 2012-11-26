@@ -20,7 +20,7 @@ namespace BDAutoMuxer.tools
         private string _basePath;
         private string _metaFilePath;
         private string _chapterTextFilePath;
-        private string _chapterXMLFilePath;
+        private string _chapterXmlFilePath;
 
         protected override string Name { get { return "TsMuxer"; } }
         protected override string Filename { get { return "tsMuxeR.exe"; } }
@@ -28,16 +28,18 @@ namespace BDAutoMuxer.tools
         private readonly BDROM _bdrom;
         private readonly TSPlaylistFile _playlist;
         private readonly ICollection<TSStream> _selectedTracks;
+        private readonly bool _demuxSubtitles;
         private readonly string _streamClipPaths;
         private readonly string _mplsFileName;
         private readonly string _videoHeight;
         private readonly string _videoWidth;
 
-        public TsMuxer(BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks)
+        public TsMuxer(BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks, bool demuxSubtitles = false)
         {
             _bdrom = bdrom;
             _playlist = playlist;
             _selectedTracks = selectedTracks;
+            _demuxSubtitles = demuxSubtitles;
             _streamClipPaths = GetStreamClipPaths();
             _mplsFileName = Path.GetFileNameWithoutExtension(playlist.FullName);
 
@@ -114,26 +116,36 @@ namespace BDAutoMuxer.tools
 
             ExtractResources();
 
-            _basePath = Path.Combine(Path.GetDirectoryName(_outputFilePath), Path.GetFileNameWithoutExtension(_outputFilePath));
-            _metaFilePath = _basePath + ".meta.txt";
+            var outputDirectory = Path.GetDirectoryName(_outputFilePath);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_outputFilePath);
+
+            _basePath = Path.Combine(outputDirectory, fileNameWithoutExtension);
             _chapterTextFilePath = _basePath + ".chapters.txt";
-            _chapterXMLFilePath = _basePath + ".chapters.xml";
+            _chapterXmlFilePath = _basePath + ".chapters.xml";
 
-            WriteChapterXmlFile(_chapterXMLFilePath);
+            WriteChapterXmlFile(_chapterXmlFilePath);
 
-            WriteMetaFile(_metaFilePath);
+            _metaFilePath = WriteMetaFile(fileNameWithoutExtension);
 
             Execute(new List<string> { _metaFilePath, _outputFilePath }, sender, e);
+
         }
-        
+
         private void WriteChapterXmlFile(string chapterXmlFilePath)
         {
             new ChapterWriter(_playlist).SaveXml(chapterXmlFilePath);
         }
 
-        private void WriteMetaFile(string metaFilePath)
+        private bool IncludeTrack(TSStream track)
         {
-            var lines = new List<string> {"MUXOPT --no-pcr-on-video-pid --new-audio-pes --vbr --vbv-len=500"};
+            return !_demuxSubtitles || ((track.IsGraphicsStream && track.StreamType == TSStreamType.PRESENTATION_GRAPHICS) || track.IsTextStream);
+        }
+
+        private string WriteMetaFile(string fileNameWithoutExtension)
+        {
+            var metaFilePath = GetTempPath(fileNameWithoutExtension + string.Format(".{0}.meta.txt", _demuxSubtitles ? "demux" : "mux"));
+
+            var lines = new List<string> { string.Format("MUXOPT --no-pcr-on-video-pid --new-audio-pes {0} --vbr --vbv-len=500", _demuxSubtitles ? "--demux" : "") };
 
             foreach (var track in _playlist.SortedStreams)
             {
@@ -165,7 +177,7 @@ namespace BDAutoMuxer.tools
                 line.Add("track=" + track.PID);
                 line.Add("mplsFile=" + _mplsFileName);
 
-                var comment = _selectedTracks.Contains(track) ? "" : "#";
+                var comment = _selectedTracks.Where(IncludeTrack).Contains(track) ? "" : "#";
 
                 lines.Add(comment + string.Join(", ", line));
 
@@ -180,6 +192,8 @@ namespace BDAutoMuxer.tools
             }
 
             File.WriteAllLines(metaFilePath, lines);
+
+            return metaFilePath;
         }
 
         protected override void ExtractResources()
@@ -206,7 +220,7 @@ namespace BDAutoMuxer.tools
 
         protected override ISet<string> GetOutputFilesImpl()
         {
-            return new HashSet<string>() { _metaFilePath, _chapterTextFilePath, _chapterXMLFilePath, _outputFilePath };
+            return new HashSet<string>() { _metaFilePath, _chapterTextFilePath, _chapterXmlFilePath, _outputFilePath };
         }
     }
 }

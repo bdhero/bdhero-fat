@@ -61,6 +61,7 @@ namespace BDAutoMuxer
         private bool _ignoreFilterControlChange;
         private bool _ignoreDataGridItemChange;
 
+        private TsMuxer _tsDemuxer;
         private TsMuxer _tsMuxer;
         private string _tsMuxerOutputPath;
 
@@ -1027,17 +1028,44 @@ namespace BDAutoMuxer
             }
             */
 
-            ISet<TSStream> selectedStreams = new HashSet<TSStream>();
-            selectedStreams.UnionWith(SelectedVideoStreams);
-            selectedStreams.UnionWith(SelectedAudioStreams);
-            selectedStreams.UnionWith(SelectedSubtitleStreams);
-
             BDAutoMuxerSettings.OutputDir = textBoxOutputDir.Text;
             BDAutoMuxerSettings.OutputFileName = textBoxOutputFileName.Text;
             BDAutoMuxerSettings.ReplaceSpaces = checkBoxReplaceSpaces.Checked;
             BDAutoMuxerSettings.ReplaceSpacesWith = textBoxReplaceSpaces.Text;
             BDAutoMuxerSettings.SaveSettings();
 
+            ISet<TSStream> selectedStreams = new HashSet<TSStream>();
+            selectedStreams.UnionWith(SelectedVideoStreams);
+            selectedStreams.UnionWith(SelectedAudioStreams);
+            selectedStreams.UnionWith(SelectedSubtitleStreams);
+
+            // TODO: Finish me!
+//            if (checkBoxDemuxSubtitles.Enabled)
+//                StartDemuxer(selectedStreams);
+//            else
+                StartMuxer(selectedStreams);
+        }
+
+        // TODO: Finish me!
+        private void StartDemuxer(ISet<TSStream> selectedStreams)
+        {
+            // TODO: Make this status "sticky"
+            SetTabStatus(tabPageProgress, "tsMuxeR: 0.0%");
+            textBoxTsMuxerCommandLine.Text = "";
+            toolStripProgressBar.Visible = true;
+
+            _tsDemuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams, true);
+            _tsDemuxer.WorkerReportsProgress = true;
+            _tsDemuxer.WorkerSupportsCancellation = true;
+            // TODO: Finish me!
+//            _tsDemuxer.ProgressChanged += tsDemuxerBackgroundWorker_ProgressChanged;
+//            _tsDemuxer.RunWorkerCompleted += tsDemuxerBackgroundWorker_RunWorkerCompleted;
+
+            _tsDemuxer.RunWorkerAsync(_tsMuxerOutputPath);
+        }
+
+        private void StartMuxer(ISet<TSStream> selectedStreams)
+        {
             // TODO: Make this status "sticky"
             SetTabStatus(tabPageProgress, "tsMuxeR: 0.0%");
             textBoxTsMuxerCommandLine.Text = "";
@@ -1479,6 +1507,7 @@ namespace BDAutoMuxer
                 textBoxOutputDir.Enabled = value;
                 buttonOutputDir.Enabled = value;
                 textBoxOutputFileName.Enabled = value;
+                checkBoxDemuxSubtitles.Enabled = value;
             }
         }
 
