@@ -456,10 +456,10 @@ namespace BDAutoMuxer
                 (int)(listViewStreams.ClientSize.Width * 0.45);
         }
 
-        private void ResetPlaylistDataGrid()
+        private void ResetPlaylistDataGrid(object sender = null, EventArgs e = null)
         {
             if (_populator != null)
-                _populator.ShowAllPlaylists = showAllPlaylistsCheckbox.Checked;
+                _populator.SetVisible(checkboxShowBogusPlaylists.Checked, checkBoxShowShortPlaylists.Checked);
         }
 
         #endregion

@@ -19,8 +19,6 @@ namespace BDAutoMuxer.views
 
         private readonly BindingList<PlaylistGridItem> _bindingList = new BindingList<PlaylistGridItem>();
 
-        private bool _showAllPlaylists;
-
         private IList<TSPlaylistFile> _playlists;
         private readonly IList<PlaylistGridItem> _playlistGridItems = new List<PlaylistGridItem>();
         private readonly IList<PlaylistGridItem> _playlistGridItemsOriginal = new List<PlaylistGridItem>();
@@ -124,7 +122,7 @@ namespace BDAutoMuxer.views
                 _playlistGridItemsOriginal.Add(clone);
             }
 
-            ShowAllPlaylists = false;
+            SetVisible(false, false);
         }
 
         ~PlaylistDataGridPopulator()
@@ -166,34 +164,33 @@ namespace BDAutoMuxer.views
             }
         }
 
-        public bool ShowAllPlaylists
+        private static bool ShowPlaylist(PlaylistGridItem item, bool showBogus, bool showShort)
         {
-            get { return _showAllPlaylists; }
-            set
+            return item.Playlist.IsLikelyMainMovie || (item.Playlist.IsFeatureLength && showBogus) || (!item.Playlist.IsFeatureLength && showShort);
+        }
+
+        public void SetVisible(bool showBogus, bool showShort)
+        {
+            _dataGridView.DataSource = null;
+            _bindingList.Clear();
+
+            var i = 0;
+            var enabledRowIndexes = new List<int>();
+            foreach (var item in _playlistGridItems.Where(item => ShowPlaylist(item, showBogus, showShort)))
             {
-                _showAllPlaylists = value;
+                _bindingList.Add(item);
 
-                _dataGridView.DataSource = null;
-                _bindingList.Clear();
+                if (item.Playlist.IsFeatureLength)
+                    enabledRowIndexes.Add(i);
 
-                var i = 0;
-                var enabledRowIndexes = new List<int>();
-                foreach (var item in _playlistGridItems.Where(item => _showAllPlaylists || item.Playlist.IsFeatureLength))
-                {
-                    _bindingList.Add(item);
+                i++;
+            }
 
-                    if (item.Playlist.IsFeatureLength)
-                        enabledRowIndexes.Add(i);
+            _dataGridView.DataSource = _bindingList;
 
-                    i++;
-                }
-
-                _dataGridView.DataSource = _bindingList;
-
-                for (var rowIndex = 0; rowIndex < _dataGridView.Rows.Count; rowIndex++)
-                {
-                    EnableRow(_dataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
-                }
+            for (var rowIndex = 0; rowIndex < _dataGridView.Rows.Count; rowIndex++)
+            {
+                EnableRow(_dataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
             }
         }
 

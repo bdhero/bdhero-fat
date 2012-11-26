@@ -54,7 +54,7 @@
             this.buttonUnselectAll = new System.Windows.Forms.Button();
             this.buttonSubmitToDB = new System.Windows.Forms.Button();
             this.buttonSelectAll = new System.Windows.Forms.Button();
-            this.showAllPlaylistsCheckbox = new System.Windows.Forms.CheckBox();
+            this.checkboxShowBogusPlaylists = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.playlistDataGridView = new System.Windows.Forms.DataGridView();
             this.playlistsSplitContainerInner = new BDAutoMuxer.views.SplitContainerWithDivider();
@@ -153,6 +153,7 @@
             this.textBoxSource = new System.Windows.Forms.TextBox();
             this.labelSource = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.checkBoxShowShortPlaylists = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerDiscOuter)).BeginInit();
@@ -453,10 +454,11 @@
             this.playlistsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsGroupBox.Controls.Add(this.checkBoxShowShortPlaylists);
             this.playlistsGroupBox.Controls.Add(this.buttonUnselectAll);
             this.playlistsGroupBox.Controls.Add(this.buttonSubmitToDB);
             this.playlistsGroupBox.Controls.Add(this.buttonSelectAll);
-            this.playlistsGroupBox.Controls.Add(this.showAllPlaylistsCheckbox);
+            this.playlistsGroupBox.Controls.Add(this.checkboxShowBogusPlaylists);
             this.playlistsGroupBox.Controls.Add(this.panel1);
             this.playlistsGroupBox.Location = new System.Drawing.Point(4, 0);
             this.playlistsGroupBox.Name = "playlistsGroupBox";
@@ -500,18 +502,18 @@
             this.buttonSelectAll.UseVisualStyleBackColor = true;
             this.buttonSelectAll.Click += new System.EventHandler(this.buttonSelectAll_Click);
             // 
-            // showAllPlaylistsCheckbox
+            // checkboxShowBogusPlaylists
             // 
-            this.showAllPlaylistsCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.showAllPlaylistsCheckbox.AutoSize = true;
-            this.showAllPlaylistsCheckbox.Location = new System.Drawing.Point(9, 173);
-            this.showAllPlaylistsCheckbox.Name = "showAllPlaylistsCheckbox";
-            this.showAllPlaylistsCheckbox.Size = new System.Drawing.Size(105, 17);
-            this.showAllPlaylistsCheckbox.TabIndex = 5;
-            this.showAllPlaylistsCheckbox.Tag = "Show short playlists that are unlikely to be the main movie";
-            this.showAllPlaylistsCheckbox.Text = "Show all playlists";
-            this.showAllPlaylistsCheckbox.UseVisualStyleBackColor = true;
-            this.showAllPlaylistsCheckbox.CheckedChanged += new System.EventHandler(this.showAllPlaylistsCheckbox_CheckedChanged);
+            this.checkboxShowBogusPlaylists.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkboxShowBogusPlaylists.AutoSize = true;
+            this.checkboxShowBogusPlaylists.Location = new System.Drawing.Point(9, 173);
+            this.checkboxShowBogusPlaylists.Name = "checkboxShowBogusPlaylists";
+            this.checkboxShowBogusPlaylists.Size = new System.Drawing.Size(124, 17);
+            this.checkboxShowBogusPlaylists.TabIndex = 5;
+            this.checkboxShowBogusPlaylists.Tag = "Show fake and duplicate playlists that are unlikely to be the main movie";
+            this.checkboxShowBogusPlaylists.Text = "Show bogus playlists";
+            this.checkboxShowBogusPlaylists.UseVisualStyleBackColor = true;
+            this.checkboxShowBogusPlaylists.CheckedChanged += new System.EventHandler(this.ResetPlaylistDataGrid);
             // 
             // panel1
             // 
@@ -1543,6 +1545,19 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // checkBoxShowShortPlaylists
+            // 
+            this.checkBoxShowShortPlaylists.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxShowShortPlaylists.AutoSize = true;
+            this.checkBoxShowShortPlaylists.Location = new System.Drawing.Point(139, 173);
+            this.checkBoxShowShortPlaylists.Name = "checkBoxShowShortPlaylists";
+            this.checkBoxShowShortPlaylists.Size = new System.Drawing.Size(118, 17);
+            this.checkBoxShowShortPlaylists.TabIndex = 101;
+            this.checkBoxShowShortPlaylists.Tag = "Show short playlists that are unlikely to be the main movie";
+            this.checkBoxShowShortPlaylists.Text = "Show short playlists";
+            this.checkBoxShowShortPlaylists.UseVisualStyleBackColor = true;
+            this.checkBoxShowShortPlaylists.CheckedChanged += new System.EventHandler(this.ResetPlaylistDataGrid);
+            // 
             // FormDetails
             // 
             this.AllowDrop = true;
@@ -1702,7 +1717,7 @@
         private System.Windows.Forms.GroupBox playlistsGroupBox;
         private System.Windows.Forms.Button buttonUnselectAll;
         private System.Windows.Forms.Button buttonSelectAll;
-        private System.Windows.Forms.CheckBox showAllPlaylistsCheckbox;
+        private System.Windows.Forms.CheckBox checkboxShowBogusPlaylists;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView playlistDataGridView;
         private views.SplitContainerWithDivider playlistsSplitContainerInner;
@@ -1747,5 +1762,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTmdb;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemTmdb;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.CheckBox checkBoxShowShortPlaylists;
     }
 }
