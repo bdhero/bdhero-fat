@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Windows.Forms;
 using BDAutoMuxer.models;
+using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.views
 {
@@ -21,8 +24,8 @@ namespace BDAutoMuxer.views
         private readonly IList<PlaylistGridItem> _playlistGridItems = new List<PlaylistGridItem>();
         private readonly IList<PlaylistGridItem> _playlistGridItemsOriginal = new List<PlaylistGridItem>();
 
-        public event EventHandler SelectionChanged;
-        public event EventHandler ItemChanged;
+        public event EventHandler OnSelectionChange;
+        public event EventHandler OnItemChange;
 
         public TSPlaylistFile SelectedPlaylist { get; private set; }
 
@@ -64,11 +67,16 @@ namespace BDAutoMuxer.views
         private static int ComparePlaylists(TSPlaylistFile playlist1, TSPlaylistFile playlist2)
         {
             // XOR - One is a main movie but not the other
-            if (playlist1.IsMainMovie && !playlist2.IsMainMovie) return -1;
-            if (playlist2.IsMainMovie && !playlist1.IsMainMovie) return +1;
+            if (playlist1.IsLikelyMainMovie && !playlist2.IsLikelyMainMovie) return -1;
+            if (playlist2.IsLikelyMainMovie && !playlist1.IsLikelyMainMovie) return +1;
 
             // AND - Both are main movies
-            if (playlist1.IsMainMovie && playlist2.IsMainMovie) return String.Compare(playlist1.Name, playlist2.Name, StringComparison.OrdinalIgnoreCase);
+            if (playlist1.IsLikelyMainMovie && playlist2.IsLikelyMainMovie)
+                return String.Compare(playlist1.Name, playlist2.Name, StringComparison.OrdinalIgnoreCase);
+
+            // XOR - One is feature-length but not the other
+            if (playlist1.IsFeatureLength && !playlist2.IsFeatureLength) return -1;
+            if (playlist2.IsFeatureLength && !playlist1.IsFeatureLength) return +1;
 
             return 0;
         }
@@ -84,26 +92,23 @@ namespace BDAutoMuxer.views
 
             playlists = SortPlaylists(playlists);
 
-            foreach (var code in languageCodes)
-            {
-                _languages.Add(Language.GetLanguage(code));
-            }
+            _languages.AddRange(languageCodes.Select(Language.GetLanguage));
 
             _dataGridView.AutoGenerateColumns = false;
             _dataGridView.AutoSize = true;
 
             CreateColumns();
 
-            _dataGridView.CellClick += playlistDataGridView_CellClick;
-            _dataGridView.SelectionChanged += dataGridView_SelectionChanged;
-            _dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
+            _dataGridView.CellClick += CellClick;
+            _dataGridView.SelectionChanged += SelectionChanged;
+            _dataGridView.CellBeginEdit += CellBeginEdit;
 
             foreach (var playlist in playlists)
             {
                 var item = new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null);
                 var clone = new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null);
 
-                item.PropertyChanged += OnItemChange;
+                item.PropertyChanged += ItemChanged;
 
                 _playlistGridItems.Add(item);
                 _playlistGridItemsOriginal.Add(clone);
@@ -119,21 +124,20 @@ namespace BDAutoMuxer.views
 
         public void Destroy()
         {
-            _dataGridView.CellClick -= playlistDataGridView_CellClick;
-            _dataGridView.SelectionChanged -= dataGridView_SelectionChanged;
-            _dataGridView.CellBeginEdit -= dataGridView_CellBeginEdit;
+            _dataGridView.CellClick -= CellClick;
+            _dataGridView.SelectionChanged -= SelectionChanged;
+            _dataGridView.CellBeginEdit -= CellBeginEdit;
 
             foreach (var pgi in _playlistGridItems)
             {
-                pgi.PropertyChanged -= OnItemChange;
+                pgi.PropertyChanged -= ItemChanged;
             }
-
-            _dataGridView.CellClick -= playButton_CellClick;
         }
 
-        private void OnItemChange(object sender, PropertyChangedEventArgs e)
+        private void ItemChanged(object sender, PropertyChangedEventArgs e)
         {
-            ItemChanged.Invoke(this, EventArgs.Empty);
+            if (OnItemChange != null)
+                OnItemChange.Invoke(this, EventArgs.Empty);
         }
 
         public bool HasChanged
@@ -163,7 +167,7 @@ namespace BDAutoMuxer.views
                 _bindingList.Clear();
 
                 var i = 0;
-                IList<int> enabledRowIndexes = new List<int>();
+                var enabledRowIndexes = new List<int>();
                 foreach (var item in _playlistGridItems.Where(item => _showAllPlaylists || item.Playlist.IsFeatureLength))
                 {
                     _bindingList.Add(item);
@@ -178,7 +182,7 @@ namespace BDAutoMuxer.views
 
                 for (var rowIndex = 0; rowIndex < _dataGridView.Rows.Count; rowIndex++)
                 {
-                    EnableBand(_dataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
+                    EnableRow(_dataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
                 }
             }
         }
@@ -190,15 +194,12 @@ namespace BDAutoMuxer.views
                 throw new IndexOutOfRangeException("Playlist row index " + rowIndex + " is out of range [0, " + _dataGridView.Rows.Count + "]");
             }
             
-            var item = _dataGridView.Rows[rowIndex].DataBoundItem;
+            var item = _dataGridView.Rows[rowIndex].DataBoundItem as PlaylistGridItem;
             
-            if (!(item is PlaylistGridItem))
-                return null;
-
-            return (item as PlaylistGridItem).Playlist;
+            return item == null ? null : (item).Playlist;
         }
 
-        private void EnableBand(DataGridViewBand row, bool enabled)
+        private void EnableRow(DataGridViewBand row, bool enabled)
         {
             row.ReadOnly = !enabled;
             for (var colIndex = 0; colIndex < _dataGridView.Columns.Count; colIndex++)
@@ -241,7 +242,7 @@ namespace BDAutoMuxer.views
             {
                 return (from item in _playlistGridItems
                         where item.Playlist.IsFeatureLength
-                        select item.JsonPlaylist).ToList();
+                        select item.JsonPlaylist);
             }
         }
 
@@ -252,8 +253,8 @@ namespace BDAutoMuxer.views
                 return
                     new HashSet<Language>(
                         (from item in _playlistGridItems
-                         where item.Playlist.IsFeatureLength
-                         select Language.GetLanguage(item.VideoLanguage)).ToList());
+                         where item.IsMainMovie
+                         select Language.GetLanguage(item.VideoLanguage)));
             }
         }
 
@@ -263,8 +264,8 @@ namespace BDAutoMuxer.views
             {
                 return new HashSet<Cut>(
                     (from item in _playlistGridItems
-                     where item.Playlist.IsFeatureLength
-                     select item.Cut).ToList());
+                     where item.IsMainMovie
+                     select item.Cut));
             }
         }
 
@@ -274,7 +275,7 @@ namespace BDAutoMuxer.views
             {
                 ISet<CommentaryOption> selectedCommentaryOptionsSet = new HashSet<CommentaryOption>();
 
-                foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsFeatureLength))
+                foreach (var item in _playlistGridItems.Where(item => item.IsMainMovie))
                 {
                     selectedCommentaryOptionsSet.Add(item.HasCommentary ? CommentaryOption.Yes : CommentaryOption.No);
                 }
@@ -317,95 +318,49 @@ namespace BDAutoMuxer.views
 
         public IEnumerable<TSPlaylistFile> GetPlaylistsWithMainMovie(bool mainMovie)
         {
-            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
-
-            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsFeatureLength && item.IsMainMovie == mainMovie))
-            {
-                files.Add(item.Playlist);
-            }
-
-            return files;
+            return new HashSet<TSPlaylistFile>(_playlistGridItems.Where(item => item.IsMainMovie == mainMovie).Select(item => item.Playlist));
         }
 
         public IEnumerable<TSPlaylistFile> GetPlaylistsWithVideoLanguage(Language lang)
         {
-            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
-
-            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsFeatureLength && Language.GetLanguage(item.VideoLanguage) == lang))
-            {
-                files.Add(item.Playlist);
-            }
-
-            return files;
+            return new HashSet<TSPlaylistFile>(_playlistGridItems.Where(item => item.VideoLanguageObject == lang).Select(item => item.Playlist));
         }
 
         public IEnumerable<TSPlaylistFile> GetPlaylistsWithCut(Cut cut)
         {
-            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
-
-            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsFeatureLength && item.Cut == cut))
-            {
-                files.Add(item.Playlist);
-            }
-
-            return files;
+            return new HashSet<TSPlaylistFile>(_playlistGridItems.Where(item => item.Cut == cut).Select(item => item.Playlist));
         }
 
         public IEnumerable<TSPlaylistFile> GetPlaylistsWithCommentaryOption(CommentaryOption commentaryOption)
         {
-            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
+            return new HashSet<TSPlaylistFile>(_playlistGridItems.Where(item => ShouldIncludePlaylist(item, commentaryOption)).Select(item => item.Playlist));
+        }
 
-            foreach (var item in _playlistGridItems)
-            {
-                var isAny = commentaryOption == CommentaryOption.Any;
-                var isYes = item.HasCommentary && commentaryOption == CommentaryOption.Yes;
-                var isNo = !item.HasCommentary && commentaryOption == CommentaryOption.No;
-
-                if (item.Playlist.IsFeatureLength && (isAny || isYes || isNo))
-                    files.Add(item.Playlist);
-            }
-
-            return files;
+        private static bool ShouldIncludePlaylist(PlaylistGridItem item, CommentaryOption commentaryOption)
+        {
+            var isAny = commentaryOption == CommentaryOption.Any;
+            var isYes = item.HasCommentary && commentaryOption == CommentaryOption.Yes;
+            var isNo = !item.HasCommentary && commentaryOption == CommentaryOption.No;
+            return isAny || isYes || isNo;
         }
 
         public IEnumerable<TSPlaylistFile> GetPlaylistsWithAudioLanguages(ICollection<Language> audioLanguages)
         {
-            ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
-
-            foreach (var item in _playlistGridItems)
-            {
-                if (!item.Playlist.IsFeatureLength) continue;
-
-                foreach (var audioStream in item.Playlist.AudioStreams)
-                {
-                    if (audioLanguages.Contains(Language.GetLanguage(audioStream.LanguageCode)))
-                        files.Add(item.Playlist);
-                }
-            }
-
-            return files;
+            return new HashSet<TSPlaylistFile>(_playlistGridItems.Select(item => item.Playlist).Where(playlist => playlist.AudioStreams.Any(audioStream => audioLanguages.Contains(audioStream.Language))));
         }
 
         public IEnumerable<TSPlaylistFile> GetPlaylistsWithSubtitleLanguages(ICollection<Language> subtitleLanguages)
         {
             ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
 
-            foreach (var item in _playlistGridItems)
-            {
-                if (item.Playlist.IsFeatureLength)
-                {
-                    foreach (var graphicsStream in item.Playlist.GraphicsStreams)
-                    {
-                        if (subtitleLanguages.Contains(Language.GetLanguage(graphicsStream.LanguageCode)))
-                            files.Add(item.Playlist);
-                    }
-                    foreach (var textStream in item.Playlist.TextStreams)
-                    {
-                        if (subtitleLanguages.Contains(Language.GetLanguage(textStream.LanguageCode)))
-                            files.Add(item.Playlist);
-                    }
-                }
-            }
+            files.AddRange(
+                _playlistGridItems.Select(item => item.Playlist)
+                    .Where(playlist => playlist.GraphicsStreams.Any(graphicsStream => graphicsStream.StreamType == TSStreamType.PRESENTATION_GRAPHICS && subtitleLanguages.Contains(graphicsStream.Language)))
+            );
+            files.AddRange(
+                _playlistGridItems.Select(item => item.Playlist)
+                    .Where(playlist => playlist.TextStreams.Any(textStream => subtitleLanguages.Contains(textStream.Language)))
+            );
 
             return files;
         }
@@ -434,46 +389,69 @@ namespace BDAutoMuxer.views
             item.HasCommentary = jsonPlaylist.has_commentary;
         }
 
-        private void dataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        private void CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             if (e.ColumnIndex == _filenameColumn.Index || e.ColumnIndex == _lengthColumn.Index || e.ColumnIndex == _sizeColumn.Index)
                 e.Cancel = true;
         }
 
-        private void playButton_CellClick(object sender, DataGridViewCellEventArgs e)
+        private static bool IsHeaderCell(DataGridViewCellEventArgs e)
         {
-            // Ignore clicks that are not on button cells.
-            if (e.RowIndex < 0 || e.ColumnIndex != _playButtonColumn.Index)
-                return;
+            return e.RowIndex < 0 || e.ColumnIndex < 0;
+        }
 
-            var item = _bindingList[e.RowIndex];
+        private bool IsReadOnly(DataGridViewCellEventArgs e)
+        {
+            return _dataGridView[e.ColumnIndex, e.RowIndex].ReadOnly;
+        }
 
-            System.Diagnostics.Process.Start(item.Playlist.FullName);
+        private bool IsComboBoxColumn(DataGridViewCellEventArgs e)
+        {
+            return _dataGridView.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn;
+        }
+
+        private bool IsPlayButton(DataGridViewCellEventArgs e)
+        {
+            return e.RowIndex >= 0 && e.ColumnIndex == _playButtonColumn.Index;
+        }
+
+        private bool IsSelected(DataGridViewCellEventArgs e)
+        {
+            return _dataGridView[e.ColumnIndex, e.RowIndex].Selected;
+        }
+
+        private DataGridViewComboBoxEditingControl GetCurComboBox()
+        {
+            return _dataGridView.EditingControl as DataGridViewComboBoxEditingControl;
         }
 
         /// <see cref="http://stackoverflow.com/a/242760/467582"/>
-        private void playlistDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignore clicks on the header cells
-            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+            if (IsHeaderCell(e))
                 return;
+
+            if (IsPlayButton(e))
+            {
+                Process.Start(_bindingList[e.RowIndex].Playlist.FullName);
+                return;
+            }
 
             // Ignore readonly (i.e., disabled) cells
-            if (_dataGridView[e.ColumnIndex, e.RowIndex].ReadOnly)
+            if (IsReadOnly(e))
                 return;
 
-            var column = _dataGridView.Columns[e.ColumnIndex];
-            
-            if (!(column is DataGridViewComboBoxColumn)) return;
+            if (IsComboBoxColumn(e))
+            {
+                _dataGridView.BeginEdit(true);
 
-            _dataGridView.BeginEdit(true);
-
-            if (!_dataGridView[e.ColumnIndex, e.RowIndex].Selected) return;
-
-            ((DataGridViewComboBoxEditingControl)_dataGridView.EditingControl).DroppedDown = true;
+                if (IsSelected(e))
+                    GetCurComboBox().DroppedDown = true;
+            }
         }
 
-        private void dataGridView_SelectionChanged(object sender, EventArgs e)
+        private void SelectionChanged(object sender, EventArgs e)
         {
             // Skip if nothing is selected
             if (_dataGridView.SelectedRows.Count == 0 &&
@@ -495,8 +473,8 @@ namespace BDAutoMuxer.views
 
             _prevRowIndex = rowIndex;
 
-            if (SelectionChanged != null)
-                SelectionChanged.Invoke(this, EventArgs.Empty);
+            if (OnSelectionChange != null)
+                OnSelectionChange.Invoke(this, EventArgs.Empty);
         }
 
         public bool SelectAll
@@ -533,9 +511,6 @@ namespace BDAutoMuxer.views
 
         private DataGridViewButtonColumn CreatePlayButtonColumn()
         {
-            // Add a CellClick handler to handle clicks in the button column.
-            _dataGridView.CellClick += playButton_CellClick;
-
             return new DataGridViewButtonColumn
                        {
                            Text = "Play",
@@ -629,11 +604,12 @@ namespace BDAutoMuxer.views
 
     public class PlaylistGridItem : INotifyPropertyChanged
     {
+        private const double Epsilon = 0.1;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private PlaylistGridItem _savedState;
 
-        private TSPlaylistFile _playlist;
         private bool _isMainMovie;
         private double _length;
         private string _iso6392;
@@ -648,12 +624,12 @@ namespace BDAutoMuxer.views
 
         private PlaylistGridItem(TSPlaylistFile playlist, string iso6392, bool clone)
         {
-            VideoLanguageHasChanged = false;
-            _playlist = playlist;
-            _isMainMovie = playlist.IsFeatureLength && !playlist.HasDuplicateClips && !playlist.IsDuplicate;
+            Playlist = playlist;
             Filename = playlist.Name;
-            _length = playlist.TotalLength;
             Size = playlist.FileSize.ToString("N0");
+
+            _length = playlist.TotalLength;
+            _isMainMovie = playlist.IsLikelyMainMovie;
             _iso6392 = iso6392;
             _cut = Cut.Theatrical;
             _hasCommentary = false;
@@ -664,34 +640,42 @@ namespace BDAutoMuxer.views
 
         public PlaylistGridItem Clone()
         {
-            var clone = new PlaylistGridItem(_playlist, _iso6392, false);
+            var clone = new PlaylistGridItem(Playlist, _iso6392, false);
             CopyTo(clone);
             return clone;
         }
 
         public void CopyTo(PlaylistGridItem that)
         {
-            that._playlist = _playlist;
-            that._isMainMovie = _isMainMovie;
+            that.Playlist = Playlist;
             that.Filename = Filename;
-            that._length = _length;
             that.Size = Size;
+            that._length = _length;
+            that._isMainMovie = _isMainMovie;
             that._iso6392 = _iso6392;
             that._cut = _cut;
             that._hasCommentary = _hasCommentary;
         }
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;
             if (handler != null)
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public TSPlaylistFile Playlist
+        public TSPlaylistFile Playlist { get; private set; }
+
+// ReSharper disable MemberCanBePrivate.Global
+        public string Filename { get; private set; }
+
+        public string Size { get; private set; }
+
+        public string Length
         {
-            get { return _playlist; }
+            get { return HumanFriendlyLength(_length); }
         }
+// ReSharper restore MemberCanBePrivate.Global
 
         public bool IsMainMovie
         {
@@ -705,28 +689,17 @@ namespace BDAutoMuxer.views
             }
         }
 
-// ReSharper disable MemberCanBePrivate.Global
-        public string Filename { get; private set; }
-// ReSharper restore MemberCanBePrivate.Global
-
-// ReSharper disable MemberCanBePrivate.Global
-        public string Length
-// ReSharper restore MemberCanBePrivate.Global
+        public Language VideoLanguageObject
         {
-            get { return HumanFriendlyLength(_length); }
+            get { return Language.GetLanguage(VideoLanguage); }
         }
 
-// ReSharper disable MemberCanBePrivate.Global
-        public string Size { get; private set; }
-// ReSharper restore MemberCanBePrivate.Global
-
+// ReSharper disable UnusedMember.Global
         public string VideoLanguage
         {
             get { return _iso6392; }
             // setter is required for data binding to work
-// ReSharper disable UnusedMember.Global
             set
-// ReSharper restore UnusedMember.Global
             {
                 if (_iso6392 == value) return;
 
@@ -735,6 +708,7 @@ namespace BDAutoMuxer.views
                 OnPropertyChanged("VideoLanguage");
             }
         }
+// ReSharper restore UnusedMember.Global
 
         public string VideoLanguageAuto
         {
@@ -826,11 +800,11 @@ namespace BDAutoMuxer.views
             }
 
             return
-                _playlist == that._playlist &&
-                _isMainMovie == that._isMainMovie &&
+                Playlist == that.Playlist &&
                 Filename == that.Filename &&
-                _length == that._length &&
                 Size == that.Size &&
+                Math.Abs(_length - that._length) < Epsilon &&
+                _isMainMovie == that._isMainMovie &&
                 _iso6392 == that._iso6392 &&
                 _cut == that._cut &&
                 _hasCommentary == that._hasCommentary;

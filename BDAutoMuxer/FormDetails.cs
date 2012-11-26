@@ -341,8 +341,8 @@ namespace BDAutoMuxer
             }
 
             _populator = new PlaylistDataGridPopulator(playlistDataGridView, _playlists, _languageCodes);
-            _populator.ItemChanged += OnPlaylistItemChange;
-            _populator.SelectionChanged += playlistDataGridView_SelectionChanged;
+            _populator.OnItemChange += OnPlaylistItemChange;
+            _populator.OnSelectionChange += playlistDataGridView_SelectionChanged;
             _populator.MainLanguageCode = ISO_639_2;
 
             _initialized = true;
@@ -514,23 +514,21 @@ namespace BDAutoMuxer
             Language videoLanguage = comboBoxVideoLanguage.SelectedValue as Language;
             Cut cut = (Cut)comboBoxCut.SelectedValue;
             CommentaryOption commentaryOption = (CommentaryOption)comboBoxCommentary.SelectedValue;
+
             _audioLanguages.Clear();
             _subtitleLanguages.Clear();
 
-            foreach (Language lang in listBoxAudioLanguages.SelectedItems.OfType<Language>())
-                _audioLanguages.Add(lang);
-
-            foreach (Language lang in listBoxSubtitleLanguages.SelectedItems.OfType<Language>())
-                _subtitleLanguages.Add(lang);
+            _audioLanguages.AddRange(listBoxAudioLanguages.SelectedItems.OfType<Language>());
+            _subtitleLanguages.AddRange(listBoxSubtitleLanguages.SelectedItems.OfType<Language>());
 
             if (videoLanguage == null) return;
 
-            IEnumerable<TSPlaylistFile> playlistsWithMainMovie = _populator.GetPlaylistsWithMainMovie(true);
-            IEnumerable<TSPlaylistFile> playlistsWithVideoLanguage = _populator.GetPlaylistsWithVideoLanguage(videoLanguage);
-            IEnumerable<TSPlaylistFile> playlistsWithCut = _populator.GetPlaylistsWithCut(cut);
-            IEnumerable<TSPlaylistFile> playlistsWithCommentaryOption = _populator.GetPlaylistsWithCommentaryOption(commentaryOption);
-            IEnumerable<TSPlaylistFile> playlistsWithAudioLanguages = _populator.GetPlaylistsWithAudioLanguages(_audioLanguages);
-            IEnumerable<TSPlaylistFile> playlistsWithSubtitleLanguages = _populator.GetPlaylistsWithSubtitleLanguages(_subtitleLanguages);
+            var playlistsWithMainMovie = _populator.GetPlaylistsWithMainMovie(true);
+            var playlistsWithVideoLanguage = _populator.GetPlaylistsWithVideoLanguage(videoLanguage);
+            var playlistsWithCut = _populator.GetPlaylistsWithCut(cut);
+            var playlistsWithCommentaryOption = _populator.GetPlaylistsWithCommentaryOption(commentaryOption);
+            var playlistsWithAudioLanguages = _populator.GetPlaylistsWithAudioLanguages(_audioLanguages);
+            var playlistsWithSubtitleLanguages = _populator.GetPlaylistsWithSubtitleLanguages(_subtitleLanguages);
 
             _filteredPlaylists.IntersectWith(playlistsWithMainMovie);
             _filteredPlaylists.IntersectWith(playlistsWithVideoLanguage);
@@ -576,11 +574,8 @@ namespace BDAutoMuxer
             if (playlist == null)
                 return;
 
-            foreach (TSStream stream in playlist.SortedStreams)
+            foreach (TSStream stream in playlist.SortedStreams.Where(stream => !stream.IsHidden))
             {
-                if (stream.IsHidden)
-                    continue;
-
                 Language lang = !String.IsNullOrEmpty(stream.LanguageCode) ? Language.GetLanguage(stream.LanguageCode) : null;
 
                 if (stream is TSVideoStream)
@@ -1374,18 +1369,18 @@ namespace BDAutoMuxer
 
         private void playlistDataGridView_MouseClick(object sender, MouseEventArgs e)
         {
-            if (!_initialized)
-                return;
-            if (e.Button != MouseButtons.Right) return;
+            if (!_initialized || e.Button != MouseButtons.Right) return;
 
-            int currentMouseOverRow = playlistDataGridView.HitTest(e.X, e.Y).RowIndex;
+            int row = playlistDataGridView.HitTest(e.X, e.Y).RowIndex;
+            int col = playlistDataGridView.HitTest(e.X, e.Y).ColumnIndex;
 
-            if (currentMouseOverRow < 0) return;
+            if (row < 0) return;
 
-            playlistDataGridView.ClearSelection();
-            playlistDataGridView.Rows[currentMouseOverRow].Selected = true;
+            col = col < 0 ? 0 : col;
 
-            TSPlaylistFile playlist = _populator.PlaylistAt(currentMouseOverRow);
+            playlistDataGridView.CurrentCell = playlistDataGridView[col, row];
+
+            TSPlaylistFile playlist = _populator.PlaylistAt(row);
             ShowPlayableFileContextMenu(playlistDataGridView, playlist.FullName, e.X, e.Y);
         }
 
@@ -1430,8 +1425,6 @@ namespace BDAutoMuxer
             contextMenu.Items.Add("-");
             contextMenu.Items.Add(menuItemCopyPath);
             contextMenu.Items.Add(menuItemShow);
-
-//            contextMenu.Opening += (s, e) => menuItemOpen.Select();
 
             contextMenu.Show(control, new Point(x, y));
         }

@@ -139,7 +139,7 @@ namespace BDAutoMuxer
             _isInitialized = true;
         }
 
-        public bool IsMainMovie
+        public bool IsLikelyMainMovie
         {
             get { return IsFeatureLength && !HasDuplicateClips && !IsDuplicate; }
         }

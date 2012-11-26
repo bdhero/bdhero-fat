@@ -183,18 +183,23 @@ namespace BDAutoMuxer
             }
         }
 
-        private string _LanguageCode;
+        private string _languageCode;
         public string LanguageCode
         {
             get 
             {
-                return _LanguageCode; 
+                return _languageCode;
             }
             set 
             {
-                _LanguageCode = value;
+                _languageCode = value;
                 LanguageName = Language.GetName(value);
             } 
+        }
+
+        public Language Language
+        {
+            get { return Language.GetLanguage(LanguageCode); }
         }
 
         public bool IsVideoStream
@@ -448,7 +453,7 @@ namespace BDAutoMuxer
             stream.IsVBR = IsVBR;
             stream.BitRate = BitRate;
             stream.IsInitialized = IsInitialized;
-            stream.LanguageCode = _LanguageCode;
+            stream.LanguageCode = _languageCode;
             if (Descriptors != null)
             {
                 stream.Descriptors = new List<TSDescriptor>();
