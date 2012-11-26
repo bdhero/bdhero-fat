@@ -58,7 +58,7 @@ namespace BDAutoMuxer
 // ReSharper restore FieldCanBeMadeReadOnly.Global
 // ReSharper restore MemberCanBePrivate.Global
 
-        public bool IsMainPlaylist;
+        public bool IsFeatureLength;
         public bool IsDuplicate;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -139,6 +139,11 @@ namespace BDAutoMuxer
             _isInitialized = true;
         }
 
+        public bool IsMainMovie
+        {
+            get { return IsFeatureLength && !HasDuplicateClips && !IsDuplicate; }
+        }
+
         public override string ToString()
         {
             return Name;
@@ -166,8 +171,6 @@ namespace BDAutoMuxer
         {
             return string.Format("{0}{1}", clip.Length, clip.FileSize);
         }
-
-        public bool IsMainMovie { get { return IsMainPlaylist && !HasDuplicateClips && !IsDuplicate; } }
 
         public ulong InterleavedFileSize
         {
@@ -1203,9 +1206,9 @@ namespace BDAutoMuxer
                 // x > y --> -1
                 // y > x --> +1
 
-                if (x.IsMainPlaylist && !y.IsMainPlaylist)
+                if (x.IsFeatureLength && !y.IsFeatureLength)
                     return -1;
-                else if (y.IsMainPlaylist && !x.IsMainPlaylist)
+                else if (y.IsFeatureLength && !x.IsFeatureLength)
                     return +1;
 
                 else if (!x.HasDuplicateClips && y.HasDuplicateClips)

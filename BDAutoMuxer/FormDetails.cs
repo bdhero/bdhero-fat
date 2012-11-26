@@ -813,7 +813,7 @@ namespace BDAutoMuxer
         {
             try
             {
-                IList<TSPlaylistFile> mainPlaylists = _playlists.Where(playlist => playlist.IsMainPlaylist).ToList();
+                IList<TSPlaylistFile> mainPlaylists = _playlists.Where(playlist => playlist.IsFeatureLength).ToList();
                 _mainMovieSearchResult = _mainMovieService.FindMainMovie(_bdrom.VolumeLabel, mainPlaylists);
                 e.Result = null;
             }

@@ -230,7 +230,7 @@ namespace BDAutoMuxer.controllers
 
             foreach (TSPlaylistFile playlist in sortedPlaylists.Where(playlist => playlist.TotalLength > maxlength * 0.9))
             {
-                playlist.IsMainPlaylist = true;
+                playlist.IsFeatureLength = true;
                 mainPlaylists.Add(playlist);
             }
 

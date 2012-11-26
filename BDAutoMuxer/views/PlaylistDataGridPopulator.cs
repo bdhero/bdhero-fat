@@ -164,11 +164,11 @@ namespace BDAutoMuxer.views
 
                 var i = 0;
                 IList<int> enabledRowIndexes = new List<int>();
-                foreach (var item in _playlistGridItems.Where(item => _showAllPlaylists || item.Playlist.IsMainPlaylist))
+                foreach (var item in _playlistGridItems.Where(item => _showAllPlaylists || item.Playlist.IsFeatureLength))
                 {
                     _bindingList.Add(item);
 
-                    if (item.Playlist.IsMainPlaylist)
+                    if (item.Playlist.IsFeatureLength)
                         enabledRowIndexes.Add(i);
 
                     i++;
@@ -240,7 +240,7 @@ namespace BDAutoMuxer.views
             get
             {
                 return (from item in _playlistGridItems
-                        where item.Playlist.IsMainPlaylist
+                        where item.Playlist.IsFeatureLength
                         select item.JsonPlaylist).ToList();
             }
         }
@@ -252,7 +252,7 @@ namespace BDAutoMuxer.views
                 return
                     new HashSet<Language>(
                         (from item in _playlistGridItems
-                         where item.Playlist.IsMainPlaylist
+                         where item.Playlist.IsFeatureLength
                          select Language.GetLanguage(item.VideoLanguage)).ToList());
             }
         }
@@ -263,7 +263,7 @@ namespace BDAutoMuxer.views
             {
                 return new HashSet<Cut>(
                     (from item in _playlistGridItems
-                     where item.Playlist.IsMainPlaylist
+                     where item.Playlist.IsFeatureLength
                      select item.Cut).ToList());
             }
         }
@@ -274,7 +274,7 @@ namespace BDAutoMuxer.views
             {
                 ISet<CommentaryOption> selectedCommentaryOptionsSet = new HashSet<CommentaryOption>();
 
-                foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsMainPlaylist))
+                foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsFeatureLength))
                 {
                     selectedCommentaryOptionsSet.Add(item.HasCommentary ? CommentaryOption.Yes : CommentaryOption.No);
                 }
@@ -300,7 +300,7 @@ namespace BDAutoMuxer.views
                 var item = _playlistGridItems[i];
                 var itemOriginal = _playlistGridItemsOriginal[i];
 
-                if (!item.Playlist.IsMainPlaylist) continue;
+                if (!item.Playlist.IsFeatureLength) continue;
 
                 mainPlaylistGridItems.Add(item.Playlist.Name.ToUpper(), item);
                 mainPlaylistGridItemsOriginal.Add(item.Playlist.Name.ToUpper(), itemOriginal);
@@ -319,7 +319,7 @@ namespace BDAutoMuxer.views
         {
             ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
 
-            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsMainPlaylist && item.IsMainMovie == mainMovie))
+            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsFeatureLength && item.IsMainMovie == mainMovie))
             {
                 files.Add(item.Playlist);
             }
@@ -331,7 +331,7 @@ namespace BDAutoMuxer.views
         {
             ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
 
-            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsMainPlaylist && Language.GetLanguage(item.VideoLanguage) == lang))
+            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsFeatureLength && Language.GetLanguage(item.VideoLanguage) == lang))
             {
                 files.Add(item.Playlist);
             }
@@ -343,7 +343,7 @@ namespace BDAutoMuxer.views
         {
             ISet<TSPlaylistFile> files = new HashSet<TSPlaylistFile>();
 
-            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsMainPlaylist && item.Cut == cut))
+            foreach (var item in _playlistGridItems.Where(item => item.Playlist.IsFeatureLength && item.Cut == cut))
             {
                 files.Add(item.Playlist);
             }
@@ -361,7 +361,7 @@ namespace BDAutoMuxer.views
                 var isYes = item.HasCommentary && commentaryOption == CommentaryOption.Yes;
                 var isNo = !item.HasCommentary && commentaryOption == CommentaryOption.No;
 
-                if (item.Playlist.IsMainPlaylist && (isAny || isYes || isNo))
+                if (item.Playlist.IsFeatureLength && (isAny || isYes || isNo))
                     files.Add(item.Playlist);
             }
 
@@ -374,7 +374,7 @@ namespace BDAutoMuxer.views
 
             foreach (var item in _playlistGridItems)
             {
-                if (!item.Playlist.IsMainPlaylist) continue;
+                if (!item.Playlist.IsFeatureLength) continue;
 
                 foreach (var audioStream in item.Playlist.AudioStreams)
                 {
@@ -392,7 +392,7 @@ namespace BDAutoMuxer.views
 
             foreach (var item in _playlistGridItems)
             {
-                if (item.Playlist.IsMainPlaylist)
+                if (item.Playlist.IsFeatureLength)
                 {
                     foreach (var graphicsStream in item.Playlist.GraphicsStreams)
                     {
@@ -503,7 +503,7 @@ namespace BDAutoMuxer.views
         {
             set
             {
-                foreach (var gridItem in _playlistGridItems.Where(pgi => pgi.Playlist.IsMainPlaylist))
+                foreach (var gridItem in _playlistGridItems.Where(pgi => pgi.Playlist.IsFeatureLength))
                 {
                     gridItem.IsMainMovie = value;
                 }
@@ -650,7 +650,7 @@ namespace BDAutoMuxer.views
         {
             VideoLanguageHasChanged = false;
             _playlist = playlist;
-            _isMainMovie = playlist.IsMainPlaylist && !playlist.HasDuplicateClips && !playlist.IsDuplicate;
+            _isMainMovie = playlist.IsFeatureLength && !playlist.HasDuplicateClips && !playlist.IsDuplicate;
             Filename = playlist.Name;
             _length = playlist.TotalLength;
             Size = playlist.FileSize.ToString("N0");
