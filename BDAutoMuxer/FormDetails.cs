@@ -1060,7 +1060,7 @@ namespace BDAutoMuxer
         private void StartDemuxer(ISet<TSStream> selectedStreams)
         {
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "Demuxing: 0.0%");
+            SetTabStatus(tabPageProgress, "Demuxing subtitles: 0.0%");
             textBoxDemuxingCommandLine.Text = "";
             textBoxTsMuxerCommandLine.Text = "";
             progressBarTsMuxer.Value = 0;
@@ -1078,7 +1078,7 @@ namespace BDAutoMuxer
         private void StartMuxer(ISet<TSStream> selectedStreams)
         {
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "Muxing: 0.0%");
+            SetTabStatus(tabPageProgress, "Muxing M2TS: 0.0%");
             textBoxTsMuxerCommandLine.Text = "";
             toolStripProgressBar.Visible = true;
 
@@ -1137,7 +1137,7 @@ namespace BDAutoMuxer
             progressLabel.Text = strProgress;
 
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "Muxing: " + strProgress);
+            SetTabStatus(tabPageProgress, "Muxing M2TS: " + strProgress);
 
             if (String.IsNullOrEmpty(textBoxTsMuxerCommandLine.Text))
                 textBoxTsMuxerCommandLine.Text = _tsMuxer.CommandLine;
@@ -1213,7 +1213,7 @@ namespace BDAutoMuxer
             progressLabel.Text = strProgress;
 
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "Demuxing: " + strProgress);
+            SetTabStatus(tabPageProgress, "Demuxing subtitles: " + strProgress);
 
             if (String.IsNullOrEmpty(textBoxDemuxingCommandLine.Text))
                 textBoxDemuxingCommandLine.Text = _tsDemuxer.CommandLine;
@@ -1695,7 +1695,7 @@ namespace BDAutoMuxer
             if (_isMuxing)
             {
                 if (_tsDemuxer != null && _tsDemuxer.IsBusy)
-                    PauseResume(_tsDemuxer, labelTsMuxerProgress);
+                    PauseResume(_tsDemuxer, labelDemuxingProgress);
                 else
                     PauseResume(_tsMuxer, labelTsMuxerProgress);
             }
