@@ -306,6 +306,8 @@ namespace BDAutoMuxer.views
                 mainPlaylistGridItemsOriginal.Add(item.Playlist.Name.ToUpper(), itemOriginal);
             }
 
+            _dataGridView.EndEdit();
+
             foreach (var jsonPlaylist in jsonPlaylists)
             {
                 AutoConfigure(jsonPlaylist, mainPlaylistGridItems);
