@@ -1915,6 +1915,19 @@ namespace BDAutoMuxer
                 PlayFile(SelectedPlaylist.FullName);
         }
 
+        private void contextMenuStripTmdb_Opened(object sender, EventArgs e)
+        {
+            if (toolStripMenuItemTmdb.Image == null)
+                toolStripMenuItemTmdb.Image = Win32.Win32.DefaultBrowserIconAsBitmap;
+            toolStripMenuItemTmdb.Enabled = _tmdbMovieUrl != null;
+        }
+
+        private void toolStripMenuItemTmdb_Click(object sender, EventArgs e)
+        {
+            if (_tmdbMovieUrl != null)
+                Process.Start(_tmdbMovieUrl);
+        }
+
         private static bool IsBDROMDir(DirectoryInfo dir)
         {
             return dir != null && dir.Name.ToLowerInvariant() == "bdmv";
@@ -2083,19 +2096,6 @@ namespace BDAutoMuxer
         }
 
         #endregion
-
-        private void contextMenuStripTmdb_Opened(object sender, EventArgs e)
-        {
-            if (toolStripMenuItemTmdb.Image == null)
-                toolStripMenuItemTmdb.Image = Win32.Win32.DefaultBrowserIconAsBitmap;
-            toolStripMenuItemTmdb.Enabled = _tmdbMovieUrl != null;
-        }
-
-        private void toolStripMenuItemTmdb_Click(object sender, EventArgs e)
-        {
-            if (_tmdbMovieUrl != null)
-                Process.Start(_tmdbMovieUrl);
-        }
 
     }
 }
