@@ -511,7 +511,7 @@
             this.showAllPlaylistsCheckbox.Tag = "Show short playlists that are unlikely to be the main movie";
             this.showAllPlaylistsCheckbox.Text = "Show all playlists";
             this.showAllPlaylistsCheckbox.UseVisualStyleBackColor = true;
-            this.showAllPlaylistsCheckbox.Click += new System.EventHandler(this.showAllPlaylistsCheckbox_CheckedChanged);
+            this.showAllPlaylistsCheckbox.CheckedChanged += new System.EventHandler(this.showAllPlaylistsCheckbox_CheckedChanged);
             // 
             // panel1
             // 
