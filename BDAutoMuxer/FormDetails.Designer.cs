@@ -100,14 +100,14 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.checkBoxDemuxSubtitles = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelDemuxingTimeRemainingElapsed = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.labelDemuxingTimeRemaining = new System.Windows.Forms.Label();
+            this.labelDemuxingTimeElapsed = new System.Windows.Forms.Label();
+            this.textBoxDemuxingCommandLine = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.label6 = new System.Windows.Forms.Label();
+            this.progressBarDemuxing = new System.Windows.Forms.ProgressBar();
+            this.labelDemuxingProgress = new System.Windows.Forms.Label();
             this.splitContainerDiscOuter = new BDAutoMuxer.views.SplitContainerWithDivider();
             this.panelMoviePoster = new System.Windows.Forms.Panel();
             this.pictureBoxMoviePoster = new System.Windows.Forms.PictureBox();
@@ -637,9 +637,9 @@
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerCommandLine);
             this.groupBoxTsMuxerProgress.Controls.Add(this.progressBarTsMuxer);
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerProgress);
-            this.groupBoxTsMuxerProgress.Location = new System.Drawing.Point(3, 159);
+            this.groupBoxTsMuxerProgress.Location = new System.Drawing.Point(4, 160);
             this.groupBoxTsMuxerProgress.Name = "groupBoxTsMuxerProgress";
-            this.groupBoxTsMuxerProgress.Size = new System.Drawing.Size(738, 150);
+            this.groupBoxTsMuxerProgress.Size = new System.Drawing.Size(742, 150);
             this.groupBoxTsMuxerProgress.TabIndex = 0;
             this.groupBoxTsMuxerProgress.TabStop = false;
             this.groupBoxTsMuxerProgress.Text = "Muxing Progress";
@@ -649,7 +649,7 @@
             this.labelTsMuxerTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTsMuxerTimeRemainingElapsed.AutoSize = true;
             this.labelTsMuxerTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTsMuxerTimeRemainingElapsed.Location = new System.Drawing.Point(471, 20);
+            this.labelTsMuxerTimeRemainingElapsed.Location = new System.Drawing.Point(475, 20);
             this.labelTsMuxerTimeRemainingElapsed.Name = "labelTsMuxerTimeRemainingElapsed";
             this.labelTsMuxerTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
             this.labelTsMuxerTimeRemainingElapsed.TabIndex = 36;
@@ -659,7 +659,7 @@
             // 
             this.labelTsMuxerTimeSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTsMuxerTimeSeparator.AutoSize = true;
-            this.labelTsMuxerTimeSeparator.Location = new System.Drawing.Point(667, 20);
+            this.labelTsMuxerTimeSeparator.Location = new System.Drawing.Point(671, 20);
             this.labelTsMuxerTimeSeparator.Name = "labelTsMuxerTimeSeparator";
             this.labelTsMuxerTimeSeparator.Size = new System.Drawing.Size(12, 13);
             this.labelTsMuxerTimeSeparator.TabIndex = 6;
@@ -669,7 +669,7 @@
             // 
             this.labelTsMuxerTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTsMuxerTimeRemaining.AutoSize = true;
-            this.labelTsMuxerTimeRemaining.Location = new System.Drawing.Point(612, 20);
+            this.labelTsMuxerTimeRemaining.Location = new System.Drawing.Point(616, 20);
             this.labelTsMuxerTimeRemaining.Name = "labelTsMuxerTimeRemaining";
             this.labelTsMuxerTimeRemaining.Size = new System.Drawing.Size(49, 13);
             this.labelTsMuxerTimeRemaining.TabIndex = 5;
@@ -679,7 +679,7 @@
             // 
             this.labelTsMuxerTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTsMuxerTimeElapsed.AutoSize = true;
-            this.labelTsMuxerTimeElapsed.Location = new System.Drawing.Point(683, 20);
+            this.labelTsMuxerTimeElapsed.Location = new System.Drawing.Point(687, 20);
             this.labelTsMuxerTimeElapsed.Name = "labelTsMuxerTimeElapsed";
             this.labelTsMuxerTimeElapsed.Size = new System.Drawing.Size(49, 13);
             this.labelTsMuxerTimeElapsed.TabIndex = 4;
@@ -694,7 +694,7 @@
             this.textBoxTsMuxerCommandLine.Multiline = true;
             this.textBoxTsMuxerCommandLine.Name = "textBoxTsMuxerCommandLine";
             this.textBoxTsMuxerCommandLine.ReadOnly = true;
-            this.textBoxTsMuxerCommandLine.Size = new System.Drawing.Size(725, 60);
+            this.textBoxTsMuxerCommandLine.Size = new System.Drawing.Size(729, 60);
             this.textBoxTsMuxerCommandLine.TabIndex = 3;
             // 
             // labelTsMuxerCommandLine
@@ -713,7 +713,7 @@
             this.progressBarTsMuxer.Location = new System.Drawing.Point(7, 37);
             this.progressBarTsMuxer.Maximum = 1000;
             this.progressBarTsMuxer.Name = "progressBarTsMuxer";
-            this.progressBarTsMuxer.Size = new System.Drawing.Size(725, 23);
+            this.progressBarTsMuxer.Size = new System.Drawing.Size(729, 23);
             this.progressBarTsMuxer.Step = 1;
             this.progressBarTsMuxer.TabIndex = 1;
             // 
@@ -947,7 +947,6 @@
             // checkBoxDemuxSubtitles
             // 
             this.checkBoxDemuxSubtitles.AutoSize = true;
-            this.checkBoxDemuxSubtitles.Enabled = false;
             this.checkBoxDemuxSubtitles.Location = new System.Drawing.Point(10, 140);
             this.checkBoxDemuxSubtitles.Name = "checkBoxDemuxSubtitles";
             this.checkBoxDemuxSubtitles.Size = new System.Drawing.Size(100, 17);
@@ -959,74 +958,73 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.labelDemuxingTimeRemainingElapsed);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.labelDemuxingTimeRemaining);
+            this.groupBox1.Controls.Add(this.labelDemuxingTimeElapsed);
+            this.groupBox1.Controls.Add(this.textBoxDemuxingCommandLine);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.progressBar1);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Enabled = false;
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
+            this.groupBox1.Controls.Add(this.progressBarDemuxing);
+            this.groupBox1.Controls.Add(this.labelDemuxingProgress);
+            this.groupBox1.Location = new System.Drawing.Point(4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(738, 150);
+            this.groupBox1.Size = new System.Drawing.Size(742, 150);
             this.groupBox1.TabIndex = 37;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Demuxing Progress";
             // 
-            // label1
+            // labelDemuxingTimeRemainingElapsed
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(471, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(135, 13);
-            this.label1.TabIndex = 36;
-            this.label1.Text = "Time Remaining / Elapsed:";
+            this.labelDemuxingTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDemuxingTimeRemainingElapsed.AutoSize = true;
+            this.labelDemuxingTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDemuxingTimeRemainingElapsed.Location = new System.Drawing.Point(475, 20);
+            this.labelDemuxingTimeRemainingElapsed.Name = "labelDemuxingTimeRemainingElapsed";
+            this.labelDemuxingTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
+            this.labelDemuxingTimeRemainingElapsed.TabIndex = 36;
+            this.labelDemuxingTimeRemainingElapsed.Text = "Time Remaining / Elapsed:";
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(667, 20);
+            this.label2.Location = new System.Drawing.Point(671, 20);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(12, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "/";
             // 
-            // label3
+            // labelDemuxingTimeRemaining
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(612, 20);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "00:00:00";
+            this.labelDemuxingTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDemuxingTimeRemaining.AutoSize = true;
+            this.labelDemuxingTimeRemaining.Location = new System.Drawing.Point(616, 20);
+            this.labelDemuxingTimeRemaining.Name = "labelDemuxingTimeRemaining";
+            this.labelDemuxingTimeRemaining.Size = new System.Drawing.Size(49, 13);
+            this.labelDemuxingTimeRemaining.TabIndex = 5;
+            this.labelDemuxingTimeRemaining.Text = "00:00:00";
             // 
-            // label4
+            // labelDemuxingTimeElapsed
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(683, 20);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(49, 13);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "00:00:00";
+            this.labelDemuxingTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDemuxingTimeElapsed.AutoSize = true;
+            this.labelDemuxingTimeElapsed.Location = new System.Drawing.Point(687, 20);
+            this.labelDemuxingTimeElapsed.Name = "labelDemuxingTimeElapsed";
+            this.labelDemuxingTimeElapsed.Size = new System.Drawing.Size(49, 13);
+            this.labelDemuxingTimeElapsed.TabIndex = 4;
+            this.labelDemuxingTimeElapsed.Text = "00:00:00";
             // 
-            // textBox1
+            // textBoxDemuxingCommandLine
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.textBoxDemuxingCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(7, 84);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(725, 60);
-            this.textBox1.TabIndex = 3;
+            this.textBoxDemuxingCommandLine.Location = new System.Drawing.Point(7, 84);
+            this.textBoxDemuxingCommandLine.Multiline = true;
+            this.textBoxDemuxingCommandLine.Name = "textBoxDemuxingCommandLine";
+            this.textBoxDemuxingCommandLine.ReadOnly = true;
+            this.textBoxDemuxingCommandLine.Size = new System.Drawing.Size(729, 60);
+            this.textBoxDemuxingCommandLine.TabIndex = 3;
             // 
             // label5
             // 
@@ -1037,25 +1035,25 @@
             this.label5.TabIndex = 2;
             this.label5.Text = "Command line:";
             // 
-            // progressBar1
+            // progressBarDemuxing
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.progressBarDemuxing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(7, 37);
-            this.progressBar1.Maximum = 1000;
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(725, 23);
-            this.progressBar1.Step = 1;
-            this.progressBar1.TabIndex = 1;
+            this.progressBarDemuxing.Location = new System.Drawing.Point(7, 37);
+            this.progressBarDemuxing.Maximum = 1000;
+            this.progressBarDemuxing.Name = "progressBarDemuxing";
+            this.progressBarDemuxing.Size = new System.Drawing.Size(729, 23);
+            this.progressBarDemuxing.Step = 1;
+            this.progressBarDemuxing.TabIndex = 1;
             // 
-            // label6
+            // labelDemuxingProgress
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 20);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(30, 13);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "0.0%";
+            this.labelDemuxingProgress.AutoSize = true;
+            this.labelDemuxingProgress.Location = new System.Drawing.Point(7, 20);
+            this.labelDemuxingProgress.Name = "labelDemuxingProgress";
+            this.labelDemuxingProgress.Size = new System.Drawing.Size(30, 13);
+            this.labelDemuxingProgress.TabIndex = 0;
+            this.labelDemuxingProgress.Text = "0.0%";
             // 
             // splitContainerDiscOuter
             // 
@@ -1893,13 +1891,13 @@
         private System.Windows.Forms.CheckBox checkBoxShowShortPlaylists;
         private System.Windows.Forms.CheckBox checkBoxDemuxSubtitles;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelDemuxingTimeRemainingElapsed;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label labelDemuxingTimeRemaining;
+        private System.Windows.Forms.Label labelDemuxingTimeElapsed;
+        private System.Windows.Forms.TextBox textBoxDemuxingCommandLine;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ProgressBar progressBarDemuxing;
+        private System.Windows.Forms.Label labelDemuxingProgress;
     }
 }

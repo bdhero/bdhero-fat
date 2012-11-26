@@ -127,8 +127,7 @@ namespace BDAutoMuxer.tools
 
             _metaFilePath = WriteMetaFile(fileNameWithoutExtension);
 
-            Execute(new List<string> { _metaFilePath, _outputFilePath }, sender, e);
-
+            Execute(new List<string> { _metaFilePath, _demuxSubtitles ? outputDirectory : _outputFilePath }, sender, e);
         }
 
         private void WriteChapterXmlFile(string chapterXmlFilePath)

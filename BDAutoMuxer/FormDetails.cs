@@ -1034,32 +1034,43 @@ namespace BDAutoMuxer
             BDAutoMuxerSettings.ReplaceSpacesWith = textBoxReplaceSpaces.Text;
             BDAutoMuxerSettings.SaveSettings();
 
-            ISet<TSStream> selectedStreams = new HashSet<TSStream>();
-            selectedStreams.UnionWith(SelectedVideoStreams);
-            selectedStreams.UnionWith(SelectedAudioStreams);
-            selectedStreams.UnionWith(SelectedSubtitleStreams);
+            _tsMuxer = null;
+            _tsDemuxer = null;
 
             // TODO: Finish me!
-//            if (checkBoxDemuxSubtitles.Enabled)
-//                StartDemuxer(selectedStreams);
-//            else
-                StartMuxer(selectedStreams);
+            if (checkBoxDemuxSubtitles.Checked)
+                StartDemuxer(SelectedStreams);
+            else
+                StartMuxer(SelectedStreams);
+        }
+
+        private ISet<TSStream> SelectedStreams
+        {
+            get
+            {
+                ISet<TSStream> selectedStreams = new HashSet<TSStream>();
+                selectedStreams.UnionWith(SelectedVideoStreams);
+                selectedStreams.UnionWith(SelectedAudioStreams);
+                selectedStreams.UnionWith(SelectedSubtitleStreams);
+                return selectedStreams;
+            }
         }
 
         // TODO: Finish me!
         private void StartDemuxer(ISet<TSStream> selectedStreams)
         {
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "tsMuxeR: 0.0%");
+            SetTabStatus(tabPageProgress, "Demuxing: 0.0%");
+            textBoxDemuxingCommandLine.Text = "";
             textBoxTsMuxerCommandLine.Text = "";
+            progressBarTsMuxer.Value = 0;
             toolStripProgressBar.Visible = true;
 
             _tsDemuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams, true);
             _tsDemuxer.WorkerReportsProgress = true;
             _tsDemuxer.WorkerSupportsCancellation = true;
-            // TODO: Finish me!
-//            _tsDemuxer.ProgressChanged += tsDemuxerBackgroundWorker_ProgressChanged;
-//            _tsDemuxer.RunWorkerCompleted += tsDemuxerBackgroundWorker_RunWorkerCompleted;
+            _tsDemuxer.ProgressChanged += DemuxerBackgroundWorkerProgressChanged;
+            _tsDemuxer.RunWorkerCompleted += DemuxerBackgroundWorkerCompleted;
 
             _tsDemuxer.RunWorkerAsync(_tsMuxerOutputPath);
         }
@@ -1067,28 +1078,33 @@ namespace BDAutoMuxer
         private void StartMuxer(ISet<TSStream> selectedStreams)
         {
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "tsMuxeR: 0.0%");
+            SetTabStatus(tabPageProgress, "Muxing: 0.0%");
             textBoxTsMuxerCommandLine.Text = "";
             toolStripProgressBar.Visible = true;
 
             _tsMuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams);
             _tsMuxer.WorkerReportsProgress = true;
             _tsMuxer.WorkerSupportsCancellation = true;
-            _tsMuxer.ProgressChanged += tsMuxerBackgroundWorker_ProgressChanged;
-            _tsMuxer.RunWorkerCompleted += tsMuxerBackgroundWorker_RunWorkerCompleted;
+            _tsMuxer.ProgressChanged += TsMuxerBackgroundWorkerProgressChanged;
+            _tsMuxer.RunWorkerCompleted += TsMuxerBackgroundWorkerCompleted;
 
             _tsMuxer.RunWorkerAsync(_tsMuxerOutputPath);
         }
 
         private void CancelRip()
         {
-            if (_tsMuxer == null || !_tsMuxer.IsBusy) return;
-
-            _tsMuxer.Resume();
-            _tsMuxer.CancelAsync();
+            CancelRip(_tsMuxer);
+            CancelRip(_tsDemuxer);
         }
 
-        private void tsMuxerBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private static void CancelRip(AbstractExternalTool tool)
+        {
+            if (tool == null || !tool.IsBusy) return;
+            tool.Resume();
+            tool.CancelAsync();
+        }
+
+        private void TsMuxerBackgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             _isMuxing = true;
             ResetUI();
@@ -1100,11 +1116,13 @@ namespace BDAutoMuxer
             // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
             progressBarTsMuxer.Value = (int)(_tsMuxer.Progress * 10);
 
+            int taskbarProgress = (int) ((_tsDemuxer != null ? 0.5 : 1.0)*progressBarTsMuxer.Value);
+
 // ReSharper disable EmptyGeneralCatchClause
             try
             {
                 // TODO: This throws a NPE if the window is closed while muxing is in progress
-                toolStripProgressBar.Value = progressBarTsMuxer.Value;
+                toolStripProgressBar.Value = taskbarProgress;
             }
             catch
             {
@@ -1112,14 +1130,14 @@ namespace BDAutoMuxer
 // ReSharper restore EmptyGeneralCatchClause
 
             TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
-            TaskbarProgress.SetProgressValue(progressBarTsMuxer.Value, 1000, Handle);
+            TaskbarProgress.SetProgressValue(taskbarProgress, 1000, Handle);
 
             string strProgress = _tsMuxer.Progress.ToString("##0.0") + "%";
             labelTsMuxerProgress.Text = strProgress;
             progressLabel.Text = strProgress;
 
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "tsMuxeR: " + strProgress);
+            SetTabStatus(tabPageProgress, "Muxing: " + strProgress);
 
             if (String.IsNullOrEmpty(textBoxTsMuxerCommandLine.Text))
                 textBoxTsMuxerCommandLine.Text = _tsMuxer.CommandLine;
@@ -1139,7 +1157,106 @@ namespace BDAutoMuxer
             }
         }
 
-        private string GetElapsedTimeString(TimeSpan elapsedTime)
+        private void TsMuxerBackgroundWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _isMuxing = false;
+
+            ResetUI();
+
+            if (e.Cancelled && _tsMuxer.IsCanceled)
+            {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
+                SetTabStatus(tabPageProgress, "Muxing canceled");
+            }
+            else if (e.Error != null)
+            {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
+                ShowErrorMessage(tabPageProgress, "Muxing Error", e.Error.Message);
+            }
+            else
+            {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
+                ShowMessage(tabPageProgress, "Muxing completed!", "Finished muxing M2TS with tsMuxeR!");
+            }
+        }
+
+        private void DemuxerBackgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            _isMuxing = true;
+            ResetUI();
+            UpdateDemuxerProgress(sender, e);
+        }
+
+        private void UpdateDemuxerProgress(object sender = null, EventArgs e = null)
+        {
+            // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
+            progressBarDemuxing.Value = (int)(_tsDemuxer.Progress * 10);
+
+            var taskbarProgress = (int)(progressBarDemuxing.Value * 0.5);
+
+// ReSharper disable EmptyGeneralCatchClause
+            try
+            {
+                // TODO: This throws a NPE if the window is closed while muxing is in progress
+                toolStripProgressBar.Value = taskbarProgress;
+            }
+            catch
+            {
+            }
+// ReSharper restore EmptyGeneralCatchClause
+
+            TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
+            TaskbarProgress.SetProgressValue(taskbarProgress, 1000, Handle);
+
+            string strProgress = _tsDemuxer.Progress.ToString("##0.0") + "%";
+            labelDemuxingProgress.Text = strProgress;
+            progressLabel.Text = strProgress;
+
+            // TODO: Make this status "sticky"
+            SetTabStatus(tabPageProgress, "Demuxing: " + strProgress);
+
+            if (String.IsNullOrEmpty(textBoxDemuxingCommandLine.Text))
+                textBoxDemuxingCommandLine.Text = _tsDemuxer.CommandLine;
+
+            labelDemuxingTimeRemaining.Text = GetElapsedTimeString(_tsDemuxer.TimeRemaining);
+            labelDemuxingTimeElapsed.Text = GetElapsedTimeString(_tsDemuxer.TimeElapsed);
+
+            // TODO: Refactor this logic into a separate method
+            if (!String.IsNullOrEmpty(_tsDemuxer.State))
+            {
+                labelDemuxingProgress.Text += String.Format(" ({0})", _tsDemuxer.State);
+
+                if (_tsDemuxer.IsPaused)
+                    TaskbarProgress.SetProgressState(TaskbarProgressBarState.Paused, Handle);
+                else if (_tsDemuxer.IsCanceled || _tsDemuxer.IsError)
+                    TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
+            }
+        }
+
+        private void DemuxerBackgroundWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _isMuxing = false;
+
+            ResetUI();
+
+            if (e.Cancelled && _tsDemuxer.IsCanceled)
+            {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
+                SetTabStatus(tabPageProgress, "Demuxing canceled");
+            }
+            else if (e.Error != null)
+            {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
+                ShowErrorMessage(tabPageProgress, "Demuxing Error", e.Error.Message);
+            }
+            else
+            {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
+                StartMuxer(SelectedStreams);
+            }
+        }
+
+        private static string GetElapsedTimeString(TimeSpan elapsedTime)
         {
             if (elapsedTime == TimeSpan.MaxValue)
                 elapsedTime = TimeSpan.Zero;
@@ -1149,29 +1266,6 @@ namespace BDAutoMuxer
                 elapsedTime.Hours,
                 elapsedTime.Minutes,
                 elapsedTime.Seconds);
-        }
-
-        private void tsMuxerBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            _isMuxing = false;
-
-            ResetUI();
-
-            if (e.Cancelled && _tsMuxer.IsCanceled)
-            {
-                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
-                SetTabStatus(tabPageProgress, "tsMuxeR canceled");
-            }
-            else if (e.Error != null)
-            {
-                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
-                ShowErrorMessage(tabPageProgress, "tsMuxeR Error", e.Error.Message);
-            }
-            else
-            {
-                TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
-                ShowMessage(tabPageProgress, "tsMuxeR completed!", "Finished muxing M2TS with tsMuxeR!");
-            }
         }
 
         #endregion
@@ -1566,7 +1660,7 @@ namespace BDAutoMuxer
             buttonSubmitToDB.Enabled = CanSubmitToDb;
             submitToDbToolStripMenuItem.Enabled = CanSubmitToDb;
 
-            continueButton.Text = _isMuxing ? (_tsMuxer.IsPaused ? "Resume" : "Pause") : "Mux it!";
+            continueButton.Text = _isMuxing ? (IsMuxingOrDemuxingPaused ? "Resume" : "Pause") : "Mux it!";
             continueButton.Visible = _initialized && (_isMuxing || tabControl.SelectedTab == tabPageOutput) && SelectedPlaylist != null;
             cancelButton.Text = _isMuxing ? "Stop" : "Close";
 
@@ -1574,21 +1668,36 @@ namespace BDAutoMuxer
             ResizeOutputTab();
         }
 
+        private bool IsMuxingOrDemuxingPaused
+        {
+            get { return (_tsMuxer != null && _tsMuxer.IsPaused) || (_tsDemuxer != null && _tsDemuxer.IsPaused); }
+        }
+
+        private static void PauseResume(AbstractExternalTool tool, Control progressLabel)
+        {
+            if (tool == null) return;
+
+            // TODO: Refactor label text logic into a separate method
+            if (tool.IsPaused)
+            {
+                tool.Resume();
+                progressLabel.Text = progressLabel.Text.Replace(" (paused}", "");
+            }
+            else
+            {
+                tool.Pause();
+                progressLabel.Text += " (paused}";
+            }
+        }
+
         private void continueButton_Click(object sender, EventArgs e)
         {
-            if (_isMuxing && _tsMuxer != null)
+            if (_isMuxing)
             {
-                // TODO: Refactor label text logic into a separate method
-                if (_tsMuxer.IsPaused)
-                {
-                    _tsMuxer.Resume();
-                    labelTsMuxerProgress.Text = labelTsMuxerProgress.Text.Replace(" (paused}", "");
-                }
+                if (_tsDemuxer != null && _tsDemuxer.IsBusy)
+                    PauseResume(_tsDemuxer, labelTsMuxerProgress);
                 else
-                {
-                    _tsMuxer.Pause();
-                    labelTsMuxerProgress.Text += " (paused}";
-                }
+                    PauseResume(_tsMuxer, labelTsMuxerProgress);
             }
             else if (tabControl.SelectedTab == tabPageOutput)
             {
