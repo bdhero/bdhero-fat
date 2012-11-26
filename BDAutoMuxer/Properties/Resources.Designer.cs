@@ -60,6 +60,13 @@ namespace BDAutoMuxer.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap arrow_right_gray {
+            get {
+                object obj = ResourceManager.GetObject("arrow_right_gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap arrow_right_green {
             get {
                 object obj = ResourceManager.GetObject("arrow_right_green", resourceCulture);

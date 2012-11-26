@@ -213,6 +213,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\arrow_right_gray.png" />
     <None Include="Resources\info.png" />
     <None Include="Resources\arrow_right_green.png" />
     <None Include="Resources\settings.png" />
