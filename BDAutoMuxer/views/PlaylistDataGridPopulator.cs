@@ -21,6 +21,7 @@ namespace BDAutoMuxer.views
 
         private bool _showAllPlaylists;
 
+        private IList<TSPlaylistFile> _playlists;
         private readonly IList<PlaylistGridItem> _playlistGridItems = new List<PlaylistGridItem>();
         private readonly IList<PlaylistGridItem> _playlistGridItemsOriginal = new List<PlaylistGridItem>();
 
@@ -57,7 +58,7 @@ namespace BDAutoMuxer.views
             }
         }
 
-        private static IEnumerable<TSPlaylistFile> SortPlaylists(IEnumerable<TSPlaylistFile> playlists)
+        private static IList<TSPlaylistFile> SortPlaylists(IEnumerable<TSPlaylistFile> playlists)
         {
             var array = playlists.ToArray();
             Array.Sort(array, ComparePlaylists);
@@ -85,17 +86,26 @@ namespace BDAutoMuxer.views
         {
             _dataGridView = dataGridView;
             _languageCodes = languageCodes;
-
-            dataGridView.DataSource = null;
-            dataGridView.Rows.Clear();
-            dataGridView.Columns.Clear();
-
-            playlists = SortPlaylists(playlists);
-
-            _languages.AddRange(languageCodes.Select(Language.GetLanguage));
+            _languages.AddRange(_languageCodes.Select(Language.GetLanguage));
 
             _dataGridView.AutoGenerateColumns = false;
             _dataGridView.AutoSize = true;
+
+            Init(playlists);
+        }
+
+        private void Init(IEnumerable<TSPlaylistFile> playlists)
+        {
+            _dataGridView.DataSource = null;
+            _dataGridView.Rows.Clear();
+            _dataGridView.Columns.Clear();
+
+            _playlistGridItems.Clear();
+            _playlistGridItemsOriginal.Clear();
+
+            var tsPlaylistFiles = new List<TSPlaylistFile>(playlists);
+
+            _playlists = SortPlaylists(tsPlaylistFiles);
 
             CreateColumns();
 
@@ -103,10 +113,10 @@ namespace BDAutoMuxer.views
             _dataGridView.SelectionChanged += SelectionChanged;
             _dataGridView.CellBeginEdit += CellBeginEdit;
 
-            foreach (var playlist in playlists)
+            foreach (var playlist in tsPlaylistFiles)
             {
-                var item = new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null);
-                var clone = new PlaylistGridItem(playlist, languageCodes.Count > 0 ? languageCodes[0] : null);
+                var item = new PlaylistGridItem(playlist, _languageCodes.Count > 0 ? _languageCodes[0] : null);
+                var clone = new PlaylistGridItem(playlist, _languageCodes.Count > 0 ? _languageCodes[0] : null);
 
                 item.PropertyChanged += ItemChanged;
 
@@ -290,8 +300,38 @@ namespace BDAutoMuxer.views
             }
         }
 
-        public void AutoConfigure(IEnumerable<JsonPlaylist> jsonPlaylists)
+        public void AutoConfigure(IList<JsonPlaylist> jsonPlaylists)
         {
+            _dataGridView.EndEdit();
+
+            // TODO: Clean this garbage up
+            foreach (var playlist in _playlists)
+            {
+                playlist.IsMainMovieAuto = false;
+
+                var playlist1 = playlist;
+                var playlistGridItem = _playlistGridItems.FirstOrDefault(p => p.Playlist.Name == playlist1.Name);
+
+                if (playlistGridItem != null)
+                {
+                    playlist.IsMainMovieAuto = playlistGridItem.IsMainMovie;
+                }
+            }
+
+            foreach (var jsonPlaylist in jsonPlaylists)
+            {
+                var key = jsonPlaylist.filename.ToUpperInvariant();
+                var playlist = _playlists.FirstOrDefault(tsPlaylistFile => tsPlaylistFile.Name.ToUpperInvariant() == key);
+
+                if (playlist == null) continue;
+
+                playlist.IsMainMovieAuto = jsonPlaylist.is_main;
+            }
+
+            // Re-sort the playlists in the GridView
+            Destroy();
+            Init(_playlists);
+
             var mainPlaylistGridItems = new Dictionary<string, PlaylistGridItem>();
             var mainPlaylistGridItemsOriginal = new Dictionary<string, PlaylistGridItem>();
 
@@ -305,8 +345,6 @@ namespace BDAutoMuxer.views
                 mainPlaylistGridItems.Add(item.Playlist.Name.ToUpper(), item);
                 mainPlaylistGridItemsOriginal.Add(item.Playlist.Name.ToUpper(), itemOriginal);
             }
-
-            _dataGridView.EndEdit();
 
             foreach (var jsonPlaylist in jsonPlaylists)
             {

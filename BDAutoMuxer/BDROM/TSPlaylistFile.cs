@@ -139,9 +139,22 @@ namespace BDAutoMuxer
             _isInitialized = true;
         }
 
+        private bool _autoConfigured;
+        private bool _isMainMovieAuto;
+
+        public bool IsMainMovieAuto
+        {
+            get { return _isMainMovieAuto; }
+            set
+            {
+                _autoConfigured = true;
+                _isMainMovieAuto = value;
+            }
+        }
+
         public bool IsLikelyMainMovie
         {
-            get { return IsFeatureLength && !HasDuplicateClips && !IsDuplicate; }
+            get { return _autoConfigured ? IsMainMovieAuto : (IsFeatureLength && !HasDuplicateClips && !IsDuplicate); }
         }
 
         public override string ToString()
