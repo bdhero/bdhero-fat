@@ -234,6 +234,8 @@ namespace BDAutoMuxer.tools
 
         #endregion
 
+        #region Process Execution
+
         protected void Execute(IList<string> args, object sender, DoWorkEventArgs e)
         {
             ExtractResources();
@@ -392,6 +394,10 @@ namespace BDAutoMuxer.tools
             _worker.ReportProgress(100);
         }
 
+        #endregion
+
+        #region Output Files
+
         protected void DeleteTempFiles()
         {
             try
@@ -490,6 +496,8 @@ namespace BDAutoMuxer.tools
             var message = String.Format("The following files are incomplete and unusable:\n\n{0}\n\nDo you want to delete them?", files);
             return MessageBox.Show(message, "Delete output files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
+
+        #endregion
 
         #region Suspend / Resume Thread
 
