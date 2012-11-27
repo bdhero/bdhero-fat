@@ -542,7 +542,7 @@ namespace BDAutoMuxer.tools
 
             // See http://stackoverflow.com/a/910069/467582
             String pathVar = Environment.GetEnvironmentVariable("path") ?? "";
-            String[] folders = pathVar.Split(';');
+            String[] folders = pathVar.Split(Path.PathSeparator);
             result = folders.Select(folder => Path.Combine(folder, filename)).FirstOrDefault(File.Exists);
 
             if (result == null && siblingFilename != null)
