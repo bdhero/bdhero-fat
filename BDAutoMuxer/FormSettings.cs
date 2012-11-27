@@ -18,7 +18,9 @@
 //=============================================================================
 
 using System;
+using System.Configuration;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -86,6 +88,15 @@ namespace BDAutoMuxer
 
     public static class BDAutoMuxerSettings
     {
+        public static string ConfigDir
+        {
+            get
+            {
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+                return Path.GetDirectoryName(config.FilePath);
+            }
+        }
+
         public static string AssemblyName
         {
             get
