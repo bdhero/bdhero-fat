@@ -504,12 +504,31 @@ namespace BDAutoMuxer.tools
 
         private const string AppPathsRegKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths";
 
-        public static string FindExe(string filename)
+        /// <summary>
+        /// <para>Attempts to find the full path to an EXE by searching (in order):</para>
+        /// <list type="number">
+        ///     <item><description>The HKLM "App Paths" registry key</description></item>
+        ///     <item><description>All <code>%PATH%</code> directories</description></item>
+        ///     <item><description>If siblingFilename is specified and can be found via 1) or 2), the same directory as siblingFilename</description></item>
+        /// </list>
+        /// <para></para>
+        /// </summary>
+        /// <param name="filename">
+        /// The name of the EXE file to find (e.g., <code>"cmd.exe"</code>, <code>"mmg.exe"</code>)
+        /// </param>
+        /// <param name="siblingFilename">
+        /// The name of a sibling EXE file that exists in the same directory as <code>filename</code>
+        /// and which may or may not be registered with the OS via the HKLM "App Paths" registry key
+        /// </param>
+        /// <returns>The absolute path to <code>filename</code> if it can be found; otherwise <code>null</code></returns>
+        public static string FindExe(string filename, string siblingFilename = null)
         {
             string result;
 
             // See http://stackoverflow.com/a/909966/467582
-            using (RegistryKey fileKey = Registry.LocalMachine.OpenSubKey(string.Format(@"{0}\{1}", AppPathsRegKeyPath, filename)))
+            using (
+                RegistryKey fileKey =
+                    Registry.LocalMachine.OpenSubKey(string.Format(@"{0}\{1}", AppPathsRegKeyPath, filename)))
             {
                 if (fileKey != null)
                 {
@@ -525,6 +544,20 @@ namespace BDAutoMuxer.tools
             String pathVar = Environment.GetEnvironmentVariable("path") ?? "";
             String[] folders = pathVar.Split(';');
             result = folders.Select(folder => Path.Combine(folder, filename)).FirstOrDefault(File.Exists);
+
+            if (result == null && siblingFilename != null)
+            {
+                string siblingPath = FindExe(siblingFilename);
+                string siblingDir;
+                string filePath;
+
+                if ((siblingPath != null) &&
+                    (siblingDir = Path.GetDirectoryName(siblingPath)) != null &&
+                    File.Exists(filePath = Path.Combine(siblingDir, filename)))
+                {
+                    result = filePath;
+                }
+            }
 
             return result;
         }
