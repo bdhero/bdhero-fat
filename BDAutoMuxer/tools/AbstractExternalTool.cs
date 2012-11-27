@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.views;
+using Microsoft.Win32;
 
 namespace BDAutoMuxer.tools
 {
@@ -495,6 +496,37 @@ namespace BDAutoMuxer.tools
             var files = String.Join("\n", GetOutputFiles().Select(path => string.Format("\t{0}", path)));
             var message = String.Format("The following files are incomplete and unusable:\n\n{0}\n\nDo you want to delete them?", files);
             return MessageBox.Show(message, "Delete output files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
+        #endregion
+
+        #region EXE Finder
+
+        private const string AppPathsRegKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths";
+
+        public static string FindExe(string filename)
+        {
+            string result;
+
+            // See http://stackoverflow.com/a/909966/467582
+            using (RegistryKey fileKey = Registry.LocalMachine.OpenSubKey(string.Format(@"{0}\{1}", AppPathsRegKeyPath, filename)))
+            {
+                if (fileKey != null)
+                {
+                    result = (string) fileKey.GetValue(string.Empty);
+                    fileKey.Close();
+
+                    if (!string.IsNullOrWhiteSpace(result))
+                        return result;
+                }
+            }
+
+            // See http://stackoverflow.com/a/910069/467582
+            String pathVar = Environment.GetEnvironmentVariable("path") ?? "";
+            String[] folders = pathVar.Split(';');
+            result = folders.Select(folder => Path.Combine(folder, filename)).FirstOrDefault(File.Exists);
+
+            return result;
         }
 
         #endregion
