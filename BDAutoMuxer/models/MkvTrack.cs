@@ -342,6 +342,11 @@ S_HDMV/PGS = PGS subtitles
             track.BitDepth = GetString(xml, "BitDepth_String");
             track.CompressionMode = GetString(xml, "Compression_Mode_String");
 
+            if (track.Channels == 6)
+                track.Channels = 5.1;
+            else if (track.Channels == 8)
+                track.Channels = 7.1;
+
             switch (track.Format)
             {
                 case "AC-3":
