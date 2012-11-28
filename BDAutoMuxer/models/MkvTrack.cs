@@ -290,7 +290,7 @@ S_HDMV/PGS = PGS subtitles
 
     public class MkvAudioVideoTrack : MkvTrack
     {
-        protected static readonly Regex StreamSizeRegex = new Regex(@"([0-9\.]+) ([a-zA-Z]{3}) \((\d+%)\)", RegexOptions.IgnoreCase);
+        protected static readonly Regex StreamSizeRegex = new Regex(@"([0-9\.]+) ([a-zA-Z]{3}) \((\d+)%\)", RegexOptions.IgnoreCase);
 
         public string Duration { get; protected set; }
         public string Bitrate { get; protected set; }
