@@ -7,7 +7,7 @@ using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.models
 {
-    public enum BitFlag
+    public enum MkvBitFlag
     {
         Unspecified,
         Yes,
@@ -130,8 +130,8 @@ namespace BDAutoMuxer.models
         public string NewTitle;
         public string Language;
 
-        public BitFlag IsDefault;
-        public BitFlag IsForced;
+        public MkvBitFlag IsDefault;
+        public MkvBitFlag IsForced;
 
         /*
         private static readonly IDictionary<string, TSStreamType> CodecMap = new Dictionary<string, TSStreamType>()
@@ -233,7 +233,7 @@ S_HDMV/PGS = PGS subtitles
             return ParseDouble(GetString(xml, tagName, regex));
         }
 
-        protected static BitFlag GetBitFlag(string xml, string tagName, Regex regex = null)
+        protected static MkvBitFlag GetBitFlag(string xml, string tagName, Regex regex = null)
         {
             return ParseBitFlag(GetString(xml, tagName, regex));
         }
@@ -252,10 +252,10 @@ S_HDMV/PGS = PGS subtitles
             return d;
         }
 
-        protected static BitFlag ParseBitFlag(string value)
+        protected static MkvBitFlag ParseBitFlag(string value)
         {
             var lower = (value ?? "").ToLowerInvariant();
-            return lower == "yes" ? BitFlag.Yes : (lower == "no" ? BitFlag.No : BitFlag.Unspecified);
+            return lower == "yes" ? MkvBitFlag.Yes : (lower == "no" ? MkvBitFlag.No : MkvBitFlag.Unspecified);
         }
 
         protected static readonly IDictionary<string, double> SizeScales = new Dictionary<string, double>()
