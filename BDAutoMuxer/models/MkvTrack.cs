@@ -26,8 +26,8 @@ namespace BDAutoMuxer.models
         public string FormatInfo { get; protected set; }
         public string FormatProfile { get; protected set; }
         public string CodecId { get; protected set; }
-        public string OldTitle { get; protected set; }
         public TSStreamType StreamType { get; protected set; }
+        public string OldTitle { get; protected set; }
 
         public string CodecName
         {
@@ -133,55 +133,6 @@ namespace BDAutoMuxer.models
         public MkvBitFlag IsDefault;
         public MkvBitFlag IsForced;
 
-        /*
-        private static readonly IDictionary<string, TSStreamType> CodecMap = new Dictionary<string, TSStreamType>()
-        {
-            { "V_MPEG1", TSStreamType.MPEG1_VIDEO },
-            { "V_MPEG-1", TSStreamType.MPEG1_VIDEO },
-
-            { "V_MPEG2", TSStreamType.MPEG2_VIDEO },
-            { "V_MPEG-2", TSStreamType.MPEG2_VIDEO },
-
-            { "V_MPEG4/ISO/AVC", TSStreamType.AVC_VIDEO },
-
-            { "V_MS/VFW/WVC1", TSStreamType.VC1_VIDEO },
-
-            { "A_AC3", TSStreamType.AC3_AUDIO },
-            { "A_AC3", TSStreamType.AC3_PLUS_AUDIO },
-            { "A_AC3", TSStreamType.AC3_PLUS_SECONDARY_AUDIO },
-            { "A_TRUEHD", TSStreamType.AC3_TRUE_HD_AUDIO },
-
-            { "A_DTS", TSStreamType.DTS_AUDIO },
-            { "A_DTS", TSStreamType.DTS_HD_AUDIO },
-            { "A_DTS", TSStreamType.DTS_HD_SECONDARY_AUDIO },
-            { "A_DTS", TSStreamType.DTS_HD_MASTER_AUDIO },
-
-            { "A_PCM", TSStreamType.LPCM_AUDIO },
-            { "A_LPCM", TSStreamType.LPCM_AUDIO },
-
-            { "S_HDMV/PGS", TSStreamType.PRESENTATION_GRAPHICS },
-            { "S_TEXT/UTF8", TSStreamType.SUBTITLE }
-        };
-        */
-        /*
-V_MPEG1 = ISO/IEC 11172-2
-V_MPEG2 = ISO/IEC 13818-2
-V_MPEG4/ISO/AVC = MPEG-4 part 10, ISO/IEC 14496-10
-A_AC3 = Dolby AC3
-A_DTS = DTS
-A_PCM/INT/LIT = Uncompressed PCM, integer, little endian
-A_PCM/FLOAT/IEEE = Uncompressed PCM, float, little endian
-A_AAC = MPEG-4 part 3, ISO/IEC 14496-3
-S_TEXT/ASCII = Plain text subtitles in system default character encoding
-S_TEXT/UTF8 = Plain text subtitles in UTF-8 encoding
-
----
-
-V_MS/VFW/WVC1 = VC-1
-A_LPCM = PCM
-S_HDMV/PGS = PGS subtitles
-         */
-
         private static readonly Regex TrackRegex = new Regex("<track\\s+type=\"(Audio|Video|Text|Menu)\"[^>]*>.*?</track>", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
         public static ICollection<MkvTrack> ParseMediaInfo(string mediaInfo)
@@ -195,17 +146,17 @@ S_HDMV/PGS = PGS subtitles
                           .Select(match => ParseTrack(match.Value, match.Groups[1].Value)).Where(track => track != null).ToList();
         }
 
-        private static MkvTrack ParseTrack(string trackXml, string type)
+        private static MkvTrack ParseTrack(string xml, string type)
         {
             var typeLower = type.ToLowerInvariant();
             if (typeLower == "audio")
-                return MkvAudioTrack.Parse(trackXml);
+                return MkvAudioTrack.Parse(xml);
             if (typeLower == "video")
-                return MkvVideoTrack.Parse(trackXml);
+                return MkvVideoTrack.Parse(xml);
             if (typeLower == "text")
-                return MkvSubtitleTrack.Parse(trackXml);
+                return MkvSubtitleTrack.Parse(xml);
             if (typeLower == "menu")
-                return MkvChapterTrack.Parse(trackXml);
+                return MkvChapterTrack.Parse(xml);
             return null;
         }
 
