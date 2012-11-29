@@ -747,6 +747,11 @@ namespace BDAutoMuxer.models
         {
             _chapters.AddRange(menuSectionText.Split('\n').Where(MIChapter.IsChapter).Select(MIChapter.Parse));
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} chapters [ {1} ]", _chapters.Count, string.Join(", ", _chapters));
+        }
     }
     
     class MIChapter
@@ -776,6 +781,17 @@ namespace BDAutoMuxer.models
             Offset = new TimeSpan(0, hours, minutes, seconds, milliseconds);
             Language = language;
             Title = title;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(OffsetString);
+            if (Language != null)
+                sb.AppendFormat(" - {0}", Language.ISO_639_2);
+            if (!string.IsNullOrWhiteSpace(Title))
+                sb.AppendFormat(" - {0}", Title);
+            return sb.ToString();
         }
 
         public static bool IsChapter(string line)
