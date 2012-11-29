@@ -144,6 +144,33 @@ namespace BDAutoMuxer.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to ;
+        ///;
+        ///;Bug: &quot;Page_Begin&quot;, &quot;Page_Middle&quot; and &quot;Page_End&quot; sections are picked on lines 10, 11 and 12 regardless what is there. So it is better to leave them there.
+        ///;Bug: \r\n is not turned into a newline on &quot;Page&quot; entries.
+        ///;Bug: &quot;Image&quot; sections are not active, but should.
+        ///;
+        ///;
+        ///;
+        ///Page;(unused)\r\n
+        ///Page_Begin;
+        ///Page_Middle;
+        ///Page_End;&lt;/Tracks&gt;&lt;/MediaInfo&gt;
+        ///;
+        ///File;(unused)\r\n
+        ///File_Begin;
+        ///File_Middle;(unused)\r\n
+        ///File_End;
+        ///;
+        ///General;&lt;?xml version=&quot;1.0&quot;?&gt;\r\n&lt;MediaInfo&gt;\r\n    &lt;FileInfo&gt;\r\n        &lt;F [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MediaInfo_XML {
+            get {
+                return ResourceManager.GetString("MediaInfo_XML", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Icon mpeg1_audio {
             get {
                 object obj = ResourceManager.GetObject("mpeg1_audio", resourceCulture);

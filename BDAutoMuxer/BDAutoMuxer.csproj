@@ -218,6 +218,7 @@
     <None Include="Resources\arrow_right_gray.png" />
     <None Include="Resources\info.png" />
     <None Include="Resources\arrow_right_green.png" />
+    <None Include="Resources\MediaInfo_XML.csv" />
     <None Include="Resources\settings.png" />
     <None Include="Resources\tmdb.ico" />
     <None Include="Resources\play.png" />
