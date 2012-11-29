@@ -15,6 +15,8 @@ namespace BDAutoMuxer.models
 
         public static bool IsCorrectVersion { get { return Config.IsValid; } }
 
+        private static readonly Regex TrackRegex = new Regex(@"<(Video|Audio|Subtitle|Chapter)Track>\s*(.*?)\s*</\1Track>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
         private readonly string _mediaFilePath;
 
         public MIFile File;
@@ -34,9 +36,6 @@ namespace BDAutoMuxer.models
         public IList<MISubtitleTrack> SubtitleTracks { get { return _subtitleTracks.AsReadOnly(); } }
         public IList<MIChapterTrack> ChapterTracks { get { return _chapterTracks.AsReadOnly(); } }
 
-        private string _xml;
-        private static readonly Regex TrackRegex = new Regex(@"<(Video|Audio|Subtitle|Chapter)Track>\s*(.+?)\s*</\1Track>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-
         public static void Test()
         {
             MediaInfo.Config.CLIPath = @"C:\Tools\MediaInfo\MediaInfo.exe";
@@ -50,11 +49,15 @@ namespace BDAutoMuxer.models
             var pirates_mkv_path = @"Y:\BDAutoMuxer\PIRATES3_SHORT\PIRATES3_00001.mmg.mkv";
             var thismeanswar_mka_path = @"Y:\BDAutoMuxer\THIS_MEANS_WAR\This Means War (2012) [1080p].mka";
 
+            var start = DateTime.Now;
+
             var braveheart_mkv = new MediaInfo(braveheart_mkv_path).Scan();
             var pirates_m2ts = new MediaInfo(pirates_m2ts_path).Scan();
             var pirates_wav = new MediaInfo(pirates_wav_path).Scan();
             var pirates_mkv = new MediaInfo(pirates_mkv_path).Scan();
             var pirates_mka = new MediaInfo(thismeanswar_mka_path).Scan();
+
+            var diff = DateTime.Now - start;
 
             Console.WriteLine();
         }
@@ -70,41 +73,39 @@ namespace BDAutoMuxer.models
                 throw new FileNotFoundException("Media file not found", _mediaFilePath);
 
             var validationException = Config.ValidationException;
-            if (validationException != null)
-                throw validationException;
+            if (validationException != null) throw validationException;
 
-            Process process = null;
+            var xmlResult = RunProcess(new List<string>() { "--Output=file://" + Config.CSVPath });
+            if (xmlResult.Exception != null) throw xmlResult.Exception;
+            if (xmlResult.StdErr.Length > 0) throw new Exception(string.Format("MediaInfo XML exception: {0}", xmlResult.StdErr));
 
-            try
+            if (!xmlResult.StdOut.StartsWith("<?xml"))
+                throw new Exception(string.Format("Expecting XML output; instead found \"{0}\"", xmlResult.StdOut));
+
+            ParseXml(xmlResult.StdOut);
+
+            if (_chapterTracks.Any())
             {
-                process = RunProcess();
-                Parse();
-            }
-            finally
-            {
-                try
-                {
-                    if (process != null)
-                        process.Kill();
-                }
-                catch
-                {
-                }
+                var txtResult = RunProcess();
+                if (txtResult.Exception != null) throw txtResult.Exception;
+                if (txtResult.StdErr.Length > 0) throw new Exception(string.Format("MediaInfo TXT exception: {0}", txtResult.StdErr));
+
+                ParseTxt(txtResult.StdOut);
             }
 
             return this;
         }
 
-        private Process RunProcess()
+        private MIProcessResult RunProcess(IEnumerable<string> args = null)
         {
-            var args = new Args(new List<string>() { "--Output=file://" + Config.CSVPath, _mediaFilePath }).ToString();
+            if (args == null) args = new string[0];
 
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = Config.CLIPath,
-                    Arguments = args,
+                    Arguments = new Args(new List<string>(args) { _mediaFilePath }).ToString(),
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     ErrorDialog = false,
@@ -114,45 +115,51 @@ namespace BDAutoMuxer.models
                 }
             };
 
-            process.Start();
+            var stdout = new StringBuilder();
+            var stderr = new StringBuilder();
 
-            var xml = new StringBuilder();
-            var lineNum = 0;
+            Exception exception = null;
 
-            while (!process.StandardOutput.EndOfStream)
+            try
             {
-                var line = process.StandardOutput.ReadLine();
+                process.Start();
 
-                if (lineNum++ == 0 && line != null && !line.Contains("<?xml"))
-                    throw new Exception(string.Format("Expecting XML file; instead found \"{0}\"", line));
+                while (!process.StandardOutput.EndOfStream)
+                {
+                    stdout.AppendLine(process.StandardOutput.ReadLine());
+                }
 
-                xml.AppendLine(line);
+                while (!process.StandardError.EndOfStream)
+                {
+                    stderr.AppendLine(process.StandardError.ReadLine());
+                }
+            }
+            catch (Exception e)
+            {
+                exception = e;
+            }
+            finally
+            {
+                try { process.Kill(); }
+                catch {}
             }
 
-            while (!process.StandardError.EndOfStream)
-            {
-                var line = process.StandardError.ReadLine();
-                throw new Exception(string.Format("MediaInfo error: " + line));
-            }
-
-            _xml = xml.ToString();
-
-            return process;
+            return new MIProcessResult(stdout.ToString(), stderr.ToString(), exception);
         }
 
-        private void Parse()
+        private void ParseXml(string xml)
         {
             var fileSectionRegex = new Regex(@"<File>\s*(.+?)\s*</File>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             var containerSectionRegex = new Regex(@"<Container>\s*(.+?)\s*</Container>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             var tracksSectionRegex = new Regex(@"<Tracks>\s*(.+?)\s*</Tracks>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-            if (string.IsNullOrWhiteSpace(_xml) || !fileSectionRegex.IsMatch(_xml) ||
-                !containerSectionRegex.IsMatch(_xml) || !tracksSectionRegex.IsMatch(_xml))
-                return;
+            if (string.IsNullOrWhiteSpace(xml) || !fileSectionRegex.IsMatch(xml) ||
+                !containerSectionRegex.IsMatch(xml) || !tracksSectionRegex.IsMatch(xml))
+                throw new Exception("Unable to locate track section in MediaInfo XML");
 
-            var fileSection = fileSectionRegex.Match(_xml).Groups[1].Value;
-            var containerSection = containerSectionRegex.Match(_xml).Groups[1].Value;
-            var tracksSection = tracksSectionRegex.Match(_xml).Groups[1].Value;
+            var fileSection = fileSectionRegex.Match(xml).Groups[1].Value;
+            var containerSection = containerSectionRegex.Match(xml).Groups[1].Value;
+            var tracksSection = tracksSectionRegex.Match(xml).Groups[1].Value;
 
             File = new MIFile(fileSection);
             Container = new MIContainer(containerSection);
@@ -162,15 +169,35 @@ namespace BDAutoMuxer.models
             var subtitleSectionRegex = new Regex(@"<Subtitle>\s*(.+?)\s*</Subtitle>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             var chapterSectionRegex = new Regex(@"<Chapter>\s*(.+?)\s*</Chapter>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-            _videoTracks.AddRange(ParseTracks(videoSectionRegex, tracksSection).Select(trackXml => new MIVideoTrack().ReadFrom(trackXml) as MIVideoTrack));
-            _audioTracks.AddRange(ParseTracks(audioSectionRegex, tracksSection).Select(trackXml => new MIAudioTrack().ReadFrom(trackXml) as MIAudioTrack));
-            _subtitleTracks.AddRange(ParseTracks(subtitleSectionRegex, tracksSection).Select(trackXml => new MISubtitleTrack().ReadFrom(trackXml) as MISubtitleTrack));
-            _chapterTracks.AddRange(ParseTracks(chapterSectionRegex, tracksSection).Select(trackXml => new MIChapterTrack().ReadFrom(trackXml) as MIChapterTrack));
+            _videoTracks.AddRange(ParseTracks(videoSectionRegex, tracksSection).Select(trackXml => new MIVideoTrack().ReadFromXml(trackXml) as MIVideoTrack));
+            _audioTracks.AddRange(ParseTracks(audioSectionRegex, tracksSection).Select(trackXml => new MIAudioTrack().ReadFromXml(trackXml) as MIAudioTrack));
+            _subtitleTracks.AddRange(ParseTracks(subtitleSectionRegex, tracksSection).Select(trackXml => new MISubtitleTrack().ReadFromXml(trackXml) as MISubtitleTrack));
+            _chapterTracks.AddRange(ParseTracks(chapterSectionRegex, tracksSection).Select(trackXml => new MIChapterTrack().ReadFromXml(trackXml) as MIChapterTrack));
 
             _tracks.AddRange(_videoTracks);
             _tracks.AddRange(_audioTracks);
             _tracks.AddRange(_subtitleTracks);
             _tracks.AddRange(_chapterTracks);
+        }
+
+        private void ParseTxt(string txt)
+        {
+            // Normalize all newlines to Unix-style
+            txt = new Regex(@"\r\n|\r").Replace(txt, "\n");
+
+            var newlineMultiRegex = new Regex(@"\n{2,}");
+
+            var menuSections = newlineMultiRegex.Split(txt).Where(section => section.StartsWith("Menu")).ToList();
+
+            if (menuSections.Count != _chapterTracks.Count)
+                throw new Exception(string.Format("Expecting {0} Menu sections in TXT output, but instead found {1}", ChapterTracks.Count, menuSections.Count));
+
+            for (var i = 0; i < menuSections.Count; i++)
+            {
+                var menuSection = menuSections[i];
+                var chapterTrack = _chapterTracks[i];
+                chapterTrack.ReadFromTxt(menuSection);
+            }
         }
 
         private List<string> ParseTracks(Regex trackTypeSectionRegex, string tracksSection)
@@ -186,6 +213,19 @@ namespace BDAutoMuxer.models
         {
             var value = trackMatch.Groups[2].Value;
             return value;
+        }
+    }
+
+    class MIProcessResult
+    {
+        public readonly string StdOut;
+        public readonly string StdErr;
+        public readonly Exception Exception;
+        public MIProcessResult(string stdOut, string stdErr, Exception exception)
+        {
+            StdOut = stdOut;
+            StdErr = stdErr;
+            Exception = exception;
         }
     }
 
@@ -510,7 +550,7 @@ namespace BDAutoMuxer.models
             }
         }
 
-        public virtual MITrack ReadFrom(string xml)
+        public virtual MITrack ReadFromXml(string xml)
         {
             StreamKindId = XmlUtil.GetInt(xml, "StreamKindId");
 
@@ -540,9 +580,9 @@ namespace BDAutoMuxer.models
         public string FrameRateString { get; protected set; }
         public long? FrameCount { get; protected set; }
 
-        public override MITrack ReadFrom(string xml)
+        public override MITrack ReadFromXml(string xml)
         {
-            base.ReadFrom(xml);
+            base.ReadFromXml(xml);
 
             Format = XmlUtil.GetString(xml, "Format");
             FormatInfo = XmlUtil.GetString(xml, "FormatInfo");
@@ -584,9 +624,9 @@ namespace BDAutoMuxer.models
             IsVideo = true;
         }
 
-        public override MITrack ReadFrom(string xml)
+        public override MITrack ReadFromXml(string xml)
         {
-            base.ReadFrom(xml);
+            base.ReadFromXml(xml);
 
             BitDepth = XmlUtil.GetInt(xml, "BitDepth");
             BitDepthString = XmlUtil.GetString(xml, "BitDepthString");
@@ -638,9 +678,9 @@ namespace BDAutoMuxer.models
             IsAudio = true;
         }
 
-        public override MITrack ReadFrom(string xml)
+        public override MITrack ReadFromXml(string xml)
         {
-            base.ReadFrom(xml);
+            base.ReadFromXml(xml);
 
             BitDepth = XmlUtil.GetInt(xml, "BitDepth");
             BitDepthString = XmlUtil.GetString(xml, "BitDepthString");
@@ -675,9 +715,9 @@ namespace BDAutoMuxer.models
             IsSubtitle = true;
         }
 
-        public override MITrack ReadFrom(string xml)
+        public override MITrack ReadFromXml(string xml)
         {
-            base.ReadFrom(xml);
+            base.ReadFromXml(xml);
 
             Width = XmlUtil.GetIntNullable(xml, "Width");
             Height = XmlUtil.GetIntNullable(xml, "Height");
@@ -703,14 +743,16 @@ namespace BDAutoMuxer.models
             IsChapter = true;
         }
 
-        public void AddChapters(string text)
+        public void ReadFromTxt(string menuSectionText)
         {
-            // TODO: Finish me!
+            _chapters.AddRange(menuSectionText.Split('\n').Where(MIChapter.IsChapter).Select(MIChapter.Parse));
         }
     }
     
     class MIChapter
     {
+        private static readonly Regex ChapterLineRegex = new Regex(@"^(\d{2}):(\d{2}):(\d{2})\.(\d{3})[ \t]*:[ \t]*(?:([a-z]{2}):)?(.*)$");
+
         public TimeSpan Offset { get; protected set; }
 
         public string OffsetString
@@ -718,16 +760,46 @@ namespace BDAutoMuxer.models
             get
             {
                 // 00:00:00.000
-                return "";
+                return string.Format("{0}:{1}:{2}.{3}",
+                    Offset.Hours.ToString("00"),
+                    Offset.Minutes.ToString("00"),
+                    Offset.Seconds.ToString("00"),
+                    Offset.Milliseconds.ToString("000"));
             }
         }
 
         public Language Language;
         public string Title;
 
-        public MIChapter(string line)
+        public MIChapter(int hours, int minutes, int seconds, int milliseconds, Language language, string title)
         {
-            // TODO: Finish me!  Parse line
+            Offset = new TimeSpan(0, hours, minutes, seconds, milliseconds);
+            Language = language;
+            Title = title;
+        }
+
+        public static bool IsChapter(string line)
+        {
+            return ChapterLineRegex.IsMatch(line);
+        }
+
+        public static MIChapter Parse(string line)
+        {
+            if (!IsChapter(line)) return null;
+
+            var groups = ChapterLineRegex.Match(line).Groups;
+
+            var chapter = new MIChapter
+                (
+                    XmlUtil.ParseInt(groups[1].Value),
+                    XmlUtil.ParseInt(groups[2].Value),
+                    XmlUtil.ParseInt(groups[3].Value),
+                    XmlUtil.ParseInt(groups[4].Value),
+                    !string.IsNullOrWhiteSpace(groups[5].Value) ? Language.GetLanguage(groups[5].Value) : null,
+                    !string.IsNullOrWhiteSpace(groups[6].Value) ? groups[6].Value : null
+                );
+
+            return chapter;
         }
     }
 }
