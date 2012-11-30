@@ -23,6 +23,8 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using BDAutoMuxer.models;
 
 namespace BDAutoMuxer
 {
@@ -34,6 +36,11 @@ namespace BDAutoMuxer
         [STAThreadAttribute]
         static void Main(string[] args)
         {
+            if (args.Contains("--test"))
+            {
+                MediaInfo.Test();
+                return;
+            }
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
