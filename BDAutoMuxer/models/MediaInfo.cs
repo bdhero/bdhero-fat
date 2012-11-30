@@ -37,7 +37,7 @@ namespace BDAutoMuxer.models
         public IList<MISubtitleTrack> SubtitleTracks { get { return _subtitleTracks.AsReadOnly(); } }
         public IList<MIChapterTrack> ChapterTracks { get { return _chapterTracks.AsReadOnly(); } }
 
-        public static void Test()
+        public static void Test(string[] files = null)
         {
             MediaInfo.Config.CLIPath = @"C:\Tools\MediaInfo\MediaInfo.exe";
             MediaInfo.Config.CSVPath = @"C:\Projects\bdautomuxer\BDAutoMuxer\Resources\MediaInfo_XML.csv";
@@ -102,13 +102,14 @@ namespace BDAutoMuxer.models
                                          @"E:\BD\WALL-E BD\BDMV\PLAYLIST\00089.MPLS"
                                      };
 
+            if (files != null)
+                mediaFilePaths = files;
+
             Console.WriteLine("Scanning {0} MPLS files...", mediaFilePaths.Length);
 
             var startAll = DateTime.Now;
 
-            var i = 0;
-
-            var mediaInfos = mediaFilePaths.Select(filePath => new MediaInfo(filePath).Scan(i++)).ToList();
+            var mediaInfos = mediaFilePaths.Select(filePath => new MediaInfo(filePath).Scan()).ToList();
 
             var diffAll = DateTime.Now - startAll;
 
@@ -182,15 +183,13 @@ namespace BDAutoMuxer.models
             _mediaFilePath = mediaFilePath;
         }
 
-        public MediaInfo Scan(int i)
+        public MediaInfo Scan()
         {
             if (!System.IO.File.Exists(_mediaFilePath))
                 throw new FileNotFoundException("Media file not found", _mediaFilePath);
 
             var validationException = Config.ValidationException;
             if (validationException != null) throw validationException;
-
-            Console.WriteLine("{0}) Scanning {1}...", i, _mediaFilePath);
 
             var xmlResult = RunProcess(new List<string>() { "--Output=file://" + Config.CSVPath });
             if (xmlResult.Exception != null) throw xmlResult.Exception;
@@ -698,6 +697,8 @@ namespace BDAutoMuxer.models
         public string FrameRateString { get; protected set; }
         public long? FrameCount { get; protected set; }
 
+        public MICodec Codec { get; protected set; }
+
         public override MITrack ReadFromXml(string xml)
         {
             base.ReadFromXml(xml);
@@ -720,7 +721,75 @@ namespace BDAutoMuxer.models
             FrameRateString = XmlUtil.GetString(xml, "FrameRateString");
             FrameCount = XmlUtil.GetLongNullable(xml, "FrameCount");
 
+            Codec = GetCodec(this);
+
             return this;
+        }
+
+        protected static MICodec GetCodec(MIAVSTrack track)
+        {
+            var format = track.Format;
+
+            if (track.IsVideo)
+            {
+                if (MICodecAVC.Matches(format))
+                    return MICodec.AVC;
+                if (MICodecVC1.Matches(format))
+                    return MICodec.VC1;
+                if (MICodecMPEG1Video.Matches(format))
+                    return MICodec.MPEG1Video;
+                if (MICodecMPEG2Video.Matches(format))
+                    return MICodec.MPEG2Video;
+                return MICodec.UnknownVideo;
+            }
+            if (track.IsAudio)
+            {
+                // Dolby
+
+                if (MICodecProLogic.Matches(format))
+                    return MICodec.ProLogic;
+                if (MICodecAC3.Matches(format))
+                    return MICodec.AC3;
+                if (MICodecAC3EX.Matches(format))
+                    return MICodec.AC3EX;
+                if (MICodecEAC3.Matches(format))
+                    return MICodec.EAC3;
+                if (MICodecTrueHD.Matches(format))
+                    return MICodec.TrueHD;
+
+                // DTS
+
+                if (MICodecDTS.Matches(format))
+                    return MICodec.DTS;
+                if (MICodecDTSES.Matches(format))
+                    return MICodec.DTSES;
+                if (MICodecDTSExpress.Matches(format))
+                    return MICodec.DTSExpress;
+                if (MICodecDTSHDHRA.Matches(format))
+                    return MICodec.DTSHDHRA;
+                if (MICodecDTSHDMA.Matches(format))
+                    return MICodec.DTSHDMA;
+
+                // MPEG
+
+                if (MICodecMPEG2Audio.Matches(format))
+                    return MICodec.MPEG2Audio;
+
+                // LPCM
+
+                if (MICodecLPCM.Matches(format))
+                    return MICodec.LPCM;
+
+                return MICodec.UnknownAudio;
+            }
+            if (track.IsSubtitle)
+            {
+                if (MICodecPGS.Matches(format))
+                    return MICodec.PGS;
+                return MICodec.UnknownSubtitle;
+            }
+
+            return MICodec.UnknownCodec;
         }
     }
 
@@ -1005,7 +1074,13 @@ namespace BDAutoMuxer.models
 
         public override string ToString()
         {
-            return string.Format("{0} - {1}", Id, Profile);
+            var sb = new StringBuilder();
+            sb.Append(Id);
+            if (!string.IsNullOrWhiteSpace(Profile))
+                sb.AppendFormat(" - {0}", Profile);
+            if (!string.IsNullOrWhiteSpace(Version))
+                sb.AppendFormat(" ({0})", Version);
+            return sb.ToString();
         }
     }
 
@@ -1013,6 +1088,52 @@ namespace BDAutoMuxer.models
 
     abstract class MICodec
     {
+        #region Video
+
+        public static readonly MICodecAVC AVC = new MICodecAVC();
+        public static readonly MICodecVC1 VC1 = new MICodecVC1();
+        public static readonly MICodecMPEG1Video MPEG1Video = new MICodecMPEG1Video();
+        public static readonly MICodecMPEG2Video MPEG2Video = new MICodecMPEG2Video();
+        public static readonly MICodecUnknownVideo UnknownVideo = new MICodecUnknownVideo();
+
+        #endregion
+
+        #region Audio
+
+        public static readonly MICodecProLogic ProLogic = new MICodecProLogic();
+        public static readonly MICodecAC3 AC3 = new MICodecAC3();
+        public static readonly MICodecAC3EX AC3EX = new MICodecAC3EX();
+        public static readonly MICodecEAC3 EAC3 = new MICodecEAC3();
+        public static readonly MICodecTrueHD TrueHD = new MICodecTrueHD();
+
+        public static readonly MICodecDTS DTS = new MICodecDTS();
+        public static readonly MICodecDTSES DTSES = new MICodecDTSES();
+        public static readonly MICodecDTSExpress DTSExpress = new MICodecDTSExpress();
+        public static readonly MICodecDTSHDHRA DTSHDHRA = new MICodecDTSHDHRA();
+        public static readonly MICodecDTSHDMA DTSHDMA = new MICodecDTSHDMA();
+
+        public static readonly MICodecMPEG2Audio MPEG2Audio = new MICodecMPEG2Audio();
+
+        public static readonly MICodecLPCM LPCM = new MICodecLPCM();
+
+        public static readonly MICodecUnknownAudio UnknownAudio = new MICodecUnknownAudio();
+
+        #endregion
+
+        #region Subtitle
+
+        public static readonly MICodecPGS PGS = new MICodecPGS();
+
+        public static readonly MICodecUnknownSubtitle UnknownSubtitle = new MICodecUnknownSubtitle();
+
+        #endregion
+
+        #region Unknown
+
+        public static readonly MIUnknownCodec UnknownCodec = new MIUnknownCodec();
+
+        #endregion
+
         public abstract bool IsAudio { get; }
         public abstract bool IsVideo { get; }
         public abstract bool IsSubtitle { get; }
@@ -1039,6 +1160,18 @@ namespace BDAutoMuxer.models
         /// Can this codec be muxed by standard, freely available consumer software?
         /// </summary>
         public virtual bool Muxable { get { return true; } }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(CodecId);
+            sb.AppendFormat(" - {0}", FullName);
+            if (!string.IsNullOrWhiteSpace(AltFullName))
+                sb.AppendFormat(" ({0})", AltFullName);
+            if (!Muxable)
+                sb.Append(" - NOT muxable");
+            return sb.ToString();
+        }
     }
 
     abstract class MIAudioCodec : MICodec
@@ -1265,6 +1398,34 @@ namespace BDAutoMuxer.models
         }
     }
 
+    class MICodecUnknownVideo : MISubtitleCodec
+    {
+        public override string CodecId
+        {
+            get { return "V_UNKNOWN"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Unknown Video Codec"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "Unknown Video"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "Unknown Video"; }
+        }
+
+        public override string Description
+        {
+            get { return "Unknown video format."; }
+        }
+    }
+
     #endregion
 
     #region Audio Codecs
@@ -1470,6 +1631,11 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return false; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "E-AC-3";
         }
     }
 
@@ -1766,7 +1932,8 @@ namespace BDAutoMuxer.models
     {
         public override string CodecId
         {
-            get { throw new NotImplementedException("TODO: Find out what the Codec ID for MPEG-2 Audio is!"); }
+            // TODO: throw new NotImplementedException("TODO: Find out what the Codec ID for MPEG-2 Audio is!");
+            get { return "A_MPEG2"; }
         }
 
         public override string FullName
@@ -1813,7 +1980,8 @@ namespace BDAutoMuxer.models
     {
         public override string CodecId
         {
-            get { throw new NotImplementedException("Could be either A_PCM/INT/LIT, A_PCM/INT/BIG, or A_PCM/FLOAT/IEEE"); }
+            // TODO: throw new NotImplementedException("Could be either A_PCM/INT/LIT, A_PCM/INT/BIG, or A_PCM/FLOAT/IEEE");
+            get { return "A_PCM"; }
         }
 
         public override string FullName
@@ -1858,6 +2026,150 @@ namespace BDAutoMuxer.models
     }
 
     #endregion
+
+    #region Unknown
+
+    class MICodecUnknownAudio : MISubtitleCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_UNKNOWN"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Unknown Audio Codec"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "Unknown Audio"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "Unknown Audio"; }
+        }
+
+        public override string Description
+        {
+            get { return "Unknown audio format."; }
+        }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Subtitle Codecs
+
+    class MICodecPGS : MISubtitleCodec
+    {
+        public override string CodecId
+        {
+            get { return "S_HDMV/PGS"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Presentation Graphics Stream"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "PGS"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "PGS"; }
+        }
+
+        public override string Description
+        {
+            get { return "Official subtitle format for Blu-ray discs."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "PGS";
+        }
+    }
+
+    class MICodecUnknownSubtitle : MISubtitleCodec
+    {
+        public override string CodecId
+        {
+            get { return "S_UNKNOWN"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Unknown Subtitle Codec"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "Unknown Sub"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "Unknown Sub"; }
+        }
+
+        public override string Description
+        {
+            get { return "Unknown subtitle format."; }
+        }
+    }
+
+    #endregion
+
+    #region Unknown Codec
+
+    class MIUnknownCodec : MICodec
+    {
+        public override bool IsAudio
+        {
+            get { return false; }
+        }
+
+        public override bool IsVideo
+        {
+            get { return false; }
+        }
+
+        public override bool IsSubtitle
+        {
+            get { return false; }
+        }
+
+        public override string CodecId
+        {
+            get { return "UNKNOWN"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Unknown Codec"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "Unknown"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "Unknown"; }
+        }
+
+        public override string Description
+        {
+            get { return "Unknown format."; }
+        }
+    }
 
     #endregion
 
