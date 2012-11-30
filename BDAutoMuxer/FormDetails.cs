@@ -225,6 +225,8 @@ namespace BDAutoMuxer
 
         #region Initialization
 
+        private readonly bool _scanOnLoad;
+
         public FormDetails(string[] args)
         {
             InitializeComponent();
@@ -233,7 +235,7 @@ namespace BDAutoMuxer
             {
                 string path = args[0];
                 textBoxSource.Text = path;
-                Scan(path);
+                _scanOnLoad = true;
             }
             else
             {
@@ -294,6 +296,9 @@ namespace BDAutoMuxer
             ResetUI();
 
             CheckForUpdates();
+
+            if (_scanOnLoad)
+                Scan(textBoxSource.Text);
         }
 
         private void ResetState()
@@ -2228,6 +2233,11 @@ namespace BDAutoMuxer
         }
 
         #endregion
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            new FormTrackNamer().Show(this);
+        }
 
     }
 }
