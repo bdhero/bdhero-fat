@@ -121,6 +121,7 @@
     <Compile Include="BDROM\TSCodecVC1.cs" />
     <Compile Include="controllers\Extensions.cs" />
     <Compile Include="controllers\PlaylistFinder.cs" />
+    <Compile Include="models\MediaInfo.cs" />
     <Compile Include="models\MkvTrack.cs" />
     <Compile Include="Win32\SHFileInfo.cs" />
     <Compile Include="tools\Args.cs" />
