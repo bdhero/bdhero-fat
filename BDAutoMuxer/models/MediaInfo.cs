@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using BDAutoMuxer.controllers;
 using BDAutoMuxer.tools;
+using Newtonsoft.Json;
 
 namespace BDAutoMuxer.models
 {
@@ -41,6 +43,8 @@ namespace BDAutoMuxer.models
             MediaInfo.Config.CLIPath = @"C:\Tools\MediaInfo\MediaInfo.exe";
             MediaInfo.Config.CSVPath = @"C:\Projects\bdautomuxer\BDAutoMuxer\Resources\MediaInfo_XML.csv";
 
+            /*
+
             var braveheart_mkv_path = @"Y:\BDAutoMuxer\BRAVEHEART_D1_AC\Braveheart (1995) [1080p].mkv";
             var pirates_m2ts_path =
                 @"Y:\BDAutoMuxer\PIRATES3_FULL\Pirates of the Caribbean - At World's End (2007) [1080p].m2ts";
@@ -49,7 +53,7 @@ namespace BDAutoMuxer.models
             var pirates_mkv_path = @"Y:\BDAutoMuxer\PIRATES3_SHORT\PIRATES3_00001.mmg.mkv";
             var thismeanswar_mka_path = @"Y:\BDAutoMuxer\THIS_MEANS_WAR\This Means War (2012) [1080p].mka";
 
-            var start = DateTime.Now;
+            var start5 = DateTime.Now;
 
             var braveheart_mkv = new MediaInfo(braveheart_mkv_path).Scan();
             var pirates_m2ts = new MediaInfo(pirates_m2ts_path).Scan();
@@ -57,9 +61,118 @@ namespace BDAutoMuxer.models
             var pirates_mkv = new MediaInfo(pirates_mkv_path).Scan();
             var pirates_mka = new MediaInfo(thismeanswar_mka_path).Scan();
 
-            var diff = DateTime.Now - start;
+            var diff5 = DateTime.Now - start5;
 
             Console.WriteLine();
+             
+            */
+
+//            var mediaFilePaths = FullDirList(new DirectoryInfo(@"E:\"));
+            var mediaFilePaths = new[]
+                                     {
+                                         @"E:\BD\21_JUMP_STREET\BDMV\PLAYLIST\00001.MPLS",
+                                         @"E:\BD\49123204_BLACK_HAWK_DOWN\BDMV\PLAYLIST\00009.MPLS",
+                                         @"E:\BD\AMAZING_SPIDERMAN\BDMV\PLAYLIST\00001.MPLS",
+                                         @"E:\BD\BEAUTYANDTHEBEAST\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\BRAVE\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\BRAVEHEART_D1_AC\BDMV\PLAYLIST\00004.MPLS",
+                                         @"E:\BD\CONTACT\BDMV\PLAYLIST\00000.MPLS",
+                                         @"E:\BD\DARK_SHADOWS\BDMV\PLAYLIST\00100.MPLS",
+                                         @"E:\BD\DOOM\BDMV\PLAYLIST\00000.MPLS",
+                                         @"E:\BD\FIVE_YEAR_ENGAGEMENT_RENTAL\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\GALAXY_QUEST_AC\BDMV\PLAYLIST\00006.MPLS",
+                                         @"E:\BD\GOOD_WILL_HUNTING\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\INCREDIBLES\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\LOCKOUT\BDMV\PLAYLIST\00001.MPLS",
+                                         @"E:\BD\MARVELS_THE_AVENGERS\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\MIRROR_MIRROR_BD\BDMV\PLAYLIST\00000.MPLS",
+                                         @"E:\BD\MUMMY_RETURNS\BDMV\PLAYLIST\00010.MPLS",
+                                         @"E:\BD\PANS_LABYRINTH\BDMV\PLAYLIST\00062.MPLS",
+                                         @"E:\BD\PRINCESSANDTHEFROG\BDMV\PLAYLIST\00289.MPLS",
+                                         @"E:\BD\RED_BIRD_2D_WW\BDMV\PLAYLIST\00802.MPLS",
+                                         @"E:\BD\SALT\BDMV\PLAYLIST\00001.MPLS",
+                                         @"E:\BD\SAVING_PRIVATE_RYAN_1\BDMV\PLAYLIST\01022.MPLS",
+                                         @"E:\BD\SCARFACE\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\STARTSHIP_TROOPERS_1_P1\BDMV\PLAYLIST\00000.MPLS",
+                                         @"E:\BD\SWATH_RENTAL\BDMV\PLAYLIST\00801.MPLS",
+                                         @"E:\BD\TANGLED\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\THE_COUNT_OF_MONTE_CRISTO\BDMV\PLAYLIST\00001.MPLS",
+                                         @"E:\BD\THIS_MEANS_WAR\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\TOY_STORY\BDMV\PLAYLIST\00337.MPLS",
+                                         @"E:\BD\TOY_STORY_3_DISC_1\BDMV\PLAYLIST\00800.MPLS",
+                                         @"E:\BD\WALL-E BD\BDMV\PLAYLIST\00089.MPLS"
+                                     };
+
+            Console.WriteLine(string.Format("Scanning {0} MPLS files...", mediaFilePaths.Length));
+
+            var startAll = DateTime.Now;
+
+            var i = 0;
+
+            var mediaInfos = mediaFilePaths.Select(filePath => new MediaInfo(filePath).Scan(i++)).ToList();
+
+            var diffAll = DateTime.Now - startAll;
+
+            var miVideoTracks = mediaInfos.SelectMany(mi => mi.VideoTracks).ToList();
+            var miAudioTracks = mediaInfos.SelectMany(mi => mi.AudioTracks).ToList();
+
+            var videoCodecs = miVideoTracks.ToDictionary(videoTrack => videoTrack.Format, videoTrack => videoTrack.FilePath);
+            var audioCodecs = miAudioTracks.ToDictionary(audioTrack => audioTrack.Format, audioTrack => audioTrack.FilePath);
+
+            var strVideoCodecs = JsonConvert.SerializeObject(videoCodecs);
+            var strAudioCodecs = JsonConvert.SerializeObject(audioCodecs);
+
+            var text = string.Format("VIDEO\n=====\n\n{0}\n\nAUDIO\n=====\n\n{1}", strVideoCodecs, strAudioCodecs);
+
+            var outputFile = @"E:\BD\BDAM.MediaInfo.txt";
+
+            Console.WriteLine("\n\nWrote output to " + outputFile);
+
+            System.IO.File.WriteAllText(outputFile, text);
+
+            Console.WriteLine();
+        }
+
+        public static List<FileInfo> FullDirList(DirectoryInfo dir)
+        {
+            var filesFound = FindFilesRecursive(dir);
+            filesFound.Sort((a, b) => string.CompareOrdinal(a.FullName, b.FullName));
+            return filesFound;
+        }
+
+        private static List<FileInfo> FindFilesRecursive(DirectoryInfo dir)
+        {
+            var filesFound = new List<FileInfo>();
+            
+
+            try
+            {
+                filesFound.AddRange(dir.GetFiles().Where(IncludeFile));
+            }
+            catch { }
+
+            try
+            {
+                foreach (var d in dir.GetDirectories())
+                {
+                    filesFound.AddRange(FindFilesRecursive(d));
+                }
+            }
+            catch { }
+
+            return filesFound;
+        }
+
+        private static readonly string[] Extensions = new[] { ".vob", /*".mpls",*/ ".mkv", ".mka", ".mks", ".mp3" };
+
+        private static bool IncludeFile(FileInfo fileInfo)
+        {
+            var correctExtension = Extensions.Contains(fileInfo.Extension.ToLower());
+            var isArchive = (fileInfo.Attributes & FileAttributes.Archive) == FileAttributes.Archive;
+            var isHiddenWindows = (fileInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+            var isTrash = fileInfo.Name.StartsWith("$");
+            var isHiddenUnix = fileInfo.Name.StartsWith(".");
+            return correctExtension && !(isTrash || isHiddenUnix);
         }
 
         public MediaInfo(string mediaFilePath)
@@ -67,13 +180,15 @@ namespace BDAutoMuxer.models
             _mediaFilePath = mediaFilePath;
         }
 
-        public MediaInfo Scan()
+        public MediaInfo Scan(int i)
         {
             if (!System.IO.File.Exists(_mediaFilePath))
                 throw new FileNotFoundException("Media file not found", _mediaFilePath);
 
             var validationException = Config.ValidationException;
             if (validationException != null) throw validationException;
+
+            Console.WriteLine("{0}) Scanning {1}...", i, _mediaFilePath);
 
             var xmlResult = RunProcess(new List<string>() { "--Output=file://" + Config.CSVPath });
             if (xmlResult.Exception != null) throw xmlResult.Exception;
@@ -169,9 +284,9 @@ namespace BDAutoMuxer.models
             var subtitleSectionRegex = new Regex(@"<Subtitle>\s*(.+?)\s*</Subtitle>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             var chapterSectionRegex = new Regex(@"<Chapter>\s*(.+?)\s*</Chapter>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-            _videoTracks.AddRange(ParseTracks(videoSectionRegex, tracksSection).Select(trackXml => new MIVideoTrack().ReadFromXml(trackXml) as MIVideoTrack));
-            _audioTracks.AddRange(ParseTracks(audioSectionRegex, tracksSection).Select(trackXml => new MIAudioTrack().ReadFromXml(trackXml) as MIAudioTrack));
-            _subtitleTracks.AddRange(ParseTracks(subtitleSectionRegex, tracksSection).Select(trackXml => new MISubtitleTrack().ReadFromXml(trackXml) as MISubtitleTrack));
+            _videoTracks.AddRange(ParseTracks(videoSectionRegex, tracksSection).Select(trackXml => new MIVideoTrack(_mediaFilePath).ReadFromXml(trackXml) as MIVideoTrack));
+            _audioTracks.AddRange(ParseTracks(audioSectionRegex, tracksSection).Select(trackXml => new MIAudioTrack(_mediaFilePath).ReadFromXml(trackXml) as MIAudioTrack));
+            _subtitleTracks.AddRange(ParseTracks(subtitleSectionRegex, tracksSection).Select(trackXml => new MISubtitleTrack(_mediaFilePath).ReadFromXml(trackXml) as MISubtitleTrack));
             _chapterTracks.AddRange(ParseTracks(chapterSectionRegex, tracksSection).Select(trackXml => new MIChapterTrack().ReadFromXml(trackXml) as MIChapterTrack));
 
             _tracks.AddRange(_videoTracks);
@@ -511,6 +626,239 @@ namespace BDAutoMuxer.models
         }
     }
 
+    abstract class MICodec
+    {
+        public abstract bool IsAudio { get; }
+        public abstract bool IsVideo { get; }
+        public abstract bool IsSubtitle { get; }
+
+        /// <summary>
+        /// Shown in MediaInfo.  Also stored in MKV headers.
+        /// </summary>
+        /// <example>A_AC3</example>
+        /// <example>A_DTS</example>
+        /// <example>V_MPEG4/ISO/AVC</example>
+        public abstract string CodecId { get; }
+
+        public abstract string FullName { get; }
+        public abstract string ShortName { get; }
+        public abstract string MicroName { get; }
+
+        public virtual string AltFullName { get { return null; } }
+        public virtual string AltShortName { get { return null; } }
+        public virtual string AltMicroName { get { return null; } }
+
+        public abstract bool Lossy { get; }
+        public abstract bool Lossless { get; }
+    }
+
+    abstract class MIAudioCodec : MICodec
+    {
+        public override bool IsAudio
+        {
+            get { return true; }
+        }
+        public override bool IsVideo
+        {
+            get { return false; }
+        }
+        public override bool IsSubtitle
+        {
+            get { return false; }
+        }
+    }
+
+    abstract class MIVideoCodec : MICodec
+    {
+        public override bool IsAudio
+        {
+            get { return false; }
+        }
+        public override bool IsVideo
+        {
+            get { return true; }
+        }
+        public override bool IsSubtitle
+        {
+            get { return false; }
+        }
+    }
+
+    abstract class MISubtitleCodec : MICodec
+    {
+        public override bool IsAudio
+        {
+            get { return false; }
+        }
+        public override bool IsVideo
+        {
+            get { return false; }
+        }
+        public override bool IsSubtitle
+        {
+            get { return true; }
+        }
+    }
+
+    class MICodecProLogic : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_AC3"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Dolby Pro Logic"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "Pro Logic"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "DPL"; }
+        }
+
+        /// <summary>
+        /// "Dolby Pro Logic" is actually the name of the Decoder; "Dolby Surround" is the name of the Encoder.
+        /// </summary>
+        public override string AltFullName
+        {
+            get { return "Dolby Surround"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "AC-3" && format.Profile == "Dolby Digital";
+        }
+    }
+
+    class MICodecAC3 : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_AC3"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Dolby Digital"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "AC-3"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "AC3"; }
+        }
+
+        public override string AltFullName
+        {
+            get { return "ATSC A/52"; }
+        }
+
+        public override string AltShortName
+        {
+            get { return "A/52"; }
+        }
+
+        public override string AltMicroName
+        {
+            get { return "DD"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "AC-3" && !MICodecProLogic.Matches(format);
+        }
+    }
+
+//    class MICodec 
+
+    class MIFormat
+    {
+        public string Id { get; protected set; }
+        public string Info { get; protected set; }
+        public string Version { get; protected set; }
+        public string Profile { get; protected set; }
+        public string Compresion { get; protected set; }
+        public string Settings { get; protected set; }
+
+        public MIFormat(string id, string info, string version, string profile, string compression, string settings)
+        {
+            Id = id;
+            Info = info;
+            Version = version;
+            Profile = profile;
+            Compresion = compression;
+            Settings = settings;
+        }
+
+        protected bool Equals(MIFormat other)
+        {
+            return
+                string.Equals(Id, other.Id) &&
+                string.Equals(Info, other.Info) &&
+                string.Equals(Version, other.Version) &&
+                string.Equals(Profile, other.Profile) &&
+                string.Equals(Compresion, other.Compresion) &&
+                string.Equals(Settings, other.Settings);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((MIFormat) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (Id != null ? Id.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Info != null ? Info.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Version != null ? Version.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Profile != null ? Profile.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Compresion != null ? Compresion.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Settings != null ? Settings.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", Id, Profile);
+        }
+    }
+
     abstract class MITrack
     {
         public bool IsVideo { get; protected set; }
@@ -565,12 +913,7 @@ namespace BDAutoMuxer.models
 
     abstract class MIAVSTrack : MITrack /*, INotifyPropertyListener */
     {
-        public string Format { get; protected set; }
-        public string FormatInfo { get; protected set; }
-        public string FormatVersion { get; protected set; }
-        public string FormatProfile { get; protected set; }
-        public string FormatCompression { get; protected set; }
-        public string FormatSettings { get; protected set; }
+        public MIFormat Format { get; protected set; }
         public long Duration { get; protected set; }
         public string DurationString { get; protected set; }
         public long StreamSize { get; protected set; }
@@ -584,12 +927,15 @@ namespace BDAutoMuxer.models
         {
             base.ReadFromXml(xml);
 
-            Format = XmlUtil.GetString(xml, "Format");
-            FormatInfo = XmlUtil.GetString(xml, "FormatInfo");
-            FormatVersion = XmlUtil.GetString(xml, "FormatVersion");
-            FormatProfile = XmlUtil.GetString(xml, "FormatProfile");
-            FormatCompression = XmlUtil.GetString(xml, "FormatCompression");
-            FormatSettings = XmlUtil.GetString(xml, "FormatSettings");
+            Format = 
+                new MIFormat(
+                    XmlUtil.GetString(xml, "Format"),
+                    XmlUtil.GetString(xml, "FormatInfo"),
+                    XmlUtil.GetString(xml, "FormatVersion"),
+                    XmlUtil.GetString(xml, "FormatProfile"),
+                    XmlUtil.GetString(xml, "FormatCompression"),
+                    XmlUtil.GetString(xml, "FormatSettings")
+                );
             Duration = XmlUtil.GetLong(xml, "Duration");
             DurationString = XmlUtil.GetString(xml, "DurationString");
             StreamSize = XmlUtil.GetLong(xml, "StreamSize");
@@ -619,9 +965,12 @@ namespace BDAutoMuxer.models
         public string Chroma { get; protected set; }
         public string ScanType { get; protected set; }
 
-        public MIVideoTrack()
+        public string FilePath { get; protected set; }
+
+        public MIVideoTrack(string filePath)
         {
             IsVideo = true;
+            FilePath = filePath;
         }
 
         public override MITrack ReadFromXml(string xml)
@@ -673,9 +1022,12 @@ namespace BDAutoMuxer.models
         public string SamplingRateString { get; protected set; }
         public long SampleCount { get; protected set; }
 
-        public MIAudioTrack()
+        public string FilePath { get; protected set; }
+
+        public MIAudioTrack(string filePath)
         {
             IsAudio = true;
+            FilePath = filePath;
         }
 
         public override MITrack ReadFromXml(string xml)
@@ -710,9 +1062,12 @@ namespace BDAutoMuxer.models
         public int? Width { get; protected set; }
         public int? Height { get; protected set; }
 
-        public MISubtitleTrack()
+        public string FilePath { get; protected set; }
+
+        public MISubtitleTrack(string filePath)
         {
             IsSubtitle = true;
+            FilePath = filePath;
         }
 
         public override MITrack ReadFromXml(string xml)
