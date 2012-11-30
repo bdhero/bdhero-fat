@@ -592,6 +592,8 @@ namespace BDAutoMuxer.models
         }
     }
 
+    #region Meta data
+
     class MIFile
     {
         public string Folder { get; protected set; }
@@ -628,873 +630,9 @@ namespace BDAutoMuxer.models
         }
     }
 
-    #region Abstract Codecs
-
-    abstract class MICodec
-    {
-        public abstract bool IsAudio { get; }
-        public abstract bool IsVideo { get; }
-        public abstract bool IsSubtitle { get; }
-
-        /// <summary>
-        /// Shown in MediaInfo.  Also stored in MKV headers.
-        /// </summary>
-        /// <example>A_AC3</example>
-        /// <example>A_DTS</example>
-        /// <example>V_MPEG4/ISO/AVC</example>
-        public abstract string CodecId { get; }
-
-        public abstract string FullName { get; }
-        public abstract string ShortName { get; }
-        public abstract string MicroName { get; }
-
-        public virtual string AltFullName { get { return null; } }
-        public virtual string AltShortName { get { return null; } }
-        public virtual string AltMicroName { get { return null; } }
-
-        public abstract string Description { get; }
-
-        /// <summary>
-        /// Can this codec be muxed by standard, freely available consumer software?
-        /// </summary>
-        public virtual bool Muxable { get { return true; } }
-    }
-
-    abstract class MIAudioCodec : MICodec
-    {
-        public override bool IsAudio
-        {
-            get { return true; }
-        }
-        public override bool IsVideo
-        {
-            get { return false; }
-        }
-        public override bool IsSubtitle
-        {
-            get { return false; }
-        }
-
-        public abstract bool Lossy { get; }
-        public abstract bool Lossless { get; }
-    }
-
-    abstract class MIVideoCodec : MICodec
-    {
-        public override bool IsAudio
-        {
-            get { return false; }
-        }
-        public override bool IsVideo
-        {
-            get { return true; }
-        }
-        public override bool IsSubtitle
-        {
-            get { return false; }
-        }
-    }
-
-    abstract class MISubtitleCodec : MICodec
-    {
-        public override bool IsAudio
-        {
-            get { return false; }
-        }
-        public override bool IsVideo
-        {
-            get { return false; }
-        }
-        public override bool IsSubtitle
-        {
-            get { return true; }
-        }
-    }
-
     #endregion
 
-    #region Video Codecs
-
-    class MICodecAVC : MIVideoCodec
-    {
-        public override string CodecId
-        {
-            get { return "V_MPEG4/ISO/AVC"; }
-        }
-
-        public override string FullName
-        {
-            get { return "H.264/MPEG-4 AVC"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "H.264/AVC"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "H.264"; }
-        }
-
-        public override string AltMicroName
-        {
-            get { return "AVC"; }
-        }
-
-        public override string Description
-        {
-            get { return "The de facto standard for quality HD video at reasonable file sizes.  Officially part of the Blu-ray standard."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "AVC";
-        }
-    }
-
-    class MICodecVC1 : MIVideoCodec
-    {
-        public override string CodecId
-        {
-            get { return "V_VC1"; }
-        }
-
-        public override string FullName
-        {
-            get { return "VC-1"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "VC-1"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "VC-1"; }
-        }
-
-        public override string Description
-        {
-            get { return "Microsoft's video codec.  Much less common than H.264/AVC, but is officially part of the Blu-ray standard."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "VC-1";
-        }
-    }
-
-    class MICodecMPEG1Video : MIVideoCodec
-    {
-        public override string CodecId
-        {
-            get { return "V_MPEG1"; }
-        }
-
-        public override string FullName
-        {
-            get { return "MPEG-1 Video"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "MPEG1 Video"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "MPEG1-V"; }
-        }
-
-        public override string AltFullName
-        {
-            get { return "MPEG-1 Part 2"; }
-        }
-
-        public override string Description
-        {
-            get { return "Video portion of the MPEG-1 standard most often used for standalone A/V files (e.g., .mpg, .mpeg).  Officially part of the DVD standard.  Not part of the Blu-ray standard."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "MPEG Video" && format.Version == "Version 1";
-        }
-    }
-
-    class MICodecMPEG2Video : MIVideoCodec
-    {
-        public override string CodecId
-        {
-            get { return "V_MPEG2"; }
-        }
-
-        public override string FullName
-        {
-            get { return "MPEG-2 Video"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "MPEG2 Video"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "MPEG2-V"; }
-        }
-
-        public override string AltFullName
-        {
-            get { return "H.262/MPEG-2 Part 2"; }
-        }
-
-        public override string AltShortName
-        {
-            get { return "MPEG-2 Part 2"; }
-        }
-
-        public override string AltMicroName
-        {
-            get { return "H.262"; }
-        }
-
-        public override string Description
-        {
-            get { return "Video portion of the MPEG-2 standard.  Officially part of the Blu-ray and DVD standards."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "MPEG Video" && format.Version == "Version 2";
-        }
-    }
-
-    #endregion
-
-    #region Audio Codecs
-
-    #region Dolby
-
-    class MICodecProLogic : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_AC3"; }
-        }
-
-        public override string FullName
-        {
-            get { return "Dolby Pro Logic"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "Pro Logic"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "DPL"; }
-        }
-
-        /// <summary>
-        /// "Dolby Pro Logic" is actually the name of the Decoder; "Dolby Surround" is the name of the Encoder.
-        /// </summary>
-        public override string AltFullName
-        {
-            get { return "Dolby Surround"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Dolby Stereo + 2 matrixed channels (front center and rear center), resulting in 4.0 channel output.  Backwards compatible with existing stereo systems."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "AC-3" && format.Profile == "Dolby Digital";
-        }
-    }
-
-    class MICodecAC3 : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_AC3"; }
-        }
-
-        public override string FullName
-        {
-            get { return "Dolby Digital"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "AC-3"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "AC3"; }
-        }
-
-        public override string AltMicroName
-        {
-            get { return "DD"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Standard Dolby Digital.  Officially part of the Blu-ray and DVD standards."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "AC-3" && string.IsNullOrEmpty(format.Profile);
-        }
-    }
-
-    class MICodecAC3EX : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_AC3"; }
-        }
-
-        public override string FullName
-        {
-            get { return "Dolby Digital EX"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "AC-3 EX"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "AC3 EX"; }
-        }
-
-        public override string AltMicroName
-        {
-            get { return "DD EX"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Extension of AC-3 (Dolby Digital) that adds 1 or 2 matrixed rear channels, creating 6.1 or 7.1 channel output."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "AC-3" && format.Profile == "MA";
-        }
-    }
-
-    class MICodecEAC3 : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_EAC3"; }
-        }
-
-        public override string FullName
-        {
-            get { return "Dolby Digital Plus"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "E-AC-3"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "EAC3"; }
-        }
-
-        public override string AltMicroName
-        {
-            get { return "DD+"; }
-        }
-
-        public override string Description
-        {
-            get { return "Enhanced version of AC-3.  Not backwards compatible with existing AC-3 hardware.  Optional part of the Blu-ray standard for secondary audio."; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-    }
-
-    class MICodecTrueHD : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_TRUEHD"; }
-        }
-
-        public override string FullName
-        {
-            get { return "Dolby TrueHD"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "TrueHD"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "TrueHD"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return false; }
-        }
-
-        public override bool Lossless
-        {
-            get { return true; }
-        }
-
-        public override string Description
-        {
-            get { return "Lossless audio codec with a core inner AC-3 (Dolby Digital) stream for backwards compatibility with existing hardware."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id.StartsWith("TrueHD");
-        }
-    }
-
-    #endregion
-
-    #region DTS
-
-    class MICodecDTS : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_DTS"; }
-        }
-
-        public override string FullName
-        {
-            get { return "DTS Digital Surround"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "DTS"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "DTS"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "The standard core DTS codec.  Officially part of the Blu-ray standard.  Officially part of the DVD standard, but player support is optional."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "DTS" && string.IsNullOrEmpty(format.Profile);
-        }
-    }
-
-    class MICodecDTSES : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_DTS"; }
-        }
-
-        public override string FullName
-        {
-            get { return "DTS Extended Surround"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "DTS-ES"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "DTS-ES"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "DTS Digital Surround (a.k.a. DTS) + an additional discrete or matrix-encoded rear channel.  Backwards compatible with regular DTS."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "DTS" && format.Profile == "ES";
-        }
-    }
-
-    class MICodecDTSExpress : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_DTS"; }
-        }
-
-        public override string FullName
-        {
-            get { return "DTS Express"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "DTS Express"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "DTS EX"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Low bit-rate audio codec used for Blu-ray secondary audio and BD Live.  Might not be muxable with current freely available software."; }
-        }
-
-        public override bool Muxable
-        {
-            get { return false; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "DTS" && format.Profile == "Express";
-        }
-    }
-
-    class MICodecDTSHDHRA : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_DTS"; }
-        }
-
-        public override string FullName
-        {
-            get { return "DTS-HD High Resolution Audio"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "DTS-HD Hi-Res"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "DTS-HD HRA"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Extension of regular DTS Digital Surround with higher quality.  Contains backwards compatible DTS Digital Surround core.  Optional part of the Blu-ray standard."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "DTS" && format.Profile == "HRA / Core";
-        }
-    }
-
-    class MICodecDTSHDMA : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { return "A_DTS"; }
-        }
-
-        public override string FullName
-        {
-            get { return "DTS-HD Master Audio"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "DTS-HD Master"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "DTS-HD MA"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return false; }
-        }
-
-        public override bool Lossless
-        {
-            get { return true; }
-        }
-
-        public override string Description
-        {
-            get { return "Lossless extension to regular DTS Digital Surround.  Contains backwards compatible DTS Digital Surround core.  Optional part of the Blu-ray standard."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "DTS" && format.Profile == "MA / Core";
-        }
-    }
-
-    #endregion
-
-    #region MPEG Audio
-
-    class MICodecMPEG2Audio : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { throw new NotImplementedException("TODO: Find out what the Codec ID for MPEG-2 Audio is!"); }
-        }
-
-        public override string FullName
-        {
-            get { return "MPEG-2 Audio"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "MPEG2 Audio"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "MPEG2-A"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return true; }
-        }
-
-        public override bool Lossless
-        {
-            get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Audio portion of the MPEG-2 standard.  Officially part of the Blu-ray and DVD standards."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "MPEG-2 Audio";
-        }
-    }
-
-    #endregion
-
-    #region LPCM
-
-    class MICodecLPCM : MIAudioCodec
-    {
-        public override string CodecId
-        {
-            get { throw new NotImplementedException("Could be either A_PCM/INT/LIT, A_PCM/INT/BIG, or A_PCM/FLOAT/IEEE"); }
-        }
-
-        public override string FullName
-        {
-            get { return "LPCM"; }
-        }
-
-        public override string ShortName
-        {
-            get { return "LPCM"; }
-        }
-
-        public override string MicroName
-        {
-            get { return "PCM"; }
-        }
-
-        public override string AltFullName
-        {
-            get { return "Linear pulse-code modulation"; }
-        }
-
-        public override bool Lossy
-        {
-            get { return false; }
-        }
-
-        public override bool Lossless
-        {
-            get { return true; }
-        }
-
-        public override string Description
-        {
-            get { return "Uncompressed studio-quality audio.  Officially part of the Blu-ray and DVD standards."; }
-        }
-
-        public static bool Matches(MIFormat format)
-        {
-            return format.Id == "PCM";
-        }
-    }
-
-    #endregion
-
-    #endregion
-
-    class MIFormat
-    {
-        public string Id { get; protected set; }
-        public string Info { get; protected set; }
-        public string Version { get; protected set; }
-        public string Profile { get; protected set; }
-        public string Compresion { get; protected set; }
-        public string Settings { get; protected set; }
-
-        public MIFormat(string id, string info, string version, string profile, string compression, string settings)
-        {
-            Id = id;
-            Info = info;
-            Version = version;
-            Profile = profile;
-            Compresion = compression;
-            Settings = settings;
-        }
-
-        protected bool Equals(MIFormat other)
-        {
-            return
-                string.Equals(Id, other.Id) &&
-                string.Equals(Info, other.Info) &&
-                string.Equals(Version, other.Version) &&
-                string.Equals(Profile, other.Profile) &&
-                string.Equals(Compresion, other.Compresion) &&
-                string.Equals(Settings, other.Settings);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((MIFormat) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = (Id != null ? Id.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Info != null ? Info.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Version != null ? Version.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Profile != null ? Profile.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Compresion != null ? Compresion.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Settings != null ? Settings.GetHashCode() : 0);
-                return hashCode;
-            }
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0} - {1}", Id, Profile);
-        }
-    }
+    #region Tracks
 
     abstract class MITrack
     {
@@ -1810,4 +948,917 @@ namespace BDAutoMuxer.models
             return chapter;
         }
     }
+
+    #endregion
+
+    class MIFormat
+    {
+        public string Id { get; protected set; }
+        public string Info { get; protected set; }
+        public string Version { get; protected set; }
+        public string Profile { get; protected set; }
+        public string Compresion { get; protected set; }
+        public string Settings { get; protected set; }
+
+        public MIFormat(string id, string info, string version, string profile, string compression, string settings)
+        {
+            Id = id;
+            Info = info;
+            Version = version;
+            Profile = profile;
+            Compresion = compression;
+            Settings = settings;
+        }
+
+        protected bool Equals(MIFormat other)
+        {
+            return
+                string.Equals(Id, other.Id) &&
+                string.Equals(Info, other.Info) &&
+                string.Equals(Version, other.Version) &&
+                string.Equals(Profile, other.Profile) &&
+                string.Equals(Compresion, other.Compresion) &&
+                string.Equals(Settings, other.Settings);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((MIFormat) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (Id != null ? Id.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Info != null ? Info.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Version != null ? Version.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Profile != null ? Profile.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Compresion != null ? Compresion.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Settings != null ? Settings.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", Id, Profile);
+        }
+    }
+
+    #region Abstract Codecs
+
+    abstract class MICodec
+    {
+        public abstract bool IsAudio { get; }
+        public abstract bool IsVideo { get; }
+        public abstract bool IsSubtitle { get; }
+
+        /// <summary>
+        /// Shown in MediaInfo.  Also stored in MKV headers.
+        /// </summary>
+        /// <example>A_AC3</example>
+        /// <example>A_DTS</example>
+        /// <example>V_MPEG4/ISO/AVC</example>
+        public abstract string CodecId { get; }
+
+        public abstract string FullName { get; }
+        public abstract string ShortName { get; }
+        public abstract string MicroName { get; }
+
+        public virtual string AltFullName { get { return null; } }
+        public virtual string AltShortName { get { return null; } }
+        public virtual string AltMicroName { get { return null; } }
+
+        public abstract string Description { get; }
+
+        /// <summary>
+        /// Can this codec be muxed by standard, freely available consumer software?
+        /// </summary>
+        public virtual bool Muxable { get { return true; } }
+    }
+
+    abstract class MIAudioCodec : MICodec
+    {
+        public override bool IsAudio
+        {
+            get { return true; }
+        }
+        public override bool IsVideo
+        {
+            get { return false; }
+        }
+        public override bool IsSubtitle
+        {
+            get { return false; }
+        }
+
+        public abstract bool Lossy { get; }
+        public abstract bool Lossless { get; }
+    }
+
+    abstract class MIVideoCodec : MICodec
+    {
+        public override bool IsAudio
+        {
+            get { return false; }
+        }
+        public override bool IsVideo
+        {
+            get { return true; }
+        }
+        public override bool IsSubtitle
+        {
+            get { return false; }
+        }
+    }
+
+    abstract class MISubtitleCodec : MICodec
+    {
+        public override bool IsAudio
+        {
+            get { return false; }
+        }
+        public override bool IsVideo
+        {
+            get { return false; }
+        }
+        public override bool IsSubtitle
+        {
+            get { return true; }
+        }
+    }
+
+    #endregion
+
+    #region Video Codecs
+
+    /// <summary>
+    /// H.264/MPEG-4 AVC
+    /// </summary>
+    class MICodecAVC : MIVideoCodec
+    {
+        public override string CodecId
+        {
+            get { return "V_MPEG4/ISO/AVC"; }
+        }
+
+        public override string FullName
+        {
+            get { return "H.264/MPEG-4 AVC"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "H.264/AVC"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "H.264"; }
+        }
+
+        public override string AltMicroName
+        {
+            get { return "AVC"; }
+        }
+
+        public override string Description
+        {
+            get { return "The de facto standard for quality HD video at reasonable file sizes.  Officially part of the Blu-ray standard."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "AVC";
+        }
+    }
+
+    /// <summary>
+    /// VC-1
+    /// </summary>
+    class MICodecVC1 : MIVideoCodec
+    {
+        public override string CodecId
+        {
+            get { return "V_VC1"; }
+        }
+
+        public override string FullName
+        {
+            get { return "VC-1"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "VC-1"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "VC-1"; }
+        }
+
+        public override string Description
+        {
+            get { return "Microsoft's video codec.  Much less common than H.264/AVC, but is officially part of the Blu-ray standard."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "VC-1";
+        }
+    }
+
+    /// <summary>
+    /// MPEG-1 Video (non-Blu-ray)
+    /// </summary>
+    class MICodecMPEG1Video : MIVideoCodec
+    {
+        public override string CodecId
+        {
+            get { return "V_MPEG1"; }
+        }
+
+        public override string FullName
+        {
+            get { return "MPEG-1 Video"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "MPEG1 Video"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "MPEG1-V"; }
+        }
+
+        public override string AltFullName
+        {
+            get { return "MPEG-1 Part 2"; }
+        }
+
+        public override string Description
+        {
+            get { return "Video portion of the MPEG-1 standard most often used for standalone A/V files (e.g., .mpg, .mpeg).  Officially part of the DVD standard.  Not part of the Blu-ray standard."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "MPEG Video" && format.Version == "Version 1";
+        }
+    }
+
+    /// <summary>
+    /// MPEG-2 Video
+    /// </summary>
+    class MICodecMPEG2Video : MIVideoCodec
+    {
+        public override string CodecId
+        {
+            get { return "V_MPEG2"; }
+        }
+
+        public override string FullName
+        {
+            get { return "MPEG-2 Video"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "MPEG2 Video"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "MPEG2-V"; }
+        }
+
+        public override string AltFullName
+        {
+            get { return "H.262/MPEG-2 Part 2"; }
+        }
+
+        public override string AltShortName
+        {
+            get { return "MPEG-2 Part 2"; }
+        }
+
+        public override string AltMicroName
+        {
+            get { return "H.262"; }
+        }
+
+        public override string Description
+        {
+            get { return "Video portion of the MPEG-2 standard.  Officially part of the Blu-ray and DVD standards."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "MPEG Video" && format.Version == "Version 2";
+        }
+    }
+
+    #endregion
+
+    #region Audio Codecs
+
+    #region Dolby
+
+    /// <summary>
+    /// Dolby Pro Logic
+    /// </summary>
+    class MICodecProLogic : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_AC3"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Dolby Pro Logic"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "Pro Logic"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "DPL"; }
+        }
+
+        /// <summary>
+        /// "Dolby Pro Logic" is actually the name of the Decoder; "Dolby Surround" is the name of the Encoder.
+        /// </summary>
+        public override string AltFullName
+        {
+            get { return "Dolby Surround"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "Dolby Stereo + 2 matrixed channels (front center and rear center), resulting in 4.0 channel output.  Backwards compatible with existing stereo systems."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "AC-3" && format.Profile == "Dolby Digital";
+        }
+    }
+
+    /// <summary>
+    /// Dolby Digital
+    /// </summary>
+    class MICodecAC3 : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_AC3"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Dolby Digital"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "AC-3"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "AC3"; }
+        }
+
+        public override string AltMicroName
+        {
+            get { return "DD"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "Standard Dolby Digital.  Officially part of the Blu-ray and DVD standards."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "AC-3" && string.IsNullOrEmpty(format.Profile);
+        }
+    }
+
+    /// <summary>
+    /// Dolby Digital EX
+    /// </summary>
+    class MICodecAC3EX : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_AC3"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Dolby Digital EX"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "AC-3 EX"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "AC3 EX"; }
+        }
+
+        public override string AltMicroName
+        {
+            get { return "DD EX"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "Extension of AC-3 (Dolby Digital) that adds 1 or 2 matrixed rear channels, creating 6.1 or 7.1 channel output."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "AC-3" && format.Profile == "MA";
+        }
+    }
+
+    /// <summary>
+    /// Dolby Digital Plus
+    /// </summary>
+    class MICodecEAC3 : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_EAC3"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Dolby Digital Plus"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "E-AC-3"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "EAC3"; }
+        }
+
+        public override string AltMicroName
+        {
+            get { return "DD+"; }
+        }
+
+        public override string Description
+        {
+            get { return "Enhanced version of AC-3.  Not backwards compatible with existing AC-3 hardware.  Optional part of the Blu-ray standard for secondary audio."; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+    }
+
+    /// <summary>
+    /// Dolby TrueHD
+    /// </summary>
+    class MICodecTrueHD : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_TRUEHD"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Dolby TrueHD"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "TrueHD"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "TrueHD"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return false; }
+        }
+
+        public override bool Lossless
+        {
+            get { return true; }
+        }
+
+        public override string Description
+        {
+            get { return "Lossless audio codec with a core inner AC-3 (Dolby Digital) stream for backwards compatibility with existing hardware."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id.StartsWith("TrueHD");
+        }
+    }
+
+    #endregion
+
+    #region DTS
+
+    /// <summary>
+    /// Standard DTS
+    /// </summary>
+    class MICodecDTS : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_DTS"; }
+        }
+
+        public override string FullName
+        {
+            get { return "DTS Digital Surround"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "DTS"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "DTS"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "The standard core DTS codec.  Officially part of the Blu-ray standard.  Officially part of the DVD standard, but player support is optional."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "DTS" && string.IsNullOrEmpty(format.Profile);
+        }
+    }
+
+    /// <summary>
+    /// DTS Extended Surround
+    /// </summary>
+    class MICodecDTSES : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_DTS"; }
+        }
+
+        public override string FullName
+        {
+            get { return "DTS Extended Surround"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "DTS-ES"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "DTS-ES"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "DTS Digital Surround (a.k.a. DTS) + an additional discrete or matrix-encoded rear channel.  Backwards compatible with regular DTS."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "DTS" && format.Profile == "ES";
+        }
+    }
+
+    /// <summary>
+    /// DTS Express
+    /// </summary>
+    class MICodecDTSExpress : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_DTS"; }
+        }
+
+        public override string FullName
+        {
+            get { return "DTS Express"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "DTS Express"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "DTS EX"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "Low bit-rate audio codec used for Blu-ray secondary audio and BD Live.  Might not be muxable with current freely available software."; }
+        }
+
+        public override bool Muxable
+        {
+            get { return false; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "DTS" && format.Profile == "Express";
+        }
+    }
+
+    /// <summary>
+    /// DTS-HD High Resolution Audio
+    /// </summary>
+    class MICodecDTSHDHRA : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_DTS"; }
+        }
+
+        public override string FullName
+        {
+            get { return "DTS-HD High Resolution Audio"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "DTS-HD Hi-Res"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "DTS-HD HRA"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "Extension of regular DTS Digital Surround with higher quality.  Contains backwards compatible DTS Digital Surround core.  Optional part of the Blu-ray standard."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "DTS" && format.Profile == "HRA / Core";
+        }
+    }
+
+    /// <summary>
+    /// DTS-HD Master Audio
+    /// </summary>
+    class MICodecDTSHDMA : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { return "A_DTS"; }
+        }
+
+        public override string FullName
+        {
+            get { return "DTS-HD Master Audio"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "DTS-HD Master"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "DTS-HD MA"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return false; }
+        }
+
+        public override bool Lossless
+        {
+            get { return true; }
+        }
+
+        public override string Description
+        {
+            get { return "Lossless extension to regular DTS Digital Surround.  Contains backwards compatible DTS Digital Surround core.  Optional part of the Blu-ray standard."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "DTS" && format.Profile == "MA / Core";
+        }
+    }
+
+    #endregion
+
+    #region MPEG Audio
+
+    class MICodecMPEG2Audio : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { throw new NotImplementedException("TODO: Find out what the Codec ID for MPEG-2 Audio is!"); }
+        }
+
+        public override string FullName
+        {
+            get { return "MPEG-2 Audio"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "MPEG2 Audio"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "MPEG2-A"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "Audio portion of the MPEG-2 standard.  Officially part of the Blu-ray and DVD standards."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "MPEG-2 Audio";
+        }
+    }
+
+    #endregion
+
+    #region LPCM
+
+    class MICodecLPCM : MIAudioCodec
+    {
+        public override string CodecId
+        {
+            get { throw new NotImplementedException("Could be either A_PCM/INT/LIT, A_PCM/INT/BIG, or A_PCM/FLOAT/IEEE"); }
+        }
+
+        public override string FullName
+        {
+            get { return "LPCM"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "LPCM"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "PCM"; }
+        }
+
+        public override string AltFullName
+        {
+            get { return "Linear pulse-code modulation"; }
+        }
+
+        public override bool Lossy
+        {
+            get { return false; }
+        }
+
+        public override bool Lossless
+        {
+            get { return true; }
+        }
+
+        public override string Description
+        {
+            get { return "Uncompressed studio-quality audio.  Officially part of the Blu-ray and DVD standards."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "PCM";
+        }
+    }
+
+    #endregion
+
+    #endregion
+
 }
