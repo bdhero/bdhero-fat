@@ -1169,7 +1169,7 @@ namespace BDAutoMuxer.models
             if (!string.IsNullOrWhiteSpace(AltFullName))
                 sb.AppendFormat(" ({0})", AltFullName);
             if (!Muxable)
-                sb.Append(" - NOT muxable");
+                sb.Append(" (NOT muxable)");
             return sb.ToString();
         }
     }
@@ -1277,6 +1277,7 @@ namespace BDAutoMuxer.models
     {
         public override string CodecId
         {
+            // TODO: Or is it "V_MS/VFW/WVC1"?
             get { return "V_VC1"; }
         }
 
