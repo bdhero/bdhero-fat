@@ -33,84 +33,11 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageDisc = new System.Windows.Forms.TabPage();
             this.hiddenTrackLabel = new System.Windows.Forms.Label();
-            this.contextMenuStripTmdb = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemTmdb = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPageOutput = new System.Windows.Forms.TabPage();
-            this.groupBoxOutput = new System.Windows.Forms.GroupBox();
-            this.textBoxOutputFileNamePreview = new System.Windows.Forms.TextBox();
-            this.textBoxOutputDirPreview = new System.Windows.Forms.TextBox();
-            this.labelOutputPlaceholders = new System.Windows.Forms.Label();
-            this.textBoxOutputFileNameHint = new System.Windows.Forms.TextBox();
-            this.textBoxReplaceSpaces = new System.Windows.Forms.TextBox();
-            this.checkBoxReplaceSpaces = new System.Windows.Forms.CheckBox();
-            this.labelOutputFileExtension = new System.Windows.Forms.Label();
-            this.buttonOutputDir = new System.Windows.Forms.Button();
-            this.textBoxOutputDir = new System.Windows.Forms.TextBox();
-            this.textBoxOutputFileName = new System.Windows.Forms.TextBox();
-            this.labelOutputFileName = new System.Windows.Forms.Label();
-            this.labelOutputDirectory = new System.Windows.Forms.Label();
-            this.groupBoxTracks = new System.Windows.Forms.GroupBox();
-            this.groupBoxFilter = new System.Windows.Forms.GroupBox();
-            this.listBoxSubtitleLanguages = new System.Windows.Forms.ListBox();
-            this.listBoxAudioLanguages = new System.Windows.Forms.ListBox();
-            this.comboBoxCommentary = new System.Windows.Forms.ComboBox();
-            this.comboBoxCut = new System.Windows.Forms.ComboBox();
-            this.comboBoxVideoLanguage = new System.Windows.Forms.ComboBox();
-            this.labelSubtitleLanguages = new System.Windows.Forms.Label();
-            this.labelAudioLanguages = new System.Windows.Forms.Label();
-            this.labelCommentary = new System.Windows.Forms.Label();
-            this.labelCut = new System.Windows.Forms.Label();
-            this.labelVideoLanguage = new System.Windows.Forms.Label();
-            this.groupBoxMasterOverride = new System.Windows.Forms.GroupBox();
-            this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
-            this.labelAudienceLanguage = new System.Windows.Forms.Label();
-            this.tabPageProgress = new System.Windows.Forms.TabPage();
-            this.groupBoxTsMuxerProgress = new System.Windows.Forms.GroupBox();
-            this.labelTsMuxerTimeRemainingElapsed = new System.Windows.Forms.Label();
-            this.labelTsMuxerTimeSeparator = new System.Windows.Forms.Label();
-            this.labelTsMuxerTimeRemaining = new System.Windows.Forms.Label();
-            this.labelTsMuxerTimeElapsed = new System.Windows.Forms.Label();
-            this.textBoxTsMuxerCommandLine = new System.Windows.Forms.TextBox();
-            this.labelTsMuxerCommandLine = new System.Windows.Forms.Label();
-            this.progressBarTsMuxer = new System.Windows.Forms.ProgressBar();
-            this.labelTsMuxerProgress = new System.Windows.Forms.Label();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.progressLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.submitToDbToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.remuxerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonRescan = new System.Windows.Forms.Button();
-            this.buttonBrowse = new System.Windows.Forms.Button();
-            this.textBoxSource = new System.Windows.Forms.TextBox();
-            this.labelSource = new System.Windows.Forms.Label();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.checkBoxDemuxSubtitles = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.labelDemuxingTimeRemainingElapsed = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.labelDemuxingTimeRemaining = new System.Windows.Forms.Label();
-            this.labelDemuxingTimeElapsed = new System.Windows.Forms.Label();
-            this.textBoxDemuxingCommandLine = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.progressBarDemuxing = new System.Windows.Forms.ProgressBar();
-            this.labelDemuxingProgress = new System.Windows.Forms.Label();
             this.splitContainerDiscOuter = new BDAutoMuxer.views.SplitContainerWithDivider();
             this.panelMoviePoster = new System.Windows.Forms.Panel();
             this.pictureBoxMoviePoster = new System.Windows.Forms.PictureBox();
+            this.contextMenuStripTmdb = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemTmdb = new System.Windows.Forms.ToolStripMenuItem();
             this.panelMovieDetails = new System.Windows.Forms.Panel();
             this.searchResultListView = new System.Windows.Forms.ListView();
             this.NameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -144,6 +71,22 @@
             this.columnHeaderStreamLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderBitrate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tabPageOutput = new System.Windows.Forms.TabPage();
+            this.groupBoxOutput = new System.Windows.Forms.GroupBox();
+            this.checkBoxDemuxSubtitles = new System.Windows.Forms.CheckBox();
+            this.textBoxOutputFileNamePreview = new System.Windows.Forms.TextBox();
+            this.textBoxOutputDirPreview = new System.Windows.Forms.TextBox();
+            this.labelOutputPlaceholders = new System.Windows.Forms.Label();
+            this.textBoxOutputFileNameHint = new System.Windows.Forms.TextBox();
+            this.textBoxReplaceSpaces = new System.Windows.Forms.TextBox();
+            this.checkBoxReplaceSpaces = new System.Windows.Forms.CheckBox();
+            this.labelOutputFileExtension = new System.Windows.Forms.Label();
+            this.buttonOutputDir = new System.Windows.Forms.Button();
+            this.textBoxOutputDir = new System.Windows.Forms.TextBox();
+            this.textBoxOutputFileName = new System.Windows.Forms.TextBox();
+            this.labelOutputFileName = new System.Windows.Forms.Label();
+            this.labelOutputDirectory = new System.Windows.Forms.Label();
+            this.groupBoxTracks = new System.Windows.Forms.GroupBox();
             this.splitContainerTracksOuter = new BDAutoMuxer.views.SplitContainerWithDivider();
             this.buttonPlaylistOpen = new System.Windows.Forms.Button();
             this.labelPlaylist = new System.Windows.Forms.Label();
@@ -164,25 +107,75 @@
             this.columnHeaderSubtitleCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderSubtitleLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelSubtitleTracks = new System.Windows.Forms.Label();
+            this.groupBoxFilter = new System.Windows.Forms.GroupBox();
+            this.listBoxSubtitleLanguages = new System.Windows.Forms.ListBox();
+            this.listBoxAudioLanguages = new System.Windows.Forms.ListBox();
+            this.comboBoxCommentary = new System.Windows.Forms.ComboBox();
+            this.comboBoxCut = new System.Windows.Forms.ComboBox();
+            this.comboBoxVideoLanguage = new System.Windows.Forms.ComboBox();
+            this.labelSubtitleLanguages = new System.Windows.Forms.Label();
+            this.labelAudioLanguages = new System.Windows.Forms.Label();
+            this.labelCommentary = new System.Windows.Forms.Label();
+            this.labelCut = new System.Windows.Forms.Label();
+            this.labelVideoLanguage = new System.Windows.Forms.Label();
+            this.groupBoxMasterOverride = new System.Windows.Forms.GroupBox();
+            this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
+            this.labelAudienceLanguage = new System.Windows.Forms.Label();
+            this.tabPageProgress = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.labelDemuxingTimeRemainingElapsed = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelDemuxingTimeRemaining = new System.Windows.Forms.Label();
+            this.labelDemuxingTimeElapsed = new System.Windows.Forms.Label();
+            this.textBoxDemuxingCommandLine = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.progressBarDemuxing = new System.Windows.Forms.ProgressBar();
+            this.labelDemuxingProgress = new System.Windows.Forms.Label();
+            this.groupBoxTsMuxerProgress = new System.Windows.Forms.GroupBox();
+            this.labelTsMuxerTimeRemainingElapsed = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeSeparator = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeRemaining = new System.Windows.Forms.Label();
+            this.labelTsMuxerTimeElapsed = new System.Windows.Forms.Label();
+            this.textBoxTsMuxerCommandLine = new System.Windows.Forms.TextBox();
+            this.labelTsMuxerCommandLine = new System.Windows.Forms.Label();
+            this.progressBarTsMuxer = new System.Windows.Forms.ProgressBar();
+            this.labelTsMuxerProgress = new System.Windows.Forms.Label();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.progressLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.submitToDbToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.remuxerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonRescan = new System.Windows.Forms.Button();
+            this.buttonBrowse = new System.Windows.Forms.Button();
+            this.textBoxSource = new System.Windows.Forms.TextBox();
+            this.labelSource = new System.Windows.Forms.Label();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.groupBoxDemux = new System.Windows.Forms.GroupBox();
+            this.checkBoxDemuxPCM = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
-            this.contextMenuStripTmdb.SuspendLayout();
-            this.tabPageOutput.SuspendLayout();
-            this.groupBoxOutput.SuspendLayout();
-            this.groupBoxTracks.SuspendLayout();
-            this.groupBoxFilter.SuspendLayout();
-            this.groupBoxMasterOverride.SuspendLayout();
-            this.tabPageProgress.SuspendLayout();
-            this.groupBoxTsMuxerProgress.SuspendLayout();
-            this.statusStrip.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerDiscOuter)).BeginInit();
             this.splitContainerDiscOuter.Panel1.SuspendLayout();
             this.splitContainerDiscOuter.Panel2.SuspendLayout();
             this.splitContainerDiscOuter.SuspendLayout();
             this.panelMoviePoster.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMoviePoster)).BeginInit();
+            this.contextMenuStripTmdb.SuspendLayout();
             this.panelMovieDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.playlistsSplitContainerOuter)).BeginInit();
             this.playlistsSplitContainerOuter.Panel1.SuspendLayout();
@@ -197,6 +190,9 @@
             this.playlistsSplitContainerInner.SuspendLayout();
             this.streamsGroupBox.SuspendLayout();
             this.tracksGroupBox.SuspendLayout();
+            this.tabPageOutput.SuspendLayout();
+            this.groupBoxOutput.SuspendLayout();
+            this.groupBoxTracks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTracksOuter)).BeginInit();
             this.splitContainerTracksOuter.Panel1.SuspendLayout();
             this.splitContainerTracksOuter.Panel2.SuspendLayout();
@@ -205,6 +201,14 @@
             this.splitContainerTracksInner.Panel1.SuspendLayout();
             this.splitContainerTracksInner.Panel2.SuspendLayout();
             this.splitContainerTracksInner.SuspendLayout();
+            this.groupBoxFilter.SuspendLayout();
+            this.groupBoxMasterOverride.SuspendLayout();
+            this.tabPageProgress.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBoxTsMuxerProgress.SuspendLayout();
+            this.statusStrip.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            this.groupBoxDemux.SuspendLayout();
             this.SuspendLayout();
             // 
             // continueButton
@@ -260,801 +264,6 @@
                 "ile.  ";
             this.hiddenTrackLabel.Text = "* Hidden track - will not be muxed";
             // 
-            // contextMenuStripTmdb
-            // 
-            this.contextMenuStripTmdb.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemTmdb});
-            this.contextMenuStripTmdb.Name = "contextMenuStripTmdb";
-            this.contextMenuStripTmdb.Size = new System.Drawing.Size(236, 26);
-            this.contextMenuStripTmdb.Opened += new System.EventHandler(this.contextMenuStripTmdb_Opened);
-            // 
-            // toolStripMenuItemTmdb
-            // 
-            this.toolStripMenuItemTmdb.Name = "toolStripMenuItemTmdb";
-            this.toolStripMenuItemTmdb.Size = new System.Drawing.Size(235, 22);
-            this.toolStripMenuItemTmdb.Text = "&View movie details at TMDb.org";
-            this.toolStripMenuItemTmdb.Click += new System.EventHandler(this.toolStripMenuItemTmdb_Click);
-            // 
-            // tabPageOutput
-            // 
-            this.tabPageOutput.Controls.Add(this.groupBoxOutput);
-            this.tabPageOutput.Controls.Add(this.groupBoxTracks);
-            this.tabPageOutput.Controls.Add(this.groupBoxFilter);
-            this.tabPageOutput.Controls.Add(this.groupBoxMasterOverride);
-            this.tabPageOutput.Location = new System.Drawing.Point(4, 22);
-            this.tabPageOutput.Name = "tabPageOutput";
-            this.tabPageOutput.Size = new System.Drawing.Size(749, 583);
-            this.tabPageOutput.TabIndex = 2;
-            this.tabPageOutput.Text = "Output";
-            this.tabPageOutput.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxOutput
-            // 
-            this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxOutput.Controls.Add(this.checkBoxDemuxSubtitles);
-            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNamePreview);
-            this.groupBoxOutput.Controls.Add(this.textBoxOutputDirPreview);
-            this.groupBoxOutput.Controls.Add(this.labelOutputPlaceholders);
-            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNameHint);
-            this.groupBoxOutput.Controls.Add(this.textBoxReplaceSpaces);
-            this.groupBoxOutput.Controls.Add(this.checkBoxReplaceSpaces);
-            this.groupBoxOutput.Controls.Add(this.labelOutputFileExtension);
-            this.groupBoxOutput.Controls.Add(this.buttonOutputDir);
-            this.groupBoxOutput.Controls.Add(this.textBoxOutputDir);
-            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileName);
-            this.groupBoxOutput.Controls.Add(this.labelOutputFileName);
-            this.groupBoxOutput.Controls.Add(this.labelOutputDirectory);
-            this.groupBoxOutput.Location = new System.Drawing.Point(3, 417);
-            this.groupBoxOutput.Name = "groupBoxOutput";
-            this.groupBoxOutput.Size = new System.Drawing.Size(743, 163);
-            this.groupBoxOutput.TabIndex = 3;
-            this.groupBoxOutput.TabStop = false;
-            this.groupBoxOutput.Text = "Output";
-            // 
-            // textBoxOutputFileNamePreview
-            // 
-            this.textBoxOutputFileNamePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputFileNamePreview.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxOutputFileNamePreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxOutputFileNamePreview.Location = new System.Drawing.Point(84, 119);
-            this.textBoxOutputFileNamePreview.Name = "textBoxOutputFileNamePreview";
-            this.textBoxOutputFileNamePreview.ReadOnly = true;
-            this.textBoxOutputFileNamePreview.Size = new System.Drawing.Size(653, 13);
-            this.textBoxOutputFileNamePreview.TabIndex = 14;
-            this.textBoxOutputFileNamePreview.TabStop = false;
-            this.textBoxOutputFileNamePreview.Text = "The Incredibles (2006) [1080p].m2ts";
-            // 
-            // textBoxOutputDirPreview
-            // 
-            this.textBoxOutputDirPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputDirPreview.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxOutputDirPreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxOutputDirPreview.Location = new System.Drawing.Point(84, 72);
-            this.textBoxOutputDirPreview.Name = "textBoxOutputDirPreview";
-            this.textBoxOutputDirPreview.ReadOnly = true;
-            this.textBoxOutputDirPreview.Size = new System.Drawing.Size(653, 13);
-            this.textBoxOutputDirPreview.TabIndex = 13;
-            this.textBoxOutputDirPreview.TabStop = false;
-            this.textBoxOutputDirPreview.Text = "C:\\Users\\Administrator\\AppData\\Local\\Temp\\INCREDIBLES";
-            // 
-            // labelOutputPlaceholders
-            // 
-            this.labelOutputPlaceholders.AutoSize = true;
-            this.labelOutputPlaceholders.Location = new System.Drawing.Point(7, 20);
-            this.labelOutputPlaceholders.Name = "labelOutputPlaceholders";
-            this.labelOutputPlaceholders.Size = new System.Drawing.Size(71, 13);
-            this.labelOutputPlaceholders.TabIndex = 12;
-            this.labelOutputPlaceholders.Text = "Placeholders:";
-            // 
-            // textBoxOutputFileNameHint
-            // 
-            this.textBoxOutputFileNameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputFileNameHint.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxOutputFileNameHint.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxOutputFileNameHint.Location = new System.Drawing.Point(84, 20);
-            this.textBoxOutputFileNameHint.Name = "textBoxOutputFileNameHint";
-            this.textBoxOutputFileNameHint.ReadOnly = true;
-            this.textBoxOutputFileNameHint.Size = new System.Drawing.Size(477, 13);
-            this.textBoxOutputFileNameHint.TabIndex = 11;
-            this.textBoxOutputFileNameHint.TabStop = false;
-            this.textBoxOutputFileNameHint.Text = "%volume% %title% %year% %res% %vcodec% %acodec% %channels%";
-            // 
-            // textBoxReplaceSpaces
-            // 
-            this.textBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxReplaceSpaces.Enabled = false;
-            this.textBoxReplaceSpaces.Location = new System.Drawing.Point(704, 17);
-            this.textBoxReplaceSpaces.Name = "textBoxReplaceSpaces";
-            this.textBoxReplaceSpaces.Size = new System.Drawing.Size(29, 20);
-            this.textBoxReplaceSpaces.TabIndex = 1;
-            this.textBoxReplaceSpaces.Text = ".";
-            this.textBoxReplaceSpaces.TextChanged += new System.EventHandler(this.textBoxReplaceSpaces_TextChanged);
-            this.textBoxReplaceSpaces.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxReplaceSpaces_KeyPress);
-            // 
-            // checkBoxReplaceSpaces
-            // 
-            this.checkBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxReplaceSpaces.AutoSize = true;
-            this.checkBoxReplaceSpaces.Location = new System.Drawing.Point(567, 19);
-            this.checkBoxReplaceSpaces.Name = "checkBoxReplaceSpaces";
-            this.checkBoxReplaceSpaces.Size = new System.Drawing.Size(128, 17);
-            this.checkBoxReplaceSpaces.TabIndex = 0;
-            this.checkBoxReplaceSpaces.Text = "Replace spaces with:";
-            this.checkBoxReplaceSpaces.UseVisualStyleBackColor = true;
-            this.checkBoxReplaceSpaces.CheckedChanged += new System.EventHandler(this.checkBoxReplaceSpaces_CheckedChanged);
-            // 
-            // labelOutputFileExtension
-            // 
-            this.labelOutputFileExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelOutputFileExtension.AutoSize = true;
-            this.labelOutputFileExtension.Location = new System.Drawing.Point(701, 96);
-            this.labelOutputFileExtension.Name = "labelOutputFileExtension";
-            this.labelOutputFileExtension.Size = new System.Drawing.Size(32, 13);
-            this.labelOutputFileExtension.TabIndex = 3;
-            this.labelOutputFileExtension.Text = ".m2ts";
-            // 
-            // buttonOutputDir
-            // 
-            this.buttonOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOutputDir.Location = new System.Drawing.Point(662, 43);
-            this.buttonOutputDir.Name = "buttonOutputDir";
-            this.buttonOutputDir.Size = new System.Drawing.Size(75, 23);
-            this.buttonOutputDir.TabIndex = 3;
-            this.buttonOutputDir.Text = "Browse...";
-            this.buttonOutputDir.UseVisualStyleBackColor = true;
-            this.buttonOutputDir.Click += new System.EventHandler(this.buttonOutputDir_Click);
-            // 
-            // textBoxOutputDir
-            // 
-            this.textBoxOutputDir.AllowDrop = true;
-            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputDir.Location = new System.Drawing.Point(84, 45);
-            this.textBoxOutputDir.Name = "textBoxOutputDir";
-            this.textBoxOutputDir.Size = new System.Drawing.Size(572, 20);
-            this.textBoxOutputDir.TabIndex = 2;
-            this.textBoxOutputDir.TextChanged += new System.EventHandler(this.textBoxOutputDir_TextChanged);
-            this.textBoxOutputDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragDrop);
-            this.textBoxOutputDir.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragEnter);
-            // 
-            // textBoxOutputFileName
-            // 
-            this.textBoxOutputFileName.AllowDrop = true;
-            this.textBoxOutputFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputFileName.Location = new System.Drawing.Point(84, 93);
-            this.textBoxOutputFileName.Name = "textBoxOutputFileName";
-            this.textBoxOutputFileName.Size = new System.Drawing.Size(611, 20);
-            this.textBoxOutputFileName.TabIndex = 4;
-            this.textBoxOutputFileName.TextChanged += new System.EventHandler(this.textBoxOutputFileName_TextChanged);
-            this.textBoxOutputFileName.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragDrop);
-            this.textBoxOutputFileName.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragEnter);
-            // 
-            // labelOutputFileName
-            // 
-            this.labelOutputFileName.AutoSize = true;
-            this.labelOutputFileName.Location = new System.Drawing.Point(6, 96);
-            this.labelOutputFileName.Name = "labelOutputFileName";
-            this.labelOutputFileName.Size = new System.Drawing.Size(55, 13);
-            this.labelOutputFileName.TabIndex = 1;
-            this.labelOutputFileName.Text = "File name:";
-            // 
-            // labelOutputDirectory
-            // 
-            this.labelOutputDirectory.AutoSize = true;
-            this.labelOutputDirectory.Location = new System.Drawing.Point(6, 48);
-            this.labelOutputDirectory.Name = "labelOutputDirectory";
-            this.labelOutputDirectory.Size = new System.Drawing.Size(52, 13);
-            this.labelOutputDirectory.TabIndex = 0;
-            this.labelOutputDirectory.Text = "Directory:";
-            // 
-            // groupBoxTracks
-            // 
-            this.groupBoxTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxTracks.Controls.Add(this.splitContainerTracksOuter);
-            this.groupBoxTracks.Location = new System.Drawing.Point(256, 4);
-            this.groupBoxTracks.Name = "groupBoxTracks";
-            this.groupBoxTracks.Size = new System.Drawing.Size(490, 407);
-            this.groupBoxTracks.TabIndex = 2;
-            this.groupBoxTracks.TabStop = false;
-            this.groupBoxTracks.Text = "Select Playlist / Tracks";
-            this.groupBoxTracks.SizeChanged += new System.EventHandler(this.ResizeOutputTab);
-            // 
-            // groupBoxFilter
-            // 
-            this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBoxFilter.Controls.Add(this.listBoxSubtitleLanguages);
-            this.groupBoxFilter.Controls.Add(this.listBoxAudioLanguages);
-            this.groupBoxFilter.Controls.Add(this.comboBoxCommentary);
-            this.groupBoxFilter.Controls.Add(this.comboBoxCut);
-            this.groupBoxFilter.Controls.Add(this.comboBoxVideoLanguage);
-            this.groupBoxFilter.Controls.Add(this.labelSubtitleLanguages);
-            this.groupBoxFilter.Controls.Add(this.labelAudioLanguages);
-            this.groupBoxFilter.Controls.Add(this.labelCommentary);
-            this.groupBoxFilter.Controls.Add(this.labelCut);
-            this.groupBoxFilter.Controls.Add(this.labelVideoLanguage);
-            this.groupBoxFilter.Location = new System.Drawing.Point(4, 61);
-            this.groupBoxFilter.Name = "groupBoxFilter";
-            this.groupBoxFilter.Size = new System.Drawing.Size(246, 350);
-            this.groupBoxFilter.TabIndex = 1;
-            this.groupBoxFilter.TabStop = false;
-            this.groupBoxFilter.Text = "Filter";
-            // 
-            // listBoxSubtitleLanguages
-            // 
-            this.listBoxSubtitleLanguages.FormattingEnabled = true;
-            this.listBoxSubtitleLanguages.Location = new System.Drawing.Point(115, 164);
-            this.listBoxSubtitleLanguages.Name = "listBoxSubtitleLanguages";
-            this.listBoxSubtitleLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxSubtitleLanguages.Size = new System.Drawing.Size(120, 56);
-            this.listBoxSubtitleLanguages.TabIndex = 4;
-            this.listBoxSubtitleLanguages.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
-            // 
-            // listBoxAudioLanguages
-            // 
-            this.listBoxAudioLanguages.FormattingEnabled = true;
-            this.listBoxAudioLanguages.Location = new System.Drawing.Point(115, 101);
-            this.listBoxAudioLanguages.Name = "listBoxAudioLanguages";
-            this.listBoxAudioLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxAudioLanguages.Size = new System.Drawing.Size(120, 56);
-            this.listBoxAudioLanguages.TabIndex = 3;
-            this.listBoxAudioLanguages.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
-            // 
-            // comboBoxCommentary
-            // 
-            this.comboBoxCommentary.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCommentary.FormattingEnabled = true;
-            this.comboBoxCommentary.Location = new System.Drawing.Point(115, 73);
-            this.comboBoxCommentary.Name = "comboBoxCommentary";
-            this.comboBoxCommentary.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxCommentary.TabIndex = 2;
-            this.comboBoxCommentary.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
-            // 
-            // comboBoxCut
-            // 
-            this.comboBoxCut.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCut.FormattingEnabled = true;
-            this.comboBoxCut.Location = new System.Drawing.Point(115, 45);
-            this.comboBoxCut.Name = "comboBoxCut";
-            this.comboBoxCut.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxCut.TabIndex = 1;
-            this.comboBoxCut.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
-            // 
-            // comboBoxVideoLanguage
-            // 
-            this.comboBoxVideoLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxVideoLanguage.FormattingEnabled = true;
-            this.comboBoxVideoLanguage.Location = new System.Drawing.Point(115, 17);
-            this.comboBoxVideoLanguage.Name = "comboBoxVideoLanguage";
-            this.comboBoxVideoLanguage.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxVideoLanguage.TabIndex = 0;
-            this.comboBoxVideoLanguage.Tag = "Primary video language (many animated Disney movies contain several video renders" +
-                " - e.g., French, Spanish, and English)";
-            this.comboBoxVideoLanguage.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
-            // 
-            // labelSubtitleLanguages
-            // 
-            this.labelSubtitleLanguages.AutoSize = true;
-            this.labelSubtitleLanguages.Location = new System.Drawing.Point(6, 167);
-            this.labelSubtitleLanguages.Name = "labelSubtitleLanguages";
-            this.labelSubtitleLanguages.Size = new System.Drawing.Size(103, 13);
-            this.labelSubtitleLanguages.TabIndex = 4;
-            this.labelSubtitleLanguages.Text = "Subtitle language(s):";
-            // 
-            // labelAudioLanguages
-            // 
-            this.labelAudioLanguages.AutoSize = true;
-            this.labelAudioLanguages.Location = new System.Drawing.Point(6, 104);
-            this.labelAudioLanguages.Name = "labelAudioLanguages";
-            this.labelAudioLanguages.Size = new System.Drawing.Size(95, 13);
-            this.labelAudioLanguages.TabIndex = 3;
-            this.labelAudioLanguages.Text = "Audio language(s):";
-            // 
-            // labelCommentary
-            // 
-            this.labelCommentary.AutoSize = true;
-            this.labelCommentary.Location = new System.Drawing.Point(6, 76);
-            this.labelCommentary.Name = "labelCommentary";
-            this.labelCommentary.Size = new System.Drawing.Size(68, 13);
-            this.labelCommentary.TabIndex = 2;
-            this.labelCommentary.Text = "Commentary:";
-            // 
-            // labelCut
-            // 
-            this.labelCut.AutoSize = true;
-            this.labelCut.Location = new System.Drawing.Point(6, 48);
-            this.labelCut.Name = "labelCut";
-            this.labelCut.Size = new System.Drawing.Size(26, 13);
-            this.labelCut.TabIndex = 1;
-            this.labelCut.Text = "Cut:";
-            // 
-            // labelVideoLanguage
-            // 
-            this.labelVideoLanguage.AutoSize = true;
-            this.labelVideoLanguage.Location = new System.Drawing.Point(6, 20);
-            this.labelVideoLanguage.Name = "labelVideoLanguage";
-            this.labelVideoLanguage.Size = new System.Drawing.Size(84, 13);
-            this.labelVideoLanguage.TabIndex = 0;
-            this.labelVideoLanguage.Text = "Video language:";
-            // 
-            // groupBoxMasterOverride
-            // 
-            this.groupBoxMasterOverride.Controls.Add(this.comboBoxAudienceLanguage);
-            this.groupBoxMasterOverride.Controls.Add(this.labelAudienceLanguage);
-            this.groupBoxMasterOverride.Location = new System.Drawing.Point(4, 4);
-            this.groupBoxMasterOverride.Name = "groupBoxMasterOverride";
-            this.groupBoxMasterOverride.Size = new System.Drawing.Size(246, 50);
-            this.groupBoxMasterOverride.TabIndex = 0;
-            this.groupBoxMasterOverride.TabStop = false;
-            this.groupBoxMasterOverride.Text = "Master Override";
-            // 
-            // comboBoxAudienceLanguage
-            // 
-            this.comboBoxAudienceLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAudienceLanguage.FormattingEnabled = true;
-            this.comboBoxAudienceLanguage.Location = new System.Drawing.Point(115, 17);
-            this.comboBoxAudienceLanguage.Name = "comboBoxAudienceLanguage";
-            this.comboBoxAudienceLanguage.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxAudienceLanguage.TabIndex = 0;
-            this.comboBoxAudienceLanguage.Tag = "Set all language filters (video, audio, and subtitle) to a single language";
-            // 
-            // labelAudienceLanguage
-            // 
-            this.labelAudienceLanguage.AutoSize = true;
-            this.labelAudienceLanguage.Location = new System.Drawing.Point(6, 20);
-            this.labelAudienceLanguage.Name = "labelAudienceLanguage";
-            this.labelAudienceLanguage.Size = new System.Drawing.Size(102, 13);
-            this.labelAudienceLanguage.TabIndex = 0;
-            this.labelAudienceLanguage.Text = "Audience language:";
-            // 
-            // tabPageProgress
-            // 
-            this.tabPageProgress.Controls.Add(this.groupBox1);
-            this.tabPageProgress.Controls.Add(this.groupBoxTsMuxerProgress);
-            this.tabPageProgress.Location = new System.Drawing.Point(4, 22);
-            this.tabPageProgress.Name = "tabPageProgress";
-            this.tabPageProgress.Size = new System.Drawing.Size(749, 583);
-            this.tabPageProgress.TabIndex = 3;
-            this.tabPageProgress.Text = "Progress";
-            this.tabPageProgress.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxTsMuxerProgress
-            // 
-            this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemainingElapsed);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeSeparator);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemaining);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeElapsed);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.textBoxTsMuxerCommandLine);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerCommandLine);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.progressBarTsMuxer);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerProgress);
-            this.groupBoxTsMuxerProgress.Location = new System.Drawing.Point(4, 160);
-            this.groupBoxTsMuxerProgress.Name = "groupBoxTsMuxerProgress";
-            this.groupBoxTsMuxerProgress.Size = new System.Drawing.Size(742, 150);
-            this.groupBoxTsMuxerProgress.TabIndex = 0;
-            this.groupBoxTsMuxerProgress.TabStop = false;
-            this.groupBoxTsMuxerProgress.Text = "Muxing Progress";
-            // 
-            // labelTsMuxerTimeRemainingElapsed
-            // 
-            this.labelTsMuxerTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTsMuxerTimeRemainingElapsed.AutoSize = true;
-            this.labelTsMuxerTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTsMuxerTimeRemainingElapsed.Location = new System.Drawing.Point(475, 20);
-            this.labelTsMuxerTimeRemainingElapsed.Name = "labelTsMuxerTimeRemainingElapsed";
-            this.labelTsMuxerTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
-            this.labelTsMuxerTimeRemainingElapsed.TabIndex = 36;
-            this.labelTsMuxerTimeRemainingElapsed.Text = "Time Remaining / Elapsed:";
-            // 
-            // labelTsMuxerTimeSeparator
-            // 
-            this.labelTsMuxerTimeSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTsMuxerTimeSeparator.AutoSize = true;
-            this.labelTsMuxerTimeSeparator.Location = new System.Drawing.Point(671, 20);
-            this.labelTsMuxerTimeSeparator.Name = "labelTsMuxerTimeSeparator";
-            this.labelTsMuxerTimeSeparator.Size = new System.Drawing.Size(12, 13);
-            this.labelTsMuxerTimeSeparator.TabIndex = 6;
-            this.labelTsMuxerTimeSeparator.Text = "/";
-            // 
-            // labelTsMuxerTimeRemaining
-            // 
-            this.labelTsMuxerTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTsMuxerTimeRemaining.AutoSize = true;
-            this.labelTsMuxerTimeRemaining.Location = new System.Drawing.Point(616, 20);
-            this.labelTsMuxerTimeRemaining.Name = "labelTsMuxerTimeRemaining";
-            this.labelTsMuxerTimeRemaining.Size = new System.Drawing.Size(49, 13);
-            this.labelTsMuxerTimeRemaining.TabIndex = 5;
-            this.labelTsMuxerTimeRemaining.Text = "00:00:00";
-            // 
-            // labelTsMuxerTimeElapsed
-            // 
-            this.labelTsMuxerTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTsMuxerTimeElapsed.AutoSize = true;
-            this.labelTsMuxerTimeElapsed.Location = new System.Drawing.Point(687, 20);
-            this.labelTsMuxerTimeElapsed.Name = "labelTsMuxerTimeElapsed";
-            this.labelTsMuxerTimeElapsed.Size = new System.Drawing.Size(49, 13);
-            this.labelTsMuxerTimeElapsed.TabIndex = 4;
-            this.labelTsMuxerTimeElapsed.Text = "00:00:00";
-            // 
-            // textBoxTsMuxerCommandLine
-            // 
-            this.textBoxTsMuxerCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTsMuxerCommandLine.Location = new System.Drawing.Point(7, 84);
-            this.textBoxTsMuxerCommandLine.Multiline = true;
-            this.textBoxTsMuxerCommandLine.Name = "textBoxTsMuxerCommandLine";
-            this.textBoxTsMuxerCommandLine.ReadOnly = true;
-            this.textBoxTsMuxerCommandLine.Size = new System.Drawing.Size(729, 60);
-            this.textBoxTsMuxerCommandLine.TabIndex = 3;
-            // 
-            // labelTsMuxerCommandLine
-            // 
-            this.labelTsMuxerCommandLine.AutoSize = true;
-            this.labelTsMuxerCommandLine.Location = new System.Drawing.Point(7, 67);
-            this.labelTsMuxerCommandLine.Name = "labelTsMuxerCommandLine";
-            this.labelTsMuxerCommandLine.Size = new System.Drawing.Size(76, 13);
-            this.labelTsMuxerCommandLine.TabIndex = 2;
-            this.labelTsMuxerCommandLine.Text = "Command line:";
-            // 
-            // progressBarTsMuxer
-            // 
-            this.progressBarTsMuxer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarTsMuxer.Location = new System.Drawing.Point(7, 37);
-            this.progressBarTsMuxer.Maximum = 1000;
-            this.progressBarTsMuxer.Name = "progressBarTsMuxer";
-            this.progressBarTsMuxer.Size = new System.Drawing.Size(729, 23);
-            this.progressBarTsMuxer.Step = 1;
-            this.progressBarTsMuxer.TabIndex = 1;
-            // 
-            // labelTsMuxerProgress
-            // 
-            this.labelTsMuxerProgress.AutoSize = true;
-            this.labelTsMuxerProgress.Location = new System.Drawing.Point(7, 20);
-            this.labelTsMuxerProgress.Name = "labelTsMuxerProgress";
-            this.labelTsMuxerProgress.Size = new System.Drawing.Size(30, 13);
-            this.labelTsMuxerProgress.TabIndex = 0;
-            this.labelTsMuxerProgress.Text = "0.0%";
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabel,
-            this.progressLabel,
-            this.toolStripProgressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 727);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(781, 22);
-            this.statusStrip.TabIndex = 6;
-            this.statusStrip.Text = "Status Strip";
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(530, 17);
-            this.statusLabel.Spring = true;
-            this.statusLabel.Text = "Status";
-            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // progressLabel
-            // 
-            this.progressLabel.Name = "progressLabel";
-            this.progressLabel.Size = new System.Drawing.Size(34, 17);
-            this.progressLabel.Text = "0.0%";
-            this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // toolStripProgressBar
-            // 
-            this.toolStripProgressBar.Maximum = 1000;
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(200, 16);
-            this.toolStripProgressBar.Step = 1;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.toolsToolStripMenuItem,
-            this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(781, 24);
-            this.menuStrip1.TabIndex = 100;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openFolderToolStripMenuItem,
-            this.rescanToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.submitToDbToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // openFolderToolStripMenuItem
-            // 
-            this.openFolderToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.folder_open;
-            this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.openFolderToolStripMenuItem.Text = "&Open BD-ROM folder...";
-            this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.buttonBrowse_Click);
-            // 
-            // rescanToolStripMenuItem
-            // 
-            this.rescanToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.refresh_green;
-            this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
-            this.rescanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.rescanToolStripMenuItem.Text = "&Rescan";
-            this.rescanToolStripMenuItem.Click += new System.EventHandler(this.buttonRescan_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(234, 6);
-            // 
-            // submitToDbToolStripMenuItem
-            // 
-            this.submitToDbToolStripMenuItem.Name = "submitToDbToolStripMenuItem";
-            this.submitToDbToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.submitToDbToolStripMenuItem.Text = "Submit to &database";
-            this.submitToDbToolStripMenuItem.Click += new System.EventHandler(this.SubmitJsonDisc);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(234, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.remuxerToolStripMenuItem,
-            this.toolStripMenuItem3,
-            this.settingsToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // remuxerToolStripMenuItem
-            // 
-            this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
-            this.remuxerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.remuxerToolStripMenuItem.Text = "&Remuxer";
-            this.remuxerToolStripMenuItem.Click += new System.EventHandler(this.remuxerToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(164, 6);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.settings;
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.settingsToolStripMenuItem.Text = "&Settings...";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem,
-            this.checkForUpdatesToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Enabled = false;
-            this.aboutToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.info;
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.aboutToolStripMenuItem.Text = "&About";
-            // 
-            // checkForUpdatesToolStripMenuItem
-            // 
-            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.checkForUpdatesToolStripMenuItem.Text = "Check for &updates";
-            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
-            // 
-            // buttonRescan
-            // 
-            this.buttonRescan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRescan.Enabled = false;
-            this.buttonRescan.Image = global::BDAutoMuxer.Properties.Resources.refresh_green;
-            this.buttonRescan.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonRescan.Location = new System.Drawing.Point(694, 47);
-            this.buttonRescan.Name = "buttonRescan";
-            this.buttonRescan.Size = new System.Drawing.Size(75, 23);
-            this.buttonRescan.TabIndex = 103;
-            this.buttonRescan.Text = "Rescan";
-            this.buttonRescan.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonRescan.UseVisualStyleBackColor = true;
-            this.buttonRescan.Click += new System.EventHandler(this.buttonRescan_Click);
-            // 
-            // buttonBrowse
-            // 
-            this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowse.Image = global::BDAutoMuxer.Properties.Resources.folder_open;
-            this.buttonBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonBrowse.Location = new System.Drawing.Point(613, 47);
-            this.buttonBrowse.Name = "buttonBrowse";
-            this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowse.TabIndex = 102;
-            this.buttonBrowse.Text = "Browse...";
-            this.buttonBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonBrowse.UseVisualStyleBackColor = true;
-            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
-            // 
-            // textBoxSource
-            // 
-            this.textBoxSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSource.Location = new System.Drawing.Point(15, 49);
-            this.textBoxSource.Name = "textBoxSource";
-            this.textBoxSource.Size = new System.Drawing.Size(592, 20);
-            this.textBoxSource.TabIndex = 101;
-            this.textBoxSource.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSource_KeyPress);
-            // 
-            // labelSource
-            // 
-            this.labelSource.AutoSize = true;
-            this.labelSource.Location = new System.Drawing.Point(12, 33);
-            this.labelSource.Name = "labelSource";
-            this.labelSource.Size = new System.Drawing.Size(141, 13);
-            this.labelSource.TabIndex = 104;
-            this.labelSource.Text = "Select the Source BD-ROM:";
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(694, 697);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 99;
-            this.cancelButton.Text = "Close";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
-            // checkBoxDemuxSubtitles
-            // 
-            this.checkBoxDemuxSubtitles.AutoSize = true;
-            this.checkBoxDemuxSubtitles.Location = new System.Drawing.Point(10, 140);
-            this.checkBoxDemuxSubtitles.Name = "checkBoxDemuxSubtitles";
-            this.checkBoxDemuxSubtitles.Size = new System.Drawing.Size(100, 17);
-            this.checkBoxDemuxSubtitles.TabIndex = 15;
-            this.checkBoxDemuxSubtitles.Text = "Demux subtitles";
-            this.checkBoxDemuxSubtitles.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.labelDemuxingTimeRemainingElapsed);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.labelDemuxingTimeRemaining);
-            this.groupBox1.Controls.Add(this.labelDemuxingTimeElapsed);
-            this.groupBox1.Controls.Add(this.textBoxDemuxingCommandLine);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.progressBarDemuxing);
-            this.groupBox1.Controls.Add(this.labelDemuxingProgress);
-            this.groupBox1.Location = new System.Drawing.Point(4, 4);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(742, 150);
-            this.groupBox1.TabIndex = 37;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Demuxing Progress";
-            // 
-            // labelDemuxingTimeRemainingElapsed
-            // 
-            this.labelDemuxingTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelDemuxingTimeRemainingElapsed.AutoSize = true;
-            this.labelDemuxingTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDemuxingTimeRemainingElapsed.Location = new System.Drawing.Point(475, 20);
-            this.labelDemuxingTimeRemainingElapsed.Name = "labelDemuxingTimeRemainingElapsed";
-            this.labelDemuxingTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
-            this.labelDemuxingTimeRemainingElapsed.TabIndex = 36;
-            this.labelDemuxingTimeRemainingElapsed.Text = "Time Remaining / Elapsed:";
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(671, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(12, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "/";
-            // 
-            // labelDemuxingTimeRemaining
-            // 
-            this.labelDemuxingTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelDemuxingTimeRemaining.AutoSize = true;
-            this.labelDemuxingTimeRemaining.Location = new System.Drawing.Point(616, 20);
-            this.labelDemuxingTimeRemaining.Name = "labelDemuxingTimeRemaining";
-            this.labelDemuxingTimeRemaining.Size = new System.Drawing.Size(49, 13);
-            this.labelDemuxingTimeRemaining.TabIndex = 5;
-            this.labelDemuxingTimeRemaining.Text = "00:00:00";
-            // 
-            // labelDemuxingTimeElapsed
-            // 
-            this.labelDemuxingTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelDemuxingTimeElapsed.AutoSize = true;
-            this.labelDemuxingTimeElapsed.Location = new System.Drawing.Point(687, 20);
-            this.labelDemuxingTimeElapsed.Name = "labelDemuxingTimeElapsed";
-            this.labelDemuxingTimeElapsed.Size = new System.Drawing.Size(49, 13);
-            this.labelDemuxingTimeElapsed.TabIndex = 4;
-            this.labelDemuxingTimeElapsed.Text = "00:00:00";
-            // 
-            // textBoxDemuxingCommandLine
-            // 
-            this.textBoxDemuxingCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxDemuxingCommandLine.Location = new System.Drawing.Point(7, 84);
-            this.textBoxDemuxingCommandLine.Multiline = true;
-            this.textBoxDemuxingCommandLine.Name = "textBoxDemuxingCommandLine";
-            this.textBoxDemuxingCommandLine.ReadOnly = true;
-            this.textBoxDemuxingCommandLine.Size = new System.Drawing.Size(729, 60);
-            this.textBoxDemuxingCommandLine.TabIndex = 3;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 67);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(76, 13);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "Command line:";
-            // 
-            // progressBarDemuxing
-            // 
-            this.progressBarDemuxing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarDemuxing.Location = new System.Drawing.Point(7, 37);
-            this.progressBarDemuxing.Maximum = 1000;
-            this.progressBarDemuxing.Name = "progressBarDemuxing";
-            this.progressBarDemuxing.Size = new System.Drawing.Size(729, 23);
-            this.progressBarDemuxing.Step = 1;
-            this.progressBarDemuxing.TabIndex = 1;
-            // 
-            // labelDemuxingProgress
-            // 
-            this.labelDemuxingProgress.AutoSize = true;
-            this.labelDemuxingProgress.Location = new System.Drawing.Point(7, 20);
-            this.labelDemuxingProgress.Name = "labelDemuxingProgress";
-            this.labelDemuxingProgress.Size = new System.Drawing.Size(30, 13);
-            this.labelDemuxingProgress.TabIndex = 0;
-            this.labelDemuxingProgress.Text = "0.0%";
-            // 
             // splitContainerDiscOuter
             // 
             this.splitContainerDiscOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -1101,6 +310,21 @@
             this.pictureBoxMoviePoster.TabIndex = 0;
             this.pictureBoxMoviePoster.TabStop = false;
             this.pictureBoxMoviePoster.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBoxMoviePoster_MouseClick);
+            // 
+            // contextMenuStripTmdb
+            // 
+            this.contextMenuStripTmdb.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemTmdb});
+            this.contextMenuStripTmdb.Name = "contextMenuStripTmdb";
+            this.contextMenuStripTmdb.Size = new System.Drawing.Size(236, 26);
+            this.contextMenuStripTmdb.Opened += new System.EventHandler(this.contextMenuStripTmdb_Opened);
+            // 
+            // toolStripMenuItemTmdb
+            // 
+            this.toolStripMenuItemTmdb.Name = "toolStripMenuItemTmdb";
+            this.toolStripMenuItemTmdb.Size = new System.Drawing.Size(235, 22);
+            this.toolStripMenuItemTmdb.Text = "&View movie details at TMDb.org";
+            this.toolStripMenuItemTmdb.Click += new System.EventHandler(this.toolStripMenuItemTmdb_Click);
             // 
             // panelMovieDetails
             // 
@@ -1483,6 +707,207 @@
             this.columnHeaderDescription.Text = "Description";
             this.columnHeaderDescription.Width = 306;
             // 
+            // tabPageOutput
+            // 
+            this.tabPageOutput.Controls.Add(this.groupBoxDemux);
+            this.tabPageOutput.Controls.Add(this.groupBoxOutput);
+            this.tabPageOutput.Controls.Add(this.groupBoxTracks);
+            this.tabPageOutput.Controls.Add(this.groupBoxFilter);
+            this.tabPageOutput.Controls.Add(this.groupBoxMasterOverride);
+            this.tabPageOutput.Location = new System.Drawing.Point(4, 22);
+            this.tabPageOutput.Name = "tabPageOutput";
+            this.tabPageOutput.Size = new System.Drawing.Size(749, 583);
+            this.tabPageOutput.TabIndex = 2;
+            this.tabPageOutput.Text = "Output";
+            this.tabPageOutput.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxOutput
+            // 
+            this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNamePreview);
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputDirPreview);
+            this.groupBoxOutput.Controls.Add(this.labelOutputPlaceholders);
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNameHint);
+            this.groupBoxOutput.Controls.Add(this.textBoxReplaceSpaces);
+            this.groupBoxOutput.Controls.Add(this.checkBoxReplaceSpaces);
+            this.groupBoxOutput.Controls.Add(this.labelOutputFileExtension);
+            this.groupBoxOutput.Controls.Add(this.buttonOutputDir);
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputDir);
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputFileName);
+            this.groupBoxOutput.Controls.Add(this.labelOutputFileName);
+            this.groupBoxOutput.Controls.Add(this.labelOutputDirectory);
+            this.groupBoxOutput.Location = new System.Drawing.Point(3, 440);
+            this.groupBoxOutput.Name = "groupBoxOutput";
+            this.groupBoxOutput.Size = new System.Drawing.Size(743, 140);
+            this.groupBoxOutput.TabIndex = 3;
+            this.groupBoxOutput.TabStop = false;
+            this.groupBoxOutput.Text = "Output";
+            // 
+            // checkBoxDemuxSubtitles
+            // 
+            this.checkBoxDemuxSubtitles.AutoSize = true;
+            this.checkBoxDemuxSubtitles.Location = new System.Drawing.Point(110, 19);
+            this.checkBoxDemuxSubtitles.Name = "checkBoxDemuxSubtitles";
+            this.checkBoxDemuxSubtitles.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxDemuxSubtitles.TabIndex = 15;
+            this.checkBoxDemuxSubtitles.Text = "Demux &subtitles";
+            this.checkBoxDemuxSubtitles.UseVisualStyleBackColor = true;
+            // 
+            // textBoxOutputFileNamePreview
+            // 
+            this.textBoxOutputFileNamePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileNamePreview.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxOutputFileNamePreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxOutputFileNamePreview.Location = new System.Drawing.Point(84, 119);
+            this.textBoxOutputFileNamePreview.Name = "textBoxOutputFileNamePreview";
+            this.textBoxOutputFileNamePreview.ReadOnly = true;
+            this.textBoxOutputFileNamePreview.Size = new System.Drawing.Size(653, 13);
+            this.textBoxOutputFileNamePreview.TabIndex = 14;
+            this.textBoxOutputFileNamePreview.TabStop = false;
+            this.textBoxOutputFileNamePreview.Text = "The Incredibles (2006) [1080p].m2ts";
+            // 
+            // textBoxOutputDirPreview
+            // 
+            this.textBoxOutputDirPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputDirPreview.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxOutputDirPreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxOutputDirPreview.Location = new System.Drawing.Point(84, 72);
+            this.textBoxOutputDirPreview.Name = "textBoxOutputDirPreview";
+            this.textBoxOutputDirPreview.ReadOnly = true;
+            this.textBoxOutputDirPreview.Size = new System.Drawing.Size(653, 13);
+            this.textBoxOutputDirPreview.TabIndex = 13;
+            this.textBoxOutputDirPreview.TabStop = false;
+            this.textBoxOutputDirPreview.Text = "C:\\Users\\Administrator\\AppData\\Local\\Temp\\INCREDIBLES";
+            // 
+            // labelOutputPlaceholders
+            // 
+            this.labelOutputPlaceholders.AutoSize = true;
+            this.labelOutputPlaceholders.Location = new System.Drawing.Point(7, 20);
+            this.labelOutputPlaceholders.Name = "labelOutputPlaceholders";
+            this.labelOutputPlaceholders.Size = new System.Drawing.Size(71, 13);
+            this.labelOutputPlaceholders.TabIndex = 12;
+            this.labelOutputPlaceholders.Text = "Placeholders:";
+            // 
+            // textBoxOutputFileNameHint
+            // 
+            this.textBoxOutputFileNameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileNameHint.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxOutputFileNameHint.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxOutputFileNameHint.Location = new System.Drawing.Point(84, 20);
+            this.textBoxOutputFileNameHint.Name = "textBoxOutputFileNameHint";
+            this.textBoxOutputFileNameHint.ReadOnly = true;
+            this.textBoxOutputFileNameHint.Size = new System.Drawing.Size(477, 13);
+            this.textBoxOutputFileNameHint.TabIndex = 11;
+            this.textBoxOutputFileNameHint.TabStop = false;
+            this.textBoxOutputFileNameHint.Text = "%volume% %title% %year% %res% %vcodec% %acodec% %channels%";
+            // 
+            // textBoxReplaceSpaces
+            // 
+            this.textBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxReplaceSpaces.Enabled = false;
+            this.textBoxReplaceSpaces.Location = new System.Drawing.Point(704, 17);
+            this.textBoxReplaceSpaces.Name = "textBoxReplaceSpaces";
+            this.textBoxReplaceSpaces.Size = new System.Drawing.Size(29, 20);
+            this.textBoxReplaceSpaces.TabIndex = 1;
+            this.textBoxReplaceSpaces.Text = ".";
+            this.textBoxReplaceSpaces.TextChanged += new System.EventHandler(this.textBoxReplaceSpaces_TextChanged);
+            this.textBoxReplaceSpaces.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxReplaceSpaces_KeyPress);
+            // 
+            // checkBoxReplaceSpaces
+            // 
+            this.checkBoxReplaceSpaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxReplaceSpaces.AutoSize = true;
+            this.checkBoxReplaceSpaces.Location = new System.Drawing.Point(567, 19);
+            this.checkBoxReplaceSpaces.Name = "checkBoxReplaceSpaces";
+            this.checkBoxReplaceSpaces.Size = new System.Drawing.Size(128, 17);
+            this.checkBoxReplaceSpaces.TabIndex = 0;
+            this.checkBoxReplaceSpaces.Text = "&Replace spaces with:";
+            this.checkBoxReplaceSpaces.UseVisualStyleBackColor = true;
+            this.checkBoxReplaceSpaces.CheckedChanged += new System.EventHandler(this.checkBoxReplaceSpaces_CheckedChanged);
+            // 
+            // labelOutputFileExtension
+            // 
+            this.labelOutputFileExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelOutputFileExtension.AutoSize = true;
+            this.labelOutputFileExtension.Location = new System.Drawing.Point(701, 96);
+            this.labelOutputFileExtension.Name = "labelOutputFileExtension";
+            this.labelOutputFileExtension.Size = new System.Drawing.Size(32, 13);
+            this.labelOutputFileExtension.TabIndex = 3;
+            this.labelOutputFileExtension.Text = ".m2ts";
+            // 
+            // buttonOutputDir
+            // 
+            this.buttonOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOutputDir.Location = new System.Drawing.Point(662, 43);
+            this.buttonOutputDir.Name = "buttonOutputDir";
+            this.buttonOutputDir.Size = new System.Drawing.Size(75, 23);
+            this.buttonOutputDir.TabIndex = 3;
+            this.buttonOutputDir.Text = "Browse...";
+            this.buttonOutputDir.UseVisualStyleBackColor = true;
+            this.buttonOutputDir.Click += new System.EventHandler(this.buttonOutputDir_Click);
+            // 
+            // textBoxOutputDir
+            // 
+            this.textBoxOutputDir.AllowDrop = true;
+            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputDir.Location = new System.Drawing.Point(84, 45);
+            this.textBoxOutputDir.Name = "textBoxOutputDir";
+            this.textBoxOutputDir.Size = new System.Drawing.Size(572, 20);
+            this.textBoxOutputDir.TabIndex = 2;
+            this.textBoxOutputDir.TextChanged += new System.EventHandler(this.textBoxOutputDir_TextChanged);
+            this.textBoxOutputDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragDrop);
+            this.textBoxOutputDir.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputDir_DragEnter);
+            // 
+            // textBoxOutputFileName
+            // 
+            this.textBoxOutputFileName.AllowDrop = true;
+            this.textBoxOutputFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileName.Location = new System.Drawing.Point(84, 93);
+            this.textBoxOutputFileName.Name = "textBoxOutputFileName";
+            this.textBoxOutputFileName.Size = new System.Drawing.Size(611, 20);
+            this.textBoxOutputFileName.TabIndex = 4;
+            this.textBoxOutputFileName.TextChanged += new System.EventHandler(this.textBoxOutputFileName_TextChanged);
+            this.textBoxOutputFileName.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragDrop);
+            this.textBoxOutputFileName.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxOutputFileName_DragEnter);
+            // 
+            // labelOutputFileName
+            // 
+            this.labelOutputFileName.AutoSize = true;
+            this.labelOutputFileName.Location = new System.Drawing.Point(6, 96);
+            this.labelOutputFileName.Name = "labelOutputFileName";
+            this.labelOutputFileName.Size = new System.Drawing.Size(55, 13);
+            this.labelOutputFileName.TabIndex = 1;
+            this.labelOutputFileName.Text = "File name:";
+            // 
+            // labelOutputDirectory
+            // 
+            this.labelOutputDirectory.AutoSize = true;
+            this.labelOutputDirectory.Location = new System.Drawing.Point(6, 48);
+            this.labelOutputDirectory.Name = "labelOutputDirectory";
+            this.labelOutputDirectory.Size = new System.Drawing.Size(52, 13);
+            this.labelOutputDirectory.TabIndex = 0;
+            this.labelOutputDirectory.Text = "Directory:";
+            // 
+            // groupBoxTracks
+            // 
+            this.groupBoxTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTracks.Controls.Add(this.splitContainerTracksOuter);
+            this.groupBoxTracks.Location = new System.Drawing.Point(256, 4);
+            this.groupBoxTracks.Name = "groupBoxTracks";
+            this.groupBoxTracks.Size = new System.Drawing.Size(490, 379);
+            this.groupBoxTracks.TabIndex = 2;
+            this.groupBoxTracks.TabStop = false;
+            this.groupBoxTracks.Text = "Select Playlist / Tracks";
+            this.groupBoxTracks.SizeChanged += new System.EventHandler(this.ResizeOutputTab);
+            // 
             // splitContainerTracksOuter
             // 
             this.splitContainerTracksOuter.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1501,8 +926,8 @@
             // splitContainerTracksOuter.Panel2
             // 
             this.splitContainerTracksOuter.Panel2.Controls.Add(this.splitContainerTracksInner);
-            this.splitContainerTracksOuter.Size = new System.Drawing.Size(484, 388);
-            this.splitContainerTracksOuter.SplitterDistance = 97;
+            this.splitContainerTracksOuter.Size = new System.Drawing.Size(484, 360);
+            this.splitContainerTracksOuter.SplitterDistance = 85;
             this.splitContainerTracksOuter.TabIndex = 5;
             // 
             // buttonPlaylistOpen
@@ -1551,7 +976,7 @@
             this.listViewVideoTracks.FullRowSelect = true;
             this.listViewVideoTracks.Location = new System.Drawing.Point(90, 29);
             this.listViewVideoTracks.Name = "listViewVideoTracks";
-            this.listViewVideoTracks.Size = new System.Drawing.Size(388, 65);
+            this.listViewVideoTracks.Size = new System.Drawing.Size(388, 47);
             this.listViewVideoTracks.TabIndex = 1;
             this.listViewVideoTracks.UseCompatibleStateImageBehavior = false;
             this.listViewVideoTracks.View = System.Windows.Forms.View.Details;
@@ -1601,8 +1026,8 @@
             // 
             this.splitContainerTracksInner.Panel2.Controls.Add(this.listViewSubtitleTracks);
             this.splitContainerTracksInner.Panel2.Controls.Add(this.labelSubtitleTracks);
-            this.splitContainerTracksInner.Size = new System.Drawing.Size(484, 287);
-            this.splitContainerTracksInner.SplitterDistance = 157;
+            this.splitContainerTracksInner.Size = new System.Drawing.Size(484, 271);
+            this.splitContainerTracksInner.SplitterDistance = 140;
             this.splitContainerTracksInner.TabIndex = 0;
             // 
             // listViewAudioTracks
@@ -1618,7 +1043,7 @@
             this.listViewAudioTracks.FullRowSelect = true;
             this.listViewAudioTracks.Location = new System.Drawing.Point(91, 3);
             this.listViewAudioTracks.Name = "listViewAudioTracks";
-            this.listViewAudioTracks.Size = new System.Drawing.Size(390, 151);
+            this.listViewAudioTracks.Size = new System.Drawing.Size(390, 125);
             this.listViewAudioTracks.TabIndex = 0;
             this.listViewAudioTracks.UseCompatibleStateImageBehavior = false;
             this.listViewAudioTracks.View = System.Windows.Forms.View.Details;
@@ -1658,7 +1083,7 @@
             this.listViewSubtitleTracks.FullRowSelect = true;
             this.listViewSubtitleTracks.Location = new System.Drawing.Point(91, 3);
             this.listViewSubtitleTracks.Name = "listViewSubtitleTracks";
-            this.listViewSubtitleTracks.Size = new System.Drawing.Size(390, 120);
+            this.listViewSubtitleTracks.Size = new System.Drawing.Size(390, 113);
             this.listViewSubtitleTracks.TabIndex = 0;
             this.listViewSubtitleTracks.UseCompatibleStateImageBehavior = false;
             this.listViewSubtitleTracks.View = System.Windows.Forms.View.Details;
@@ -1681,6 +1106,617 @@
             this.labelSubtitleTracks.Size = new System.Drawing.Size(77, 13);
             this.labelSubtitleTracks.TabIndex = 6;
             this.labelSubtitleTracks.Text = "Subtitle tracks:";
+            // 
+            // groupBoxFilter
+            // 
+            this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxFilter.Controls.Add(this.listBoxSubtitleLanguages);
+            this.groupBoxFilter.Controls.Add(this.listBoxAudioLanguages);
+            this.groupBoxFilter.Controls.Add(this.comboBoxCommentary);
+            this.groupBoxFilter.Controls.Add(this.comboBoxCut);
+            this.groupBoxFilter.Controls.Add(this.comboBoxVideoLanguage);
+            this.groupBoxFilter.Controls.Add(this.labelSubtitleLanguages);
+            this.groupBoxFilter.Controls.Add(this.labelAudioLanguages);
+            this.groupBoxFilter.Controls.Add(this.labelCommentary);
+            this.groupBoxFilter.Controls.Add(this.labelCut);
+            this.groupBoxFilter.Controls.Add(this.labelVideoLanguage);
+            this.groupBoxFilter.Location = new System.Drawing.Point(3, 61);
+            this.groupBoxFilter.Name = "groupBoxFilter";
+            this.groupBoxFilter.Size = new System.Drawing.Size(247, 322);
+            this.groupBoxFilter.TabIndex = 1;
+            this.groupBoxFilter.TabStop = false;
+            this.groupBoxFilter.Text = "Filter";
+            // 
+            // listBoxSubtitleLanguages
+            // 
+            this.listBoxSubtitleLanguages.FormattingEnabled = true;
+            this.listBoxSubtitleLanguages.Location = new System.Drawing.Point(115, 164);
+            this.listBoxSubtitleLanguages.Name = "listBoxSubtitleLanguages";
+            this.listBoxSubtitleLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxSubtitleLanguages.Size = new System.Drawing.Size(120, 56);
+            this.listBoxSubtitleLanguages.TabIndex = 4;
+            this.listBoxSubtitleLanguages.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
+            // 
+            // listBoxAudioLanguages
+            // 
+            this.listBoxAudioLanguages.FormattingEnabled = true;
+            this.listBoxAudioLanguages.Location = new System.Drawing.Point(115, 101);
+            this.listBoxAudioLanguages.Name = "listBoxAudioLanguages";
+            this.listBoxAudioLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxAudioLanguages.Size = new System.Drawing.Size(120, 56);
+            this.listBoxAudioLanguages.TabIndex = 3;
+            this.listBoxAudioLanguages.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
+            // 
+            // comboBoxCommentary
+            // 
+            this.comboBoxCommentary.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCommentary.FormattingEnabled = true;
+            this.comboBoxCommentary.Location = new System.Drawing.Point(115, 73);
+            this.comboBoxCommentary.Name = "comboBoxCommentary";
+            this.comboBoxCommentary.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxCommentary.TabIndex = 2;
+            this.comboBoxCommentary.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
+            // 
+            // comboBoxCut
+            // 
+            this.comboBoxCut.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCut.FormattingEnabled = true;
+            this.comboBoxCut.Location = new System.Drawing.Point(115, 45);
+            this.comboBoxCut.Name = "comboBoxCut";
+            this.comboBoxCut.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxCut.TabIndex = 1;
+            this.comboBoxCut.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
+            // 
+            // comboBoxVideoLanguage
+            // 
+            this.comboBoxVideoLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxVideoLanguage.FormattingEnabled = true;
+            this.comboBoxVideoLanguage.Location = new System.Drawing.Point(115, 17);
+            this.comboBoxVideoLanguage.Name = "comboBoxVideoLanguage";
+            this.comboBoxVideoLanguage.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxVideoLanguage.TabIndex = 0;
+            this.comboBoxVideoLanguage.Tag = "Primary video language (many animated Disney movies contain several video renders" +
+                " - e.g., French, Spanish, and English)";
+            this.comboBoxVideoLanguage.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
+            // 
+            // labelSubtitleLanguages
+            // 
+            this.labelSubtitleLanguages.AutoSize = true;
+            this.labelSubtitleLanguages.Location = new System.Drawing.Point(6, 167);
+            this.labelSubtitleLanguages.Name = "labelSubtitleLanguages";
+            this.labelSubtitleLanguages.Size = new System.Drawing.Size(103, 13);
+            this.labelSubtitleLanguages.TabIndex = 4;
+            this.labelSubtitleLanguages.Text = "Subtitle language(s):";
+            // 
+            // labelAudioLanguages
+            // 
+            this.labelAudioLanguages.AutoSize = true;
+            this.labelAudioLanguages.Location = new System.Drawing.Point(6, 104);
+            this.labelAudioLanguages.Name = "labelAudioLanguages";
+            this.labelAudioLanguages.Size = new System.Drawing.Size(95, 13);
+            this.labelAudioLanguages.TabIndex = 3;
+            this.labelAudioLanguages.Text = "Audio language(s):";
+            // 
+            // labelCommentary
+            // 
+            this.labelCommentary.AutoSize = true;
+            this.labelCommentary.Location = new System.Drawing.Point(6, 76);
+            this.labelCommentary.Name = "labelCommentary";
+            this.labelCommentary.Size = new System.Drawing.Size(68, 13);
+            this.labelCommentary.TabIndex = 2;
+            this.labelCommentary.Text = "Commentary:";
+            // 
+            // labelCut
+            // 
+            this.labelCut.AutoSize = true;
+            this.labelCut.Location = new System.Drawing.Point(6, 48);
+            this.labelCut.Name = "labelCut";
+            this.labelCut.Size = new System.Drawing.Size(26, 13);
+            this.labelCut.TabIndex = 1;
+            this.labelCut.Text = "Cut:";
+            // 
+            // labelVideoLanguage
+            // 
+            this.labelVideoLanguage.AutoSize = true;
+            this.labelVideoLanguage.Location = new System.Drawing.Point(6, 20);
+            this.labelVideoLanguage.Name = "labelVideoLanguage";
+            this.labelVideoLanguage.Size = new System.Drawing.Size(84, 13);
+            this.labelVideoLanguage.TabIndex = 0;
+            this.labelVideoLanguage.Text = "Video language:";
+            // 
+            // groupBoxMasterOverride
+            // 
+            this.groupBoxMasterOverride.Controls.Add(this.comboBoxAudienceLanguage);
+            this.groupBoxMasterOverride.Controls.Add(this.labelAudienceLanguage);
+            this.groupBoxMasterOverride.Location = new System.Drawing.Point(4, 4);
+            this.groupBoxMasterOverride.Name = "groupBoxMasterOverride";
+            this.groupBoxMasterOverride.Size = new System.Drawing.Size(246, 50);
+            this.groupBoxMasterOverride.TabIndex = 0;
+            this.groupBoxMasterOverride.TabStop = false;
+            this.groupBoxMasterOverride.Text = "Master Override";
+            // 
+            // comboBoxAudienceLanguage
+            // 
+            this.comboBoxAudienceLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAudienceLanguage.FormattingEnabled = true;
+            this.comboBoxAudienceLanguage.Location = new System.Drawing.Point(115, 17);
+            this.comboBoxAudienceLanguage.Name = "comboBoxAudienceLanguage";
+            this.comboBoxAudienceLanguage.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxAudienceLanguage.TabIndex = 0;
+            this.comboBoxAudienceLanguage.Tag = "Set all language filters (video, audio, and subtitle) to a single language";
+            // 
+            // labelAudienceLanguage
+            // 
+            this.labelAudienceLanguage.AutoSize = true;
+            this.labelAudienceLanguage.Location = new System.Drawing.Point(6, 20);
+            this.labelAudienceLanguage.Name = "labelAudienceLanguage";
+            this.labelAudienceLanguage.Size = new System.Drawing.Size(102, 13);
+            this.labelAudienceLanguage.TabIndex = 0;
+            this.labelAudienceLanguage.Text = "Audience language:";
+            // 
+            // tabPageProgress
+            // 
+            this.tabPageProgress.Controls.Add(this.groupBox1);
+            this.tabPageProgress.Controls.Add(this.groupBoxTsMuxerProgress);
+            this.tabPageProgress.Location = new System.Drawing.Point(4, 22);
+            this.tabPageProgress.Name = "tabPageProgress";
+            this.tabPageProgress.Size = new System.Drawing.Size(749, 583);
+            this.tabPageProgress.TabIndex = 3;
+            this.tabPageProgress.Text = "Progress";
+            this.tabPageProgress.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.labelDemuxingTimeRemainingElapsed);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.labelDemuxingTimeRemaining);
+            this.groupBox1.Controls.Add(this.labelDemuxingTimeElapsed);
+            this.groupBox1.Controls.Add(this.textBoxDemuxingCommandLine);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.progressBarDemuxing);
+            this.groupBox1.Controls.Add(this.labelDemuxingProgress);
+            this.groupBox1.Location = new System.Drawing.Point(4, 4);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(742, 150);
+            this.groupBox1.TabIndex = 37;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Demuxing Progress";
+            // 
+            // labelDemuxingTimeRemainingElapsed
+            // 
+            this.labelDemuxingTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDemuxingTimeRemainingElapsed.AutoSize = true;
+            this.labelDemuxingTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDemuxingTimeRemainingElapsed.Location = new System.Drawing.Point(475, 20);
+            this.labelDemuxingTimeRemainingElapsed.Name = "labelDemuxingTimeRemainingElapsed";
+            this.labelDemuxingTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
+            this.labelDemuxingTimeRemainingElapsed.TabIndex = 36;
+            this.labelDemuxingTimeRemainingElapsed.Text = "Time Remaining / Elapsed:";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(671, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(12, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "/";
+            // 
+            // labelDemuxingTimeRemaining
+            // 
+            this.labelDemuxingTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDemuxingTimeRemaining.AutoSize = true;
+            this.labelDemuxingTimeRemaining.Location = new System.Drawing.Point(616, 20);
+            this.labelDemuxingTimeRemaining.Name = "labelDemuxingTimeRemaining";
+            this.labelDemuxingTimeRemaining.Size = new System.Drawing.Size(49, 13);
+            this.labelDemuxingTimeRemaining.TabIndex = 5;
+            this.labelDemuxingTimeRemaining.Text = "00:00:00";
+            // 
+            // labelDemuxingTimeElapsed
+            // 
+            this.labelDemuxingTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDemuxingTimeElapsed.AutoSize = true;
+            this.labelDemuxingTimeElapsed.Location = new System.Drawing.Point(687, 20);
+            this.labelDemuxingTimeElapsed.Name = "labelDemuxingTimeElapsed";
+            this.labelDemuxingTimeElapsed.Size = new System.Drawing.Size(49, 13);
+            this.labelDemuxingTimeElapsed.TabIndex = 4;
+            this.labelDemuxingTimeElapsed.Text = "00:00:00";
+            // 
+            // textBoxDemuxingCommandLine
+            // 
+            this.textBoxDemuxingCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDemuxingCommandLine.Location = new System.Drawing.Point(7, 84);
+            this.textBoxDemuxingCommandLine.Multiline = true;
+            this.textBoxDemuxingCommandLine.Name = "textBoxDemuxingCommandLine";
+            this.textBoxDemuxingCommandLine.ReadOnly = true;
+            this.textBoxDemuxingCommandLine.Size = new System.Drawing.Size(729, 60);
+            this.textBoxDemuxingCommandLine.TabIndex = 3;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 67);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(76, 13);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "Command line:";
+            // 
+            // progressBarDemuxing
+            // 
+            this.progressBarDemuxing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBarDemuxing.Location = new System.Drawing.Point(7, 37);
+            this.progressBarDemuxing.Maximum = 1000;
+            this.progressBarDemuxing.Name = "progressBarDemuxing";
+            this.progressBarDemuxing.Size = new System.Drawing.Size(729, 23);
+            this.progressBarDemuxing.Step = 1;
+            this.progressBarDemuxing.TabIndex = 1;
+            // 
+            // labelDemuxingProgress
+            // 
+            this.labelDemuxingProgress.AutoSize = true;
+            this.labelDemuxingProgress.Location = new System.Drawing.Point(7, 20);
+            this.labelDemuxingProgress.Name = "labelDemuxingProgress";
+            this.labelDemuxingProgress.Size = new System.Drawing.Size(30, 13);
+            this.labelDemuxingProgress.TabIndex = 0;
+            this.labelDemuxingProgress.Text = "0.0%";
+            // 
+            // groupBoxTsMuxerProgress
+            // 
+            this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemainingElapsed);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeSeparator);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemaining);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeElapsed);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.textBoxTsMuxerCommandLine);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerCommandLine);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.progressBarTsMuxer);
+            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerProgress);
+            this.groupBoxTsMuxerProgress.Location = new System.Drawing.Point(4, 160);
+            this.groupBoxTsMuxerProgress.Name = "groupBoxTsMuxerProgress";
+            this.groupBoxTsMuxerProgress.Size = new System.Drawing.Size(742, 150);
+            this.groupBoxTsMuxerProgress.TabIndex = 0;
+            this.groupBoxTsMuxerProgress.TabStop = false;
+            this.groupBoxTsMuxerProgress.Text = "Muxing Progress";
+            // 
+            // labelTsMuxerTimeRemainingElapsed
+            // 
+            this.labelTsMuxerTimeRemainingElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeRemainingElapsed.AutoSize = true;
+            this.labelTsMuxerTimeRemainingElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTsMuxerTimeRemainingElapsed.Location = new System.Drawing.Point(475, 20);
+            this.labelTsMuxerTimeRemainingElapsed.Name = "labelTsMuxerTimeRemainingElapsed";
+            this.labelTsMuxerTimeRemainingElapsed.Size = new System.Drawing.Size(135, 13);
+            this.labelTsMuxerTimeRemainingElapsed.TabIndex = 36;
+            this.labelTsMuxerTimeRemainingElapsed.Text = "Time Remaining / Elapsed:";
+            // 
+            // labelTsMuxerTimeSeparator
+            // 
+            this.labelTsMuxerTimeSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeSeparator.AutoSize = true;
+            this.labelTsMuxerTimeSeparator.Location = new System.Drawing.Point(671, 20);
+            this.labelTsMuxerTimeSeparator.Name = "labelTsMuxerTimeSeparator";
+            this.labelTsMuxerTimeSeparator.Size = new System.Drawing.Size(12, 13);
+            this.labelTsMuxerTimeSeparator.TabIndex = 6;
+            this.labelTsMuxerTimeSeparator.Text = "/";
+            // 
+            // labelTsMuxerTimeRemaining
+            // 
+            this.labelTsMuxerTimeRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeRemaining.AutoSize = true;
+            this.labelTsMuxerTimeRemaining.Location = new System.Drawing.Point(616, 20);
+            this.labelTsMuxerTimeRemaining.Name = "labelTsMuxerTimeRemaining";
+            this.labelTsMuxerTimeRemaining.Size = new System.Drawing.Size(49, 13);
+            this.labelTsMuxerTimeRemaining.TabIndex = 5;
+            this.labelTsMuxerTimeRemaining.Text = "00:00:00";
+            // 
+            // labelTsMuxerTimeElapsed
+            // 
+            this.labelTsMuxerTimeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTsMuxerTimeElapsed.AutoSize = true;
+            this.labelTsMuxerTimeElapsed.Location = new System.Drawing.Point(687, 20);
+            this.labelTsMuxerTimeElapsed.Name = "labelTsMuxerTimeElapsed";
+            this.labelTsMuxerTimeElapsed.Size = new System.Drawing.Size(49, 13);
+            this.labelTsMuxerTimeElapsed.TabIndex = 4;
+            this.labelTsMuxerTimeElapsed.Text = "00:00:00";
+            // 
+            // textBoxTsMuxerCommandLine
+            // 
+            this.textBoxTsMuxerCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTsMuxerCommandLine.Location = new System.Drawing.Point(7, 84);
+            this.textBoxTsMuxerCommandLine.Multiline = true;
+            this.textBoxTsMuxerCommandLine.Name = "textBoxTsMuxerCommandLine";
+            this.textBoxTsMuxerCommandLine.ReadOnly = true;
+            this.textBoxTsMuxerCommandLine.Size = new System.Drawing.Size(729, 60);
+            this.textBoxTsMuxerCommandLine.TabIndex = 3;
+            // 
+            // labelTsMuxerCommandLine
+            // 
+            this.labelTsMuxerCommandLine.AutoSize = true;
+            this.labelTsMuxerCommandLine.Location = new System.Drawing.Point(7, 67);
+            this.labelTsMuxerCommandLine.Name = "labelTsMuxerCommandLine";
+            this.labelTsMuxerCommandLine.Size = new System.Drawing.Size(76, 13);
+            this.labelTsMuxerCommandLine.TabIndex = 2;
+            this.labelTsMuxerCommandLine.Text = "Command line:";
+            // 
+            // progressBarTsMuxer
+            // 
+            this.progressBarTsMuxer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBarTsMuxer.Location = new System.Drawing.Point(7, 37);
+            this.progressBarTsMuxer.Maximum = 1000;
+            this.progressBarTsMuxer.Name = "progressBarTsMuxer";
+            this.progressBarTsMuxer.Size = new System.Drawing.Size(729, 23);
+            this.progressBarTsMuxer.Step = 1;
+            this.progressBarTsMuxer.TabIndex = 1;
+            // 
+            // labelTsMuxerProgress
+            // 
+            this.labelTsMuxerProgress.AutoSize = true;
+            this.labelTsMuxerProgress.Location = new System.Drawing.Point(7, 20);
+            this.labelTsMuxerProgress.Name = "labelTsMuxerProgress";
+            this.labelTsMuxerProgress.Size = new System.Drawing.Size(30, 13);
+            this.labelTsMuxerProgress.TabIndex = 0;
+            this.labelTsMuxerProgress.Text = "0.0%";
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel,
+            this.progressLabel,
+            this.toolStripProgressBar});
+            this.statusStrip.Location = new System.Drawing.Point(0, 727);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(781, 22);
+            this.statusStrip.TabIndex = 6;
+            this.statusStrip.Text = "Status Strip";
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(530, 17);
+            this.statusLabel.Spring = true;
+            this.statusLabel.Text = "Status";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // progressLabel
+            // 
+            this.progressLabel.Name = "progressLabel";
+            this.progressLabel.Size = new System.Drawing.Size(34, 17);
+            this.progressLabel.Text = "0.0%";
+            this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Maximum = 1000;
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(200, 16);
+            this.toolStripProgressBar.Step = 1;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.toolsToolStripMenuItem,
+            this.helpToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(781, 24);
+            this.menuStrip1.TabIndex = 100;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openFolderToolStripMenuItem,
+            this.rescanToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.submitToDbToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // openFolderToolStripMenuItem
+            // 
+            this.openFolderToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.folder_open;
+            this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
+            this.openFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.openFolderToolStripMenuItem.Text = "&Open BD-ROM folder...";
+            this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.buttonBrowse_Click);
+            // 
+            // rescanToolStripMenuItem
+            // 
+            this.rescanToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.refresh_green;
+            this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
+            this.rescanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.rescanToolStripMenuItem.Text = "&Rescan";
+            this.rescanToolStripMenuItem.Click += new System.EventHandler(this.buttonRescan_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(234, 6);
+            // 
+            // submitToDbToolStripMenuItem
+            // 
+            this.submitToDbToolStripMenuItem.Name = "submitToDbToolStripMenuItem";
+            this.submitToDbToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.submitToDbToolStripMenuItem.Text = "Submit to &database";
+            this.submitToDbToolStripMenuItem.Click += new System.EventHandler(this.SubmitJsonDisc);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(234, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.remuxerToolStripMenuItem,
+            this.toolStripMenuItem4,
+            this.toolStripMenuItem3,
+            this.settingsToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // remuxerToolStripMenuItem
+            // 
+            this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
+            this.remuxerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.remuxerToolStripMenuItem.Text = "&Remuxer";
+            this.remuxerToolStripMenuItem.Click += new System.EventHandler(this.remuxerToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(167, 22);
+            this.toolStripMenuItem4.Text = "Track Namer";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(164, 6);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.settings;
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.settingsToolStripMenuItem.Text = "&Settings...";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem,
+            this.checkForUpdatesToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Enabled = false;
+            this.aboutToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.info;
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.aboutToolStripMenuItem.Text = "&About";
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for &updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
+            // 
+            // buttonRescan
+            // 
+            this.buttonRescan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRescan.Enabled = false;
+            this.buttonRescan.Image = global::BDAutoMuxer.Properties.Resources.refresh_green;
+            this.buttonRescan.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonRescan.Location = new System.Drawing.Point(694, 47);
+            this.buttonRescan.Name = "buttonRescan";
+            this.buttonRescan.Size = new System.Drawing.Size(75, 23);
+            this.buttonRescan.TabIndex = 103;
+            this.buttonRescan.Text = "Rescan";
+            this.buttonRescan.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonRescan.UseVisualStyleBackColor = true;
+            this.buttonRescan.Click += new System.EventHandler(this.buttonRescan_Click);
+            // 
+            // buttonBrowse
+            // 
+            this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowse.Image = global::BDAutoMuxer.Properties.Resources.folder_open;
+            this.buttonBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonBrowse.Location = new System.Drawing.Point(613, 47);
+            this.buttonBrowse.Name = "buttonBrowse";
+            this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowse.TabIndex = 102;
+            this.buttonBrowse.Text = "Browse...";
+            this.buttonBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
+            // 
+            // textBoxSource
+            // 
+            this.textBoxSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSource.Location = new System.Drawing.Point(15, 49);
+            this.textBoxSource.Name = "textBoxSource";
+            this.textBoxSource.Size = new System.Drawing.Size(592, 20);
+            this.textBoxSource.TabIndex = 101;
+            this.textBoxSource.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSource_KeyPress);
+            // 
+            // labelSource
+            // 
+            this.labelSource.AutoSize = true;
+            this.labelSource.Location = new System.Drawing.Point(12, 33);
+            this.labelSource.Name = "labelSource";
+            this.labelSource.Size = new System.Drawing.Size(141, 13);
+            this.labelSource.TabIndex = 104;
+            this.labelSource.Text = "Select the Source BD-ROM:";
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(694, 697);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 99;
+            this.cancelButton.Text = "Close";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // groupBoxDemux
+            // 
+            this.groupBoxDemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxDemux.Controls.Add(this.checkBoxDemuxPCM);
+            this.groupBoxDemux.Controls.Add(this.checkBoxDemuxSubtitles);
+            this.groupBoxDemux.Location = new System.Drawing.Point(3, 389);
+            this.groupBoxDemux.Name = "groupBoxDemux";
+            this.groupBoxDemux.Size = new System.Drawing.Size(742, 45);
+            this.groupBoxDemux.TabIndex = 4;
+            this.groupBoxDemux.TabStop = false;
+            this.groupBoxDemux.Text = "Demux";
+            // 
+            // checkBoxDemuxPCM
+            // 
+            this.checkBoxDemuxPCM.AutoSize = true;
+            this.checkBoxDemuxPCM.Enabled = false;
+            this.checkBoxDemuxPCM.Location = new System.Drawing.Point(13, 19);
+            this.checkBoxDemuxPCM.Name = "checkBoxDemuxPCM";
+            this.checkBoxDemuxPCM.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxDemuxPCM.TabIndex = 16;
+            this.checkBoxDemuxPCM.Text = "Demux &LPCM";
+            this.checkBoxDemuxPCM.UseVisualStyleBackColor = true;
             // 
             // FormDetails
             // 
@@ -1706,30 +1742,13 @@
             this.tabControl.ResumeLayout(false);
             this.tabPageDisc.ResumeLayout(false);
             this.tabPageDisc.PerformLayout();
-            this.contextMenuStripTmdb.ResumeLayout(false);
-            this.tabPageOutput.ResumeLayout(false);
-            this.groupBoxOutput.ResumeLayout(false);
-            this.groupBoxOutput.PerformLayout();
-            this.groupBoxTracks.ResumeLayout(false);
-            this.groupBoxFilter.ResumeLayout(false);
-            this.groupBoxFilter.PerformLayout();
-            this.groupBoxMasterOverride.ResumeLayout(false);
-            this.groupBoxMasterOverride.PerformLayout();
-            this.tabPageProgress.ResumeLayout(false);
-            this.groupBoxTsMuxerProgress.ResumeLayout(false);
-            this.groupBoxTsMuxerProgress.PerformLayout();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.splitContainerDiscOuter.Panel1.ResumeLayout(false);
             this.splitContainerDiscOuter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerDiscOuter)).EndInit();
             this.splitContainerDiscOuter.ResumeLayout(false);
             this.panelMoviePoster.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMoviePoster)).EndInit();
+            this.contextMenuStripTmdb.ResumeLayout(false);
             this.panelMovieDetails.ResumeLayout(false);
             this.panelMovieDetails.PerformLayout();
             this.playlistsSplitContainerOuter.Panel1.ResumeLayout(false);
@@ -1746,6 +1765,10 @@
             this.playlistsSplitContainerInner.ResumeLayout(false);
             this.streamsGroupBox.ResumeLayout(false);
             this.tracksGroupBox.ResumeLayout(false);
+            this.tabPageOutput.ResumeLayout(false);
+            this.groupBoxOutput.ResumeLayout(false);
+            this.groupBoxOutput.PerformLayout();
+            this.groupBoxTracks.ResumeLayout(false);
             this.splitContainerTracksOuter.Panel1.ResumeLayout(false);
             this.splitContainerTracksOuter.Panel1.PerformLayout();
             this.splitContainerTracksOuter.Panel2.ResumeLayout(false);
@@ -1757,6 +1780,21 @@
             this.splitContainerTracksInner.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTracksInner)).EndInit();
             this.splitContainerTracksInner.ResumeLayout(false);
+            this.groupBoxFilter.ResumeLayout(false);
+            this.groupBoxFilter.PerformLayout();
+            this.groupBoxMasterOverride.ResumeLayout(false);
+            this.groupBoxMasterOverride.PerformLayout();
+            this.tabPageProgress.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBoxTsMuxerProgress.ResumeLayout(false);
+            this.groupBoxTsMuxerProgress.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.groupBoxDemux.ResumeLayout(false);
+            this.groupBoxDemux.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1899,5 +1937,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ProgressBar progressBarDemuxing;
         private System.Windows.Forms.Label labelDemuxingProgress;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+        private System.Windows.Forms.GroupBox groupBoxDemux;
+        private System.Windows.Forms.CheckBox checkBoxDemuxPCM;
     }
 }
