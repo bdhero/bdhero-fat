@@ -72,8 +72,10 @@
             this.columnHeaderBitrate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageOutput = new System.Windows.Forms.TabPage();
-            this.groupBoxOutput = new System.Windows.Forms.GroupBox();
+            this.groupBoxDemux = new System.Windows.Forms.GroupBox();
+            this.checkBoxDemuxLPCM = new System.Windows.Forms.CheckBox();
             this.checkBoxDemuxSubtitles = new System.Windows.Forms.CheckBox();
+            this.groupBoxOutput = new System.Windows.Forms.GroupBox();
             this.textBoxOutputFileNamePreview = new System.Windows.Forms.TextBox();
             this.textBoxOutputDirPreview = new System.Windows.Forms.TextBox();
             this.labelOutputPlaceholders = new System.Windows.Forms.Label();
@@ -165,8 +167,6 @@
             this.textBoxSource = new System.Windows.Forms.TextBox();
             this.labelSource = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.groupBoxDemux = new System.Windows.Forms.GroupBox();
-            this.checkBoxDemuxPCM = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerDiscOuter)).BeginInit();
@@ -191,6 +191,7 @@
             this.streamsGroupBox.SuspendLayout();
             this.tracksGroupBox.SuspendLayout();
             this.tabPageOutput.SuspendLayout();
+            this.groupBoxDemux.SuspendLayout();
             this.groupBoxOutput.SuspendLayout();
             this.groupBoxTracks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTracksOuter)).BeginInit();
@@ -208,7 +209,6 @@
             this.groupBoxTsMuxerProgress.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.groupBoxDemux.SuspendLayout();
             this.SuspendLayout();
             // 
             // continueButton
@@ -721,6 +721,43 @@
             this.tabPageOutput.Text = "Output";
             this.tabPageOutput.UseVisualStyleBackColor = true;
             // 
+            // groupBoxDemux
+            // 
+            this.groupBoxDemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxDemux.Controls.Add(this.checkBoxDemuxLPCM);
+            this.groupBoxDemux.Controls.Add(this.checkBoxDemuxSubtitles);
+            this.groupBoxDemux.Location = new System.Drawing.Point(3, 389);
+            this.groupBoxDemux.Name = "groupBoxDemux";
+            this.groupBoxDemux.Size = new System.Drawing.Size(742, 45);
+            this.groupBoxDemux.TabIndex = 4;
+            this.groupBoxDemux.TabStop = false;
+            this.groupBoxDemux.Text = "Demux";
+            // 
+            // checkBoxDemuxLPCM
+            // 
+            this.checkBoxDemuxLPCM.AutoSize = true;
+            this.checkBoxDemuxLPCM.Location = new System.Drawing.Point(13, 19);
+            this.checkBoxDemuxLPCM.Name = "checkBoxDemuxLPCM";
+            this.checkBoxDemuxLPCM.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxDemuxLPCM.TabIndex = 15;
+            this.checkBoxDemuxLPCM.Tag = "Extract LPCM audio tracks to separate .WAV files for mkvmerge (see https://trac.b" +
+                "unkus.org/ticket/763)";
+            this.checkBoxDemuxLPCM.Text = "Demux &LPCM";
+            this.checkBoxDemuxLPCM.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDemuxSubtitles
+            // 
+            this.checkBoxDemuxSubtitles.AutoSize = true;
+            this.checkBoxDemuxSubtitles.Location = new System.Drawing.Point(110, 19);
+            this.checkBoxDemuxSubtitles.Name = "checkBoxDemuxSubtitles";
+            this.checkBoxDemuxSubtitles.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxDemuxSubtitles.TabIndex = 16;
+            this.checkBoxDemuxSubtitles.Tag = "Extract subtitles to separate .SUP files so they can be processed by external too" +
+                "ls (e.g., BDSup2Sub)";
+            this.checkBoxDemuxSubtitles.Text = "Demux &subtitles";
+            this.checkBoxDemuxSubtitles.UseVisualStyleBackColor = true;
+            // 
             // groupBoxOutput
             // 
             this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
@@ -743,16 +780,6 @@
             this.groupBoxOutput.TabIndex = 3;
             this.groupBoxOutput.TabStop = false;
             this.groupBoxOutput.Text = "Output";
-            // 
-            // checkBoxDemuxSubtitles
-            // 
-            this.checkBoxDemuxSubtitles.AutoSize = true;
-            this.checkBoxDemuxSubtitles.Location = new System.Drawing.Point(110, 19);
-            this.checkBoxDemuxSubtitles.Name = "checkBoxDemuxSubtitles";
-            this.checkBoxDemuxSubtitles.Size = new System.Drawing.Size(100, 17);
-            this.checkBoxDemuxSubtitles.TabIndex = 15;
-            this.checkBoxDemuxSubtitles.Text = "Demux &subtitles";
-            this.checkBoxDemuxSubtitles.UseVisualStyleBackColor = true;
             // 
             // textBoxOutputFileNamePreview
             // 
@@ -980,6 +1007,7 @@
             this.listViewVideoTracks.TabIndex = 1;
             this.listViewVideoTracks.UseCompatibleStateImageBehavior = false;
             this.listViewVideoTracks.View = System.Windows.Forms.View.Details;
+            this.listViewVideoTracks.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.OutputTrackChecked);
             // 
             // columnHeaderVideoCodec
             // 
@@ -1047,6 +1075,7 @@
             this.listViewAudioTracks.TabIndex = 0;
             this.listViewAudioTracks.UseCompatibleStateImageBehavior = false;
             this.listViewAudioTracks.View = System.Windows.Forms.View.Details;
+            this.listViewAudioTracks.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.OutputTrackChecked);
             // 
             // columnHeaderAudioCodec
             // 
@@ -1087,6 +1116,7 @@
             this.listViewSubtitleTracks.TabIndex = 0;
             this.listViewSubtitleTracks.UseCompatibleStateImageBehavior = false;
             this.listViewSubtitleTracks.View = System.Windows.Forms.View.Details;
+            this.listViewSubtitleTracks.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.OutputTrackChecked);
             // 
             // columnHeaderSubtitleCodec
             // 
@@ -1694,30 +1724,6 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // groupBoxDemux
-            // 
-            this.groupBoxDemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxDemux.Controls.Add(this.checkBoxDemuxPCM);
-            this.groupBoxDemux.Controls.Add(this.checkBoxDemuxSubtitles);
-            this.groupBoxDemux.Location = new System.Drawing.Point(3, 389);
-            this.groupBoxDemux.Name = "groupBoxDemux";
-            this.groupBoxDemux.Size = new System.Drawing.Size(742, 45);
-            this.groupBoxDemux.TabIndex = 4;
-            this.groupBoxDemux.TabStop = false;
-            this.groupBoxDemux.Text = "Demux";
-            // 
-            // checkBoxDemuxPCM
-            // 
-            this.checkBoxDemuxPCM.AutoSize = true;
-            this.checkBoxDemuxPCM.Enabled = false;
-            this.checkBoxDemuxPCM.Location = new System.Drawing.Point(13, 19);
-            this.checkBoxDemuxPCM.Name = "checkBoxDemuxPCM";
-            this.checkBoxDemuxPCM.Size = new System.Drawing.Size(91, 17);
-            this.checkBoxDemuxPCM.TabIndex = 16;
-            this.checkBoxDemuxPCM.Text = "Demux &LPCM";
-            this.checkBoxDemuxPCM.UseVisualStyleBackColor = true;
-            // 
             // FormDetails
             // 
             this.AllowDrop = true;
@@ -1766,6 +1772,8 @@
             this.streamsGroupBox.ResumeLayout(false);
             this.tracksGroupBox.ResumeLayout(false);
             this.tabPageOutput.ResumeLayout(false);
+            this.groupBoxDemux.ResumeLayout(false);
+            this.groupBoxDemux.PerformLayout();
             this.groupBoxOutput.ResumeLayout(false);
             this.groupBoxOutput.PerformLayout();
             this.groupBoxTracks.ResumeLayout(false);
@@ -1793,8 +1801,6 @@
             this.statusStrip.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.groupBoxDemux.ResumeLayout(false);
-            this.groupBoxDemux.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1939,6 +1945,6 @@
         private System.Windows.Forms.Label labelDemuxingProgress;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.GroupBox groupBoxDemux;
-        private System.Windows.Forms.CheckBox checkBoxDemuxPCM;
+        private System.Windows.Forms.CheckBox checkBoxDemuxLPCM;
     }
 }

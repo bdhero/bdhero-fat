@@ -65,6 +65,9 @@ namespace BDAutoMuxer
         private TsMuxer _tsMuxer;
         private string _tsMuxerOutputPath;
 
+        private ProgressUIState _tsDemuxerProgressUIState;
+        private ProgressUIState _tsMuxerProgressUIState;
+
         private ISet<TSPlaylistFile> _filteredPlaylists = new HashSet<TSPlaylistFile>();
 
         private readonly IList<Language> _audioLanguages = new List<Language>();
@@ -294,6 +297,13 @@ namespace BDAutoMuxer
             InitHints(this);
 
             ResetUI();
+
+            _tsDemuxerProgressUIState = new ProgressUIState(labelDemuxingProgress, labelDemuxingTimeRemaining,
+                                                            labelDemuxingTimeElapsed, progressBarDemuxing,
+                                                            textBoxDemuxingCommandLine);
+            _tsMuxerProgressUIState = new ProgressUIState(labelTsMuxerProgress, labelTsMuxerTimeRemaining,
+                                                          labelTsMuxerTimeElapsed, progressBarTsMuxer,
+                                                          textBoxTsMuxerCommandLine);
 
             CheckForUpdates();
 
@@ -1042,8 +1052,11 @@ namespace BDAutoMuxer
             _tsMuxer = null;
             _tsDemuxer = null;
 
+            _tsDemuxerProgressUIState.Reset();
+            _tsMuxerProgressUIState.Reset();
+
             // TODO: Finish me!
-            if (checkBoxDemuxSubtitles.Checked)
+            if (checkBoxDemuxSubtitles.Checked || checkBoxDemuxLPCM.Checked)
                 StartDemuxer(SelectedStreams);
             else
                 StartMuxer(SelectedStreams);
@@ -1071,7 +1084,7 @@ namespace BDAutoMuxer
             progressBarTsMuxer.Value = 0;
             toolStripProgressBar.Visible = true;
 
-            _tsDemuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams, true);
+            _tsDemuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams, checkBoxDemuxLPCM.Checked, checkBoxDemuxSubtitles.Checked);
             _tsDemuxer.WorkerReportsProgress = true;
             _tsDemuxer.WorkerSupportsCancellation = true;
             _tsDemuxer.ProgressChanged += DemuxerBackgroundWorkerProgressChanged;
@@ -1606,7 +1619,8 @@ namespace BDAutoMuxer
                 textBoxOutputDir.Enabled = value;
                 buttonOutputDir.Enabled = value;
                 textBoxOutputFileName.Enabled = value;
-                checkBoxDemuxSubtitles.Enabled = value;
+                checkBoxDemuxLPCM.Enabled = value && SelectedAudioStreams.Any(audio => audio.StreamType == TSStreamType.LPCM_AUDIO);
+                checkBoxDemuxSubtitles.Enabled = value && SelectedSubtitleStreams.Any();
             }
         }
 
@@ -1634,6 +1648,11 @@ namespace BDAutoMuxer
             pictureBoxMoviePoster.ImageLocation = null;
         }
 
+        private void AutoEnableOutputTab()
+        {
+            OutputTabEnabled = !_isMuxing;
+        }
+
         private void ResetUI()
         {
             if (Disposing || IsDisposed) return;
@@ -1641,9 +1660,9 @@ namespace BDAutoMuxer
             EnableScanControls = !_isScanningBDROM && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
 
             tabControl.Enabled = _initialized && !_isSearchingMainMovieDb;
-
+            AutoEnableOutputTab();
             DiscTabEnabled = _initialized && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
-            OutputTabEnabled = !_isMuxing;
+            
             ShowProgressTabPage = ShowProgressTabPage || _isMuxing;
 
             hiddenTrackLabel.Visible = SelectedPlaylistHasHiddenTracks;
@@ -1671,6 +1690,14 @@ namespace BDAutoMuxer
 
             ResizeDiscTab();
             ResizeOutputTab();
+
+            RefreshOutputPaths();
+        }
+
+        private void RefreshOutputPaths()
+        {
+            textBoxOutputDir_TextChanged();
+            textBoxOutputFileName_TextChanged();
         }
 
         private bool IsMuxingOrDemuxingPaused
@@ -1792,17 +1819,17 @@ namespace BDAutoMuxer
             return preview;
         }
 
-        private void textBoxOutputDir_TextChanged(object sender, EventArgs e)
+        private void textBoxOutputDir_TextChanged(object sender = null, EventArgs e = null)
         {
             textBoxOutputDirPreview.Text = ReplacePlaceholders(textBoxOutputDir.Text);
         }
 
-        private void textBoxOutputFileName_TextChanged(object sender, EventArgs e)
+        private void textBoxOutputFileName_TextChanged(object sender = null, EventArgs e = null)
         {
             textBoxOutputFileNamePreview.Text = Sanitize(ReplacePlaceholders(textBoxOutputFileName.Text)) + labelOutputFileExtension.Text;
         }
 
-        private void textBoxReplaceSpaces_TextChanged(object sender, EventArgs e)
+        private void textBoxReplaceSpaces_TextChanged(object sender = null, EventArgs e = null)
         {
             textBoxOutputDir_TextChanged(sender, e);
             textBoxOutputFileName_TextChanged(sender, e);
@@ -2065,6 +2092,12 @@ namespace BDAutoMuxer
                 Process.Start(_tmdbMovieUrl);
         }
 
+        private void OutputTrackChecked(object sender, ItemCheckedEventArgs e)
+        {
+            RefreshOutputPaths();
+            AutoEnableOutputTab();
+        }
+
         private static bool IsBDROMDir(DirectoryInfo dir)
         {
             return dir != null && dir.Name.ToLowerInvariant() == "bdmv";
@@ -2239,5 +2272,40 @@ namespace BDAutoMuxer
             new FormTrackNamer().Show(this);
         }
 
+    }
+
+    class ProgressUIState
+    {
+        private readonly Label _percent;
+        private readonly Label _timeRemaining;
+        private readonly Label _timeElapsed;
+        private readonly ProgressBar _progressBar;
+        private readonly TextBox _commandLine;
+
+        private readonly string _percentTextInitial;
+        private readonly string _timeRemainingTextInitial;
+        private readonly string _timeElapsedTextInitial;
+
+        public ProgressUIState(Label percent, Label timeRemaining, Label timeElapsed, ProgressBar progressBar, TextBox commandLine)
+        {
+            _percent = percent;
+            _timeRemaining = timeRemaining;
+            _timeElapsed = timeElapsed;
+            _progressBar = progressBar;
+            _commandLine = commandLine;
+
+            _percentTextInitial = _percent.Text;
+            _timeRemainingTextInitial = _timeRemaining.Text;
+            _timeElapsedTextInitial = _timeElapsed.Text;
+        }
+
+        public void Reset()
+        {
+            _percent.Text = _percentTextInitial;
+            _timeRemaining.Text = _timeRemainingTextInitial;
+            _timeElapsed.Text = _timeElapsedTextInitial;
+            _progressBar.Value = 0;
+            _commandLine.Text = null;
+        }
     }
 }

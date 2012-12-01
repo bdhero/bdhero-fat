@@ -28,18 +28,25 @@ namespace BDAutoMuxer.tools
         private readonly BDROM _bdrom;
         private readonly TSPlaylistFile _playlist;
         private readonly ICollection<TSStream> _selectedTracks;
+
+        private bool Demux { get { return _demuxLPCM || _demuxSubtitles; } }
+        private readonly bool _demuxLPCM;
         private readonly bool _demuxSubtitles;
+
         private readonly string _streamClipPaths;
         private readonly string _mplsFileName;
         private readonly string _videoHeight;
         private readonly string _videoWidth;
 
-        public TsMuxer(BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks, bool demuxSubtitles = false)
+        public TsMuxer(BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks, bool demuxLPCM = false, bool demuxSubtitles = false)
         {
             _bdrom = bdrom;
             _playlist = playlist;
             _selectedTracks = selectedTracks;
+            
+            _demuxLPCM = demuxLPCM;
             _demuxSubtitles = demuxSubtitles;
+
             _streamClipPaths = GetStreamClipPaths();
             _mplsFileName = Path.GetFileNameWithoutExtension(playlist.FullName);
 
@@ -127,7 +134,7 @@ namespace BDAutoMuxer.tools
 
             _metaFilePath = WriteMetaFile(fileNameWithoutExtension);
 
-            Execute(new List<string> { _metaFilePath, _demuxSubtitles ? outputDirectory : _outputFilePath }, sender, e);
+            Execute(new List<string> { _metaFilePath, Demux ? outputDirectory : _outputFilePath }, sender, e);
         }
 
         private void WriteChapterXmlFile(string chapterXmlFilePath)
@@ -137,14 +144,25 @@ namespace BDAutoMuxer.tools
 
         private bool IncludeTrack(TSStream track)
         {
-            return !_demuxSubtitles || ((track.IsGraphicsStream && track.StreamType == TSStreamType.PRESENTATION_GRAPHICS) || track.IsTextStream);
+            return !Demux || ((_demuxLPCM && IsLPCM(track)) || (_demuxSubtitles && IsSubtitle(track)));
+        }
+
+        private static bool IsLPCM(TSStream track)
+        {
+            return track.StreamType == TSStreamType.LPCM_AUDIO;
+        }
+
+        private static bool IsSubtitle(TSStream track)
+        {
+            return (track.IsTextStream) ||
+                   (track.IsGraphicsStream && track.StreamType == TSStreamType.PRESENTATION_GRAPHICS);
         }
 
         private string WriteMetaFile(string fileNameWithoutExtension)
         {
-            var metaFilePath = GetTempPath(fileNameWithoutExtension + string.Format(".{0}.meta.txt", _demuxSubtitles ? "demux" : "mux"));
+            var metaFilePath = GetTempPath(fileNameWithoutExtension + string.Format(".{0}.meta.txt", Demux ? "demux" : "mux"));
 
-            var lines = new List<string> { string.Format("MUXOPT --no-pcr-on-video-pid --new-audio-pes {0} --vbr --vbv-len=500", _demuxSubtitles ? "--demux" : "") };
+            var lines = new List<string> { string.Format("MUXOPT --no-pcr-on-video-pid --new-audio-pes {0} --vbr --vbv-len=500", Demux ? "--demux" : "") };
 
             foreach (var track in _playlist.SortedStreams)
             {
@@ -217,6 +235,7 @@ namespace BDAutoMuxer.tools
             }
         }
 
+        // TODO: Include demuxed .WAV and .SUP files!
         protected override ISet<string> GetOutputFilesImpl()
         {
             return new HashSet<string>() { _metaFilePath, _chapterTextFilePath, _chapterXmlFilePath, _outputFilePath };
