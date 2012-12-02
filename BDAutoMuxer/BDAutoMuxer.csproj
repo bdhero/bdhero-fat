@@ -224,6 +224,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\vc1.ico" />
     <None Include="Resources\arrow_right_gray.png" />
     <None Include="Resources\info.png" />
     <None Include="Resources\arrow_right_green.png" />

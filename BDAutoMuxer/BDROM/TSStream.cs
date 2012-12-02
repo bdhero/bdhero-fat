@@ -141,6 +141,7 @@ namespace BDAutoMuxer
                       { TSStreamType.AVC_VIDEO, Properties.Resources.avc },
                       { TSStreamType.MPEG1_VIDEO, Properties.Resources.mpeg1_video },
                       { TSStreamType.MPEG2_VIDEO, Properties.Resources.mpeg2_video },
+                      { TSStreamType.VC1_VIDEO, Properties.Resources.vc1 },
 
                       { TSStreamType.PRESENTATION_GRAPHICS, Properties.Resources.pgs },
                       { TSStreamType.SUBTITLE, Properties.Resources.txt }
