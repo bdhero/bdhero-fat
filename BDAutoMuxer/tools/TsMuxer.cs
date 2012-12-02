@@ -231,7 +231,7 @@ namespace BDAutoMuxer.tools
             else if (Regex.IsMatch(line, errorRegex))
             {
                 isError = true;
-                errorMessages.Add(line);
+                ErrorMessages.Add(line);
             }
         }
 

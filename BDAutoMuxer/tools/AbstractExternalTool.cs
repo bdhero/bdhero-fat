@@ -47,7 +47,10 @@ namespace BDAutoMuxer.tools
         /// </summary>
         protected double progress = 0;
 
-        protected IList<string> errorMessages = new List<string>();
+        protected readonly IList<string> ErrorMessages = new List<string>();
+
+        protected readonly ISet<string> BeforeFiles = new HashSet<string>();
+        protected readonly ISet<string> AfterFiles = new HashSet<string>();
 
         #endregion
 
@@ -187,7 +190,7 @@ namespace BDAutoMuxer.tools
             }
         }
 
-        public string ErrorMessage { get { return String.Join("\n", errorMessages); } }
+        public string ErrorMessage { get { return String.Join("\n", ErrorMessages); } }
 
         #endregion
 
@@ -237,8 +240,21 @@ namespace BDAutoMuxer.tools
 
         #region Process Execution
 
+        protected ISet<string> GetAllFilesInOutputDirs()
+        {
+            var allFiles = new HashSet<string>();
+            var outputDirs = new HashSet<string>(GetOutputFilesImpl().Select(Path.GetDirectoryName));
+            foreach (var outputDir in outputDirs)
+            {
+                allFiles.AddRange(new DirectoryInfo(outputDir).GetFiles().Select(fileInfo => fileInfo.FullName));
+            }
+            return allFiles;
+        }
+
         protected void Execute(IList<string> args, object sender, DoWorkEventArgs e)
         {
+            BeforeFiles.AddRange(GetAllFilesInOutputDirs());
+
             ExtractResources();
 
             _worker = (BackgroundWorker)sender;
@@ -260,7 +276,7 @@ namespace BDAutoMuxer.tools
 
             _onCompleteHandled = false;
 
-            errorMessages.Clear();
+            ErrorMessages.Clear();
 
             if (_job == null)
                 _job = new Job();
@@ -297,8 +313,10 @@ namespace BDAutoMuxer.tools
 
             while (!CancellationPending && !_process.StandardError.EndOfStream && !isError)
             {
-                errorMessages.Add(_process.StandardError.ReadLine());
+                ErrorMessages.Add(_process.StandardError.ReadLine());
             }
+
+            AfterFiles.AddRange(GetAllFilesInOutputDirs());
 
             OnComplete(e);
         }
@@ -350,7 +368,7 @@ namespace BDAutoMuxer.tools
                 var extraDetails = p != null ? String.Format(" with exit code {0}", p.ExitCode) : "";
                 var errorMessage = String.Format("tsMuxeR terminated unexpectedly{0}.", extraDetails);
 
-                errorMessages.Add(errorMessage);
+                ErrorMessages.Add(errorMessage);
             }
             
             OnComplete(e);
@@ -364,7 +382,7 @@ namespace BDAutoMuxer.tools
 
             _onCompleteHandled = true;
 
-            if (errorMessages.Count > 0)
+            if (ErrorMessages.Count > 0)
             {
                 isError = true;
 
@@ -439,7 +457,11 @@ namespace BDAutoMuxer.tools
 
         protected ISet<string> GetOutputFiles()
         {
-            return new HashSet<string>(GetOutputFilesImpl().Where(File.Exists).Select(Path.GetFullPath));
+            var files = new HashSet<string>(GetOutputFilesImpl().Where(File.Exists).Select(Path.GetFullPath));
+            var newFiles = new HashSet<string>(AfterFiles);
+            newFiles.ExceptWith(BeforeFiles);
+            files.AddRange(newFiles);
+            return files;
         }
 
         protected abstract ISet<string> GetOutputFilesImpl();
