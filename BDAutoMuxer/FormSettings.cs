@@ -36,14 +36,9 @@ namespace BDAutoMuxer
         {
             InitializeComponent();
 
-            checkBoxAutosaveReport.Checked = BDAutoMuxerSettings.AutosaveReport;
-            checkBoxGenerateStreamDiagnostics.Checked = BDAutoMuxerSettings.GenerateStreamDiagnostics;
-            checkBoxGenerateTextSummary.Checked = BDAutoMuxerSettings.GenerateTextSummary;
             checkBoxFilterLoopingPlaylists.Checked = BDAutoMuxerSettings.FilterLoopingPlaylists;
             checkBoxFilterShortPlaylists.Checked = BDAutoMuxerSettings.FilterShortPlaylists;
             textBoxFilterShortPlaylistsValue.Text = BDAutoMuxerSettings.FilterShortPlaylistsValue.ToString();
-            checkBoxUseImagePrefix.Checked = BDAutoMuxerSettings.UseImagePrefix;
-            textBoxUseImagePrefixValue.Text = BDAutoMuxerSettings.UseImagePrefixValue;
             checkBoxKeepStreamOrder.Checked = BDAutoMuxerSettings.KeepStreamOrder;
             checkBoxEnableSSIF.Checked = BDAutoMuxerSettings.EnableSSIF;
             textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
@@ -54,12 +49,7 @@ namespace BDAutoMuxer
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            BDAutoMuxerSettings.AutosaveReport = checkBoxAutosaveReport.Checked;
-            BDAutoMuxerSettings.GenerateStreamDiagnostics = checkBoxGenerateStreamDiagnostics.Checked;
-            BDAutoMuxerSettings.GenerateTextSummary = checkBoxGenerateTextSummary.Checked;
             BDAutoMuxerSettings.KeepStreamOrder = checkBoxKeepStreamOrder.Checked;
-            BDAutoMuxerSettings.UseImagePrefix = checkBoxUseImagePrefix.Checked;
-            BDAutoMuxerSettings.UseImagePrefixValue = textBoxUseImagePrefixValue.Text;
             BDAutoMuxerSettings.FilterLoopingPlaylists = checkBoxFilterLoopingPlaylists.Checked;
             BDAutoMuxerSettings.FilterShortPlaylists = checkBoxFilterShortPlaylists.Checked;
             BDAutoMuxerSettings.EnableSSIF = checkBoxEnableSSIF.Checked;
@@ -122,21 +112,6 @@ namespace BDAutoMuxer
             }
         }
 
-        public static bool GenerateStreamDiagnostics
-        {
-            get
-            {
-                try { return Properties.Settings.Default.GenerateStreamDiagnostics; }
-                catch { return true; }
-            }
-
-            set
-            {
-                try { Properties.Settings.Default.GenerateStreamDiagnostics = value; }
-                catch { }
-            }
-        }
-
         public static bool EnableSSIF
         {
             get
@@ -148,36 +123,6 @@ namespace BDAutoMuxer
             set
             {
                 try { Properties.Settings.Default.EnableSSIF = value; }
-                catch { }
-            }
-        }
-
-        public static bool AutosaveReport
-        {
-            get
-            {
-                try { return Properties.Settings.Default.AutosaveReport; }
-                catch { return false; }
-            }
-
-            set
-            {
-                try { Properties.Settings.Default.AutosaveReport = value; }
-                catch { }
-            }
-        }
-
-        public static bool GenerateFrameDataFile
-        {
-            get
-            {
-                try { return Properties.Settings.Default.GenerateFrameDataFile; }
-                catch { return false; }
-            }
-
-            set
-            {
-                try { Properties.Settings.Default.GenerateFrameDataFile = value; }
                 catch { }
             }
         }
@@ -227,36 +172,6 @@ namespace BDAutoMuxer
             }
         }
 
-        public static bool UseImagePrefix
-        {
-            get
-            {
-                try { return Properties.Settings.Default.UseImagePrefix; }
-                catch { return false; }
-            }
-
-            set
-            {
-                try { Properties.Settings.Default.UseImagePrefix = value; }
-                catch { }
-            }
-        }
-
-        public static string UseImagePrefixValue
-        {
-            get
-            {
-                try { return Properties.Settings.Default.UseImagePrefixValue; }
-                catch { return null; }
-            }
-
-            set
-            {
-                try { Properties.Settings.Default.UseImagePrefixValue = value; }
-                catch { }
-            }
-        }
-
         public static bool KeepStreamOrder
         {
             get
@@ -268,21 +183,6 @@ namespace BDAutoMuxer
             set
             {
                 try { Properties.Settings.Default.KeepStreamOrder = value; }
-                catch { }
-            }
-        }
-
-        public static bool GenerateTextSummary
-        {
-            get
-            {
-                try { return Properties.Settings.Default.GenerateTextSummary; }
-                catch { return false; }
-            }
-
-            set
-            {
-                try { Properties.Settings.Default.GenerateTextSummary = value; }
                 catch { }
             }
         }

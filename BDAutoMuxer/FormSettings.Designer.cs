@@ -48,22 +48,23 @@ namespace BDAutoMuxer
         private void InitializeComponent()
         {
             this.checkBoxFilterLoopingPlaylists = new System.Windows.Forms.CheckBox();
-            this.checkBoxAutosaveReport = new System.Windows.Forms.CheckBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
-            this.checkBoxGenerateStreamDiagnostics = new System.Windows.Forms.CheckBox();
             this.checkBoxKeepStreamOrder = new System.Windows.Forms.CheckBox();
-            this.checkBoxGenerateTextSummary = new System.Windows.Forms.CheckBox();
             this.checkBoxFilterShortPlaylists = new System.Windows.Forms.CheckBox();
             this.textBoxFilterShortPlaylistsValue = new System.Windows.Forms.TextBox();
             this.labelPlaylistLength = new System.Windows.Forms.Label();
-            this.checkBoxUseImagePrefix = new System.Windows.Forms.CheckBox();
-            this.textBoxUseImagePrefixValue = new System.Windows.Forms.TextBox();
             this.checkBoxEnableSSIF = new System.Windows.Forms.CheckBox();
             this.labelApiKey = new System.Windows.Forms.Label();
             this.textBoxApiKey = new System.Windows.Forms.TextBox();
-            this.checkBoxCheckForUpdates = new System.Windows.Forms.CheckBox();
             this.buttonCheckForUpdates = new System.Windows.Forms.Button();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabPageBDInfo = new System.Windows.Forms.TabPage();
+            this.tabPageAdvanced = new System.Windows.Forms.TabPage();
+            this.checkBoxCheckForUpdates = new System.Windows.Forms.CheckBox();
+            this.tabControl.SuspendLayout();
+            this.tabPageBDInfo.SuspendLayout();
+            this.tabPageAdvanced.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBoxFilterLoopingPlaylists
@@ -71,27 +72,18 @@ namespace BDAutoMuxer
             this.checkBoxFilterLoopingPlaylists.AutoSize = true;
             this.checkBoxFilterLoopingPlaylists.Checked = true;
             this.checkBoxFilterLoopingPlaylists.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxFilterLoopingPlaylists.Location = new System.Drawing.Point(11, 99);
+            this.checkBoxFilterLoopingPlaylists.Location = new System.Drawing.Point(6, 29);
             this.checkBoxFilterLoopingPlaylists.Name = "checkBoxFilterLoopingPlaylists";
             this.checkBoxFilterLoopingPlaylists.Size = new System.Drawing.Size(177, 17);
             this.checkBoxFilterLoopingPlaylists.TabIndex = 3;
             this.checkBoxFilterLoopingPlaylists.Text = "Filter playlists that contain loops.";
             this.checkBoxFilterLoopingPlaylists.UseVisualStyleBackColor = true;
             // 
-            // checkBoxAutosaveReport
-            // 
-            this.checkBoxAutosaveReport.AutoSize = true;
-            this.checkBoxAutosaveReport.Location = new System.Drawing.Point(11, 53);
-            this.checkBoxAutosaveReport.Name = "checkBoxAutosaveReport";
-            this.checkBoxAutosaveReport.Size = new System.Drawing.Size(202, 17);
-            this.checkBoxAutosaveReport.TabIndex = 2;
-            this.checkBoxAutosaveReport.Text = "Auto-save report on scan completion.";
-            this.checkBoxAutosaveReport.UseVisualStyleBackColor = true;
-            // 
             // buttonCancel
             // 
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(126, 243);
+            this.buttonCancel.Location = new System.Drawing.Point(273, 147);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 6;
@@ -101,7 +93,8 @@ namespace BDAutoMuxer
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(45, 243);
+            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOK.Location = new System.Drawing.Point(192, 147);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 5;
@@ -109,46 +102,23 @@ namespace BDAutoMuxer
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
-            // checkBoxGenerateStreamDiagnostics
-            // 
-            this.checkBoxGenerateStreamDiagnostics.AutoSize = true;
-            this.checkBoxGenerateStreamDiagnostics.Checked = true;
-            this.checkBoxGenerateStreamDiagnostics.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxGenerateStreamDiagnostics.Location = new System.Drawing.Point(11, 7);
-            this.checkBoxGenerateStreamDiagnostics.Name = "checkBoxGenerateStreamDiagnostics";
-            this.checkBoxGenerateStreamDiagnostics.Size = new System.Drawing.Size(195, 17);
-            this.checkBoxGenerateStreamDiagnostics.TabIndex = 0;
-            this.checkBoxGenerateStreamDiagnostics.Text = "Include stream diagnostics in report.";
-            this.checkBoxGenerateStreamDiagnostics.UseVisualStyleBackColor = true;
-            // 
             // checkBoxKeepStreamOrder
             // 
             this.checkBoxKeepStreamOrder.AutoSize = true;
-            this.checkBoxKeepStreamOrder.Location = new System.Drawing.Point(11, 76);
+            this.checkBoxKeepStreamOrder.Enabled = false;
+            this.checkBoxKeepStreamOrder.Location = new System.Drawing.Point(6, 6);
             this.checkBoxKeepStreamOrder.Name = "checkBoxKeepStreamOrder";
             this.checkBoxKeepStreamOrder.Size = new System.Drawing.Size(165, 17);
             this.checkBoxKeepStreamOrder.TabIndex = 4;
             this.checkBoxKeepStreamOrder.Text = "Keep original stream ordering.";
             this.checkBoxKeepStreamOrder.UseVisualStyleBackColor = true;
             // 
-            // checkBoxGenerateTextSummary
-            // 
-            this.checkBoxGenerateTextSummary.AutoSize = true;
-            this.checkBoxGenerateTextSummary.Checked = true;
-            this.checkBoxGenerateTextSummary.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxGenerateTextSummary.Location = new System.Drawing.Point(11, 30);
-            this.checkBoxGenerateTextSummary.Name = "checkBoxGenerateTextSummary";
-            this.checkBoxGenerateTextSummary.Size = new System.Drawing.Size(198, 17);
-            this.checkBoxGenerateTextSummary.TabIndex = 1;
-            this.checkBoxGenerateTextSummary.Text = "Include quick text summary in report.";
-            this.checkBoxGenerateTextSummary.UseVisualStyleBackColor = true;
-            // 
             // checkBoxFilterShortPlaylists
             // 
             this.checkBoxFilterShortPlaylists.AutoSize = true;
             this.checkBoxFilterShortPlaylists.Checked = true;
             this.checkBoxFilterShortPlaylists.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxFilterShortPlaylists.Location = new System.Drawing.Point(11, 122);
+            this.checkBoxFilterShortPlaylists.Location = new System.Drawing.Point(6, 52);
             this.checkBoxFilterShortPlaylists.Name = "checkBoxFilterShortPlaylists";
             this.checkBoxFilterShortPlaylists.Size = new System.Drawing.Size(153, 17);
             this.checkBoxFilterShortPlaylists.TabIndex = 7;
@@ -157,7 +127,7 @@ namespace BDAutoMuxer
             // 
             // textBoxFilterShortPlaylistsValue
             // 
-            this.textBoxFilterShortPlaylistsValue.Location = new System.Drawing.Point(160, 120);
+            this.textBoxFilterShortPlaylistsValue.Location = new System.Drawing.Point(155, 50);
             this.textBoxFilterShortPlaylistsValue.MaxLength = 4;
             this.textBoxFilterShortPlaylistsValue.Name = "textBoxFilterShortPlaylistsValue";
             this.textBoxFilterShortPlaylistsValue.Size = new System.Drawing.Size(41, 20);
@@ -167,35 +137,16 @@ namespace BDAutoMuxer
             // labelPlaylistLength
             // 
             this.labelPlaylistLength.AutoSize = true;
-            this.labelPlaylistLength.Location = new System.Drawing.Point(202, 124);
+            this.labelPlaylistLength.Location = new System.Drawing.Point(197, 54);
             this.labelPlaylistLength.Name = "labelPlaylistLength";
             this.labelPlaylistLength.Size = new System.Drawing.Size(24, 13);
             this.labelPlaylistLength.TabIndex = 9;
             this.labelPlaylistLength.Text = "sec";
             // 
-            // checkBoxUseImagePrefix
-            // 
-            this.checkBoxUseImagePrefix.AutoSize = true;
-            this.checkBoxUseImagePrefix.Location = new System.Drawing.Point(11, 145);
-            this.checkBoxUseImagePrefix.Name = "checkBoxUseImagePrefix";
-            this.checkBoxUseImagePrefix.Size = new System.Drawing.Size(104, 17);
-            this.checkBoxUseImagePrefix.TabIndex = 10;
-            this.checkBoxUseImagePrefix.Text = "Use image prefix";
-            this.checkBoxUseImagePrefix.UseVisualStyleBackColor = true;
-            // 
-            // textBoxUseImagePrefixValue
-            // 
-            this.textBoxUseImagePrefixValue.Location = new System.Drawing.Point(113, 143);
-            this.textBoxUseImagePrefixValue.MaxLength = 4;
-            this.textBoxUseImagePrefixValue.Name = "textBoxUseImagePrefixValue";
-            this.textBoxUseImagePrefixValue.Size = new System.Drawing.Size(113, 20);
-            this.textBoxUseImagePrefixValue.TabIndex = 11;
-            this.textBoxUseImagePrefixValue.Text = "video-";
-            // 
             // checkBoxEnableSSIF
             // 
             this.checkBoxEnableSSIF.AutoSize = true;
-            this.checkBoxEnableSSIF.Location = new System.Drawing.Point(11, 168);
+            this.checkBoxEnableSSIF.Location = new System.Drawing.Point(6, 75);
             this.checkBoxEnableSSIF.Name = "checkBoxEnableSSIF";
             this.checkBoxEnableSSIF.Size = new System.Drawing.Size(134, 17);
             this.checkBoxEnableSSIF.TabIndex = 12;
@@ -205,7 +156,7 @@ namespace BDAutoMuxer
             // labelApiKey
             // 
             this.labelApiKey.AutoSize = true;
-            this.labelApiKey.Location = new System.Drawing.Point(12, 220);
+            this.labelApiKey.Location = new System.Drawing.Point(6, 9);
             this.labelApiKey.Name = "labelApiKey";
             this.labelApiKey.Size = new System.Drawing.Size(47, 13);
             this.labelApiKey.TabIndex = 13;
@@ -215,27 +166,14 @@ namespace BDAutoMuxer
             // 
             this.textBoxApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxApiKey.Location = new System.Drawing.Point(65, 217);
+            this.textBoxApiKey.Location = new System.Drawing.Point(59, 6);
             this.textBoxApiKey.Name = "textBoxApiKey";
-            this.textBoxApiKey.Size = new System.Drawing.Size(189, 20);
+            this.textBoxApiKey.Size = new System.Drawing.Size(264, 20);
             this.textBoxApiKey.TabIndex = 14;
-            // 
-            // checkBoxCheckForUpdates
-            // 
-            this.checkBoxCheckForUpdates.AutoSize = true;
-            this.checkBoxCheckForUpdates.Checked = global::BDAutoMuxer.Properties.Settings.Default.CheckForUpdates;
-            this.checkBoxCheckForUpdates.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxCheckForUpdates.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::BDAutoMuxer.Properties.Settings.Default, "CheckForUpdates", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxCheckForUpdates.Location = new System.Drawing.Point(11, 192);
-            this.checkBoxCheckForUpdates.Name = "checkBoxCheckForUpdates";
-            this.checkBoxCheckForUpdates.Size = new System.Drawing.Size(163, 17);
-            this.checkBoxCheckForUpdates.TabIndex = 15;
-            this.checkBoxCheckForUpdates.Text = "Check for updates on startup";
-            this.checkBoxCheckForUpdates.UseVisualStyleBackColor = true;
             // 
             // buttonCheckForUpdates
             // 
-            this.buttonCheckForUpdates.Location = new System.Drawing.Point(180, 188);
+            this.buttonCheckForUpdates.Location = new System.Drawing.Point(175, 32);
             this.buttonCheckForUpdates.Name = "buttonCheckForUpdates";
             this.buttonCheckForUpdates.Size = new System.Drawing.Size(75, 23);
             this.buttonCheckForUpdates.TabIndex = 16;
@@ -243,58 +181,103 @@ namespace BDAutoMuxer
             this.buttonCheckForUpdates.UseVisualStyleBackColor = true;
             this.buttonCheckForUpdates.Click += new System.EventHandler(this.buttonCheckForUpdates_Click);
             // 
+            // tabControl
+            // 
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Controls.Add(this.tabPageBDInfo);
+            this.tabControl.Controls.Add(this.tabPageAdvanced);
+            this.tabControl.Location = new System.Drawing.Point(11, 13);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(337, 128);
+            this.tabControl.TabIndex = 17;
+            // 
+            // tabPageBDInfo
+            // 
+            this.tabPageBDInfo.Controls.Add(this.checkBoxKeepStreamOrder);
+            this.tabPageBDInfo.Controls.Add(this.checkBoxFilterLoopingPlaylists);
+            this.tabPageBDInfo.Controls.Add(this.checkBoxFilterShortPlaylists);
+            this.tabPageBDInfo.Controls.Add(this.textBoxFilterShortPlaylistsValue);
+            this.tabPageBDInfo.Controls.Add(this.labelPlaylistLength);
+            this.tabPageBDInfo.Controls.Add(this.checkBoxEnableSSIF);
+            this.tabPageBDInfo.Location = new System.Drawing.Point(4, 22);
+            this.tabPageBDInfo.Name = "tabPageBDInfo";
+            this.tabPageBDInfo.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBDInfo.Size = new System.Drawing.Size(329, 102);
+            this.tabPageBDInfo.TabIndex = 0;
+            this.tabPageBDInfo.Text = "BDInfo";
+            this.tabPageBDInfo.UseVisualStyleBackColor = true;
+            // 
+            // tabPageAdvanced
+            // 
+            this.tabPageAdvanced.Controls.Add(this.checkBoxCheckForUpdates);
+            this.tabPageAdvanced.Controls.Add(this.buttonCheckForUpdates);
+            this.tabPageAdvanced.Controls.Add(this.labelApiKey);
+            this.tabPageAdvanced.Controls.Add(this.textBoxApiKey);
+            this.tabPageAdvanced.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAdvanced.Name = "tabPageAdvanced";
+            this.tabPageAdvanced.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAdvanced.Size = new System.Drawing.Size(329, 102);
+            this.tabPageAdvanced.TabIndex = 1;
+            this.tabPageAdvanced.Text = "Advanced";
+            this.tabPageAdvanced.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCheckForUpdates
+            // 
+            this.checkBoxCheckForUpdates.AutoSize = true;
+            this.checkBoxCheckForUpdates.Checked = global::BDAutoMuxer.Properties.Settings.Default.CheckForUpdates;
+            this.checkBoxCheckForUpdates.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCheckForUpdates.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::BDAutoMuxer.Properties.Settings.Default, "CheckForUpdates", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkBoxCheckForUpdates.Location = new System.Drawing.Point(6, 36);
+            this.checkBoxCheckForUpdates.Name = "checkBoxCheckForUpdates";
+            this.checkBoxCheckForUpdates.Size = new System.Drawing.Size(163, 17);
+            this.checkBoxCheckForUpdates.TabIndex = 15;
+            this.checkBoxCheckForUpdates.Text = "Check for updates on startup";
+            this.checkBoxCheckForUpdates.UseVisualStyleBackColor = true;
+            // 
             // FormSettings
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(266, 275);
-            this.Controls.Add(this.buttonCheckForUpdates);
-            this.Controls.Add(this.checkBoxCheckForUpdates);
-            this.Controls.Add(this.textBoxApiKey);
-            this.Controls.Add(this.labelApiKey);
-            this.Controls.Add(this.checkBoxEnableSSIF);
-            this.Controls.Add(this.textBoxUseImagePrefixValue);
-            this.Controls.Add(this.checkBoxUseImagePrefix);
-            this.Controls.Add(this.labelPlaylistLength);
-            this.Controls.Add(this.textBoxFilterShortPlaylistsValue);
-            this.Controls.Add(this.checkBoxFilterShortPlaylists);
-            this.Controls.Add(this.checkBoxGenerateTextSummary);
-            this.Controls.Add(this.checkBoxKeepStreamOrder);
-            this.Controls.Add(this.checkBoxFilterLoopingPlaylists);
-            this.Controls.Add(this.checkBoxAutosaveReport);
+            this.ClientSize = new System.Drawing.Size(360, 182);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.checkBoxGenerateStreamDiagnostics);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(376, 216);
             this.Name = "FormSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "BDAutoMuxer Settings";
+            this.tabControl.ResumeLayout(false);
+            this.tabPageBDInfo.ResumeLayout(false);
+            this.tabPageBDInfo.PerformLayout();
+            this.tabPageAdvanced.ResumeLayout(false);
+            this.tabPageAdvanced.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.CheckBox checkBoxFilterLoopingPlaylists;
-        private System.Windows.Forms.CheckBox checkBoxAutosaveReport;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.CheckBox checkBoxGenerateStreamDiagnostics;
         private System.Windows.Forms.CheckBox checkBoxKeepStreamOrder;
-        private System.Windows.Forms.CheckBox checkBoxGenerateTextSummary;
         private System.Windows.Forms.CheckBox checkBoxFilterShortPlaylists;
         private System.Windows.Forms.TextBox textBoxFilterShortPlaylistsValue;
         private System.Windows.Forms.Label labelPlaylistLength;
-        private System.Windows.Forms.CheckBox checkBoxUseImagePrefix;
-        private System.Windows.Forms.TextBox textBoxUseImagePrefixValue;
         private System.Windows.Forms.CheckBox checkBoxEnableSSIF;
         private System.Windows.Forms.Label labelApiKey;
         private System.Windows.Forms.TextBox textBoxApiKey;
         private System.Windows.Forms.CheckBox checkBoxCheckForUpdates;
         private System.Windows.Forms.Button buttonCheckForUpdates;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabPageBDInfo;
+        private System.Windows.Forms.TabPage tabPageAdvanced;
     }
 }
