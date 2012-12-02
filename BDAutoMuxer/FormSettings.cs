@@ -337,6 +337,36 @@ namespace BDAutoMuxer
             }
         }
 
+        public static bool DemuxLPCM
+        {
+            get
+            {
+                try { return Properties.Settings.Default.DemuxLPCM; }
+                catch { return true; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.DemuxLPCM = value; }
+                catch { }
+            }
+        }
+
+        public static bool DemuxSubtitles
+        {
+            get
+            {
+                try { return Properties.Settings.Default.DemuxSubtitles; }
+                catch { return true; }
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.DemuxSubtitles = value; }
+                catch { }
+            }
+        }
+
         public static void SaveSettings()
         {
             try

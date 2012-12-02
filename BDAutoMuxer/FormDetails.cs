@@ -276,6 +276,9 @@ namespace BDAutoMuxer
             textBoxReplaceSpaces.Text = BDAutoMuxerSettings.ReplaceSpacesWith;
             checkBoxReplaceSpaces.Checked = BDAutoMuxerSettings.ReplaceSpaces;
 
+            checkBoxDemuxLPCM.Checked = BDAutoMuxerSettings.DemuxLPCM;
+            checkBoxDemuxSubtitles.Checked = BDAutoMuxerSettings.DemuxSubtitles;
+
             comboBoxAudienceLanguage.SelectedIndexChanged += OnAudienceLanguageChange;
             playlistDataGridView.CurrentCellDirtyStateChanged += playlistDataGridView_CurrentCellDirtyStateChanged;
             pictureBoxMoviePoster.MouseEnter += (o, args) => SetTabStatus(_tmdbMovieUrl, true);
@@ -427,9 +430,6 @@ namespace BDAutoMuxer
             tabControl.SelectedIndex = 0;
 
             SetTabStatus("");
-
-            BDAutoMuxerSettings.LastPath = textBoxSource.Text;
-            BDAutoMuxerSettings.SaveSettings();
         }
 
         private void ScanError(object sender, ErrorEventArgs e)
@@ -1047,6 +1047,9 @@ namespace BDAutoMuxer
             BDAutoMuxerSettings.OutputFileName = textBoxOutputFileName.Text;
             BDAutoMuxerSettings.ReplaceSpaces = checkBoxReplaceSpaces.Checked;
             BDAutoMuxerSettings.ReplaceSpacesWith = textBoxReplaceSpaces.Text;
+            BDAutoMuxerSettings.LastPath = textBoxSource.Text;
+            BDAutoMuxerSettings.DemuxLPCM = checkBoxDemuxLPCM.Checked;
+            BDAutoMuxerSettings.DemuxSubtitles = checkBoxDemuxSubtitles.Checked;
             BDAutoMuxerSettings.SaveSettings();
 
             _tsMuxer = null;

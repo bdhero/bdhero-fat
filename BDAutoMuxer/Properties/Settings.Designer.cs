@@ -200,5 +200,29 @@ namespace BDAutoMuxer.Properties {
                 this["ReplaceSpacesWith"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DemuxLPCM {
+            get {
+                return ((bool)(this["DemuxLPCM"]));
+            }
+            set {
+                this["DemuxLPCM"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DemuxSubtitles {
+            get {
+                return ((bool)(this["DemuxSubtitles"]));
+            }
+            set {
+                this["DemuxSubtitles"] = value;
+            }
+        }
     }
 }
