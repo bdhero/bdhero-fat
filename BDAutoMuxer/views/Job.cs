@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
+// ReSharper disable InconsistentNaming
 namespace BDAutoMuxer.views
 {
     /// <see cref="http://stackoverflow.com/a/9164742/467582"/>
@@ -28,12 +29,12 @@ namespace BDAutoMuxer.views
         [DllImport("user32.dll", SetLastError = true)]
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-        private IntPtr handle;
-        private bool disposed;
+        private IntPtr _handle;
+        private bool _disposed;
 
         public Job()
         {
-            handle = CreateJobObject(IntPtr.Zero, null);
+            _handle = CreateJobObject(IntPtr.Zero, null);
 
             var info = new JOBOBJECT_BASIC_LIMIT_INFORMATION
             {
@@ -49,7 +50,7 @@ namespace BDAutoMuxer.views
             IntPtr extendedInfoPtr = Marshal.AllocHGlobal(length);
             Marshal.StructureToPtr(extendedInfo, extendedInfoPtr, false);
 
-            if (!SetInformationJobObject(handle, JobObjectInfoType.ExtendedLimitInformation, extendedInfoPtr, (uint)length))
+            if (!SetInformationJobObject(_handle, JobObjectInfoType.ExtendedLimitInformation, extendedInfoPtr, (uint)length))
                 throw new Exception(string.Format("Unable to set information.  Error: {0}", Marshal.GetLastWin32Error()));
         }
 
@@ -61,24 +62,24 @@ namespace BDAutoMuxer.views
 
         private void Dispose(bool disposing)
         {
-            if (disposed)
+            if (_disposed)
                 return;
 
             if (disposing) { }
 
             Close();
-            disposed = true;
+            _disposed = true;
         }
 
         public void Close()
         {
-            CloseHandle(handle);
-            handle = IntPtr.Zero;
+            CloseHandle(_handle);
+            _handle = IntPtr.Zero;
         }
 
         public bool AddProcess(IntPtr processHandle)
         {
-            return AssignProcessToJobObject(handle, processHandle);
+            return AssignProcessToJobObject(_handle, processHandle);
         }
 
         public bool AddProcess(int processId)
