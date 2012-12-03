@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace BDAutoMuxer
@@ -48,6 +49,16 @@ namespace BDAutoMuxer
         public override string ToString()
         {
             return Name;
+        }
+
+        public string UIDisplayName
+        {
+            get { return string.Format("{0} - {1}", ISO_639_2, Name); }
+        }
+
+        public static ICollection<Language> AllLanguages
+        {
+            get { return Languages.AsReadOnly(); }
         }
 
         static Language()
@@ -554,6 +565,11 @@ namespace BDAutoMuxer
         public static List<string> GetISO6392Codes()
         {
             return new List<string>(ISO_639_2_Map.Keys);
+        }
+
+        public static Language CurrentUILanguage
+        {
+            get { return Language.GetLanguage(CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName); }
         }
     }
 }
