@@ -1103,7 +1103,15 @@ namespace BDAutoMuxer
             textBoxTsMuxerCommandLine.Text = "";
             toolStripProgressBar.Visible = true;
 
-            _tsMuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams);
+            var selectedMuxingStreams = new HashSet<TSStream>(selectedStreams);
+
+            if (checkBoxDemuxLPCM.Checked)
+                selectedMuxingStreams.RemoveWhere(stream => stream.StreamType == TSStreamType.LPCM_AUDIO);
+
+            if (checkBoxDemuxSubtitles.Checked)
+                selectedMuxingStreams.RemoveWhere(stream => stream.IsGraphicsStream || stream.IsTextStream);
+
+            _tsMuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedMuxingStreams);
             _tsMuxer.WorkerReportsProgress = true;
             _tsMuxer.WorkerSupportsCancellation = true;
             _tsMuxer.ProgressChanged += TsMuxerBackgroundWorkerProgressChanged;
@@ -1134,16 +1142,30 @@ namespace BDAutoMuxer
 
         private void UpdateTsMuxerProgress(object sender = null, EventArgs e = null)
         {
-            // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
-            progressBarTsMuxer.Value = (int)(_tsMuxer.Progress * 10);
+            // 0.0 to 100.0
+            double muxerProgressPct = _tsMuxer.Progress;
+            double overallProgressPct = muxerProgressPct;
 
-            int taskbarProgress = (int) ((_tsDemuxer != null ? 0.5 : 1.0)*progressBarTsMuxer.Value);
+            if (_tsDemuxer != null)
+            {
+                overallProgressPct /= 2;
+                overallProgressPct += 50.0;
+            }
+
+            string muxerProgressStr = muxerProgressPct.ToString("##0.0") + "%";
+            string overallProgressStr = overallProgressPct.ToString("##0.0") + "%";
+
+            int muxerProgressValue = (int) (muxerProgressPct * 10);
+            int overallProgressValue = (int)(overallProgressPct * 10);
+
+            // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
+            progressBarTsMuxer.Value = muxerProgressValue;
 
 // ReSharper disable EmptyGeneralCatchClause
             try
             {
                 // TODO: This throws a NPE if the window is closed while muxing is in progress
-                toolStripProgressBar.Value = taskbarProgress;
+                toolStripProgressBar.Value = overallProgressValue;
             }
             catch
             {
@@ -1151,14 +1173,13 @@ namespace BDAutoMuxer
 // ReSharper restore EmptyGeneralCatchClause
 
             TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
-            TaskbarProgress.SetProgressValue(taskbarProgress, 1000, Handle);
+            TaskbarProgress.SetProgressValue(overallProgressValue, 1000, Handle);
 
-            string strProgress = _tsMuxer.Progress.ToString("##0.0") + "%";
-            labelTsMuxerProgress.Text = strProgress;
-            progressLabel.Text = strProgress;
+            labelTsMuxerProgress.Text = muxerProgressStr;
+            progressLabel.Text = overallProgressStr;
 
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "Muxing M2TS: " + strProgress);
+            SetTabStatus(tabPageProgress, "Muxing M2TS: " + muxerProgressStr);
 
             if (String.IsNullOrEmpty(textBoxTsMuxerCommandLine.Text))
                 textBoxTsMuxerCommandLine.Text = _tsMuxer.CommandLine;
@@ -1199,6 +1220,36 @@ namespace BDAutoMuxer
                 TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
                 ShowMessage(tabPageProgress, "Muxing completed!", "Finished muxing M2TS with tsMuxeR!");
             }
+
+            if (_tsMuxer != null && (_tsMuxer.IsCanceled || _tsMuxer.IsError))
+                CleanupFiles();
+        }
+
+        private void CleanupFiles()
+        {
+            var junkFiles = new HashSet<string>();
+
+            if (_tsDemuxer != null && _tsDemuxer.HasOutputFiles())
+                junkFiles.AddRange(_tsDemuxer.GetOutputFiles());
+
+            if (_tsMuxer != null && _tsMuxer.HasOutputFiles())
+                junkFiles.AddRange(_tsMuxer.GetOutputFiles());
+
+            var existingJunkFiles = junkFiles.Where(File.Exists).ToList();
+
+            if (!existingJunkFiles.Any())
+                return;
+
+            if (PromptToDeleteOutputFiles(existingJunkFiles.ToList()))
+                AbstractExternalTool.DeleteOutputFiles(existingJunkFiles);
+        }
+
+        public bool PromptToDeleteOutputFiles(ICollection<string> outputFiles)
+        {
+            if (!outputFiles.Any()) return false;
+            var files = String.Join("\n", outputFiles.Select(path => string.Format("\t{0}", path)));
+            var message = String.Format("The following files are incomplete and unusable:\n\n{0}\n\nDo you want to delete them?", files);
+            return MessageBox.Show(message, "Delete output files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
         private void DemuxerBackgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1210,16 +1261,24 @@ namespace BDAutoMuxer
 
         private void UpdateDemuxerProgress(object sender = null, EventArgs e = null)
         {
-            // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
-            progressBarDemuxing.Value = (int)(_tsDemuxer.Progress * 10);
+            // 0.0 to 100.0
+            double demuxerProgressPct = _tsDemuxer.Progress;
+            double overallProgressPct = (demuxerProgressPct / 2);
 
-            var taskbarProgress = (int)(progressBarDemuxing.Value * 0.5);
+            string demuxerProgressStr = demuxerProgressPct.ToString("##0.0") + "%";
+            string overallProgressStr = overallProgressPct.ToString("##0.0") + "%";
+
+            int demuxerProgressValue = (int)(demuxerProgressPct * 10);
+            int overallProgressValue = (int)(overallProgressPct * 10);
+
+            // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
+            progressBarDemuxing.Value = demuxerProgressValue;
 
 // ReSharper disable EmptyGeneralCatchClause
             try
             {
                 // TODO: This throws a NPE if the window is closed while muxing is in progress
-                toolStripProgressBar.Value = taskbarProgress;
+                toolStripProgressBar.Value = overallProgressValue;
             }
             catch
             {
@@ -1227,14 +1286,13 @@ namespace BDAutoMuxer
 // ReSharper restore EmptyGeneralCatchClause
 
             TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
-            TaskbarProgress.SetProgressValue(taskbarProgress, 1000, Handle);
+            TaskbarProgress.SetProgressValue(overallProgressValue, 1000, Handle);
 
-            string strProgress = _tsDemuxer.Progress.ToString("##0.0") + "%";
-            labelDemuxingProgress.Text = strProgress;
-            progressLabel.Text = strProgress;
+            labelDemuxingProgress.Text = demuxerProgressStr;
+            progressLabel.Text = overallProgressStr;
 
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "Demuxing subtitles: " + strProgress);
+            SetTabStatus(tabPageProgress, "Demuxing subtitles: " + demuxerProgressStr);
 
             if (String.IsNullOrEmpty(textBoxDemuxingCommandLine.Text))
                 textBoxDemuxingCommandLine.Text = _tsDemuxer.CommandLine;
@@ -1275,6 +1333,9 @@ namespace BDAutoMuxer
                 TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
                 StartMuxer(SelectedStreams);
             }
+
+            if (_tsDemuxer != null && (_tsDemuxer.IsCanceled || _tsDemuxer.IsError))
+                CleanupFiles();
         }
 
         private static string GetElapsedTimeString(TimeSpan elapsedTime)

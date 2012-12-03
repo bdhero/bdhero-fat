@@ -402,9 +402,6 @@ namespace BDAutoMuxer.tools
 
                 e.Cancel = true;
 
-                if (HasOutputFiles() && PromptToDeleteOutputFiles())
-                    DeleteOutputFiles();
-
                 return;
             }
 
@@ -455,7 +452,7 @@ namespace BDAutoMuxer.tools
             }
         }
 
-        protected ISet<string> GetOutputFiles()
+        public ISet<string> GetOutputFiles()
         {
             var files = new HashSet<string>(GetOutputFilesImpl().Where(File.Exists).Select(Path.GetFullPath));
             var newFiles = new HashSet<string>(AfterFiles);
@@ -466,17 +463,17 @@ namespace BDAutoMuxer.tools
 
         protected abstract ISet<string> GetOutputFilesImpl();
 
-        protected bool HasOutputFiles()
+        public bool HasOutputFiles()
         {
             return GetOutputFiles().Any();
         }
 
-        protected void DeleteOutputFiles()
+        public static void DeleteOutputFiles(ICollection<string> outputFiles)
         {
             ISet<string> parents = new HashSet<string>();
 
             // Delete output files
-            foreach (var path in GetOutputFiles().Where(path => !string.IsNullOrWhiteSpace(path)))
+            foreach (var path in outputFiles.Where(path => !string.IsNullOrWhiteSpace(path) && File.Exists(path)))
             {
                 var parent = Path.GetDirectoryName(path);
                 if (parent != null)
@@ -491,7 +488,7 @@ namespace BDAutoMuxer.tools
             }
         }
 
-        protected static void DeleteOutputFile(string path)
+        public static void DeleteOutputFile(string path)
         {
             try
             {
@@ -511,13 +508,6 @@ namespace BDAutoMuxer.tools
             catch
             {
             }
-        }
-
-        private bool PromptToDeleteOutputFiles()
-        {
-            var files = String.Join("\n", GetOutputFiles().Select(path => string.Format("\t{0}", path)));
-            var message = String.Format("The following files are incomplete and unusable:\n\n{0}\n\nDo you want to delete them?", files);
-            return MessageBox.Show(message, "Delete output files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
         #endregion
