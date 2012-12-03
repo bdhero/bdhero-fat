@@ -88,6 +88,16 @@ namespace BDAutoMuxer
 
         #region Properties
 
+        private bool IsDemuxLPCMChecked
+        {
+            get { return checkBoxDemuxLPCM.Checked && checkBoxDemuxLPCM.Enabled; }
+        }
+
+        private bool IsDemuxSubtitlesChecked
+        {
+            get { return checkBoxDemuxSubtitles.Checked && checkBoxDemuxSubtitles.Enabled; }
+        }
+
         private bool CanDragAndDrop
         {
             get { return !_isScanningBDROM && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing; }
@@ -1062,7 +1072,7 @@ namespace BDAutoMuxer
 
             _shouldMux = SelectedStreams.Any(ShouldMuxTrack);
 
-            if (checkBoxDemuxSubtitles.Checked || checkBoxDemuxLPCM.Checked)
+            if (IsDemuxLPCMChecked || IsDemuxSubtitlesChecked)
                 StartDemuxer(SelectedStreams);
             else if (_shouldMux)
                 StartMuxer(SelectedStreams);
@@ -1090,7 +1100,7 @@ namespace BDAutoMuxer
             progressBarTsMuxer.Value = 0;
             toolStripProgressBar.Visible = true;
 
-            _tsDemuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams, checkBoxDemuxLPCM.Checked, checkBoxDemuxSubtitles.Checked);
+            _tsDemuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams, IsDemuxLPCMChecked, IsDemuxSubtitlesChecked);
             _tsDemuxer.WorkerReportsProgress = true;
             _tsDemuxer.WorkerSupportsCancellation = true;
             _tsDemuxer.ProgressChanged += DemuxerBackgroundWorkerProgressChanged;
@@ -1108,10 +1118,10 @@ namespace BDAutoMuxer
 
             var selectedMuxingStreams = new HashSet<TSStream>(selectedStreams);
 
-            if (checkBoxDemuxLPCM.Checked)
+            if (IsDemuxLPCMChecked)
                 selectedMuxingStreams.RemoveWhere(stream => stream.StreamType == TSStreamType.LPCM_AUDIO);
 
-            if (checkBoxDemuxSubtitles.Checked)
+            if (IsDemuxSubtitlesChecked)
                 selectedMuxingStreams.RemoveWhere(stream => stream.IsGraphicsStream || stream.IsTextStream);
 
             _tsMuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedMuxingStreams);
@@ -1321,11 +1331,11 @@ namespace BDAutoMuxer
         private string GetDemuxerProgressMessage(string demuxerProgressStr)
         {
             string types;
-            if (checkBoxDemuxLPCM.Checked && checkBoxDemuxSubtitles.Checked)
+            if (IsDemuxLPCMChecked && IsDemuxSubtitlesChecked)
                 types = "LPCM and subtitles";
-            else if (checkBoxDemuxLPCM.Checked)
+            else if (IsDemuxLPCMChecked)
                 types = "LPCM";
-            else if (checkBoxDemuxSubtitles.Checked)
+            else if (IsDemuxSubtitlesChecked)
                 types = "subtitles";
             else
                 types = "tracks";
@@ -1362,9 +1372,9 @@ namespace BDAutoMuxer
 
         private bool ShouldMuxTrack(TSStream stream)
         {
-            if (checkBoxDemuxLPCM.Checked && stream.StreamType == TSStreamType.LPCM_AUDIO)
+            if (IsDemuxLPCMChecked && stream.StreamType == TSStreamType.LPCM_AUDIO)
                 return false;
-            if (checkBoxDemuxSubtitles.Checked && stream.IsTextStream || stream.IsGraphicsStream)
+            if (IsDemuxSubtitlesChecked && stream.IsTextStream || stream.IsGraphicsStream)
                 return false;
             return true;
         }
