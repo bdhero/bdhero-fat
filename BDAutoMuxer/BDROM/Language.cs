@@ -527,18 +527,25 @@ namespace BDAutoMuxer
             return lang != null ? lang.Name : null;
         }
 
+        /// <summary>
+        /// Gets the Language object associated with the given 2-letter (ISO 639-1) or 3-letter (ISO 639-2) language code.
+        /// </summary>
+        /// <param name="code">2-letter (ISO 639-1) or 3-letter (ISO 639-2) ISO language code</param>
+        /// <returns>Language object that matches the ISO 639 code, or null if none exists</returns>
         public static Language GetLanguage(string code)
         {
+            code = code != null ? code.ToLowerInvariant() : null;
             Language lang = null;
             if (!String.IsNullOrEmpty(code))
             {
-                if (code.Length == 2)
+                switch (code.Length)
                 {
-                    ISO_639_1_Map.TryGetValue(code.ToLower(), out lang);
-                }
-                else if (code.Length == 3)
-                {
-                    ISO_639_2_Map.TryGetValue(code.ToLower(), out lang);
+                    case 2:
+                        ISO_639_1_Map.TryGetValue(code, out lang);
+                        break;
+                    case 3:
+                        ISO_639_2_Map.TryGetValue(code, out lang);
+                        break;
                 }
             }
             return lang;
