@@ -1291,8 +1291,20 @@ namespace BDAutoMuxer
             labelDemuxingProgress.Text = demuxerProgressStr;
             progressLabel.Text = overallProgressStr;
 
+            string types;
+            if (checkBoxDemuxLPCM.Checked && checkBoxDemuxSubtitles.Checked)
+                types = "LPCM and subtitles";
+            else if (checkBoxDemuxLPCM.Checked)
+                types = "LPCM";
+            else if (checkBoxDemuxSubtitles.Checked)
+                types = "subtitles";
+            else
+                types = "tracks";
+
+            var progressMessage = string.Format("Demuxing {0}: {1}", types, demuxerProgressStr);
+
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "Demuxing subtitles: " + demuxerProgressStr);
+            SetTabStatus(tabPageProgress, progressMessage);
 
             if (String.IsNullOrEmpty(textBoxDemuxingCommandLine.Text))
                 textBoxDemuxingCommandLine.Text = _tsDemuxer.CommandLine;
