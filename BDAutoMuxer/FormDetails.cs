@@ -1762,12 +1762,19 @@ namespace BDAutoMuxer
         {
             if (Disposing || IsDisposed) return;
 
+            // Scan controls
             EnableScanControls = !_isScanningBDROM && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
 
+            // All tabs
             tabControl.Enabled = _initialized && !_isSearchingMainMovieDb;
-            AutoEnableOutputTab();
+
+            // Disc tab
             DiscTabEnabled = _initialized && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
+
+            // Output tab
+            AutoEnableOutputTab();
             
+            // Progress tab
             ShowProgressTabPage = ShowProgressTabPage || _isMuxing;
 
             hiddenTrackLabel.Visible = SelectedPlaylistHasHiddenTracks;
