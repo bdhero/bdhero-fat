@@ -191,7 +191,7 @@ namespace BDAutoMuxer.models
             var validationException = Config.ValidationException;
             if (validationException != null) throw validationException;
 
-            var xmlResult = RunProcess(new List<string>() { "--Output=file://" + Config.CSVPath });
+            var xmlResult = RunProcess(new List<string>() { "--Full", "--Output=file://" + Config.CSVPath });
             if (xmlResult.Exception != null) throw xmlResult.Exception;
             if (xmlResult.StdErr.Length > 0) throw new Exception(string.Format("MediaInfo XML exception: {0}", xmlResult.StdErr));
 
@@ -695,6 +695,11 @@ namespace BDAutoMuxer.models
 
     abstract class MIAVSTrack : MITrack /*, INotifyPropertyListener */
     {
+        /// <summary>
+        /// The order in which this track appears in the source media file, irrespective of track type (base = 0).
+        /// </summary>
+        public int StreamOrder { get; protected set; }
+
         public MIFormat Format { get; protected set; }
         public long Duration { get; protected set; }
         public string DurationString { get; protected set; }
@@ -710,6 +715,8 @@ namespace BDAutoMuxer.models
         public override MITrack ReadFromXml(string xml)
         {
             base.ReadFromXml(xml);
+
+            StreamOrder = XmlUtil.GetInt(xml, "StreamOrder");
 
             Format = 
                 new MIFormat(
