@@ -345,7 +345,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    class XmlUtil
+    static class XmlUtil
     {
         public static string GetString(string xml, string tagName, Regex regex = null)
         {
