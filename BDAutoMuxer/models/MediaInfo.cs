@@ -641,6 +641,11 @@ namespace BDAutoMuxer.models
         public bool IsChapter { get; protected set; }
 
         /// <summary>
+        /// Shortcut for IsAudio || IsVideo || IsSubtitle.
+        /// </summary>
+        public bool IsAVS { get { return IsAudio || IsVideo || IsSubtitle; } }
+
+        /// <summary>
         /// The order in which this track appears in the source media file, relative to other tracks of the same type (base = 0).
         /// </summary>
         public int StreamKindId { get; protected set; }
