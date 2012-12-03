@@ -1084,7 +1084,7 @@ namespace BDAutoMuxer
         private void StartDemuxer(ISet<TSStream> selectedStreams)
         {
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, "Demuxing subtitles: 0.0%");
+            SetTabStatus(tabPageProgress, GetDemuxerProgressMessage("0.0%"));
             textBoxDemuxingCommandLine.Text = "";
             textBoxTsMuxerCommandLine.Text = "";
             progressBarTsMuxer.Value = 0;
@@ -1266,7 +1266,10 @@ namespace BDAutoMuxer
         {
             // 0.0 to 100.0
             double demuxerProgressPct = _tsDemuxer.Progress;
-            double overallProgressPct = (demuxerProgressPct / 2);
+            double overallProgressPct = demuxerProgressPct;
+
+            if (_shouldMux)
+                overallProgressPct /= 2;
 
             string demuxerProgressStr = demuxerProgressPct.ToString("##0.0") + "%";
             string overallProgressStr = overallProgressPct.ToString("##0.0") + "%";
@@ -1294,20 +1297,8 @@ namespace BDAutoMuxer
             labelDemuxingProgress.Text = demuxerProgressStr;
             progressLabel.Text = overallProgressStr;
 
-            string types;
-            if (checkBoxDemuxLPCM.Checked && checkBoxDemuxSubtitles.Checked)
-                types = "LPCM and subtitles";
-            else if (checkBoxDemuxLPCM.Checked)
-                types = "LPCM";
-            else if (checkBoxDemuxSubtitles.Checked)
-                types = "subtitles";
-            else
-                types = "tracks";
-
-            var progressMessage = string.Format("Demuxing {0}: {1}", types, demuxerProgressStr);
-
             // TODO: Make this status "sticky"
-            SetTabStatus(tabPageProgress, progressMessage);
+            SetTabStatus(tabPageProgress, GetDemuxerProgressMessage(demuxerProgressStr));
 
             if (String.IsNullOrEmpty(textBoxDemuxingCommandLine.Text))
                 textBoxDemuxingCommandLine.Text = _tsDemuxer.CommandLine;
@@ -1325,6 +1316,20 @@ namespace BDAutoMuxer
                 else if (_tsDemuxer.IsCanceled || _tsDemuxer.IsError)
                     TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
             }
+        }
+
+        private string GetDemuxerProgressMessage(string demuxerProgressStr)
+        {
+            string types;
+            if (checkBoxDemuxLPCM.Checked && checkBoxDemuxSubtitles.Checked)
+                types = "LPCM and subtitles";
+            else if (checkBoxDemuxLPCM.Checked)
+                types = "LPCM";
+            else if (checkBoxDemuxSubtitles.Checked)
+                types = "subtitles";
+            else
+                types = "tracks";
+            return string.Format("Demuxing {0}: {1}", types, demuxerProgressStr);
         }
 
         private void DemuxerBackgroundWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
