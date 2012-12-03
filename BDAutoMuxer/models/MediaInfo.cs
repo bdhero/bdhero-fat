@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace BDAutoMuxer.models
 {
-    class MediaInfo
+    public class MediaInfo
     {
         public static readonly MIConfig Config = new MIConfig();
 
@@ -332,7 +332,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    class MIProcessResult
+    public class MIProcessResult
     {
         public readonly string StdOut;
         public readonly string StdErr;
@@ -345,7 +345,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    static class XmlUtil
+    public static class XmlUtil
     {
         public static string GetString(string xml, string tagName, Regex regex = null)
         {
@@ -452,7 +452,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    class MIConfig
+    public class MIConfig
     {
         private string _cliPath;
 
@@ -593,7 +593,7 @@ namespace BDAutoMuxer.models
 
     #region Meta data
 
-    class MIFile
+    public class MIFile
     {
         public string Folder { get; protected set; }
         public string Filename { get; protected set; }
@@ -611,7 +611,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    class MIContainer
+    public class MIContainer
     {
         public string Title { get; protected set; }
         public string Format { get; protected set; }
@@ -633,7 +633,7 @@ namespace BDAutoMuxer.models
 
     #region Tracks
 
-    abstract class MITrack
+    public abstract class MITrack
     {
         public bool IsVideo { get; protected set; }
         public bool IsAudio { get; protected set; }
@@ -693,7 +693,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    abstract class MIAVSTrack : MITrack /*, INotifyPropertyListener */
+    public abstract class MIAVSTrack : MITrack /*, INotifyPropertyListener */
     {
         /// <summary>
         /// The order in which this track appears in the source media file, irrespective of track type (base = 0).
@@ -808,7 +808,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    class MIVideoTrack : MIAVSTrack
+    public class MIVideoTrack : MIAVSTrack
     {
         public int BitDepth { get; protected set; }
         public string BitDepthString { get; protected set; }
@@ -854,7 +854,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    class MIAudioTrack : MIAVSTrack
+    public class MIAudioTrack : MIAVSTrack
     {
         public int BitDepth { get; protected set; }
         public string BitDepthString { get; protected set; }
@@ -916,7 +916,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// MediaInfo refers to these as "Text".
     /// </summary>
-    class MISubtitleTrack : MIAVSTrack
+    public class MISubtitleTrack : MIAVSTrack
     {
         public int? Width { get; protected set; }
         public int? Height { get; protected set; }
@@ -943,7 +943,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// MediaInfo refers to these as "Menu"; "Chapters" is something different (not sure what "Chapters" means to MediaInfo)
     /// </summary>
-    class MIChapterTrack : MITrack
+    public class MIChapterTrack : MITrack
     {
         private readonly List<MIChapter> _chapters = new List<MIChapter>();
 
@@ -967,8 +967,8 @@ namespace BDAutoMuxer.models
             return string.Format("{0} chapters [ {1} ]", _chapters.Count, string.Join(", ", _chapters));
         }
     }
-    
-    class MIChapter
+
+    public class MIChapter
     {
         private static readonly Regex ChapterLineRegex = new Regex(@"^(\d{2}):(\d{2}):(\d{2})\.(\d{3})[ \t]*:[ \t]*(?:([a-z]{2}):)?(.*)$");
 
@@ -1035,7 +1035,7 @@ namespace BDAutoMuxer.models
 
     #endregion
 
-    class MIFormat
+    public class MIFormat
     {
         public string Id { get; protected set; }
         public string Info { get; protected set; }
@@ -1101,7 +1101,7 @@ namespace BDAutoMuxer.models
 
     #region Abstract Codecs
 
-    abstract class MICodec
+    public abstract class MICodec
     {
         #region Video
 
@@ -1191,7 +1191,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    abstract class MIAudioCodec : MICodec
+    public abstract class MIAudioCodec : MICodec
     {
         public override bool IsAudio
         {
@@ -1210,7 +1210,7 @@ namespace BDAutoMuxer.models
         public abstract bool Lossless { get; }
     }
 
-    abstract class MIVideoCodec : MICodec
+    public abstract class MIVideoCodec : MICodec
     {
         public override bool IsAudio
         {
@@ -1226,7 +1226,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    abstract class MISubtitleCodec : MICodec
+    public abstract class MISubtitleCodec : MICodec
     {
         public override bool IsAudio
         {
@@ -1249,7 +1249,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// H.264/MPEG-4 AVC
     /// </summary>
-    class MICodecAVC : MIVideoCodec
+    public class MICodecAVC : MIVideoCodec
     {
         public override string SerializableName
         {
@@ -1295,7 +1295,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// VC-1
     /// </summary>
-    class MICodecVC1 : MIVideoCodec
+    public class MICodecVC1 : MIVideoCodec
     {
         public override string SerializableName
         {
@@ -1337,7 +1337,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// MPEG-1 Video (non-Blu-ray)
     /// </summary>
-    class MICodecMPEG1Video : MIVideoCodec
+    public class MICodecMPEG1Video : MIVideoCodec
     {
         public override string SerializableName
         {
@@ -1383,7 +1383,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// MPEG-2 Video
     /// </summary>
-    class MICodecMPEG2Video : MIVideoCodec
+    public class MICodecMPEG2Video : MIVideoCodec
     {
         public override string SerializableName
         {
@@ -1436,7 +1436,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    class MICodecUnknownVideo : MISubtitleCodec
+    public class MICodecUnknownVideo : MISubtitleCodec
     {
         public override string SerializableName
         {
@@ -1478,7 +1478,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// Dolby Pro Logic
     /// </summary>
-    class MICodecProLogic : MIAudioCodec
+    public class MICodecProLogic : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1537,7 +1537,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// Dolby Digital
     /// </summary>
-    class MICodecAC3 : MIAudioCodec
+    public class MICodecAC3 : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1593,7 +1593,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// Dolby Digital EX
     /// </summary>
-    class MICodecAC3EX : MIAudioCodec
+    public class MICodecAC3EX : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1649,7 +1649,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// Dolby Digital Plus
     /// </summary>
-    class MICodecEAC3 : MIAudioCodec
+    public class MICodecEAC3 : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1705,7 +1705,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// Dolby TrueHD
     /// </summary>
-    class MICodecTrueHD : MIAudioCodec
+    public class MICodecTrueHD : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1760,7 +1760,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// Standard DTS
     /// </summary>
-    class MICodecDTS : MIAudioCodec
+    public class MICodecDTS : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1811,7 +1811,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// DTS Extended Surround
     /// </summary>
-    class MICodecDTSES : MIAudioCodec
+    public class MICodecDTSES : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1862,7 +1862,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// DTS Express
     /// </summary>
-    class MICodecDTSExpress : MIAudioCodec
+    public class MICodecDTSExpress : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1918,7 +1918,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// DTS-HD High Resolution Audio
     /// </summary>
-    class MICodecDTSHDHRA : MIAudioCodec
+    public class MICodecDTSHDHRA : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -1969,7 +1969,7 @@ namespace BDAutoMuxer.models
     /// <summary>
     /// DTS-HD Master Audio
     /// </summary>
-    class MICodecDTSHDMA : MIAudioCodec
+    public class MICodecDTSHDMA : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -2021,7 +2021,7 @@ namespace BDAutoMuxer.models
 
     #region MPEG Audio
 
-    class MICodecMPEG2Audio : MIAudioCodec
+    public class MICodecMPEG2Audio : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -2074,7 +2074,7 @@ namespace BDAutoMuxer.models
 
     #region LPCM
 
-    class MICodecLPCM : MIAudioCodec
+    public class MICodecLPCM : MIAudioCodec
     {
         public override string SerializableName
         {
@@ -2132,7 +2132,7 @@ namespace BDAutoMuxer.models
 
     #region Unknown
 
-    class MICodecUnknownAudio : MISubtitleCodec
+    public class MICodecUnknownAudio : MISubtitleCodec
     {
         public override string SerializableName
         {
@@ -2171,7 +2171,7 @@ namespace BDAutoMuxer.models
 
     #region Subtitle Codecs
 
-    class MICodecPGS : MISubtitleCodec
+    public class MICodecPGS : MISubtitleCodec
     {
         public override string SerializableName
         {
@@ -2209,7 +2209,7 @@ namespace BDAutoMuxer.models
         }
     }
 
-    class MICodecUnknownSubtitle : MISubtitleCodec
+    public class MICodecUnknownSubtitle : MISubtitleCodec
     {
         public override string SerializableName
         {
@@ -2246,7 +2246,7 @@ namespace BDAutoMuxer.models
 
     #region Unknown Codec
 
-    class MIUnknownCodec : MICodec
+    public class MIUnknownCodec : MICodec
     {
         public override bool IsAudio
         {
