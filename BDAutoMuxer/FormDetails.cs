@@ -1709,7 +1709,14 @@ namespace BDAutoMuxer
 
         private bool DiscTabEnabled
         {
-            set { panelMovieDetails.Enabled = value; }
+            set
+            {
+                panelMovieDetails.Enabled = value;
+                checkboxShowBogusPlaylists.Enabled = value && _playlists != null &&
+                                                     _playlists.Any(playlist => playlist.IsBogus);
+                checkBoxShowShortPlaylists.Enabled = value && _playlists != null &&
+                                                     _playlists.Any(playlist => !playlist.IsFeatureLength);
+            }
         }
 
         private bool OutputTabEnabled
@@ -1753,6 +1760,11 @@ namespace BDAutoMuxer
             pictureBoxMoviePoster.ImageLocation = null;
         }
 
+        private void AutoEnableDiscTab()
+        {
+            DiscTabEnabled = _initialized && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
+        }
+
         private void AutoEnableOutputTab()
         {
             OutputTabEnabled = !_isMuxing;
@@ -1769,7 +1781,7 @@ namespace BDAutoMuxer
             tabControl.Enabled = _initialized && !_isSearchingMainMovieDb;
 
             // Disc tab
-            DiscTabEnabled = _initialized && !_isSearchingMainMovieDb && !_isSearchingTmdb && !_isMuxing;
+            AutoEnableDiscTab();
 
             // Output tab
             AutoEnableOutputTab();

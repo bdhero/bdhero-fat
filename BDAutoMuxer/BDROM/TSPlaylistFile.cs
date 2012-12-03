@@ -157,6 +157,11 @@ namespace BDAutoMuxer
             get { return _autoConfigured ? IsMainMovieAuto : (IsFeatureLength && !HasDuplicateClips && !IsDuplicate); }
         }
 
+        public bool IsBogus
+        {
+            get { return !IsLikelyMainMovie && IsFeatureLength; }
+        }
+
         public override string ToString()
         {
             return Name;
