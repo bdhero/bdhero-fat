@@ -65,6 +65,8 @@ namespace BDAutoMuxer
         private TsMuxer _tsMuxer;
         private string _tsMuxerOutputPath;
 
+        private bool _shouldMux;
+
         private ProgressUIState _tsDemuxerProgressUIState;
         private ProgressUIState _tsMuxerProgressUIState;
 
@@ -1058,10 +1060,11 @@ namespace BDAutoMuxer
             _tsDemuxerProgressUIState.Reset();
             _tsMuxerProgressUIState.Reset();
 
-            // TODO: Finish me!
+            _shouldMux = SelectedStreams.Any(ShouldMuxTrack);
+
             if (checkBoxDemuxSubtitles.Checked || checkBoxDemuxLPCM.Checked)
                 StartDemuxer(SelectedStreams);
-            else
+            else if (_shouldMux)
                 StartMuxer(SelectedStreams);
         }
 
@@ -1343,11 +1346,22 @@ namespace BDAutoMuxer
             else
             {
                 TaskbarProgress.SetProgressState(TaskbarProgressBarState.NoProgress, Handle);
-                StartMuxer(SelectedStreams);
+
+                if (_shouldMux)
+                    StartMuxer(SelectedStreams);
             }
 
             if (_tsDemuxer != null && (_tsDemuxer.IsCanceled || _tsDemuxer.IsError))
                 CleanupFiles();
+        }
+
+        private bool ShouldMuxTrack(TSStream stream)
+        {
+            if (checkBoxDemuxLPCM.Checked && stream.StreamType == TSStreamType.LPCM_AUDIO)
+                return false;
+            if (checkBoxDemuxSubtitles.Checked && stream.IsTextStream || stream.IsGraphicsStream)
+                return false;
+            return true;
         }
 
         private static string GetElapsedTimeString(TimeSpan elapsedTime)
