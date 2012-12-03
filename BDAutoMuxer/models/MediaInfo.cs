@@ -1153,6 +1153,8 @@ namespace BDAutoMuxer.models
         public abstract bool IsVideo { get; }
         public abstract bool IsSubtitle { get; }
 
+        public abstract string SerializableName { get; }
+
         /// <summary>
         /// Shown in MediaInfo.  Also stored in MKV headers.
         /// </summary>
@@ -1249,6 +1251,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecAVC : MIVideoCodec
     {
+        public override string SerializableName
+        {
+            get { return "V_H264"; }
+        }
+
         public override string CodecId
         {
             get { return "V_MPEG4/ISO/AVC"; }
@@ -1290,6 +1297,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecVC1 : MIVideoCodec
     {
+        public override string SerializableName
+        {
+            get { return "V_VC1"; }
+        }
+
         public override string CodecId
         {
             // TODO: Or is it "V_MS/VFW/WVC1"?
@@ -1327,6 +1339,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecMPEG1Video : MIVideoCodec
     {
+        public override string SerializableName
+        {
+            get { return "V_MPEG1"; }
+        }
+
         public override string CodecId
         {
             get { return "V_MPEG1"; }
@@ -1368,6 +1385,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecMPEG2Video : MIVideoCodec
     {
+        public override string SerializableName
+        {
+            get { return "V_MPEG2"; }
+        }
+
         public override string CodecId
         {
             get { return "V_MPEG2"; }
@@ -1416,6 +1438,11 @@ namespace BDAutoMuxer.models
 
     class MICodecUnknownVideo : MISubtitleCodec
     {
+        public override string SerializableName
+        {
+            get { return "V_UNKNOWN"; }
+        }
+
         public override string CodecId
         {
             get { return "V_UNKNOWN"; }
@@ -1453,6 +1480,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecProLogic : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_AC3_PL"; }
+        }
+
         public override string CodecId
         {
             get { return "A_AC3"; }
@@ -1507,6 +1539,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecAC3 : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_AC3"; }
+        }
+
         public override string CodecId
         {
             get { return "A_AC3"; }
@@ -1558,6 +1595,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecAC3EX : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_AC3_EX"; }
+        }
+
         public override string CodecId
         {
             get { return "A_AC3"; }
@@ -1609,6 +1651,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecEAC3 : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_AC3_PLUS"; }
+        }
+
         public override string CodecId
         {
             get { return "A_EAC3"; }
@@ -1660,6 +1707,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecTrueHD : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_TRUEHD"; }
+        }
+
         public override string CodecId
         {
             get { return "A_TRUEHD"; }
@@ -1710,6 +1762,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecDTS : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_DTS"; }
+        }
+
         public override string CodecId
         {
             get { return "A_DTS"; }
@@ -1756,6 +1813,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecDTSES : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "D_DTS_ES"; }
+        }
+
         public override string CodecId
         {
             get { return "A_DTS"; }
@@ -1802,6 +1864,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecDTSExpress : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_DTS_EXPRESS"; }
+        }
+
         public override string CodecId
         {
             get { return "A_DTS"; }
@@ -1853,6 +1920,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecDTSHDHRA : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_DTS_HD_HRA"; }
+        }
+
         public override string CodecId
         {
             get { return "A_DTS"; }
@@ -1899,6 +1971,11 @@ namespace BDAutoMuxer.models
     /// </summary>
     class MICodecDTSHDMA : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_DTS_HD_MA"; }
+        }
+
         public override string CodecId
         {
             get { return "A_DTS"; }
@@ -1946,6 +2023,11 @@ namespace BDAutoMuxer.models
 
     class MICodecMPEG2Audio : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_MPEG2"; }
+        }
+
         public override string CodecId
         {
             // TODO: throw new NotImplementedException("TODO: Find out what the Codec ID for MPEG-2 Audio is!");
@@ -1994,6 +2076,11 @@ namespace BDAutoMuxer.models
 
     class MICodecLPCM : MIAudioCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_LPCM"; }
+        }
+
         public override string CodecId
         {
             // TODO: throw new NotImplementedException("Could be either A_PCM/INT/LIT, A_PCM/INT/BIG, or A_PCM/FLOAT/IEEE");
@@ -2047,6 +2134,11 @@ namespace BDAutoMuxer.models
 
     class MICodecUnknownAudio : MISubtitleCodec
     {
+        public override string SerializableName
+        {
+            get { return "A_UNKNOWN"; }
+        }
+
         public override string CodecId
         {
             get { return "A_UNKNOWN"; }
@@ -2081,6 +2173,11 @@ namespace BDAutoMuxer.models
 
     class MICodecPGS : MISubtitleCodec
     {
+        public override string SerializableName
+        {
+            get { return "S_PGS"; }
+        }
+
         public override string CodecId
         {
             get { return "S_HDMV/PGS"; }
@@ -2114,6 +2211,11 @@ namespace BDAutoMuxer.models
 
     class MICodecUnknownSubtitle : MISubtitleCodec
     {
+        public override string SerializableName
+        {
+            get { return "S_UNKNOWN"; }
+        }
+
         public override string CodecId
         {
             get { return "S_UNKNOWN"; }
@@ -2159,6 +2261,11 @@ namespace BDAutoMuxer.models
         public override bool IsSubtitle
         {
             get { return false; }
+        }
+
+        public override string SerializableName
+        {
+            get { return "UNKNOWN"; }
         }
 
         public override string CodecId
