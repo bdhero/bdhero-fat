@@ -1176,7 +1176,7 @@ namespace BDAutoMuxer.models
         /// <summary>
         /// Can this codec be muxed by standard, freely available consumer software?
         /// </summary>
-        public virtual bool Muxable { get { return true; } }
+        public virtual bool IsMuxable { get { return true; } }
 
         public override string ToString()
         {
@@ -1185,7 +1185,7 @@ namespace BDAutoMuxer.models
             sb.AppendFormat(" - {0}", FullName);
             if (!string.IsNullOrWhiteSpace(AltFullName))
                 sb.AppendFormat(" ({0})", AltFullName);
-            if (!Muxable)
+            if (!IsMuxable)
                 sb.Append(" (NOT muxable)");
             return sb.ToString();
         }
@@ -1904,7 +1904,7 @@ namespace BDAutoMuxer.models
             get { return "Low bit-rate audio codec used for Blu-ray secondary audio and BD Live.  Might not be muxable with current freely available software."; }
         }
 
-        public override bool Muxable
+        public override bool IsMuxable
         {
             get { return false; }
         }
