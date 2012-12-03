@@ -640,10 +640,13 @@ namespace BDAutoMuxer.models
         public bool IsSubtitle { get; protected set; }
         public bool IsChapter { get; protected set; }
 
+        /// <summary>
+        /// The order in which this track appears in the source media file, relative to other tracks of the same type (base = 0).
+        /// </summary>
         public int StreamKindId { get; protected set; }
 
         /// <summary>
-        /// Determines whether the track is included in (muxed into) the output file.
+        /// Determines whether the track should be included (muxed) in the output file.
         /// </summary>
         public bool Mux = true;
 
