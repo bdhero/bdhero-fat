@@ -18,23 +18,37 @@
 //=============================================================================
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
+using BDAutoMuxer.models;
 using BDAutoMuxer.views;
+using ComboBox = System.Windows.Forms.ComboBox;
+using ToolTip = System.Windows.Forms.ToolTip;
 
 // ReSharper disable EmptyGeneralCatchClause
 namespace BDAutoMuxer
 {
     public partial class FormSettings : Form
     {
+        private readonly Language[] _audienceLanguages;
+        private readonly MIAudioCodec[] _bdInfoAudioCodecs;
+
         public FormSettings()
         {
             InitializeComponent();
+
+            _audienceLanguages = Language.AllLanguages.OrderBy(lang => lang.ISO_639_2).ToArray();
+            _bdInfoAudioCodecs = MICodec.AudioCodecs.Where(codec => codec.StreamType != TSStreamType.Unknown && codec.IsMuxable).ToArray();
 
             checkBoxFilterLoopingPlaylists.Checked = BDAutoMuxerSettings.FilterLoopingPlaylists;
             checkBoxFilterShortPlaylists.Checked = BDAutoMuxerSettings.FilterShortPlaylists;
@@ -44,7 +58,53 @@ namespace BDAutoMuxer
             textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
             checkBoxCheckForUpdates.Checked = BDAutoMuxerSettings.CheckForUpdates;
 
+            InitAudienceLanguage();
+            InitPreferredAudioCodecs();
+
             FormUtils.TextBox_EnableSelectAll(this);
+        }
+
+        private void InitAudienceLanguage()
+        {
+            comboBoxAudienceLanguage.DataSource = _audienceLanguages;
+            comboBoxAudienceLanguage.DisplayMember = "UIDisplayName";
+
+            var selectedIndex = comboBoxAudienceLanguage.Items.IndexOf(BDAutoMuxerSettings.AudienceLanguage);
+            if (selectedIndex > -1)
+                comboBoxAudienceLanguage.SelectedIndex = selectedIndex;
+
+            comboBoxAudienceLanguage.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            comboBoxAudienceLanguage.AutoCompleteSource = AutoCompleteSource.ListItems;
+
+            comboBoxAudienceLanguage.Validating += AudienceLanguageValidating;
+        }
+
+        private void AudienceLanguageValidating(object sender, CancelEventArgs cancelEventArgs)
+        {
+            var text = comboBoxAudienceLanguage.Text;
+            if (comboBoxAudienceLanguage.Items.OfType<Language>().All(lang => lang.UIDisplayName != text))
+                cancelEventArgs.Cancel = true;
+        }
+
+        private void InitPreferredAudioCodecs()
+        {
+            checkedListBoxAudioCodecs.DataSource = _bdInfoAudioCodecs;
+            checkedListBoxAudioCodecs.DisplayMember = "FullNameDisambig";
+
+            foreach (var index in BDAutoMuxerSettings.PreferredAudioCodecs.Select(audioCodec => checkedListBoxAudioCodecs.Items.IndexOf(audioCodec)).Where(index => index > -1))
+            {
+                checkedListBoxAudioCodecs.SetItemChecked(index, true);
+            }
+        }
+
+        private Language SelectedAudienceLanguage
+        {
+            get { return comboBoxAudienceLanguage.SelectedValue as Language; }
+        }
+
+        private ISet<MIAudioCodec> SelectedAudioCodecs
+        {
+            get { return new HashSet<MIAudioCodec>(checkedListBoxAudioCodecs.CheckedItems.OfType<MIAudioCodec>()); }
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -60,6 +120,8 @@ namespace BDAutoMuxer
             {
                 BDAutoMuxerSettings.FilterShortPlaylistsValue = filterShortPlaylistsValue;
             }
+            BDAutoMuxerSettings.AudienceLanguage = SelectedAudienceLanguage;
+            BDAutoMuxerSettings.PreferredAudioCodecs = SelectedAudioCodecs;
             BDAutoMuxerSettings.SaveSettings();
             Close();
         }
@@ -78,6 +140,11 @@ namespace BDAutoMuxer
 
     public static class BDAutoMuxerSettings
     {
+        private static readonly HashSet<MIAudioCodec> AudioCodecsHD = new HashSet<MIAudioCodec>() { MICodec.LPCM, MICodec.DTSHDMA, MICodec.TrueHD };
+        private const string HDOnlyValue = "hd_only";
+        private const string AllValueText = "all";
+        private const string AllValueChar = "*";
+
         public static string ConfigDir
         {
             get
@@ -363,6 +430,68 @@ namespace BDAutoMuxer
             set
             {
                 try { Properties.Settings.Default.DemuxSubtitles = value; }
+                catch { }
+            }
+        }
+
+        public static Language AudienceLanguage
+        {
+            get
+            {
+                Language lang = null;
+                try { lang = Language.GetLanguage(Properties.Settings.Default.AudienceLanguage); }
+                catch {}
+                return lang ?? Language.CurrentUILanguage;
+            }
+
+            set
+            {
+                try { Properties.Settings.Default.AudienceLanguage = value != null ? value.ISO_639_2 : ""; }
+                catch { }
+            }
+        }
+
+        public static ISet<MIAudioCodec> PreferredAudioCodecs
+        {
+            get
+            {
+                string str = null;
+
+                try { str = Properties.Settings.Default.PreferredAudioCodecs; }
+                catch { }
+
+                str = str != null ? str.ToLowerInvariant() : null;
+
+                // All audio codecs
+                if (str == AllValueText || str == AllValueChar)
+                    return new HashSet<MIAudioCodec>(MICodec.MuxableBDAudioCodecs);
+
+                // HD only
+                if (str == HDOnlyValue)
+                    return AudioCodecsHD;
+
+                return new HashSet<MIAudioCodec>(MICodec.DeserializeCodecs<MIAudioCodec>(str));
+            }
+
+            set
+            {
+                string serialized;
+                var valueCount = value.Count();
+                var allAudio = new HashSet<MIAudioCodec>(MICodec.MuxableBDAudioCodecs);
+
+                // All audio codecs
+                if (allAudio.Intersect(value).Count() == valueCount && valueCount == allAudio.Count())
+                    serialized = AllValueText;
+
+                // HD only
+                else if (AudioCodecsHD.Intersect(value).Count() == valueCount && valueCount == AudioCodecsHD.Count())
+                    serialized = HDOnlyValue;
+
+                // Custom
+                else
+                    serialized = MICodec.SerializeCodecs(value);
+
+                try { Properties.Settings.Default.PreferredAudioCodecs = serialized; }
                 catch { }
             }
         }

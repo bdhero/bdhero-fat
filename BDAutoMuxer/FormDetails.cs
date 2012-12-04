@@ -498,9 +498,10 @@ namespace BDAutoMuxer
         {
             _ignoreFilterControlChange = true;
 
+            Language[] audienceLanguages = new List<Language>(_languages).ToArray();
             comboBoxAudienceLanguage.DataSource = null;
-            comboBoxAudienceLanguage.DataSource = new List<Language>(_languages).ToArray();
-            comboBoxAudienceLanguage.Enabled = _languages.Count > 1;
+            comboBoxAudienceLanguage.DataSource = audienceLanguages;
+            comboBoxAudienceLanguage.Enabled = audienceLanguages.Length > 1;
 
             Language[] selectedVideoLanguages = VideoLanguages;
             comboBoxVideoLanguage.DataSource = null;
@@ -526,6 +527,10 @@ namespace BDAutoMuxer
             listBoxSubtitleLanguages.DataSource = null;
             listBoxSubtitleLanguages.DataSource = SubtitleLanguages;
             listBoxSubtitleLanguages.Enabled = subtitleLanguages.Length > 1;
+
+            Language userPrefAudienceLanguage = BDAutoMuxerSettings.AudienceLanguage;
+            if (audienceLanguages.Contains(userPrefAudienceLanguage))
+                comboBoxAudienceLanguage.SelectedItem = userPrefAudienceLanguage;
 
             _ignoreFilterControlChange = false;
 
@@ -630,6 +635,13 @@ namespace BDAutoMuxer
             var i = 0;
             var icons = new ImageList();
 
+            var first1080 = _videoTracks.FirstOrDefault(track => track.VideoFormat == TSVideoFormat.VIDEOFORMAT_1080p || track.VideoFormat == TSVideoFormat.VIDEOFORMAT_1080i);
+            var first720 = _videoTracks.FirstOrDefault(track => track.VideoFormat == TSVideoFormat.VIDEOFORMAT_720p);
+            var first576 = _videoTracks.FirstOrDefault(track => track.VideoFormat == TSVideoFormat.VIDEOFORMAT_576p || track.VideoFormat == TSVideoFormat.VIDEOFORMAT_576i);
+            var firstAny = _videoTracks.FirstOrDefault();
+
+            var bestTrack = first1080 ?? first720 ?? first576 ?? firstAny;
+
             foreach (TSVideoStream stream in _videoTracks)
             {
                 ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
@@ -661,7 +673,7 @@ namespace BDAutoMuxer
 
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
                 streamItem.Tag = stream;
-                streamItem.Checked = true;
+                streamItem.Checked = stream == bestTrack;
                 streamItem.ImageIndex = i++;
                 listViewVideoTracks.Items.Add(streamItem);
 
@@ -675,6 +687,7 @@ namespace BDAutoMuxer
         {
             var i = 0;
             var icons = new ImageList();
+            var preferredAudioCodecs = BDAutoMuxerSettings.PreferredAudioCodecs;
 
             foreach (TSAudioStream stream in _audioTracks)
             {
@@ -702,12 +715,16 @@ namespace BDAutoMuxer
 
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
                 streamItem.Tag = stream;
-                streamItem.Checked = true;
+                streamItem.Checked = preferredAudioCodecs.Any(audioCodec => audioCodec.StreamType == stream.StreamType);
                 streamItem.ImageIndex = i++;
                 listViewAudioTracks.Items.Add(streamItem);
 
                 icons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
             }
+
+            // If none of the filtered audio tracks contain a preferred codec, select the first track as a fallback
+            if (listViewAudioTracks.CheckedIndices.Count == 0 && listViewAudioTracks.Items.Count > 0)
+                listViewAudioTracks.Items[0].Checked = true;
 
             listViewAudioTracks.SmallImageList = icons;
         }

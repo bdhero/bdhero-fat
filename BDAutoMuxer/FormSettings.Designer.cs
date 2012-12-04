@@ -60,10 +60,18 @@ namespace BDAutoMuxer
             this.buttonCheckForUpdates = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageBDInfo = new System.Windows.Forms.TabPage();
+            this.tabPageOutput = new System.Windows.Forms.TabPage();
+            this.groupBoxOutputPrefs = new System.Windows.Forms.GroupBox();
+            this.checkedListBoxAudioCodecs = new System.Windows.Forms.CheckedListBox();
+            this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
+            this.labelAudioCodecs = new System.Windows.Forms.Label();
+            this.labelAudienceLanguage = new System.Windows.Forms.Label();
             this.tabPageAdvanced = new System.Windows.Forms.TabPage();
             this.checkBoxCheckForUpdates = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageBDInfo.SuspendLayout();
+            this.tabPageOutput.SuspendLayout();
+            this.groupBoxOutputPrefs.SuspendLayout();
             this.tabPageAdvanced.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +91,7 @@ namespace BDAutoMuxer
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(273, 147);
+            this.buttonCancel.Location = new System.Drawing.Point(333, 245);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 6;
@@ -94,7 +102,7 @@ namespace BDAutoMuxer
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(192, 147);
+            this.buttonOK.Location = new System.Drawing.Point(252, 245);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 5;
@@ -120,14 +128,14 @@ namespace BDAutoMuxer
             this.checkBoxFilterShortPlaylists.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxFilterShortPlaylists.Location = new System.Drawing.Point(6, 52);
             this.checkBoxFilterShortPlaylists.Name = "checkBoxFilterShortPlaylists";
-            this.checkBoxFilterShortPlaylists.Size = new System.Drawing.Size(153, 17);
+            this.checkBoxFilterShortPlaylists.Size = new System.Drawing.Size(150, 17);
             this.checkBoxFilterShortPlaylists.TabIndex = 7;
-            this.checkBoxFilterShortPlaylists.Text = "Filter playlists with length < ";
+            this.checkBoxFilterShortPlaylists.Text = "Filter playlists with length <";
             this.checkBoxFilterShortPlaylists.UseVisualStyleBackColor = true;
             // 
             // textBoxFilterShortPlaylistsValue
             // 
-            this.textBoxFilterShortPlaylistsValue.Location = new System.Drawing.Point(155, 50);
+            this.textBoxFilterShortPlaylistsValue.Location = new System.Drawing.Point(162, 50);
             this.textBoxFilterShortPlaylistsValue.MaxLength = 4;
             this.textBoxFilterShortPlaylistsValue.Name = "textBoxFilterShortPlaylistsValue";
             this.textBoxFilterShortPlaylistsValue.Size = new System.Drawing.Size(41, 20);
@@ -137,7 +145,7 @@ namespace BDAutoMuxer
             // labelPlaylistLength
             // 
             this.labelPlaylistLength.AutoSize = true;
-            this.labelPlaylistLength.Location = new System.Drawing.Point(197, 54);
+            this.labelPlaylistLength.Location = new System.Drawing.Point(204, 54);
             this.labelPlaylistLength.Name = "labelPlaylistLength";
             this.labelPlaylistLength.Size = new System.Drawing.Size(24, 13);
             this.labelPlaylistLength.TabIndex = 9;
@@ -164,11 +172,11 @@ namespace BDAutoMuxer
             // 
             // textBoxApiKey
             // 
-            this.textBoxApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxApiKey.Location = new System.Drawing.Point(59, 6);
             this.textBoxApiKey.Name = "textBoxApiKey";
-            this.textBoxApiKey.Size = new System.Drawing.Size(264, 20);
+            this.textBoxApiKey.Size = new System.Drawing.Size(316, 20);
             this.textBoxApiKey.TabIndex = 14;
             // 
             // buttonCheckForUpdates
@@ -183,15 +191,16 @@ namespace BDAutoMuxer
             // 
             // tabControl
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageBDInfo);
+            this.tabControl.Controls.Add(this.tabPageOutput);
             this.tabControl.Controls.Add(this.tabPageAdvanced);
-            this.tabControl.Location = new System.Drawing.Point(11, 13);
+            this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(337, 128);
+            this.tabControl.Size = new System.Drawing.Size(396, 227);
             this.tabControl.TabIndex = 17;
             // 
             // tabPageBDInfo
@@ -205,10 +214,74 @@ namespace BDAutoMuxer
             this.tabPageBDInfo.Location = new System.Drawing.Point(4, 22);
             this.tabPageBDInfo.Name = "tabPageBDInfo";
             this.tabPageBDInfo.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBDInfo.Size = new System.Drawing.Size(329, 102);
+            this.tabPageBDInfo.Size = new System.Drawing.Size(388, 201);
             this.tabPageBDInfo.TabIndex = 0;
             this.tabPageBDInfo.Text = "BDInfo";
             this.tabPageBDInfo.UseVisualStyleBackColor = true;
+            // 
+            // tabPageOutput
+            // 
+            this.tabPageOutput.Controls.Add(this.groupBoxOutputPrefs);
+            this.tabPageOutput.Location = new System.Drawing.Point(4, 22);
+            this.tabPageOutput.Name = "tabPageOutput";
+            this.tabPageOutput.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageOutput.Size = new System.Drawing.Size(388, 201);
+            this.tabPageOutput.TabIndex = 2;
+            this.tabPageOutput.Text = "Output";
+            this.tabPageOutput.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxOutputPrefs
+            // 
+            this.groupBoxOutputPrefs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutputPrefs.Controls.Add(this.checkedListBoxAudioCodecs);
+            this.groupBoxOutputPrefs.Controls.Add(this.comboBoxAudienceLanguage);
+            this.groupBoxOutputPrefs.Controls.Add(this.labelAudioCodecs);
+            this.groupBoxOutputPrefs.Controls.Add(this.labelAudienceLanguage);
+            this.groupBoxOutputPrefs.Location = new System.Drawing.Point(7, 7);
+            this.groupBoxOutputPrefs.Name = "groupBoxOutputPrefs";
+            this.groupBoxOutputPrefs.Size = new System.Drawing.Size(370, 187);
+            this.groupBoxOutputPrefs.TabIndex = 0;
+            this.groupBoxOutputPrefs.TabStop = false;
+            this.groupBoxOutputPrefs.Text = "Preferred Filter Settings";
+            // 
+            // checkedListBoxAudioCodecs
+            // 
+            this.checkedListBoxAudioCodecs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkedListBoxAudioCodecs.FormattingEnabled = true;
+            this.checkedListBoxAudioCodecs.Location = new System.Drawing.Point(115, 46);
+            this.checkedListBoxAudioCodecs.Name = "checkedListBoxAudioCodecs";
+            this.checkedListBoxAudioCodecs.Size = new System.Drawing.Size(249, 124);
+            this.checkedListBoxAudioCodecs.TabIndex = 3;
+            // 
+            // comboBoxAudienceLanguage
+            // 
+            this.comboBoxAudienceLanguage.FormattingEnabled = true;
+            this.comboBoxAudienceLanguage.Location = new System.Drawing.Point(115, 19);
+            this.comboBoxAudienceLanguage.Name = "comboBoxAudienceLanguage";
+            this.comboBoxAudienceLanguage.Size = new System.Drawing.Size(189, 21);
+            this.comboBoxAudienceLanguage.TabIndex = 2;
+            // 
+            // labelAudioCodecs
+            // 
+            this.labelAudioCodecs.AutoSize = true;
+            this.labelAudioCodecs.Location = new System.Drawing.Point(7, 46);
+            this.labelAudioCodecs.Name = "labelAudioCodecs";
+            this.labelAudioCodecs.Size = new System.Drawing.Size(75, 13);
+            this.labelAudioCodecs.TabIndex = 1;
+            this.labelAudioCodecs.Text = "Audio codecs:";
+            // 
+            // labelAudienceLanguage
+            // 
+            this.labelAudienceLanguage.AutoSize = true;
+            this.labelAudienceLanguage.Location = new System.Drawing.Point(7, 22);
+            this.labelAudienceLanguage.Name = "labelAudienceLanguage";
+            this.labelAudienceLanguage.Size = new System.Drawing.Size(102, 13);
+            this.labelAudienceLanguage.TabIndex = 0;
+            this.labelAudienceLanguage.Text = "Audience language:";
             // 
             // tabPageAdvanced
             // 
@@ -219,7 +292,7 @@ namespace BDAutoMuxer
             this.tabPageAdvanced.Location = new System.Drawing.Point(4, 22);
             this.tabPageAdvanced.Name = "tabPageAdvanced";
             this.tabPageAdvanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAdvanced.Size = new System.Drawing.Size(329, 102);
+            this.tabPageAdvanced.Size = new System.Drawing.Size(388, 201);
             this.tabPageAdvanced.TabIndex = 1;
             this.tabPageAdvanced.Text = "Advanced";
             this.tabPageAdvanced.UseVisualStyleBackColor = true;
@@ -243,7 +316,7 @@ namespace BDAutoMuxer
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(360, 182);
+            this.ClientSize = new System.Drawing.Size(420, 280);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -256,6 +329,9 @@ namespace BDAutoMuxer
             this.tabControl.ResumeLayout(false);
             this.tabPageBDInfo.ResumeLayout(false);
             this.tabPageBDInfo.PerformLayout();
+            this.tabPageOutput.ResumeLayout(false);
+            this.groupBoxOutputPrefs.ResumeLayout(false);
+            this.groupBoxOutputPrefs.PerformLayout();
             this.tabPageAdvanced.ResumeLayout(false);
             this.tabPageAdvanced.PerformLayout();
             this.ResumeLayout(false);
@@ -279,5 +355,11 @@ namespace BDAutoMuxer
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPageBDInfo;
         private System.Windows.Forms.TabPage tabPageAdvanced;
+        private System.Windows.Forms.TabPage tabPageOutput;
+        private System.Windows.Forms.GroupBox groupBoxOutputPrefs;
+        private System.Windows.Forms.CheckedListBox checkedListBoxAudioCodecs;
+        private System.Windows.Forms.ComboBox comboBoxAudienceLanguage;
+        private System.Windows.Forms.Label labelAudioCodecs;
+        private System.Windows.Forms.Label labelAudienceLanguage;
     }
 }
