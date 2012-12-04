@@ -1276,6 +1276,11 @@ namespace BDAutoMuxer.models
                 sb.Append(" (NOT muxable)");
             return sb.ToString();
         }
+
+        public override int GetHashCode()
+        {
+            return SerializableName.GetHashCode();
+        }
     }
 
     public abstract class MIAudioCodec : MICodec
