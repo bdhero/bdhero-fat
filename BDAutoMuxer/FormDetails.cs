@@ -32,6 +32,7 @@ namespace BDAutoMuxer
         private bool _isSearchingMainMovieDb;
         private bool _isSearchingTmdb;
         private bool _isMuxing;
+        private bool _isCancelling;
 
         private Tmdb _tmdbApi;
 
@@ -333,6 +334,7 @@ namespace BDAutoMuxer
             _isSearchingMainMovieDb = false;
             _isSearchingTmdb = false;
             _isMuxing = false;
+            _isCancelling = false;
 
             _autoConfigured = false;
             _autoTmdbId = -1;
@@ -1152,6 +1154,8 @@ namespace BDAutoMuxer
 
         private void CancelRip()
         {
+            _isCancelling = true;
+            ResetUI();
             CancelRip(_tsMuxer);
             CancelRip(_tsDemuxer);
         }
@@ -1253,6 +1257,10 @@ namespace BDAutoMuxer
 
             if (_tsMuxer != null && (_tsMuxer.IsCanceled || _tsMuxer.IsError))
                 CleanupFiles();
+
+            _isCancelling = false;
+
+            ResetUI();
         }
 
         private void CleanupFiles()
@@ -1385,6 +1393,10 @@ namespace BDAutoMuxer
 
             if (_tsDemuxer != null && (_tsDemuxer.IsCanceled || _tsDemuxer.IsError))
                 CleanupFiles();
+
+            _isCancelling = false;
+
+            ResetUI();
         }
 
         private bool ShouldMuxTrack(TSStream stream)
@@ -1828,6 +1840,8 @@ namespace BDAutoMuxer
             continueButton.Text = _isMuxing ? (IsMuxingOrDemuxingPaused ? "Resume" : "Pause") : "Mux it!";
             continueButton.Visible = _initialized && (_isMuxing || tabControl.SelectedTab == tabPageOutput) && SelectedPlaylist != null;
             cancelButton.Text = _isMuxing ? "Stop" : "Close";
+
+            continueButton.Enabled = cancelButton.Enabled = !_isCancelling;
 
             ResizeDiscTab();
             ResizeOutputTab();
