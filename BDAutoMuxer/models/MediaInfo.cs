@@ -1281,6 +1281,24 @@ namespace BDAutoMuxer.models
         {
             return SerializableName.GetHashCode();
         }
+
+        public static string SerializeCodecs<T>(ICollection<T> codecs) where T : MICodec
+        {
+            return string.Join(";", new HashSet<T>(codecs).Select(codec => codec.SerializableName));
+        }
+
+        public static ISet<T> DeserializeCodecs<T>(string codecs) where T : MICodec
+        {
+            var codecNames = (codecs ?? "").Trim().Split(';').Where(serializedName => !string.IsNullOrWhiteSpace(serializedName));
+            return new HashSet<T>(codecNames.Select(DeserializeCodec<T>));
+        }
+
+        public static T DeserializeCodec<T>(string serializableName) where T : MICodec
+        {
+            serializableName = (serializableName ?? "").Trim().ToUpperInvariant();
+            var matchingCodec = AllCodecs.FirstOrDefault(codec => codec.SerializableName == serializableName);
+            return (matchingCodec ?? UnknownCodec) as T;
+        }
     }
 
     public abstract class MIAudioCodec : MICodec
