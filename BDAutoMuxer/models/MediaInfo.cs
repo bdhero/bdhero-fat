@@ -1103,6 +1103,8 @@ namespace BDAutoMuxer.models
 
     public abstract class MICodec
     {
+        #region Individual Codecs
+
         #region Video
 
         public static readonly MICodecAVC AVC = new MICodecAVC();
@@ -1146,6 +1148,82 @@ namespace BDAutoMuxer.models
         #region Unknown
 
         public static readonly MIUnknownCodec UnknownCodec = new MIUnknownCodec();
+
+        #endregion
+
+        #endregion
+
+        #region Codec Lists
+
+        public static readonly List<MIVideoCodec> VideoCodecs = new List<MIVideoCodec>()
+                                                                    {
+                                                                        AVC,
+                                                                        VC1,
+                                                                        MPEG1Video,
+                                                                        MPEG2Video
+                                                                    };
+
+        public static readonly List<MIAudioCodec> AudioCodecs = new List<MIAudioCodec>()
+                                                                    {
+                                                                        // HD - All
+                                                                        LPCM,
+                                                                        DTSHDMA,
+                                                                        TrueHD,
+                                                                        // SD - DTS
+                                                                        DTSHDHRA,
+                                                                        DTSES,
+                                                                        DTS,
+                                                                        DTSExpress,
+                                                                        // SD - Dolby
+                                                                        AC3EX,
+                                                                        EAC3,
+                                                                        AC3,
+                                                                        ProLogic,
+                                                                        // SD - MPEG
+                                                                        MPEG2Audio
+                                                                    };
+
+        public static readonly List<MIAudioCodec> MuxableBDAudioCodecs = new List<MIAudioCodec>()
+                                                                    {
+                                                                        // HD - All
+                                                                        LPCM,
+                                                                        DTSHDMA,
+                                                                        TrueHD,
+                                                                        // SD - DTS
+                                                                        DTSHDHRA,
+                                                                        DTS,
+                                                                        // SD - Dolby
+                                                                        EAC3,
+                                                                        AC3,
+                                                                        // SD - MPEG
+                                                                        MPEG2Audio
+                                                                    };
+
+        public static readonly List<MISubtitleCodec> SubtitleCodecs = new List<MISubtitleCodec>()
+                                                                          {
+                                                                              PGS
+                                                                          };
+
+        public static readonly List<MICodec> AllCodecs = new List<MICodec>()
+                                                             {
+                                                                 AVC,
+                                                                 VC1,
+                                                                 MPEG1Video,
+                                                                 MPEG2Video,
+                                                                 ProLogic,
+                                                                 AC3,
+                                                                 AC3EX,
+                                                                 EAC3,
+                                                                 TrueHD,
+                                                                 DTS,
+                                                                 DTSES,
+                                                                 DTSExpress,
+                                                                 DTSHDHRA,
+                                                                 DTSHDMA,
+                                                                 MPEG2Audio,
+                                                                 LPCM,
+                                                                 PGS
+                                                             };
 
         #endregion
 
