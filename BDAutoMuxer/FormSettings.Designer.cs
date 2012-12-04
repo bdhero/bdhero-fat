@@ -92,7 +92,7 @@ namespace BDAutoMuxer
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(417, 245);
+            this.buttonCancel.Location = new System.Drawing.Point(417, 261);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 6;
@@ -103,7 +103,7 @@ namespace BDAutoMuxer
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(336, 245);
+            this.buttonOK.Location = new System.Drawing.Point(336, 261);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 5;
@@ -201,7 +201,7 @@ namespace BDAutoMuxer
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(480, 227);
+            this.tabControl.Size = new System.Drawing.Size(480, 243);
             this.tabControl.TabIndex = 17;
             // 
             // tabPageBDInfo
@@ -226,7 +226,7 @@ namespace BDAutoMuxer
             this.tabPageOutput.Location = new System.Drawing.Point(4, 22);
             this.tabPageOutput.Name = "tabPageOutput";
             this.tabPageOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageOutput.Size = new System.Drawing.Size(472, 201);
+            this.tabPageOutput.Size = new System.Drawing.Size(472, 217);
             this.tabPageOutput.TabIndex = 2;
             this.tabPageOutput.Text = "Output";
             this.tabPageOutput.UseVisualStyleBackColor = true;
@@ -243,7 +243,7 @@ namespace BDAutoMuxer
             this.groupBoxOutputPrefs.Controls.Add(this.labelAudienceLanguage);
             this.groupBoxOutputPrefs.Location = new System.Drawing.Point(7, 7);
             this.groupBoxOutputPrefs.Name = "groupBoxOutputPrefs";
-            this.groupBoxOutputPrefs.Size = new System.Drawing.Size(454, 187);
+            this.groupBoxOutputPrefs.Size = new System.Drawing.Size(454, 203);
             this.groupBoxOutputPrefs.TabIndex = 0;
             this.groupBoxOutputPrefs.TabStop = false;
             this.groupBoxOutputPrefs.Text = "Preferred Filter Settings";
@@ -256,7 +256,7 @@ namespace BDAutoMuxer
             this.checkedListBoxAudioCodecs.FormattingEnabled = true;
             this.checkedListBoxAudioCodecs.Location = new System.Drawing.Point(115, 46);
             this.checkedListBoxAudioCodecs.Name = "checkedListBoxAudioCodecs";
-            this.checkedListBoxAudioCodecs.Size = new System.Drawing.Size(230, 124);
+            this.checkedListBoxAudioCodecs.Size = new System.Drawing.Size(230, 139);
             this.checkedListBoxAudioCodecs.TabIndex = 3;
             // 
             // comboBoxAudienceLanguage
@@ -314,6 +314,7 @@ namespace BDAutoMuxer
             // 
             // splitButtonSelectAudioCodecs
             // 
+            this.splitButtonSelectAudioCodecs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.splitButtonSelectAudioCodecs.AutoSize = true;
             this.splitButtonSelectAudioCodecs.Location = new System.Drawing.Point(351, 46);
             this.splitButtonSelectAudioCodecs.Name = "splitButtonSelectAudioCodecs";
@@ -329,13 +330,13 @@ namespace BDAutoMuxer
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(504, 280);
+            this.ClientSize = new System.Drawing.Size(504, 296);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(376, 216);
+            this.MinimumSize = new System.Drawing.Size(480, 320);
             this.Name = "FormSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "BDAutoMuxer Settings";
