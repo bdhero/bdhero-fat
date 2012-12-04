@@ -33,6 +33,8 @@ using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
 using BDAutoMuxer.views;
 using ComboBox = System.Windows.Forms.ComboBox;
+using ContextMenu = System.Windows.Forms.ContextMenu;
+using MenuItem = System.Windows.Forms.MenuItem;
 using ToolTip = System.Windows.Forms.ToolTip;
 
 // ReSharper disable EmptyGeneralCatchClause
@@ -60,6 +62,7 @@ namespace BDAutoMuxer
 
             InitAudienceLanguage();
             InitPreferredAudioCodecs();
+            InitSelectButton();
 
             FormUtils.TextBox_EnableSelectAll(this);
         }
@@ -105,6 +108,80 @@ namespace BDAutoMuxer
         private ISet<MIAudioCodec> SelectedAudioCodecs
         {
             get { return new HashSet<MIAudioCodec>(checkedListBoxAudioCodecs.CheckedItems.OfType<MIAudioCodec>()); }
+        }
+
+        private bool AreAllAudioCodecsChecked(ItemCheckEventArgs e = null)
+        {
+            var delta = e == null ? 0 : (e.NewValue == CheckState.Checked ? +1 : (e.NewValue == CheckState.Unchecked ? -1 : 0));
+            return checkedListBoxAudioCodecs.CheckedItems.Count + delta == checkedListBoxAudioCodecs.Items.Count;
+        }
+
+        private void InitSelectButton()
+        {
+            var contextMenu = new ContextMenu();
+
+            var selectAllMenuItem = new MenuItem("&All");
+            var selectHDMenuItem = new MenuItem("&HD only");
+            var selectSDMenuItem = new MenuItem("&SD only");
+            var selectNoneMenuItem = new MenuItem("&None");
+
+            selectAllMenuItem.Click += SelectAllAudioCodecs;
+            selectHDMenuItem.Click += SelectHDAudioCodecs;
+            selectSDMenuItem.Click += SelectSDAudioCodecs;
+            selectNoneMenuItem.Click += SelectNoAudioCodecs;
+
+            contextMenu.MenuItems.Add(selectAllMenuItem);
+            contextMenu.MenuItems.Add(selectHDMenuItem);
+            contextMenu.MenuItems.Add(selectSDMenuItem);
+            contextMenu.MenuItems.Add(selectNoneMenuItem);
+
+            splitButtonSelectAudioCodecs.ShowSplit = true;
+            splitButtonSelectAudioCodecs.SplitMenu = contextMenu;
+            splitButtonSelectAudioCodecs.Click += (sender, args) =>
+                                                      {
+                                                          if (AreAllAudioCodecsChecked())
+                                                              SelectNoAudioCodecs();
+                                                          else
+                                                              SelectAllAudioCodecs();
+                                                      };
+
+            checkedListBoxAudioCodecs.ItemCheck +=
+                (sender, args) =>
+                splitButtonSelectAudioCodecs.Text = AreAllAudioCodecsChecked(args) ? "Select &none" : "Select &all";
+        }
+
+        private void SelectAllAudioCodecs(object sender = null, EventArgs e = null)
+        {
+            for (var i = 0; i < checkedListBoxAudioCodecs.Items.Count; i++)
+            {
+                checkedListBoxAudioCodecs.SetItemChecked(i, true);
+            }
+        }
+
+        private void SelectHDAudioCodecs(object sender = null, EventArgs e = null)
+        {
+            for (var i = 0; i < checkedListBoxAudioCodecs.Items.Count; i++)
+            {
+                var audioCodec = checkedListBoxAudioCodecs.Items[i] as MIAudioCodec;
+                checkedListBoxAudioCodecs.SetItemChecked(i, audioCodec != null && audioCodec.Lossless);
+            }
+        }
+
+        private void SelectSDAudioCodecs(object sender = null, EventArgs e = null)
+        {
+            for (var i = 0; i < checkedListBoxAudioCodecs.Items.Count; i++)
+            {
+                var audioCodec = checkedListBoxAudioCodecs.Items[i] as MIAudioCodec;
+                checkedListBoxAudioCodecs.SetItemChecked(i, audioCodec != null && audioCodec.Lossy);
+            }
+        }
+
+        private void SelectNoAudioCodecs(object sender = null, EventArgs e = null)
+        {
+            for (var i = 0; i < checkedListBoxAudioCodecs.Items.Count; i++)
+            {
+                checkedListBoxAudioCodecs.SetItemChecked(i, false);
+            }
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
