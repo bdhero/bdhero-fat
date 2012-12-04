@@ -1182,6 +1182,11 @@ namespace BDAutoMuxer.models
         /// </summary>
         public virtual bool IsMuxable { get { return true; } }
 
+        /// <summary>
+        /// The full name of the codec plus any alternate names to avoid confusion (e.g., "Dolby Digital (AC-3)").
+        /// </summary>
+        public virtual string FullNameDisambig { get { return FullName; } }
+
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -1613,6 +1618,11 @@ namespace BDAutoMuxer.models
             get { return "DD"; }
         }
 
+        public override string FullNameDisambig
+        {
+            get { return string.Format("{0} ({1})", base.FullNameDisambig, ShortName); }
+        }
+
         public override string Description
         {
             get { return "Standard Dolby Digital.  Officially part of the Blu-ray and DVD standards."; }
@@ -1735,6 +1745,11 @@ namespace BDAutoMuxer.models
             get { return "DD+"; }
         }
 
+        public override string FullNameDisambig
+        {
+            get { return string.Format("{0} ({1} / {2})", base.FullNameDisambig, AltMicroName, ShortName); }
+        }
+
         public override string Description
         {
             get { return "Enhanced version of AC-3.  Not backwards compatible with regular AC-3.  Optional part of the Blu-ray standard for secondary audio tracks."; }
@@ -1851,6 +1866,11 @@ namespace BDAutoMuxer.models
             get { return "DTS"; }
         }
 
+        public override string FullNameDisambig
+        {
+            get { return string.Format("{0} ({1})", base.FullNameDisambig, ShortName); }
+        }
+
         public override string Description
         {
             get { return "The standard core DTS codec.  Officially part of the Blu-ray standard.  Officially part of the DVD standard, but player support is optional."; }
@@ -1905,6 +1925,11 @@ namespace BDAutoMuxer.models
         public override string MicroName
         {
             get { return "DTS-ES"; }
+        }
+
+        public override string FullNameDisambig
+        {
+            get { return string.Format("{0} ({1})", base.FullNameDisambig, ShortName); }
         }
 
         public override string Description
@@ -2199,6 +2224,11 @@ namespace BDAutoMuxer.models
         public override string AltFullName
         {
             get { return "Linear pulse-code modulation"; }
+        }
+
+        public override string FullNameDisambig
+        {
+            get { return string.Format("{0} (uncompressed)", base.FullNameDisambig); }
         }
 
         public override string Description
