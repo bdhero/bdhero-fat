@@ -109,8 +109,83 @@ BDAutoMuxer would not be possible without the **exceptional** work of these amaz
 
 # License
 
-*  The BDInfo source code is licensed under the [LGPL 2.1][lgpl].
-*  BDAutoMuxer is currently licensed under the [LGPL 2.1][lgpl] as well, but this is under review and we may release it under a different license in the future.
+BDAutoMuxer
+-----------
+
+### Overview
+
+BDAutoMuxer is free, [Open Source software as defined by the Open Source Initiative][open-source-def].  You may modify the program and distribute modified or verbatim copies of BDAutoMuxer without asking, provided that you make the source code available for others to view and modify as described by the GPL v3.0 (see below).
+
+*   License: [GPL 3.0][gpl-3.0]
+*   Source code: [GitHub project][bdam-src]
+*   Derived from:
+    *   [BDInfo](#bdinfo) (LGPL 2.1)
+*   Uses:
+    *   [MKVToolNix](#mkvtoolnix) (GPL 2.0)
+    *   [MediaInfo](#mediainfo) (LGPL 3.0)
+    *   tsMuxeR (custom freeware license)
+
+### GPL 3.0
+
+> BDAutoMuxer - Automated Blu-ray muxing tool
+> Copyright (C) 2012-2013 Andrew C. Dvorak (andy@andydvorak.net)
+
+> This program is free software: you can redistribute it and/or modify
+> it under the terms of the GNU General Public License as published by
+> the Free Software Foundation, either version 3 of the License, or
+> (at your option) any later version.
+
+> This program is distributed in the hope that it will be useful,
+> but WITHOUT ANY WARRANTY; without even the implied warranty of
+> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> GNU General Public License for more details.
+
+> You should have received a copy of the GNU General Public License
+> along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+BDInfo
+------
+
+http://www.cinemasquid.com/blu-ray/tools/bdinfo
+
+Licensed under the [GNU Lesser General Public License, version 2.1 (LGPL-2.1)][lgpl-2.1]
+
+### Section 3
+
+> You may opt to apply the terms of the ordinary GNU General Public License instead of this License to a given copy of the Library.
+
+> ...
+
+> This option is useful when you wish to copy part of the code of the Library into a program that is not a library.
+
+### Section 5
+
+> A program that contains no derivative of any portion of the Library, but is designed to work with the Library by being compiled or linked with it, is called a "work that uses the Library". Such a work, in isolation, is not a derivative work of the Library, and therefore falls outside the scope of this License.
+
+> However, linking a "work that uses the Library" with the Library creates an executable that is a derivative of the Library (because it contains portions of the Library), rather than a "work that uses the library". The executable is therefore covered by this License. Section 6 states terms for distribution of such executables.
+
+MKVToolNix
+----------
+
+http://www.bunkus.org/videotools/mkvtoolnix/
+
+Licensed under the [GNU General Public License, version 2 (GPL-2.0)][gpl-2.0]
+
+MediaInfo
+---------
+
+http://mediainfo.sourceforge.net/en
+
+Licensed under the [GNU Lesser General Public License, version 3.0 (LGPL-3.0)][lgpl-3.0]
+
+tsMuxeR
+-------
+
+http://www.videohelp.com/tools/tsMuxeR
+
+Licensed under a custom "Freeware Licence [sic] Agreement"
+
+Permits licensees to "distribute exact copies of the Software to anyone."
 
 [tmdb]: http://www.themoviedb.org/
 [bdinfo]: http://www.cinemasquid.com/blu-ray/tools/bdinfo
@@ -120,4 +195,9 @@ BDAutoMuxer would not be possible without the **exceptional** work of these amaz
 [mkvtoolnix]: http://www.bunkus.org/videotools/mkvtoolnix/
 [andydvorak]: https://github.com/acdvorak
 [chrisspencer]: https://github.com/Chris-Spencer
-[lgpl]: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+[bdam-src]: https://github.com/acdvorak/bdautomuxer
+[gpl-2.0]: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+[gpl-3.0]: http://www.gnu.org/licenses/gpl.html
+[lgpl-2.1]: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+[lgpl-3.0]: http://www.gnu.org/licenses/lgpl.html
+[open-source-def]: http://opensource.org/osd-annotated
