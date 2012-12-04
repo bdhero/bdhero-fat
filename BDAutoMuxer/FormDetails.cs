@@ -628,7 +628,7 @@ namespace BDAutoMuxer
         private void PopulateVideoTracks()
         {
             var i = 0;
-            ImageList icons = new ImageList();
+            var icons = new ImageList();
 
             foreach (TSVideoStream stream in _videoTracks)
             {
@@ -674,7 +674,7 @@ namespace BDAutoMuxer
         private void PopulateAudioTracks()
         {
             var i = 0;
-            ImageList icons = new ImageList();
+            var icons = new ImageList();
 
             foreach (TSAudioStream stream in _audioTracks)
             {
@@ -715,7 +715,7 @@ namespace BDAutoMuxer
         private void PopulateSubtitleTracks()
         {
             var i = 0;
-            ImageList icons = new ImageList();
+            var icons = new ImageList();
 
             foreach (TSStream stream in _subtitleTracks.Where(track => track.StreamType != TSStreamType.INTERACTIVE_GRAPHICS))
             {
