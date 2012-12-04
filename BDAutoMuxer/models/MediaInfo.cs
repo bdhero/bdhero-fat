@@ -1564,7 +1564,7 @@ namespace BDAutoMuxer.models
 
         public override string Description
         {
-            get { return "Dolby Stereo + 2 matrixed channels (front center and rear center), resulting in 4.0 channel output.  Backwards compatible with existing stereo systems."; }
+            get { return "Dolby Stereo + 2 matrixed channels (front center and rear center), resulting in 4.0 channel output.  Backwards compatible with older stereo systems."; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1613,6 +1613,11 @@ namespace BDAutoMuxer.models
             get { return "DD"; }
         }
 
+        public override string Description
+        {
+            get { return "Standard Dolby Digital.  Officially part of the Blu-ray and DVD standards."; }
+        }
+
         public override bool Lossy
         {
             get { return true; }
@@ -1621,11 +1626,6 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Standard Dolby Digital.  Officially part of the Blu-ray and DVD standards."; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1674,6 +1674,11 @@ namespace BDAutoMuxer.models
             get { return "DD EX"; }
         }
 
+        public override string Description
+        {
+            get { return "Extension of AC-3 (Dolby Digital) that adds 1 or 2 matrixed rear channels, creating 6.1 or 7.1 channel output.  Backwards compatible with regular AC-3."; }
+        }
+
         public override bool Lossy
         {
             get { return true; }
@@ -1682,11 +1687,6 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Extension of AC-3 (Dolby Digital) that adds 1 or 2 matrixed rear channels, creating 6.1 or 7.1 channel output."; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1737,7 +1737,7 @@ namespace BDAutoMuxer.models
 
         public override string Description
         {
-            get { return "Enhanced version of AC-3.  Not backwards compatible with existing AC-3 hardware.  Optional part of the Blu-ray standard for secondary audio."; }
+            get { return "Enhanced version of AC-3.  Not backwards compatible with regular AC-3.  Optional part of the Blu-ray standard for secondary audio tracks."; }
         }
 
         public override bool Lossy
@@ -1803,7 +1803,7 @@ namespace BDAutoMuxer.models
 
         public override string Description
         {
-            get { return "Lossless audio codec with a core inner AC-3 (Dolby Digital) stream for backwards compatibility with existing hardware."; }
+            get { return "Lossless audio encoding with a core AC-3 (Dolby Digital) stream for backwards compatibility with existing AC-3 hardware."; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1851,6 +1851,11 @@ namespace BDAutoMuxer.models
             get { return "DTS"; }
         }
 
+        public override string Description
+        {
+            get { return "The standard core DTS codec.  Officially part of the Blu-ray standard.  Officially part of the DVD standard, but player support is optional."; }
+        }
+
         public override bool Lossy
         {
             get { return true; }
@@ -1859,11 +1864,6 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "The standard core DTS codec.  Officially part of the Blu-ray standard.  Officially part of the DVD standard, but player support is optional."; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1907,6 +1907,11 @@ namespace BDAutoMuxer.models
             get { return "DTS-ES"; }
         }
 
+        public override string Description
+        {
+            get { return "DTS Digital Surround (a.k.a. DTS) + an additional discrete or matrix-encoded rear channel.  Backwards compatible with regular DTS."; }
+        }
+
         public override bool Lossy
         {
             get { return true; }
@@ -1915,11 +1920,6 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "DTS Digital Surround (a.k.a. DTS) + an additional discrete or matrix-encoded rear channel.  Backwards compatible with regular DTS."; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1963,6 +1963,11 @@ namespace BDAutoMuxer.models
             get { return "DTS EX"; }
         }
 
+        public override string Description
+        {
+            get { return "Low bit-rate audio codec used for Blu-ray secondary audio and BD Live.  Might not be muxable with current freely available software."; }
+        }
+
         public override bool Lossy
         {
             get { return true; }
@@ -1971,11 +1976,6 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Low bit-rate audio codec used for Blu-ray secondary audio and BD Live.  Might not be muxable with current freely available software."; }
         }
 
         public override bool IsMuxable
@@ -2024,6 +2024,11 @@ namespace BDAutoMuxer.models
             get { return "DTS-HD HRA"; }
         }
 
+        public override string Description
+        {
+            get { return "Extension of regular DTS Digital Surround with higher quality.  Contains backwards compatible DTS Digital Surround core.  Optional part of the Blu-ray standard."; }
+        }
+
         public override bool Lossy
         {
             get { return true; }
@@ -2032,11 +2037,6 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return false; }
-        }
-
-        public override string Description
-        {
-            get { return "Extension of regular DTS Digital Surround with higher quality.  Contains backwards compatible DTS Digital Surround core.  Optional part of the Blu-ray standard."; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2080,6 +2080,11 @@ namespace BDAutoMuxer.models
             get { return "DTS-HD MA"; }
         }
 
+        public override string Description
+        {
+            get { return "Lossless extension to regular DTS Digital Surround.  Contains backwards compatible DTS Digital Surround core.  Optional part of the Blu-ray standard."; }
+        }
+
         public override bool Lossy
         {
             get { return false; }
@@ -2088,11 +2093,6 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return true; }
-        }
-
-        public override string Description
-        {
-            get { return "Lossless extension to regular DTS Digital Surround.  Contains backwards compatible DTS Digital Surround core.  Optional part of the Blu-ray standard."; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2201,6 +2201,11 @@ namespace BDAutoMuxer.models
             get { return "Linear pulse-code modulation"; }
         }
 
+        public override string Description
+        {
+            get { return "Uncompressed studio-quality audio.  Officially part of the Blu-ray and DVD standards."; }
+        }
+
         public override bool Lossy
         {
             get { return false; }
@@ -2209,11 +2214,6 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return true; }
-        }
-
-        public override string Description
-        {
-            get { return "Uncompressed studio-quality audio.  Officially part of the Blu-ray and DVD standards."; }
         }
 
         public static bool Matches(MIFormat format)
