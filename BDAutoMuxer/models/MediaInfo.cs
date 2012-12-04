@@ -1742,7 +1742,7 @@ namespace BDAutoMuxer.models
 
         public override string AltMicroName
         {
-            get { return "DD+"; }
+            get { return "AC3+"; }
         }
 
         public override string FullNameDisambig
@@ -1985,7 +1985,7 @@ namespace BDAutoMuxer.models
 
         public override string MicroName
         {
-            get { return "DTS EX"; }
+            get { return "DTS Express"; }
         }
 
         public override string Description
