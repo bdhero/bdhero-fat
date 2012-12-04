@@ -1157,6 +1157,8 @@ namespace BDAutoMuxer.models
 
         public abstract string SerializableName { get; }
 
+        public abstract TSStreamType StreamType { get; }
+
         /// <summary>
         /// Shown in MediaInfo.  Also stored in MKV headers.
         /// </summary>
@@ -1258,6 +1260,11 @@ namespace BDAutoMuxer.models
             get { return "V_H264"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.AVC_VIDEO; }
+        }
+
         public override string CodecId
         {
             get { return "V_MPEG4/ISO/AVC"; }
@@ -1304,6 +1311,11 @@ namespace BDAutoMuxer.models
             get { return "V_VC1"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.VC1_VIDEO; }
+        }
+
         public override string CodecId
         {
             // TODO: Or is it "V_MS/VFW/WVC1"?
@@ -1344,6 +1356,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "V_MPEG1"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.MPEG1_VIDEO; }
         }
 
         public override string CodecId
@@ -1390,6 +1407,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "V_MPEG2"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.MPEG2_VIDEO; }
         }
 
         public override string CodecId
@@ -1445,6 +1467,11 @@ namespace BDAutoMuxer.models
             get { return "V_UNKNOWN"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
+        }
+
         public override string CodecId
         {
             get { return "V_UNKNOWN"; }
@@ -1490,6 +1517,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "A_AC3_PL"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -1551,6 +1583,11 @@ namespace BDAutoMuxer.models
             get { return "A_AC3"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.AC3_AUDIO; }
+        }
+
         public override string CodecId
         {
             get { return "A_AC3"; }
@@ -1605,6 +1642,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "A_AC3_EX"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -1663,6 +1705,11 @@ namespace BDAutoMuxer.models
             get { return "A_AC3_PLUS"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.AC3_PLUS_AUDIO; }
+        }
+
         public override string CodecId
         {
             get { return "A_EAC3"; }
@@ -1717,6 +1764,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "A_TRUEHD"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.AC3_TRUE_HD_AUDIO; }
         }
 
         public override string CodecId
@@ -1774,6 +1826,11 @@ namespace BDAutoMuxer.models
             get { return "A_DTS"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.DTS_AUDIO; }
+        }
+
         public override string CodecId
         {
             get { return "A_DTS"; }
@@ -1825,6 +1882,11 @@ namespace BDAutoMuxer.models
             get { return "D_DTS_ES"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
+        }
+
         public override string CodecId
         {
             get { return "A_DTS"; }
@@ -1874,6 +1936,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "A_DTS_EXPRESS"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.DTS_HD_SECONDARY_AUDIO; }
         }
 
         public override string CodecId
@@ -1932,6 +1999,11 @@ namespace BDAutoMuxer.models
             get { return "A_DTS_HD_HRA"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.DTS_HD_AUDIO; }
+        }
+
         public override string CodecId
         {
             get { return "A_DTS"; }
@@ -1981,6 +2053,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "A_DTS_HD_MA"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.DTS_HD_MASTER_AUDIO; }
         }
 
         public override string CodecId
@@ -2035,6 +2112,11 @@ namespace BDAutoMuxer.models
             get { return "A_MPEG2"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.MPEG2_AUDIO; }
+        }
+
         public override string CodecId
         {
             // TODO: throw new NotImplementedException("TODO: Find out what the Codec ID for MPEG-2 Audio is!");
@@ -2086,6 +2168,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "A_LPCM"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.LPCM_AUDIO; }
         }
 
         public override string CodecId
@@ -2146,6 +2233,11 @@ namespace BDAutoMuxer.models
             get { return "A_UNKNOWN"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
+        }
+
         public override string CodecId
         {
             get { return "A_UNKNOWN"; }
@@ -2190,6 +2282,11 @@ namespace BDAutoMuxer.models
             get { return "S_PGS"; }
         }
 
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.PRESENTATION_GRAPHICS; }
+        }
+
         public override string CodecId
         {
             get { return "S_HDMV/PGS"; }
@@ -2226,6 +2323,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "S_UNKNOWN"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -2288,6 +2390,11 @@ namespace BDAutoMuxer.models
         public override string SerializableName
         {
             get { return "UNKNOWN"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
