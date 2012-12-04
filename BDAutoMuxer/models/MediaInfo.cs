@@ -1153,6 +1153,8 @@ namespace BDAutoMuxer.models
         public abstract bool IsVideo { get; }
         public abstract bool IsSubtitle { get; }
 
+        public virtual bool IsKnown { get { return true; } }
+
         public abstract string SerializableName { get; }
 
         /// <summary>
@@ -1466,6 +1468,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Unknown video format."; }
+        }
+
+        public override bool IsKnown
+        {
+            get { return false; }
         }
     }
 
@@ -2163,6 +2170,11 @@ namespace BDAutoMuxer.models
         {
             get { return "Unknown audio format."; }
         }
+
+        public override bool IsKnown
+        {
+            get { return false; }
+        }
     }
 
     #endregion
@@ -2240,6 +2252,11 @@ namespace BDAutoMuxer.models
         {
             get { return "Unknown subtitle format."; }
         }
+
+        public override bool IsKnown
+        {
+            get { return false; }
+        }
     }
 
     #endregion
@@ -2259,6 +2276,11 @@ namespace BDAutoMuxer.models
         }
 
         public override bool IsSubtitle
+        {
+            get { return false; }
+        }
+
+        public override bool IsKnown
         {
             get { return false; }
         }
