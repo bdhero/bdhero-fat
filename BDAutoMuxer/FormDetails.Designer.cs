@@ -1003,7 +1003,7 @@
             this.listViewVideoTracks.FullRowSelect = true;
             this.listViewVideoTracks.Location = new System.Drawing.Point(90, 29);
             this.listViewVideoTracks.Name = "listViewVideoTracks";
-            this.listViewVideoTracks.Size = new System.Drawing.Size(388, 47);
+            this.listViewVideoTracks.Size = new System.Drawing.Size(391, 54);
             this.listViewVideoTracks.TabIndex = 1;
             this.listViewVideoTracks.UseCompatibleStateImageBehavior = false;
             this.listViewVideoTracks.View = System.Windows.Forms.View.Details;
@@ -1069,9 +1069,9 @@
             this.columnHeaderAudioLanguage,
             this.columnHeaderAudioChannels});
             this.listViewAudioTracks.FullRowSelect = true;
-            this.listViewAudioTracks.Location = new System.Drawing.Point(91, 3);
+            this.listViewAudioTracks.Location = new System.Drawing.Point(90, 3);
             this.listViewAudioTracks.Name = "listViewAudioTracks";
-            this.listViewAudioTracks.Size = new System.Drawing.Size(390, 125);
+            this.listViewAudioTracks.Size = new System.Drawing.Size(391, 134);
             this.listViewAudioTracks.TabIndex = 0;
             this.listViewAudioTracks.UseCompatibleStateImageBehavior = false;
             this.listViewAudioTracks.View = System.Windows.Forms.View.Details;
@@ -1110,9 +1110,9 @@
             this.columnHeaderSubtitleCodec,
             this.columnHeaderSubtitleLanguage});
             this.listViewSubtitleTracks.FullRowSelect = true;
-            this.listViewSubtitleTracks.Location = new System.Drawing.Point(91, 3);
+            this.listViewSubtitleTracks.Location = new System.Drawing.Point(90, 3);
             this.listViewSubtitleTracks.Name = "listViewSubtitleTracks";
-            this.listViewSubtitleTracks.Size = new System.Drawing.Size(390, 113);
+            this.listViewSubtitleTracks.Size = new System.Drawing.Size(391, 121);
             this.listViewSubtitleTracks.TabIndex = 0;
             this.listViewSubtitleTracks.UseCompatibleStateImageBehavior = false;
             this.listViewSubtitleTracks.View = System.Windows.Forms.View.Details;
