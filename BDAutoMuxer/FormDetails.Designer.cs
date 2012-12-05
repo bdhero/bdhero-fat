@@ -525,8 +525,8 @@
             this.buttonSelectAll.Name = "buttonSelectAll";
             this.buttonSelectAll.Size = new System.Drawing.Size(75, 23);
             this.buttonSelectAll.TabIndex = 0;
-            this.buttonSelectAll.Tag = "Mark all enabled playlists as \"Main Movie\"";
-            this.buttonSelectAll.Text = "Select likely";
+            this.buttonSelectAll.Tag = "Mark best guess playlists as \"Main Movie\"";
+            this.buttonSelectAll.Text = "Auto select";
             this.buttonSelectAll.UseVisualStyleBackColor = true;
             this.buttonSelectAll.Click += new System.EventHandler(this.buttonSelectAll_Click);
             // 
