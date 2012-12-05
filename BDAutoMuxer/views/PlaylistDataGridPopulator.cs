@@ -190,7 +190,9 @@ namespace BDAutoMuxer.views
 
             for (var rowIndex = 0; rowIndex < _dataGridView.Rows.Count; rowIndex++)
             {
+                TSPlaylistFile tsPlaylistFile = _bindingList[rowIndex].Playlist;
                 EnableRow(_dataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
+                StyleRow(_dataGridView.Rows[rowIndex], tsPlaylistFile.IsFeatureLength && !tsPlaylistFile.IsLikelyMainMovie);
             }
         }
 
@@ -212,6 +214,14 @@ namespace BDAutoMuxer.views
             for (var colIndex = 0; colIndex < _dataGridView.Columns.Count; colIndex++)
             {
                 EnableCell(_dataGridView[colIndex, row.Index], enabled);
+            }
+        }
+
+        private void StyleRow(DataGridViewBand row, bool isBogus)
+        {
+            for (var colIndex = 0; colIndex < _dataGridView.Columns.Count; colIndex++)
+            {
+                StyleCell(_dataGridView[colIndex, row.Index], isBogus);
             }
         }
 
@@ -237,10 +247,16 @@ namespace BDAutoMuxer.views
             else
             {
                 // gray out the cell
-                // TODO: Use system colors instead of hard-coded ones
                 dc.Style.BackColor = Color.LightGray;
                 dc.Style.ForeColor = Color.DarkGray;
             }
+        }
+
+        private static void StyleCell(DataGridViewCell dc, bool isBogus)
+        {
+            if (!isBogus) return;
+            dc.Style.BackColor = SystemColors.ControlLight;
+            dc.Style.ForeColor = SystemColors.InactiveCaptionText;
         }
 
         public IEnumerable<JsonPlaylist> JsonPlaylists
