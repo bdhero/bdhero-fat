@@ -502,7 +502,7 @@
             this.buttonUnselectAll.Size = new System.Drawing.Size(75, 23);
             this.buttonUnselectAll.TabIndex = 1;
             this.buttonUnselectAll.Tag = "Clear the \"Main Movie\" checkbox on all playlists";
-            this.buttonUnselectAll.Text = "Unselect All";
+            this.buttonUnselectAll.Text = "Unselect all";
             this.buttonUnselectAll.UseVisualStyleBackColor = true;
             this.buttonUnselectAll.Click += new System.EventHandler(this.buttonUnselectAll_Click);
             // 
@@ -526,7 +526,7 @@
             this.buttonSelectAll.Size = new System.Drawing.Size(75, 23);
             this.buttonSelectAll.TabIndex = 0;
             this.buttonSelectAll.Tag = "Mark all enabled playlists as \"Main Movie\"";
-            this.buttonSelectAll.Text = "Select All";
+            this.buttonSelectAll.Text = "Select likely";
             this.buttonSelectAll.UseVisualStyleBackColor = true;
             this.buttonSelectAll.Click += new System.EventHandler(this.buttonSelectAll_Click);
             // 

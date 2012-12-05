@@ -513,13 +513,24 @@ namespace BDAutoMuxer.views
                 OnSelectionChange.Invoke(this, EventArgs.Empty);
         }
 
-        public bool SelectAll
+        public bool SelectFeatureLength
         {
             set
             {
-                foreach (var gridItem in _playlistGridItems.Where(pgi => pgi.Playlist.IsFeatureLength))
+                foreach (var gridItem in _playlistGridItems)
                 {
-                    gridItem.IsMainMovie = value;
+                    gridItem.IsMainMovie = gridItem.Playlist.IsFeatureLength && value;
+                }
+            }
+        }
+
+        public bool SelectLikely
+        {
+            set
+            {
+                foreach (var gridItem in _playlistGridItems)
+                {
+                    gridItem.IsMainMovie = gridItem.Playlist.IsLikelyMainMovie && value;
                 }
             }
         }

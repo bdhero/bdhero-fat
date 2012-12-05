@@ -547,8 +547,8 @@ namespace BDAutoMuxer
             _filteredPlaylists = new HashSet<TSPlaylistFile>(_playlists);
 
             Language videoLanguage = comboBoxVideoLanguage.SelectedValue as Language;
-            Cut cut = (Cut)comboBoxCut.SelectedValue;
-            CommentaryOption commentaryOption = (CommentaryOption)comboBoxCommentary.SelectedValue;
+            Cut cut = comboBoxCut.SelectedValue is Cut ? (Cut) comboBoxCut.SelectedValue : Cut.Theatrical;
+            CommentaryOption commentaryOption = comboBoxCommentary.SelectedValue is CommentaryOption ? (CommentaryOption) comboBoxCommentary.SelectedValue : CommentaryOption.Any;
 
             _audioLanguages.Clear();
             _subtitleLanguages.Clear();
@@ -1596,9 +1596,12 @@ namespace BDAutoMuxer
 
         private void OnAudienceLanguageChange(object sender, EventArgs e)
         {
-            SetAudienceLanguage(VideoLanguages, comboBoxVideoLanguage);
-            SetAudienceLanguage(AudioLanguages, listBoxAudioLanguages);
-            SetAudienceLanguage(SubtitleLanguages, listBoxSubtitleLanguages);
+            if (!_ignoreFilterControlChange)
+            {
+                SetAudienceLanguage(VideoLanguages, comboBoxVideoLanguage);
+                SetAudienceLanguage(AudioLanguages, listBoxAudioLanguages);
+                SetAudienceLanguage(SubtitleLanguages, listBoxSubtitleLanguages);
+            }
         }
 
         private void SetAudienceLanguage(IEnumerable<Language> array, ListControl control)
@@ -2023,7 +2026,7 @@ namespace BDAutoMuxer
         private void buttonSelectAll_Click(object sender, EventArgs e)
         {
             _ignoreDataGridItemChange = true;
-            _populator.SelectAll = true;
+            _populator.SelectLikely = true;
             _ignoreDataGridItemChange = false;
             OnPlaylistItemChange(sender, e);
         }
@@ -2031,7 +2034,7 @@ namespace BDAutoMuxer
         private void buttonUnselectAll_Click(object sender, EventArgs e)
         {
             _ignoreDataGridItemChange = true;
-            _populator.SelectAll = false;
+            _populator.SelectLikely = false;
             _ignoreDataGridItemChange = false;
             OnPlaylistItemChange(sender, e);
         }
