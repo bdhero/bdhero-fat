@@ -156,8 +156,7 @@ namespace BDAutoMuxer.tools
         /// <summary>
         /// Full path to the EXE.
         /// </summary>
-        /// <example>C:\Users\Administrator\AppData\Local\Temp\BDAutoRip\584\TsMuxer\tsMuxeR.exe</example>
-        public string FullName { get { return GetTempPath(Filename); } }
+        public string FullName { get { return GetExePathAbsolute(Filename); } }
 
         /// <summary>
         /// Command line string used to execute the process, including the full path to the EXE and all arguments.
@@ -205,9 +204,19 @@ namespace BDAutoMuxer.tools
 
         #region Resource Paths & Extraction
 
-        protected string GetResourceName(string filename)
+        protected string InstallDir
         {
-            return "BDAutoMuxer.lib.exe." + filename;
+            get { return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location); }
+        }
+
+        protected string GetExePathRelative(string exeFilename)
+        {
+            return Path.Combine("lib", exeFilename);
+        }
+
+        protected string GetExePathAbsolute(string exeFilename)
+        {
+            return Path.Combine(InstallDir, GetExePathRelative(Filename));
         }
 
         protected string GetTempPath(string filename)
@@ -217,23 +226,8 @@ namespace BDAutoMuxer.tools
 
         protected string ExtractResource(string filename)
         {
-            string resource = GetResourceName(filename);
-            string destPath = GetTempPath(filename);
-            ExtractResource(resource, destPath);
-            _paths.Add(destPath);
-            return destPath;
-        }
-
-        // extracts [resource] into the the file specified by [destPath]
-        protected void ExtractResource(string resource, string destPath)
-        {
-            if (File.Exists(destPath)) return;
-            var dir = Path.GetDirectoryName(destPath);
-            Directory.CreateDirectory(dir);
-            var stream = GetType().Assembly.GetManifestResourceStream(resource);
-            var bytes = new byte[(int)stream.Length];
-            stream.Read(bytes, 0, bytes.Length);
-            File.WriteAllBytes(destPath, bytes);
+            // TODO: Handle embedded resources like MediaInfo_XML.csv
+            return GetExePathAbsolute(filename);
         }
 
         #endregion

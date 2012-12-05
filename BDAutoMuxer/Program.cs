@@ -41,13 +41,18 @@ namespace BDAutoMuxer
                 MediaInfo.Test();
                 return;
             }
-            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
+
+            // To embed referenced .DLL files in the output .EXE, uncomment the lines below and in BDAutoMuxer.csproj (close VS2010 first)
+//            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDetails(args));
         }
 
+        // To embed referenced .DLL files in the output .EXE, uncomment the lines below and in BDAutoMuxer.csproj (close VS2010 first)
         // From http://blogs.interknowlogy.com/2011/07/13/merging-a-wpf-application-into-a-single-exe/
+        /*
         private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -69,5 +74,6 @@ namespace BDAutoMuxer
                 return Assembly.Load(assemblyRawBytes);
             }
         }
+        */
     }
 }

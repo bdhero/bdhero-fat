@@ -3,9 +3,9 @@
   <PropertyGroup>
     <ReferencePath>
     </ReferencePath>
-    <PublishUrlHistory>publish\</PublishUrlHistory>
-    <InstallUrlHistory />
-    <SupportUrlHistory />
+    <PublishUrlHistory>..\gh-pages\publish\|gh-pages\publish\|publish\</PublishUrlHistory>
+    <InstallUrlHistory>http://acdvorak.github.com/bdautomuxer/publish/|http://acdvorak.github.com/bdautomuxer/|http://localhost:8080/|http://localhost/</InstallUrlHistory>
+    <SupportUrlHistory>https://github.com/acdvorak/bdautomuxer/issues</SupportUrlHistory>
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory />

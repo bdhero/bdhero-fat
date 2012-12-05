@@ -5,4 +5,5 @@
 /BDAutoMuxer/bin
 /BDAutoMuxer/obj
 /_ReSharper.*
-
+/BDAutoMuxer/publish
+/gh-pages
