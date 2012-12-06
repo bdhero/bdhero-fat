@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using BDAutoMuxer.Properties;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
 using BDAutoMuxer.views;
@@ -217,7 +218,9 @@ namespace BDAutoMuxer
 
     public static class BDAutoMuxerSettings
     {
+        private static readonly Settings UserSettings = Settings.Default;
         private static readonly HashSet<MIAudioCodec> AudioCodecsHD = new HashSet<MIAudioCodec>() { MICodec.LPCM, MICodec.DTSHDMA, MICodec.TrueHD };
+
         private const string HDOnlyValue = "hd_only";
         private const string AllValueText = "all";
         private const string AllValueChar = "*";
@@ -235,8 +238,7 @@ namespace BDAutoMuxer
         {
             get
             {
-                Assembly asm = Properties.Settings.Default.GetType().Assembly;
-                return asm.GetName().Name;
+                return  UserSettings.GetType().Assembly.GetName().Name;
             }
         }
 
@@ -244,7 +246,7 @@ namespace BDAutoMuxer
         {
             get
             {
-                return Properties.Settings.Default.GetType().Assembly.GetName().Version;
+                return UserSettings.GetType().Assembly.GetName().Version;
             }
         }
 
@@ -260,13 +262,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.EnableSSIF; }
+                try { return UserSettings.EnableSSIF; }
                 catch { return true; }
             }
 
             set
             {
-                try { Properties.Settings.Default.EnableSSIF = value; }
+                try { UserSettings.EnableSSIF = value; }
                 catch { }
             }
         }
@@ -275,13 +277,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.FilterLoopingPlaylists; }
+                try { return UserSettings.FilterLoopingPlaylists; }
                 catch { return false; }
             }
 
             set
             {
-                try { Properties.Settings.Default.FilterLoopingPlaylists = value; }
+                try { UserSettings.FilterLoopingPlaylists = value; }
                 catch { }
             }
         }
@@ -290,13 +292,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.FilterShortPlaylists; }
+                try { return UserSettings.FilterShortPlaylists; }
                 catch { return false; }
             }
 
             set
             {
-                try { Properties.Settings.Default.FilterShortPlaylists = value; }
+                try { UserSettings.FilterShortPlaylists = value; }
                 catch { }
             }
         }
@@ -305,13 +307,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.FilterShortPlaylistsValue; }
+                try { return UserSettings.FilterShortPlaylistsValue; }
                 catch { return 0; }
             }
 
             set
             {
-                try { Properties.Settings.Default.FilterShortPlaylistsValue = value; }
+                try { UserSettings.FilterShortPlaylistsValue = value; }
                 catch { }
             }
         }
@@ -320,13 +322,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.KeepStreamOrder; }
+                try { return UserSettings.KeepStreamOrder; }
                 catch { return false; }
             }
 
             set
             {
-                try { Properties.Settings.Default.KeepStreamOrder = value; }
+                try { UserSettings.KeepStreamOrder = value; }
                 catch { }
             }
         }
@@ -335,13 +337,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.ApiKey; }
+                try { return UserSettings.ApiKey; }
                 catch { return ""; }
             }
 
             set
             {
-                try { Properties.Settings.Default.ApiKey = value; }
+                try { UserSettings.ApiKey = value; }
                 catch { }
             }
         }
@@ -350,13 +352,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.LastPath; }
+                try { return UserSettings.LastPath; }
                 catch { return ""; }
             }
 
             set
             {
-                try { Properties.Settings.Default.LastPath = value; }
+                try { UserSettings.LastPath = value; }
                 catch { }
             }
         }
@@ -365,13 +367,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.OutputDir; }
+                try { return UserSettings.OutputDir; }
                 catch { return ""; }
             }
 
             set
             {
-                try { Properties.Settings.Default.OutputDir = value; }
+                try { UserSettings.OutputDir = value; }
                 catch { }
             }
         }
@@ -380,13 +382,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.OutputFileName; }
+                try { return UserSettings.OutputFileName; }
                 catch { return ""; }
             }
 
             set
             {
-                try { Properties.Settings.Default.OutputFileName = value; }
+                try { UserSettings.OutputFileName = value; }
                 catch { }
             }
         }
@@ -395,13 +397,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.DetailsWindowMaximized; }
+                try { return UserSettings.DetailsWindowMaximized; }
                 catch { return false; }
             }
 
             set
             {
-                try { Properties.Settings.Default.DetailsWindowMaximized = value; }
+                try { UserSettings.DetailsWindowMaximized = value; }
                 catch { }
             }
         }
@@ -410,13 +412,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.DetailsWindowSize; }
+                try { return UserSettings.DetailsWindowSize; }
                 catch { return Size.Empty; }
             }
 
             set
             {
-                try { Properties.Settings.Default.DetailsWindowSize = value; }
+                try { UserSettings.DetailsWindowSize = value; }
                 catch { }
             }
         }
@@ -425,13 +427,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.DetailsWindowLocation; }
+                try { return UserSettings.DetailsWindowLocation; }
                 catch { return Point.Empty; }
             }
 
             set
             {
-                try { Properties.Settings.Default.DetailsWindowLocation = value; }
+                try { UserSettings.DetailsWindowLocation = value; }
                 catch { }
             }
         }
@@ -440,13 +442,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.CheckForUpdates; }
+                try { return UserSettings.CheckForUpdates; }
                 catch { return true; }
             }
 
             set
             {
-                try { Properties.Settings.Default.CheckForUpdates = value; }
+                try { UserSettings.CheckForUpdates = value; }
                 catch { }
             }
         }
@@ -455,13 +457,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.ReplaceSpaces; }
+                try { return UserSettings.ReplaceSpaces; }
                 catch { return false; }
             }
 
             set
             {
-                try { Properties.Settings.Default.ReplaceSpaces = value; }
+                try { UserSettings.ReplaceSpaces = value; }
                 catch { }
             }
         }
@@ -470,13 +472,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.ReplaceSpacesWith; }
+                try { return UserSettings.ReplaceSpacesWith; }
                 catch { return ""; }
             }
 
             set
             {
-                try { Properties.Settings.Default.ReplaceSpacesWith = value; }
+                try { UserSettings.ReplaceSpacesWith = value; }
                 catch { }
             }
         }
@@ -485,13 +487,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.DemuxLPCM; }
+                try { return UserSettings.DemuxLPCM; }
                 catch { return true; }
             }
 
             set
             {
-                try { Properties.Settings.Default.DemuxLPCM = value; }
+                try { UserSettings.DemuxLPCM = value; }
                 catch { }
             }
         }
@@ -500,13 +502,13 @@ namespace BDAutoMuxer
         {
             get
             {
-                try { return Properties.Settings.Default.DemuxSubtitles; }
+                try { return UserSettings.DemuxSubtitles; }
                 catch { return true; }
             }
 
             set
             {
-                try { Properties.Settings.Default.DemuxSubtitles = value; }
+                try { UserSettings.DemuxSubtitles = value; }
                 catch { }
             }
         }
@@ -516,14 +518,14 @@ namespace BDAutoMuxer
             get
             {
                 Language lang = null;
-                try { lang = Language.GetLanguage(Properties.Settings.Default.AudienceLanguage); }
+                try { lang = Language.GetLanguage(UserSettings.AudienceLanguage); }
                 catch {}
                 return lang ?? Language.CurrentUILanguage;
             }
 
             set
             {
-                try { Properties.Settings.Default.AudienceLanguage = value != null ? value.ISO_639_2 : ""; }
+                try { UserSettings.AudienceLanguage = value != null ? value.ISO_639_2 : ""; }
                 catch { }
             }
         }
@@ -534,7 +536,7 @@ namespace BDAutoMuxer
             {
                 string str = null;
 
-                try { str = Properties.Settings.Default.PreferredAudioCodecs; }
+                try { str = UserSettings.PreferredAudioCodecs; }
                 catch { }
 
                 str = str != null ? str.ToLowerInvariant() : null;
@@ -568,7 +570,7 @@ namespace BDAutoMuxer
                 else
                     serialized = MICodec.SerializeCodecs(value);
 
-                try { Properties.Settings.Default.PreferredAudioCodecs = serialized; }
+                try { UserSettings.PreferredAudioCodecs = serialized; }
                 catch { }
             }
         }
@@ -577,7 +579,7 @@ namespace BDAutoMuxer
         {
             try
             {
-                Properties.Settings.Default.Save();
+                UserSettings.Save();
             }
             catch { }
         }
