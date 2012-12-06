@@ -90,10 +90,10 @@ namespace BDAutoMuxer.tools
 
         private bool isCompleted
         {
-            get { return IsCompleted; }
+            get { return IsSuccess; }
             set
             {
-                IsCompleted = value;
+                IsSuccess = value;
                 if (value)
                 {
                     UpdateTime();
@@ -173,7 +173,7 @@ namespace BDAutoMuxer.tools
         /// <code>true</code> if this tool finished executing and completed successfully;
         /// <code>false</code> if an error occurred or the process was cancelled.
         /// </summary>
-        public bool IsCompleted { get; private set; }
+        public bool IsSuccess { get; private set; }
 
         /// <summary>
         /// 0.0 to 100.0
@@ -188,7 +188,7 @@ namespace BDAutoMuxer.tools
             {
                 if (IsError) return "error";
                 if (IsCanceled) return "canceled";
-                if (IsCompleted) return "completed";
+                if (IsSuccess) return "completed";
                 if (IsPaused) return "paused";
                 return "";
             }
@@ -269,7 +269,7 @@ namespace BDAutoMuxer.tools
             
             IsStarted = false;
             IsPaused = false;
-            IsCompleted = false;
+            IsSuccess = false;
             IsCanceled = false;
             IsError = false;
 

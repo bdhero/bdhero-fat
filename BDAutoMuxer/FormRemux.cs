@@ -342,7 +342,7 @@ namespace BDAutoMuxer
                 statusStripLabel.Text += " (error)";
             if (_mkvMerge.IsCanceled)
                 statusStripLabel.Text += " (canceled)";
-            if (_mkvMerge.IsCompleted)
+            if (_mkvMerge.IsSuccess)
                 statusStripLabel.Text += " (completed)";
         }
 
