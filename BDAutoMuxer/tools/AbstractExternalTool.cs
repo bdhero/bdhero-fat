@@ -166,9 +166,14 @@ namespace BDAutoMuxer.tools
 
         public bool IsStarted { get; private set; }
         public bool IsPaused { get; private set; }
-        public bool IsCompleted { get; private set; }
         public bool IsCanceled { get; private set; }
         public bool IsError { get; private set; }
+
+        /// <summary>
+        /// <code>true</code> if this tool finished executing and completed successfully;
+        /// <code>false</code> if an error occurred or the process was cancelled.
+        /// </summary>
+        public bool IsCompleted { get; private set; }
 
         /// <summary>
         /// 0.0 to 100.0
