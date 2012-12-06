@@ -95,7 +95,7 @@ namespace BDAutoMuxer.views
                 codec.Tag = stream.CodecName;
 
                 // ReSharper disable LocalizableElement
-                if (stream.StreamType == TSStreamType.DTS_HD_SECONDARY_AUDIO)
+                if (stream.StreamType == TSStreamType.DTS_HD_SECONDARY_AUDIO || stream.StreamType == TSStreamType.INTERACTIVE_GRAPHICS)
                 {
                     codec.Text = "** " + codec.Text;
                     codec.ForeColor = SystemColors.GrayText;

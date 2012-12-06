@@ -1735,7 +1735,9 @@ namespace BDAutoMuxer
         {
             get
             {
-                return _populator != null && _populator.SelectedPlaylist != null && _populator.SelectedPlaylist.SortedStreams.Any(stream => stream.StreamType == TSStreamType.DTS_HD_SECONDARY_AUDIO);
+                return
+                    _populator != null && _populator.SelectedPlaylist != null &&
+                    _populator.SelectedPlaylist.SortedStreams.Any(stream => stream.StreamType == TSStreamType.DTS_HD_SECONDARY_AUDIO || stream.StreamType == TSStreamType.INTERACTIVE_GRAPHICS);
             }
         }
 
@@ -1743,7 +1745,9 @@ namespace BDAutoMuxer
         {
             get
             {
-                return _populator != null && _populator.SelectedPlaylist != null && _populator.SelectedPlaylist.SortedStreams.Any(stream => stream.IsHidden);
+                return
+                    _populator != null && _populator.SelectedPlaylist != null &&
+                    _populator.SelectedPlaylist.SortedStreams.Any(stream => stream.IsHidden);
             }
         }
 
