@@ -44,7 +44,7 @@ namespace BDAutoMuxer.controllers
 
         private static IUpdateChecker GetUpdateChecker(Form form)
         {
-            if (ApplicationDeployment.IsNetworkDeployed)
+            if (IsClickOnce)
                 return new ClickOnceUpdateChecker(form);
             return new GitHubUpdateChecker();
         }
@@ -169,7 +169,7 @@ namespace BDAutoMuxer.controllers
 
         private bool CheckForUpdate()
         {
-            if (!ApplicationDeployment.IsNetworkDeployed)
+            if (!UpdateNotifier.IsClickOnce)
                 return false;
 
             _ad = ApplicationDeployment.CurrentDeployment;
