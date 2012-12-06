@@ -321,7 +321,7 @@ namespace BDAutoMuxer
                                                           labelTsMuxerTimeElapsed, progressBarTsMuxer,
                                                           textBoxTsMuxerCommandLine);
 
-            CheckForUpdates();
+            CheckForUpdateOnStartup();
 
             if (_scanOnLoad)
                 Scan(textBoxSource.Text);
@@ -2410,9 +2410,9 @@ namespace BDAutoMuxer
             ShowErrorMessage(tabControl.SelectedTab, caption, text);
         }
 
-        private void CheckForUpdates()
+        private void CheckForUpdateOnStartup()
         {
-            if (BDAutoMuxerSettings.CheckForUpdates)
+            if (BDAutoMuxerSettings.CheckForUpdates && !UpdateNotifier.IsClickOnce)
             {
                 UpdateNotifier.CheckForUpdate(this);
             }
