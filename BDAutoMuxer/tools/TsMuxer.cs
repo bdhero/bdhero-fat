@@ -16,7 +16,9 @@ namespace BDAutoMuxer.tools
 // ReSharper restore LocalizableElement
     class TsMuxer : AbstractExternalTool
     {
+        private string _outputFileNameWithoutExtension;
         private string _outputFilePath;
+        private string _outputDirPath;
         private string _basePath;
         private string _metaFilePath;
         private string _chapterTextFilePath;
@@ -37,6 +39,11 @@ namespace BDAutoMuxer.tools
         private readonly string _mplsFileName;
         private readonly string _videoHeight;
         private readonly string _videoWidth;
+
+        /// <summary>
+        /// Map of tsMuxeR's demuxed path + filenames to their new human-friendly path + filenames
+        /// </summary>
+        private readonly Dictionary<string, string> _demuxedFilePaths = new Dictionary<string, string>();
 
         public TsMuxer(BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks, bool demuxLPCM = false, bool demuxSubtitles = false)
         {
@@ -59,11 +66,90 @@ namespace BDAutoMuxer.tools
             }
 
             DoWork += Mux;
+            RunWorkerCompleted += RunWorkerCompletedHandler;
+        }
+
+        private void RunWorkerCompletedHandler(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            if (!IsDemux) return;
+
+            var baseDemuxFilename = GetStreamClipNamesWithoutExtensions();
+
+            foreach (var track in _selectedTracks.Where(ShouldRename))
+            {
+                AddDemuxedFileIfExists(baseDemuxFilename, track);
+
+                var i = 1;
+
+                while (AddDemuxedFileIfExists(baseDemuxFilename, track, i) && i++ < 100)
+                {
+                }
+            }
+
+            if (!IsSuccess) return;
+
+            // Rename demuxed output files
+            foreach (var file in _demuxedFilePaths)
+            {
+                try
+                {
+                    // Key = old tsMuxeR filename path
+                    // Value = new human-friendly filename path
+                    File.Delete(file.Value);
+                    File.Move(file.Key, file.Value);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private bool AddDemuxedFileIfExists(string baseDemuxFilename, TSStream track, int num = 0)
+        {
+            var beforeFilename = GetTsMuxerFilename(baseDemuxFilename, track, num);
+            var afterFilename = GetTsMuxerFilename(_outputFileNameWithoutExtension, track, num);
+
+            var beforePath = Path.Combine(_outputDirPath, beforeFilename);
+            var afterPath = Path.Combine(_outputDirPath, afterFilename);
+
+            var exists = File.Exists(beforePath);
+
+            if (exists)
+            {
+                _demuxedFilePaths[beforePath] = afterPath;
+            }
+
+            return exists;
+        }
+
+        private static string GetTsMuxerFilename(string baseDemuxFilename, TSStream track, int num = 0)
+        {
+            var isSUP = IsSubtitle(track);
+            var isLPCM = IsLPCM(track);
+            var strNum = num > 0 ? string.Format(".{0}", num) : "";
+            var extension = isSUP ? "sup" : isLPCM ? "wav" : "unknown";
+            var oldFileName = string.Format("{0}.track_{1}{2}.{3}", baseDemuxFilename, track.PID, strNum, extension);
+            return oldFileName;
+        }
+
+        private bool ShouldRename(TSStream track)
+        {
+            return (_demuxSubtitles && IsSubtitle(track)) || (_demuxLPCM && IsLPCM(track));
+        }
+
+        private string GetStreamClipNamesWithoutExtensions()
+        {
+            return string.Join("+", _playlist.StreamClips.Select(GetClipNameWithoutExtension));
         }
 
         private string GetStreamClipPaths()
         {
             return string.Join("+", _playlist.StreamClips.Select(GetClipPath));
+        }
+
+        private string GetClipNameWithoutExtension(TSStreamClip clip)
+        {
+            return Path.GetFileNameWithoutExtension(clip.Name);
         }
 
         private string GetClipPath(TSStreamClip clip)
@@ -123,18 +209,22 @@ namespace BDAutoMuxer.tools
 
             ExtractResources();
 
-            var outputDirectory = Path.GetDirectoryName(_outputFilePath);
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_outputFilePath);
+            _outputDirPath = Path.GetDirectoryName(_outputFilePath);
 
-            _basePath = Path.Combine(outputDirectory, fileNameWithoutExtension);
+            _outputFileNameWithoutExtension = Path.GetFileNameWithoutExtension(_outputFilePath);
+
+            if (_outputDirPath == null || _outputFileNameWithoutExtension == null)
+                return;
+
+            _basePath = Path.Combine(_outputDirPath, _outputFileNameWithoutExtension);
             _chapterTextFilePath = _basePath + ".chapters.txt";
             _chapterXmlFilePath = _basePath + ".chapters.xml";
 
             WriteChapterXmlFile(_chapterXmlFilePath);
 
-            _metaFilePath = WriteMetaFile(fileNameWithoutExtension);
+            _metaFilePath = WriteMetaFile(_outputFileNameWithoutExtension);
 
-            Execute(new List<string> { _metaFilePath, IsDemux ? outputDirectory : _outputFilePath }, sender, e);
+            Execute(new List<string> { _metaFilePath, IsDemux ? _outputDirPath : _outputFilePath }, sender, e);
         }
 
         private void WriteChapterXmlFile(string chapterXmlFilePath)
@@ -235,10 +325,12 @@ namespace BDAutoMuxer.tools
             }
         }
 
-        // TODO: Include demuxed .WAV and .SUP files!
         protected override ISet<string> GetOutputFilesImpl()
         {
-            return new HashSet<string>() { _metaFilePath, _chapterTextFilePath, _chapterXmlFilePath, _outputFilePath };
+            var demuxedFiles = new HashSet<string>();
+            demuxedFiles.AddRange(_demuxedFilePaths.Keys);
+            demuxedFiles.AddRange(_demuxedFilePaths.Values);
+            return new HashSet<string>(demuxedFiles) { _metaFilePath, _chapterTextFilePath, _chapterXmlFilePath, _outputFilePath };
         }
     }
 }

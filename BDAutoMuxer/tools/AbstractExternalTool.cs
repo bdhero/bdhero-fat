@@ -49,9 +49,6 @@ namespace BDAutoMuxer.tools
 
         protected readonly IList<string> ErrorMessages = new List<string>();
 
-        protected readonly ISet<string> BeforeFiles = new HashSet<string>();
-        protected readonly ISet<string> AfterFiles = new HashSet<string>();
-
         #endregion
 
         #region Properties (private)
@@ -252,8 +249,6 @@ namespace BDAutoMuxer.tools
 
         protected void Execute(IList<string> args, object sender, DoWorkEventArgs e)
         {
-            BeforeFiles.AddRange(GetAllFilesInOutputDirs());
-
             ExtractResources();
 
             _worker = (BackgroundWorker)sender;
@@ -315,8 +310,6 @@ namespace BDAutoMuxer.tools
                 ErrorMessages.Add(_process.StandardError.ReadLine());
             }
 
-            AfterFiles.AddRange(GetAllFilesInOutputDirs());
-
             OnComplete(e);
         }
 
@@ -349,6 +342,7 @@ namespace BDAutoMuxer.tools
                         // Decrement by 1 second
                         _remainingTime = TimeSpan.FromMilliseconds(_remainingTime.TotalMilliseconds - 1000);
                     }
+
                     // If the remaining time estimate dips below 0, bump it up by 30 seconds
                     if (_remainingTime.TotalMilliseconds < 0)
                         _remainingTime = TimeSpan.FromMilliseconds((_remainingTime.TotalMilliseconds + 30000));
@@ -457,11 +451,7 @@ namespace BDAutoMuxer.tools
 
         public ISet<string> GetOutputFiles()
         {
-            var files = new HashSet<string>(GetOutputFilesImpl().Where(File.Exists).Select(Path.GetFullPath));
-            var newFiles = new HashSet<string>(AfterFiles);
-            newFiles.ExceptWith(BeforeFiles);
-            files.AddRange(newFiles);
-            return files;
+            return new HashSet<string>(GetOutputFilesImpl().Where(File.Exists).Select(Path.GetFullPath));
         }
 
         protected abstract ISet<string> GetOutputFilesImpl();
