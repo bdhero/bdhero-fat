@@ -36,6 +36,8 @@ namespace BDAutoMuxer
         [STAThreadAttribute]
         static void Main(string[] args)
         {
+            BDAutoMuxerSettings.UpgradeFromPreviousVersion();
+
             if (args.Contains("--test"))
             {
                 MediaInfo.Test();

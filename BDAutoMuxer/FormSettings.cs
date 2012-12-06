@@ -258,6 +258,21 @@ namespace BDAutoMuxer
             }
         }
 
+        public static bool UpgradeRequired
+        {
+            get
+            {
+                try { return UserSettings.UpgradeRequired; }
+                catch { return true; }
+            }
+
+            set
+            {
+                try { UserSettings.UpgradeRequired = value; }
+                catch { }
+            }
+        }
+
         public static bool EnableSSIF
         {
             get
@@ -573,6 +588,23 @@ namespace BDAutoMuxer
                 try { UserSettings.PreferredAudioCodecs = serialized; }
                 catch { }
             }
+        }
+
+        /// <summary>
+        /// Migrates a previous version's user.config file to the current version's user.config if necessary.
+        /// </summary>
+        public static void UpgradeFromPreviousVersion()
+        {
+            // ClickOnce automatically upgrades user.config settings when it auto-updates the application.
+            if (UpdateNotifier.IsClickOnce || !UpgradeRequired)
+                return;
+            try
+            {
+                UserSettings.Upgrade();
+                UpgradeRequired = false;
+                SaveSettings();
+            }
+            catch { }
         }
 
         public static void SaveSettings()
