@@ -116,6 +116,7 @@ namespace BDAutoMuxer.controllers
         string Message { get; }
     }
 
+    /// <see cref="http://msdn.microsoft.com/en-us/library/ms404263.aspx"/>
     public class ClickOnceUpdateChecker : IUpdateChecker
     {
         private readonly Version _currentVersion;
