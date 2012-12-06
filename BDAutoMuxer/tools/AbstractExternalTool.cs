@@ -339,7 +339,7 @@ namespace BDAutoMuxer.tools
                     else
                         tmpEst = TimeSpan.Zero;
 
-                    if (progress < .5 || progress > 95 || Math.Abs(tmpEst.TotalMinutes - _remainingTime.TotalMinutes) > 2)
+                    if (progress < .5 || progress > 95 || Math.Abs(tmpEst.TotalMinutes - _remainingTime.TotalMinutes) > 2 || _remainingTime.TotalMilliseconds < 1000)
                     {
                         // Update estimate
                         _remainingTime = tmpEst;
@@ -349,6 +349,10 @@ namespace BDAutoMuxer.tools
                         // Decrement by 1 second
                         _remainingTime = TimeSpan.FromMilliseconds(_remainingTime.TotalMilliseconds - 1000);
                     }
+                    // If the remaining time estimate dips below 0, bump it up by 30 seconds
+                    if (_remainingTime.TotalMilliseconds < 0)
+                        _remainingTime = TimeSpan.FromMilliseconds((_remainingTime.TotalMilliseconds + 30000));
+
                     _lastEstimate = DateTime.Now;
                 }
             }
