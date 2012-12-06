@@ -46,6 +46,8 @@ namespace BDAutoMuxer
         private readonly Language[] _audienceLanguages;
         private readonly MIAudioCodec[] _bdInfoAudioCodecs;
 
+        private bool _ignoreAudioCheckEvent;
+
         public FormSettings()
         {
             InitializeComponent();
@@ -122,33 +124,42 @@ namespace BDAutoMuxer
             var contextMenu = new ContextMenu();
 
             var selectAllMenuItem = new MenuItem("&All");
-            var selectHDMenuItem = new MenuItem("&HD only");
-            var selectSDMenuItem = new MenuItem("&SD only");
+            var selectLosslessMenuItem = new MenuItem("&Lossless");
+            var selectLossyMenuItem = new MenuItem("L&ossy");
             var selectNoneMenuItem = new MenuItem("&None");
 
             selectAllMenuItem.Click += SelectAllAudioCodecs;
-            selectHDMenuItem.Click += SelectHDAudioCodecs;
-            selectSDMenuItem.Click += SelectSDAudioCodecs;
+            selectLosslessMenuItem.Click += SelectLosslessAudioCodecs;
+            selectLossyMenuItem.Click += SelectLossyAudioCodecs;
             selectNoneMenuItem.Click += SelectNoAudioCodecs;
 
             contextMenu.MenuItems.Add(selectAllMenuItem);
-            contextMenu.MenuItems.Add(selectHDMenuItem);
-            contextMenu.MenuItems.Add(selectSDMenuItem);
+            contextMenu.MenuItems.Add(selectLosslessMenuItem);
+            contextMenu.MenuItems.Add(selectLossyMenuItem);
             contextMenu.MenuItems.Add(selectNoneMenuItem);
 
             splitButtonSelectAudioCodecs.ShowSplit = true;
             splitButtonSelectAudioCodecs.SplitMenu = contextMenu;
             splitButtonSelectAudioCodecs.Click += (sender, args) =>
                                                       {
+                                                          _ignoreAudioCheckEvent = true;
                                                           if (AreAllAudioCodecsChecked())
                                                               SelectNoAudioCodecs();
                                                           else
                                                               SelectAllAudioCodecs();
+                                                          _ignoreAudioCheckEvent = false;
+                                                          AutoSetSelectButtonText();
                                                       };
 
-            checkedListBoxAudioCodecs.ItemCheck +=
-                (sender, args) =>
-                splitButtonSelectAudioCodecs.Text = AreAllAudioCodecsChecked(args) ? "Select &none" : "Select &all";
+            checkedListBoxAudioCodecs.ItemCheck += (sender, args) => AutoSetSelectButtonText(args);
+
+            AutoSetSelectButtonText();
+        }
+
+        private void AutoSetSelectButtonText(ItemCheckEventArgs args = null)
+        {
+            if (_ignoreAudioCheckEvent) return;
+            splitButtonSelectAudioCodecs.Text = AreAllAudioCodecsChecked(args) ? "Select &none" : "Select &all";
         }
 
         private void SelectAllAudioCodecs(object sender = null, EventArgs e = null)
@@ -159,7 +170,7 @@ namespace BDAutoMuxer
             }
         }
 
-        private void SelectHDAudioCodecs(object sender = null, EventArgs e = null)
+        private void SelectLosslessAudioCodecs(object sender = null, EventArgs e = null)
         {
             for (var i = 0; i < checkedListBoxAudioCodecs.Items.Count; i++)
             {
@@ -168,7 +179,7 @@ namespace BDAutoMuxer
             }
         }
 
-        private void SelectSDAudioCodecs(object sender = null, EventArgs e = null)
+        private void SelectLossyAudioCodecs(object sender = null, EventArgs e = null)
         {
             for (var i = 0; i < checkedListBoxAudioCodecs.Items.Count; i++)
             {
