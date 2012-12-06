@@ -94,12 +94,18 @@ namespace BDAutoMuxer.views
                 }
                 codec.Tag = stream.CodecName;
 
-                if (stream.IsHidden)
+                // ReSharper disable LocalizableElement
+                if (stream.StreamType == TSStreamType.DTS_HD_SECONDARY_AUDIO)
                 {
-// ReSharper disable LocalizableElement
-                    codec.Text = "* " + codec.Text;
-// ReSharper restore LocalizableElement
+                    codec.Text = "** " + codec.Text;
+                    codec.ForeColor = SystemColors.GrayText;
                 }
+                else if (stream.IsHidden)
+                {
+                    codec.Text = "* " + codec.Text;
+                    codec.ForeColor = SystemColors.GrayText;
+                }
+                // ReSharper restore LocalizableElement
 
                 var language = new ListViewItem.ListViewSubItem {Text = stream.LanguageName, Tag = stream.LanguageName};
                 var bitrate = new ListViewItem.ListViewSubItem();

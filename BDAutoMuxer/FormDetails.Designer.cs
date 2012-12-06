@@ -224,9 +224,9 @@
             // 
             // tabControl
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageDisc);
             this.tabControl.Controls.Add(this.tabPageOutput);
             this.tabControl.Controls.Add(this.tabPageProgress);
@@ -258,17 +258,17 @@
             this.hiddenTrackLabel.ForeColor = System.Drawing.SystemColors.GrayText;
             this.hiddenTrackLabel.Location = new System.Drawing.Point(10, 561);
             this.hiddenTrackLabel.Name = "hiddenTrackLabel";
-            this.hiddenTrackLabel.Size = new System.Drawing.Size(165, 13);
+            this.hiddenTrackLabel.Size = new System.Drawing.Size(126, 13);
             this.hiddenTrackLabel.TabIndex = 101;
             this.hiddenTrackLabel.Tag = "The Track is physically present in the Stream file but absent from the Playlist f" +
-    "ile.  ";
-            this.hiddenTrackLabel.Text = "* Hidden track - will not be muxed";
+                "ile.  ";
+            this.hiddenTrackLabel.Text = "* Track will not be muxed";
             // 
             // splitContainerDiscOuter
             // 
-            this.splitContainerDiscOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainerDiscOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerDiscOuter.Location = new System.Drawing.Point(6, 7);
             this.splitContainerDiscOuter.Name = "splitContainerDiscOuter";
             this.splitContainerDiscOuter.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -287,8 +287,8 @@
             // 
             // panelMoviePoster
             // 
-            this.panelMoviePoster.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelMoviePoster.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.panelMoviePoster.Controls.Add(this.pictureBoxMoviePoster);
             this.panelMoviePoster.Location = new System.Drawing.Point(633, 0);
             this.panelMoviePoster.Name = "panelMoviePoster";
@@ -328,9 +328,9 @@
             // 
             // panelMovieDetails
             // 
-            this.panelMovieDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelMovieDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.panelMovieDetails.Controls.Add(this.searchResultListView);
             this.panelMovieDetails.Controls.Add(this.maskedTextBoxYear);
             this.panelMovieDetails.Controls.Add(this.searchButton);
@@ -345,9 +345,9 @@
             // 
             // searchResultListView
             // 
-            this.searchResultListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchResultListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.searchResultListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.NameColumn,
             this.YearColumn,
@@ -416,8 +416,8 @@
             // 
             // movieNameTextBox
             // 
-            this.movieNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.movieNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.movieNameTextBox.Location = new System.Drawing.Point(89, 30);
             this.movieNameTextBox.Name = "movieNameTextBox";
             this.movieNameTextBox.Size = new System.Drawing.Size(386, 20);
@@ -445,9 +445,9 @@
             // 
             // playlistsSplitContainerOuter
             // 
-            this.playlistsSplitContainerOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsSplitContainerOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.playlistsSplitContainerOuter.BackColor = System.Drawing.Color.Transparent;
             this.playlistsSplitContainerOuter.Location = new System.Drawing.Point(0, 2);
             this.playlistsSplitContainerOuter.Name = "playlistsSplitContainerOuter";
@@ -466,9 +466,9 @@
             // 
             // playlistsGroupBox
             // 
-            this.playlistsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.playlistsGroupBox.Controls.Add(this.checkBoxShowShortPlaylists);
             this.playlistsGroupBox.Controls.Add(this.buttonUnselectAll);
             this.playlistsGroupBox.Controls.Add(this.buttonSubmitToDB);
@@ -545,9 +545,9 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.playlistDataGridView);
             this.panel1.Location = new System.Drawing.Point(6, 49);
             this.panel1.Name = "panel1";
@@ -559,9 +559,9 @@
             this.playlistDataGridView.AllowUserToAddRows = false;
             this.playlistDataGridView.AllowUserToDeleteRows = false;
             this.playlistDataGridView.AllowUserToResizeRows = false;
-            this.playlistDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.playlistDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.playlistDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.playlistDataGridView.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
@@ -581,9 +581,9 @@
             // 
             // playlistsSplitContainerInner
             // 
-            this.playlistsSplitContainerInner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsSplitContainerInner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.playlistsSplitContainerInner.Location = new System.Drawing.Point(0, 0);
             this.playlistsSplitContainerInner.Name = "playlistsSplitContainerInner";
             this.playlistsSplitContainerInner.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -601,9 +601,9 @@
             // 
             // streamsGroupBox
             // 
-            this.streamsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.streamsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.streamsGroupBox.Controls.Add(this.listViewStreamFiles);
             this.streamsGroupBox.Location = new System.Drawing.Point(4, 0);
             this.streamsGroupBox.Name = "streamsGroupBox";
@@ -658,9 +658,9 @@
             // 
             // tracksGroupBox
             // 
-            this.tracksGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tracksGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tracksGroupBox.Controls.Add(this.listViewStreams);
             this.tracksGroupBox.Location = new System.Drawing.Point(4, -1);
             this.tracksGroupBox.Name = "tracksGroupBox";
@@ -723,8 +723,8 @@
             // 
             // groupBoxDemux
             // 
-            this.groupBoxDemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxDemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxDemux.Controls.Add(this.checkBoxDemuxLPCM);
             this.groupBoxDemux.Controls.Add(this.checkBoxDemuxSubtitles);
             this.groupBoxDemux.Location = new System.Drawing.Point(3, 389);
@@ -742,7 +742,7 @@
             this.checkBoxDemuxLPCM.Size = new System.Drawing.Size(91, 17);
             this.checkBoxDemuxLPCM.TabIndex = 15;
             this.checkBoxDemuxLPCM.Tag = "Extract LPCM audio tracks to separate .WAV files for mkvmerge (see https://trac.b" +
-    "unkus.org/ticket/763)";
+                "unkus.org/ticket/763)";
             this.checkBoxDemuxLPCM.Text = "Demux &LPCM";
             this.checkBoxDemuxLPCM.UseVisualStyleBackColor = true;
             // 
@@ -754,14 +754,14 @@
             this.checkBoxDemuxSubtitles.Size = new System.Drawing.Size(100, 17);
             this.checkBoxDemuxSubtitles.TabIndex = 16;
             this.checkBoxDemuxSubtitles.Tag = "Extract subtitles to separate .SUP files so they can be processed by external too" +
-    "ls (e.g., BDSup2Sub)";
+                "ls (e.g., BDSup2Sub)";
             this.checkBoxDemuxSubtitles.Text = "Demux &subtitles";
             this.checkBoxDemuxSubtitles.UseVisualStyleBackColor = true;
             // 
             // groupBoxOutput
             // 
-            this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxOutput.Controls.Add(this.textBoxOutputFileNamePreview);
             this.groupBoxOutput.Controls.Add(this.textBoxOutputDirPreview);
             this.groupBoxOutput.Controls.Add(this.labelOutputPlaceholders);
@@ -783,8 +783,8 @@
             // 
             // textBoxOutputFileNamePreview
             // 
-            this.textBoxOutputFileNamePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileNamePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputFileNamePreview.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxOutputFileNamePreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxOutputFileNamePreview.Location = new System.Drawing.Point(84, 119);
@@ -797,8 +797,8 @@
             // 
             // textBoxOutputDirPreview
             // 
-            this.textBoxOutputDirPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputDirPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputDirPreview.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxOutputDirPreview.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxOutputDirPreview.Location = new System.Drawing.Point(84, 72);
@@ -820,8 +820,8 @@
             // 
             // textBoxOutputFileNameHint
             // 
-            this.textBoxOutputFileNameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileNameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputFileNameHint.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxOutputFileNameHint.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxOutputFileNameHint.Location = new System.Drawing.Point(84, 20);
@@ -880,8 +880,8 @@
             // textBoxOutputDir
             // 
             this.textBoxOutputDir.AllowDrop = true;
-            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputDir.Location = new System.Drawing.Point(84, 45);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
             this.textBoxOutputDir.Size = new System.Drawing.Size(572, 20);
@@ -893,8 +893,8 @@
             // textBoxOutputFileName
             // 
             this.textBoxOutputFileName.AllowDrop = true;
-            this.textBoxOutputFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutputFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputFileName.Location = new System.Drawing.Point(84, 93);
             this.textBoxOutputFileName.Name = "textBoxOutputFileName";
             this.textBoxOutputFileName.Size = new System.Drawing.Size(611, 20);
@@ -923,9 +923,9 @@
             // 
             // groupBoxTracks
             // 
-            this.groupBoxTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTracks.Controls.Add(this.splitContainerTracksOuter);
             this.groupBoxTracks.Location = new System.Drawing.Point(256, 4);
             this.groupBoxTracks.Name = "groupBoxTracks";
@@ -991,9 +991,9 @@
             // 
             // listViewVideoTracks
             // 
-            this.listViewVideoTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewVideoTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewVideoTracks.CheckBoxes = true;
             this.listViewVideoTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderVideoCodec,
@@ -1060,9 +1060,9 @@
             // 
             // listViewAudioTracks
             // 
-            this.listViewAudioTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewAudioTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewAudioTracks.CheckBoxes = true;
             this.listViewAudioTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderAudioCodec,
@@ -1102,9 +1102,9 @@
             // 
             // listViewSubtitleTracks
             // 
-            this.listViewSubtitleTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewSubtitleTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewSubtitleTracks.CheckBoxes = true;
             this.listViewSubtitleTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderSubtitleCodec,
@@ -1139,8 +1139,8 @@
             // 
             // groupBoxFilter
             // 
-            this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBoxFilter.Controls.Add(this.listBoxSubtitleLanguages);
             this.groupBoxFilter.Controls.Add(this.listBoxAudioLanguages);
             this.groupBoxFilter.Controls.Add(this.comboBoxCommentary);
@@ -1207,7 +1207,7 @@
             this.comboBoxVideoLanguage.Size = new System.Drawing.Size(121, 21);
             this.comboBoxVideoLanguage.TabIndex = 0;
             this.comboBoxVideoLanguage.Tag = "Primary video language (many animated Disney movies contain several video renders" +
-    " - e.g., French, Spanish, and English)";
+                " - e.g., French, Spanish, and English)";
             this.comboBoxVideoLanguage.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
             // 
             // labelSubtitleLanguages
@@ -1298,8 +1298,8 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.labelDemuxingTimeRemainingElapsed);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.labelDemuxingTimeRemaining);
@@ -1358,9 +1358,9 @@
             // 
             // textBoxDemuxingCommandLine
             // 
-            this.textBoxDemuxingCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDemuxingCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxDemuxingCommandLine.Location = new System.Drawing.Point(7, 84);
             this.textBoxDemuxingCommandLine.Multiline = true;
             this.textBoxDemuxingCommandLine.Name = "textBoxDemuxingCommandLine";
@@ -1379,8 +1379,8 @@
             // 
             // progressBarDemuxing
             // 
-            this.progressBarDemuxing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBarDemuxing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarDemuxing.Location = new System.Drawing.Point(7, 37);
             this.progressBarDemuxing.Maximum = 1000;
             this.progressBarDemuxing.Name = "progressBarDemuxing";
@@ -1399,8 +1399,8 @@
             // 
             // groupBoxTsMuxerProgress
             // 
-            this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemainingElapsed);
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeSeparator);
             this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemaining);
@@ -1459,9 +1459,9 @@
             // 
             // textBoxTsMuxerCommandLine
             // 
-            this.textBoxTsMuxerCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTsMuxerCommandLine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxTsMuxerCommandLine.Location = new System.Drawing.Point(7, 84);
             this.textBoxTsMuxerCommandLine.Multiline = true;
             this.textBoxTsMuxerCommandLine.Name = "textBoxTsMuxerCommandLine";
@@ -1480,8 +1480,8 @@
             // 
             // progressBarTsMuxer
             // 
-            this.progressBarTsMuxer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBarTsMuxer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarTsMuxer.Location = new System.Drawing.Point(7, 37);
             this.progressBarTsMuxer.Maximum = 1000;
             this.progressBarTsMuxer.Name = "progressBarTsMuxer";
@@ -1513,7 +1513,7 @@
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(532, 17);
+            this.statusLabel.Size = new System.Drawing.Size(530, 17);
             this.statusLabel.Spring = true;
             this.statusLabel.Text = "Status";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1521,7 +1521,7 @@
             // progressLabel
             // 
             this.progressLabel.Name = "progressLabel";
-            this.progressLabel.Size = new System.Drawing.Size(32, 17);
+            this.progressLabel.Size = new System.Drawing.Size(34, 17);
             this.progressLabel.Text = "0.0%";
             this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -1554,7 +1554,7 @@
             this.toolStripMenuItem2,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // openFolderToolStripMenuItem
@@ -1562,7 +1562,7 @@
             this.openFolderToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.folder_open;
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
             this.openFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.openFolderToolStripMenuItem.Text = "&Open BD-ROM folder...";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.buttonBrowse_Click);
             // 
@@ -1571,32 +1571,32 @@
             this.rescanToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.refresh_green;
             this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
             this.rescanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.rescanToolStripMenuItem.Text = "&Rescan";
             this.rescanToolStripMenuItem.Click += new System.EventHandler(this.buttonRescan_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(236, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(234, 6);
             // 
             // submitToDbToolStripMenuItem
             // 
             this.submitToDbToolStripMenuItem.Name = "submitToDbToolStripMenuItem";
-            this.submitToDbToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.submitToDbToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.submitToDbToolStripMenuItem.Text = "Submit to &database";
             this.submitToDbToolStripMenuItem.Click += new System.EventHandler(this.SubmitJsonDisc);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(236, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(234, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1608,34 +1608,34 @@
             this.toolStripMenuItem3,
             this.settingsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // remuxerToolStripMenuItem
             // 
             this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
             this.remuxerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.remuxerToolStripMenuItem.Text = "&Remuxer";
             this.remuxerToolStripMenuItem.Click += new System.EventHandler(this.remuxerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(161, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(167, 22);
             this.toolStripMenuItem4.Text = "Track Namer";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(158, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(164, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.settingsToolStripMenuItem.Text = "&Settings...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -1645,7 +1645,7 @@
             this.aboutToolStripMenuItem,
             this.checkForUpdatesToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // aboutToolStripMenuItem
@@ -1654,13 +1654,13 @@
             this.aboutToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.info;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             // 
             // checkForUpdatesToolStripMenuItem
             // 
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.checkForUpdatesToolStripMenuItem.Text = "Check for &updates";
             this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
@@ -1695,8 +1695,8 @@
             // 
             // textBoxSource
             // 
-            this.textBoxSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxSource.Location = new System.Drawing.Point(15, 49);
             this.textBoxSource.Name = "textBoxSource";
             this.textBoxSource.Size = new System.Drawing.Size(592, 20);

@@ -691,7 +691,7 @@ namespace BDAutoMuxer
             var icons = new ImageList();
             var preferredAudioCodecs = BDAutoMuxerSettings.PreferredAudioCodecs;
 
-            foreach (TSAudioStream stream in _audioTracks)
+            foreach (TSAudioStream stream in _audioTracks.Where(track => track.StreamType != TSStreamType.DTS_HD_SECONDARY_AUDIO))
             {
                 ListViewItem.ListViewSubItem codec = new ListViewItem.ListViewSubItem();
                 codec.Text = stream.CodecName;
@@ -1731,6 +1731,14 @@ namespace BDAutoMuxer
             }
         }
 
+        private bool SelectedPlaylistHasUnsupportedCodecs
+        {
+            get
+            {
+                return _populator != null && _populator.SelectedPlaylist != null && _populator.SelectedPlaylist.SortedStreams.Any(stream => stream.StreamType == TSStreamType.DTS_HD_SECONDARY_AUDIO);
+            }
+        }
+
         private bool SelectedPlaylistHasHiddenTracks
         {
             get
@@ -1821,7 +1829,18 @@ namespace BDAutoMuxer
             // Progress tab
             ShowProgressTabPage = ShowProgressTabPage || _isMuxing;
 
-            hiddenTrackLabel.Visible = SelectedPlaylistHasHiddenTracks;
+            var notices = new List<string>();
+            var hasHidden = SelectedPlaylistHasHiddenTracks;
+            var hasUnsupported = SelectedPlaylistHasUnsupportedCodecs;
+
+            if (hasHidden)
+                notices.Add("* Hidden track - will not be muxed");
+            if (hasUnsupported)
+                notices.Add("** Unsupported codec - will not be muxed");
+
+            hiddenTrackLabel.Text = string.Join("  ", notices);
+            hiddenTrackLabel.Visible = hasHidden || hasUnsupported;
+
             buttonPlaylistOpen.Enabled = SelectedPlaylist != null;
 
             toolStripProgressBar.Visible = _isMuxing;
