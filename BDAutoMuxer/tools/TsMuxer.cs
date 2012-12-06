@@ -29,7 +29,7 @@ namespace BDAutoMuxer.tools
         private readonly TSPlaylistFile _playlist;
         private readonly ICollection<TSStream> _selectedTracks;
 
-        private bool Demux { get { return _demuxLPCM || _demuxSubtitles; } }
+        private bool IsDemux { get { return _demuxLPCM || _demuxSubtitles; } }
         private readonly bool _demuxLPCM;
         private readonly bool _demuxSubtitles;
 
@@ -134,7 +134,7 @@ namespace BDAutoMuxer.tools
 
             _metaFilePath = WriteMetaFile(fileNameWithoutExtension);
 
-            Execute(new List<string> { _metaFilePath, Demux ? outputDirectory : _outputFilePath }, sender, e);
+            Execute(new List<string> { _metaFilePath, IsDemux ? outputDirectory : _outputFilePath }, sender, e);
         }
 
         private void WriteChapterXmlFile(string chapterXmlFilePath)
@@ -144,7 +144,7 @@ namespace BDAutoMuxer.tools
 
         private bool IncludeTrack(TSStream track)
         {
-            return !Demux || ((_demuxLPCM && IsLPCM(track)) || (_demuxSubtitles && IsSubtitle(track)));
+            return !IsDemux || ((_demuxLPCM && IsLPCM(track)) || (_demuxSubtitles && IsSubtitle(track)));
         }
 
         private static bool IsLPCM(TSStream track)
@@ -160,9 +160,9 @@ namespace BDAutoMuxer.tools
 
         private string WriteMetaFile(string fileNameWithoutExtension)
         {
-            var metaFilePath = GetTempPath(fileNameWithoutExtension + string.Format(".{0}.meta.txt", Demux ? "demux" : "mux"));
+            var metaFilePath = GetTempPath(fileNameWithoutExtension + string.Format(".{0}.meta.txt", IsDemux ? "demux" : "mux"));
 
-            var lines = new List<string> { string.Format("MUXOPT --no-pcr-on-video-pid --new-audio-pes {0} --vbr --vbv-len=500", Demux ? "--demux" : "") };
+            var lines = new List<string> { string.Format("MUXOPT --no-pcr-on-video-pid --new-audio-pes {0} --vbr --vbv-len=500", IsDemux ? "--demux" : "") };
 
             foreach (var track in _playlist.SortedStreams)
             {
