@@ -2046,7 +2046,7 @@ namespace BDAutoMuxer.models
 
         public override string Description
         {
-            get { return "DTS Digital Surround (a.k.a. DTS) + an additional discrete or matrix-encoded rear channel.  Backwards compatible with regular DTS."; }
+            get { return "Regular DTS plus an additional discrete or matrix-encoded rear channel.  Backwards compatible with regular DTS."; }
         }
 
         public override bool Lossy

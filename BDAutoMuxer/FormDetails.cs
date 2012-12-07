@@ -2450,7 +2450,12 @@ namespace BDAutoMuxer
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            new FormTrackNamer().Show(this);
+            new FormTrackNamer().Show();
+        }
+
+        private void codecsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FormCodecs().Show();
         }
 
     }

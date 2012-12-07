@@ -167,6 +167,7 @@
             this.textBoxSource = new System.Windows.Forms.TextBox();
             this.labelSource = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.codecsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerDiscOuter)).BeginInit();
@@ -1643,6 +1644,7 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem,
+            this.codecsToolStripMenuItem,
             this.checkForUpdatesToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
@@ -1723,6 +1725,13 @@
             this.cancelButton.Text = "Close";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // codecsToolStripMenuItem
+            // 
+            this.codecsToolStripMenuItem.Name = "codecsToolStripMenuItem";
+            this.codecsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.codecsToolStripMenuItem.Text = "Codecs";
+            this.codecsToolStripMenuItem.Click += new System.EventHandler(this.codecsToolStripMenuItem_Click);
             // 
             // FormDetails
             // 
@@ -1946,5 +1955,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.GroupBox groupBoxDemux;
         private System.Windows.Forms.CheckBox checkBoxDemuxLPCM;
+        private System.Windows.Forms.ToolStripMenuItem codecsToolStripMenuItem;
     }
 }
