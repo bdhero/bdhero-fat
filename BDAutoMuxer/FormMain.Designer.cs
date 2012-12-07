@@ -1,6 +1,6 @@
 ﻿namespace BDAutoMuxer
 {
-    partial class FormDetails
+    partial class FormMain
     {
         /// <summary>
         /// Required designer variable.

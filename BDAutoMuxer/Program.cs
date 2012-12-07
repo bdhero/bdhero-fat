@@ -49,7 +49,7 @@ namespace BDAutoMuxer
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormDetails(args));
+            Application.Run(new FormMain(args));
         }
 
         // To embed referenced .DLL files in the output .EXE, uncomment the lines below and in BDAutoMuxer.csproj (close VS2010 first)

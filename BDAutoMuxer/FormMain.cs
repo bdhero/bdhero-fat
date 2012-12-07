@@ -21,7 +21,7 @@ using WatTmdb.V3;
 // ReSharper disable LocalizableElement
 namespace BDAutoMuxer
 {
-    public partial class FormDetails : Form
+    public partial class FormMain : Form
     {
         #region Fields
 
@@ -244,7 +244,7 @@ namespace BDAutoMuxer
         private readonly bool _scanOnLoad;
         private FormCodecReference _formCodecReference;
 
-        public FormDetails(string[] args)
+        public FormMain(string[] args)
         {
             InitializeComponent();
 
@@ -262,7 +262,7 @@ namespace BDAutoMuxer
             Load += FormDetails_Load;
         }
 
-        ~FormDetails()
+        ~FormMain()
         {
             CancelRip();
         }
@@ -2465,7 +2465,7 @@ namespace BDAutoMuxer
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            new FormTrackNamer().Show();
+            new FormCodecScanner().Show();
         }
 
         private void codecsToolStripMenuItem_Click(object sender, EventArgs e)

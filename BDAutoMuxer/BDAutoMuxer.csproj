@@ -181,11 +181,11 @@
     <Compile Include="tools\TsMuxer.cs" />
     <Compile Include="controllers\MainMovieService.cs" />
     <Compile Include="controllers\UpdateNotifier.cs" />
-    <Compile Include="FormDetails.cs">
+    <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormDetails.Designer.cs">
-      <DependentUpon>FormDetails.cs</DependentUpon>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="models\JsonSearchResult.cs" />
     <Compile Include="models\JsonDisc.cs" />
@@ -203,8 +203,8 @@
     <EmbeddedResource Include="FormCodecReference.resx">
       <DependentUpon>FormCodecReference.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormDetails.resx">
-      <DependentUpon>FormDetails.cs</DependentUpon>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormRemux.resx">
       <DependentUpon>FormRemux.cs</DependentUpon>
