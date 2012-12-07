@@ -1444,6 +1444,11 @@ namespace BDAutoMuxer.models
             get { return "H.264"; }
         }
 
+        public override string AltFullName
+        {
+            get { return "MPEG-4 Part 2"; }
+        }
+
         public override string AltMicroName
         {
             get { return "AVC"; }
