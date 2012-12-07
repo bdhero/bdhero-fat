@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace BDAutoMuxer
 {
-    public partial class FormTrackNamer : Form
+    public partial class FormCodecScanner : Form
     {
         private BackgroundWorker _worker;
 
@@ -32,13 +32,9 @@ namespace BDAutoMuxer
 
         private string[] _filePaths;
 
-        public FormTrackNamer()
+        public FormCodecScanner()
         {
             InitializeComponent();
-
-            textBoxMkvInfoPath.Text = AbstractExternalTool.FindExe("mkvinfo.exe", "mmg.exe");
-            textBoxMkvPropEditPath.Text = AbstractExternalTool.FindExe("mkvpropedit.exe", "mmg.exe");
-            textBoxToolsDirPath.Text = BDAutoMuxerSettings.ConfigDir;
 
             FormUtils.TextBox_EnableSelectAll(this);
         }
