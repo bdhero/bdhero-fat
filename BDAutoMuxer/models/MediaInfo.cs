@@ -2653,7 +2653,7 @@ namespace BDAutoMuxer.models
 
         public override string Description
         {
-            get { return "Uncompressed studio-quality audio.  Highest-possible quality available.  Not directly supported as input from M2TS / MKV containers by mkvmerge; must first be demuxed to .WAV files with tsMuxeR."; }
+            get { return "Uncompressed studio-quality audio.  Not directly supported as input from M2TS / MKV containers by mkvmerge; must first be demuxed to .WAV files with tsMuxeR (see https://trac.bunkus.org/ticket/763)."; }
         }
 
         public override bool Lossless
