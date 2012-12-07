@@ -787,8 +787,10 @@ namespace BDAutoMuxer.models
 
                 // MPEG
 
-                if (MICodecMPEG2Audio.Matches(format))
-                    return MICodec.MPEG2Audio;
+                if (MICodecMP3.Matches(format))
+                    return MICodec.MP3;
+                if (MICodecAAC.Matches(format))
+                    return MICodec.AAC;
 
                 // LPCM
 
@@ -1129,7 +1131,8 @@ namespace BDAutoMuxer.models
         public static readonly MICodecDTSHDHRA DTSHDHRA = new MICodecDTSHDHRA();
         public static readonly MICodecDTSHDMA DTSHDMA = new MICodecDTSHDMA();
 
-        public static readonly MICodecMPEG2Audio MPEG2Audio = new MICodecMPEG2Audio();
+        public static readonly MICodecMP3 MP3 = new MICodecMP3();
+        public static readonly MICodecAAC AAC = new MICodecAAC();
 
         public static readonly MICodecLPCM LPCM = new MICodecLPCM();
 
@@ -1180,7 +1183,8 @@ namespace BDAutoMuxer.models
                                                                         AC3,
                                                                         ProLogic,
                                                                         // SD - MPEG
-                                                                        MPEG2Audio
+                                                                        MP3,
+                                                                        AAC
                                                                     };
 
         public static readonly List<MIAudioCodec> MuxableBDAudioCodecs = new List<MIAudioCodec>()
@@ -1194,9 +1198,7 @@ namespace BDAutoMuxer.models
                                                                         DTS,
                                                                         // SD - Dolby
                                                                         EAC3,
-                                                                        AC3,
-                                                                        // SD - MPEG
-                                                                        MPEG2Audio
+                                                                        AC3
                                                                     };
 
         public static readonly List<MISubtitleCodec> SubtitleCodecs = new List<MISubtitleCodec>()
@@ -1220,7 +1222,8 @@ namespace BDAutoMuxer.models
                                                                  DTSExpress,
                                                                  DTSHDHRA,
                                                                  DTSHDMA,
-                                                                 MPEG2Audio,
+                                                                 MP3,
+                                                                 AAC,
                                                                  LPCM,
                                                                  PGS
                                                              };
@@ -1232,6 +1235,14 @@ namespace BDAutoMuxer.models
         public abstract bool IsSubtitle { get; }
 
         public virtual bool IsKnown { get { return true; } }
+
+        public bool IsOfficialBlurayCodec { get { return IsRequiredBlurayCodec || IsOptionalBlurayCodec; } }
+        public virtual bool IsRequiredBlurayCodec { get { return false; } }
+        public virtual bool IsOptionalBlurayCodec { get { return false; } }
+
+        public bool IsOfficialDVDCodec { get { return IsRequiredDVDCodec || IsOptionalDVDCodec; } }
+        public virtual bool IsRequiredDVDCodec { get { return false; } }
+        public virtual bool IsOptionalDVDCodec { get { return false; } }
 
         public abstract string SerializableName { get; }
 
@@ -2231,37 +2242,37 @@ namespace BDAutoMuxer.models
 
     #region MPEG Audio
 
-    public class MICodecMPEG2Audio : MIAudioCodec
+    public class MICodecMP3 : MIAudioCodec
     {
         public override string SerializableName
         {
-            get { return "A_MPEG2"; }
+            get { return "A_MP3"; }
         }
 
         public override TSStreamType StreamType
         {
-            get { return TSStreamType.MPEG2_AUDIO; }
+            // TODO: Should this return TSStreamType.MPEG1_AUDIO
+            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
         {
-            // TODO: throw new NotImplementedException("TODO: Find out what the Codec ID for MPEG-2 Audio is!");
-            get { return "A_MPEG2"; }
+            get { return "A_MPEG/L3"; }
         }
 
         public override string FullName
         {
-            get { return "MPEG-2 Audio"; }
+            get { return "MPEG Audio Layer III"; }
         }
 
         public override string ShortName
         {
-            get { return "MPEG2 Audio"; }
+            get { return "MPEG Layer 3"; }
         }
 
         public override string MicroName
         {
-            get { return "MPEG2-A"; }
+            get { return "MP3"; }
         }
 
         public override bool Lossy
@@ -2276,12 +2287,71 @@ namespace BDAutoMuxer.models
 
         public override string Description
         {
-            get { return "Audio portion of the MPEG-2 standard.  Officially part of the Blu-ray and DVD standards."; }
+            get { return "Audio portion of the MPEG-1 and MPEG-2 standards."; }
         }
 
         public static bool Matches(MIFormat format)
         {
-            return format.Id == "MPEG-2 Audio";
+            return format.Id == "MPEG Audio" && format.Profile == "Layer 3";
+        }
+    }
+
+    public class MICodecAAC : MIAudioCodec
+    {
+        public override string SerializableName
+        {
+            get { return "A_AAC"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            // TODO: Should this return TSStreamType.MPEG1_AUDIO
+            get { return TSStreamType.Unknown; }
+        }
+
+        public override string CodecId
+        {
+            get { return "A_AAC"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Advanced Audio Coding"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "AAC"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "AAC"; }
+        }
+
+        public override string AltFullName
+        {
+            get { return "MPEG-2 Part 7"; }
+        }
+
+        public override string Description
+        {
+            get { return "Successor to MP3 with better sound quality at similar bit rates."; }
+        }
+
+        public override bool Lossy
+        {
+            get { return true; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "AAC";
         }
     }
 
@@ -2352,6 +2422,10 @@ namespace BDAutoMuxer.models
             return format.Id == "PCM";
         }
     }
+
+    #endregion
+
+    #region AAC
 
     #endregion
 
