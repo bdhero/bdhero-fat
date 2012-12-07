@@ -153,7 +153,7 @@ namespace BDAutoMuxer.tools
         /// <summary>
         /// Full path to the EXE.
         /// </summary>
-        public string FullName { get { return GetExePathAbsolute(Filename); } }
+        public string FullName { get { return GetLibPathAbsolute(Filename); } }
 
         /// <summary>
         /// Command line string used to execute the process, including the full path to the EXE and all arguments.
@@ -206,19 +206,19 @@ namespace BDAutoMuxer.tools
 
         #region Resource Paths & Extraction
 
-        protected string InstallDir
+        public static string InstallDir
         {
             get { return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location); }
         }
 
-        protected string GetExePathRelative(string exeFilename)
+        public static string GetLibPathRelative(string libFilename)
         {
-            return Path.Combine("lib", exeFilename);
+            return Path.Combine("lib", libFilename);
         }
 
-        protected string GetExePathAbsolute(string exeFilename)
+        public static string GetLibPathAbsolute(string libFilename)
         {
-            return Path.Combine(InstallDir, GetExePathRelative(Filename));
+            return Path.Combine(InstallDir, GetLibPathRelative(libFilename));
         }
 
         protected string GetTempPath(string filename)
@@ -229,7 +229,7 @@ namespace BDAutoMuxer.tools
         protected string ExtractResource(string filename)
         {
             // TODO: Handle embedded resources like MediaInfo_XML.csv
-            return GetExePathAbsolute(filename);
+            return GetLibPathAbsolute(filename);
         }
 
         #endregion
