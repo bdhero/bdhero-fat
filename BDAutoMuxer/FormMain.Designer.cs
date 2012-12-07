@@ -355,6 +355,7 @@
             this.PopularityColumn});
             this.searchResultListView.ContextMenuStrip = this.contextMenuStripTmdb;
             this.searchResultListView.FullRowSelect = true;
+            this.searchResultListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.searchResultListView.HideSelection = false;
             this.searchResultListView.Location = new System.Drawing.Point(3, 57);
             this.searchResultListView.MultiSelect = false;
@@ -1002,6 +1003,7 @@
             this.columnHeaderVideoFrameRate,
             this.columnHeaderVideoAspectRatio});
             this.listViewVideoTracks.FullRowSelect = true;
+            this.listViewVideoTracks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewVideoTracks.Location = new System.Drawing.Point(90, 29);
             this.listViewVideoTracks.Name = "listViewVideoTracks";
             this.listViewVideoTracks.Size = new System.Drawing.Size(391, 54);
@@ -1070,6 +1072,7 @@
             this.columnHeaderAudioLanguage,
             this.columnHeaderAudioChannels});
             this.listViewAudioTracks.FullRowSelect = true;
+            this.listViewAudioTracks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewAudioTracks.Location = new System.Drawing.Point(90, 3);
             this.listViewAudioTracks.Name = "listViewAudioTracks";
             this.listViewAudioTracks.Size = new System.Drawing.Size(391, 134);
@@ -1111,6 +1114,7 @@
             this.columnHeaderSubtitleCodec,
             this.columnHeaderSubtitleLanguage});
             this.listViewSubtitleTracks.FullRowSelect = true;
+            this.listViewSubtitleTracks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewSubtitleTracks.Location = new System.Drawing.Point(90, 3);
             this.listViewSubtitleTracks.Name = "listViewSubtitleTracks";
             this.listViewSubtitleTracks.Size = new System.Drawing.Size(391, 121);
