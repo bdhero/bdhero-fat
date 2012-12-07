@@ -242,6 +242,7 @@ namespace BDAutoMuxer
         #region Initialization
 
         private readonly bool _scanOnLoad;
+        private FormCodecs _formCodecs;
 
         public FormDetails(string[] args)
         {
@@ -264,6 +265,20 @@ namespace BDAutoMuxer
         ~FormDetails()
         {
             CancelRip();
+        }
+
+        private void ShowCodecReference()
+        {
+            if (_formCodecs == null)
+            {
+                _formCodecs = new FormCodecs();
+                _formCodecs.Disposed += (sender, eventArgs) => _formCodecs = null;
+                _formCodecs.Show();
+            }
+            else
+            {
+                _formCodecs.Focus();
+            }
         }
 
         private void FormDetails_Load(object sender, EventArgs e)
@@ -2455,7 +2470,7 @@ namespace BDAutoMuxer
 
         private void codecsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new FormCodecs().Show();
+            ShowCodecReference();
         }
 
     }

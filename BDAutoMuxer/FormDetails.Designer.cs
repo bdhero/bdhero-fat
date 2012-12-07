@@ -161,13 +161,13 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.codecsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonRescan = new System.Windows.Forms.Button();
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.textBoxSource = new System.Windows.Forms.TextBox();
             this.labelSource = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.codecsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerDiscOuter)).BeginInit();
@@ -1659,6 +1659,13 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             // 
+            // codecsToolStripMenuItem
+            // 
+            this.codecsToolStripMenuItem.Name = "codecsToolStripMenuItem";
+            this.codecsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.codecsToolStripMenuItem.Text = "&Codec reference";
+            this.codecsToolStripMenuItem.Click += new System.EventHandler(this.codecsToolStripMenuItem_Click);
+            // 
             // checkForUpdatesToolStripMenuItem
             // 
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
@@ -1725,13 +1732,6 @@
             this.cancelButton.Text = "Close";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
-            // codecsToolStripMenuItem
-            // 
-            this.codecsToolStripMenuItem.Name = "codecsToolStripMenuItem";
-            this.codecsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.codecsToolStripMenuItem.Text = "Codecs";
-            this.codecsToolStripMenuItem.Click += new System.EventHandler(this.codecsToolStripMenuItem_Click);
             // 
             // FormDetails
             // 
