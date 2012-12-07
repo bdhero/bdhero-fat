@@ -34,6 +34,7 @@
             this.columnHeaderAlternateNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderCodecId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderCore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderCompression = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderMuxable = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonClose = new System.Windows.Forms.Button();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
@@ -42,7 +43,6 @@
             this.labelOfficialDVD = new System.Windows.Forms.Label();
             this.labelOfficialBlurayValue = new System.Windows.Forms.Label();
             this.labelOfficialDVDValue = new System.Windows.Forms.Label();
-            this.columnHeaderCompression = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listViewCodecs
@@ -64,7 +64,7 @@
             this.listViewCodecs.Location = new System.Drawing.Point(13, 13);
             this.listViewCodecs.MultiSelect = false;
             this.listViewCodecs.Name = "listViewCodecs";
-            this.listViewCodecs.Size = new System.Drawing.Size(701, 286);
+            this.listViewCodecs.Size = new System.Drawing.Size(716, 322);
             this.listViewCodecs.TabIndex = 0;
             this.listViewCodecs.UseCompatibleStateImageBehavior = false;
             this.listViewCodecs.View = System.Windows.Forms.View.Details;
@@ -97,6 +97,11 @@
             this.columnHeaderCore.Text = "Core";
             this.columnHeaderCore.Width = 45;
             // 
+            // columnHeaderCompression
+            // 
+            this.columnHeaderCompression.Text = "Compression";
+            this.columnHeaderCompression.Width = 76;
+            // 
             // columnHeaderMuxable
             // 
             this.columnHeaderMuxable.Tag = "Capable of being muxed with freely available software (tsMuxeR, mkvmerge, eac3to," +
@@ -107,7 +112,7 @@
             // 
             this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonClose.Location = new System.Drawing.Point(639, 409);
+            this.buttonClose.Location = new System.Drawing.Point(654, 445);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(75, 23);
             this.buttonClose.TabIndex = 2;
@@ -119,18 +124,18 @@
             // 
             this.textBoxDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxDescription.Location = new System.Drawing.Point(13, 331);
+            this.textBoxDescription.Location = new System.Drawing.Point(13, 367);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
-            this.textBoxDescription.Size = new System.Drawing.Size(500, 72);
+            this.textBoxDescription.Size = new System.Drawing.Size(515, 72);
             this.textBoxDescription.TabIndex = 1;
             // 
             // labelOfficialBluray
             // 
             this.labelOfficialBluray.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelOfficialBluray.AutoSize = true;
-            this.labelOfficialBluray.Location = new System.Drawing.Point(519, 331);
+            this.labelOfficialBluray.Location = new System.Drawing.Point(534, 367);
             this.labelOfficialBluray.Name = "labelOfficialBluray";
             this.labelOfficialBluray.Size = new System.Drawing.Size(110, 13);
             this.labelOfficialBluray.TabIndex = 4;
@@ -140,7 +145,7 @@
             // 
             this.labelDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelDescription.AutoSize = true;
-            this.labelDescription.Location = new System.Drawing.Point(10, 312);
+            this.labelDescription.Location = new System.Drawing.Point(10, 348);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(63, 13);
             this.labelDescription.TabIndex = 5;
@@ -150,7 +155,7 @@
             // 
             this.labelOfficialDVD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelOfficialDVD.AutoSize = true;
-            this.labelOfficialDVD.Location = new System.Drawing.Point(520, 348);
+            this.labelOfficialDVD.Location = new System.Drawing.Point(535, 384);
             this.labelOfficialDVD.Name = "labelOfficialDVD";
             this.labelOfficialDVD.Size = new System.Drawing.Size(101, 13);
             this.labelOfficialDVD.TabIndex = 6;
@@ -159,7 +164,7 @@
             // labelOfficialBlurayValue
             // 
             this.labelOfficialBlurayValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelOfficialBlurayValue.Location = new System.Drawing.Point(635, 331);
+            this.labelOfficialBlurayValue.Location = new System.Drawing.Point(650, 367);
             this.labelOfficialBlurayValue.Name = "labelOfficialBlurayValue";
             this.labelOfficialBlurayValue.Size = new System.Drawing.Size(79, 13);
             this.labelOfficialBlurayValue.TabIndex = 7;
@@ -168,23 +173,18 @@
             // labelOfficialDVDValue
             // 
             this.labelOfficialDVDValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelOfficialDVDValue.Location = new System.Drawing.Point(635, 348);
+            this.labelOfficialDVDValue.Location = new System.Drawing.Point(650, 384);
             this.labelOfficialDVDValue.Name = "labelOfficialDVDValue";
             this.labelOfficialDVDValue.Size = new System.Drawing.Size(79, 13);
             this.labelOfficialDVDValue.TabIndex = 8;
             this.labelOfficialDVDValue.Text = "Yes (required)";
             // 
-            // columnHeaderCompression
-            // 
-            this.columnHeaderCompression.Text = "Compression";
-            this.columnHeaderCompression.Width = 76;
-            // 
-            // FormCodecs
+            // FormCodecReference
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonClose;
-            this.ClientSize = new System.Drawing.Size(726, 444);
+            this.ClientSize = new System.Drawing.Size(741, 480);
             this.Controls.Add(this.labelOfficialDVDValue);
             this.Controls.Add(this.labelOfficialBlurayValue);
             this.Controls.Add(this.labelOfficialDVD);
@@ -193,7 +193,7 @@
             this.Controls.Add(this.textBoxDescription);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.listViewCodecs);
-            this.Name = "FormCodecs";
+            this.Name = "FormCodecReference";
             this.Text = "Codecs";
             this.ResumeLayout(false);
             this.PerformLayout();
