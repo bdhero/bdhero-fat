@@ -1461,7 +1461,7 @@ namespace BDAutoMuxer.models
 
         public override IEnumerable<string> AltDisplayNames
         {
-            get { return new string[] { AltMicroName, ShortName }; }
+            get { return new[] { AltMicroName, ShortName, AltFullName }; }
         }
 
         public override bool IsRequiredBlurayCodec
