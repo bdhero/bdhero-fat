@@ -1563,8 +1563,8 @@
             this.openFolderToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.folder_open;
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
             this.openFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.openFolderToolStripMenuItem.Text = "&Open BD-ROM folder...";
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.openFolderToolStripMenuItem.Text = "&Open BD-ROM Folder...";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.buttonBrowse_Click);
             // 
             // rescanToolStripMenuItem
@@ -1572,32 +1572,32 @@
             this.rescanToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.refresh_green;
             this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
             this.rescanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
             this.rescanToolStripMenuItem.Text = "&Rescan";
             this.rescanToolStripMenuItem.Click += new System.EventHandler(this.buttonRescan_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(234, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(236, 6);
             // 
             // submitToDbToolStripMenuItem
             // 
             this.submitToDbToolStripMenuItem.Name = "submitToDbToolStripMenuItem";
-            this.submitToDbToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.submitToDbToolStripMenuItem.Text = "Submit to &database";
+            this.submitToDbToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.submitToDbToolStripMenuItem.Text = "Submit to &Database";
             this.submitToDbToolStripMenuItem.Click += new System.EventHandler(this.SubmitJsonDisc);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(234, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(236, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1624,7 +1624,7 @@
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(167, 22);
-            this.toolStripMenuItem4.Text = "Track Namer";
+            this.toolStripMenuItem4.Text = "Codec Scanner";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
             // toolStripMenuItem3
@@ -1656,21 +1656,21 @@
             this.aboutToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.info;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             // 
             // codecsToolStripMenuItem
             // 
             this.codecsToolStripMenuItem.Name = "codecsToolStripMenuItem";
-            this.codecsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.codecsToolStripMenuItem.Text = "&Codec reference";
+            this.codecsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.codecsToolStripMenuItem.Text = "&Codec Reference";
             this.codecsToolStripMenuItem.Click += new System.EventHandler(this.codecsToolStripMenuItem_Click);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.checkForUpdatesToolStripMenuItem.Text = "Check for &updates";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for &Updates";
             this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // buttonRescan
@@ -1733,7 +1733,7 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // FormDetails
+            // FormMain
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1749,7 +1749,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.continueButton);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "FormDetails";
+            this.Name = "FormMain";
             this.Text = "BDAutoMuxer v0.0.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormDetails_FormClosing);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormDetails_DragDrop);
