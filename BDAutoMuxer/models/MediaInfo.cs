@@ -39,8 +39,8 @@ namespace BDAutoMuxer.models
 
         public static void Test(string[] files = null)
         {
-            MediaInfo.Config.CLIPath = @"C:\Tools\MediaInfo\MediaInfo.exe";
-            MediaInfo.Config.CSVPath = @"C:\Projects\bdautomuxer\BDAutoMuxer\Resources\MediaInfo_XML.csv";
+            MediaInfo.Config.CLIPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfo.exe");
+            MediaInfo.Config.CSVPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfoXML.csv");
 
             /*
 
@@ -792,6 +792,13 @@ namespace BDAutoMuxer.models
                 if (MICodecAAC.Matches(format))
                     return MICodec.AAC;
 
+                // MISC
+
+                if (MICodecVorbis.Matches(format))
+                    return MICodec.Vorbis;
+                if (MICodecFLAC.Matches(format))
+                    return MICodec.FLAC;
+
                 // LPCM
 
                 if (MICodecLPCM.Matches(format))
@@ -1134,6 +1141,9 @@ namespace BDAutoMuxer.models
         public static readonly MICodecMP3 MP3 = new MICodecMP3();
         public static readonly MICodecAAC AAC = new MICodecAAC();
 
+        public static readonly MICodecVorbis Vorbis = new MICodecVorbis();
+        public static readonly MICodecFLAC FLAC = new MICodecFLAC();
+
         public static readonly MICodecLPCM LPCM = new MICodecLPCM();
 
         public static readonly MICodecUnknownAudio UnknownAudio = new MICodecUnknownAudio();
@@ -1184,7 +1194,10 @@ namespace BDAutoMuxer.models
                                                                         ProLogic,
                                                                         // SD - MPEG
                                                                         MP3,
-                                                                        AAC
+                                                                        AAC,
+                                                                        // HD / SD - Misc
+                                                                        Vorbis,
+                                                                        FLAC
                                                                     };
 
         public static readonly List<MIAudioCodec> MuxableBDAudioCodecs = new List<MIAudioCodec>()
@@ -1224,6 +1237,8 @@ namespace BDAutoMuxer.models
                                                                  DTSHDMA,
                                                                  MP3,
                                                                  AAC,
+                                                                 Vorbis,
+                                                                 FLAC,
                                                                  LPCM,
                                                                  PGS
                                                              };
@@ -2357,6 +2372,106 @@ namespace BDAutoMuxer.models
         public static bool Matches(MIFormat format)
         {
             return format.Id == "DTS" && format.Profile == "MA / Core";
+        }
+    }
+
+    #endregion
+
+    #region Misc Audio
+
+    public class MICodecVorbis : MIAudioCodec
+    {
+        public override string SerializableName
+        {
+            get { return "A_VORBIS"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
+        }
+
+        public override string CodecId
+        {
+            get { return "A_VORBIS"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Ogg Vorbis"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "Vorbis"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "OGA"; }
+        }
+
+        public override bool Lossless
+        {
+            get { return false; }
+        }
+
+        public override string Description
+        {
+            get { return "Free / open source audio codec."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "Vorbis";
+        }
+    }
+
+    public class MICodecFLAC : MIAudioCodec
+    {
+        public override string SerializableName
+        {
+            get { return "A_FLAC"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
+        }
+
+        public override string CodecId
+        {
+            get { return "A_FLAC"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Free Lossless Audio Codec"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "FLAC"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "FLAC"; }
+        }
+
+        public override bool Lossless
+        {
+            get { return true; }
+        }
+
+        public override string Description
+        {
+            get { return "Open audio format with royalty-free licensing and a free software reference implementation."; }
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "FLAC";
         }
     }
 

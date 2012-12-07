@@ -154,6 +154,11 @@ namespace BDAutoMuxer
             miAudioTracks.ForEach(track => _audioFormats[track.Format] = track.FilePath);
             */
         }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 
     #region JSON

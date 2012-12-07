@@ -229,6 +229,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="BDAutoMuxer_TemporaryKey.pfx" />
+    <None Include="lib\MediaInfoXML.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -288,6 +291,12 @@
     <None Include="Resources\dd.ico" />
     <None Include="Resources\avc.ico" />
     <None Include="Resources\no-poster-w185.png" />
+    <Content Include="lib\MediaInfo.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\MediaInfo.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\tsMuxeR.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
