@@ -242,7 +242,7 @@ namespace BDAutoMuxer
         #region Initialization
 
         private readonly bool _scanOnLoad;
-        private FormCodecs _formCodecs;
+        private FormCodecReference _formCodecReference;
 
         public FormDetails(string[] args)
         {
@@ -269,15 +269,15 @@ namespace BDAutoMuxer
 
         private void ShowCodecReference()
         {
-            if (_formCodecs == null)
+            if (_formCodecReference == null)
             {
-                _formCodecs = new FormCodecs();
-                _formCodecs.Disposed += (sender, eventArgs) => _formCodecs = null;
-                _formCodecs.Show();
+                _formCodecReference = new FormCodecReference();
+                _formCodecReference.Disposed += (sender, eventArgs) => _formCodecReference = null;
+                _formCodecReference.Show();
             }
             else
             {
-                _formCodecs.Focus();
+                _formCodecReference.Focus();
             }
         }
 

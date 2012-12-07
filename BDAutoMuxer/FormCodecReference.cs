@@ -11,9 +11,9 @@ using BDAutoMuxer.views;
 
 namespace BDAutoMuxer
 {
-    public partial class FormCodecs : Form
+    public partial class FormCodecReference : Form
     {
-        public FormCodecs()
+        public FormCodecReference()
         {
             InitializeComponent();
 

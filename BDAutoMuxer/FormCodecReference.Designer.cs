@@ -1,6 +1,6 @@
 ﻿namespace BDAutoMuxer
 {
-    partial class FormCodecs
+    partial class FormCodecReference
     {
         /// <summary>
         /// Required designer variable.

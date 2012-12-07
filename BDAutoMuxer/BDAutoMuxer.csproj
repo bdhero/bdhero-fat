@@ -144,11 +144,11 @@
     <Compile Include="BDROM\TSCodecVC1.cs" />
     <Compile Include="controllers\Extensions.cs" />
     <Compile Include="controllers\PlaylistFinder.cs" />
-    <Compile Include="FormCodecs.cs">
+    <Compile Include="FormCodecReference.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCodecs.Designer.cs">
-      <DependentUpon>FormCodecs.cs</DependentUpon>
+    <Compile Include="FormCodecReference.Designer.cs">
+      <DependentUpon>FormCodecReference.cs</DependentUpon>
     </Compile>
     <Compile Include="FormTrackNamer.cs">
       <SubType>Form</SubType>
@@ -200,8 +200,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormCodecs.resx">
-      <DependentUpon>FormCodecs.cs</DependentUpon>
+    <EmbeddedResource Include="FormCodecReference.resx">
+      <DependentUpon>FormCodecReference.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDetails.resx">
       <DependentUpon>FormDetails.cs</DependentUpon>
