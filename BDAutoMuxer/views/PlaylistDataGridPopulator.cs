@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
+using BDAutoMuxer.Properties;
 using BDAutoMuxer.models;
 using BDAutoMuxer.controllers;
 
@@ -58,7 +59,7 @@ namespace BDAutoMuxer.views
 
         private static IList<TSPlaylistFile> SortPlaylists(IEnumerable<TSPlaylistFile> playlists)
         {
-            return playlists.OrderBy(p => p.SortScore).ToList();
+            return playlists.OrderBy(p => p.Rank).ToList();
         }
 
         public PlaylistDataGridPopulator(DataGridView dataGridView, IEnumerable<TSPlaylistFile> playlists, IList<string> languageCodes)
@@ -545,6 +546,7 @@ namespace BDAutoMuxer.views
             }
         }
 
+        private DataGridViewImageColumn    _rankImageColumn;
         private DataGridViewButtonColumn   _playButtonColumn;
         private DataGridViewCheckBoxColumn _isMainMovieColumn;
         private DataGridViewTextBoxColumn  _filenameColumn;
@@ -556,6 +558,7 @@ namespace BDAutoMuxer.views
 
         private void CreateColumns()
         {
+            _dataGridView.Columns.Add(_rankImageColumn     = CreateRankImageColumn());
             _dataGridView.Columns.Add(_playButtonColumn    = CreatePlayButtonColumn());
             _dataGridView.Columns.Add(_isMainMovieColumn   = CreateIsMainMovieColumn());
             _dataGridView.Columns.Add(_filenameColumn      = CreateFilenameColumn());
@@ -564,6 +567,30 @@ namespace BDAutoMuxer.views
             _dataGridView.Columns.Add(_videoLanguageColumn = CreateVideoLanguageColumn());
             _dataGridView.Columns.Add(_cutColumn           = CreateCutColumn());
             _dataGridView.Columns.Add(_hasCommentaryColumn = CreateHasCommentaryColumn());
+        }
+
+        private DataGridViewImageColumn CreateRankImageColumn()
+        {
+            _dataGridView.CellToolTipTextNeeded += DataGridViewOnCellToolTipTextNeeded;
+            return new DataGridViewImageColumn
+                       {
+                           Name = "Type",
+                           DataPropertyName = "RankImage"
+                       };
+        }
+
+        private void DataGridViewOnCellToolTipTextNeeded(object sender, DataGridViewCellToolTipTextNeededEventArgs e)
+        {
+            var row = e.RowIndex;
+            var col = e.ColumnIndex;
+            if (row > -1 && col == _rankImageColumn.Index)
+            {
+                var playlist = PlaylistAt(row);
+                if (playlist != null)
+                {
+                    e.ToolTipText = playlist.RankToolTipText;
+                }
+            }
         }
 
         private DataGridViewButtonColumn CreatePlayButtonColumn()
@@ -722,6 +749,21 @@ namespace BDAutoMuxer.views
         }
 
         public TSPlaylistFile Playlist { get; private set; }
+
+        public Image RankImage
+        {
+            get
+            {
+                var rank = Playlist.Rank;
+                if (rank == TSPlaylistRank.MainMovieHq) return Resources.bullet_green;
+                if (rank == TSPlaylistRank.MainMovieLq) return Resources.bullet_error;
+                if (rank == TSPlaylistRank.BogusFeature) return Resources.bullet_delete;
+                return Resources.bullet_black;
+            }
+            // Empty setter necessary for reflection to work
+            set
+            {}
+        }
 
 // ReSharper disable MemberCanBePrivate.Global
         public string Filename { get; private set; }

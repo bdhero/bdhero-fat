@@ -198,7 +198,7 @@ namespace BDAutoMuxer
         /// <summary>
         /// Numeric value used to sort playlists by likelyhood that they are the main movie.  Lower is better.
         /// </summary>
-        public TSPlaylistRank SortScore
+        public TSPlaylistRank Rank
         {
             get
             {
@@ -206,6 +206,17 @@ namespace BDAutoMuxer
                 if (IsLowQualityOnly) return TSPlaylistRank.MainMovieLq;
                 if (IsBogusOnly) return TSPlaylistRank.BogusFeature;
                 return TSPlaylistRank.Short;
+            }
+        }
+
+        public string RankToolTipText
+        {
+            get
+            {
+                if (IsLikelyMainMovie) return "Best guess for main movie playlist";
+                if (IsLowQualityOnly) return "Low quality feature-length playlist";
+                if (IsBogusOnly) return "Bogus (duplicate) feature-length playlist";
+                return "Too short to be the main movie";
             }
         }
 
