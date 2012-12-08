@@ -59,6 +59,7 @@ namespace BDAutoMuxer
 // ReSharper restore MemberCanBePrivate.Global
 
         public bool IsFeatureLength;
+        public bool IsMaxQuality;
         public bool IsDuplicate;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -154,12 +155,58 @@ namespace BDAutoMuxer
 
         public bool IsLikelyMainMovie
         {
-            get { return _autoConfigured ? IsMainMovieAuto : (IsFeatureLength && !HasDuplicateClips && !IsDuplicate); }
+            get { return _autoConfigured ? IsMainMovieAuto : (IsFeatureLength && !HasDuplicateClips && !IsDuplicate && IsMaxQuality); }
         }
 
+        public bool IsShort
+        {
+            get { return !IsFeatureLength; }
+        }
+
+        /// <summary>
+        /// Feature-length playlist that has duplicate clips or is itself a duplicate playlist.
+        /// </summary>
         public bool IsBogus
         {
-            get { return !IsLikelyMainMovie && IsFeatureLength; }
+            get { return (HasDuplicateClips || IsDuplicate) && IsFeatureLength; }
+        }
+
+        /// <summary>
+        /// Shortcut for <code>!IsMaxQuality</code>.
+        /// </summary>
+        public bool IsLowQuality
+        {
+            get { return !IsMaxQuality; }
+        }
+
+        /// <summary>
+        /// Low quality feature-length playlist (NOT bogus).
+        /// </summary>
+        public bool IsLowQualityOnly
+        {
+            get { return IsLowQuality && !IsBogus && IsFeatureLength; }
+        }
+
+        /// <summary>
+        /// Bogus, maximum-quality, feature-length playlist.
+        /// </summary>
+        public bool IsBogusOnly
+        {
+            get { return IsBogus && IsMaxQuality; }
+        }
+
+        /// <summary>
+        /// Numeric value used to sort playlists by likelyhood that they are the main movie.  Lower is better.
+        /// </summary>
+        public TSPlaylistRank SortScore
+        {
+            get
+            {
+                if (IsLikelyMainMovie) return TSPlaylistRank.MainMovieHq;
+                if (IsLowQualityOnly) return TSPlaylistRank.MainMovieLq;
+                if (IsBogusOnly) return TSPlaylistRank.BogusFeature;
+                return TSPlaylistRank.Short;
+            }
         }
 
         public override string ToString()
@@ -244,6 +291,24 @@ namespace BDAutoMuxer
         public ulong TotalAngleBitRate
         {
             get { return TotalAngleLength > 0 ? (ulong) Math.Round(((TotalAngleSize*8.0)/TotalAngleLength)) : 0; }
+        }
+
+        public int MaxVideoHeight
+        {
+            get
+            {
+                var bestVideoTrack = VideoStreams.OrderByDescending(v => v.Height).FirstOrDefault();
+                return bestVideoTrack != null ? bestVideoTrack.Height : 0;
+            }
+        }
+
+        public int MaxAudioChannels
+        {
+            get
+            {
+                var bestAudioTrack = AudioStreams.OrderByDescending(a => a.ChannelCount).FirstOrDefault();
+                return bestAudioTrack != null ? bestAudioTrack.ChannelCount : 0;
+            }
         }
 
         public void Scan(
@@ -1365,5 +1430,28 @@ namespace BDAutoMuxer
         }
 
         #endregion
+    }
+
+    public enum TSPlaylistRank
+    {
+        /// <summary>
+        /// High quality, non-bogus, feature length
+        /// </summary>
+        MainMovieHq,
+
+        /// <summary>
+        /// Low quality, non-bogus, feature-length
+        /// </summary>
+        MainMovieLq,
+
+        /// <summary>
+        /// Bogus feature-length (high and low quality)
+        /// </summary>
+        BogusFeature,
+
+        /// <summary>
+        /// Short (non-feature-length) (high and low quality)
+        /// </summary>
+        Short
     }
 }

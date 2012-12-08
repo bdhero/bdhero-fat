@@ -504,7 +504,10 @@ namespace BDAutoMuxer
         private void ResetPlaylistDataGrid(object sender = null, EventArgs e = null)
         {
             if (_populator != null)
-                _populator.SetVisible(checkboxShowBogusPlaylists.Checked, checkBoxShowShortPlaylists.Checked);
+                _populator.SetVisible(
+                    checkBoxShowLowQualityPlaylists.Checked,
+                    checkboxShowBogusPlaylists.Checked,
+                    checkBoxShowShortPlaylists.Checked);
         }
 
         #endregion
@@ -705,6 +708,14 @@ namespace BDAutoMuxer
             var i = 0;
             var icons = new ImageList();
             var preferredAudioCodecs = BDAutoMuxerSettings.PreferredAudioCodecs;
+            var minChannelCount = 0;
+
+            if (BDAutoMuxerSettings.SelectHighestChannelCount)
+            {
+                var highestTrack = _audioTracks.OrderByDescending(a => a.ChannelCount).FirstOrDefault();
+                if (highestTrack != null)
+                    minChannelCount = highestTrack.ChannelCount;
+            }
 
             foreach (TSAudioStream stream in _audioTracks.Where(track => track.StreamType != TSStreamType.DTS_HD_SECONDARY_AUDIO))
             {
@@ -732,7 +743,7 @@ namespace BDAutoMuxer
 
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
                 streamItem.Tag = stream;
-                streamItem.Checked = preferredAudioCodecs.Any(audioCodec => audioCodec.StreamType == stream.StreamType);
+                streamItem.Checked = preferredAudioCodecs.Any(audioCodec => audioCodec.StreamType == stream.StreamType) && stream.ChannelCount >= minChannelCount;
                 streamItem.ImageIndex = i++;
                 listViewAudioTracks.Items.Add(streamItem);
 
@@ -1771,10 +1782,12 @@ namespace BDAutoMuxer
             set
             {
                 panelMovieDetails.Enabled = value;
+                checkBoxShowLowQualityPlaylists.Enabled = value && _playlists != null &&
+                                                     _playlists.Any(playlist => playlist.IsLowQualityOnly);
                 checkboxShowBogusPlaylists.Enabled = value && _playlists != null &&
-                                                     _playlists.Any(playlist => playlist.IsBogus);
+                                                     _playlists.Any(playlist => playlist.IsBogusOnly);
                 checkBoxShowShortPlaylists.Enabled = value && _playlists != null &&
-                                                     _playlists.Any(playlist => !playlist.IsFeatureLength);
+                                                     _playlists.Any(playlist => playlist.IsShort);
             }
         }
 

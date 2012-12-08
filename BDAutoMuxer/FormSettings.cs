@@ -62,6 +62,7 @@ namespace BDAutoMuxer
             checkBoxEnableSSIF.Checked = BDAutoMuxerSettings.EnableSSIF;
             textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
             checkBoxCheckForUpdates.Checked = BDAutoMuxerSettings.CheckForUpdates;
+            checkBoxSelectHighestChannelCount.Checked = BDAutoMuxerSettings.SelectHighestChannelCount;
 
             InitAudienceLanguage();
             InitPreferredAudioCodecs();
@@ -196,7 +197,7 @@ namespace BDAutoMuxer
             }
         }
 
-        private void buttonOK_Click(object sender, EventArgs e)
+        private void SaveSettings(object sender = null, EventArgs e = null)
         {
             BDAutoMuxerSettings.KeepStreamOrder = checkBoxKeepStreamOrder.Checked;
             BDAutoMuxerSettings.FilterLoopingPlaylists = checkBoxFilterLoopingPlaylists.Checked;
@@ -211,6 +212,7 @@ namespace BDAutoMuxer
             }
             BDAutoMuxerSettings.AudienceLanguage = SelectedAudienceLanguage;
             BDAutoMuxerSettings.PreferredAudioCodecs = SelectedAudioCodecs;
+            BDAutoMuxerSettings.SelectHighestChannelCount = checkBoxSelectHighestChannelCount.Checked;
             BDAutoMuxerSettings.SaveSettings();
             Close();
         }
@@ -597,6 +599,21 @@ namespace BDAutoMuxer
                     serialized = MICodec.SerializeCodecs(value);
 
                 try { UserSettings.PreferredAudioCodecs = serialized; }
+                catch { }
+            }
+        }
+
+        public static bool SelectHighestChannelCount
+        {
+            get
+            {
+                try { return UserSettings.SelectHighestChannelCount; }
+                catch { return true; }
+            }
+
+            set
+            {
+                try { UserSettings.SelectHighestChannelCount = value; }
                 catch { }
             }
         }

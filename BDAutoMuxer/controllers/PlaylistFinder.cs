@@ -224,14 +224,31 @@ namespace BDAutoMuxer.controllers
 
             mainPlaylists.Clear();
 
-            if (sortedPlaylists.Count == 0) return;
+            var maxLengthPlaylist = sortedPlaylists.OrderByDescending(p => p.TotalLength).FirstOrDefault();
+            if (maxLengthPlaylist == null) return;
 
-            double maxlength = sortedPlaylists[0].TotalLength;
+            var bestAudioPlaylist = sortedPlaylists.OrderByDescending(p => p.MaxAudioChannels).FirstOrDefault();
+            if (bestAudioPlaylist == null) return;
+
+            var bestVideoPlaylist = sortedPlaylists.OrderByDescending(p => p.MaxVideoHeight).FirstOrDefault();
+            if (bestVideoPlaylist == null) return;
+
+            var maxlength = maxLengthPlaylist.TotalLength;
+            var maxChannels = bestAudioPlaylist.MaxAudioChannels;
+            var maxHeight = bestVideoPlaylist.MaxVideoHeight;
 
             foreach (TSPlaylistFile playlist in sortedPlaylists.Where(playlist => playlist.TotalLength > maxlength * 0.9))
             {
                 playlist.IsFeatureLength = true;
                 mainPlaylists.Add(playlist);
+            }
+
+            foreach (
+                var playlist in
+                    sortedPlaylists.Where(
+                        playlist => playlist.MaxAudioChannels >= maxChannels && playlist.MaxVideoHeight >= maxHeight))
+            {
+                playlist.IsMaxQuality = true;
             }
 
             var duplicateMap = new Dictionary<string, IList<TSPlaylistFile>>();

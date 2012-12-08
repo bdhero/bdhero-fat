@@ -58,26 +58,7 @@ namespace BDAutoMuxer.views
 
         private static IList<TSPlaylistFile> SortPlaylists(IEnumerable<TSPlaylistFile> playlists)
         {
-            var array = playlists.ToArray();
-            Array.Sort(array, ComparePlaylists);
-            return new List<TSPlaylistFile>(array);
-        }
-
-        private static int ComparePlaylists(TSPlaylistFile playlist1, TSPlaylistFile playlist2)
-        {
-            // XOR - One is a main movie but not the other
-            if (playlist1.IsLikelyMainMovie && !playlist2.IsLikelyMainMovie) return -1;
-            if (playlist2.IsLikelyMainMovie && !playlist1.IsLikelyMainMovie) return +1;
-
-            // AND - Both are main movies
-            if (playlist1.IsLikelyMainMovie && playlist2.IsLikelyMainMovie)
-                return String.Compare(playlist1.Name, playlist2.Name, StringComparison.OrdinalIgnoreCase);
-
-            // XOR - One is feature-length but not the other
-            if (playlist1.IsFeatureLength && !playlist2.IsFeatureLength) return -1;
-            if (playlist2.IsFeatureLength && !playlist1.IsFeatureLength) return +1;
-
-            return 0;
+            return playlists.OrderBy(p => p.SortScore).ToList();
         }
 
         public PlaylistDataGridPopulator(DataGridView dataGridView, IEnumerable<TSPlaylistFile> playlists, IList<string> languageCodes)
@@ -101,9 +82,7 @@ namespace BDAutoMuxer.views
             _playlistGridItems.Clear();
             _playlistGridItemsOriginal.Clear();
 
-            var tsPlaylistFiles = new List<TSPlaylistFile>(playlists);
-
-            _playlists = SortPlaylists(tsPlaylistFiles);
+            _playlists = SortPlaylists(playlists);
 
             CreateColumns();
 
@@ -111,7 +90,7 @@ namespace BDAutoMuxer.views
             _dataGridView.SelectionChanged += SelectionChanged;
             _dataGridView.CellBeginEdit += CellBeginEdit;
 
-            foreach (var playlist in tsPlaylistFiles)
+            foreach (var playlist in _playlists)
             {
                 var item = new PlaylistGridItem(playlist, _languageCodes.Count > 0 ? _languageCodes[0] : null);
                 var clone = new PlaylistGridItem(playlist, _languageCodes.Count > 0 ? _languageCodes[0] : null);
@@ -122,7 +101,7 @@ namespace BDAutoMuxer.views
                 _playlistGridItemsOriginal.Add(clone);
             }
 
-            SetVisible(false, false);
+            SetVisible(false, false, false);
         }
 
         ~PlaylistDataGridPopulator()
@@ -164,19 +143,19 @@ namespace BDAutoMuxer.views
             }
         }
 
-        private static bool ShowPlaylist(PlaylistGridItem item, bool showBogus, bool showShort)
+        private static bool ShowPlaylist(PlaylistGridItem item, bool showLowQuality, bool showBogus, bool showShort)
         {
-            return item.Playlist.IsLikelyMainMovie || (item.Playlist.IsFeatureLength && showBogus) || (!item.Playlist.IsFeatureLength && showShort);
+            return item.Playlist.IsLikelyMainMovie || (item.Playlist.IsLowQualityOnly && showLowQuality) || (item.Playlist.IsBogusOnly && showBogus) || (item.Playlist.IsShort && showShort);
         }
 
-        public void SetVisible(bool showBogus, bool showShort)
+        public void SetVisible(bool showLowQuality, bool showBogus, bool showShort)
         {
             _dataGridView.DataSource = null;
             _bindingList.Clear();
 
             var i = 0;
             var enabledRowIndexes = new List<int>();
-            foreach (var item in _playlistGridItems.Where(item => ShowPlaylist(item, showBogus, showShort)))
+            foreach (var item in _playlistGridItems.Where(item => ShowPlaylist(item, showLowQuality, showBogus, showShort)))
             {
                 _bindingList.Add(item);
 
@@ -192,7 +171,7 @@ namespace BDAutoMuxer.views
             {
                 TSPlaylistFile tsPlaylistFile = _bindingList[rowIndex].Playlist;
                 EnableRow(_dataGridView.Rows[rowIndex], enabledRowIndexes.Contains(rowIndex));
-                StyleRow(_dataGridView.Rows[rowIndex], tsPlaylistFile.IsFeatureLength && !tsPlaylistFile.IsLikelyMainMovie);
+                StyleRow(_dataGridView.Rows[rowIndex], tsPlaylistFile.IsLowQualityOnly, tsPlaylistFile.IsBogusOnly);
             }
         }
 
@@ -217,11 +196,11 @@ namespace BDAutoMuxer.views
             }
         }
 
-        private void StyleRow(DataGridViewBand row, bool isBogus)
+        private void StyleRow(DataGridViewBand row, bool isLowQuality, bool isBogus)
         {
             for (var colIndex = 0; colIndex < _dataGridView.Columns.Count; colIndex++)
             {
-                StyleCell(_dataGridView[colIndex, row.Index], isBogus);
+                StyleCell(_dataGridView[colIndex, row.Index], isLowQuality, isBogus);
             }
         }
 
@@ -243,20 +222,35 @@ namespace BDAutoMuxer.views
                 // restore cell style to the default value
                 dc.Style.BackColor = dc.OwningColumn.DefaultCellStyle.BackColor;
                 dc.Style.ForeColor = dc.OwningColumn.DefaultCellStyle.ForeColor;
+//                dc.Style.SelectionBackColor = dc.OwningColumn.DefaultCellStyle.SelectionBackColor;
+//                dc.Style.SelectionForeColor = dc.OwningColumn.DefaultCellStyle.SelectionForeColor;
             }
             else
             {
                 // gray out the cell
                 dc.Style.BackColor = Color.LightGray;
                 dc.Style.ForeColor = Color.DarkGray;
+//                dc.Style.SelectionBackColor = Color.DimGray;
+//                dc.Style.SelectionForeColor = Color.LightGray;
             }
         }
 
-        private static void StyleCell(DataGridViewCell dc, bool isBogus)
+        private static void StyleCell(DataGridViewCell dc, bool isLowQuality, bool isBogus)
         {
-            if (!isBogus) return;
-            dc.Style.BackColor = SystemColors.ControlLight;
-            dc.Style.ForeColor = SystemColors.InactiveCaptionText;
+            if (isLowQuality)
+            {
+                dc.Style.BackColor = Color.Cornsilk;
+                dc.Style.ForeColor = Color.DarkGoldenrod;
+//                dc.Style.SelectionBackColor = Color.SaddleBrown;
+//                dc.Style.SelectionForeColor = Color.Cornsilk;
+            }
+            else if (isBogus)
+            {
+                dc.Style.BackColor = Color.GhostWhite;
+                dc.Style.ForeColor = Color.DarkGray;
+//                dc.Style.SelectionBackColor = Color.SlateGray;
+//                dc.Style.SelectionForeColor = Color.GhostWhite;
+            }
         }
 
         public IEnumerable<JsonPlaylist> JsonPlaylists
