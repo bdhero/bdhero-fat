@@ -14,6 +14,8 @@ namespace BDAutoMuxer.views
 {
     class PlaylistDataGridPopulator
     {
+        private const bool DisableShortPlaylists = false;
+
         private readonly DataGridView _dataGridView;
         private readonly IList<Language> _languages = new List<Language>();
         private readonly IList<string> _languageCodes;
@@ -190,7 +192,9 @@ namespace BDAutoMuxer.views
 
         private void EnableRow(DataGridViewBand row, bool enabled)
         {
-            row.ReadOnly = !enabled;
+            if (DisableShortPlaylists)
+                row.ReadOnly = !enabled;
+
             for (var colIndex = 0; colIndex < _dataGridView.Columns.Count; colIndex++)
             {
                 EnableCell(_dataGridView[colIndex, row.Index], enabled);
@@ -217,7 +221,9 @@ namespace BDAutoMuxer.views
         {
             // toggle read-only state
             // TODO: Find a better method of disabling cells that disables their controls as well
-            dc.ReadOnly = !enabled;
+            if (DisableShortPlaylists)
+                dc.ReadOnly = !enabled;
+
             if (enabled)
             {
                 // restore cell style to the default value
@@ -486,7 +492,7 @@ namespace BDAutoMuxer.views
             }
 
             // Ignore readonly (i.e., disabled) cells
-            if (IsReadOnly(e))
+            if (IsReadOnly(e) && DisableShortPlaylists)
                 return;
 
             if (IsComboBoxColumn(e))
