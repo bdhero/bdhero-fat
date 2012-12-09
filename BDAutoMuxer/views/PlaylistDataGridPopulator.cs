@@ -507,7 +507,7 @@ namespace BDAutoMuxer.views
             {
                 _dataGridView.BeginEdit(true);
 
-                if (IsSelected(e))
+                if (IsSelected(e) && GetCurComboBox() != null)
                     GetCurComboBox().DroppedDown = true;
             }
         }
