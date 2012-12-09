@@ -46,23 +46,25 @@ namespace BDAutoMuxer
             columnHeaderAlternateNames.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             columnHeaderCodecId.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 
+            FormUtils.TextBox_EnableSelectAll(this);
+
             listViewCodecs.Items[0].Selected = true;
 
-            SelectCodec(autoSelectStreamType);
-
-            FormUtils.TextBox_EnableSelectAll(this);
+            Load += (sender, args) => SelectCodec(autoSelectStreamType);
         }
 
         public void SelectCodec(TSStreamType streamType = TSStreamType.Unknown)
         {
+            if (CanFocus) Focus();
             if (streamType != TSStreamType.Unknown)
             {
                 var listViewItem = listViewCodecs.Items.OfType<ListViewItem>().FirstOrDefault(item => CodecMatches(item, streamType));
                 if (listViewItem != null)
+                {
                     listViewItem.Selected = true;
+                    listViewItem.Focused = true;
+                }
             }
-
-            if (CanFocus) Focus();
         }
 
         private static bool CodecMatches(ListViewItem item, TSStreamType streamType)
