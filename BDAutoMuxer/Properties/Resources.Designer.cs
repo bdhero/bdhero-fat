@@ -116,6 +116,13 @@ namespace BDAutoMuxer.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap bullet_blue {
+            get {
+                object obj = ResourceManager.GetObject("bullet_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap bullet_delete {
             get {
                 object obj = ResourceManager.GetObject("bullet_delete", resourceCulture);
@@ -337,6 +344,27 @@ namespace BDAutoMuxer.Properties {
             get {
                 object obj = ResourceManager.GetObject("txt", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap type_audio {
+            get {
+                object obj = ResourceManager.GetObject("type_audio", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap type_subtitle {
+            get {
+                object obj = ResourceManager.GetObject("type_subtitle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap type_video {
+            get {
+                object obj = ResourceManager.GetObject("type_video", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

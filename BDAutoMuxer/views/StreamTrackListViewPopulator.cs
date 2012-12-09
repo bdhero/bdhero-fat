@@ -85,7 +85,7 @@ namespace BDAutoMuxer.views
             }
 
             var i = 0;
-            ImageList trackIcons = new ImageList();
+            ImageList trackIcons = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
 
             foreach (var stream in playlist.SortedStreams)
             {

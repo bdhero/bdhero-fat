@@ -263,6 +263,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\type_video.png" />
+    <None Include="Resources\type_subtitle.png" />
+    <None Include="Resources\type_audio.png" />
+    <None Include="Resources\bullet_blue.png" />
     <None Include="Resources\exclamation.png" />
     <None Include="Resources\error.png" />
     <None Include="Resources\bullet_red.png" />

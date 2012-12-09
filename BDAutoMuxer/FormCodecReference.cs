@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BDAutoMuxer.Properties;
 using BDAutoMuxer.models;
 using BDAutoMuxer.views;
 
@@ -14,6 +15,8 @@ namespace BDAutoMuxer
     public partial class FormCodecReference : Form
     {
         private static FormCodecReference _instance;
+
+        private readonly ImageList _icons = new ImageList {ColorDepth = ColorDepth.Depth32Bit};
 
         public static void ShowReference(TSStreamType autoSelectStreamType = TSStreamType.Unknown)
         {
@@ -80,6 +83,13 @@ namespace BDAutoMuxer
                 var altDisplayNames = string.Join(",  ", new HashSet<string>(codec.AltDisplayNames));
                 var isMuxable = codec.IsMuxable ? "yes" : "NO";
 
+                var icon = Resources.bullet_black;
+
+                if (codec.IsVideo) icon = Resources.bullet_blue;
+                if (codec.IsAudio) icon = Resources.bullet_green;
+
+                _icons.Images.Add(icon);
+
                 var subitems = new[]
                                    {
                                        new ListViewItem.ListViewSubItem { Text = codec.CommonName },
@@ -90,8 +100,10 @@ namespace BDAutoMuxer
                                        new ListViewItem.ListViewSubItem { Text = compression },
                                        new ListViewItem.ListViewSubItem { Text = isMuxable }
                                    };
-                listViewCodecs.Items.Add(new ListViewItem(subitems, 0) { Tag = codec });
+                var i = listViewCodecs.Items.Count;
+                listViewCodecs.Items.Add(new ListViewItem(subitems, 0) {Tag = codec, ImageIndex = i});
             }
+            listViewCodecs.SmallImageList = _icons;
         }
 
         private void buttonClose_Click(object sender, EventArgs e)

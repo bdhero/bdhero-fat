@@ -647,7 +647,7 @@ namespace BDAutoMuxer
         private void PopulateVideoTracks()
         {
             var i = 0;
-            var icons = new ImageList();
+            var icons = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
 
             var first1080 = _videoTracks.FirstOrDefault(track => track.VideoFormat == TSVideoFormat.VIDEOFORMAT_1080p || track.VideoFormat == TSVideoFormat.VIDEOFORMAT_1080i);
             var first720 = _videoTracks.FirstOrDefault(track => track.VideoFormat == TSVideoFormat.VIDEOFORMAT_720p);
@@ -700,7 +700,7 @@ namespace BDAutoMuxer
         private void PopulateAudioTracks()
         {
             var i = 0;
-            var icons = new ImageList();
+            var icons = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
             var preferredAudioCodecs = BDAutoMuxerSettings.PreferredAudioCodecs;
             var minChannelCount = 0;
 
@@ -754,7 +754,7 @@ namespace BDAutoMuxer
         private void PopulateSubtitleTracks()
         {
             var i = 0;
-            var icons = new ImageList();
+            var icons = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
 
             foreach (TSStream stream in _subtitleTracks.Where(track => track.StreamType != TSStreamType.INTERACTIVE_GRAPHICS))
             {
