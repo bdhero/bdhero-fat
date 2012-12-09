@@ -242,7 +242,6 @@ namespace BDAutoMuxer
         #region Initialization
 
         private readonly bool _scanOnLoad;
-        private FormCodecReference _formCodecReference;
 
         public FormMain(string[] args)
         {
@@ -269,16 +268,7 @@ namespace BDAutoMuxer
 
         private void ShowCodecReference()
         {
-            if (_formCodecReference == null)
-            {
-                _formCodecReference = new FormCodecReference();
-                _formCodecReference.Disposed += (sender, eventArgs) => _formCodecReference = null;
-                _formCodecReference.Show();
-            }
-            else
-            {
-                _formCodecReference.Focus();
-            }
+            FormCodecReference.ShowReference();
         }
 
         private void FormDetails_Load(object sender, EventArgs e)
@@ -335,6 +325,10 @@ namespace BDAutoMuxer
             _tsMuxerProgressUIState = new ProgressUIState(labelTsMuxerProgress, labelTsMuxerTimeRemaining,
                                                           labelTsMuxerTimeElapsed, progressBarTsMuxer,
                                                           textBoxTsMuxerCommandLine);
+
+            StreamTrackListViewPopulator.AddCodecReferenceContextMenu(listViewVideoTracks, () => _videoTracks.OfType<TSStream>().ToList());
+            StreamTrackListViewPopulator.AddCodecReferenceContextMenu(listViewAudioTracks, () => _audioTracks.OfType<TSStream>().ToList());
+            StreamTrackListViewPopulator.AddCodecReferenceContextMenu(listViewSubtitleTracks, () => _subtitleTracks);
 
             CheckForUpdateOnStartup();
 

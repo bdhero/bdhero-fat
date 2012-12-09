@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
+using BDAutoMuxer.Properties;
 
 namespace BDAutoMuxer.views
 {
@@ -163,6 +166,40 @@ namespace BDAutoMuxer.views
             }
 
             tracks.SmallImageList = trackIcons;
+
+            AddCodecReferenceContextMenu(tracks, playlist.SortedStreams);
+        }
+
+        private static void AddCodecReferenceContextMenu(ListView listView, List<TSStream> streams)
+        {
+            AddCodecReferenceContextMenu(listView, () => streams);
+        }
+
+        public static void AddCodecReferenceContextMenu(ListView listView, Func<List<TSStream>> streamsGetter)
+        {
+            listView.ContextMenuStrip = new ContextMenuStrip();
+            listView.ContextMenuStrip.Items.Add("View codec information", Resources.info,
+                                                (sender, args) =>
+                                                    {
+                                                        var streams = streamsGetter();
+                                                        if (streams != null)
+                                                            ViewCodecInformation(listView, streams);
+                                                    }
+                                                );
+            listView.ContextMenuStrip.Opening += (sender, args) =>
+                                                     {
+                                                         if (listView.SelectedItems.Count == 0)
+                                                             args.Cancel = true;
+                                                     };
+        }
+
+        public static void ViewCodecInformation(ListView listViewTracks, IList<TSStream> streams)
+        {
+            var selectedTrack = listViewTracks.SelectedItems.OfType<ListViewItem>().FirstOrDefault();
+            if (selectedTrack == null) return;
+            var stream = streams[selectedTrack.Index];
+            if (stream == null) return;
+            FormCodecReference.ShowReference(stream.StreamType);
         }
     }
 }

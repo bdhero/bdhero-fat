@@ -13,7 +13,24 @@ namespace BDAutoMuxer
 {
     public partial class FormCodecReference : Form
     {
-        public FormCodecReference()
+        private static FormCodecReference _instance;
+
+        public static void ShowReference(TSStreamType autoSelectStreamType = TSStreamType.Unknown)
+        {
+            if (_instance == null)
+            {
+                _instance = new FormCodecReference(autoSelectStreamType);
+                _instance.Disposed += (sender, eventArgs) => _instance = null;
+                _instance.Show();
+            }
+            else
+            {
+                _instance.Focus();
+                _instance.SelectCodec(autoSelectStreamType);
+            }
+        }
+
+        private FormCodecReference(TSStreamType autoSelectStreamType = TSStreamType.Unknown)
         {
             InitializeComponent();
 
@@ -26,10 +43,29 @@ namespace BDAutoMuxer
             columnHeaderAlternateNames.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             columnHeaderCodecId.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 
-            // Auto-select the first codec
             listViewCodecs.Items[0].Selected = true;
 
+            SelectCodec(autoSelectStreamType);
+
             FormUtils.TextBox_EnableSelectAll(this);
+        }
+
+        public void SelectCodec(TSStreamType streamType = TSStreamType.Unknown)
+        {
+            if (streamType != TSStreamType.Unknown)
+            {
+                var listViewItem = listViewCodecs.Items.OfType<ListViewItem>().FirstOrDefault(item => CodecMatches(item, streamType));
+                if (listViewItem != null)
+                    listViewItem.Selected = true;
+            }
+
+            if (CanFocus) Focus();
+        }
+
+        private static bool CodecMatches(ListViewItem item, TSStreamType streamType)
+        {
+            var codec = item.Tag as MICodec;
+            return codec != null && codec.StreamType == streamType;
         }
 
         private void AddCodecs(IEnumerable<MICodec> codecs)
