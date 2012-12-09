@@ -16,6 +16,10 @@ namespace BDAutoMuxer.views
     {
         private const bool DisableShortPlaylists = false;
 
+        private bool _showLowQuality;
+        private bool _showBogus;
+        private bool _showShort;
+
         private readonly DataGridView _dataGridView;
         private readonly IList<Language> _languages = new List<Language>();
         private readonly IList<string> _languageCodes;
@@ -104,7 +108,7 @@ namespace BDAutoMuxer.views
                 _playlistGridItemsOriginal.Add(clone);
             }
 
-            SetVisible(false, false, false);
+            SetVisible(_showLowQuality, _showBogus, _showShort);
         }
 
         ~PlaylistDataGridPopulator()
@@ -153,6 +157,10 @@ namespace BDAutoMuxer.views
 
         public void SetVisible(bool showLowQuality, bool showBogus, bool showShort)
         {
+            _showLowQuality = showLowQuality;
+            _showBogus = showBogus;
+            _showShort = showShort;
+
             _dataGridView.DataSource = null;
             _bindingList.Clear();
 
