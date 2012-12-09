@@ -237,16 +237,16 @@ namespace BDAutoMuxer.views
                 // restore cell style to the default value
                 dc.Style.BackColor = dc.OwningColumn.DefaultCellStyle.BackColor;
                 dc.Style.ForeColor = dc.OwningColumn.DefaultCellStyle.ForeColor;
-//                dc.Style.SelectionBackColor = dc.OwningColumn.DefaultCellStyle.SelectionBackColor;
-//                dc.Style.SelectionForeColor = dc.OwningColumn.DefaultCellStyle.SelectionForeColor;
+                dc.Style.SelectionBackColor = dc.OwningColumn.DefaultCellStyle.SelectionBackColor;
+                dc.Style.SelectionForeColor = dc.OwningColumn.DefaultCellStyle.SelectionForeColor;
             }
             else
             {
                 // gray out the cell
-                dc.Style.BackColor = Color.LightGray;
-                dc.Style.ForeColor = Color.DarkGray;
-//                dc.Style.SelectionBackColor = Color.DimGray;
-//                dc.Style.SelectionForeColor = Color.LightGray;
+                dc.Style.BackColor = Color.FromArgb(230, 230, 230);
+                dc.Style.ForeColor = Color.FromArgb(105, 105, 105);
+                dc.Style.SelectionBackColor = Color.FromArgb(105, 105, 105);
+                dc.Style.SelectionForeColor = Color.FromArgb(230, 230, 230);
             }
         }
 
@@ -254,17 +254,17 @@ namespace BDAutoMuxer.views
         {
             if (isLowQuality)
             {
-                dc.Style.BackColor = Color.Cornsilk;
-                dc.Style.ForeColor = Color.DarkGoldenrod;
-//                dc.Style.SelectionBackColor = Color.SaddleBrown;
-//                dc.Style.SelectionForeColor = Color.Cornsilk;
+                dc.Style.BackColor = Color.FromArgb(254, 251, 214);
+                dc.Style.ForeColor = Color.FromArgb(213, 162, 62);
+                dc.Style.SelectionBackColor = Color.FromArgb(213, 162, 62);
+                dc.Style.SelectionForeColor = Color.FromArgb(254, 251, 214);
             }
             else if (isBogus)
             {
-                dc.Style.BackColor = Color.GhostWhite;
-                dc.Style.ForeColor = Color.DarkGray;
-//                dc.Style.SelectionBackColor = Color.SlateGray;
-//                dc.Style.SelectionForeColor = Color.GhostWhite;
+                dc.Style.BackColor = Color.FromArgb(255, 239, 239);
+                dc.Style.ForeColor = Color.FromArgb(219, 0, 0);
+                dc.Style.SelectionBackColor = Color.FromArgb(219, 0, 0);
+                dc.Style.SelectionForeColor = Color.FromArgb(255, 239, 239);
             }
         }
 
