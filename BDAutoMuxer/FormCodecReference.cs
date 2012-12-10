@@ -37,9 +37,11 @@ namespace BDAutoMuxer
         {
             InitializeComponent();
 
-            AddCodecs(MICodec.VideoCodecs.Select(c => c as MICodec).ToList());
-            AddCodecs(MICodec.AudioCodecs.Select(c => c as MICodec).ToList());
-            AddCodecs(MICodec.SubtitleCodecs.Select(c => c as MICodec).ToList());
+            listViewCodecs.Items.Clear();
+
+            AddCodecs(0, MICodec.VideoCodecs.Select(c => c as MICodec).ToList());
+            AddCodecs(1, MICodec.AudioCodecs.Select(c => c as MICodec).ToList());
+            AddCodecs(2, MICodec.SubtitleCodecs.Select(c => c as MICodec).ToList());
 
             columnHeaderCommonName.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             columnHeaderOfficialName.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -73,7 +75,7 @@ namespace BDAutoMuxer
             return codec != null && codec.StreamType == streamType;
         }
 
-        private void AddCodecs(IEnumerable<MICodec> codecs)
+        private void AddCodecs(int groupIndex, IEnumerable<MICodec> codecs)
         {
             foreach (var codec in codecs)
             {
@@ -102,8 +104,15 @@ namespace BDAutoMuxer
                                        new ListViewItem.ListViewSubItem { Text = compression },
                                        new ListViewItem.ListViewSubItem { Text = isMuxable }
                                    };
+                // Variable `i` needs to be outside of ListViewItem() initializer to avoid closure craziness (lazy evaluation)
                 var i = listViewCodecs.Items.Count;
-                listViewCodecs.Items.Add(new ListViewItem(subitems, 0) {Tag = codec, ImageIndex = i});
+                var listViewItem = new ListViewItem(subitems, 0)
+                                       {
+                                           Tag = codec,
+                                           ImageIndex = i,
+                                           Group = listViewCodecs.Groups[groupIndex]
+                                       };
+                listViewCodecs.Items.Add(listViewItem);
             }
             listViewCodecs.SmallImageList = _icons;
         }
