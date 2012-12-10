@@ -235,6 +235,146 @@ namespace BDAutoMuxer.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap logo_aac {
+            get {
+                object obj = ResourceManager.GetObject("logo_aac", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dolby_digital {
+            get {
+                object obj = ResourceManager.GetObject("logo_dolby_digital", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dolby_digital_ex {
+            get {
+                object obj = ResourceManager.GetObject("logo_dolby_digital_ex", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dolby_digital_plus {
+            get {
+                object obj = ResourceManager.GetObject("logo_dolby_digital_plus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dolby_pro_logic {
+            get {
+                object obj = ResourceManager.GetObject("logo_dolby_pro_logic", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dolby_truehd {
+            get {
+                object obj = ResourceManager.GetObject("logo_dolby_truehd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dts {
+            get {
+                object obj = ResourceManager.GetObject("logo_dts", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dts_es {
+            get {
+                object obj = ResourceManager.GetObject("logo_dts_es", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dts_express {
+            get {
+                object obj = ResourceManager.GetObject("logo_dts_express", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dts_hd_hra {
+            get {
+                object obj = ResourceManager.GetObject("logo_dts_hd_hra", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_dts_hd_ma {
+            get {
+                object obj = ResourceManager.GetObject("logo_dts_hd_ma", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_flac {
+            get {
+                object obj = ResourceManager.GetObject("logo_flac", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_h264 {
+            get {
+                object obj = ResourceManager.GetObject("logo_h264", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_lpcm {
+            get {
+                object obj = ResourceManager.GetObject("logo_lpcm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_mp3 {
+            get {
+                object obj = ResourceManager.GetObject("logo_mp3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_mpeg1_video {
+            get {
+                object obj = ResourceManager.GetObject("logo_mpeg1_video", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_mpeg2_video {
+            get {
+                object obj = ResourceManager.GetObject("logo_mpeg2_video", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_pgs {
+            get {
+                object obj = ResourceManager.GetObject("logo_pgs", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_vc1 {
+            get {
+                object obj = ResourceManager.GetObject("logo_vc1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap logo_vorbis {
+            get {
+                object obj = ResourceManager.GetObject("logo_vorbis", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Icon lpcm {
             get {
                 object obj = ResourceManager.GetObject("lpcm", resourceCulture);

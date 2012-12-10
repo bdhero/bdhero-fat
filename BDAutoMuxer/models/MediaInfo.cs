@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using BDAutoMuxer.Properties;
 using BDAutoMuxer.tools;
 using Newtonsoft.Json;
 
@@ -1303,6 +1305,8 @@ namespace BDAutoMuxer.models
 
         public abstract string TypeDisplay { get; }
 
+        public abstract Image Logo { get; }
+
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -1474,6 +1478,11 @@ namespace BDAutoMuxer.models
             get { return "The de facto standard for high quality HD video at reasonable file sizes."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_h264; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "AVC";
@@ -1524,6 +1533,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Microsoft's Blu-ray video codec.  Much less common than H.264/AVC."; }
+        }
+
+        public override Image Logo
+        {
+            get { return Resources.logo_vc1; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1585,6 +1599,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Video portion of the MPEG-1 standard.  Most commonly found on DVDs and standalone video files (e.g., .mpg, .mpeg)."; }
+        }
+
+        public override Image Logo
+        {
+            get { return Resources.logo_mpeg1_video; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1658,6 +1677,11 @@ namespace BDAutoMuxer.models
             get { return true; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_mpeg2_video; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "MPEG Video" && format.Version == "Version 2";
@@ -1699,6 +1723,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Unknown video format."; }
+        }
+
+        public override Image Logo
+        {
+            get { return null; }
         }
 
         public override bool IsKnown
@@ -1764,6 +1793,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Dolby Stereo + 2 matrixed channels (front center and rear center), resulting in 4.0 channel output.  Backwards compatible with older stereo systems."; }
+        }
+
+        public override Image Logo
+        {
+            get { return Resources.logo_dolby_pro_logic; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1842,6 +1876,11 @@ namespace BDAutoMuxer.models
             get { return true; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_dolby_digital; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "AC-3" && string.IsNullOrEmpty(format.Profile);
@@ -1913,6 +1952,11 @@ namespace BDAutoMuxer.models
             get { return "Extension of AC-3 (Dolby Digital) that adds 1 or 2 matrixed rear channels, creating 6.1 or 7.1 channel output.  Backwards compatible with regular AC-3."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_dolby_digital_ex; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "AC-3" && format.Profile == "MA";
@@ -1979,6 +2023,11 @@ namespace BDAutoMuxer.models
             get { return "Enhanced version of AC-3.  Not backwards compatible with regular AC-3.  Typically used for secondary audio (commentary) tracks on Blu-ray discs."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_dolby_digital_plus; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "E-AC-3";
@@ -2038,6 +2087,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Lossless audio encoding with a core AC-3 (Dolby Digital) stream for backwards compatibility with existing AC-3 hardware."; }
+        }
+
+        public override Image Logo
+        {
+            get { return Resources.logo_dolby_truehd; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2110,6 +2164,11 @@ namespace BDAutoMuxer.models
             get { return "Standard DTS.  One of the most common audio codecs for consumer video (Blu-ray and DVD)."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_dts; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "DTS" && string.IsNullOrEmpty(format.Profile);
@@ -2176,6 +2235,11 @@ namespace BDAutoMuxer.models
             get { return "Regular DTS Digital Surround plus an additional discrete or matrix-encoded rear channel.  Backwards compatible with regular DTS."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_dts_es; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "DTS" && format.Profile == "ES";
@@ -2235,6 +2299,11 @@ namespace BDAutoMuxer.models
         public override bool IsMuxable
         {
             get { return false; }
+        }
+
+        public override Image Logo
+        {
+            get { return Resources.logo_dts_express; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2308,6 +2377,11 @@ namespace BDAutoMuxer.models
             get { return "Extension of regular DTS Digital Surround with higher quality.  Contains backwards compatible DTS Digital Surround core."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_dts_hd_hra; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "DTS" && format.Profile == "HRA / Core";
@@ -2374,6 +2448,11 @@ namespace BDAutoMuxer.models
             get { return "Lossless extension to regular DTS Digital Surround.  Contains backwards compatible DTS Digital Surround core."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_dts_hd_ma; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "DTS" && format.Profile == "MA / Core";
@@ -2426,6 +2505,11 @@ namespace BDAutoMuxer.models
             get { return "Free / open source audio codec."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_vorbis; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "Vorbis";
@@ -2472,6 +2556,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Open audio format with royalty-free licensing and a free software reference implementation."; }
+        }
+
+        public override Image Logo
+        {
+            get { return Resources.logo_flac; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2539,6 +2628,11 @@ namespace BDAutoMuxer.models
             get { return "Audio portion of the MPEG-1 and MPEG-2 standards."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_mp3; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "MPEG Audio" && format.Profile == "Layer 3";
@@ -2591,6 +2685,11 @@ namespace BDAutoMuxer.models
         public override bool Lossless
         {
             get { return false; }
+        }
+
+        public override Image Logo
+        {
+            get { return Resources.logo_aac; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2666,6 +2765,11 @@ namespace BDAutoMuxer.models
             get { return true; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_lpcm; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "PCM";
@@ -2711,6 +2815,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Unknown audio format."; }
+        }
+
+        public override Image Logo
+        {
+            get { return null; }
         }
 
         public override bool IsKnown
@@ -2767,6 +2876,11 @@ namespace BDAutoMuxer.models
             get { return "The official subtitle format for Blu-ray discs.  Stored as bitmap images rather than plain text to reduce strain on player hardware.  Can be converted to plain text with OCR software (e.g., BDSup2Sub)."; }
         }
 
+        public override Image Logo
+        {
+            get { return Resources.logo_pgs; }
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "PGS";
@@ -2808,6 +2922,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Unknown subtitle format."; }
+        }
+
+        public override Image Logo
+        {
+            get { return null; }
         }
 
         public override bool IsKnown
@@ -2880,6 +2999,11 @@ namespace BDAutoMuxer.models
         public override string Description
         {
             get { return "Unknown format."; }
+        }
+
+        public override Image Logo
+        {
+            get { return null; }
         }
     }
 

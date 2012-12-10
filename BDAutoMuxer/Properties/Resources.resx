@@ -193,6 +193,66 @@
   <data name="info" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="logo_aac" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_aac.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dolby_digital" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dolby_digital.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dolby_digital_ex" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dolby_digital_ex.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dolby_digital_plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dolby_digital_plus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dolby_pro_logic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dolby_pro_logic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dolby_truehd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dolby_truehd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dts_es" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dts_es.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dts_express" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dts_express.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dts_hd_hra" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dts_hd_hra.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_dts_hd_ma" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_dts_hd_ma.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_flac" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_flac.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_h264" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_h264.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_lpcm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_lpcm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_mp3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_mp3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_mpeg1_video" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_mpeg1_video.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_mpeg2_video" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_mpeg2_video.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_pgs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_pgs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_vc1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_vc1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo_vorbis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_vorbis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="lpcm" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\lpcm.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

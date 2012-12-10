@@ -263,6 +263,26 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\logo_vorbis.png" />
+    <None Include="Resources\logo_vc1.png" />
+    <None Include="Resources\logo_pgs.png" />
+    <None Include="Resources\logo_mpeg2_video.png" />
+    <None Include="Resources\logo_mpeg1_video.png" />
+    <None Include="Resources\logo_mp3.png" />
+    <None Include="Resources\logo_lpcm.png" />
+    <None Include="Resources\logo_h264.png" />
+    <None Include="Resources\logo_flac.png" />
+    <None Include="Resources\logo_dts_hd_ma.png" />
+    <None Include="Resources\logo_dts_hd_hra.png" />
+    <None Include="Resources\logo_dts_express.png" />
+    <None Include="Resources\logo_dts_es.png" />
+    <None Include="Resources\logo_dts.png" />
+    <None Include="Resources\logo_dolby_truehd.png" />
+    <None Include="Resources\logo_dolby_pro_logic.png" />
+    <None Include="Resources\logo_dolby_digital_plus.png" />
+    <None Include="Resources\logo_dolby_digital_ex.png" />
+    <None Include="Resources\logo_dolby_digital.png" />
+    <None Include="Resources\logo_aac.png" />
     <None Include="Resources\type_video.png" />
     <None Include="Resources\type_subtitle.png" />
     <None Include="Resources\type_audio.png" />

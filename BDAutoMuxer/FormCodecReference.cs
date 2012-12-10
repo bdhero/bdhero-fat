@@ -118,6 +118,7 @@ namespace BDAutoMuxer
             textBoxDescription.Text = null;
             labelOfficialBlurayValue.Text = "N/A";
             labelOfficialDVDValue.Text = "N/A";
+            pictureBoxLogo.Image = null;
 
             var item = listViewCodecs.SelectedItems.OfType<ListViewItem>().FirstOrDefault();
             if (item == null) return;
@@ -134,6 +135,7 @@ namespace BDAutoMuxer
                                              ? string.Format("Yes ({0})",
                                                              codec.IsRequiredDVDCodec ? "required" : "optional")
                                              : "No";
+            pictureBoxLogo.Image = codec.Logo;
         }
     }
 }
