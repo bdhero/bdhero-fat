@@ -85,10 +85,10 @@ namespace BDAutoMuxer
                 var altDisplayNames = string.Join(",  ", new HashSet<string>(codec.AltDisplayNames));
                 var isMuxable = codec.IsMuxable ? "yes" : "NO";
 
-                var icon = Resources.bullet_black;
+                var icon = Resources.type_subtitle;
 
-                if (codec.IsVideo) icon = Resources.bullet_blue;
-                if (codec.IsAudio) icon = Resources.bullet_green;
+                if (codec.IsVideo) icon = Resources.type_video;
+                if (codec.IsAudio) icon = Resources.type_audio;
 
                 _icons.Images.Add(icon);
 

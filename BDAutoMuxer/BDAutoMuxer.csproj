@@ -263,6 +263,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\type_subtitle.png" />
+    <None Include="Resources\type_audio.png" />
+    <None Include="Resources\type_video.png" />
     <None Include="Resources\logo_vorbis.png" />
     <None Include="Resources\logo_vc1.png" />
     <None Include="Resources\logo_pgs.png" />
@@ -283,9 +286,6 @@
     <None Include="Resources\logo_dolby_digital_ex.png" />
     <None Include="Resources\logo_dolby_digital.png" />
     <None Include="Resources\logo_aac.png" />
-    <None Include="Resources\type_video.png" />
-    <None Include="Resources\type_subtitle.png" />
-    <None Include="Resources\type_audio.png" />
     <None Include="Resources\bullet_blue.png" />
     <None Include="Resources\exclamation.png" />
     <None Include="Resources\error.png" />
