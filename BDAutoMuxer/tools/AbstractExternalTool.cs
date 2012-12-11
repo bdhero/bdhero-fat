@@ -185,13 +185,15 @@ namespace BDAutoMuxer.tools
             {
                 if (IsError) return "error";
                 if (IsCanceled) return "canceled";
-                if (IsSuccess && Progress < 100.0) return "error";
                 if (IsSuccess) return "completed";
                 if (IsPaused) return "paused";
                 return "";
             }
         }
 
+        /// <summary>
+        /// <code>ErrorMessages</code> joined by newlines (\n)
+        /// </summary>
         public string ErrorMessage { get { return String.Join("\n", ErrorMessages); } }
 
         #endregion
@@ -236,17 +238,6 @@ namespace BDAutoMuxer.tools
         #endregion
 
         #region Process Execution
-
-        protected ISet<string> GetAllFilesInOutputDirs()
-        {
-            var allFiles = new HashSet<string>();
-            var outputDirs = new HashSet<string>(GetOutputFilesImpl().Select(Path.GetDirectoryName));
-            foreach (var outputDir in outputDirs)
-            {
-                allFiles.AddRange(new DirectoryInfo(outputDir).GetFiles().Select(fileInfo => fileInfo.FullName));
-            }
-            return allFiles;
-        }
 
         protected void Execute(IList<string> args, object sender, DoWorkEventArgs e)
         {
@@ -296,6 +287,8 @@ namespace BDAutoMuxer.tools
 
             _process.Start();
 
+            var procName = _process.ProcessName;
+
             isStarted = true;
 
             _job.AddProcess(_process.Handle);
@@ -309,6 +302,12 @@ namespace BDAutoMuxer.tools
             while (!CancellationPending && !_process.StandardError.EndOfStream && !isError)
             {
                 ErrorMessages.Add(_process.StandardError.ReadLine());
+            }
+
+            if (Progress < 100.0)
+            {
+                IsError = true;
+                ErrorMessages.Add(string.Format("{0} terminated unexpectedly.", procName));
             }
 
             OnComplete(e);
@@ -358,15 +357,10 @@ namespace BDAutoMuxer.tools
         {
             var p = sender as Process;
             
-            if (p == null || p.ExitCode != 0)
+            if (p != null && p.ExitCode != 0)
             {
-                // Use underscored field name to avoid crashing BDAutoMuxer by calling UpdateTime() unnecessarily
                 IsError = true;
-
-                var extraDetails = p != null ? String.Format(" with exit code {0}", p.ExitCode) : "";
-                var errorMessage = String.Format("tsMuxeR terminated unexpectedly{0}.", extraDetails);
-
-                ErrorMessages.Add(errorMessage);
+                ErrorMessages.Add(string.Format("{0} terminated unexpectedly with exit code {1}.", p.ProcessName, p.ExitCode));
             }
             
             OnComplete(e);
