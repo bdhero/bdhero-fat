@@ -201,9 +201,13 @@ namespace BDAutoMuxer.controllers
         {
             try
             {
-                _ad.Update();
-                MessageBox.Show(_form, "The application has been upgraded, and will now restart.");
-                Application.Restart();
+                _ad.UpdateCompleted += (sender, args) =>
+                                           {
+                                               MessageBox.Show(_form, "The application has been updated and will now restart.");
+                                               Application.Restart();
+                                           };
+                _ad.UpdateAsync();
+                MessageBox.Show(_form, "The application update is being downloading in the background.  You will be notified when it completes.");
             }
             catch (DeploymentDownloadException dde)
             {
