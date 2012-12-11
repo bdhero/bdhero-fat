@@ -85,6 +85,8 @@ namespace BDAutoMuxer
 
         private readonly PlaylistFinder _playlistFinder = new PlaylistFinder();
 
+        private readonly UpdateNotifierCompleteDelegate _updateNotifierComplete;
+
         #endregion
 
         #region Properties
@@ -257,6 +259,8 @@ namespace BDAutoMuxer
             {
                 textBoxSource.Text = BDAutoMuxerSettings.LastPath;
             }
+
+            _updateNotifierComplete = () => checkForUpdatesToolStripMenuItem.Enabled = true;
 
             Load += FormDetails_Load;
         }
@@ -2247,7 +2251,8 @@ namespace BDAutoMuxer
 
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateNotifier.CheckForUpdate(this, true);
+            checkForUpdatesToolStripMenuItem.Enabled = false;
+            UpdateNotifier.CheckForUpdate(this, true, _updateNotifierComplete);
         }
 
         private void remuxerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2459,7 +2464,8 @@ namespace BDAutoMuxer
         {
             if (BDAutoMuxerSettings.CheckForUpdates && !UpdateNotifier.IsClickOnce)
             {
-                UpdateNotifier.CheckForUpdate(this);
+                checkForUpdatesToolStripMenuItem.Enabled = false;
+                UpdateNotifier.CheckForUpdate(this, false, _updateNotifierComplete);
             }
         }
 
