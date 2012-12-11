@@ -64,6 +64,9 @@ namespace BDAutoMuxer
             checkBoxCheckForUpdates.Checked = BDAutoMuxerSettings.CheckForUpdates;
             checkBoxSelectHighestChannelCount.Checked = BDAutoMuxerSettings.SelectHighestChannelCount;
 
+            // Disable 
+            checkBoxCheckForUpdates.Enabled = !UpdateNotifier.IsClickOnce;
+
             InitAudienceLanguage();
             InitPreferredAudioCodecs();
             InitSelectButton();
