@@ -185,6 +185,7 @@ namespace BDAutoMuxer.tools
             {
                 if (IsError) return "error";
                 if (IsCanceled) return "canceled";
+                if (IsSuccess && Progress < 100.0) return "error";
                 if (IsSuccess) return "completed";
                 if (IsPaused) return "paused";
                 return "";

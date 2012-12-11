@@ -1267,7 +1267,12 @@ namespace BDAutoMuxer
             else if (e.Error != null)
             {
                 TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
-                ShowErrorMessage(tabPageProgress, "Muxing Error", e.Error.Message);
+                ShowErrorMessage(tabPageProgress, "Muxing error", e.Error.Message);
+            }
+            else if (_tsMuxer.Progress < 100.0)
+            {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
+                ShowErrorMessage(tabPageProgress, "Muxing error", "tsMuxeR process terminated unexpectedly.  This could be caused by a hardware or driver failure.");
             }
             else
             {
@@ -1402,6 +1407,11 @@ namespace BDAutoMuxer
             {
                 TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
                 ShowErrorMessage(tabPageProgress, "Demuxing Error", e.Error.Message);
+            }
+            else if (_tsDemuxer.Progress < 100.0)
+            {
+                TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
+                ShowErrorMessage(tabPageProgress, "Demuxing error", "tsMuxeR process terminated unexpectedly.  This could be caused by a hardware or driver failure.");
             }
             else
             {
