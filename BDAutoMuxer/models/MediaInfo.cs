@@ -1180,38 +1180,38 @@ namespace BDAutoMuxer.models
 
         public static readonly List<MIAudioCodec> AudioCodecs = new List<MIAudioCodec>()
                                                                     {
-                                                                        // HD - All
+                                                                        // LPCM
                                                                         LPCM,
+                                                                        // DTS
                                                                         DTSHDMA,
-                                                                        TrueHD,
-                                                                        // SD - DTS
                                                                         DTSHDHRA,
                                                                         DTSES,
                                                                         DTS,
                                                                         DTSExpress,
-                                                                        // SD - Dolby
-                                                                        AC3EX,
+                                                                        // Dolby
+                                                                        TrueHD,
                                                                         EAC3,
+                                                                        AC3EX,
                                                                         AC3,
                                                                         ProLogic,
-                                                                        // SD - MPEG
-                                                                        MP3,
+                                                                        // MPEG
                                                                         AAC,
-                                                                        // HD / SD - Misc
-                                                                        Vorbis,
-                                                                        FLAC
+                                                                        MP3,
+                                                                        // Misc
+                                                                        FLAC,
+                                                                        Vorbis
                                                                     };
 
         public static readonly List<MIAudioCodec> MuxableBDAudioCodecs = new List<MIAudioCodec>()
                                                                     {
-                                                                        // HD - All
+                                                                        // Lossless - All
                                                                         LPCM,
                                                                         DTSHDMA,
                                                                         TrueHD,
-                                                                        // SD - DTS
+                                                                        // Lossy - DTS
                                                                         DTSHDHRA,
                                                                         DTS,
-                                                                        // SD - Dolby
+                                                                        // Lossy - Dolby
                                                                         EAC3,
                                                                         AC3
                                                                     };
