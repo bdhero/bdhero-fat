@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
+using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
 using Microsoft.WindowsAPICodePack.Taskbar;
@@ -14,6 +17,11 @@ namespace BDAutoMuxer
     public partial class FormRemux : Form
     {
         private MkvMerge _mkvMerge;
+
+        private MediaInfo _inputM2TS;
+        private MediaInfo _inputMKV;
+        private List<LPCMGroup> _inputLPCM = new List<LPCMGroup>();
+        private List<MediaInfo> _inputSubtitles;
 
         public FormRemux()
         {
@@ -30,14 +38,11 @@ namespace BDAutoMuxer
         {
             progressLabel.Text = "";
             statusStripProgressBar.Visible = false;
-
-            MinimumSize = new Size(0, Size.Height);
-            MaximumSize = new Size(Screen.FromHandle(Handle).Bounds.Width, Size.Height);
         }
 
         private void FormRemux_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop) && DragUtils.HasFileExtension(e, new string[] { "m2ts", "mkv", "txt", "xml" }))
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) && DragUtils.HasFileExtension(e, new[] { "m2ts", "mkv", "xml", "wav", "sup", "sub", "idx", "txt" }))
             {
                 e.Effect = DragDropEffects.All;
             }
@@ -53,44 +58,29 @@ namespace BDAutoMuxer
                 textBoxInputM2ts.Text = DragUtils.GetFirstFileWithExtension(e, "m2ts");
             if (DragUtils.HasFileExtension(e, "mkv"))
                 textBoxInputMkv.Text = DragUtils.GetFirstFileWithExtension(e, "mkv");
-            if (DragUtils.HasFileExtension(e, new string[] { "txt", "xml" }))
-                textBoxInputChapters.Text = DragUtils.GetFirstFileWithExtension(e, new string[] { "txt", "xml" });
+            if (DragUtils.HasFileExtension(e, "xml"))
+                textBoxInputChapters.Text = DragUtils.GetFirstFileWithExtension(e, "xml");
+            if (DragUtils.HasFileExtension(e, "wav"))
+                AddLPCM(DragUtils.GetFilesWithExtension(e, "wav"));
         }
 
-        /// <see cref="http://stackoverflow.com/a/2140908/467582"/>
-        protected override void WndProc(ref Message m)
+        private void AddLPCM(IEnumerable<string> paths)
         {
-            base.WndProc(ref m);
-            switch (m.Msg)
+            foreach (var path in paths)
             {
-                case 0x84: //WM_NCHITTEST
-                    var result = (HitTest)m.Result.ToInt32();
-                    if (result == HitTest.Top || result == HitTest.Bottom)
-                        m.Result = new IntPtr((int)HitTest.Caption);
-                    if (result == HitTest.TopLeft || result == HitTest.BottomLeft)
-                        m.Result = new IntPtr((int)HitTest.Left);
-                    if (result == HitTest.TopRight || result == HitTest.BottomRight)
-                        m.Result = new IntPtr((int)HitTest.Right);
-
-                    break;
+                var file = new LPCMFile(path);
+                if (!_inputLPCM.Any(@group => @group.Matches(file)))
+                    _inputLPCM.Add(new LPCMGroup(file));
             }
-        }
 
-        enum HitTest
-        {
-            Caption = 2,
-            Transparent = -1,
-            Nowhere = 0,
-            Client = 1,
-            Left = 10,
-            Right = 11,
-            Top = 12,
-            TopLeft = 13,
-            TopRight = 14,
-            Bottom = 15,
-            BottomLeft = 16,
-            BottomRight = 17,
-            Border = 18
+            listViewLPCM.Items.Clear();
+
+            foreach (var lpcm in _inputLPCM)
+            {
+                var listViewItem = new ListViewItem(new[] {lpcm.DisplayFilename, lpcm.Channels + ""});
+                listViewItem.Tag = lpcm;
+                listViewLPCM.Items.Add(listViewItem);
+            }
         }
 
         private void buttonInputM2tsBrowse_Click(object sender, EventArgs e)
@@ -265,7 +255,7 @@ namespace BDAutoMuxer
 
             mkvMerge_Started();
 
-            _mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text, radioButtonUseM2tsAudio.Checked)
+            _mkvMerge = new MkvMerge(textBoxInputM2ts.Text, textBoxInputMkv.Text, textBoxInputChapters.Text, textBoxOutputMkv.Text /* , radioButtonUseM2tsAudio.Checked */)
                             {WorkerReportsProgress = true, WorkerSupportsCancellation = true};
             _mkvMerge.ProgressChanged += mkvMerge_ProgressChanged;
             _mkvMerge.RunWorkerCompleted += mkvMerge_RunWorkerCompleted;
@@ -391,6 +381,159 @@ namespace BDAutoMuxer
                 }
 
                 CancelRemux();
+            }
+        }
+
+        private class LPCMGroup
+        {
+            private readonly ISet<LPCMFile> _files = new HashSet<LPCMFile>();
+
+            public ISet<LPCMFile> Files { get { return new HashSet<LPCMFile>(_files); } }
+
+            public int Channels { get { return _files.First().Channels; } }
+
+            public string DisplayFilename
+            {
+                get
+                {
+                    var first = _files.First();
+                    if (first.IsNumbered)
+                    {
+                        return string.Format("{0}.(1..{1}){2}", first.PartFilename, _files.Count, first.Extension);
+                    }
+                    else
+                    {
+                        return first.FullFilename;
+                    }
+                }
+            }
+
+            public LPCMGroup(LPCMFile file)
+            {
+                AddFiles(file);
+            }
+
+            public void AddFiles(LPCMFile file)
+            {
+                if (!file.IsNumbered)
+                {
+                    _files.Add(file);
+                    return;
+                }
+
+                for (var i = 1; i < 100; i++)
+                {
+                    var numberedFile = file.GetNumbered(i);
+                    if (numberedFile.Exists)
+                    {
+                        _files.Add(numberedFile);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            public bool Matches(LPCMFile file)
+            {
+                return file.Matches(_files.First());
+            }
+        }
+
+        private class LPCMFile
+        {
+            private static readonly Regex NumberedPattern = new Regex(@"^(.+)\.(\d+)(\.wav)$", RegexOptions.IgnoreCase);
+
+            public string FullPath { get; private set; }
+            public string FullFilename { get; private set; }
+            public string PartFilename { get; private set; }
+
+            public string Directory { get { return Path.GetDirectoryName(FullPath); } }
+            public string Extension { get { return Path.GetExtension(FullPath); } }
+            public bool Exists { get { return File.Exists(FullPath); }}
+
+            public bool IsNumbered { get; private set; }
+            public int Number { get; private set; }
+
+            public int Length { get; private set; }
+            public int Channels { get; private set; }
+            public int SampleRate { get; private set; }
+            public int BitsPerSample { get; private set; }
+            public int DataLength { get; private set; }
+
+            public LPCMFile(string path)
+            {
+                FullPath = path;
+                FullFilename = Path.GetFileName(path);
+                IsNumbered = NumberedPattern.IsMatch(FullFilename);
+                if (IsNumbered)
+                {
+                    var match = NumberedPattern.Match(FullFilename);
+                    PartFilename = match.Groups[1].Value;
+                    Number = Int32.Parse(match.Groups[2].Value);
+                }
+                else
+                {
+                    PartFilename = Path.GetFileNameWithoutExtension(path);
+                }
+
+//                var bytes = new byte[2];
+//                var fileStream = File.OpenRead(path);
+//                fileStream.Seek(22, SeekOrigin.Begin);
+//                fileStream.Read(bytes, 0, 2);
+//                fileStream.Close();
+
+                if (!File.Exists(path))
+                    return;
+
+                var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                var br = new BinaryReader(fs);
+
+                Length = (int)fs.Length - 8;
+                fs.Position = 22;
+                Channels = br.ReadInt16();
+                fs.Position = 24;
+                SampleRate = br.ReadInt32();
+                fs.Position = 34;
+                BitsPerSample = br.ReadInt16();
+                DataLength = (int)fs.Length - 44;
+
+                br.Close();
+                fs.Close();
+            }
+
+            public bool Matches(LPCMFile other)
+            {
+                if (this.Directory.ToLowerInvariant() != other.Directory.ToLowerInvariant()) return false;
+                if (this.PartFilename.ToLowerInvariant() != other.PartFilename.ToLowerInvariant()) return false;
+                if (this.Extension.ToLowerInvariant() != other.Extension.ToLowerInvariant()) return false;
+                return true;
+            }
+
+            public LPCMFile GetNumbered(int i)
+            {
+                var newFilename = string.Format("{0}.{1}{2}", PartFilename, i, Extension);
+                var newPath = Path.Combine(Directory, newFilename);
+                return new LPCMFile(newPath);
+            }
+
+            protected bool Equals(LPCMFile other)
+            {
+                return string.Equals(FullPath, other.FullPath);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((LPCMFile) obj);
+            }
+
+            public override int GetHashCode()
+            {
+                return (FullPath != null ? FullPath.GetHashCode() : 0);
             }
         }
     }
