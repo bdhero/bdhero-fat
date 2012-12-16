@@ -304,7 +304,7 @@ namespace BDAutoMuxer.tools
                 ErrorMessages.Add(_process.StandardError.ReadLine());
             }
 
-            if (Progress < 100.0)
+            if (Progress < 100.0 && !CancellationPending && !IsCanceled)
             {
                 IsError = true;
                 ErrorMessages.Add(string.Format("{0} terminated unexpectedly.", procName));
