@@ -15,9 +15,14 @@ namespace BDAutoMuxer.views
         /// <param name="parentControl"></param>
         public static void TextBox_EnableSelectAll(Control parentControl)
         {
-            foreach (var control in parentControl.Descendants<Control>().OfType<TextBox>())
+            var controls = parentControl.Descendants<Control>().ToList();
+            foreach (var control in controls.OfType<TextBox>())
             {
                 control.KeyPress += TextBox_KeyPress;
+            }
+            foreach (var control in controls.OfType<ListView>())
+            {
+                control.KeyPress += ListView_KeyPress;
             }
         }
 
@@ -25,8 +30,25 @@ namespace BDAutoMuxer.views
         public static void TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar != '\x1') return;
+            var textBox = sender as TextBox;
+            if (textBox == null) return;
 
-            ((TextBox)sender).SelectAll();
+            textBox.SelectAll();
+            e.Handled = true;
+        }
+
+        /// <see cref="http://www.dzone.com/snippets/ctrl-shortcut-select-all-text"/>
+        public static void ListView_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != '\x1') return;
+            var listView = sender as ListView;
+            if (listView == null) return;
+
+            foreach (var x in listView.Items.OfType<ListViewItem>())
+            {
+                x.Selected = true;
+            }
+
             e.Handled = true;
         }
 
