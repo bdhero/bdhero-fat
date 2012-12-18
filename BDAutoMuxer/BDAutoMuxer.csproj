@@ -157,6 +157,9 @@
       <DependentUpon>FormCodecScanner.cs</DependentUpon>
     </Compile>
     <Compile Include="models\MediaInfo.cs" />
+    <Compile Include="views\LinkLabel2.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="views\SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -410,6 +413,12 @@
       <IncludeHash>False</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ObjectListView\ObjectListView2010.csproj">
+      <Project>{18FEDA0C-D147-4286-B39A-01204808106A}</Project>
+      <Name>ObjectListView2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To embed referenced .DLL files in the output .EXE, uncomment the lines below and in Program.cs -->
