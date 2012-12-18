@@ -20,13 +20,27 @@ namespace BDAutoMuxer
 
         private MediaInfo _inputM2TS;
         private MediaInfo _inputMKV;
-        private List<LPCMGroup> _inputLPCM = new List<LPCMGroup>();
-        private List<MediaInfo> _inputSubtitles;
+
+        private readonly List<LPCMGroup> _inputLPCM = new List<LPCMGroup>();
+        private readonly ISet<string> _inputSubtitles = new HashSet<string>();
+
+        private string _lastLPCMPath;
+        private string _lastSubtitlePath;
 
         public FormRemux()
         {
             InitializeComponent();
+
             FormUtils.TextBox_EnableSelectAll(this);
+
+            listViewLPCM_SelectedIndexChanged();
+            listViewSubtitles_SelectedIndexChanged();
+
+            /*
+            .sup = S_HDMV/PGS  - Blu-ray
+            .idx = S_VOBSUB    - DVD      (.sub = companion file)
+            .srt = S_TEXT/UTF8 - Matroska
+             */
         }
 
         ~FormRemux()
@@ -40,29 +54,7 @@ namespace BDAutoMuxer
             statusStripProgressBar.Visible = false;
         }
 
-        private void FormRemux_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop) && DragUtils.HasFileExtension(e, new[] { "m2ts", "mkv", "xml", "wav", "sup", "sub", "idx", "txt" }))
-            {
-                e.Effect = DragDropEffects.All;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
-
-        private void FormRemux_DragDrop(object sender, DragEventArgs e)
-        {
-            if (DragUtils.HasFileExtension(e, "m2ts"))
-                textBoxInputM2ts.Text = DragUtils.GetFirstFileWithExtension(e, "m2ts");
-            if (DragUtils.HasFileExtension(e, "mkv"))
-                textBoxInputMkv.Text = DragUtils.GetFirstFileWithExtension(e, "mkv");
-            if (DragUtils.HasFileExtension(e, "xml"))
-                textBoxInputChapters.Text = DragUtils.GetFirstFileWithExtension(e, "xml");
-            if (DragUtils.HasFileExtension(e, "wav"))
-                AddLPCM(DragUtils.GetFilesWithExtension(e, "wav"));
-        }
+        #region LPCM UI
 
         private void AddLPCM(IEnumerable<string> paths)
         {
@@ -71,39 +63,92 @@ namespace BDAutoMuxer
                 var file = new LPCMFile(path);
                 if (!_inputLPCM.Any(@group => @group.Matches(file)))
                     _inputLPCM.Add(new LPCMGroup(file));
+                _lastLPCMPath = path;
             }
+            PopulateLPCMListView();
+        }
 
+        private void PopulateLPCMListView()
+        {
             listViewLPCM.Items.Clear();
-
             foreach (var lpcm in _inputLPCM)
             {
                 var listViewItem = new ListViewItem(new[] {lpcm.DisplayFilename, lpcm.Channels + ""});
                 listViewItem.Tag = lpcm;
                 listViewLPCM.Items.Add(listViewItem);
             }
+            listViewLPCM_SelectedIndexChanged();
         }
 
-        private void buttonInputM2tsBrowse_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Subtitles UI
+
+        private void AddSubtitles(IEnumerable<string> paths)
         {
-            BrowseFile(textBoxInputM2ts, "Select an Input M2TS File:", "BDAV Transport Stream", "m2ts");
+            foreach (var path in paths)
+            {
+                var _path = path;
+                if (Path.GetExtension(path.ToLowerInvariant()) == ".sub")
+                    _path = Path.ChangeExtension(path, ".idx");
+                _inputSubtitles.Add(_path);
+                _lastSubtitlePath = _path;
+            }
+            PopulateSubtitlesListView();
         }
 
-        private void buttonInputMkvBrowse_Click(object sender, EventArgs e)
+        private void PopulateSubtitlesListView()
         {
-            BrowseFile(textBoxInputMkv, "Select an Input MKV File:", "Matroska Video", "mkv");
+            listViewSubtitles.Items.Clear();
+            foreach (var path in _inputSubtitles)
+            {
+                var ext = Path.GetExtension(path.ToLowerInvariant());
+                var type = ext == ".sup" ? "PGS" : ext == ".idx" ? "VobSub" : ext == ".srt" ? "Matroska" : "Unknown";
+                var listViewItem = new ListViewItem(new[] { Path.GetFileName(path), type });
+                listViewItem.Tag = path;
+                listViewSubtitles.Items.Add(listViewItem);
+            }
+            listViewSubtitles_SelectedIndexChanged();
         }
 
-        private void buttonInputChaptersBrowse_Click(object sender, EventArgs e)
+        #endregion
+
+        #region File Browse Dialogs
+
+        private List<string> BrowseFiles(string directory, string title, string fileTypeName, string fileExt, bool checkFileExists = true)
         {
-            BrowseFile(textBoxInputChapters, "Select an Input Chapter File:", "Matroska XML or OGM text", "txt;xml");
+            var paths = new List<string>();
+            try
+            {
+                // Normalize "ext", ".ext", and "*.ext" to "*.ext"
+                fileExt = Regex.Replace(fileExt.Trim(), @"\*?\.?(\w+)", "*.$1");
+
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Multiselect = true;
+                dialog.Filter = string.Format("{0} ({1})|{1}", fileTypeName, fileExt);
+                dialog.Title = title;
+                dialog.CheckFileExists = checkFileExists;
+                dialog.InitialDirectory = directory;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    paths = dialog.FileNames.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format(
+                    "Error opening path(s) {0}: {1}{2}",
+                    string.Join(", ", paths),
+                    ex.Message,
+                    Environment.NewLine);
+
+                MessageBox.Show(this, msg, "BDAutoMuxer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return paths;
         }
 
-        private void buttonOutputMkvBrowse_Click(object sender, EventArgs e)
-        {
-            BrowseFile(textBoxOutputMkv, "Select an Output MKV File:", "Matroska Video", "mkv", false);
-        }
-
-        private static void BrowseFile(Control textBox, string title, string fileTypeName, string fileExt, bool checkFileExists = true)
+        private void BrowseFile(Control textBox, string title, string fileTypeName, string fileExt, bool checkFileExists = true)
         {
             string path = null;
             try
@@ -136,15 +181,13 @@ namespace BDAutoMuxer
                     ex.Message,
                     Environment.NewLine);
 
-                MessageBox.Show(msg, "BDAutoMuxer Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, msg, "BDAutoMuxer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void buttonRemux_Click(object sender, EventArgs e)
-        {
-            Remux();
-        }
+        #endregion
+
+        #region Background Worker
 
         private void mkvMerge_Started()
         {
@@ -355,34 +398,9 @@ namespace BDAutoMuxer
             }
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            if (_mkvMerge != null && _mkvMerge.IsBusy)
-            {
-                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                    return;
+        #endregion
 
-                CancelRemux();
-            }
-            else
-            {
-                Close();
-            }
-        }
-
-        private void FormRemux_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (_mkvMerge != null && _mkvMerge.IsBusy)
-            {
-                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                {
-                    e.Cancel = true;
-                    return;
-                }
-
-                CancelRemux();
-            }
-        }
+        #region LPCM Files
 
         private class LPCMGroup
         {
@@ -478,12 +496,6 @@ namespace BDAutoMuxer
                     PartFilename = Path.GetFileNameWithoutExtension(path);
                 }
 
-//                var bytes = new byte[2];
-//                var fileStream = File.OpenRead(path);
-//                fileStream.Seek(22, SeekOrigin.Begin);
-//                fileStream.Read(bytes, 0, 2);
-//                fileStream.Close();
-
                 if (!File.Exists(path))
                     return;
 
@@ -536,5 +548,141 @@ namespace BDAutoMuxer
                 return (FullPath != null ? FullPath.GetHashCode() : 0);
             }
         }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void FormRemux_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) && DragUtils.HasFileExtension(e, new[] { "m2ts", "mkv", "xml", "txt", "wav", "sup", "sub", "idx", "srt" }))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void FormRemux_DragDrop(object sender, DragEventArgs e)
+        {
+            if (DragUtils.HasFileExtension(e, "m2ts"))
+                textBoxInputM2ts.Text = DragUtils.GetFirstFileWithExtension(e, "m2ts");
+            if (DragUtils.HasFileExtension(e, "mkv"))
+                textBoxInputMkv.Text = DragUtils.GetFirstFileWithExtension(e, "mkv");
+            if (DragUtils.HasFileExtension(e, new[] { "xml", "txt" }))
+                textBoxInputChapters.Text = DragUtils.GetFirstFileWithExtension(e, new[] { "xml", "txt" });
+            if (DragUtils.HasFileExtension(e, "wav"))
+                AddLPCM(DragUtils.GetFilesWithExtension(e, "wav"));
+            if (DragUtils.HasFileExtension(e, new[] { "sup", "sub", "idx", "srt" }))
+                AddSubtitles(DragUtils.GetFilesWithExtension(e, new[] { "sup", "sub", "idx", "srt" }));
+        }
+
+        private void buttonInputM2tsBrowse_Click(object sender, EventArgs e)
+        {
+            BrowseFile(textBoxInputM2ts, "Select an Input M2TS File:", "BDAV Transport Stream", "m2ts");
+        }
+
+        private void buttonInputMkvBrowse_Click(object sender, EventArgs e)
+        {
+            BrowseFile(textBoxInputMkv, "Select an Input MKV File:", "Matroska Video", "mkv");
+        }
+
+        private void buttonInputChaptersBrowse_Click(object sender, EventArgs e)
+        {
+            BrowseFile(textBoxInputChapters, "Select an Input Chapter File:", "Matroska XML or OGM text", "txt;xml");
+        }
+
+        private void buttonOutputMkvBrowse_Click(object sender, EventArgs e)
+        {
+            BrowseFile(textBoxOutputMkv, "Select an Output MKV File:", "Matroska Video", "mkv", false);
+        }
+
+        private void buttonAddLPCM_Click(object sender = null, EventArgs e = null)
+        {
+            AddLPCM(BrowseFiles(Path.GetDirectoryName(_lastLPCMPath), "Select LPCM (WAVE) Files:", "LPCM (Uncompressed WAVE) Audio", "wav"));
+        }
+
+        private void buttonRemoveLPCM_Click(object sender = null, EventArgs e = null)
+        {
+            foreach (var listViewItem in listViewLPCM.SelectedItems.OfType<ListViewItem>())
+            {
+                _inputLPCM.Remove(listViewItem.Tag as LPCMGroup);
+            }
+            PopulateLPCMListView();
+        }
+
+        private void listViewLPCM_SelectedIndexChanged(object sender = null, EventArgs e = null)
+        {
+            buttonRemoveLPCM.Enabled = listViewLPCM.SelectedIndices.Count > 0;
+        }
+
+        private void buttonAddSubtitles_Click(object sender = null, EventArgs e = null)
+        {
+            AddSubtitles(BrowseFiles(Path.GetDirectoryName(_lastSubtitlePath), "Select Subtitle Files:", "Subtitle File", "sup;idx;srt"));
+        }
+
+        private void buttonRemoveSubtitles_Click(object sender = null, EventArgs e = null)
+        {
+            foreach (var listViewItem in listViewSubtitles.SelectedItems.OfType<ListViewItem>())
+            {
+                _inputSubtitles.Remove(listViewItem.Tag as string);
+            }
+            PopulateSubtitlesListView();
+        }
+
+        private void listViewSubtitles_SelectedIndexChanged(object sender = null, EventArgs e = null)
+        {
+            buttonRemoveSubtitles.Enabled = listViewSubtitles.SelectedIndices.Count > 0;
+        }
+
+        private void listViewLPCM_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+                buttonRemoveLPCM_Click();
+        }
+
+        private void listViewSubtitles_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+                buttonRemoveSubtitles_Click();
+        }
+
+        private void buttonRemux_Click(object sender, EventArgs e)
+        {
+            Remux();
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            if (_mkvMerge != null && _mkvMerge.IsBusy)
+            {
+                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    return;
+
+                CancelRemux();
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        private void FormRemux_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_mkvMerge != null && _mkvMerge.IsBusy)
+            {
+                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                CancelRemux();
+            }
+        }
+
+        #endregion
     }
 }

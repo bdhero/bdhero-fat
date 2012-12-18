@@ -53,9 +53,15 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.listViewLPCM = new System.Windows.Forms.ListView();
+            this.columnHeaderLPCMFilename = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderLPCMChannels = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonRemoveLPCM = new System.Windows.Forms.Button();
             this.buttonAddLPCM = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.listViewSubtitles = new System.Windows.Forms.ListView();
+            this.columnHeaderSubtitleFilename = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderSubtitleType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonRemoveSubtitles = new System.Windows.Forms.Button();
             this.buttonAddSubtitles = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -64,14 +70,8 @@
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderResolution = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label9 = new System.Windows.Forms.Label();
-            this.listViewLPCM = new System.Windows.Forms.ListView();
-            this.listViewSubtitles = new System.Windows.Forms.ListView();
             this.columnHeaderSource = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderLPCMFilename = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderLPCMChannels = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderSubtitleFilename = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderSubtitleType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label9 = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -353,6 +353,35 @@
             this.splitContainer1.SplitterDistance = 333;
             this.splitContainer1.TabIndex = 0;
             // 
+            // listViewLPCM
+            // 
+            this.listViewLPCM.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewLPCM.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderLPCMFilename,
+            this.columnHeaderLPCMChannels});
+            this.listViewLPCM.FullRowSelect = true;
+            this.listViewLPCM.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewLPCM.HideSelection = false;
+            this.listViewLPCM.Location = new System.Drawing.Point(4, 16);
+            this.listViewLPCM.Name = "listViewLPCM";
+            this.listViewLPCM.Size = new System.Drawing.Size(326, 97);
+            this.listViewLPCM.TabIndex = 0;
+            this.listViewLPCM.UseCompatibleStateImageBehavior = false;
+            this.listViewLPCM.View = System.Windows.Forms.View.Details;
+            this.listViewLPCM.SelectedIndexChanged += new System.EventHandler(this.listViewLPCM_SelectedIndexChanged);
+            this.listViewLPCM.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewLPCM_KeyDown);
+            // 
+            // columnHeaderLPCMFilename
+            // 
+            this.columnHeaderLPCMFilename.Text = "Filename";
+            this.columnHeaderLPCMFilename.Width = 260;
+            // 
+            // columnHeaderLPCMChannels
+            // 
+            this.columnHeaderLPCMChannels.Text = "Channels";
+            // 
             // buttonRemoveLPCM
             // 
             this.buttonRemoveLPCM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -362,6 +391,7 @@
             this.buttonRemoveLPCM.TabIndex = 2;
             this.buttonRemoveLPCM.Text = "Remove";
             this.buttonRemoveLPCM.UseVisualStyleBackColor = true;
+            this.buttonRemoveLPCM.Click += new System.EventHandler(this.buttonRemoveLPCM_Click);
             // 
             // buttonAddLPCM
             // 
@@ -372,6 +402,7 @@
             this.buttonAddLPCM.TabIndex = 1;
             this.buttonAddLPCM.Text = "Add...";
             this.buttonAddLPCM.UseVisualStyleBackColor = true;
+            this.buttonAddLPCM.Click += new System.EventHandler(this.buttonAddLPCM_Click);
             // 
             // label7
             // 
@@ -382,6 +413,35 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "LPCM audio:";
             // 
+            // listViewSubtitles
+            // 
+            this.listViewSubtitles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewSubtitles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderSubtitleFilename,
+            this.columnHeaderSubtitleType});
+            this.listViewSubtitles.FullRowSelect = true;
+            this.listViewSubtitles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewSubtitles.HideSelection = false;
+            this.listViewSubtitles.Location = new System.Drawing.Point(4, 16);
+            this.listViewSubtitles.Name = "listViewSubtitles";
+            this.listViewSubtitles.Size = new System.Drawing.Size(327, 97);
+            this.listViewSubtitles.TabIndex = 0;
+            this.listViewSubtitles.UseCompatibleStateImageBehavior = false;
+            this.listViewSubtitles.View = System.Windows.Forms.View.Details;
+            this.listViewSubtitles.SelectedIndexChanged += new System.EventHandler(this.listViewSubtitles_SelectedIndexChanged);
+            this.listViewSubtitles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewSubtitles_KeyDown);
+            // 
+            // columnHeaderSubtitleFilename
+            // 
+            this.columnHeaderSubtitleFilename.Text = "Filename";
+            this.columnHeaderSubtitleFilename.Width = 260;
+            // 
+            // columnHeaderSubtitleType
+            // 
+            this.columnHeaderSubtitleType.Text = "Type";
+            // 
             // buttonRemoveSubtitles
             // 
             this.buttonRemoveSubtitles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -391,6 +451,7 @@
             this.buttonRemoveSubtitles.TabIndex = 2;
             this.buttonRemoveSubtitles.Text = "Remove";
             this.buttonRemoveSubtitles.UseVisualStyleBackColor = true;
+            this.buttonRemoveSubtitles.Click += new System.EventHandler(this.buttonRemoveSubtitles_Click);
             // 
             // buttonAddSubtitles
             // 
@@ -401,6 +462,7 @@
             this.buttonAddSubtitles.TabIndex = 1;
             this.buttonAddSubtitles.Text = "Add...";
             this.buttonAddSubtitles.UseVisualStyleBackColor = true;
+            this.buttonAddSubtitles.Click += new System.EventHandler(this.buttonAddSubtitles_Click);
             // 
             // label8
             // 
@@ -470,6 +532,10 @@
             this.columnHeaderResolution.Text = "Resolution";
             this.columnHeaderResolution.Width = 80;
             // 
+            // columnHeaderSource
+            // 
+            this.columnHeaderSource.Text = "Source";
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -478,64 +544,6 @@
             this.label9.Size = new System.Drawing.Size(72, 13);
             this.label9.TabIndex = 24;
             this.label9.Text = "Select tracks:";
-            // 
-            // listViewLPCM
-            // 
-            this.listViewLPCM.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewLPCM.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeaderLPCMFilename,
-            this.columnHeaderLPCMChannels});
-            this.listViewLPCM.FullRowSelect = true;
-            this.listViewLPCM.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewLPCM.HideSelection = false;
-            this.listViewLPCM.Location = new System.Drawing.Point(4, 16);
-            this.listViewLPCM.Name = "listViewLPCM";
-            this.listViewLPCM.Size = new System.Drawing.Size(326, 97);
-            this.listViewLPCM.TabIndex = 3;
-            this.listViewLPCM.UseCompatibleStateImageBehavior = false;
-            this.listViewLPCM.View = System.Windows.Forms.View.Details;
-            // 
-            // listViewSubtitles
-            // 
-            this.listViewSubtitles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewSubtitles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeaderSubtitleFilename,
-            this.columnHeaderSubtitleType});
-            this.listViewSubtitles.FullRowSelect = true;
-            this.listViewSubtitles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewSubtitles.HideSelection = false;
-            this.listViewSubtitles.Location = new System.Drawing.Point(4, 16);
-            this.listViewSubtitles.Name = "listViewSubtitles";
-            this.listViewSubtitles.Size = new System.Drawing.Size(327, 97);
-            this.listViewSubtitles.TabIndex = 3;
-            this.listViewSubtitles.UseCompatibleStateImageBehavior = false;
-            this.listViewSubtitles.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeaderSource
-            // 
-            this.columnHeaderSource.Text = "Source";
-            // 
-            // columnHeaderLPCMFilename
-            // 
-            this.columnHeaderLPCMFilename.Text = "Filename";
-            this.columnHeaderLPCMFilename.Width = 260;
-            // 
-            // columnHeaderLPCMChannels
-            // 
-            this.columnHeaderLPCMChannels.Text = "Channels";
-            // 
-            // columnHeaderSubtitleFilename
-            // 
-            this.columnHeaderSubtitleFilename.Text = "Filename";
-            this.columnHeaderSubtitleFilename.Width = 260;
-            // 
-            // columnHeaderSubtitleType
-            // 
-            this.columnHeaderSubtitleType.Text = "Type";
             // 
             // FormRemux
             // 
