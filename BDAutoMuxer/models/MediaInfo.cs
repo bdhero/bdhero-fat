@@ -193,6 +193,9 @@ namespace BDAutoMuxer.models
             var validationException = Config.ValidationException;
             if (validationException != null) throw validationException;
 
+            if (FromFilename())
+                return this;
+
             var xmlResult = RunProcess(new List<string>() { "--Full", "--Output=file://" + Config.CSVPath });
             if (xmlResult.Exception != null) throw xmlResult.Exception;
             if (xmlResult.StdErr.Length > 0) throw new Exception(string.Format("MediaInfo XML exception: {0}", xmlResult.StdErr));
@@ -212,6 +215,26 @@ namespace BDAutoMuxer.models
             }
 
             return this;
+        }
+
+        private bool FromFilename()
+        {
+            if (MICodecPGS.Matches(_mediaFilePath))
+            {
+                _subtitleTracks.Add(new MISubtitleTrack(_mediaFilePath, MICodec.PGS));
+                return true;
+            }
+            if (MICodecVobSub.Matches(_mediaFilePath))
+            {
+                _subtitleTracks.Add(new MISubtitleTrack(_mediaFilePath, MICodec.VobSub));
+                return true;
+            }
+            if (MICodecSRT.Matches(_mediaFilePath))
+            {
+                _subtitleTracks.Add(new MISubtitleTrack(_mediaFilePath, MICodec.SRT));
+                return true;
+            }
+            return false;
         }
 
         private MIProcessResult RunProcess(IEnumerable<string> args = null)
@@ -810,8 +833,16 @@ namespace BDAutoMuxer.models
             }
             if (track.IsSubtitle)
             {
-                if (MICodecPGS.Matches(format))
+                var subTrack = track as MISubtitleTrack;
+                if (subTrack == null) return MICodec.UnknownSubtitle;
+
+                if (MICodecPGS.Matches(format) || MICodecPGS.Matches(subTrack.FilePath))
                     return MICodec.PGS;
+                if (MICodecVobSub.Matches(format) || MICodecVobSub.Matches(subTrack.FilePath))
+                    return MICodec.VobSub;
+                if (MICodecSRT.Matches(format) || MICodecSRT.Matches(subTrack.FilePath))
+                    return MICodec.SRT;
+
                 return MICodec.UnknownSubtitle;
             }
 
@@ -934,10 +965,11 @@ namespace BDAutoMuxer.models
 
         public string FilePath { get; protected set; }
 
-        public MISubtitleTrack(string filePath)
+        public MISubtitleTrack(string filePath, MISubtitleCodec codec = null)
         {
             IsSubtitle = true;
             FilePath = filePath;
+            Codec = codec ?? MICodec.UnknownSubtitle;
         }
 
         public override MITrack ReadFromXml(string xml)
@@ -1155,6 +1187,8 @@ namespace BDAutoMuxer.models
         #region Subtitle
 
         public static readonly MICodecPGS PGS = new MICodecPGS();
+        public static readonly MICodecVobSub VobSub = new MICodecVobSub();
+        public static readonly MICodecSRT SRT = new MICodecSRT();
 
         public static readonly MICodecUnknownSubtitle UnknownSubtitle = new MICodecUnknownSubtitle();
 
@@ -2834,6 +2868,12 @@ namespace BDAutoMuxer.models
 
     #region Subtitle Codecs
 
+    /*
+    .sup = S_HDMV/PGS  - Blu-ray
+    .idx = S_VOBSUB    - DVD      (.sub = companion file)
+    .srt = S_TEXT/UTF8 - Matroska
+     */
+
     public class MICodecPGS : MISubtitleCodec
     {
         public override string SerializableName
@@ -2881,9 +2921,125 @@ namespace BDAutoMuxer.models
             get { return Resources.logo_pgs; }
         }
 
+        public static bool Matches(string filename)
+        {
+            return new Regex(@"(^|\.)sup$", RegexOptions.IgnoreCase).IsMatch(filename);
+        }
+
         public static bool Matches(MIFormat format)
         {
             return format.Id == "PGS";
+        }
+    }
+
+    public class MICodecVobSub : MISubtitleCodec
+    {
+        public override string SerializableName
+        {
+            get { return "S_VOBSUB"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
+        }
+
+        public override string CodecId
+        {
+            get { return "S_VOBSUB"; }
+        }
+
+        public override string FullName
+        {
+            get { return "VobSub"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "VobSub"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "VobSub"; }
+        }
+
+        public override bool IsRequiredDVDCodec
+        {
+            get { return true; }
+        }
+
+        public override string Description
+        {
+            get { return "Official DVD subtitle format.  *.sub file = subtitle bitmaps (images); *.idx file = timecodes (plain text)"; }
+        }
+
+        public override Image Logo
+        {
+            get { return null; }
+        }
+
+        public static bool Matches(string filename)
+        {
+            return new Regex(@"(^|\.)(idx|sup)$", RegexOptions.IgnoreCase).IsMatch(filename);
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "VobSub";
+        }
+    }
+
+    public class MICodecSRT : MISubtitleCodec
+    {
+        public override string SerializableName
+        {
+            get { return "S_SRT"; }
+        }
+
+        public override TSStreamType StreamType
+        {
+            get { return TSStreamType.Unknown; }
+        }
+
+        public override string CodecId
+        {
+            get { return "S_TEXT/UTF"; }
+        }
+
+        public override string FullName
+        {
+            get { return "SRT"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "SRT"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "SRT"; }
+        }
+
+        public override string Description
+        {
+            get { return "Plain text Matroska subtitle format."; }
+        }
+
+        public override Image Logo
+        {
+            get { return null; }
+        }
+
+        public static bool Matches(string filename)
+        {
+            return new Regex(@"(^|\.)(srt)$", RegexOptions.IgnoreCase).IsMatch(filename);
+        }
+
+        public static bool Matches(MIFormat format)
+        {
+            return format.Id == "UTF-8";
         }
     }
 
