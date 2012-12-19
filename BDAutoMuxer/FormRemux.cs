@@ -10,6 +10,7 @@ using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
+using BrightIdeasSoftware;
 using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace BDAutoMuxer
@@ -24,6 +25,8 @@ namespace BDAutoMuxer
         private readonly List<LPCMGroup> _inputLPCM = new List<LPCMGroup>();
         private readonly ISet<string> _inputSubtitles = new HashSet<string>();
 
+        private List<MITrack> _tracks = new List<MITrack>();
+
         private string _lastLPCMPath;
         private string _lastSubtitlePath;
 
@@ -33,8 +36,11 @@ namespace BDAutoMuxer
 
             FormUtils.TextBox_EnableSelectAll(this);
 
-            listViewLPCM_SelectedIndexChanged();
-            listViewSubtitles_SelectedIndexChanged();
+            PopulateLPCM();
+            PopulateSubtitles();
+
+            objectListViewTracks.DragSource = new SimpleDragSource();
+            objectListViewTracks.DropSink = new RearrangingDropSink(false);
 
             /*
             .sup = S_HDMV/PGS  - Blu-ray
@@ -52,6 +58,12 @@ namespace BDAutoMuxer
         {
             progressLabel.Text = "";
             statusStripProgressBar.Visible = false;
+
+            new ToolTip().SetToolTip(linkLabelAddLPCM, "Add one or more external LPCM audio tracks (.WAV files)");
+            new ToolTip().SetToolTip(linkLabelClearLPCM, "Remove all external LPCM audio tracks");
+
+            new ToolTip().SetToolTip(linkLabelAddSubtitles, "Add one or more external subtitle files (.sup, .idx/.sub, .srt)");
+            new ToolTip().SetToolTip(linkLabelClearSubtitles, "Remove all external subtitles");
         }
 
         #region LPCM UI
@@ -65,19 +77,34 @@ namespace BDAutoMuxer
                     _inputLPCM.Add(new LPCMGroup(file));
                 _lastLPCMPath = path;
             }
-            PopulateLPCMListView();
+            PopulateLPCM();
         }
 
-        private void PopulateLPCMListView()
+        private void PopulateLPCM()
         {
-            listViewLPCM.Items.Clear();
-            foreach (var lpcm in _inputLPCM)
+            panelInputLPCM.Controls.Clear();
+            if (_inputLPCM.Any())
             {
-                var listViewItem = new ListViewItem(new[] {lpcm.DisplayFilename, lpcm.Channels + ""});
-                listViewItem.Tag = lpcm;
-                listViewLPCM.Items.Add(listViewItem);
+                var count = _inputLPCM.Count;
+                var plural = count == 1 ? "" : "s";
+                var channelSet = new HashSet<int>(_inputLPCM.Select(group => group.Channels));
+                var strChannels = string.Join(", ", channelSet.OrderByDescending(x => x).Select(x => string.Format("{0} ch", x)));
+
+                var label = new Label();
+                label.AutoSize = true;
+                label.Text = string.Format("{0} track{1} ({2})", count, plural, strChannels);
+                label.Margin = new Padding(3, 3, 3, 3);
+
+                panelInputLPCM.Controls.Add(label);
+                panelInputLPCM.Controls.Add(linkLabelAddLPCM);
+                panelInputLPCM.Controls.Add(linkLabelEditLPCM);
+                panelInputLPCM.Controls.Add(linkLabelClearLPCM);
             }
-            listViewLPCM_SelectedIndexChanged();
+            else
+            {
+                panelInputLPCM.Controls.Add(labelInputLPCMNone);
+                panelInputLPCM.Controls.Add(linkLabelAddLPCM);
+            }
         }
 
         #endregion
@@ -94,21 +121,34 @@ namespace BDAutoMuxer
                 _inputSubtitles.Add(_path);
                 _lastSubtitlePath = _path;
             }
-            PopulateSubtitlesListView();
+            PopulateSubtitles();
         }
 
-        private void PopulateSubtitlesListView()
+        private void PopulateSubtitles()
         {
-            listViewSubtitles.Items.Clear();
-            foreach (var path in _inputSubtitles)
+            panelInputSubtitles.Controls.Clear();
+            if (_inputSubtitles.Any())
             {
-                var ext = Path.GetExtension(path.ToLowerInvariant());
-                var type = ext == ".sup" ? "PGS" : ext == ".idx" ? "VobSub" : ext == ".srt" ? "Matroska" : "Unknown";
-                var listViewItem = new ListViewItem(new[] { Path.GetFileName(path), type });
-                listViewItem.Tag = path;
-                listViewSubtitles.Items.Add(listViewItem);
+                var count = _inputSubtitles.Count;
+                var plural = count == 1 ? "" : "s";
+                var extensionSet = new HashSet<string>(_inputSubtitles.Select(Path.GetExtension));
+                var strExtensions = string.Join(", ", extensionSet);
+
+                var label = new Label();
+                label.AutoSize = true;
+                label.Text = string.Format("{0} track{1} ({2})", count, plural, strExtensions);
+                label.Margin = new Padding(3, 3, 3, 3);
+
+                panelInputSubtitles.Controls.Add(label);
+                panelInputSubtitles.Controls.Add(linkLabelAddSubtitles);
+                panelInputSubtitles.Controls.Add(linkLabelEditSubtitles);
+                panelInputSubtitles.Controls.Add(linkLabelClearSubtitles);
             }
-            listViewSubtitles_SelectedIndexChanged();
+            else
+            {
+                panelInputSubtitles.Controls.Add(labelInputSubtitlesNone);
+                panelInputSubtitles.Controls.Add(linkLabelAddSubtitles);
+            }
         }
 
         #endregion
@@ -599,54 +639,26 @@ namespace BDAutoMuxer
             BrowseFile(textBoxOutputMkv, "Select an Output MKV File:", "Matroska Video", "mkv", false);
         }
 
-        private void buttonAddLPCM_Click(object sender = null, EventArgs e = null)
+        private void linkLabelAddLPCM_Click(object sender, EventArgs e)
         {
-            AddLPCM(BrowseFiles(Path.GetDirectoryName(_lastLPCMPath), "Select LPCM (WAVE) Files:", "LPCM (Uncompressed WAVE) Audio", "wav"));
+            AddLPCM(BrowseFiles(Path.GetDirectoryName(_lastLPCMPath), "Select LPCM (WAVE) Files:", "LPCM (WAVE) Audio", "wav"));
         }
 
-        private void buttonRemoveLPCM_Click(object sender = null, EventArgs e = null)
+        private void linkLabelClearLPCM_Click(object sender, EventArgs e)
         {
-            foreach (var listViewItem in listViewLPCM.SelectedItems.OfType<ListViewItem>())
-            {
-                _inputLPCM.Remove(listViewItem.Tag as LPCMGroup);
-            }
-            PopulateLPCMListView();
+            _inputLPCM.Clear();
+            PopulateLPCM();
         }
 
-        private void listViewLPCM_SelectedIndexChanged(object sender = null, EventArgs e = null)
-        {
-            buttonRemoveLPCM.Enabled = listViewLPCM.SelectedIndices.Count > 0;
-        }
-
-        private void buttonAddSubtitles_Click(object sender = null, EventArgs e = null)
+        private void linkLabelAddSubtitles_Click(object sender, EventArgs e)
         {
             AddSubtitles(BrowseFiles(Path.GetDirectoryName(_lastSubtitlePath), "Select Subtitle Files:", "Subtitle File", "sup;idx;srt"));
         }
 
-        private void buttonRemoveSubtitles_Click(object sender = null, EventArgs e = null)
+        private void linkLabelClearSubtitles_Click(object sender, EventArgs e)
         {
-            foreach (var listViewItem in listViewSubtitles.SelectedItems.OfType<ListViewItem>())
-            {
-                _inputSubtitles.Remove(listViewItem.Tag as string);
-            }
-            PopulateSubtitlesListView();
-        }
-
-        private void listViewSubtitles_SelectedIndexChanged(object sender = null, EventArgs e = null)
-        {
-            buttonRemoveSubtitles.Enabled = listViewSubtitles.SelectedIndices.Count > 0;
-        }
-
-        private void listViewLPCM_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Delete)
-                buttonRemoveLPCM_Click();
-        }
-
-        private void listViewSubtitles_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Delete)
-                buttonRemoveSubtitles_Click();
+            _inputSubtitles.Clear();
+            PopulateSubtitles();
         }
 
         private void buttonRemux_Click(object sender, EventArgs e)
