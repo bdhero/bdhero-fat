@@ -39,11 +39,14 @@ namespace BDAutoMuxer.models
         public IList<MISubtitleTrack> SubtitleTracks { get { return _subtitleTracks.AsReadOnly(); } }
         public IList<MIChapterTrack> ChapterTracks { get { return _chapterTracks.AsReadOnly(); } }
 
+        static MediaInfo()
+        {
+            Config.CLIPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfo.exe");
+            Config.CSVPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfoXML.csv");
+        }
+
         public static void Test(string[] files = null)
         {
-            MediaInfo.Config.CLIPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfo.exe");
-            MediaInfo.Config.CSVPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfoXML.csv");
-
             /*
 
             var braveheart_mkv_path = @"Y:\BDAutoMuxer\BRAVEHEART_D1_AC\Braveheart (1995) [1080p].mkv";
