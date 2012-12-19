@@ -17,6 +17,8 @@ namespace BDAutoMuxer
 {
     public partial class FormRemux : Form
     {
+        private static readonly Padding LabelMargin = new Padding(3, 3, 3, 3);
+
         private MkvMerge _mkvMerge;
 
         private MediaInfo _inputM2TS;
@@ -64,6 +66,41 @@ namespace BDAutoMuxer
 
             new ToolTip().SetToolTip(linkLabelAddSubtitles, "Add one or more external subtitle files (.sup, .idx/.sub, .srt)");
             new ToolTip().SetToolTip(linkLabelClearSubtitles, "Remove all external subtitles");
+
+//            objectListViewTracks.Columns["olvColumnTitle"].
+
+            var tlist = new TypedObjectListView<MIAVSTrack>(objectListViewTracks);
+            
+            tlist.BooleanCheckStateGetter = x => x.IsSelected;
+            tlist.BooleanCheckStatePutter = (x, newValue) => x.IsSelected = newValue;
+
+            tlist.GetColumn(0).AspectGetter = track => track.Title;
+            tlist.GetColumn(0).AspectPutter = (track, value) => track.Title = value as string;
+
+            tlist.GetColumn(1).AspectGetter = track => track.Codec.ShortName;
+
+            tlist.GetColumn(2).AspectGetter = ResolutionGetter;
+
+            tlist.GetColumn(3).AspectGetter = track => "";
+
+            tlist.GetColumn(4).AspectGetter = track => track.Language;
+
+            tlist.GetColumn(5).AspectGetter = track => track.IsDefault;
+            tlist.GetColumn(5).AspectPutter = (track, value) => track.IsDefault = value as bool?;
+
+            tlist.GetColumn(6).AspectGetter = track => track.IsForced;
+            tlist.GetColumn(6).AspectPutter = (track, value) => track.IsForced = value as bool?;
+        }
+
+        private static object ResolutionGetter(MIAVSTrack track)
+        {
+            var videoTrack = track as MIVideoTrack;
+            var audioTrack = track as MIAudioTrack;
+            if (videoTrack != null)
+                return videoTrack.DisplayResolution;
+            if (audioTrack != null)
+                return audioTrack.Channels;
+            return null;
         }
 
         #region LPCM UI
@@ -93,7 +130,7 @@ namespace BDAutoMuxer
                 var label = new Label();
                 label.AutoSize = true;
                 label.Text = string.Format("{0} track{1} ({2})", count, plural, strChannels);
-                label.Margin = new Padding(3, 3, 3, 3);
+                label.Margin = LabelMargin;
 
                 panelInputLPCM.Controls.Add(label);
                 panelInputLPCM.Controls.Add(linkLabelAddLPCM);
@@ -137,7 +174,7 @@ namespace BDAutoMuxer
                 var label = new Label();
                 label.AutoSize = true;
                 label.Text = string.Format("{0} track{1} ({2})", count, plural, strExtensions);
-                label.Margin = new Padding(3, 3, 3, 3);
+                label.Margin = LabelMargin;
 
                 panelInputSubtitles.Controls.Add(label);
                 panelInputSubtitles.Controls.Add(linkLabelAddSubtitles);
@@ -608,15 +645,116 @@ namespace BDAutoMuxer
         private void FormRemux_DragDrop(object sender, DragEventArgs e)
         {
             if (DragUtils.HasFileExtension(e, "m2ts"))
-                textBoxInputM2ts.Text = DragUtils.GetFirstFileWithExtension(e, "m2ts");
+                SetInputM2TS(DragUtils.GetFirstFileWithExtension(e, "m2ts"));
             if (DragUtils.HasFileExtension(e, "mkv"))
-                textBoxInputMkv.Text = DragUtils.GetFirstFileWithExtension(e, "mkv");
+                SetInputMKV(DragUtils.GetFirstFileWithExtension(e, "mkv"));
             if (DragUtils.HasFileExtension(e, new[] { "xml", "txt" }))
-                textBoxInputChapters.Text = DragUtils.GetFirstFileWithExtension(e, new[] { "xml", "txt" });
+                SetInputChapters(DragUtils.GetFirstFileWithExtension(e, new[] { "xml", "txt" }));
             if (DragUtils.HasFileExtension(e, "wav"))
                 AddLPCM(DragUtils.GetFilesWithExtension(e, "wav"));
             if (DragUtils.HasFileExtension(e, new[] { "sup", "sub", "idx", "srt" }))
                 AddSubtitles(DragUtils.GetFilesWithExtension(e, new[] { "sup", "sub", "idx", "srt" }));
+        }
+
+        private bool FormEnabled
+        {
+            set { groupBoxInput.Enabled = groupBoxOutput.Enabled = buttonRemux.Enabled = value; }
+        }
+
+        private void PopulateTracks()
+        {
+            var tracks = new List<MIAVSTrack>();
+
+            if (_inputM2TS != null)
+            {
+                tracks.AddRange(_inputM2TS.AudioTracks);
+                tracks.AddRange(_inputM2TS.SubtitleTracks);
+            }
+            if (_inputMKV != null)
+            {
+                tracks.AddRange(_inputMKV.AudioTracks);
+                tracks.AddRange(_inputMKV.SubtitleTracks);
+            }
+
+            objectListViewTracks.SetObjects(tracks);
+        }
+
+        private void SetInputM2TS(string path)
+        {
+            textBoxInputM2ts.Text = path;
+            ScanFile(path, out _inputM2TS, info => PopulateInputLabels(info, panelInputM2tsAudio));
+        }
+
+        private void SetInputMKV(string path)
+        {
+            textBoxInputMkv.Text = path;
+            ScanFile(path, out _inputM2TS, info => PopulateInputLabels(info, panelInputMkvAudio));
+        }
+
+        private void SetInputChapters(string path)
+        {
+            textBoxInputChapters.Text = path;
+        }
+
+        private static void PopulateInputLabels(MediaInfo mediaInfo, Panel panel)
+        {
+            panel.Controls.Clear();
+
+            if (mediaInfo.VideoTracks.Any())
+            {
+                var videoLabels = mediaInfo.VideoTracks.Select(FormatVideoLabel);
+                var label = new Label();
+                label.AutoSize = true;
+                label.Text = string.Format("{0}", string.Join(", ", new HashSet<string>(videoLabels)));
+                label.Margin = LabelMargin;
+                panel.Controls.Add(label);
+            }
+
+            if (mediaInfo.AudioTracks.Any())
+            {
+                var audiolabels = mediaInfo.AudioTracks.Select(FormatAudioLabel);
+                var label = new Label();
+                label.AutoSize = true;
+                label.Text = string.Format("{0}", string.Join(", ", new HashSet<string>(audiolabels)));
+                label.Margin = LabelMargin;
+                panel.Controls.Add(label);
+            }
+
+            if (mediaInfo.SubtitleTracks.Any())
+            {
+                var subtitleLabels = mediaInfo.SubtitleTracks.Select(FormatSubtitleLabel);
+                var label = new Label();
+                label.AutoSize = true;
+                label.Text = string.Format("{0}", string.Join(", ", new HashSet<string>(subtitleLabels)));
+                label.Margin = LabelMargin;
+                panel.Controls.Add(label);
+            }
+        }
+
+        private static string FormatVideoLabel(MIVideoTrack track)
+        {
+            return string.Format("{0} {1}", track.DisplayResolution, track.Codec.ShortName);
+        }
+
+        private static string FormatAudioLabel(MIAudioTrack track)
+        {
+            return string.Format("{0} ({1} ch)", track.Codec.ShortName, track.Channels);
+        }
+
+        private static string FormatSubtitleLabel(MISubtitleTrack track)
+        {
+            return string.Format("{0}", track.Codec.ShortName);
+        }
+
+        private void ScanFile(string path, out MediaInfo mediaInfo, ScanCompletedDelegate completedHandler)
+        {
+            FormEnabled = false;
+            var mediaInfo2 = mediaInfo = new MediaInfo(path);
+            var bgworker = new BackgroundWorker();
+            bgworker.DoWork += (sender, args) => mediaInfo2 = mediaInfo2.Scan();
+            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); };
+            bgworker.RunWorkerCompleted += (sender, args) => completedHandler(mediaInfo2);
+            bgworker.RunWorkerAsync();
         }
 
         private void buttonInputM2tsBrowse_Click(object sender, EventArgs e)
@@ -697,4 +835,7 @@ namespace BDAutoMuxer
 
         #endregion
     }
+
+    public delegate void ScanCompletedDelegate(MediaInfo mediaInfo);
+
 }

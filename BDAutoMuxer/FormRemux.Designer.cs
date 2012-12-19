@@ -50,18 +50,24 @@
             this.comboBoxKeepAudioFrom = new System.Windows.Forms.ComboBox();
             this.comboBoxKeepSubtitlesFrom = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxInput = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.panelInputSubtitles = new System.Windows.Forms.FlowLayoutPanel();
             this.labelInputSubtitlesNone = new System.Windows.Forms.Label();
+            this.linkLabelAddSubtitles = new BDAutoMuxer.views.LinkLabel2();
+            this.linkLabelEditSubtitles = new BDAutoMuxer.views.LinkLabel2();
+            this.linkLabelClearSubtitles = new BDAutoMuxer.views.LinkLabel2();
             this.panelInputLPCM = new System.Windows.Forms.FlowLayoutPanel();
             this.labelInputLPCMNone = new System.Windows.Forms.Label();
+            this.linkLabelAddLPCM = new BDAutoMuxer.views.LinkLabel2();
+            this.linkLabelEditLPCM = new BDAutoMuxer.views.LinkLabel2();
+            this.linkLabelClearLPCM = new BDAutoMuxer.views.LinkLabel2();
             this.panelInputMkvAudio = new System.Windows.Forms.FlowLayoutPanel();
             this.labelInputMkvAudioNone = new System.Windows.Forms.Label();
             this.panelInputM2tsAudio = new System.Windows.Forms.FlowLayoutPanel();
             this.labelInputM2tsAudioNone = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBoxOutput = new System.Windows.Forms.GroupBox();
             this.buttonMoveDown = new System.Windows.Forms.Button();
             this.buttonMoveUp = new System.Windows.Forms.Button();
             this.objectListViewTracks = new BrightIdeasSoftware.ObjectListView();
@@ -69,20 +75,17 @@
             this.olvColumnCodec = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnResolution = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSource = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnLanguage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnDefault = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnForced = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.label9 = new System.Windows.Forms.Label();
-            this.linkLabelAddSubtitles = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelEditSubtitles = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelClearSubtitles = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelAddLPCM = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelEditLPCM = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelClearLPCM = new BDAutoMuxer.views.LinkLabel2();
             this.statusStrip.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxInput.SuspendLayout();
             this.panelInputSubtitles.SuspendLayout();
             this.panelInputLPCM.SuspendLayout();
             this.panelInputMkvAudio.SuspendLayout();
             this.panelInputM2tsAudio.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.groupBoxOutput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.objectListViewTracks)).BeginInit();
             this.SuspendLayout();
             // 
@@ -102,7 +105,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxInputM2ts.Location = new System.Drawing.Point(124, 24);
             this.textBoxInputM2ts.Name = "textBoxInputM2ts";
-            this.textBoxInputM2ts.Size = new System.Drawing.Size(461, 20);
+            this.textBoxInputM2ts.Size = new System.Drawing.Size(624, 20);
             this.textBoxInputM2ts.TabIndex = 0;
             // 
             // label2
@@ -138,7 +141,7 @@
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(5, 218);
+            this.label5.Location = new System.Drawing.Point(5, 279);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(70, 13);
             this.label5.TabIndex = 11;
@@ -147,7 +150,7 @@
             // buttonInputM2tsBrowse
             // 
             this.buttonInputM2tsBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonInputM2tsBrowse.Location = new System.Drawing.Point(591, 21);
+            this.buttonInputM2tsBrowse.Location = new System.Drawing.Point(754, 21);
             this.buttonInputM2tsBrowse.Name = "buttonInputM2tsBrowse";
             this.buttonInputM2tsBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonInputM2tsBrowse.TabIndex = 1;
@@ -158,7 +161,7 @@
             // buttonInputMkvBrowse
             // 
             this.buttonInputMkvBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonInputMkvBrowse.Location = new System.Drawing.Point(591, 73);
+            this.buttonInputMkvBrowse.Location = new System.Drawing.Point(754, 73);
             this.buttonInputMkvBrowse.Name = "buttonInputMkvBrowse";
             this.buttonInputMkvBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonInputMkvBrowse.TabIndex = 3;
@@ -169,7 +172,7 @@
             // buttonInputChaptersBrowse
             // 
             this.buttonInputChaptersBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonInputChaptersBrowse.Location = new System.Drawing.Point(591, 125);
+            this.buttonInputChaptersBrowse.Location = new System.Drawing.Point(754, 125);
             this.buttonInputChaptersBrowse.Name = "buttonInputChaptersBrowse";
             this.buttonInputChaptersBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonInputChaptersBrowse.TabIndex = 5;
@@ -183,7 +186,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxInputMkv.Location = new System.Drawing.Point(124, 76);
             this.textBoxInputMkv.Name = "textBoxInputMkv";
-            this.textBoxInputMkv.Size = new System.Drawing.Size(461, 20);
+            this.textBoxInputMkv.Size = new System.Drawing.Size(624, 20);
             this.textBoxInputMkv.TabIndex = 2;
             // 
             // textBoxInputChapters
@@ -192,22 +195,22 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxInputChapters.Location = new System.Drawing.Point(124, 128);
             this.textBoxInputChapters.Name = "textBoxInputChapters";
-            this.textBoxInputChapters.Size = new System.Drawing.Size(461, 20);
+            this.textBoxInputChapters.Size = new System.Drawing.Size(624, 20);
             this.textBoxInputChapters.TabIndex = 4;
             // 
             // textBoxOutputMkv
             // 
             this.textBoxOutputMkv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputMkv.Location = new System.Drawing.Point(111, 215);
+            this.textBoxOutputMkv.Location = new System.Drawing.Point(111, 276);
             this.textBoxOutputMkv.Name = "textBoxOutputMkv";
-            this.textBoxOutputMkv.Size = new System.Drawing.Size(474, 20);
+            this.textBoxOutputMkv.Size = new System.Drawing.Size(637, 20);
             this.textBoxOutputMkv.TabIndex = 5;
             // 
             // buttonOutputMkvBrowse
             // 
             this.buttonOutputMkvBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOutputMkvBrowse.Location = new System.Drawing.Point(591, 213);
+            this.buttonOutputMkvBrowse.Location = new System.Drawing.Point(754, 274);
             this.buttonOutputMkvBrowse.Name = "buttonOutputMkvBrowse";
             this.buttonOutputMkvBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonOutputMkvBrowse.TabIndex = 6;
@@ -221,16 +224,16 @@
             this.statusStripLabel,
             this.progressLabel,
             this.statusStripProgressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 519);
+            this.statusStrip.Location = new System.Drawing.Point(0, 580);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(707, 22);
+            this.statusStrip.Size = new System.Drawing.Size(870, 22);
             this.statusStrip.TabIndex = 19;
             this.statusStrip.Text = "statusStrip";
             // 
             // statusStripLabel
             // 
             this.statusStripLabel.Name = "statusStripLabel";
-            this.statusStripLabel.Size = new System.Drawing.Size(456, 17);
+            this.statusStripLabel.Size = new System.Drawing.Size(619, 17);
             this.statusStripLabel.Spring = true;
             this.statusStripLabel.Text = "Drag files onto this window";
             this.statusStripLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -255,7 +258,7 @@
             // 
             this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonClose.Location = new System.Drawing.Point(620, 483);
+            this.buttonClose.Location = new System.Drawing.Point(783, 544);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(75, 23);
             this.buttonClose.TabIndex = 1;
@@ -266,7 +269,7 @@
             // buttonRemux
             // 
             this.buttonRemux.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRemux.Location = new System.Drawing.Point(539, 483);
+            this.buttonRemux.Location = new System.Drawing.Point(702, 544);
             this.buttonRemux.Name = "buttonRemux";
             this.buttonRemux.Size = new System.Drawing.Size(75, 23);
             this.buttonRemux.TabIndex = 0;
@@ -301,31 +304,31 @@
             this.label6.TabIndex = 21;
             this.label6.Text = "Keep subtitles from:";
             // 
-            // groupBox1
+            // groupBoxInput
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.panelInputSubtitles);
-            this.groupBox1.Controls.Add(this.panelInputLPCM);
-            this.groupBox1.Controls.Add(this.panelInputMkvAudio);
-            this.groupBox1.Controls.Add(this.panelInputM2tsAudio);
-            this.groupBox1.Controls.Add(this.buttonInputM2tsBrowse);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.textBoxInputM2ts);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.buttonInputMkvBrowse);
-            this.groupBox1.Controls.Add(this.buttonInputChaptersBrowse);
-            this.groupBox1.Controls.Add(this.textBoxInputMkv);
-            this.groupBox1.Controls.Add(this.textBoxInputChapters);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(683, 211);
-            this.groupBox1.TabIndex = 23;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Source files";
+            this.groupBoxInput.Controls.Add(this.label8);
+            this.groupBoxInput.Controls.Add(this.label7);
+            this.groupBoxInput.Controls.Add(this.panelInputSubtitles);
+            this.groupBoxInput.Controls.Add(this.panelInputLPCM);
+            this.groupBoxInput.Controls.Add(this.panelInputMkvAudio);
+            this.groupBoxInput.Controls.Add(this.panelInputM2tsAudio);
+            this.groupBoxInput.Controls.Add(this.buttonInputM2tsBrowse);
+            this.groupBoxInput.Controls.Add(this.label1);
+            this.groupBoxInput.Controls.Add(this.textBoxInputM2ts);
+            this.groupBoxInput.Controls.Add(this.label2);
+            this.groupBoxInput.Controls.Add(this.label3);
+            this.groupBoxInput.Controls.Add(this.buttonInputMkvBrowse);
+            this.groupBoxInput.Controls.Add(this.buttonInputChaptersBrowse);
+            this.groupBoxInput.Controls.Add(this.textBoxInputMkv);
+            this.groupBoxInput.Controls.Add(this.textBoxInputChapters);
+            this.groupBoxInput.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxInput.Name = "groupBoxInput";
+            this.groupBoxInput.Size = new System.Drawing.Size(846, 211);
+            this.groupBoxInput.TabIndex = 23;
+            this.groupBoxInput.TabStop = false;
+            this.groupBoxInput.Text = "Source files";
             // 
             // label8
             // 
@@ -355,7 +358,7 @@
             this.panelInputSubtitles.Controls.Add(this.linkLabelClearSubtitles);
             this.panelInputSubtitles.Location = new System.Drawing.Point(124, 180);
             this.panelInputSubtitles.Name = "panelInputSubtitles";
-            this.panelInputSubtitles.Size = new System.Drawing.Size(461, 20);
+            this.panelInputSubtitles.Size = new System.Drawing.Size(624, 20);
             this.panelInputSubtitles.TabIndex = 10;
             // 
             // labelInputSubtitlesNone
@@ -367,171 +370,6 @@
             this.labelInputSubtitlesNone.Size = new System.Drawing.Size(37, 13);
             this.labelInputSubtitlesNone.TabIndex = 2;
             this.labelInputSubtitlesNone.Text = "(none)";
-            // 
-            // panelInputLPCM
-            // 
-            this.panelInputLPCM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelInputLPCM.Controls.Add(this.labelInputLPCMNone);
-            this.panelInputLPCM.Controls.Add(this.linkLabelAddLPCM);
-            this.panelInputLPCM.Controls.Add(this.linkLabelEditLPCM);
-            this.panelInputLPCM.Controls.Add(this.linkLabelClearLPCM);
-            this.panelInputLPCM.Location = new System.Drawing.Point(124, 154);
-            this.panelInputLPCM.Name = "panelInputLPCM";
-            this.panelInputLPCM.Size = new System.Drawing.Size(461, 20);
-            this.panelInputLPCM.TabIndex = 8;
-            // 
-            // labelInputLPCMNone
-            // 
-            this.labelInputLPCMNone.AutoSize = true;
-            this.labelInputLPCMNone.Location = new System.Drawing.Point(3, 3);
-            this.labelInputLPCMNone.Margin = new System.Windows.Forms.Padding(3);
-            this.labelInputLPCMNone.Name = "labelInputLPCMNone";
-            this.labelInputLPCMNone.Size = new System.Drawing.Size(37, 13);
-            this.labelInputLPCMNone.TabIndex = 2;
-            this.labelInputLPCMNone.Text = "(none)";
-            // 
-            // panelInputMkvAudio
-            // 
-            this.panelInputMkvAudio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelInputMkvAudio.Controls.Add(this.labelInputMkvAudioNone);
-            this.panelInputMkvAudio.Location = new System.Drawing.Point(124, 102);
-            this.panelInputMkvAudio.Name = "panelInputMkvAudio";
-            this.panelInputMkvAudio.Size = new System.Drawing.Size(461, 20);
-            this.panelInputMkvAudio.TabIndex = 7;
-            // 
-            // labelInputMkvAudioNone
-            // 
-            this.labelInputMkvAudioNone.AutoSize = true;
-            this.labelInputMkvAudioNone.Location = new System.Drawing.Point(3, 3);
-            this.labelInputMkvAudioNone.Margin = new System.Windows.Forms.Padding(3);
-            this.labelInputMkvAudioNone.Name = "labelInputMkvAudioNone";
-            this.labelInputMkvAudioNone.Size = new System.Drawing.Size(37, 13);
-            this.labelInputMkvAudioNone.TabIndex = 1;
-            this.labelInputMkvAudioNone.Text = "(none)";
-            // 
-            // panelInputM2tsAudio
-            // 
-            this.panelInputM2tsAudio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelInputM2tsAudio.Controls.Add(this.labelInputM2tsAudioNone);
-            this.panelInputM2tsAudio.Location = new System.Drawing.Point(124, 50);
-            this.panelInputM2tsAudio.Name = "panelInputM2tsAudio";
-            this.panelInputM2tsAudio.Size = new System.Drawing.Size(461, 20);
-            this.panelInputM2tsAudio.TabIndex = 6;
-            // 
-            // labelInputM2tsAudioNone
-            // 
-            this.labelInputM2tsAudioNone.AutoSize = true;
-            this.labelInputM2tsAudioNone.Location = new System.Drawing.Point(3, 3);
-            this.labelInputM2tsAudioNone.Margin = new System.Windows.Forms.Padding(3);
-            this.labelInputM2tsAudioNone.Name = "labelInputM2tsAudioNone";
-            this.labelInputM2tsAudioNone.Size = new System.Drawing.Size(37, 13);
-            this.labelInputM2tsAudioNone.TabIndex = 0;
-            this.labelInputM2tsAudioNone.Text = "(none)";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.buttonMoveDown);
-            this.groupBox2.Controls.Add(this.buttonMoveUp);
-            this.groupBox2.Controls.Add(this.objectListViewTracks);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.comboBoxKeepAudioFrom);
-            this.groupBox2.Controls.Add(this.comboBoxKeepSubtitlesFrom);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.buttonOutputMkvBrowse);
-            this.groupBox2.Controls.Add(this.textBoxOutputMkv);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Location = new System.Drawing.Point(12, 229);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(683, 248);
-            this.groupBox2.TabIndex = 24;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Output";
-            // 
-            // buttonMoveDown
-            // 
-            this.buttonMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonMoveDown.Location = new System.Drawing.Point(591, 103);
-            this.buttonMoveDown.Name = "buttonMoveDown";
-            this.buttonMoveDown.Size = new System.Drawing.Size(75, 23);
-            this.buttonMoveDown.TabIndex = 4;
-            this.buttonMoveDown.Text = "Move Down";
-            this.buttonMoveDown.UseVisualStyleBackColor = true;
-            // 
-            // buttonMoveUp
-            // 
-            this.buttonMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonMoveUp.Location = new System.Drawing.Point(591, 74);
-            this.buttonMoveUp.Name = "buttonMoveUp";
-            this.buttonMoveUp.Size = new System.Drawing.Size(75, 23);
-            this.buttonMoveUp.TabIndex = 3;
-            this.buttonMoveUp.Text = "Move Up";
-            this.buttonMoveUp.UseVisualStyleBackColor = true;
-            // 
-            // objectListViewTracks
-            // 
-            this.objectListViewTracks.AllColumns.Add(this.olvColumnTitle);
-            this.objectListViewTracks.AllColumns.Add(this.olvColumnCodec);
-            this.objectListViewTracks.AllColumns.Add(this.olvColumnResolution);
-            this.objectListViewTracks.AllColumns.Add(this.olvColumnSource);
-            this.objectListViewTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.objectListViewTracks.CheckBoxes = true;
-            this.objectListViewTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnTitle,
-            this.olvColumnCodec,
-            this.olvColumnResolution,
-            this.olvColumnSource});
-            this.objectListViewTracks.EmptyListMsg = "No input files selected";
-            this.objectListViewTracks.FullRowSelect = true;
-            this.objectListViewTracks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.objectListViewTracks.Location = new System.Drawing.Point(111, 74);
-            this.objectListViewTracks.MultiSelect = false;
-            this.objectListViewTracks.Name = "objectListViewTracks";
-            this.objectListViewTracks.Size = new System.Drawing.Size(474, 135);
-            this.objectListViewTracks.TabIndex = 2;
-            this.objectListViewTracks.UseCompatibleStateImageBehavior = false;
-            this.objectListViewTracks.View = System.Windows.Forms.View.Details;
-            // 
-            // olvColumnTitle
-            // 
-            this.olvColumnTitle.CellPadding = null;
-            this.olvColumnTitle.Hideable = false;
-            this.olvColumnTitle.Text = "Title";
-            this.olvColumnTitle.Width = 180;
-            // 
-            // olvColumnCodec
-            // 
-            this.olvColumnCodec.CellPadding = null;
-            this.olvColumnCodec.Text = "Codec";
-            this.olvColumnCodec.Width = 140;
-            // 
-            // olvColumnResolution
-            // 
-            this.olvColumnResolution.CellPadding = null;
-            this.olvColumnResolution.Text = "Resolution";
-            this.olvColumnResolution.Width = 70;
-            // 
-            // olvColumnSource
-            // 
-            this.olvColumnSource.CellPadding = null;
-            this.olvColumnSource.Text = "Source";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 74);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(72, 13);
-            this.label9.TabIndex = 24;
-            this.label9.Text = "Select tracks:";
             // 
             // linkLabelAddSubtitles
             // 
@@ -569,6 +407,29 @@
             this.linkLabelClearSubtitles.Text = "clear";
             this.linkLabelClearSubtitles.Click += new System.EventHandler(this.linkLabelClearSubtitles_Click);
             // 
+            // panelInputLPCM
+            // 
+            this.panelInputLPCM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelInputLPCM.Controls.Add(this.labelInputLPCMNone);
+            this.panelInputLPCM.Controls.Add(this.linkLabelAddLPCM);
+            this.panelInputLPCM.Controls.Add(this.linkLabelEditLPCM);
+            this.panelInputLPCM.Controls.Add(this.linkLabelClearLPCM);
+            this.panelInputLPCM.Location = new System.Drawing.Point(124, 154);
+            this.panelInputLPCM.Name = "panelInputLPCM";
+            this.panelInputLPCM.Size = new System.Drawing.Size(624, 20);
+            this.panelInputLPCM.TabIndex = 8;
+            // 
+            // labelInputLPCMNone
+            // 
+            this.labelInputLPCMNone.AutoSize = true;
+            this.labelInputLPCMNone.Location = new System.Drawing.Point(3, 3);
+            this.labelInputLPCMNone.Margin = new System.Windows.Forms.Padding(3);
+            this.labelInputLPCMNone.Name = "labelInputLPCMNone";
+            this.labelInputLPCMNone.Size = new System.Drawing.Size(37, 13);
+            this.labelInputLPCMNone.TabIndex = 2;
+            this.labelInputLPCMNone.Text = "(none)";
+            // 
             // linkLabelAddLPCM
             // 
             this.linkLabelAddLPCM.ForeColor = System.Drawing.SystemColors.HotTrack;
@@ -605,6 +466,177 @@
             this.linkLabelClearLPCM.Text = "clear";
             this.linkLabelClearLPCM.Click += new System.EventHandler(this.linkLabelClearLPCM_Click);
             // 
+            // panelInputMkvAudio
+            // 
+            this.panelInputMkvAudio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelInputMkvAudio.Controls.Add(this.labelInputMkvAudioNone);
+            this.panelInputMkvAudio.Location = new System.Drawing.Point(124, 102);
+            this.panelInputMkvAudio.Name = "panelInputMkvAudio";
+            this.panelInputMkvAudio.Size = new System.Drawing.Size(624, 20);
+            this.panelInputMkvAudio.TabIndex = 7;
+            // 
+            // labelInputMkvAudioNone
+            // 
+            this.labelInputMkvAudioNone.AutoSize = true;
+            this.labelInputMkvAudioNone.Location = new System.Drawing.Point(3, 3);
+            this.labelInputMkvAudioNone.Margin = new System.Windows.Forms.Padding(3);
+            this.labelInputMkvAudioNone.Name = "labelInputMkvAudioNone";
+            this.labelInputMkvAudioNone.Size = new System.Drawing.Size(37, 13);
+            this.labelInputMkvAudioNone.TabIndex = 1;
+            this.labelInputMkvAudioNone.Text = "(none)";
+            // 
+            // panelInputM2tsAudio
+            // 
+            this.panelInputM2tsAudio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelInputM2tsAudio.Controls.Add(this.labelInputM2tsAudioNone);
+            this.panelInputM2tsAudio.Location = new System.Drawing.Point(124, 50);
+            this.panelInputM2tsAudio.Name = "panelInputM2tsAudio";
+            this.panelInputM2tsAudio.Size = new System.Drawing.Size(624, 20);
+            this.panelInputM2tsAudio.TabIndex = 6;
+            // 
+            // labelInputM2tsAudioNone
+            // 
+            this.labelInputM2tsAudioNone.AutoSize = true;
+            this.labelInputM2tsAudioNone.Location = new System.Drawing.Point(3, 3);
+            this.labelInputM2tsAudioNone.Margin = new System.Windows.Forms.Padding(3);
+            this.labelInputM2tsAudioNone.Name = "labelInputM2tsAudioNone";
+            this.labelInputM2tsAudioNone.Size = new System.Drawing.Size(37, 13);
+            this.labelInputM2tsAudioNone.TabIndex = 0;
+            this.labelInputM2tsAudioNone.Text = "(none)";
+            // 
+            // groupBoxOutput
+            // 
+            this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Controls.Add(this.buttonMoveDown);
+            this.groupBoxOutput.Controls.Add(this.buttonMoveUp);
+            this.groupBoxOutput.Controls.Add(this.objectListViewTracks);
+            this.groupBoxOutput.Controls.Add(this.label9);
+            this.groupBoxOutput.Controls.Add(this.label4);
+            this.groupBoxOutput.Controls.Add(this.comboBoxKeepAudioFrom);
+            this.groupBoxOutput.Controls.Add(this.comboBoxKeepSubtitlesFrom);
+            this.groupBoxOutput.Controls.Add(this.label6);
+            this.groupBoxOutput.Controls.Add(this.buttonOutputMkvBrowse);
+            this.groupBoxOutput.Controls.Add(this.textBoxOutputMkv);
+            this.groupBoxOutput.Controls.Add(this.label5);
+            this.groupBoxOutput.Location = new System.Drawing.Point(12, 229);
+            this.groupBoxOutput.Name = "groupBoxOutput";
+            this.groupBoxOutput.Size = new System.Drawing.Size(846, 309);
+            this.groupBoxOutput.TabIndex = 24;
+            this.groupBoxOutput.TabStop = false;
+            this.groupBoxOutput.Text = "Output";
+            // 
+            // buttonMoveDown
+            // 
+            this.buttonMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonMoveDown.Location = new System.Drawing.Point(754, 103);
+            this.buttonMoveDown.Name = "buttonMoveDown";
+            this.buttonMoveDown.Size = new System.Drawing.Size(75, 23);
+            this.buttonMoveDown.TabIndex = 4;
+            this.buttonMoveDown.Text = "Move Down";
+            this.buttonMoveDown.UseVisualStyleBackColor = true;
+            // 
+            // buttonMoveUp
+            // 
+            this.buttonMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonMoveUp.Location = new System.Drawing.Point(754, 74);
+            this.buttonMoveUp.Name = "buttonMoveUp";
+            this.buttonMoveUp.Size = new System.Drawing.Size(75, 23);
+            this.buttonMoveUp.TabIndex = 3;
+            this.buttonMoveUp.Text = "Move Up";
+            this.buttonMoveUp.UseVisualStyleBackColor = true;
+            // 
+            // objectListViewTracks
+            // 
+            this.objectListViewTracks.AllColumns.Add(this.olvColumnTitle);
+            this.objectListViewTracks.AllColumns.Add(this.olvColumnCodec);
+            this.objectListViewTracks.AllColumns.Add(this.olvColumnResolution);
+            this.objectListViewTracks.AllColumns.Add(this.olvColumnSource);
+            this.objectListViewTracks.AllColumns.Add(this.olvColumnLanguage);
+            this.objectListViewTracks.AllColumns.Add(this.olvColumnDefault);
+            this.objectListViewTracks.AllColumns.Add(this.olvColumnForced);
+            this.objectListViewTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.objectListViewTracks.CheckBoxes = true;
+            this.objectListViewTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnTitle,
+            this.olvColumnCodec,
+            this.olvColumnResolution,
+            this.olvColumnSource,
+            this.olvColumnLanguage,
+            this.olvColumnDefault,
+            this.olvColumnForced});
+            this.objectListViewTracks.EmptyListMsg = "No input files selected";
+            this.objectListViewTracks.FullRowSelect = true;
+            this.objectListViewTracks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.objectListViewTracks.Location = new System.Drawing.Point(111, 74);
+            this.objectListViewTracks.MultiSelect = false;
+            this.objectListViewTracks.Name = "objectListViewTracks";
+            this.objectListViewTracks.Size = new System.Drawing.Size(637, 196);
+            this.objectListViewTracks.TabIndex = 2;
+            this.objectListViewTracks.UseCompatibleStateImageBehavior = false;
+            this.objectListViewTracks.View = System.Windows.Forms.View.Details;
+            // 
+            // olvColumnTitle
+            // 
+            this.olvColumnTitle.CellPadding = null;
+            this.olvColumnTitle.Hideable = false;
+            this.olvColumnTitle.Text = "Title";
+            this.olvColumnTitle.Width = 180;
+            // 
+            // olvColumnCodec
+            // 
+            this.olvColumnCodec.CellPadding = null;
+            this.olvColumnCodec.IsEditable = false;
+            this.olvColumnCodec.Text = "Codec";
+            this.olvColumnCodec.Width = 140;
+            // 
+            // olvColumnResolution
+            // 
+            this.olvColumnResolution.CellPadding = null;
+            this.olvColumnResolution.IsEditable = false;
+            this.olvColumnResolution.Text = "Resolution";
+            this.olvColumnResolution.Width = 70;
+            // 
+            // olvColumnSource
+            // 
+            this.olvColumnSource.CellPadding = null;
+            this.olvColumnSource.IsEditable = false;
+            this.olvColumnSource.Text = "Source";
+            // 
+            // olvColumnLanguage
+            // 
+            this.olvColumnLanguage.CellPadding = null;
+            this.olvColumnLanguage.IsEditable = false;
+            this.olvColumnLanguage.Text = "Language";
+            // 
+            // olvColumnDefault
+            // 
+            this.olvColumnDefault.CellPadding = null;
+            this.olvColumnDefault.CheckBoxes = true;
+            this.olvColumnDefault.Text = "Default";
+            this.olvColumnDefault.ToolTipText = "Players should prefer default tracks";
+            // 
+            // olvColumnForced
+            // 
+            this.olvColumnForced.CellPadding = null;
+            this.olvColumnForced.Text = "Forced";
+            this.olvColumnForced.ToolTipText = "Players should always play forced tracks even if the user does not explicitly sel" +
+                "ect or enable them";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 74);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(72, 13);
+            this.label9.TabIndex = 24;
+            this.label9.Text = "Select tracks:";
+            // 
             // FormRemux
             // 
             this.AcceptButton = this.buttonRemux;
@@ -612,9 +644,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonClose;
-            this.ClientSize = new System.Drawing.Size(707, 541);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.ClientSize = new System.Drawing.Size(870, 602);
+            this.Controls.Add(this.groupBoxOutput);
+            this.Controls.Add(this.groupBoxInput);
             this.Controls.Add(this.buttonRemux);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.statusStrip);
@@ -626,8 +658,8 @@
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FormRemux_DragEnter);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBoxInput.ResumeLayout(false);
+            this.groupBoxInput.PerformLayout();
             this.panelInputSubtitles.ResumeLayout(false);
             this.panelInputSubtitles.PerformLayout();
             this.panelInputLPCM.ResumeLayout(false);
@@ -636,8 +668,8 @@
             this.panelInputMkvAudio.PerformLayout();
             this.panelInputM2tsAudio.ResumeLayout(false);
             this.panelInputM2tsAudio.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.groupBoxOutput.ResumeLayout(false);
+            this.groupBoxOutput.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.objectListViewTracks)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -668,8 +700,8 @@
         private System.Windows.Forms.ComboBox comboBoxKeepAudioFrom;
         private System.Windows.Forms.ComboBox comboBoxKeepSubtitlesFrom;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBoxInput;
+        private System.Windows.Forms.GroupBox groupBoxOutput;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
@@ -694,5 +726,8 @@
         private views.LinkLabel2 linkLabelAddLPCM;
         private views.LinkLabel2 linkLabelClearSubtitles;
         private views.LinkLabel2 linkLabelClearLPCM;
+        private BrightIdeasSoftware.OLVColumn olvColumnLanguage;
+        private BrightIdeasSoftware.OLVColumn olvColumnDefault;
+        private BrightIdeasSoftware.OLVColumn olvColumnForced;
     }
 }
