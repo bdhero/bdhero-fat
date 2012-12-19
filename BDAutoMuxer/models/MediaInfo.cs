@@ -1276,7 +1276,9 @@ namespace BDAutoMuxer.models
 
         public static readonly List<MISubtitleCodec> SubtitleCodecs = new List<MISubtitleCodec>()
                                                                           {
-                                                                              PGS
+                                                                              PGS,
+                                                                              VobSub,
+                                                                              SRT
                                                                           };
 
         public static readonly List<MICodec> AllCodecs = new List<MICodec>()
