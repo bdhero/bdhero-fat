@@ -151,7 +151,6 @@ namespace BDAutoMuxer.models
         private static List<FileInfo> FindFilesRecursive(DirectoryInfo dir)
         {
             var filesFound = new List<FileInfo>();
-            
 
             try
             {
@@ -695,6 +694,8 @@ namespace BDAutoMuxer.models
         protected bool? OldIsForced;
         public bool? IsForced;
 
+        public bool IsSelected;
+
         public virtual bool HasChanged
         {
             get
@@ -870,6 +871,26 @@ namespace BDAutoMuxer.models
         public string ScanType { get; protected set; }
 
         public string FilePath { get; protected set; }
+
+        public string DisplayResolution
+        {
+            get
+            {
+                var height = Width == 1920 ? 1080 : Width == 1280 ? 720 : 480;
+                var scanType = IsProgressive ? "p" : "i";
+                return string.Format("{0}{1}", height, scanType);
+            }
+        }
+
+        public bool IsProgressive
+        {
+            get { return ScanType == "Progressive"; }
+        }
+
+        public bool IsInterlaced
+        {
+            get { return ScanType == "Interlaced"; }
+        }
 
         public MIVideoTrack(string filePath)
         {
