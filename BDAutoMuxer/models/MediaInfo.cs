@@ -175,8 +175,6 @@ namespace BDAutoMuxer.models
         private static bool IncludeFile(FileInfo fileInfo)
         {
             var correctExtension = Extensions.Contains(fileInfo.Extension.ToLower());
-            var isArchive = (fileInfo.Attributes & FileAttributes.Archive) == FileAttributes.Archive;
-            var isHiddenWindows = (fileInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
             var isTrash = fileInfo.Name.StartsWith("$");
             var isHiddenUnix = fileInfo.Name.StartsWith(".");
             return correctExtension && !(isTrash || isHiddenUnix);
