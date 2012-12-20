@@ -148,7 +148,7 @@ namespace BDAutoMuxer
         private void AddSubtitles(IEnumerable<string> paths)
         {
             paths = paths.Select(path => SubExtensionRegex.Replace(path, ".idx"));
-            ScanFiles(paths, _inputLPCM, (sender, args) => PopulateSubtitles());
+            ScanFiles(paths, _inputSubtitles, (sender, args) => PopulateSubtitles());
         }
 
         private void PopulateSubtitles()
