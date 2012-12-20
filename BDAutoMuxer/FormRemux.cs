@@ -591,8 +591,7 @@ namespace BDAutoMuxer
             var mediaInfo2 = mediaInfo = new MediaInfo(path);
             var bgworker = new BackgroundWorker();
             bgworker.DoWork += (sender, args) => mediaInfo2.Scan();
-            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); };
-            bgworker.RunWorkerCompleted += completedHandler;
+            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); completedHandler(sender, args); };
             bgworker.RunWorkerAsync();
         }
         private void ScanFiles(IEnumerable<string> paths, ICollection<MediaInfo> mediaInfos, RunWorkerCompletedEventHandler completedHandler)
@@ -602,8 +601,7 @@ namespace BDAutoMuxer
             pathSet.ExceptWith(mediaInfos.SelectMany(info => info.FilePaths));
             var bgworker = new BackgroundWorker();
             bgworker.DoWork += (sender, args) => mediaInfos.AddRange(pathSet.Select(path => new MediaInfo(path).Scan()));
-            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); };
-            bgworker.RunWorkerCompleted += completedHandler;
+            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); completedHandler(sender, args); };
             bgworker.RunWorkerAsync();
         }
 
