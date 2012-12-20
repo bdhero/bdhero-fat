@@ -24,8 +24,8 @@ namespace BDAutoMuxer
         private MediaInfo _inputM2TS;
         private MediaInfo _inputMKV;
 
-        private readonly List<LPCMGroup> _inputLPCM = new List<LPCMGroup>();
-        private readonly ISet<string> _inputSubtitles = new HashSet<string>();
+        private readonly List<MediaInfo> _inputLPCM = new List<MediaInfo>();
+        private readonly List<MediaInfo> _inputSubtitles = new List<MediaInfo>();
 
         private List<MITrack> _tracks = new List<MITrack>();
 
@@ -107,24 +107,17 @@ namespace BDAutoMuxer
 
         private void AddLPCM(IEnumerable<string> paths)
         {
-            foreach (var path in paths)
-            {
-                var file = new LPCMFile(path);
-                if (!_inputLPCM.Any(@group => @group.Matches(file)))
-                    _inputLPCM.Add(new LPCMGroup(file));
-                _lastLPCMPath = path;
-            }
-            PopulateLPCM();
+            ScanFiles(paths, _inputLPCM, (sender, args) => PopulateLPCM());
         }
 
         private void PopulateLPCM()
         {
             panelInputLPCM.Controls.Clear();
-            if (_inputLPCM.Any())
+            if (_inputLPCM.Any() && _inputLPCM.SelectMany(info => info.AudioTracks).Any())
             {
                 var count = _inputLPCM.Count;
                 var plural = count == 1 ? "" : "s";
-                var channelSet = new HashSet<int>(_inputLPCM.Select(group => group.Channels));
+                var channelSet = new HashSet<double>(_inputLPCM.SelectMany(info => info.AudioTracks).Select(track => track.Channels));
                 var strChannels = string.Join(", ", channelSet.OrderByDescending(x => x).Select(x => string.Format("{0} ch", x)));
 
                 var label = new Label();
@@ -136,6 +129,8 @@ namespace BDAutoMuxer
                 panelInputLPCM.Controls.Add(linkLabelAddLPCM);
                 panelInputLPCM.Controls.Add(linkLabelEditLPCM);
                 panelInputLPCM.Controls.Add(linkLabelClearLPCM);
+
+                _lastLPCMPath = _inputLPCM.Last().FilePaths.First();
             }
             else
             {
@@ -148,17 +143,12 @@ namespace BDAutoMuxer
 
         #region Subtitles UI
 
+        private static readonly Regex SubExtensionRegex = new Regex(@"\.sub", RegexOptions.IgnoreCase);
+
         private void AddSubtitles(IEnumerable<string> paths)
         {
-            foreach (var path in paths)
-            {
-                var _path = path;
-                if (Path.GetExtension(path.ToLowerInvariant()) == ".sub")
-                    _path = Path.ChangeExtension(path, ".idx");
-                _inputSubtitles.Add(_path);
-                _lastSubtitlePath = _path;
-            }
-            PopulateSubtitles();
+            paths = paths.Select(path => SubExtensionRegex.Replace(path, ".idx"));
+            ScanFiles(paths, _inputLPCM, (sender, args) => PopulateSubtitles());
         }
 
         private void PopulateSubtitles()
@@ -168,7 +158,7 @@ namespace BDAutoMuxer
             {
                 var count = _inputSubtitles.Count;
                 var plural = count == 1 ? "" : "s";
-                var extensionSet = new HashSet<string>(_inputSubtitles.Select(Path.GetExtension));
+                var extensionSet = new HashSet<string>(_inputSubtitles.SelectMany(info => info.FilePaths).Select(Path.GetExtension));
                 var strExtensions = string.Join(", ", extensionSet);
 
                 var label = new Label();
@@ -477,157 +467,6 @@ namespace BDAutoMuxer
 
         #endregion
 
-        #region LPCM Files
-
-        private class LPCMGroup
-        {
-            private readonly ISet<LPCMFile> _files = new HashSet<LPCMFile>();
-
-            public ISet<LPCMFile> Files { get { return new HashSet<LPCMFile>(_files); } }
-
-            public int Channels { get { return _files.First().Channels; } }
-
-            public string DisplayFilename
-            {
-                get
-                {
-                    var first = _files.First();
-                    if (first.IsNumbered)
-                    {
-                        return string.Format("{0}.(1..{1}){2}", first.PartFilename, _files.Count, first.Extension);
-                    }
-                    else
-                    {
-                        return first.FullFilename;
-                    }
-                }
-            }
-
-            public LPCMGroup(LPCMFile file)
-            {
-                AddFiles(file);
-            }
-
-            public void AddFiles(LPCMFile file)
-            {
-                if (!file.IsNumbered)
-                {
-                    _files.Add(file);
-                    return;
-                }
-
-                for (var i = 1; i < 100; i++)
-                {
-                    var numberedFile = file.GetNumbered(i);
-                    if (numberedFile.Exists)
-                    {
-                        _files.Add(numberedFile);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-
-            public bool Matches(LPCMFile file)
-            {
-                return file.Matches(_files.First());
-            }
-        }
-
-        private class LPCMFile
-        {
-            private static readonly Regex NumberedPattern = new Regex(@"^(.+)\.(\d+)(\.wav)$", RegexOptions.IgnoreCase);
-
-            public string FullPath { get; private set; }
-            public string FullFilename { get; private set; }
-            public string PartFilename { get; private set; }
-
-            public string Directory { get { return Path.GetDirectoryName(FullPath); } }
-            public string Extension { get { return Path.GetExtension(FullPath); } }
-            public bool Exists { get { return File.Exists(FullPath); }}
-
-            public bool IsNumbered { get; private set; }
-            public int Number { get; private set; }
-
-            public int Length { get; private set; }
-            public int Channels { get; private set; }
-            public int SampleRate { get; private set; }
-            public int BitsPerSample { get; private set; }
-            public int DataLength { get; private set; }
-
-            public LPCMFile(string path)
-            {
-                FullPath = path;
-                FullFilename = Path.GetFileName(path);
-                IsNumbered = NumberedPattern.IsMatch(FullFilename);
-                if (IsNumbered)
-                {
-                    var match = NumberedPattern.Match(FullFilename);
-                    PartFilename = match.Groups[1].Value;
-                    Number = Int32.Parse(match.Groups[2].Value);
-                }
-                else
-                {
-                    PartFilename = Path.GetFileNameWithoutExtension(path);
-                }
-
-                if (!File.Exists(path))
-                    return;
-
-                var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var br = new BinaryReader(fs);
-
-                Length = (int)fs.Length - 8;
-                fs.Position = 22;
-                Channels = br.ReadInt16();
-                fs.Position = 24;
-                SampleRate = br.ReadInt32();
-                fs.Position = 34;
-                BitsPerSample = br.ReadInt16();
-                DataLength = (int)fs.Length - 44;
-
-                br.Close();
-                fs.Close();
-            }
-
-            public bool Matches(LPCMFile other)
-            {
-                if (this.Directory.ToLowerInvariant() != other.Directory.ToLowerInvariant()) return false;
-                if (this.PartFilename.ToLowerInvariant() != other.PartFilename.ToLowerInvariant()) return false;
-                if (this.Extension.ToLowerInvariant() != other.Extension.ToLowerInvariant()) return false;
-                return true;
-            }
-
-            public LPCMFile GetNumbered(int i)
-            {
-                var newFilename = string.Format("{0}.{1}{2}", PartFilename, i, Extension);
-                var newPath = Path.Combine(Directory, newFilename);
-                return new LPCMFile(newPath);
-            }
-
-            protected bool Equals(LPCMFile other)
-            {
-                return string.Equals(FullPath, other.FullPath);
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
-                return Equals((LPCMFile) obj);
-            }
-
-            public override int GetHashCode()
-            {
-                return (FullPath != null ? FullPath.GetHashCode() : 0);
-            }
-        }
-
-        #endregion
-
         #region Event Handlers
 
         private void FormRemux_DragEnter(object sender, DragEventArgs e)
@@ -682,13 +521,13 @@ namespace BDAutoMuxer
         private void SetInputM2TS(string path)
         {
             textBoxInputM2ts.Text = path;
-            ScanFile(path, out _inputM2TS, info => PopulateInputLabels(info, panelInputM2tsAudio));
+            ScanFile(path, out _inputM2TS, (sender, e) => PopulateInputLabels(_inputM2TS, panelInputM2tsAudio));
         }
 
         private void SetInputMKV(string path)
         {
             textBoxInputMkv.Text = path;
-            ScanFile(path, out _inputM2TS, info => PopulateInputLabels(info, panelInputMkvAudio));
+            ScanFile(path, out _inputMKV, (sender, e) => PopulateInputLabels(_inputMKV, panelInputMkvAudio));
         }
 
         private void SetInputChapters(string path)
@@ -746,14 +585,25 @@ namespace BDAutoMuxer
             return string.Format("{0}", track.Codec.ShortName);
         }
 
-        private void ScanFile(string path, out MediaInfo mediaInfo, ScanCompletedDelegate completedHandler)
+        private void ScanFile(string path, out MediaInfo mediaInfo, RunWorkerCompletedEventHandler completedHandler)
         {
             FormEnabled = false;
             var mediaInfo2 = mediaInfo = new MediaInfo(path);
             var bgworker = new BackgroundWorker();
-            bgworker.DoWork += (sender, args) => mediaInfo2 = mediaInfo2.Scan();
+            bgworker.DoWork += (sender, args) => mediaInfo2.Scan();
             bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); };
-            bgworker.RunWorkerCompleted += (sender, args) => completedHandler(mediaInfo2);
+            bgworker.RunWorkerCompleted += completedHandler;
+            bgworker.RunWorkerAsync();
+        }
+        private void ScanFiles(IEnumerable<string> paths, ICollection<MediaInfo> mediaInfos, RunWorkerCompletedEventHandler completedHandler)
+        {
+            FormEnabled = false;
+            var pathSet = new HashSet<string>(paths);
+            pathSet.ExceptWith(mediaInfos.SelectMany(info => info.FilePaths));
+            var bgworker = new BackgroundWorker();
+            bgworker.DoWork += (sender, args) => mediaInfos.AddRange(pathSet.Select(path => new MediaInfo(path).Scan()));
+            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); };
+            bgworker.RunWorkerCompleted += completedHandler;
             bgworker.RunWorkerAsync();
         }
 
@@ -835,7 +685,5 @@ namespace BDAutoMuxer
 
         #endregion
     }
-
-    public delegate void ScanCompletedDelegate(MediaInfo mediaInfo);
 
 }
