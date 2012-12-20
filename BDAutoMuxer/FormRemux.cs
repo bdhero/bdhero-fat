@@ -27,7 +27,8 @@ namespace BDAutoMuxer
         private readonly List<MediaInfo> _inputLPCM = new List<MediaInfo>();
         private readonly List<MediaInfo> _inputSubtitles = new List<MediaInfo>();
 
-        private List<MITrack> _tracks = new List<MITrack>();
+        private List<MIAudioTrack> _audioTracks = new List<MIAudioTrack>();
+        private List<MISubtitleTrack> _subtitleTracks = new List<MISubtitleTrack>();
 
         private string _lastLPCMPath;
         private string _lastSubtitlePath;
@@ -41,8 +42,11 @@ namespace BDAutoMuxer
             PopulateLPCM();
             PopulateSubtitles();
 
-            objectListViewTracks.DragSource = new SimpleDragSource();
-            objectListViewTracks.DropSink = new RearrangingDropSink(false);
+            objectListViewAudioTracks.DragSource = new SimpleDragSource();
+            objectListViewAudioTracks.DropSink = new RearrangingDropSink(false);
+
+            objectListViewSubtitleTracks.DragSource = new SimpleDragSource();
+            objectListViewSubtitleTracks.DropSink = new RearrangingDropSink(false);
 
             /*
             .sup = S_HDMV/PGS  - Blu-ray
@@ -61,35 +65,95 @@ namespace BDAutoMuxer
             progressLabel.Text = "";
             statusStripProgressBar.Visible = false;
 
+            InitToolTips();
+            InitAudioListView();
+            InitSubtitleListView();
+        }
+
+        private void InitToolTips()
+        {
             new ToolTip().SetToolTip(linkLabelAddLPCM, "Add one or more external LPCM audio tracks (.WAV files)");
             new ToolTip().SetToolTip(linkLabelClearLPCM, "Remove all external LPCM audio tracks");
 
             new ToolTip().SetToolTip(linkLabelAddSubtitles, "Add one or more external subtitle files (.sup, .idx/.sub, .srt)");
             new ToolTip().SetToolTip(linkLabelClearSubtitles, "Remove all external subtitles");
+        }
 
-//            objectListViewTracks.Columns["olvColumnTitle"].
+        private void InitAudioListView()
+        {
+            var tlist = new TypedObjectListView<MIAVSTrack>(objectListViewAudioTracks);
 
-            var tlist = new TypedObjectListView<MIAVSTrack>(objectListViewTracks);
-            
             tlist.BooleanCheckStateGetter = x => x.IsSelected;
             tlist.BooleanCheckStatePutter = (x, newValue) => x.IsSelected = newValue;
 
+            // Title
             tlist.GetColumn(0).AspectGetter = track => track.Title;
             tlist.GetColumn(0).AspectPutter = (track, value) => track.Title = value as string;
 
+            // Codec
             tlist.GetColumn(1).AspectGetter = track => track.Codec.ShortName;
 
+            // Channels
             tlist.GetColumn(2).AspectGetter = ResolutionGetter;
 
-            tlist.GetColumn(3).AspectGetter = track => "";
+            // Source
+            tlist.GetColumn(3).AspectGetter =
+                track =>
+                _inputM2TS != null && _inputM2TS.Tracks.Contains(track)
+                    ? "M2TS"
+                    : _inputMKV != null && _inputMKV.Tracks.Contains(track)
+                          ? "MKV"
+                          : _inputLPCM.SelectMany(info => info.Tracks).Contains(track)
+                                ? "LPCM"
+                                : _inputSubtitles.SelectMany(info => info.Tracks).Contains(track) ? "Subs" : "Unknown";
 
+            // Language
             tlist.GetColumn(4).AspectGetter = track => track.Language;
 
+            // Default
             tlist.GetColumn(5).AspectGetter = track => track.IsDefault;
             tlist.GetColumn(5).AspectPutter = (track, value) => track.IsDefault = value as bool?;
 
+            // Forced
             tlist.GetColumn(6).AspectGetter = track => track.IsForced;
             tlist.GetColumn(6).AspectPutter = (track, value) => track.IsForced = value as bool?;
+        }
+
+        private void InitSubtitleListView()
+        {
+            var tlist = new TypedObjectListView<MIAVSTrack>(objectListViewSubtitleTracks);
+
+            tlist.BooleanCheckStateGetter = x => x.IsSelected;
+            tlist.BooleanCheckStatePutter = (x, newValue) => x.IsSelected = newValue;
+
+            // Title
+            tlist.GetColumn(0).AspectGetter = track => track.Title;
+            tlist.GetColumn(0).AspectPutter = (track, value) => track.Title = value as string;
+
+            // Codec
+            tlist.GetColumn(1).AspectGetter = track => track.Codec.ShortName;
+
+            // Source
+            tlist.GetColumn(2).AspectGetter =
+                track =>
+                _inputM2TS != null && _inputM2TS.Tracks.Contains(track)
+                    ? "M2TS"
+                    : _inputMKV != null && _inputMKV.Tracks.Contains(track)
+                          ? "MKV"
+                          : _inputLPCM.SelectMany(info => info.Tracks).Contains(track)
+                                ? "LPCM"
+                                : _inputSubtitles.SelectMany(info => info.Tracks).Contains(track) ? "Subs" : "Unknown";
+
+            // Language
+            tlist.GetColumn(3).AspectGetter = track => track.Language;
+
+            // Default
+            tlist.GetColumn(4).AspectGetter = track => track.IsDefault;
+            tlist.GetColumn(4).AspectPutter = (track, value) => track.IsDefault = value as bool?;
+
+            // Forced
+            tlist.GetColumn(5).AspectGetter = track => track.IsForced;
+            tlist.GetColumn(5).AspectPutter = (track, value) => track.IsForced = value as bool?;
         }
 
         private static object ResolutionGetter(MIAVSTrack track)
@@ -170,6 +234,8 @@ namespace BDAutoMuxer
                 panelInputSubtitles.Controls.Add(linkLabelAddSubtitles);
                 panelInputSubtitles.Controls.Add(linkLabelEditSubtitles);
                 panelInputSubtitles.Controls.Add(linkLabelClearSubtitles);
+
+                _lastSubtitlePath = _inputSubtitles.Last().FilePaths.Last();
             }
             else
             {
@@ -502,20 +568,25 @@ namespace BDAutoMuxer
 
         private void PopulateTracks()
         {
-            var tracks = new List<MIAVSTrack>();
+            _audioTracks.Clear();
+            _subtitleTracks.Clear();
 
             if (_inputM2TS != null)
             {
-                tracks.AddRange(_inputM2TS.AudioTracks);
-                tracks.AddRange(_inputM2TS.SubtitleTracks);
+                _audioTracks.AddRange(_inputM2TS.AudioTracks);
+                _subtitleTracks.AddRange(_inputM2TS.SubtitleTracks);
             }
             if (_inputMKV != null)
             {
-                tracks.AddRange(_inputMKV.AudioTracks);
-                tracks.AddRange(_inputMKV.SubtitleTracks);
+                _audioTracks.AddRange(_inputMKV.AudioTracks);
+                _subtitleTracks.AddRange(_inputMKV.SubtitleTracks);
             }
 
-            objectListViewTracks.SetObjects(tracks);
+            _audioTracks.AddRange(_inputLPCM.SelectMany(info => info.AudioTracks));
+            _subtitleTracks.AddRange(_inputSubtitles.SelectMany(info => info.SubtitleTracks));
+
+            objectListViewAudioTracks.SetObjects(_audioTracks);
+            objectListViewSubtitleTracks.SetObjects(_subtitleTracks);
         }
 
         private void SetInputM2TS(string path)
