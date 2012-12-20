@@ -15,9 +15,6 @@ namespace BDAutoMuxer.models
     public class MediaInfo
     {
         public static readonly MIConfig Config = new MIConfig();
-
-        public static bool IsCorrectVersion { get { return Config.IsValid; } }
-
         private static readonly Regex TrackRegex = new Regex(@"<(Video|Audio|Subtitle|Chapter)Track>\s*(.*?)\s*</\1Track>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         private readonly string _mediaFilePath;
@@ -44,6 +41,8 @@ namespace BDAutoMuxer.models
             Config.CLIPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfo.exe");
             Config.CSVPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfoXML.csv");
         }
+
+        #region Testing
 
         public static void Test(string[] files = null)
         {
@@ -112,11 +111,7 @@ namespace BDAutoMuxer.models
 
             Console.WriteLine("Scanning {0} MPLS files...", mediaFilePaths.Length);
 
-            var startAll = DateTime.Now;
-
             var mediaInfos = mediaFilePaths.Select(filePath => new MediaInfo(filePath).Scan()).ToList();
-
-            var diffAll = DateTime.Now - startAll;
 
             var miVideoTracks = mediaInfos.SelectMany(mi => mi.VideoTracks).ToList();
             var miAudioTracks = mediaInfos.SelectMany(mi => mi.AudioTracks).ToList();
@@ -180,6 +175,8 @@ namespace BDAutoMuxer.models
             return correctExtension && !(isTrash || isHiddenUnix);
         }
 
+        #endregion
+
         public MediaInfo(string mediaFilePath)
         {
             _mediaFilePath = mediaFilePath;
@@ -196,7 +193,7 @@ namespace BDAutoMuxer.models
             if (FromFilename())
                 return this;
 
-            var xmlResult = RunProcess(new List<string>() { "--Full", "--Output=file://" + Config.CSVPath });
+            var xmlResult = RunProcess(new List<string> { "--Full", "--Output=file://" + Config.CSVPath });
             if (xmlResult.Exception != null) throw xmlResult.Exception;
             if (xmlResult.StdErr.Length > 0) throw new Exception(string.Format("MediaInfo XML exception: {0}", xmlResult.StdErr));
 
