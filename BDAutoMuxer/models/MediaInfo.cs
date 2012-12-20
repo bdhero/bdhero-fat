@@ -16,21 +16,25 @@ namespace BDAutoMuxer.models
     {
         public static readonly MIConfig Config = new MIConfig();
         private static readonly Regex TrackRegex = new Regex(@"<(Video|Audio|Subtitle|Chapter)Track>\s*(.*?)\s*</\1Track>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        private static readonly Regex NumberedPattern = new Regex(@"^(.+)\.(\d+)(\.wav)$", RegexOptions.IgnoreCase);
 
         private readonly string _mediaFilePath;
 
         public MIFile File;
         public MIContainer Container;
 
-        private readonly List<MITrack> _tracks = new List<MITrack>();
+        public bool IsNumbered { get { return _filePaths.Count > 1; } }
+        public string DisplayableFilename { get; private set; }
 
+        private readonly List<string> _filePaths = new List<string>();
+        private readonly List<MITrack> _tracks = new List<MITrack>();
         private readonly List<MIVideoTrack> _videoTracks = new List<MIVideoTrack>();
         private readonly List<MIAudioTrack> _audioTracks = new List<MIAudioTrack>();
         private readonly List<MISubtitleTrack> _subtitleTracks = new List<MISubtitleTrack>();
         private readonly List<MIChapterTrack> _chapterTracks = new List<MIChapterTrack>();
 
+        public IList<string> FilePaths { get { return _filePaths.AsReadOnly(); } }
         public IList<MITrack> Tracks { get { return _tracks.AsReadOnly(); } }
-
         public IList<MIVideoTrack> VideoTracks { get { return _videoTracks.AsReadOnly(); } }
         public IList<MIAudioTrack> AudioTracks { get { return _audioTracks.AsReadOnly(); } }
         public IList<MISubtitleTrack> SubtitleTracks { get { return _subtitleTracks.AsReadOnly(); } }
@@ -182,6 +186,32 @@ namespace BDAutoMuxer.models
             _mediaFilePath = mediaFilePath;
         }
 
+        private void GetFilePaths()
+        {
+            if (NumberedPattern.IsMatch(_mediaFilePath))
+            {
+                var match = NumberedPattern.Match(_mediaFilePath);
+                var partialPath = match.Groups[1].Value;
+                var extension = match.Groups[3].Value;
+
+                for (var i = 1; i < 100; i++)
+                {
+                    var path = string.Format("{0}.{1}{2}", partialPath, i, extension);
+                    if (System.IO.File.Exists(path))
+                        _filePaths.Add(path);
+                    else
+                        break;
+                }
+
+                DisplayableFilename = string.Format("{0}.{{1...{1}}}{2}", Path.GetFileName(partialPath), _filePaths.Count, extension);
+            }
+            else
+            {
+                _filePaths.Add(_mediaFilePath);
+                DisplayableFilename = Path.GetFileName(_mediaFilePath);
+            }
+        }
+
         public MediaInfo Scan()
         {
             if (!System.IO.File.Exists(_mediaFilePath))
@@ -190,26 +220,10 @@ namespace BDAutoMuxer.models
             var validationException = Config.ValidationException;
             if (validationException != null) throw validationException;
 
-            if (FromFilename())
-                return this;
+            if (!FromFilename())
+                ParseXml();
 
-            var xmlResult = RunProcess(new List<string> { "--Full", "--Output=file://" + Config.CSVPath });
-            if (xmlResult.Exception != null) throw xmlResult.Exception;
-            if (xmlResult.StdErr.Length > 0) throw new Exception(string.Format("MediaInfo XML exception: {0}", xmlResult.StdErr));
-
-            if (!xmlResult.StdOut.StartsWith("<?xml"))
-                throw new Exception(string.Format("Expecting XML output; instead found \"{0}\"", xmlResult.StdOut));
-
-            ParseXml(xmlResult.StdOut);
-
-            if (_chapterTracks.Any())
-            {
-                var txtResult = RunProcess();
-                if (txtResult.Exception != null) throw txtResult.Exception;
-                if (txtResult.StdErr.Length > 0) throw new Exception(string.Format("MediaInfo TXT exception: {0}", txtResult.StdErr));
-
-                ParseTxt(txtResult.StdOut);
-            }
+            GetFilePaths();
 
             return this;
         }
@@ -283,6 +297,29 @@ namespace BDAutoMuxer.models
             }
 
             return new MIProcessResult(stdout.ToString(), stderr.ToString(), exception);
+        }
+
+        private void ParseXml()
+        {
+            var xmlResult = RunProcess(new List<string> {"--Full", "--Output=file://" + Config.CSVPath});
+            if (xmlResult.Exception != null) throw xmlResult.Exception;
+            if (xmlResult.StdErr.Length > 0)
+                throw new Exception(string.Format("MediaInfo XML exception: {0}", xmlResult.StdErr));
+
+            if (!xmlResult.StdOut.StartsWith("<?xml"))
+                throw new Exception(string.Format("Expecting XML output; instead found \"{0}\"", xmlResult.StdOut));
+
+            ParseXml(xmlResult.StdOut);
+
+            if (_chapterTracks.Any())
+            {
+                var txtResult = RunProcess();
+                if (txtResult.Exception != null) throw txtResult.Exception;
+                if (txtResult.StdErr.Length > 0)
+                    throw new Exception(string.Format("MediaInfo TXT exception: {0}", txtResult.StdErr));
+
+                ParseTxt(txtResult.StdOut);
+            }
         }
 
         private void ParseXml(string xml)
