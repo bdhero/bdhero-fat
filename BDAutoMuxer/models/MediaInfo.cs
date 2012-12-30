@@ -802,6 +802,11 @@ namespace BDAutoMuxer.models
             return this;
         }
 
+        protected virtual string GetDefaultTitle()
+        {
+            return Codec.CommonName;
+        }
+
         protected static MICodec GetCodec(MIAVSTrack track)
         {
             var format = track.Format;
@@ -904,6 +909,9 @@ namespace BDAutoMuxer.models
 
         public string FilePath { get; protected set; }
 
+        /// <summary>
+        /// "1080p", "1080i", "720p", "720i", "480p"
+        /// </summary>
         public string DisplayResolution
         {
             get
@@ -948,7 +956,14 @@ namespace BDAutoMuxer.models
             Chroma = XmlUtil.GetString(xml, "Chroma");
             ScanType = XmlUtil.GetString(xml, "ScanType");
 
+            Title = OldTitle = GetDefaultTitle();
+
             return this;
+        }
+
+        protected override string GetDefaultTitle()
+        {
+            return string.Format("{0} {1}", DisplayResolution, base.GetDefaultTitle());
         }
     }
 
@@ -971,7 +986,7 @@ namespace BDAutoMuxer.models
         /// </summary>
         public double Channels
         {
-            get { return ChannelPositions.Split('/').Sum(s => Double.Parse(s)); }
+            get { return ChannelPositions != null ? ChannelPositions.Split('/').Sum(s => Double.Parse(s)) : -1; }
         }
 
         /// <summary>
@@ -1023,7 +1038,14 @@ namespace BDAutoMuxer.models
             SamplingRateString = XmlUtil.GetString(xml, "SamplingRateString");
             SampleCount = XmlUtil.GetLong(xml, "SampleCount");
 
+            Title = OldTitle = GetDefaultTitle();
+
             return this;
+        }
+
+        protected override string GetDefaultTitle()
+        {
+            return string.Format("{0} ({1} ch)", base.GetDefaultTitle(), Channels.ToString("0.0"));
         }
     }
 
@@ -1050,6 +1072,8 @@ namespace BDAutoMuxer.models
 
             Width = XmlUtil.GetIntNullable(xml, "Width");
             Height = XmlUtil.GetIntNullable(xml, "Height");
+
+            Title = OldTitle = GetDefaultTitle();
 
             return this;
         }
