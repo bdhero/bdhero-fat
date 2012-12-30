@@ -117,6 +117,8 @@ namespace BDAutoMuxer
             // Forced
             tlist.GetColumn(6).AspectGetter = track => track.IsForced;
             tlist.GetColumn(6).AspectPutter = (track, value) => track.IsForced = value as bool?;
+
+            objectListViewAudioTracks_SelectedIndexChanged();
         }
 
         private void InitSubtitleListView()
@@ -154,6 +156,8 @@ namespace BDAutoMuxer
             // Forced
             tlist.GetColumn(5).AspectGetter = track => track.IsForced;
             tlist.GetColumn(5).AspectPutter = (track, value) => track.IsForced = value as bool?;
+
+            objectListViewSubtitleTracks_SelectedIndexChanged();
         }
 
         private static object ResolutionGetter(MIAVSTrack track)
@@ -750,6 +754,60 @@ namespace BDAutoMuxer
 
                 CancelRemux();
             }
+        }
+
+        #endregion
+
+        #region ObjectListView track moving
+
+        private void objectListViewAudioTracks_SelectedIndexChanged(object sender = null, EventArgs e = null)
+        {
+            ListViewSelectedIndexChanged(objectListViewAudioTracks, buttonMoveUpAudio, buttonMoveDownAudio);
+        }
+
+        private void objectListViewSubtitleTracks_SelectedIndexChanged(object sender = null, EventArgs e = null)
+        {
+            ListViewSelectedIndexChanged(objectListViewSubtitleTracks, buttonMoveUpSubtitles, buttonMoveDownSubtitles);
+        }
+
+        private void ListViewSelectedIndexChanged(ObjectListView listView, Button upButton, Button downButton)
+        {
+            var hasSelection = listView.SelectedIndices.Count > 0;
+            var selectedIndex = listView.SelectedIndex;
+            var itemCount = listView.GetItemCount();
+
+            upButton.Enabled = hasSelection && selectedIndex > 0;
+            downButton.Enabled = hasSelection && selectedIndex < itemCount - 1;
+        }
+
+        private void buttonMoveUpAudio_Click(object sender, EventArgs e)
+        {
+            MoveTrack(objectListViewAudioTracks, -1, 0);
+        }
+
+        private void buttonMoveDownAudio_Click(object sender, EventArgs e)
+        {
+            MoveTrack(objectListViewAudioTracks, +2, -1);
+        }
+
+        private void buttonMoveUpSubtitles_Click(object sender, EventArgs e)
+        {
+            MoveTrack(objectListViewSubtitleTracks, -1, 0);
+        }
+
+        private void buttonMoveDownSubtitles_Click(object sender, EventArgs e)
+        {
+            MoveTrack(objectListViewSubtitleTracks, +2, -1);
+        }
+
+        private static void MoveTrack(ObjectListView listView, int positionDelta, int selectionDelta)
+        {
+            var selectedIndex = listView.SelectedIndex;
+            var selectedObjects = listView.SelectedObjects;
+            var newIndex = selectedIndex + positionDelta;
+            listView.MoveObjects(newIndex, selectedObjects);
+            listView.SelectedIndex = newIndex + selectionDelta;
+            listView.Focus();
         }
 
         #endregion

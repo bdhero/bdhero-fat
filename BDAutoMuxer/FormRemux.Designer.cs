@@ -516,6 +516,7 @@
             this.buttonMoveDownAudio.TabIndex = 2;
             this.buttonMoveDownAudio.Text = "Move Down";
             this.buttonMoveDownAudio.UseVisualStyleBackColor = true;
+            this.buttonMoveDownAudio.Click += new System.EventHandler(this.buttonMoveDownAudio_Click);
             // 
             // buttonMoveUpAudio
             // 
@@ -526,6 +527,7 @@
             this.buttonMoveUpAudio.TabIndex = 1;
             this.buttonMoveUpAudio.Text = "Move Up";
             this.buttonMoveUpAudio.UseVisualStyleBackColor = true;
+            this.buttonMoveUpAudio.Click += new System.EventHandler(this.buttonMoveUpAudio_Click);
             // 
             // objectListViewAudioTracks
             // 
@@ -568,6 +570,7 @@
             this.objectListViewAudioTracks.UseExplorerTheme = true;
             this.objectListViewAudioTracks.UseSubItemCheckBoxes = true;
             this.objectListViewAudioTracks.View = System.Windows.Forms.View.Details;
+            this.objectListViewAudioTracks.SelectedIndexChanged += new System.EventHandler(this.objectListViewAudioTracks_SelectedIndexChanged);
             // 
             // audioTitle
             // 
@@ -644,6 +647,7 @@
             this.buttonMoveDownSubtitles.TabIndex = 2;
             this.buttonMoveDownSubtitles.Text = "Move Down";
             this.buttonMoveDownSubtitles.UseVisualStyleBackColor = true;
+            this.buttonMoveDownSubtitles.Click += new System.EventHandler(this.buttonMoveDownSubtitles_Click);
             // 
             // buttonMoveUpSubtitles
             // 
@@ -654,6 +658,7 @@
             this.buttonMoveUpSubtitles.TabIndex = 1;
             this.buttonMoveUpSubtitles.Text = "Move Up";
             this.buttonMoveUpSubtitles.UseVisualStyleBackColor = true;
+            this.buttonMoveUpSubtitles.Click += new System.EventHandler(this.buttonMoveUpSubtitles_Click);
             // 
             // objectListViewSubtitleTracks
             // 
@@ -693,6 +698,7 @@
             this.objectListViewSubtitleTracks.UseExplorerTheme = true;
             this.objectListViewSubtitleTracks.UseSubItemCheckBoxes = true;
             this.objectListViewSubtitleTracks.View = System.Windows.Forms.View.Details;
+            this.objectListViewSubtitleTracks.SelectedIndexChanged += new System.EventHandler(this.objectListViewSubtitleTracks_SelectedIndexChanged);
             // 
             // subtitleTitle
             // 
