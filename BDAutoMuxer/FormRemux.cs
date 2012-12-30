@@ -163,7 +163,7 @@ namespace BDAutoMuxer
             if (videoTrack != null)
                 return videoTrack.DisplayResolution;
             if (audioTrack != null)
-                return audioTrack.Channels;
+                return audioTrack.Channels.ToString("0.0");
             return null;
         }
 
