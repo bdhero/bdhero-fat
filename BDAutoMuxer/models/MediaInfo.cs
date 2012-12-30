@@ -960,7 +960,23 @@ namespace BDAutoMuxer.models
         public string BitRateMode { get; protected set; }
         public string BitRateModeString { get; protected set; }
 
-        public double Channels { get; protected set; }
+        /// <summary>
+        /// Integer value reported by MediaInfo as "Channels" (8 = 7.1, 6 = 5.1, etc.)
+        /// </summary>
+        public int ChannelsInt { get; protected set; }
+
+        /// <summary>
+        /// Decimal value calculated from ChannelPositions.
+        /// 8.1, 7.1, 5.1, 2.1, 2.0, etc.
+        /// </summary>
+        public double Channels
+        {
+            get { return ChannelPositions.Split('/').Sum(s => Double.Parse(s)); }
+        }
+
+        /// <summary>
+        /// E.G., "6 channels"
+        /// </summary>
         public string ChannelsString { get; protected set; }
 
         /// <summary>
@@ -997,7 +1013,7 @@ namespace BDAutoMuxer.models
             BitRateMode = XmlUtil.GetString(xml, "BitRateMode");
             BitRateModeString = XmlUtil.GetString(xml, "BitRateModeString");
 
-            Channels = XmlUtil.GetDouble(xml, "Channels");
+            ChannelsInt = XmlUtil.GetInt(xml, "Channels");
             ChannelsString = XmlUtil.GetString(xml, "ChannelsString");
 
             ChannelPositions = XmlUtil.GetString(xml, "ChannelPositions");
