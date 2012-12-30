@@ -91,7 +91,7 @@ namespace BDAutoMuxer
             tlist.GetColumn(0).AspectPutter = (track, value) => track.Title = value as string;
 
             // Codec
-            tlist.GetColumn(1).AspectGetter = track => track.Codec.ShortName;
+            tlist.GetColumn(1).AspectGetter = track => track.Codec.FullName;
 
             // Channels
             tlist.GetColumn(2).AspectGetter = ResolutionGetter;
@@ -131,7 +131,7 @@ namespace BDAutoMuxer
             tlist.GetColumn(0).AspectPutter = (track, value) => track.Title = value as string;
 
             // Codec
-            tlist.GetColumn(1).AspectGetter = track => track.Codec.ShortName;
+            tlist.GetColumn(1).AspectGetter = track => track.Codec.FullName;
 
             // Source
             tlist.GetColumn(2).AspectGetter =
