@@ -747,8 +747,8 @@ namespace BDAutoMuxer.models
 
             Title = OldTitle = XmlUtil.GetString(xml, "Title");
             Language = OldLanguage = Language.GetLanguage(XmlUtil.GetString(xml, "LanguageIso2"));
-            IsDefault = OldIsDefault = XmlUtil.GetBitFlag(xml, "Default");
-            IsForced = OldIsForced = XmlUtil.GetBitFlag(xml, "Forced");
+            IsDefault = OldIsDefault = XmlUtil.GetBitFlag(xml, "Default") ?? false;
+            IsForced = OldIsForced = XmlUtil.GetBitFlag(xml, "Forced") ?? false;
 
             return this;
         }
