@@ -48,19 +48,19 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panelInputSubtitles = new System.Windows.Forms.FlowLayoutPanel();
             this.labelInputSubtitlesNone = new System.Windows.Forms.Label();
+            this.linkLabelAddSubtitles = new BDAutoMuxer.views.LinkLabel2();
+            this.linkLabelEditSubtitles = new BDAutoMuxer.views.LinkLabel2();
+            this.linkLabelClearSubtitles = new BDAutoMuxer.views.LinkLabel2();
             this.panelInputLPCM = new System.Windows.Forms.FlowLayoutPanel();
             this.labelInputLPCMNone = new System.Windows.Forms.Label();
+            this.linkLabelAddLPCM = new BDAutoMuxer.views.LinkLabel2();
+            this.linkLabelEditLPCM = new BDAutoMuxer.views.LinkLabel2();
+            this.linkLabelClearLPCM = new BDAutoMuxer.views.LinkLabel2();
             this.panelInputMkvAudio = new System.Windows.Forms.FlowLayoutPanel();
             this.labelInputMkvAudioNone = new System.Windows.Forms.Label();
             this.panelInputM2tsAudio = new System.Windows.Forms.FlowLayoutPanel();
             this.labelInputM2tsAudioNone = new System.Windows.Forms.Label();
             this.groupBoxOutput = new System.Windows.Forms.GroupBox();
-            this.linkLabelAddSubtitles = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelEditSubtitles = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelClearSubtitles = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelAddLPCM = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelEditLPCM = new BDAutoMuxer.views.LinkLabel2();
-            this.linkLabelClearLPCM = new BDAutoMuxer.views.LinkLabel2();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonOutputMkvBrowse = new System.Windows.Forms.Button();
             this.textBoxOutputMkv = new System.Windows.Forms.TextBox();
@@ -322,6 +322,42 @@
             this.labelInputSubtitlesNone.TabIndex = 2;
             this.labelInputSubtitlesNone.Text = "(none)";
             // 
+            // linkLabelAddSubtitles
+            // 
+            this.linkLabelAddSubtitles.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelAddSubtitles.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelAddSubtitles.Location = new System.Drawing.Point(46, 3);
+            this.linkLabelAddSubtitles.Name = "linkLabelAddSubtitles";
+            this.linkLabelAddSubtitles.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelAddSubtitles.Size = new System.Drawing.Size(26, 14);
+            this.linkLabelAddSubtitles.TabIndex = 0;
+            this.linkLabelAddSubtitles.Text = "add";
+            this.linkLabelAddSubtitles.Click += new System.EventHandler(this.linkLabelAddSubtitles_Click);
+            // 
+            // linkLabelEditSubtitles
+            // 
+            this.linkLabelEditSubtitles.Enabled = false;
+            this.linkLabelEditSubtitles.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelEditSubtitles.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelEditSubtitles.Location = new System.Drawing.Point(78, 3);
+            this.linkLabelEditSubtitles.Name = "linkLabelEditSubtitles";
+            this.linkLabelEditSubtitles.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelEditSubtitles.Size = new System.Drawing.Size(25, 14);
+            this.linkLabelEditSubtitles.TabIndex = 1;
+            this.linkLabelEditSubtitles.Text = "edit";
+            // 
+            // linkLabelClearSubtitles
+            // 
+            this.linkLabelClearSubtitles.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelClearSubtitles.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelClearSubtitles.Location = new System.Drawing.Point(109, 3);
+            this.linkLabelClearSubtitles.Name = "linkLabelClearSubtitles";
+            this.linkLabelClearSubtitles.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelClearSubtitles.Size = new System.Drawing.Size(31, 14);
+            this.linkLabelClearSubtitles.TabIndex = 2;
+            this.linkLabelClearSubtitles.Text = "clear";
+            this.linkLabelClearSubtitles.Click += new System.EventHandler(this.linkLabelClearSubtitles_Click);
+            // 
             // panelInputLPCM
             // 
             this.panelInputLPCM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -344,6 +380,42 @@
             this.labelInputLPCMNone.Size = new System.Drawing.Size(37, 13);
             this.labelInputLPCMNone.TabIndex = 2;
             this.labelInputLPCMNone.Text = "(none)";
+            // 
+            // linkLabelAddLPCM
+            // 
+            this.linkLabelAddLPCM.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelAddLPCM.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelAddLPCM.Location = new System.Drawing.Point(46, 3);
+            this.linkLabelAddLPCM.Name = "linkLabelAddLPCM";
+            this.linkLabelAddLPCM.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelAddLPCM.Size = new System.Drawing.Size(26, 14);
+            this.linkLabelAddLPCM.TabIndex = 0;
+            this.linkLabelAddLPCM.Text = "add";
+            this.linkLabelAddLPCM.Click += new System.EventHandler(this.linkLabelAddLPCM_Click);
+            // 
+            // linkLabelEditLPCM
+            // 
+            this.linkLabelEditLPCM.Enabled = false;
+            this.linkLabelEditLPCM.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelEditLPCM.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelEditLPCM.Location = new System.Drawing.Point(78, 3);
+            this.linkLabelEditLPCM.Name = "linkLabelEditLPCM";
+            this.linkLabelEditLPCM.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelEditLPCM.Size = new System.Drawing.Size(25, 14);
+            this.linkLabelEditLPCM.TabIndex = 1;
+            this.linkLabelEditLPCM.Text = "edit";
+            // 
+            // linkLabelClearLPCM
+            // 
+            this.linkLabelClearLPCM.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelClearLPCM.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelClearLPCM.Location = new System.Drawing.Point(109, 3);
+            this.linkLabelClearLPCM.Name = "linkLabelClearLPCM";
+            this.linkLabelClearLPCM.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelClearLPCM.Size = new System.Drawing.Size(31, 14);
+            this.linkLabelClearLPCM.TabIndex = 2;
+            this.linkLabelClearLPCM.Text = "clear";
+            this.linkLabelClearLPCM.Click += new System.EventHandler(this.linkLabelClearLPCM_Click);
             // 
             // panelInputMkvAudio
             // 
@@ -402,78 +474,6 @@
             this.groupBoxOutput.TabIndex = 1;
             this.groupBoxOutput.TabStop = false;
             this.groupBoxOutput.Text = "Output";
-            // 
-            // linkLabelAddSubtitles
-            // 
-            this.linkLabelAddSubtitles.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelAddSubtitles.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelAddSubtitles.Location = new System.Drawing.Point(46, 3);
-            this.linkLabelAddSubtitles.Name = "linkLabelAddSubtitles";
-            this.linkLabelAddSubtitles.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelAddSubtitles.Size = new System.Drawing.Size(26, 14);
-            this.linkLabelAddSubtitles.TabIndex = 0;
-            this.linkLabelAddSubtitles.Text = "add";
-            this.linkLabelAddSubtitles.Click += new System.EventHandler(this.linkLabelAddSubtitles_Click);
-            // 
-            // linkLabelEditSubtitles
-            // 
-            this.linkLabelEditSubtitles.Enabled = false;
-            this.linkLabelEditSubtitles.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelEditSubtitles.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelEditSubtitles.Location = new System.Drawing.Point(78, 3);
-            this.linkLabelEditSubtitles.Name = "linkLabelEditSubtitles";
-            this.linkLabelEditSubtitles.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelEditSubtitles.Size = new System.Drawing.Size(25, 14);
-            this.linkLabelEditSubtitles.TabIndex = 1;
-            this.linkLabelEditSubtitles.Text = "edit";
-            // 
-            // linkLabelClearSubtitles
-            // 
-            this.linkLabelClearSubtitles.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelClearSubtitles.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelClearSubtitles.Location = new System.Drawing.Point(109, 3);
-            this.linkLabelClearSubtitles.Name = "linkLabelClearSubtitles";
-            this.linkLabelClearSubtitles.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelClearSubtitles.Size = new System.Drawing.Size(31, 14);
-            this.linkLabelClearSubtitles.TabIndex = 2;
-            this.linkLabelClearSubtitles.Text = "clear";
-            this.linkLabelClearSubtitles.Click += new System.EventHandler(this.linkLabelClearSubtitles_Click);
-            // 
-            // linkLabelAddLPCM
-            // 
-            this.linkLabelAddLPCM.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelAddLPCM.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelAddLPCM.Location = new System.Drawing.Point(46, 3);
-            this.linkLabelAddLPCM.Name = "linkLabelAddLPCM";
-            this.linkLabelAddLPCM.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelAddLPCM.Size = new System.Drawing.Size(26, 14);
-            this.linkLabelAddLPCM.TabIndex = 0;
-            this.linkLabelAddLPCM.Text = "add";
-            this.linkLabelAddLPCM.Click += new System.EventHandler(this.linkLabelAddLPCM_Click);
-            // 
-            // linkLabelEditLPCM
-            // 
-            this.linkLabelEditLPCM.Enabled = false;
-            this.linkLabelEditLPCM.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelEditLPCM.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelEditLPCM.Location = new System.Drawing.Point(78, 3);
-            this.linkLabelEditLPCM.Name = "linkLabelEditLPCM";
-            this.linkLabelEditLPCM.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelEditLPCM.Size = new System.Drawing.Size(25, 14);
-            this.linkLabelEditLPCM.TabIndex = 1;
-            this.linkLabelEditLPCM.Text = "edit";
-            // 
-            // linkLabelClearLPCM
-            // 
-            this.linkLabelClearLPCM.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelClearLPCM.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelClearLPCM.Location = new System.Drawing.Point(109, 3);
-            this.linkLabelClearLPCM.Name = "linkLabelClearLPCM";
-            this.linkLabelClearLPCM.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelClearLPCM.Size = new System.Drawing.Size(31, 14);
-            this.linkLabelClearLPCM.TabIndex = 2;
-            this.linkLabelClearLPCM.Text = "clear";
-            this.linkLabelClearLPCM.Click += new System.EventHandler(this.linkLabelClearLPCM_Click);
             // 
             // panel1
             // 
@@ -581,6 +581,7 @@
             // 
             // objectListViewAudioTracks
             // 
+            this.objectListViewAudioTracks.Activation = System.Windows.Forms.ItemActivation.OneClick;
             this.objectListViewAudioTracks.AllColumns.Add(this.audioTitle);
             this.objectListViewAudioTracks.AllColumns.Add(this.audioCodec);
             this.objectListViewAudioTracks.AllColumns.Add(this.audioChannels);
@@ -799,9 +800,9 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(0, 3);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(69, 13);
+            this.label10.Size = new System.Drawing.Size(81, 13);
             this.label10.TabIndex = 32;
-            this.label10.Text = "Select audio:";
+            this.label10.Text = "Select subtitles:";
             // 
             // comboBoxKeepSubtitlesFrom
             // 
