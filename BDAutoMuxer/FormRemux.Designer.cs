@@ -59,10 +59,18 @@
             this.buttonOutputMkvBrowse = new System.Windows.Forms.Button();
             this.textBoxOutputMkv = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.comboBoxKeepAudioFrom = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.comboBoxKeepSubtitlesFrom = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.panelKeepAudioFrom = new System.Windows.Forms.FlowLayoutPanel();
+            this.panelKeepSubtitlesFrom = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelKeepAudioFromNone = new System.Windows.Forms.Label();
+            this.labelKeepSubtitlesFromNone = new System.Windows.Forms.Label();
+            this.checkBoxKeepAudioFromM2TS = new System.Windows.Forms.CheckBox();
+            this.checkBoxKeepAudioFromMKV = new System.Windows.Forms.CheckBox();
+            this.checkBoxKeepAudioFromLPCM = new System.Windows.Forms.CheckBox();
+            this.checkBoxKeepSubtitlesFromM2TS = new System.Windows.Forms.CheckBox();
+            this.checkBoxKeepSubtitlesFromMKV = new System.Windows.Forms.CheckBox();
+            this.checkBoxKeepSubtitlesFromExternal = new System.Windows.Forms.CheckBox();
             this.splitContainerTracks = new BDAutoMuxer.views.SplitContainerWithDivider();
             this.buttonMoveDownAudio = new System.Windows.Forms.Button();
             this.buttonMoveUpAudio = new System.Windows.Forms.Button();
@@ -99,6 +107,8 @@
             this.panelInputM2tsAudio.SuspendLayout();
             this.groupBoxOutput.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panelKeepAudioFrom.SuspendLayout();
+            this.panelKeepSubtitlesFrom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTracks)).BeginInit();
             this.splitContainerTracks.Panel1.SuspendLayout();
             this.splitContainerTracks.Panel2.SuspendLayout();
@@ -390,11 +400,11 @@
             this.groupBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxOutput.Controls.Add(this.panelKeepSubtitlesFrom);
+            this.groupBoxOutput.Controls.Add(this.panelKeepAudioFrom);
             this.groupBoxOutput.Controls.Add(this.panel1);
-            this.groupBoxOutput.Controls.Add(this.comboBoxKeepAudioFrom);
             this.groupBoxOutput.Controls.Add(this.label4);
             this.groupBoxOutput.Controls.Add(this.splitContainerTracks);
-            this.groupBoxOutput.Controls.Add(this.comboBoxKeepSubtitlesFrom);
             this.groupBoxOutput.Controls.Add(this.label6);
             this.groupBoxOutput.Location = new System.Drawing.Point(12, 229);
             this.groupBoxOutput.Name = "groupBoxOutput";
@@ -445,15 +455,6 @@
             this.label5.TabIndex = 14;
             this.label5.Text = "Output file:";
             // 
-            // comboBoxKeepAudioFrom
-            // 
-            this.comboBoxKeepAudioFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxKeepAudioFrom.FormattingEnabled = true;
-            this.comboBoxKeepAudioFrom.Location = new System.Drawing.Point(124, 19);
-            this.comboBoxKeepAudioFrom.Name = "comboBoxKeepAudioFrom";
-            this.comboBoxKeepAudioFrom.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxKeepAudioFrom.TabIndex = 0;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -463,15 +464,6 @@
             this.label4.TabIndex = 26;
             this.label4.Text = "Keep audio from:";
             // 
-            // comboBoxKeepSubtitlesFrom
-            // 
-            this.comboBoxKeepSubtitlesFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxKeepSubtitlesFrom.FormattingEnabled = true;
-            this.comboBoxKeepSubtitlesFrom.Location = new System.Drawing.Point(124, 46);
-            this.comboBoxKeepSubtitlesFrom.Name = "comboBoxKeepSubtitlesFrom";
-            this.comboBoxKeepSubtitlesFrom.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxKeepSubtitlesFrom.TabIndex = 1;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -480,6 +472,124 @@
             this.label6.Size = new System.Drawing.Size(99, 13);
             this.label6.TabIndex = 27;
             this.label6.Text = "Keep subtitles from:";
+            // 
+            // panelKeepAudioFrom
+            // 
+            this.panelKeepAudioFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelKeepAudioFrom.Controls.Add(this.labelKeepAudioFromNone);
+            this.panelKeepAudioFrom.Controls.Add(this.checkBoxKeepAudioFromM2TS);
+            this.panelKeepAudioFrom.Controls.Add(this.checkBoxKeepAudioFromMKV);
+            this.panelKeepAudioFrom.Controls.Add(this.checkBoxKeepAudioFromLPCM);
+            this.panelKeepAudioFrom.Location = new System.Drawing.Point(124, 19);
+            this.panelKeepAudioFrom.Name = "panelKeepAudioFrom";
+            this.panelKeepAudioFrom.Size = new System.Drawing.Size(641, 20);
+            this.panelKeepAudioFrom.TabIndex = 0;
+            // 
+            // panelKeepSubtitlesFrom
+            // 
+            this.panelKeepSubtitlesFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelKeepSubtitlesFrom.Controls.Add(this.labelKeepSubtitlesFromNone);
+            this.panelKeepSubtitlesFrom.Controls.Add(this.checkBoxKeepSubtitlesFromM2TS);
+            this.panelKeepSubtitlesFrom.Controls.Add(this.checkBoxKeepSubtitlesFromMKV);
+            this.panelKeepSubtitlesFrom.Controls.Add(this.checkBoxKeepSubtitlesFromExternal);
+            this.panelKeepSubtitlesFrom.Location = new System.Drawing.Point(124, 45);
+            this.panelKeepSubtitlesFrom.Name = "panelKeepSubtitlesFrom";
+            this.panelKeepSubtitlesFrom.Size = new System.Drawing.Size(641, 20);
+            this.panelKeepSubtitlesFrom.TabIndex = 1;
+            // 
+            // labelKeepAudioFromNone
+            // 
+            this.labelKeepAudioFromNone.AutoSize = true;
+            this.labelKeepAudioFromNone.Location = new System.Drawing.Point(3, 3);
+            this.labelKeepAudioFromNone.Margin = new System.Windows.Forms.Padding(3);
+            this.labelKeepAudioFromNone.Name = "labelKeepAudioFromNone";
+            this.labelKeepAudioFromNone.Size = new System.Drawing.Size(37, 13);
+            this.labelKeepAudioFromNone.TabIndex = 3;
+            this.labelKeepAudioFromNone.Text = "(none)";
+            // 
+            // labelKeepSubtitlesFromNone
+            // 
+            this.labelKeepSubtitlesFromNone.AutoSize = true;
+            this.labelKeepSubtitlesFromNone.Location = new System.Drawing.Point(3, 3);
+            this.labelKeepSubtitlesFromNone.Margin = new System.Windows.Forms.Padding(3);
+            this.labelKeepSubtitlesFromNone.Name = "labelKeepSubtitlesFromNone";
+            this.labelKeepSubtitlesFromNone.Size = new System.Drawing.Size(37, 13);
+            this.labelKeepSubtitlesFromNone.TabIndex = 3;
+            this.labelKeepSubtitlesFromNone.Text = "(none)";
+            // 
+            // checkBoxKeepAudioFromM2TS
+            // 
+            this.checkBoxKeepAudioFromM2TS.AutoSize = true;
+            this.checkBoxKeepAudioFromM2TS.Checked = true;
+            this.checkBoxKeepAudioFromM2TS.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxKeepAudioFromM2TS.Location = new System.Drawing.Point(46, 3);
+            this.checkBoxKeepAudioFromM2TS.Name = "checkBoxKeepAudioFromM2TS";
+            this.checkBoxKeepAudioFromM2TS.Size = new System.Drawing.Size(55, 17);
+            this.checkBoxKeepAudioFromM2TS.TabIndex = 0;
+            this.checkBoxKeepAudioFromM2TS.Text = "M2TS";
+            this.checkBoxKeepAudioFromM2TS.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxKeepAudioFromMKV
+            // 
+            this.checkBoxKeepAudioFromMKV.AutoSize = true;
+            this.checkBoxKeepAudioFromMKV.Checked = true;
+            this.checkBoxKeepAudioFromMKV.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxKeepAudioFromMKV.Location = new System.Drawing.Point(107, 3);
+            this.checkBoxKeepAudioFromMKV.Name = "checkBoxKeepAudioFromMKV";
+            this.checkBoxKeepAudioFromMKV.Size = new System.Drawing.Size(49, 17);
+            this.checkBoxKeepAudioFromMKV.TabIndex = 1;
+            this.checkBoxKeepAudioFromMKV.Text = "MKV";
+            this.checkBoxKeepAudioFromMKV.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxKeepAudioFromLPCM
+            // 
+            this.checkBoxKeepAudioFromLPCM.AutoSize = true;
+            this.checkBoxKeepAudioFromLPCM.Checked = true;
+            this.checkBoxKeepAudioFromLPCM.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxKeepAudioFromLPCM.Location = new System.Drawing.Point(162, 3);
+            this.checkBoxKeepAudioFromLPCM.Name = "checkBoxKeepAudioFromLPCM";
+            this.checkBoxKeepAudioFromLPCM.Size = new System.Drawing.Size(55, 17);
+            this.checkBoxKeepAudioFromLPCM.TabIndex = 2;
+            this.checkBoxKeepAudioFromLPCM.Text = "LPCM";
+            this.checkBoxKeepAudioFromLPCM.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxKeepSubtitlesFromM2TS
+            // 
+            this.checkBoxKeepSubtitlesFromM2TS.AutoSize = true;
+            this.checkBoxKeepSubtitlesFromM2TS.Checked = true;
+            this.checkBoxKeepSubtitlesFromM2TS.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxKeepSubtitlesFromM2TS.Location = new System.Drawing.Point(46, 3);
+            this.checkBoxKeepSubtitlesFromM2TS.Name = "checkBoxKeepSubtitlesFromM2TS";
+            this.checkBoxKeepSubtitlesFromM2TS.Size = new System.Drawing.Size(55, 17);
+            this.checkBoxKeepSubtitlesFromM2TS.TabIndex = 0;
+            this.checkBoxKeepSubtitlesFromM2TS.Text = "M2TS";
+            this.checkBoxKeepSubtitlesFromM2TS.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxKeepSubtitlesFromMKV
+            // 
+            this.checkBoxKeepSubtitlesFromMKV.AutoSize = true;
+            this.checkBoxKeepSubtitlesFromMKV.Checked = true;
+            this.checkBoxKeepSubtitlesFromMKV.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxKeepSubtitlesFromMKV.Location = new System.Drawing.Point(107, 3);
+            this.checkBoxKeepSubtitlesFromMKV.Name = "checkBoxKeepSubtitlesFromMKV";
+            this.checkBoxKeepSubtitlesFromMKV.Size = new System.Drawing.Size(49, 17);
+            this.checkBoxKeepSubtitlesFromMKV.TabIndex = 1;
+            this.checkBoxKeepSubtitlesFromMKV.Text = "MKV";
+            this.checkBoxKeepSubtitlesFromMKV.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxKeepSubtitlesFromExternal
+            // 
+            this.checkBoxKeepSubtitlesFromExternal.AutoSize = true;
+            this.checkBoxKeepSubtitlesFromExternal.Checked = true;
+            this.checkBoxKeepSubtitlesFromExternal.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxKeepSubtitlesFromExternal.Location = new System.Drawing.Point(162, 3);
+            this.checkBoxKeepSubtitlesFromExternal.Name = "checkBoxKeepSubtitlesFromExternal";
+            this.checkBoxKeepSubtitlesFromExternal.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxKeepSubtitlesFromExternal.TabIndex = 2;
+            this.checkBoxKeepSubtitlesFromExternal.Text = "External";
+            this.checkBoxKeepSubtitlesFromExternal.UseVisualStyleBackColor = true;
             // 
             // splitContainerTracks
             // 
@@ -714,7 +824,7 @@
             this.subtitleCodec.Groupable = false;
             this.subtitleCodec.IsEditable = false;
             this.subtitleCodec.Text = "Codec";
-            this.subtitleCodec.Width = 140;
+            this.subtitleCodec.Width = 211;
             // 
             // subtitleSource
             // 
@@ -865,6 +975,10 @@
             this.groupBoxOutput.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panelKeepAudioFrom.ResumeLayout(false);
+            this.panelKeepAudioFrom.PerformLayout();
+            this.panelKeepSubtitlesFrom.ResumeLayout(false);
+            this.panelKeepSubtitlesFrom.PerformLayout();
             this.splitContainerTracks.Panel1.ResumeLayout(false);
             this.splitContainerTracks.Panel1.PerformLayout();
             this.splitContainerTracks.Panel2.ResumeLayout(false);
@@ -917,7 +1031,6 @@
         private System.Windows.Forms.Button buttonOutputMkvBrowse;
         private System.Windows.Forms.TextBox textBoxOutputMkv;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBoxKeepAudioFrom;
         private System.Windows.Forms.Label label4;
         private views.SplitContainerWithDivider splitContainerTracks;
         private System.Windows.Forms.Button buttonMoveDownAudio;
@@ -941,7 +1054,16 @@
         private BrightIdeasSoftware.OLVColumn subtitleDefault;
         private BrightIdeasSoftware.OLVColumn subtitleForced;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ComboBox comboBoxKeepSubtitlesFrom;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.FlowLayoutPanel panelKeepSubtitlesFrom;
+        private System.Windows.Forms.Label labelKeepSubtitlesFromNone;
+        private System.Windows.Forms.CheckBox checkBoxKeepSubtitlesFromM2TS;
+        private System.Windows.Forms.CheckBox checkBoxKeepSubtitlesFromMKV;
+        private System.Windows.Forms.CheckBox checkBoxKeepSubtitlesFromExternal;
+        private System.Windows.Forms.FlowLayoutPanel panelKeepAudioFrom;
+        private System.Windows.Forms.Label labelKeepAudioFromNone;
+        private System.Windows.Forms.CheckBox checkBoxKeepAudioFromM2TS;
+        private System.Windows.Forms.CheckBox checkBoxKeepAudioFromMKV;
+        private System.Windows.Forms.CheckBox checkBoxKeepAudioFromLPCM;
     }
 }

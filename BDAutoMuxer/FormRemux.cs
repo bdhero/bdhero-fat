@@ -68,6 +68,8 @@ namespace BDAutoMuxer
             InitToolTips();
             InitAudioListView();
             InitSubtitleListView();
+            PopulateCheckboxes();
+            PopulateTracks();
         }
 
         private void InitToolTips()
@@ -570,24 +572,89 @@ namespace BDAutoMuxer
             set { groupBoxInput.Enabled = groupBoxOutput.Enabled = buttonRemux.Enabled = value; }
         }
 
+        private void PopulateCheckboxes()
+        {
+            panelKeepAudioFrom.Controls.Clear();
+            panelKeepSubtitlesFrom.Controls.Clear();
+
+            var hasM2TS = _inputM2TS != null;
+            var hasMKV = _inputMKV != null;
+            var hasLPCM = _inputLPCM.Any();
+            var hasSubtitles = _inputSubtitles.Any();
+
+            if (hasM2TS)
+            {
+                if (_inputM2TS.AudioTracks.Any())
+                    panelKeepAudioFrom.Controls.Add(checkBoxKeepAudioFromM2TS);
+                if (_inputM2TS.SubtitleTracks.Any())
+                    panelKeepSubtitlesFrom.Controls.Add(checkBoxKeepSubtitlesFromM2TS);
+            }
+            if (hasMKV)
+            {
+                if (_inputMKV.AudioTracks.Any())
+                    panelKeepAudioFrom.Controls.Add(checkBoxKeepAudioFromMKV);
+                if (_inputMKV.SubtitleTracks.Any())
+                    panelKeepSubtitlesFrom.Controls.Add(checkBoxKeepSubtitlesFromMKV);
+            }
+            if (hasLPCM)
+            {
+                panelKeepAudioFrom.Controls.Add(checkBoxKeepAudioFromLPCM);
+            }
+            if (hasSubtitles)
+            {
+                panelKeepSubtitlesFrom.Controls.Add(checkBoxKeepSubtitlesFromExternal);
+            }
+            if (panelKeepAudioFrom.Controls.Count == 0)
+            {
+                panelKeepAudioFrom.Controls.Add(labelKeepAudioFromNone);
+            }
+            if (panelKeepSubtitlesFrom.Controls.Count == 0)
+            {
+                panelKeepSubtitlesFrom.Controls.Add(labelKeepSubtitlesFromNone);
+            }
+        }
+
         private void PopulateTracks()
         {
             _audioTracks.Clear();
             _subtitleTracks.Clear();
 
-            if (_inputM2TS != null)
-            {
-                _audioTracks.AddRange(_inputM2TS.AudioTracks);
-                _subtitleTracks.AddRange(_inputM2TS.SubtitleTracks);
-            }
-            if (_inputMKV != null)
-            {
-                _audioTracks.AddRange(_inputMKV.AudioTracks);
-                _subtitleTracks.AddRange(_inputMKV.SubtitleTracks);
-            }
+            var hasM2TS = _inputM2TS != null;
+            var hasMKV = _inputMKV != null;
+            var hasLPCM = _inputLPCM.Any();
+            var hasSubtitles = _inputSubtitles.Any();
 
-            _audioTracks.AddRange(_inputLPCM.SelectMany(info => info.AudioTracks));
-            _subtitleTracks.AddRange(_inputSubtitles.SelectMany(info => info.SubtitleTracks));
+            var keepAudioFromM2TS = checkBoxKeepAudioFromM2TS.Checked && panelKeepAudioFrom.Contains(checkBoxKeepAudioFromM2TS);
+            var keepSubtitlesFromM2TS = checkBoxKeepSubtitlesFromM2TS.Checked && panelKeepSubtitlesFrom.Contains(checkBoxKeepSubtitlesFromM2TS);
+            
+            var keepAudioFromMKV = checkBoxKeepAudioFromMKV.Checked && panelKeepAudioFrom.Contains(checkBoxKeepAudioFromM2TS);
+            var keepSubtitlesFromMKV = checkBoxKeepSubtitlesFromM2TS.Checked && panelKeepSubtitlesFrom.Contains(checkBoxKeepSubtitlesFromM2TS);
+            
+            var keepAudioFromLPCM = checkBoxKeepAudioFromLPCM.Checked && panelKeepAudioFrom.Contains(checkBoxKeepAudioFromLPCM);
+            var keepSubtitlesFromExternal = checkBoxKeepSubtitlesFromExternal.Checked && panelKeepSubtitlesFrom.Contains(checkBoxKeepSubtitlesFromExternal);
+
+            if (hasM2TS)
+            {
+                if (keepAudioFromM2TS)
+                    _audioTracks.AddRange(_inputM2TS.AudioTracks);
+                if (keepSubtitlesFromM2TS)
+                    _subtitleTracks.AddRange(_inputM2TS.SubtitleTracks);
+            }
+            if (hasMKV)
+            {
+                if (keepAudioFromMKV)
+                    _audioTracks.AddRange(_inputMKV.AudioTracks);
+                if (keepSubtitlesFromMKV)
+                    _subtitleTracks.AddRange(_inputMKV.SubtitleTracks);
+            }
+            if (hasLPCM && keepAudioFromLPCM)
+            {
+                _audioTracks.AddRange(_inputLPCM.SelectMany(info => info.AudioTracks));
+            }
+            if (hasSubtitles && keepSubtitlesFromExternal)
+            {
+                _subtitleTracks.AddRange(_inputSubtitles.SelectMany(info => info.SubtitleTracks));
+            }
 
             objectListViewAudioTracks.SetObjects(_audioTracks);
             objectListViewSubtitleTracks.SetObjects(_subtitleTracks);
@@ -666,7 +733,7 @@ namespace BDAutoMuxer
             var mediaInfo2 = mediaInfo = new MediaInfo(path);
             var bgworker = new BackgroundWorker();
             bgworker.DoWork += (sender, args) => mediaInfo2.Scan();
-            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); completedHandler(sender, args); };
+            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateCheckboxes(); PopulateTracks(); completedHandler(sender, args); };
             bgworker.RunWorkerAsync();
         }
         private void ScanFiles(IEnumerable<string> paths, ICollection<MediaInfo> mediaInfos, RunWorkerCompletedEventHandler completedHandler)
@@ -676,7 +743,7 @@ namespace BDAutoMuxer
             pathSet.ExceptWith(mediaInfos.SelectMany(info => info.FilePaths));
             var bgworker = new BackgroundWorker();
             bgworker.DoWork += (sender, args) => mediaInfos.AddRange(pathSet.Select(path => new MediaInfo(path).Scan()));
-            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateTracks(); completedHandler(sender, args); };
+            bgworker.RunWorkerCompleted += (sender, args) => { FormEnabled = true; PopulateCheckboxes(); PopulateTracks(); completedHandler(sender, args); };
             bgworker.RunWorkerAsync();
         }
 
@@ -721,42 +788,6 @@ namespace BDAutoMuxer
             _inputSubtitles.Clear();
             PopulateSubtitles();
         }
-
-        private void buttonRemux_Click(object sender, EventArgs e)
-        {
-            Remux();
-        }
-
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            if (_mkvMerge != null && _mkvMerge.IsBusy)
-            {
-                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                    return;
-
-                CancelRemux();
-            }
-            else
-            {
-                Close();
-            }
-        }
-
-        private void FormRemux_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (_mkvMerge != null && _mkvMerge.IsBusy)
-            {
-                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                {
-                    e.Cancel = true;
-                    return;
-                }
-
-                CancelRemux();
-            }
-        }
-
-        #endregion
 
         #region ObjectListView track moving
 
@@ -808,6 +839,46 @@ namespace BDAutoMuxer
             listView.MoveObjects(newIndex, selectedObjects);
             listView.SelectedIndex = newIndex + selectionDelta;
             listView.Focus();
+        }
+
+        #endregion
+
+        #region Mux / Close Buttons
+
+        private void buttonRemux_Click(object sender, EventArgs e)
+        {
+            Remux();
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            if (_mkvMerge != null && _mkvMerge.IsBusy)
+            {
+                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    return;
+
+                CancelRemux();
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        #endregion
+
+        private void FormRemux_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_mkvMerge != null && _mkvMerge.IsBusy)
+            {
+                if (DialogResult.Yes != MessageBox.Show(this, "Are you sure you want to cancal the remux?", "Cancel remux?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                CancelRemux();
+            }
         }
 
         #endregion
