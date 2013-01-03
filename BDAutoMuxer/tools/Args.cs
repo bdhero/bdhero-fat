@@ -77,7 +77,7 @@ namespace BDAutoMuxer.tools
 
         public static string ForCommandLine(string rawArg)
         {
-            return string.Format("{0}{1}{0}", DoubleQuote, Escape(rawArg));
+            return rawArg.Contains(" ") ? string.Format("{0}{1}{0}", DoubleQuote, Escape(rawArg)) : rawArg;
         }
 
         public override string ToString()
