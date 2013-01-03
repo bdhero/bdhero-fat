@@ -22,7 +22,8 @@ namespace BDAutoMuxer.tools
         private string _outputFilePath;
         private string _outputDirPath;
         private string _basePath;
-        private readonly List<string> _outputFilePaths = new List<string>(); 
+        private readonly List<string> _outputFilePaths = new List<string>();
+        private readonly List<string> _logFilePaths = new List<string>();
 
         protected override string Name { get { return "EAC3To"; } }
         protected override string Filename { get { return @"eac3to\eac3to.exe"; } }
@@ -42,6 +43,7 @@ namespace BDAutoMuxer.tools
             _demuxSubtitles = demuxSubtitles;
 
             DoWork += Demux;
+            Completed += DeleteLogFiles;
         }
 
         private void Demux(object sender, DoWorkEventArgs e)
@@ -69,17 +71,32 @@ namespace BDAutoMuxer.tools
                 
                 if (!IncludeTrack(track)) continue;
 
-                var ext = IsLPCM(track) ? "wav" : IsSubtitle(track) ? "sup" : "oops";
+                var ext = IsLPCM(track) ? ".wav" : IsSubtitle(track) ? ".sup" : ".wtf";
+                var mediaFilePath = GetPath(track, ext);
+                var logFilePath = GetPath(track, " - Log.txt");
 
                 args.Add(string.Format("{0}:", i + TRACK_OFFSET));
-                args.Add(string.Format("{0}._{1}_.track_{2}.{3}", _basePath, track.LanguageCode, track.PID, ext));
+                args.Add(mediaFilePath);
 
-                _outputFilePaths.Add(args.Last());
+                _outputFilePaths.Add(mediaFilePath);
+                _outputFilePaths.Add(logFilePath);
+                _logFilePaths.Add(logFilePath);
             }
 
             args.Add("-progressnumbers");
 
             Execute(args, sender, e);
+        }
+
+        /// <summary>
+        /// Generates the full absolute path to a demuxed output file.
+        /// </summary>
+        /// <param name="track"></param>
+        /// <param name="ext">Must include period (e.g., ".wav", " - Log.txt")</param>
+        /// <returns></returns>
+        private string GetPath(TSStream track, string ext)
+        {
+            return string.Format("{0}._{1}_.track_{2}{3}", _basePath, track.LanguageCode, track.PID, ext);
         }
 
         private bool IncludeTrack(TSStream track)
@@ -101,6 +118,20 @@ namespace BDAutoMuxer.tools
         {
             return (track.IsTextStream) ||
                    (track.IsGraphicsStream && track.StreamType == TSStreamType.PRESENTATION_GRAPHICS);
+        }
+
+        private void DeleteLogFiles(object sender = null, EventArgs e = null)
+        {
+            foreach (var logFilePath in _logFilePaths)
+            {
+                try
+                {
+                    File.Delete(logFilePath);
+                }
+                catch
+                {
+                }
+            }
         }
 
         protected override void ExtractResources()
