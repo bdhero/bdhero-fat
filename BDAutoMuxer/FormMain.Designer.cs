@@ -73,7 +73,7 @@
             this.columnHeaderBitrate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageOutput = new System.Windows.Forms.TabPage();
-            this.groupBoxDemux = new System.Windows.Forms.GroupBox();
+            this.groupBoxDemuxOptions = new System.Windows.Forms.GroupBox();
             this.checkBoxDemuxLPCM = new System.Windows.Forms.CheckBox();
             this.checkBoxDemuxSubtitles = new System.Windows.Forms.CheckBox();
             this.groupBoxOutput = new System.Windows.Forms.GroupBox();
@@ -125,7 +125,7 @@
             this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
             this.labelAudienceLanguage = new System.Windows.Forms.Label();
             this.tabPageProgress = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxDemuxingProgress = new System.Windows.Forms.GroupBox();
             this.labelDemuxingTimeRemainingElapsed = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.labelDemuxingTimeRemaining = new System.Windows.Forms.Label();
@@ -134,7 +134,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.progressBarDemuxing = new System.Windows.Forms.ProgressBar();
             this.labelDemuxingProgress = new System.Windows.Forms.Label();
-            this.groupBoxTsMuxerProgress = new System.Windows.Forms.GroupBox();
+            this.groupBoxMuxingProgress = new System.Windows.Forms.GroupBox();
             this.labelTsMuxerTimeRemainingElapsed = new System.Windows.Forms.Label();
             this.labelTsMuxerTimeSeparator = new System.Windows.Forms.Label();
             this.labelTsMuxerTimeRemaining = new System.Windows.Forms.Label();
@@ -193,7 +193,7 @@
             this.streamsGroupBox.SuspendLayout();
             this.tracksGroupBox.SuspendLayout();
             this.tabPageOutput.SuspendLayout();
-            this.groupBoxDemux.SuspendLayout();
+            this.groupBoxDemuxOptions.SuspendLayout();
             this.groupBoxOutput.SuspendLayout();
             this.groupBoxTracks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTracksOuter)).BeginInit();
@@ -207,8 +207,8 @@
             this.groupBoxFilter.SuspendLayout();
             this.groupBoxMasterOverride.SuspendLayout();
             this.tabPageProgress.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBoxTsMuxerProgress.SuspendLayout();
+            this.groupBoxDemuxingProgress.SuspendLayout();
+            this.groupBoxMuxingProgress.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -727,7 +727,7 @@
             // 
             // tabPageOutput
             // 
-            this.tabPageOutput.Controls.Add(this.groupBoxDemux);
+            this.tabPageOutput.Controls.Add(this.groupBoxDemuxOptions);
             this.tabPageOutput.Controls.Add(this.groupBoxOutput);
             this.tabPageOutput.Controls.Add(this.groupBoxTracks);
             this.tabPageOutput.Controls.Add(this.groupBoxFilter);
@@ -739,18 +739,18 @@
             this.tabPageOutput.Text = "Output";
             this.tabPageOutput.UseVisualStyleBackColor = true;
             // 
-            // groupBoxDemux
+            // groupBoxDemuxOptions
             // 
-            this.groupBoxDemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxDemuxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxDemux.Controls.Add(this.checkBoxDemuxLPCM);
-            this.groupBoxDemux.Controls.Add(this.checkBoxDemuxSubtitles);
-            this.groupBoxDemux.Location = new System.Drawing.Point(3, 389);
-            this.groupBoxDemux.Name = "groupBoxDemux";
-            this.groupBoxDemux.Size = new System.Drawing.Size(742, 45);
-            this.groupBoxDemux.TabIndex = 4;
-            this.groupBoxDemux.TabStop = false;
-            this.groupBoxDemux.Text = "Demux";
+            this.groupBoxDemuxOptions.Controls.Add(this.checkBoxDemuxLPCM);
+            this.groupBoxDemuxOptions.Controls.Add(this.checkBoxDemuxSubtitles);
+            this.groupBoxDemuxOptions.Location = new System.Drawing.Point(3, 389);
+            this.groupBoxDemuxOptions.Name = "groupBoxDemuxOptions";
+            this.groupBoxDemuxOptions.Size = new System.Drawing.Size(742, 45);
+            this.groupBoxDemuxOptions.TabIndex = 4;
+            this.groupBoxDemuxOptions.TabStop = false;
+            this.groupBoxDemuxOptions.Text = "Demux";
             // 
             // checkBoxDemuxLPCM
             // 
@@ -1311,8 +1311,8 @@
             // 
             // tabPageProgress
             // 
-            this.tabPageProgress.Controls.Add(this.groupBox1);
-            this.tabPageProgress.Controls.Add(this.groupBoxTsMuxerProgress);
+            this.tabPageProgress.Controls.Add(this.groupBoxDemuxingProgress);
+            this.tabPageProgress.Controls.Add(this.groupBoxMuxingProgress);
             this.tabPageProgress.Location = new System.Drawing.Point(4, 22);
             this.tabPageProgress.Name = "tabPageProgress";
             this.tabPageProgress.Size = new System.Drawing.Size(749, 583);
@@ -1320,24 +1320,24 @@
             this.tabPageProgress.Text = "Progress";
             this.tabPageProgress.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // groupBoxDemuxingProgress
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxDemuxingProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.labelDemuxingTimeRemainingElapsed);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.labelDemuxingTimeRemaining);
-            this.groupBox1.Controls.Add(this.labelDemuxingTimeElapsed);
-            this.groupBox1.Controls.Add(this.textBoxDemuxingCommandLine);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.progressBarDemuxing);
-            this.groupBox1.Controls.Add(this.labelDemuxingProgress);
-            this.groupBox1.Location = new System.Drawing.Point(4, 4);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(742, 150);
-            this.groupBox1.TabIndex = 37;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Demuxing Progress";
+            this.groupBoxDemuxingProgress.Controls.Add(this.labelDemuxingTimeRemainingElapsed);
+            this.groupBoxDemuxingProgress.Controls.Add(this.label2);
+            this.groupBoxDemuxingProgress.Controls.Add(this.labelDemuxingTimeRemaining);
+            this.groupBoxDemuxingProgress.Controls.Add(this.labelDemuxingTimeElapsed);
+            this.groupBoxDemuxingProgress.Controls.Add(this.textBoxDemuxingCommandLine);
+            this.groupBoxDemuxingProgress.Controls.Add(this.label5);
+            this.groupBoxDemuxingProgress.Controls.Add(this.progressBarDemuxing);
+            this.groupBoxDemuxingProgress.Controls.Add(this.labelDemuxingProgress);
+            this.groupBoxDemuxingProgress.Location = new System.Drawing.Point(4, 4);
+            this.groupBoxDemuxingProgress.Name = "groupBoxDemuxingProgress";
+            this.groupBoxDemuxingProgress.Size = new System.Drawing.Size(742, 150);
+            this.groupBoxDemuxingProgress.TabIndex = 37;
+            this.groupBoxDemuxingProgress.TabStop = false;
+            this.groupBoxDemuxingProgress.Text = "Demuxing Progress";
             // 
             // labelDemuxingTimeRemainingElapsed
             // 
@@ -1421,24 +1421,24 @@
             this.labelDemuxingProgress.TabIndex = 0;
             this.labelDemuxingProgress.Text = "0.0%";
             // 
-            // groupBoxTsMuxerProgress
+            // groupBoxMuxingProgress
             // 
-            this.groupBoxTsMuxerProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxMuxingProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemainingElapsed);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeSeparator);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeRemaining);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerTimeElapsed);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.textBoxTsMuxerCommandLine);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerCommandLine);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.progressBarTsMuxer);
-            this.groupBoxTsMuxerProgress.Controls.Add(this.labelTsMuxerProgress);
-            this.groupBoxTsMuxerProgress.Location = new System.Drawing.Point(4, 160);
-            this.groupBoxTsMuxerProgress.Name = "groupBoxTsMuxerProgress";
-            this.groupBoxTsMuxerProgress.Size = new System.Drawing.Size(742, 150);
-            this.groupBoxTsMuxerProgress.TabIndex = 0;
-            this.groupBoxTsMuxerProgress.TabStop = false;
-            this.groupBoxTsMuxerProgress.Text = "Muxing Progress";
+            this.groupBoxMuxingProgress.Controls.Add(this.labelTsMuxerTimeRemainingElapsed);
+            this.groupBoxMuxingProgress.Controls.Add(this.labelTsMuxerTimeSeparator);
+            this.groupBoxMuxingProgress.Controls.Add(this.labelTsMuxerTimeRemaining);
+            this.groupBoxMuxingProgress.Controls.Add(this.labelTsMuxerTimeElapsed);
+            this.groupBoxMuxingProgress.Controls.Add(this.textBoxTsMuxerCommandLine);
+            this.groupBoxMuxingProgress.Controls.Add(this.labelTsMuxerCommandLine);
+            this.groupBoxMuxingProgress.Controls.Add(this.progressBarTsMuxer);
+            this.groupBoxMuxingProgress.Controls.Add(this.labelTsMuxerProgress);
+            this.groupBoxMuxingProgress.Location = new System.Drawing.Point(4, 160);
+            this.groupBoxMuxingProgress.Name = "groupBoxMuxingProgress";
+            this.groupBoxMuxingProgress.Size = new System.Drawing.Size(742, 150);
+            this.groupBoxMuxingProgress.TabIndex = 0;
+            this.groupBoxMuxingProgress.TabStop = false;
+            this.groupBoxMuxingProgress.Text = "Muxing Progress";
             // 
             // labelTsMuxerTimeRemainingElapsed
             // 
@@ -1805,8 +1805,8 @@
             this.streamsGroupBox.ResumeLayout(false);
             this.tracksGroupBox.ResumeLayout(false);
             this.tabPageOutput.ResumeLayout(false);
-            this.groupBoxDemux.ResumeLayout(false);
-            this.groupBoxDemux.PerformLayout();
+            this.groupBoxDemuxOptions.ResumeLayout(false);
+            this.groupBoxDemuxOptions.PerformLayout();
             this.groupBoxOutput.ResumeLayout(false);
             this.groupBoxOutput.PerformLayout();
             this.groupBoxTracks.ResumeLayout(false);
@@ -1826,10 +1826,10 @@
             this.groupBoxMasterOverride.ResumeLayout(false);
             this.groupBoxMasterOverride.PerformLayout();
             this.tabPageProgress.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBoxTsMuxerProgress.ResumeLayout(false);
-            this.groupBoxTsMuxerProgress.PerformLayout();
+            this.groupBoxDemuxingProgress.ResumeLayout(false);
+            this.groupBoxDemuxingProgress.PerformLayout();
+            this.groupBoxMuxingProgress.ResumeLayout(false);
+            this.groupBoxMuxingProgress.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -1875,7 +1875,7 @@
         private System.Windows.Forms.TextBox textBoxReplaceSpaces;
         private System.Windows.Forms.CheckBox checkBoxReplaceSpaces;
         private System.Windows.Forms.Button buttonSubmitToDB;
-        private System.Windows.Forms.GroupBox groupBoxTsMuxerProgress;
+        private System.Windows.Forms.GroupBox groupBoxMuxingProgress;
         private System.Windows.Forms.ProgressBar progressBarTsMuxer;
         private System.Windows.Forms.Label labelTsMuxerProgress;
         private System.Windows.Forms.TextBox textBoxTsMuxerCommandLine;
@@ -1967,7 +1967,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.CheckBox checkBoxShowShortPlaylists;
         private System.Windows.Forms.CheckBox checkBoxDemuxSubtitles;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxDemuxingProgress;
         private System.Windows.Forms.Label labelDemuxingTimeRemainingElapsed;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelDemuxingTimeRemaining;
@@ -1977,7 +1977,7 @@
         private System.Windows.Forms.ProgressBar progressBarDemuxing;
         private System.Windows.Forms.Label labelDemuxingProgress;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
-        private System.Windows.Forms.GroupBox groupBoxDemux;
+        private System.Windows.Forms.GroupBox groupBoxDemuxOptions;
         private System.Windows.Forms.CheckBox checkBoxDemuxLPCM;
         private System.Windows.Forms.ToolStripMenuItem codecsToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBoxShowLowQualityPlaylists;
