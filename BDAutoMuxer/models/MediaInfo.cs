@@ -1582,7 +1582,7 @@ namespace BDAutoMuxer.models
 
         public override string AltFullName
         {
-            get { return "MPEG-4 Part 2"; }
+            get { return "MPEG-4 Part 10"; }
         }
 
         public override string AltMicroName
