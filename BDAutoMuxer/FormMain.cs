@@ -68,6 +68,9 @@ namespace BDAutoMuxer
 
         private bool _shouldMux;
 
+        private Point _demuxingProgressLocation;
+        private Point _muxingProgressLocation;
+
         private ProgressUIState _eac3ToProgressUIState;
         private ProgressUIState _tsMuxerProgressUIState;
 
@@ -289,6 +292,9 @@ namespace BDAutoMuxer
             Text = BDAutoMuxerSettings.AssemblyName + " v" + BDAutoMuxerSettings.AssemblyVersionDisplay;
 
             FormUtils.TextBox_EnableSelectAll(this);
+
+            _demuxingProgressLocation = groupBoxDemuxingProgress.Location;
+            _muxingProgressLocation = groupBoxMuxingProgress.Location;
 
             ShowProgressTabPage = false;
 
@@ -1114,6 +1120,14 @@ namespace BDAutoMuxer
             _tsMuxerProgressUIState.Reset();
 
             _shouldMux = SelectedStreams.Any(ShouldMuxTrack);
+
+            groupBoxDemuxingProgress.Visible = IsDemuxLPCMChecked || IsDemuxSubtitlesChecked;
+            groupBoxMuxingProgress.Visible = _shouldMux;
+
+            if (!groupBoxDemuxingProgress.Visible && groupBoxMuxingProgress.Visible)
+                groupBoxMuxingProgress.Location = _demuxingProgressLocation;
+            else
+                groupBoxMuxingProgress.Location = _muxingProgressLocation;
 
             if (IsDemuxLPCMChecked || IsDemuxSubtitlesChecked)
                 StartDemuxer(SelectedStreams);
