@@ -157,6 +157,7 @@
       <DependentUpon>FormCodecScanner.cs</DependentUpon>
     </Compile>
     <Compile Include="models\MediaInfo.cs" />
+    <Compile Include="tools\EAC3To.cs" />
     <Compile Include="views\LinkLabel2.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -333,6 +334,36 @@
     <None Include="Resources\dd.ico" />
     <None Include="Resources\avc.ico" />
     <None Include="Resources\no-poster-w185.png" />
+    <Content Include="lib\eac3to\avcodec-54.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\avutil-52.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\eac3to.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\hdcd.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\HookSurcode.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\libAften.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\libFLAC.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\libMatrix.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\libSsrc.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\eac3to\r8b.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\MediaInfo.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

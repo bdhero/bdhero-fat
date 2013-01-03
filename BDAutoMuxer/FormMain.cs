@@ -62,7 +62,7 @@ namespace BDAutoMuxer
         private bool _ignoreFilterControlChange;
         private bool _ignoreDataGridItemChange;
 
-        private TsMuxer _tsDemuxer;
+        private EAC3To _tsDemuxer;
         private TsMuxer _tsMuxer;
         private string _tsMuxerOutputPath;
 
@@ -1143,7 +1143,7 @@ namespace BDAutoMuxer
             progressBarTsMuxer.Value = 0;
             toolStripProgressBar.Visible = true;
 
-            _tsDemuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams, IsDemuxLPCMChecked, IsDemuxSubtitlesChecked);
+            _tsDemuxer = new EAC3To(SelectedPlaylist, selectedStreams, IsDemuxLPCMChecked, IsDemuxSubtitlesChecked);
             _tsDemuxer.WorkerReportsProgress = true;
             _tsDemuxer.WorkerSupportsCancellation = true;
             _tsDemuxer.ProgressChanged += DemuxerBackgroundWorkerProgressChanged;
