@@ -196,6 +196,8 @@ namespace BDAutoMuxer.tools
         /// </summary>
         public string ErrorMessage { get { return String.Join("\n", ErrorMessages); } }
 
+        public event EventHandler Completed;
+
         #endregion
 
         #region Constructor / Destructor
@@ -400,6 +402,9 @@ namespace BDAutoMuxer.tools
             isCompleted = true;
 
             _worker.ReportProgress(100);
+
+            if (Completed != null)
+                Completed(this, e);
         }
 
         #endregion
