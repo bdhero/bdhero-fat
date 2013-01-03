@@ -1607,7 +1607,7 @@ namespace BDAutoMuxer.models
 
         public override string Description
         {
-            get { return "The de facto standard for high quality HD video at reasonable file sizes."; }
+            get { return "The de facto standard for high quality HD video at reasonable file sizes.  Enjoys wide player support and is HandBrake's default video codec."; }
         }
 
         public override Image Logo
@@ -2889,7 +2889,7 @@ namespace BDAutoMuxer.models
 
         public override string Description
         {
-            get { return "Uncompressed studio-quality audio.  Not directly supported as input from M2TS / MKV containers by mkvmerge; must first be demuxed to .WAV files with tsMuxeR (see https://trac.bunkus.org/ticket/763)."; }
+            get { return "Uncompressed studio-quality audio.  Not directly supported as input from M2TS containers by mkvmerge; must first be demuxed to .WAV files with eac3to or tsMuxeR (see https://trac.bunkus.org/ticket/763)."; }
         }
 
         public override bool Lossless
