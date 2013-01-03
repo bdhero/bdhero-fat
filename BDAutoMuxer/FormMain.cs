@@ -1970,6 +1970,8 @@ namespace BDAutoMuxer
 
             string preview = text;
 
+            var videoLanguage = comboBoxVideoLanguage.SelectedValue as Language;
+
             string volume = _bdrom.VolumeLabel;
             string title = String.IsNullOrEmpty(_tmdbMovieTitle) ? movieNameTextBox.Text : _tmdbMovieTitle;
             string year = _tmdbMovieYear == null ? GetYearString(maskedTextBoxYear.Text) : _tmdbMovieYear + "";
@@ -1977,6 +1979,8 @@ namespace BDAutoMuxer
             string vcodec = "";
             string acodec = "";
             string channels = "";
+            string cut = (comboBoxCut.SelectedValue is Cut ? (Cut)comboBoxCut.SelectedValue : Cut.Theatrical).ToString();
+            string vlang = videoLanguage != null ? videoLanguage.ISO_639_2.ToUpperInvariant() : "";
 
             if (string.IsNullOrEmpty(year))
                 year = "";
@@ -2008,6 +2012,8 @@ namespace BDAutoMuxer
             vcodec = Sanitize(vcodec);
             acodec = Sanitize(acodec);
             channels = Sanitize(channels);
+            cut = Sanitize(cut);
+            vlang = Sanitize(vlang);
 
             preview = Regex.Replace(preview, @"%volume%", volume, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%title%", title, RegexOptions.IgnoreCase);
@@ -2016,6 +2022,8 @@ namespace BDAutoMuxer
             preview = Regex.Replace(preview, @"%vcodec%", vcodec, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%acodec%", acodec, RegexOptions.IgnoreCase);
             preview = Regex.Replace(preview, @"%channels%", channels, RegexOptions.IgnoreCase);
+            preview = Regex.Replace(preview, @"%cut%", cut, RegexOptions.IgnoreCase);
+            preview = Regex.Replace(preview, @"%vlang%", vlang, RegexOptions.IgnoreCase);
             preview = Environment.ExpandEnvironmentVariables(preview);
 
             if (checkBoxReplaceSpaces.Checked)
