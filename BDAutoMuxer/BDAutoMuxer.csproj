@@ -142,8 +142,10 @@
     <Compile Include="BDInfo\TSPlaylistFile.cs" />
     <Compile Include="BDInfo\TSStream.cs" />
     <Compile Include="BDInfo\TSCodecVC1.cs" />
+    <Compile Include="BDROM\Chapter.cs" />
     <Compile Include="BDROM\Disc.cs" />
     <Compile Include="BDROM\Playlist.cs" />
+    <Compile Include="BDROM\Track.cs" />
     <Compile Include="controllers\Extensions.cs" />
     <Compile Include="controllers\PlaylistFinder.cs" />
     <Compile Include="FormCodecReference.cs">
