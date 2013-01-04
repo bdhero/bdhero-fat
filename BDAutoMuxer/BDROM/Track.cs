@@ -18,7 +18,7 @@ namespace BDAutoMuxer.BDROM
         /// <summary>
         /// Language of the track.
         /// </summary>
-        public Language Language;
+        public Language Language = Language.GetLanguage("und");
 
         /// <summary>
         /// Track is physically present in the underlying .M2TS stream file(s), but is not listed in the .MPLS playlist file.
@@ -160,7 +160,7 @@ namespace BDAutoMuxer.BDROM
             {
                 return new Track
                            {
-                               Language = Language.GetLanguage(iso639_2),
+                               Language = Language.GetLanguage(iso639_2) ?? Language.GetLanguage("und"),
                                IsHidden = is_hidden,
                                Codec = MICodec.FromSerializableName(codec_id),
                                IsVideo = is_video,
