@@ -1,4 +1,3 @@
-C:\Documents and Settings\Administrator\Projects\bdautomuxer\ObjectListView\bin\Debug\ObjectListView.XML
 C:\Documents and Settings\Administrator\Projects\bdautomuxer\ObjectListView\bin\Debug\ObjectListView.dll
 C:\Documents and Settings\Administrator\Projects\bdautomuxer\ObjectListView\bin\Debug\ObjectListView.pdb
 C:\Documents and Settings\Administrator\Projects\bdautomuxer\ObjectListView\obj\Debug\ResolveAssemblyReference.cache
