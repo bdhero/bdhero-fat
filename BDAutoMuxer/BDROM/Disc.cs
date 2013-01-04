@@ -13,6 +13,8 @@ namespace BDAutoMuxer.BDROM
     /// </summary>
     public class Disc
     {
+        #region DB Fields
+
         /// <summary>
         /// E.G., "TOY_STORY_2_USA"
         /// </summary>
@@ -49,6 +51,8 @@ namespace BDAutoMuxer.BDROM
         /// </summary>
         public IList<Playlist> Playlists;
 
+        #endregion
+
         public Json ToJson()
         {
             return new Json
@@ -65,6 +69,8 @@ namespace BDAutoMuxer.BDROM
 
         public class Json
         {
+            #region DB Fields
+
             public string volume_label;
             public string meta_title;
             public string iso639_2;
@@ -72,6 +78,8 @@ namespace BDAutoMuxer.BDROM
             public string movie_title;
             public int? movie_year;
             public IList<Playlist.Json> playlists;
+
+            #endregion
 
             public Disc FromJson()
             {
