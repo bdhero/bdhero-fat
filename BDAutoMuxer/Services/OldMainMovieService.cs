@@ -5,9 +5,9 @@ using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.models;
 using Newtonsoft.Json;
 
-namespace BDAutoMuxer.controllers
+namespace BDAutoMuxer.Services
 {
-    static class MainMovieService
+    static class OldMainMovieService
     {
         private const string BaseUri = "http://bd.andydvorak.net/api/v1/movies";
 

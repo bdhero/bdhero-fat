@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.models;
+using BDAutoMuxer.tools;
 
 // ReSharper disable InconsistentNaming
 namespace BDAutoMuxer.BDROM

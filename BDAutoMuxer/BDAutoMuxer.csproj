@@ -160,8 +160,9 @@
     <Compile Include="FormCodecScanner.Designer.cs">
       <DependentUpon>FormCodecScanner.cs</DependentUpon>
     </Compile>
-    <Compile Include="models\MediaInfo.cs" />
+    <Compile Include="tools\MediaInfo.cs" />
     <Compile Include="Services\BDService.cs" />
+    <Compile Include="Services\UpdateService.cs" />
     <Compile Include="tools\EAC3To.cs" />
     <Compile Include="views\LinkLabel2.cs">
       <SubType>Component</SubType>
@@ -169,7 +170,7 @@
     <Compile Include="views\SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Win32\SHFileInfo.cs" />
+    <Compile Include="Win32\Browser.cs" />
     <Compile Include="tools\Args.cs" />
     <Compile Include="FormRemux.cs">
       <SubType>Form</SubType>
@@ -179,17 +180,19 @@
     </Compile>
     <Compile Include="tools\AbstractExternalTool.cs" />
     <Compile Include="controllers\ChapterWriter.cs" />
-    <Compile Include="controllers\HttpRequest.cs" />
+    <Compile Include="Services\HttpRequest.cs" />
     <Compile Include="tools\MkvMerge.cs" />
-    <Compile Include="controllers\DragUtils.cs" />
+    <Compile Include="views\DragUtils.cs" />
     <Compile Include="controllers\FileUtils.cs" />
     <Compile Include="views\FormUtils.cs" />
-    <Compile Include="views\Job.cs" />
-    <Compile Include="views\SplitContainerWithDivider.cs" />
+    <Compile Include="Win32\JobObject.cs" />
+    <Compile Include="views\SplitContainerWithDivider.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="views\TaskbarProgress.cs" />
     <Compile Include="tools\TsMuxer.cs" />
-    <Compile Include="controllers\MainMovieService.cs" />
-    <Compile Include="controllers\UpdateNotifier.cs" />
+    <Compile Include="Services\OldMainMovieService.cs" />
+    <Compile Include="views\UpdateNotifier.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

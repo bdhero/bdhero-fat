@@ -5,7 +5,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.Win32;
 
 namespace BDAutoMuxer.controllers
 {
@@ -30,42 +29,6 @@ namespace BDAutoMuxer.controllers
         public static bool IsDirectory(string path)
         {
             return (File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory;
-        }
-
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetDiskFreeSpaceEx(
-            string lpDirectoryName,
-            out ulong lpFreeBytesAvailable,
-            out ulong lpTotalNumberOfBytes,
-            out ulong lpTotalNumberOfFreeBytes);
-
-        /// <summary>
-        /// Returns the amount of free disk space in bytes.
-        /// Supports local and UNC paths.
-        /// </summary>
-        /// <see cref="http://pinvoke.net/default.aspx/kernel32.GetDiskFreeSpaceEx"/>
-        public static ulong GetFreeSpace(string path)
-        {
-            ulong freeBytesAvailable;
-            ulong totalNumberOfBytes;
-            ulong totalNumberOfFreeBytes;
-
-            var success = GetDiskFreeSpaceEx(path, out freeBytesAvailable, out totalNumberOfBytes, out totalNumberOfFreeBytes);
-            
-            if (!success)
-                throw new System.ComponentModel.Win32Exception();
-
-            //Console.WriteLine("Free Bytes Available:      {0,15:D}", FreeBytesAvailable);
-            //Console.WriteLine("Total Number Of Bytes:     {0,15:D}", TotalNumberOfBytes);
-            //Console.WriteLine("Total Number Of FreeBytes: {0,15:D}", TotalNumberOfFreeBytes);
-
-            return freeBytesAvailable;
-        }
-
-        public static string FormatFileSize(string filepath)
-        {
-            return FormatFileSize(new FileInfo(filepath).Length);
         }
 
         public static string FormatFileSize(long filesize, ushort maxFractionalDigits = 2)
@@ -129,9 +92,6 @@ namespace BDAutoMuxer.controllers
 
             Process.Start("explorer.exe", argument);
         }
-
-        [DllImport("shell32.dll")]
-        static extern int FindExecutable(string lpFile, string lpDirectory, [Out] StringBuilder lpResult);
 
         public static bool HasProgramAssociation(string filePath)
         {

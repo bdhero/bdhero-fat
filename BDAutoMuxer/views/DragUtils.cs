@@ -2,11 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using BDAutoMuxer.controllers;
 
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
-namespace BDAutoMuxer.controllers
+namespace BDAutoMuxer.views
 {
     public static class DragUtils
     {

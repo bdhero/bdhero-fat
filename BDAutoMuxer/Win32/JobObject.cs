@@ -5,12 +5,13 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
+// TODO: See http://jobobjectwrapper.codeplex.com/ for a better solution
 // ReSharper disable InconsistentNaming
 namespace BDAutoMuxer.views
 {
     /// <see cref="http://stackoverflow.com/a/9164742/467582"/>
     /// <see cref="http://stackoverflow.com/a/4657392/467582"/>
-    public class Job : IDisposable
+    public class JobObject : IDisposable
     {
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         static extern IntPtr CreateJobObject(IntPtr a, string lpName);
@@ -32,7 +33,7 @@ namespace BDAutoMuxer.views
         private IntPtr _handle;
         private bool _disposed;
 
-        public Job()
+        public JobObject()
         {
             _handle = CreateJobObject(IntPtr.Zero, null);
 

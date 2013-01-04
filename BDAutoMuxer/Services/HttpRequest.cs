@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Cache;
 
-namespace BDAutoMuxer.controllers
+namespace BDAutoMuxer.Services
 {
-    public class HttpRequest
+    public static class HttpRequest
     {
         private static readonly string UserAgent;
 

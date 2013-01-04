@@ -8,10 +8,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
-using BDAutoMuxer.tools;
 using Newtonsoft.Json;
 
-namespace BDAutoMuxer.models
+namespace BDAutoMuxer.tools
 {
     public class MediaInfo
     {

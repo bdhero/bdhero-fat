@@ -7,12 +7,6 @@ using System.Drawing;
 
 namespace BDAutoMuxer.views
 {
-    /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
-// ReSharper disable LocalizableElement
-// ReSharper disable RedundantNameQualifier
-    [System.ComponentModel.DesignerCategory("Code")]
-// ReSharper restore RedundantNameQualifier
-// ReSharper restore LocalizableElement
     public class SplitContainerWithDivider : SplitContainer
     {
         public SplitContainerWithDivider()

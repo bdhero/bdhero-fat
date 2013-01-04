@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
+using BDAutoMuxer.Services;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
@@ -888,7 +889,7 @@ namespace BDAutoMuxer
             {
                 IList<TSPlaylistFile> mainPlaylists = _playlists.Where(playlist => playlist.IsFeatureLength).ToList();
                 _mainMovieSearchResult = null;
-                _mainMovieSearchResult = MainMovieService.FindMainMovie(_bdrom.VolumeLabel, mainPlaylists);
+                _mainMovieSearchResult = OldMainMovieService.FindMainMovie(_bdrom.VolumeLabel, mainPlaylists);
                 e.Result = null;
             }
             catch (Exception ex)
@@ -1527,7 +1528,7 @@ namespace BDAutoMuxer
 
             try
             {
-                var postResult = MainMovieService.PostDisc(jsonDisc);
+                var postResult = OldMainMovieService.PostDisc(jsonDisc);
                 if (postResult.error)
                 {
                     var errorMessage = "Unknown error occurred while POSTing to the DB";
@@ -2313,7 +2314,7 @@ namespace BDAutoMuxer
         private void contextMenuStripTmdb_Opened(object sender, EventArgs e)
         {
             if (toolStripMenuItemTmdb.Image == null)
-                toolStripMenuItemTmdb.Image = Win32.Win32.DefaultBrowserIconAsBitmap;
+                toolStripMenuItemTmdb.Image = Win32.Browser.DefaultBrowserIconAsBitmap;
             toolStripMenuItemTmdb.Enabled = _tmdbMovieUrl != null;
         }
 

@@ -23,7 +23,7 @@ namespace BDAutoMuxer.tools
     {
         #region Fields (private)
 
-        private Job _job;
+        private JobObject _jobObject;
         private BackgroundWorker _worker;
 
         private readonly IList<string> _paths = new List<string>();
@@ -266,8 +266,8 @@ namespace BDAutoMuxer.tools
 
             ErrorMessages.Clear();
 
-            if (_job == null)
-                _job = new Job();
+            if (_jobObject == null)
+                _jobObject = new JobObject();
 
             _process = new Process
                            {
@@ -293,7 +293,7 @@ namespace BDAutoMuxer.tools
 
             isStarted = true;
 
-            _job.AddProcess(_process.Handle);
+            _jobObject.AddProcess(_process.Handle);
 
             while (!CancellationPending && !_process.StandardOutput.EndOfStream && !isError)
             {

@@ -1,109 +1,17 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Deployment.Application;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using BDAutoMuxer.controllers;
+using BDAutoMuxer.views;
 
-namespace BDAutoMuxer.controllers
+namespace BDAutoMuxer.Services
 {
-    public delegate void UpdateNotifierCompleteDelegate();
-
-    /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
-// ReSharper disable LocalizableElement
-// ReSharper disable RedundantNameQualifier
-    [System.ComponentModel.DesignerCategory("Code")]
-// ReSharper restore RedundantNameQualifier
-// ReSharper restore LocalizableElement
-    public class UpdateNotifier : BackgroundWorker
-    {
-        public static bool IsClickOnce
-        {
-            get { return ApplicationDeployment.IsNetworkDeployed; }
-        }
-
-        private readonly IUpdateChecker _updateChecker;
-
-        private bool _isUpdateAvailable;
-
-        private readonly Form _form;
-        private readonly bool _notifyIfUpToDate;
-        private readonly UpdateNotifierCompleteDelegate _onComplete;
-
-        private UpdateNotifier(Form form, bool notifyIfUpToDate = false, UpdateNotifierCompleteDelegate onComplete = null)
-        {
-            _form = form;
-            _notifyIfUpToDate = notifyIfUpToDate;
-            _onComplete = onComplete;
-
-            _updateChecker = GetUpdateChecker(form);
-
-            DoWork += CheckForUpdate;
-            RunWorkerCompleted += OnRunWorkerCompleted;
-        }
-
-        private static IUpdateChecker GetUpdateChecker(Form form)
-        {
-            if (IsClickOnce)
-                return new ClickOnceUpdateChecker(form);
-            return new GitHubUpdateChecker();
-        }
-
-        private void CheckForUpdate(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                _isUpdateAvailable = _updateChecker.IsUpdateAvailable;
-            }
-            catch (Exception ex)
-            {
-                e.Result = ex;
-            }
-        }
-
-        private void OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (_isUpdateAvailable)
-            {
-                if (_updateChecker.IsMandatory)
-                {
-                    MessageBox.Show(_form, _updateChecker.Message, "Mandatory update", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-                    _updateChecker.Update();
-                }
-                else if (DialogResult.Yes == MessageBox.Show(_form,  _updateChecker.Message, "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                {
-                    _updateChecker.Update();
-                }
-            }
-            else if (_notifyIfUpToDate)
-            {
-                var exception = (e.Result ?? _updateChecker.Result) as Exception;
-                if (exception == null)
-                {
-                    MessageBox.Show(_form, _updateChecker.Message, "No updates available", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    string caption = string.Format("{0} Error", BDAutoMuxerSettings.AssemblyName);
-                    string message = string.Format("{0}\n\n{1}", _updateChecker.Message, exception.Message);
-                    MessageBox.Show(_form, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            if (_onComplete != null)
-            {
-                _onComplete();
-            }
-        }
-
-        public static void CheckForUpdate(Form form, bool notifyIfUpToDate = false, UpdateNotifierCompleteDelegate onComplete = null)
-        {
-            var updateNotifier = new UpdateNotifier(form, notifyIfUpToDate, onComplete);
-            updateNotifier.RunWorkerAsync();
-        }
-    }
-
-    public interface IUpdateChecker
+    public interface IUpdateService
     {
         Version CurrentVersion { get; }
         Version AvailableVersion { get; }
@@ -117,7 +25,7 @@ namespace BDAutoMuxer.controllers
     }
 
     /// <see cref="http://msdn.microsoft.com/en-us/library/ms404263.aspx"/>
-    public class ClickOnceUpdateChecker : IUpdateChecker
+    public class ClickOnceUpdateService : IUpdateService
     {
         private readonly Version _currentVersion;
         private Version _latestVersion;
@@ -132,7 +40,7 @@ namespace BDAutoMuxer.controllers
 
         public bool IsMandatory { get; private set; }
 
-        public ClickOnceUpdateChecker(Form form)
+        public ClickOnceUpdateService(Form form)
         {
             _currentVersion = BDAutoMuxerSettings.AssemblyVersion;
             _form = form;
@@ -202,10 +110,10 @@ namespace BDAutoMuxer.controllers
             try
             {
                 _ad.UpdateCompleted += (sender, args) =>
-                                           {
-                                               MessageBox.Show(_form, "The application has been updated and will now restart.");
-                                               Application.Restart();
-                                           };
+                {
+                    MessageBox.Show(_form, "The application has been updated and will now restart.");
+                    Application.Restart();
+                };
                 _ad.UpdateAsync();
                 MessageBox.Show(_form, "The application update is being downloading in the background.  You will be notified when it completes.");
             }
@@ -220,12 +128,12 @@ namespace BDAutoMuxer.controllers
         public string Message { get; private set; }
     }
 
-    public class GitHubUpdateChecker : IUpdateChecker
+    public class GitHubUpdateService : IUpdateService
     {
         private const string DownloadUrl = "https://github.com/acdvorak/bdautomuxer/downloads";
         private const string VersionUrl = "https://raw.github.com/acdvorak/bdautomuxer/master/version.txt";
         private const string VersionRegex = @"^(\d+\.\d+\.\d+(?:\.\d+)?)\s+(\d{4}/\d{1,2}/\d{1,2})$";
-        
+
         private readonly Version _currentVersion;
         private Version _latestVersion;
         private DateTime _latestDate;
@@ -235,7 +143,7 @@ namespace BDAutoMuxer.controllers
 
         public bool IsMandatory { get; private set; }
 
-        public GitHubUpdateChecker()
+        public GitHubUpdateService()
         {
             IsMandatory = false;
             _currentVersion = BDAutoMuxerSettings.AssemblyVersion;
@@ -275,7 +183,7 @@ namespace BDAutoMuxer.controllers
 
             if (Version.TryParse(strLatestVersion, out _latestVersion) && DateTime.TryParse(strLatestDate, out _latestDate))
             {
-                if(_latestVersion > _currentVersion)
+                if (_latestVersion > _currentVersion)
                 {
                     Message =
                         string.Format(

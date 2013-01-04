@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
+﻿using System.Drawing;
 using System.Text.RegularExpressions;
 using BDAutoMuxer.controllers;
 using Microsoft.Win32;
 
 namespace BDAutoMuxer.Win32
 {
-    static partial class Win32
+    static class Browser
     {
         private const string DOUBLE_QUOTE = "\"";
         private const string NOT_DOUBLE_QUOTE = "[^\"]";

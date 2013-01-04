@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.models;
+using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
 
 namespace BDAutoMuxer
