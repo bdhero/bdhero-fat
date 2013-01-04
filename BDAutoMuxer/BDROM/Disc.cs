@@ -49,6 +49,20 @@ namespace BDAutoMuxer.BDROM
         /// </summary>
         public IList<Playlist> Playlists;
 
+        public Json ToJson()
+        {
+            return new Json
+                       {
+                           volume_label = VolumeLabel,
+                           meta_title = MetaTitle,
+                           iso639_2 = Language.ISO_639_2,
+                           tmdb_id = TmdbId,
+                           movie_title = MovieTitle,
+                           movie_year = MovieYear,
+                           playlists = Playlists.Select(playlist => playlist.ToJson()).ToList()
+                       };
+        }
+
         public class Json
         {
             public string volume_label;

@@ -13,6 +13,8 @@ namespace BDAutoMuxer.BDROM
     /// </summary>
     public class Track
     {
+        #region DB Fields
+
         /// <summary>
         /// Language of the track.
         /// </summary>
@@ -32,7 +34,9 @@ namespace BDAutoMuxer.BDROM
         public bool IsAudio;
         public bool IsSubtitle;
 
-        #region DB track type (main, commentary, special feature, accessible, misc)
+        #endregion
+
+        #region DB Track type (main, commentary, special feature, accessible, misc)
 
         public TrackType Type = TrackType.Misc;
 
@@ -63,8 +67,24 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
+        public Json ToJson()
+        {
+            return new Json
+                       {
+                           iso639_2 = Language.ISO_639_2,
+                           is_hidden = IsHidden,
+                           codec_id = Codec.SerializableName,
+                           is_video = IsVideo,
+                           is_audio = IsAudio,
+                           is_subtitle = IsSubtitle,
+                           type = Type
+                       };
+        }
+
         public class Json
         {
+            #region DB Fields
+
             /// <summary>
             /// 3-letter ISO 639-2 language code in all lowercase (e.g., "eng").
             /// </summary>
@@ -84,7 +104,30 @@ namespace BDAutoMuxer.BDROM
             public bool is_audio;
             public bool is_subtitle;
 
-            #region DB "Enum" type flags (main, commentary, special feature, accessible, misc)
+            #endregion
+
+            #region DB Track type (main, commentary, special feature, accessible, misc)
+
+            public TrackType type
+            {
+                get
+                {
+                    return
+                        is_main_feature    ? TrackType.MainFeature :
+                        is_commentary      ? TrackType.Commentary :
+                        is_special_feature ? TrackType.SpecialFeature :
+                        is_accessible      ? TrackType.Accessible :
+                                             TrackType.Misc;
+                }
+                set
+                {
+                    is_main_feature    = value == TrackType.MainFeature;
+                    is_commentary      = value == TrackType.Commentary;
+                    is_special_feature = value == TrackType.SpecialFeature;
+                    is_accessible      = value == TrackType.Accessible;
+                    is_misc            = value == TrackType.Misc;
+                }
+            }
 
             /// <summary>
             /// Main feature.
@@ -110,31 +153,6 @@ namespace BDAutoMuxer.BDROM
             /// Miscellaneous / extra / other track (e.g., trailer, FBI warning).
             /// </summary>
             public bool is_misc;
-
-            #endregion
-
-            #region Non-DB Properties
-
-            public TrackType type
-            {
-                get
-                {
-                    return
-                        is_main_feature ? TrackType.MainFeature :
-                        is_commentary ? TrackType.Commentary :
-                        is_special_feature ? TrackType.SpecialFeature :
-                        is_accessible ? TrackType.Accessible :
-                                             TrackType.Misc;
-                }
-                set
-                {
-                    is_main_feature = value == TrackType.MainFeature;
-                    is_commentary = value == TrackType.Commentary;
-                    is_special_feature = value == TrackType.SpecialFeature;
-                    is_accessible = value == TrackType.Accessible;
-                    is_misc = value == TrackType.Misc;
-                }
-            }
 
             #endregion
 

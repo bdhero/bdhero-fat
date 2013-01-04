@@ -90,6 +90,21 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
+        public Json ToJson()
+        {
+            return new Json
+                       {
+                           filename = Filename,
+                           filesize = Filesize,
+                           length_sec = LengthSec,
+                           is_bogus = IsBogus,
+                           is_low_resolution = IsLowResolution,
+                           cut = Cut,
+                           tracks = Tracks.Select(track => track.ToJson()).ToList(),
+                           chapters = Chapters.Select(chapter => chapter.ToJson()).ToList()
+                       };
+        }
+
         public class Json
         {
             #region DB Fields (filename, file size, length)

@@ -12,6 +12,16 @@ namespace BDAutoMuxer.BDROM
         public Language Language;
         public string Title;
 
+        public Json ToJson()
+        {
+            return new Json
+                       {
+                           start = Start,
+                           iso639_2 = Language.ISO_639_2,
+                           title = Title
+                       };
+        }
+
         public class Json
         {
             public TimeSpan start;
