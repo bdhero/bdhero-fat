@@ -67,6 +67,16 @@ namespace BDAutoMuxer.BDROM
                        };
         }
 
+        public string SerializeJson()
+        {
+            return JsonConvert.SerializeObject(ToJsonObject());
+        }
+
+        public static Disc DeserializeJson(string json)
+        {
+            return JsonConvert.DeserializeObject<Json>(json).ToDisc();
+        }
+
         public class Json
         {
             #region DB Fields
