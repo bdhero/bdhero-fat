@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace BDAutoMuxer
+namespace BDAutoMuxer.BDInfo
 {
     public class BDROM
     {

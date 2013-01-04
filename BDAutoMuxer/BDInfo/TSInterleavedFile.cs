@@ -17,14 +17,11 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //=============================================================================
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 // TODO: Do more interesting things here...
 
-namespace BDAutoMuxer
+namespace BDAutoMuxer.BDInfo
 {
     public class TSInterleavedFile
     {

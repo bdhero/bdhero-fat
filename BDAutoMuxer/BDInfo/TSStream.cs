@@ -20,9 +20,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 
-namespace BDAutoMuxer
+namespace BDAutoMuxer.BDInfo
 {
     public enum TSStreamType : byte
     {

@@ -25,7 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace BDAutoMuxer
+namespace BDAutoMuxer.BDInfo
 {
     public class TSPlaylistFile
     {

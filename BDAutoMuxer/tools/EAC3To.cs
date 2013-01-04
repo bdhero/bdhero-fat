@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.tools

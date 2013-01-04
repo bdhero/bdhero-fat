@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
@@ -36,7 +37,7 @@ namespace BDAutoMuxer
 
         private Tmdb _tmdbApi;
 
-        private BDROM _bdrom;
+        private BDInfo.BDROM _bdrom;
         private IList<TSPlaylistFile> _playlists;
         private IList<Language> _languages;
         private IList<string> _languageCodes;
@@ -368,7 +369,7 @@ namespace BDAutoMuxer
             _subtitleTracks.Clear();
         }
 
-        private void Init(BDROM bdrom, ICollection<Language> languages, List<TSPlaylistFile> playlists)
+        private void Init(BDInfo.BDROM bdrom, ICollection<Language> languages, List<TSPlaylistFile> playlists)
         {
             _bdrom = bdrom;
             _languages = new List<Language>(languages).ToArray();

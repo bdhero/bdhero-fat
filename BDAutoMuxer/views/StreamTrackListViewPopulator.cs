@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 
 namespace BDAutoMuxer.views

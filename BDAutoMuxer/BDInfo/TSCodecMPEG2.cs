@@ -19,11 +19,7 @@
 
 #undef DEBUG
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BDAutoMuxer
+namespace BDAutoMuxer.BDInfo
 {
     public abstract class TSCodecMPEG2
     {

@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;

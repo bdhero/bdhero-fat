@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.tools
@@ -27,7 +28,7 @@ namespace BDAutoMuxer.tools
         protected override string Name { get { return "TsMuxer"; } }
         protected override string Filename { get { return "tsMuxeR.exe"; } }
 
-        private readonly BDROM _bdrom;
+        private readonly BDInfo.BDROM _bdrom;
         private readonly TSPlaylistFile _playlist;
         private readonly ICollection<TSStream> _selectedTracks;
 
@@ -45,7 +46,7 @@ namespace BDAutoMuxer.tools
         /// </summary>
         private readonly Dictionary<string, string> _demuxedFilePaths = new Dictionary<string, string>();
 
-        public TsMuxer(BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks, bool demuxLPCM = false, bool demuxSubtitles = false)
+        public TsMuxer(BDInfo.BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks, bool demuxLPCM = false, bool demuxSubtitles = false)
         {
             _bdrom = bdrom;
             _playlist = playlist;
