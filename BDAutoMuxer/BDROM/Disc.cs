@@ -53,6 +53,13 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
+        public override int GetHashCode()
+        {
+            var playlistHashes = string.Join(", ", Playlists.Select(playlist => playlist.GetHashCode()));
+            var hashes = string.Format("{0}: [ {1} ]", VolumeLabel, playlistHashes);
+            return hashes.GetHashCode();
+        }
+
         public Json ToJsonObject()
         {
             return new Json

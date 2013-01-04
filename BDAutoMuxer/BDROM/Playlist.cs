@@ -90,6 +90,12 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
+        public override int GetHashCode()
+        {
+            var hashes = string.Format("{0}, {1} bytes, {2} seconds, {3} tracks, {4} chapters", Filename, Filesize, LengthSec, Tracks.Count, Chapters.Count);
+            return hashes.GetHashCode();
+        }
+
         public Json ToJsonObject()
         {
             return new Json
