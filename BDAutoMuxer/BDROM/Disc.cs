@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BDAutoMuxer.BDInfo;
 using Newtonsoft.Json;
 
 // ReSharper disable InconsistentNaming
@@ -15,44 +16,62 @@ namespace BDAutoMuxer.BDROM
         /// <summary>
         /// E.G., "TOY_STORY_2_USA"
         /// </summary>
-        public string volume_label;
+        public string VolumeLabel;
 
         /// <summary>
         /// Name of the movie taken from bdmt_eng.xml if present (e.g., "Toy Story 2 - Blu-ray™").
         /// Most discs released after 2009 have this value.
         /// </summary>
-        public string meta_title;
+        public string MetaTitle;
 
         /// <summary>
         /// Primary release language of the disc.
-        /// A 3-letter ISO 639-2 language code in all lowercase (e.g., "eng").
         /// </summary>
-        public string iso639_2;
+        public Language Language;
 
         /// <summary>
         /// TMDb movie ID (e.g., 863).
         /// </summary>
-        public int tmdb_id;
+        public int TmdbId;
 
         /// <summary>
         /// Name of the movie in its primary release language (e.g., "Toy Story 2").
         /// </summary>
-        public string movie_title;
+        public string MovieTitle;
 
         /// <summary>
         /// Year the movie was released (e.g., 1999).
         /// </summary>
-        public int? movie_year;
+        public int? MovieYear;
 
         /// <summary>
         /// List of all playlists in the order they appear on the disc.
         /// </summary>
-        public IList<Playlist> playlists;
+        public IList<Playlist> Playlists;
 
-        public static void Test()
+        public class Json
         {
-            var disc = JsonConvert.DeserializeObject<Disc>("{ \"title_name\": \"abc\" }");
-            Console.WriteLine(disc);
+            public string volume_label;
+            public string meta_title;
+            public string iso639_2;
+            public int tmdb_id;
+            public string movie_title;
+            public int? movie_year;
+            public IList<Playlist.Json> playlists;
+
+            public Disc FromJson()
+            {
+                return new Disc
+                           {
+                               VolumeLabel = volume_label,
+                               MetaTitle = meta_title,
+                               Language = Language.GetLanguage(iso639_2),
+                               TmdbId = tmdb_id,
+                               MovieTitle = movie_title,
+                               MovieYear = movie_year,
+                               Playlists = playlists.Select(playlist => playlist.FromJson()).ToList()
+                           };
+            }
         }
     }
 }
