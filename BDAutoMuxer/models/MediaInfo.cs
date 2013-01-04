@@ -1394,6 +1394,9 @@ namespace BDAutoMuxer.models
         public virtual bool IsRequiredDVDCodec { get { return false; } }
         public virtual bool IsOptionalDVDCodec { get { return false; } }
 
+        /// <summary>
+        /// Serializable codec ID in all uppercase (e.g., "V_H264")
+        /// </summary>
         public abstract string SerializableName { get; }
 
         public abstract TSStreamType StreamType { get; }
