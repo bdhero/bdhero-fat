@@ -161,6 +161,7 @@
       <DependentUpon>FormCodecScanner.cs</DependentUpon>
     </Compile>
     <Compile Include="models\MediaInfo.cs" />
+    <Compile Include="Services\BDService.cs" />
     <Compile Include="tools\EAC3To.cs" />
     <Compile Include="views\LinkLabel2.cs">
       <SubType>Component</SubType>
@@ -455,6 +456,7 @@
       <Name>ObjectListView2010</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To embed referenced .DLL files in the output .EXE, uncomment the lines below and in Program.cs -->
   <!--

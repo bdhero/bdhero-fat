@@ -74,14 +74,9 @@ namespace BDAutoMuxer.BDROM
                        };
         }
 
-        public string SerializeJson()
+        public static IList<Disc> DeserializeJson(IEnumerable<Disc.Json> discs)
         {
-            return JsonConvert.SerializeObject(ToJsonObject());
-        }
-
-        public static Disc DeserializeJson(string json)
-        {
-            return JsonConvert.DeserializeObject<Json>(json).ToDisc();
+            return discs.Select(jsonObject => jsonObject.ToDisc()).ToList();
         }
 
         public class Json
