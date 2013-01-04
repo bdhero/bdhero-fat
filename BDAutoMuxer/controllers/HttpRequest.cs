@@ -26,16 +26,26 @@ namespace BDAutoMuxer.controllers
             }
         }
 
-        public static string Post(string uri, IDictionary<string, string> data = null)
+        public static string Post(string uri, IDictionary<string, string> formData = null)
         {
-            var request = BuildRequest("POST", uri);
+            return PutPost("POST", uri, formData);
+        }
+
+        public static string Put(string uri, IDictionary<string, string> formData = null)
+        {
+            return PutPost("PUT", uri, formData);
+        }
+
+        private static string PutPost(string method, string uri, IDictionary<string, string> formData)
+        {
+            var request = BuildRequest(method, uri);
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
                 var body = new List<string>();
-                if (data != null)
+                if (formData != null)
                 {
-                    body.AddRange(data.Keys.Select(key => EncodeForPostBody(key, data[key])));
+                    body.AddRange(formData.Keys.Select(key => EncodeForPostBody(key, formData[key])));
                 }
                 streamWriter.Write(string.Join("&", body) + "\n");
                 streamWriter.Flush();
@@ -43,7 +53,7 @@ namespace BDAutoMuxer.controllers
             }
 
             // This actually sends the request
-            var httpResponse = (HttpWebResponse)request.GetResponse();
+            var httpResponse = (HttpWebResponse) request.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var responseText = streamReader.ReadToEnd();
@@ -61,7 +71,7 @@ namespace BDAutoMuxer.controllers
             request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
             request.Expect = null;
 
-            if ("POST" == method)
+            if ("POST" == method || "PUT" == method)
                 request.ContentType = "application/x-www-form-urlencoded";
 
             return request;
