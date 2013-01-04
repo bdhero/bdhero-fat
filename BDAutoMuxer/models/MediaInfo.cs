@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.tools;
 using Newtonsoft.Json;
@@ -2314,7 +2315,7 @@ namespace BDAutoMuxer.models
     {
         public override string SerializableName
         {
-            get { return "D_DTS_ES"; }
+            get { return "A_DTS_ES"; }
         }
 
         public override TSStreamType StreamType
