@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+// ReSharper disable InconsistentNaming
 namespace BDAutoMuxer.BDROM
 {
     /// <summary>
     /// Represents a .MPLS file
     /// </summary>
-    class Playlist
+    public class Playlist
     {
         #region DB Fields (filename, file size, length)
 
@@ -29,10 +30,10 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region DB Flags (bogus, low quality, short)
+        #region DB Flags (bogus, low resolution)
 
         /// <summary>
-        /// Has repeated tracks or is a duplicate of another playlist.
+        /// Has repeated stream files, loops, or is a duplicate of another playlist.
         /// </summary>
         public bool is_bogus;
 
@@ -40,13 +41,7 @@ namespace BDAutoMuxer.BDROM
         /// Has a lower video resolution than the highest-resolution playlist.
         /// E.G., this playlist is 480p or 720i but the highest-resolution playlist is 1080p.
         /// </summary>
-        public bool is_low_quality;
-
-        /// <summary>
-        /// Less than 90% of the length of the longest playlist.
-        /// E.G., this playlist is 50 minutes long whereas the longest playlist is 90 minutes.
-        /// </summary>
-        public bool is_short;
+        public bool is_low_resolution;
 
         #endregion
 
@@ -84,29 +79,42 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region Non-DB Properties (main, commentary, special feature)
+        #region Protected utilities
+
+        /// <summary>
+        /// Null-safe method for testing if the first video track meets certain criteria.
+        /// </summary>
+        /// <param name="delegate">Does NOT need to check if the video track is null.  It will not be invoked if there are no video tracks.</param>
+        /// <returns>The delegate's return value if this playlist has a video track; otherwise false.</returns>
+        bool TestFirstVideoTrack(FirstVideoTrackDelegate @delegate)
+        {
+            var video = tracks.FirstOrDefault(track => track.is_video);
+            return video != null && @delegate(video);
+        }
+
+        #endregion
+
+        #region Non-DB video track properties (main feature, video commentary, special feature, video accessible, misc.)
 
         /// <summary>
         /// The main movie (a.k.a. feature film) without forced (burned in) video commentary.
         /// </summary>
-        public bool is_main
+        public bool is_main_feature
         {
             get
             {
-                var video = tracks.FirstOrDefault(track => track.is_video);
-                return video != null && video.is_main;
+                return TestFirstVideoTrack(track => track.is_main_feature);
             }
         }
 
         /// <summary>
-        /// Director or other commentary is burned in to the video.
+        /// Director or other commentary is burned in to the primary video track.
         /// </summary>
-        public bool is_commentary
+        public bool is_video_commentary
         {
             get
             {
-                var video = tracks.FirstOrDefault(track => track.is_video);
-                return video != null && video.is_commentary;
+                return TestFirstVideoTrack(track => track.is_commentary);
             }
         }
 
@@ -117,11 +125,83 @@ namespace BDAutoMuxer.BDROM
         {
             get
             {
+                return TestFirstVideoTrack(track => track.is_special_feature);
+            }
+        }
+
+        /// <summary>
+        /// Accessible video for the deaf.  This should never be true unless the user manually overrides it.
+        /// </summary>
+        public bool is_video_accessible
+        {
+            get
+            {
+                return TestFirstVideoTrack(track => track.is_accessible);
+            }
+        }
+
+        /// <summary>
+        /// Miscellaneous / extra / other playlist (e.g., trailer, FBI warning).
+        /// </summary>
+        public bool is_misc
+        {
+            get
+            {
+                return TestFirstVideoTrack(track => track.is_misc);
+            }
+        }
+
+        #endregion
+
+        #region Non-DB enum properties
+
+        public PlaylistCut cut
+        {
+            get
+            {
+                return
+                    is_special_edition  ? PlaylistCut.Special :
+                    is_extended_edition ? PlaylistCut.Extended :
+                    is_unrated_edition  ? PlaylistCut.Unrated :
+                                          PlaylistCut.Theatrical;
+            }
+            set
+            {
+                is_theatrical_edition = value == PlaylistCut.Theatrical;
+                is_special_edition    = value == PlaylistCut.Special;
+                is_extended_edition   = value == PlaylistCut.Extended;
+                is_unrated_edition    = value == PlaylistCut.Unrated;
+            }
+        }
+
+        /// <summary>
+        /// The type of the first (primary) video track.
+        /// </summary>
+        public TrackType type
+        {
+            get
+            {
                 var video = tracks.FirstOrDefault(track => track.is_video);
-                return video != null && video.is_special_feature;
+                return video != null ? video.type : TrackType.Misc;
+            }
+            set
+            {
+                var video = tracks.FirstOrDefault(track => track.is_video);
+                if (video != null)
+                    video.type = value;
             }
         }
 
         #endregion
     }
+
+    public enum PlaylistCut
+    {
+        Theatrical,
+        Special,
+        Extended,
+        Unrated
+    }
+
+    delegate bool FirstVideoTrackDelegate(Track track);
 }

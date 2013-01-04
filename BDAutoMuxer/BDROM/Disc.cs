@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
+// ReSharper disable InconsistentNaming
 namespace BDAutoMuxer.BDROM
 {
     /// <summary>
     /// Represents the top-level BD-ROM disc and movie
     /// </summary>
-    class Disc
+    public class Disc
     {
         /// <summary>
         /// E.G., "TOY_STORY_2_USA"
