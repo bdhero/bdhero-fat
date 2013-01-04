@@ -1457,6 +1457,12 @@ namespace BDAutoMuxer.models
             return SerializableName.GetHashCode();
         }
 
+        public static MICodec FromSerializableName(string serializedName)
+        {
+            serializedName = serializedName.ToUpperInvariant();
+            return AllCodecs.FirstOrDefault(codec => codec.SerializableName == serializedName) ?? UnknownCodec;
+        }
+
         public static string SerializeCodecs<T>(ICollection<T> codecs) where T : MICodec
         {
             return string.Join(";", new HashSet<T>(codecs).Select(codec => codec.SerializableName));
