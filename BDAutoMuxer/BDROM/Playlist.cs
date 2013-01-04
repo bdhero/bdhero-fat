@@ -90,7 +90,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        public Json ToJson()
+        public Json ToJsonObject()
         {
             return new Json
                        {
@@ -100,8 +100,8 @@ namespace BDAutoMuxer.BDROM
                            is_bogus = IsBogus,
                            is_low_resolution = IsLowResolution,
                            cut = Cut,
-                           tracks = Tracks.Select(track => track.ToJson()).ToList(),
-                           chapters = Chapters.Select(chapter => chapter.ToJson()).ToList()
+                           tracks = Tracks.Select(track => track.ToJsonObject()).ToList(),
+                           chapters = Chapters.Select(chapter => chapter.ToJsonObject()).ToList()
                        };
         }
 
@@ -189,7 +189,7 @@ namespace BDAutoMuxer.BDROM
 
             #endregion
 
-            public Playlist FromJson()
+            public Playlist ToPlaylist()
             {
                 return new Playlist
                            {
@@ -199,8 +199,8 @@ namespace BDAutoMuxer.BDROM
                                IsBogus = is_bogus,
                                IsLowResolution = is_low_resolution,
                                Cut = cut,
-                               Tracks = tracks.Select(track => track.FromJson()).ToList(),
-                               Chapters = chapters.Select(chapter => chapter.FromJson()).ToList()
+                               Tracks = tracks.Select(track => track.ToTrack()).ToList(),
+                               Chapters = chapters.Select(chapter => chapter.ToChapter()).ToList()
                            };
             }
         }

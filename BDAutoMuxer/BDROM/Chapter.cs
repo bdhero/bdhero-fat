@@ -12,7 +12,7 @@ namespace BDAutoMuxer.BDROM
         public Language Language;
         public string Title;
 
-        public Json ToJson()
+        public Json ToJsonObject()
         {
             return new Json
                        {
@@ -28,7 +28,7 @@ namespace BDAutoMuxer.BDROM
             public string iso639_2;
             public string title;
 
-            public Chapter FromJson()
+            public Chapter ToChapter()
             {
                 return new Chapter {Start = start, Language = Language.GetLanguage(iso639_2), Title = title};
             }

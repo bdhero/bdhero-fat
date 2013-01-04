@@ -67,7 +67,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        public Json ToJson()
+        public Json ToJsonObject()
         {
             return new Json
                        {
@@ -156,7 +156,7 @@ namespace BDAutoMuxer.BDROM
 
             #endregion
 
-            public Track FromJson()
+            public Track ToTrack()
             {
                 return new Track
                            {

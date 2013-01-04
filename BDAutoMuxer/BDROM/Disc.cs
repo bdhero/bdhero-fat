@@ -53,7 +53,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        public Json ToJson()
+        public Json ToJsonObject()
         {
             return new Json
                        {
@@ -63,7 +63,7 @@ namespace BDAutoMuxer.BDROM
                            tmdb_id = TmdbId,
                            movie_title = MovieTitle,
                            movie_year = MovieYear,
-                           playlists = Playlists.Select(playlist => playlist.ToJson()).ToList()
+                           playlists = Playlists.Select(playlist => playlist.ToJsonObject()).ToList()
                        };
         }
 
@@ -81,7 +81,11 @@ namespace BDAutoMuxer.BDROM
 
             #endregion
 
-            public Disc FromJson()
+            /// <summary>
+            /// Transforms this Json object into a Disc object.
+            /// </summary>
+            /// <returns>Disc object populated with the same data as this Json object.</returns>
+            public Disc ToDisc()
             {
                 return new Disc
                            {
@@ -91,7 +95,7 @@ namespace BDAutoMuxer.BDROM
                                TmdbId = tmdb_id,
                                MovieTitle = movie_title,
                                MovieYear = movie_year,
-                               Playlists = playlists.Select(playlist => playlist.FromJson()).ToList()
+                               Playlists = playlists.Select(playlist => playlist.ToPlaylist()).ToList()
                            };
             }
         }
