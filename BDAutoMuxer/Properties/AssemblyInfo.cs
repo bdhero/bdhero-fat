@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AndyDvorak.net")]
 [assembly: AssemblyProduct("BDAutoMuxer")]
-[assembly: AssemblyCopyright("Copyright © AndyDvorak.net 2012, Cinema Squid 2011")]
+[assembly: AssemblyCopyright("Copyright © AndyDvorak.net 2012-2013, Cinema Squid 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
