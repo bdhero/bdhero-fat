@@ -258,7 +258,7 @@ namespace BDAutoMuxer
         {
             get
             {
-                return Regex.Replace(AssemblyVersion.ToString(), @"^(\d+\.\d+\.\d+)\.\d+$", "$1");
+                return Regex.Replace(AssemblyVersion.ToString(), @"\.0$", "");
             }
         }
 
