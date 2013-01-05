@@ -30,13 +30,13 @@ namespace BDAutoMuxer.BDInfo
         private static readonly Dictionary<string, Language> ISO_639_2_Map = new Dictionary<string, Language>();
 
         /// <summary>2 digits (e.g., "en", "fr", "es")</summary>
-        public string ISO_639_1 { get; set; }
+        public string ISO_639_1 { get; private set; }
 
         /// <summary>3 digits (e.g., "eng", "fra", "spa")</summary>
-        public string ISO_639_2 { get; set; }
+        public string ISO_639_2 { get; private set; }
 
         /// <summary>Human-friendly English name of the language (e.g., "English", "French", "Spanish")</summary>
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         public Language(string ISO_639_1, string ISO_639_2, string Name)
         {
