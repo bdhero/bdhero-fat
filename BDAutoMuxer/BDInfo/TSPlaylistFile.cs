@@ -1335,7 +1335,7 @@ namespace BDAutoMuxer.BDInfo
                 comparison = ComparePlaylistFiles;
 
             TSPlaylistFile[] playlistArray = playlists.ToArray();
-            Array.Sort(playlistArray, ComparePlaylistFiles);
+            Array.Sort(playlistArray, comparison);
             return new List<TSPlaylistFile>(playlistArray);
         }
 
