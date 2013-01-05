@@ -489,6 +489,8 @@ namespace BDAutoMuxer
         private void ScanCompleted(object sender, EventArgs e)
         {
             _isScanningBDROM = false;
+            BDAutoMuxerSettings.LastPath = textBoxSource.Text;
+            BDAutoMuxerSettings.SaveSettings();
             ResetUI();
         }
 
@@ -1124,7 +1126,6 @@ namespace BDAutoMuxer
             BDAutoMuxerSettings.OutputFileName = textBoxOutputFileName.Text;
             BDAutoMuxerSettings.ReplaceSpaces = checkBoxReplaceSpaces.Checked;
             BDAutoMuxerSettings.ReplaceSpacesWith = textBoxReplaceSpaces.Text;
-            BDAutoMuxerSettings.LastPath = textBoxSource.Text;
             BDAutoMuxerSettings.DemuxLPCM = checkBoxDemuxLPCM.Checked;
             BDAutoMuxerSettings.DemuxSubtitles = checkBoxDemuxSubtitles.Checked;
             BDAutoMuxerSettings.SaveSettings();
