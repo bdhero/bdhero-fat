@@ -27,7 +27,8 @@ namespace BDAutoMuxer.controllers
         {
             var cultureInfo = Thread.CurrentThread.CurrentCulture;
             var textInfo = cultureInfo.TextInfo;
-            return textInfo.ToTitleCase(str);
+            var titleCase = textInfo.ToTitleCase(textInfo.ToLower(str));
+            return titleCase;
         }
     }
 }
