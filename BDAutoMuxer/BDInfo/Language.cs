@@ -29,6 +29,8 @@ namespace BDAutoMuxer.BDInfo
         private static readonly Dictionary<string, Language> ISO_639_1_Map = new Dictionary<string, Language>();
         private static readonly Dictionary<string, Language> ISO_639_2_Map = new Dictionary<string, Language>();
 
+        public static Language Undetermined { get { return FromCode("und"); } }
+
         /// <summary>2 digits (e.g., "en", "fr", "es")</summary>
         public string ISO_639_1 { get; private set; }
 
