@@ -403,22 +403,22 @@ namespace BDAutoMuxer
             ResetUI();
 
             var movieNameSearchable = _bdrom.DiscNameSearchable;
-            if (Regex.Replace(movieNameSearchable, @"\W", "").ToLowerInvariant() == "bluray")
-            {
-                movieNameSearchable = "";
-            }
             if (string.IsNullOrWhiteSpace(movieNameSearchable))
             {
-                movieNameSearchable = _bdrom.VolumeLabel;
+                movieNameSearchable = _bdrom.VolumeLabel ?? "";
                 movieNameSearchable = Regex.Replace(movieNameSearchable, @"^\d{6,}_", "");
                 movieNameSearchable = Regex.Replace(movieNameSearchable, @"_+", " ");
                 movieNameSearchable = movieNameSearchable.ToTitle();
+            }
+            if (Regex.Replace(movieNameSearchable, @"\W", "").ToLowerInvariant() == "bluray")
+            {
+                movieNameSearchable = "";
             }
             movieNameSearchable = Regex.Replace(movieNameSearchable, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
             movieNameSearchable = movieNameSearchable.Replace("-", " ");
 
             movieNameTextBox.Text = movieNameSearchable;
-            maskedTextBoxYear.Text = "";
+            textBoxYear.Text = "";
 
             discLanguageComboBox.DataSource = new List<Language>(_languages).ToArray();
 
@@ -837,7 +837,7 @@ namespace BDAutoMuxer
             _autoConfigured = false;
             _autoTmdbId = -1;
 
-            SetTabStatus(tabPageDisc, "Querying main movie database...");
+            SetTabStatus(tabPagePlaylists, "Querying main movie database...");
 
             _mainMovieBackgroundWorker = new BackgroundWorker();
             _mainMovieBackgroundWorker.WorkerReportsProgress = true;
@@ -848,7 +848,7 @@ namespace BDAutoMuxer
             _mainMovieBackgroundWorker.RunWorkerAsync();
         }
 
-        private void SearchTmdb()
+        private void SearchTmdb(object sender = null, EventArgs e = null)
         {
             Language language = discLanguageComboBox.SelectedValue as Language;
 
@@ -862,11 +862,11 @@ namespace BDAutoMuxer
             ResetUI();
             ClearTmdb();
 
-            SetTabStatus(tabPageDisc, "Searching The Movie Database (TMDb)...");
+            SetTabStatus(tabPagePlaylists, "Searching The Movie Database (TMDb)...");
 
             string ISO_639_1 = language.ISO_639_1;
             string query = movieNameTextBox.Text;
-            int? year = Regex.IsMatch(maskedTextBoxYear.Text, @"^\d{4}$") ? (int?)Int32.Parse(maskedTextBoxYear.Text) : null;
+            int? year = Regex.IsMatch(textBoxYear.Text, @"^\d{4}$") ? (int?)Int32.Parse(textBoxYear.Text) : null;
             
             TmdbSearchRequestParams reqParams = new TmdbSearchRequestParams(query, year, ISO_639_1);
 
@@ -927,7 +927,7 @@ namespace BDAutoMuxer
             if (exception != null)
             {
                 searchResultListView.Enabled = false;
-                ShowErrorMessage(tabPageDisc, errorCaption, exception.Message);
+                ShowErrorMessage(tabPagePlaylists, errorCaption, exception.Message);
             }
 
             if (_mainMovieSearchResult == null) return;
@@ -936,11 +936,11 @@ namespace BDAutoMuxer
             {
                 string errorMessages = _mainMovieSearchResult.errors.Aggregate("", (current, error) => current + (error.textStatus + " - " + error.errorMessage + "\n"));
                 string errorMessage = "Main movie service returned the following error(s): \n\n" + errorMessages;
-                ShowErrorMessage(tabPageDisc, errorCaption, errorMessage);
+                ShowErrorMessage(tabPagePlaylists, errorCaption, errorMessage);
             }
             else if (_mainMovieSearchResult.discs.Count == 0)
             {
-                ShowExclamationMessage(tabPageDisc, "No results found", "No matching discs were found in the database.\n\n" + "Please submit one!");
+                ShowExclamationMessage(tabPagePlaylists, "No results found", "No matching discs were found in the database.\n\n" + "Please submit one!");
             }
             else
             {
@@ -950,7 +950,7 @@ namespace BDAutoMuxer
                 _autoTmdbId = disc.tmdb_id;
 
                 movieNameTextBox.Text = disc.movie_title;
-                maskedTextBoxYear.Text = disc.year != null ? disc.year.ToString() : null;
+                textBoxYear.Text = disc.year != null ? disc.year.ToString() : null;
 
                 _populator.AutoConfigure(disc.playlists);
 
@@ -958,7 +958,7 @@ namespace BDAutoMuxer
                 string plural = count != 1 ? "s" : "";
                 string caption = string.Format("{0:d} result{1} found", count, plural);
                 string message = string.Format("Hooray!  Found {0:d} matching disc{1} in the database.", count, plural);
-                ShowMessage(tabPageDisc, caption, message);
+                ShowMessage(tabPagePlaylists, caption, message);
             }
 
             SearchTmdb();
@@ -1015,7 +1015,7 @@ namespace BDAutoMuxer
             var exception = e.Result as Exception;
             if (exception != null)
             {
-                ShowErrorMessage(tabPageDisc, errorCaption, exception.Message);
+                ShowErrorMessage(tabPagePlaylists, errorCaption, exception.Message);
             }
 
             if (_tmdbMovieSearch == null || _tmdbMovieSearch.results == null)
@@ -1049,7 +1049,7 @@ namespace BDAutoMuxer
             {
                 int count = _tmdbMovieSearch.results.Count;
                 string plural = count != 1 ? "s" : "";
-                SetTabStatus(tabPageDisc, string.Format("{0:d} result{1} found", count, plural));
+                SetTabStatus(tabPagePlaylists, string.Format("{0:d} result{1} found", count, plural));
 
                 searchResultListView.Enabled = true;
                 searchResultListView.Select();
@@ -1057,7 +1057,7 @@ namespace BDAutoMuxer
             }
             else
             {
-                ShowExclamationMessage(tabPageDisc, "No results found", "No matching movies found in The Movie Database (TMDb)");
+                ShowExclamationMessage(tabPagePlaylists, "No results found", "No matching movies found in The Movie Database (TMDb)");
                 movieNameTextBox.Select();
             }
 
@@ -2003,7 +2003,7 @@ namespace BDAutoMuxer
 
             string volume = _bdrom.VolumeLabel;
             string title = String.IsNullOrEmpty(_tmdbMovieTitle) ? movieNameTextBox.Text : _tmdbMovieTitle;
-            string year = _tmdbMovieYear == null ? GetYearString(maskedTextBoxYear.Text) : _tmdbMovieYear + "";
+            string year = _tmdbMovieYear == null ? GetYearString(textBoxYear.Text) : _tmdbMovieYear + "";
             string res = "";
             string vcodec = "";
             string acodec = "";
