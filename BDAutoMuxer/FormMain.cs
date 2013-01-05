@@ -416,6 +416,7 @@ namespace BDAutoMuxer
             }
             movieNameSearchable = Regex.Replace(movieNameSearchable, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
             movieNameSearchable = movieNameSearchable.Replace("-", " ");
+            movieNameSearchable = Regex.Replace(movieNameSearchable, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
 
             movieNameTextBox.Text = movieNameSearchable;
             textBoxYear.Text = "";

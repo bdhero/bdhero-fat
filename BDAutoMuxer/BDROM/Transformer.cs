@@ -51,7 +51,7 @@ namespace BDAutoMuxer.BDROM
             if (!string.IsNullOrWhiteSpace(MovieTitle))
             {
                 MovieTitle = Regex.Replace(MovieTitle, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
-                MovieTitle = Regex.Replace(MovieTitle, @" \(?Disc \d+\)?", "", RegexOptions.IgnoreCase);
+                MovieTitle = Regex.Replace(MovieTitle, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
                 MovieTitle = Regex.Replace(MovieTitle, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
                 MovieTitle = MovieTitle.Trim();
             }
