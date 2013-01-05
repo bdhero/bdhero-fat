@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using BDAutoMuxer.BDInfo;
+using BDAutoMuxer.controllers;
 
 namespace BDAutoMuxer.BDROM
 {
@@ -64,13 +65,10 @@ namespace BDAutoMuxer.BDROM
 
             if (string.IsNullOrWhiteSpace(MovieTitle))
             {
-                var cultureInfo = Thread.CurrentThread.CurrentCulture;
-                var textInfo = cultureInfo.TextInfo;
-
                 MovieTitle = VolumeLabel;
                 MovieTitle = Regex.Replace(MovieTitle, @"^\d{6,}_", "");
                 MovieTitle = Regex.Replace(MovieTitle, @"_+", " ");
-                MovieTitle = textInfo.ToTitleCase(MovieTitle);
+                MovieTitle = MovieTitle.ToTitle();
             }
 
             MovieTitle = Regex.Replace(MovieTitle, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
