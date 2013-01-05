@@ -1459,6 +1459,11 @@ namespace BDAutoMuxer.tools
             return SerializableName.GetHashCode();
         }
 
+        public static MICodec FromStreamType(TSStreamType streamType)
+        {
+            return AllCodecs.FirstOrDefault(codec => codec.StreamType == streamType) ?? UnknownCodec;
+        }
+
         public static MICodec FromSerializableName(string serializedName)
         {
             serializedName = serializedName.ToUpperInvariant();
