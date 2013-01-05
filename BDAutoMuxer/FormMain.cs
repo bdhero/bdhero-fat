@@ -402,9 +402,22 @@ namespace BDAutoMuxer
 
             ResetUI();
 
-            movieNameTextBox.Text = String.IsNullOrEmpty(_bdrom.DiscNameSearchable) ? _bdrom.VolumeLabel : _bdrom.DiscNameSearchable;
-            movieNameTextBox.Text = Regex.Replace(movieNameTextBox.Text.Trim(), @"^(.*), (A|The)$", "$2 $1", RegexOptions.IgnoreCase);
-            movieNameTextBox.Text = movieNameTextBox.Text.Replace("-", " ");
+            var movieNameSearchable = _bdrom.DiscNameSearchable;
+            if (Regex.Replace(movieNameSearchable, @"\W", "").ToLowerInvariant() == "bluray")
+            {
+                movieNameSearchable = "";
+            }
+            if (string.IsNullOrWhiteSpace(movieNameSearchable))
+            {
+                movieNameSearchable = _bdrom.VolumeLabel;
+                movieNameSearchable = Regex.Replace(movieNameSearchable, @"^\d{6,}_", "");
+                movieNameSearchable = Regex.Replace(movieNameSearchable, @"_+", " ");
+                movieNameSearchable = movieNameSearchable.ToTitle();
+            }
+            movieNameSearchable = Regex.Replace(movieNameSearchable, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
+            movieNameSearchable = movieNameSearchable.Replace("-", " ");
+
+            movieNameTextBox.Text = movieNameSearchable;
             maskedTextBoxYear.Text = "";
 
             discLanguageComboBox.DataSource = new List<Language>(_languages).ToArray();
