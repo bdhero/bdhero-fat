@@ -146,6 +146,7 @@
     <Compile Include="BDROM\Disc.cs" />
     <Compile Include="BDROM\Playlist.cs" />
     <Compile Include="BDROM\Track.cs" />
+    <Compile Include="BDROM\Transformer.cs" />
     <Compile Include="controllers\Extensions.cs" />
     <Compile Include="controllers\PlaylistFinder.cs" />
     <Compile Include="FormCodecReference.cs">

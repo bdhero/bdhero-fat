@@ -11,8 +11,13 @@ namespace BDAutoMuxer.BDROM
     /// <summary>
     /// Represents the top-level BD-ROM disc and movie
     /// </summary>
-    public class Disc
+    public partial class Disc
     {
+        private Disc()
+        {
+            Languages = new List<Language>();
+        }
+
         #region DB Fields
 
         /// <summary>
@@ -52,6 +57,11 @@ namespace BDAutoMuxer.BDROM
         public IList<Playlist> Playlists = new List<Playlist>();
 
         #endregion
+
+        /// <summary>
+        /// Returns a list of all languages found on the disc, with the primary disc language first if it can be automatically detected.
+        /// </summary>
+        public IList<Language> Languages { get; private set; }
 
         public override int GetHashCode()
         {

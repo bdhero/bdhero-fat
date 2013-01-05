@@ -73,6 +73,50 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
+        #region Non-DB Fields
+
+        /// <summary>
+        /// Number of audio channels (e.g., 2, 6, 8).
+        /// </summary>
+        public int ChannelCount;
+
+        /// <summary>
+        /// Video height (e.g., 1080, 720, 480).
+        /// </summary>
+        public int VideoHeight;
+
+        #endregion
+
+        public static IList<Track> Transform(IEnumerable<TSStream> streams)
+        {
+            return streams.Select(Transform).ToList();
+        }
+
+        public static Track Transform(TSStream stream)
+        {
+            return new Track
+                       {
+                           Language = stream.Language,
+                           IsHidden = stream.IsHidden,
+                           Codec = MICodec.FromStreamType(stream.StreamType),
+                           IsVideo = stream.IsVideoStream,
+                           IsAudio = stream.IsAudioStream,
+                           IsSubtitle = stream.IsGraphicsStream || stream.IsTextStream,
+                           ChannelCount = GetChannelCount(stream as TSAudioStream),
+                           VideoHeight = GetVideoHeight(stream as TSVideoStream)
+                       };
+        }
+
+        private static int GetChannelCount(TSAudioStream audioStream)
+        {
+            return audioStream != null ? audioStream.ChannelCount : 0;
+        }
+
+        private static int GetVideoHeight(TSVideoStream videoStream)
+        {
+            return videoStream != null ? videoStream.Height : 0;
+        }
+
         public Json ToJsonObject()
         {
             return new Json
