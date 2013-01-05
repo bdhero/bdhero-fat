@@ -226,7 +226,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region Non-DB video track properties (main feature, video commentary, special feature, video accessible, misc.)
+        #region Non-DB video track properties (main feature, video commentary, special feature, misc.)
 
         /// <summary>
         /// The main movie (a.k.a. feature film) without forced (burned in) video commentary.
@@ -258,17 +258,6 @@ namespace BDAutoMuxer.BDROM
             get
             {
                 return TestFirstVideoTrack(track => track.IsSpecialFeature);
-            }
-        }
-
-        /// <summary>
-        /// Accessible video for the deaf.  This should never be true unless the user manually overrides it.
-        /// </summary>
-        public bool IsVideoAccessible
-        {
-            get
-            {
-                return TestFirstVideoTrack(track => track.IsAccessible);
             }
         }
 
