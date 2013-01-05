@@ -746,7 +746,7 @@ namespace BDAutoMuxer.tools
             StreamKindId = XmlUtil.GetInt(xml, "StreamKindId");
 
             Title = OldTitle = XmlUtil.GetString(xml, "Title");
-            Language = OldLanguage = Language.GetLanguage(XmlUtil.GetString(xml, "LanguageIso2"));
+            Language = OldLanguage = Language.FromCode(XmlUtil.GetString(xml, "LanguageIso2"));
             IsDefault = OldIsDefault = XmlUtil.GetBitFlag(xml, "Default") ?? false;
             IsForced = OldIsForced = XmlUtil.GetBitFlag(xml, "Forced") ?? false;
 
@@ -1164,7 +1164,7 @@ namespace BDAutoMuxer.tools
                     XmlUtil.ParseInt(groups[2].Value),
                     XmlUtil.ParseInt(groups[3].Value),
                     XmlUtil.ParseInt(groups[4].Value),
-                    !string.IsNullOrWhiteSpace(groups[5].Value) ? Language.GetLanguage(groups[5].Value) : null,
+                    !string.IsNullOrWhiteSpace(groups[5].Value) ? Language.FromCode(groups[5].Value) : null,
                     !string.IsNullOrWhiteSpace(groups[6].Value) ? groups[6].Value : null
                 );
 

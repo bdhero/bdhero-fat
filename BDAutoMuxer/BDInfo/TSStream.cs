@@ -199,7 +199,7 @@ namespace BDAutoMuxer.BDInfo
 
         public Language Language
         {
-            get { return Language.GetLanguage(LanguageCode); }
+            get { return Language.FromCode(LanguageCode); }
         }
 
         public bool IsVideoStream

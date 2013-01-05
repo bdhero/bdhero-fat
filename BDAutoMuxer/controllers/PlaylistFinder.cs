@@ -213,7 +213,7 @@ namespace BDAutoMuxer.controllers
 
             languages.AddRange(sortedPlaylists.SelectMany(playlistFile => (from stream in playlistFile.SortedStreams
                                                                            where stream.LanguageCode != null
-                                                                           select Language.GetLanguage(stream.LanguageCode))));
+                                                                           select Language.FromCode(stream.LanguageCode))));
 
             FindMainPlaylist();
         }

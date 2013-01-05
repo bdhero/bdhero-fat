@@ -30,7 +30,7 @@ namespace BDAutoMuxer.BDROM
 
             public Chapter ToChapter()
             {
-                return new Chapter {Start = start, Language = Language.GetLanguage(iso639_2), Title = title};
+                return new Chapter {Start = start, Language = Language.FromCode(iso639_2), Title = title};
             }
         }
     }

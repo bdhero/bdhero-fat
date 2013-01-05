@@ -490,7 +490,7 @@ namespace BDAutoMuxer
             get
             {
                 Language lang = null;
-                try { lang = Language.GetLanguage(UserSettings.AudienceLanguage); }
+                try { lang = Language.FromCode(UserSettings.AudienceLanguage); }
                 catch {}
                 return lang ?? Language.CurrentUILanguage;
             }

@@ -434,7 +434,7 @@ namespace BDAutoMuxer.BDInfo
                 if (File.Exists(path))
                 {
                     bdmt_path = path;
-                    DiscLanguage = Language.GetLanguage(code);
+                    DiscLanguage = Language.FromCode(code);
                     break;
                 }
             }

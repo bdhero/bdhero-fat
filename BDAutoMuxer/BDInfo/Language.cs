@@ -533,7 +533,7 @@ namespace BDAutoMuxer.BDInfo
 
         public static string GetName(string code)
         {
-            Language lang = GetLanguage(code);
+            Language lang = FromCode(code);
             return lang != null ? lang.Name : null;
         }
 
@@ -542,7 +542,7 @@ namespace BDAutoMuxer.BDInfo
         /// </summary>
         /// <param name="code">2-letter (ISO 639-1) or 3-letter (ISO 639-2) ISO language code</param>
         /// <returns>Language object that matches the ISO 639 code, or null if none exists</returns>
-        public static Language GetLanguage(string code)
+        public static Language FromCode(string code)
         {
             code = code != null ? code.ToLowerInvariant() : null;
             Language lang = null;
@@ -568,7 +568,7 @@ namespace BDAutoMuxer.BDInfo
 
         public static Language CurrentUILanguage
         {
-            get { return Language.GetLanguage(CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName); }
+            get { return Language.FromCode(CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName); }
         }
     }
 }

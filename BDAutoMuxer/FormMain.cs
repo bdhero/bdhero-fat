@@ -139,7 +139,7 @@ namespace BDAutoMuxer
                 ISet<Language> audioLanguagesSet = new HashSet<Language>();
                 foreach (TSAudioStream audioStream in _playlists.SelectMany(playlist => playlist.AudioStreams))
                 {
-                    audioLanguagesSet.Add(Language.GetLanguage(audioStream.LanguageCode));
+                    audioLanguagesSet.Add(Language.FromCode(audioStream.LanguageCode));
                 }
                 return GetSortedLanguageArray(audioLanguagesSet);
             }
@@ -154,11 +154,11 @@ namespace BDAutoMuxer
                 {
                     foreach (TSGraphicsStream graphicsStream in playlist.GraphicsStreams)
                     {
-                        subtitleLanguagesSet.Add(Language.GetLanguage(graphicsStream.LanguageCode));
+                        subtitleLanguagesSet.Add(Language.FromCode(graphicsStream.LanguageCode));
                     }
                     foreach (TSTextStream textStream in playlist.TextStreams)
                     {
-                        subtitleLanguagesSet.Add(Language.GetLanguage(textStream.LanguageCode));
+                        subtitleLanguagesSet.Add(Language.FromCode(textStream.LanguageCode));
                     }
                 }
                 return GetSortedLanguageArray(subtitleLanguagesSet);
@@ -635,7 +635,7 @@ namespace BDAutoMuxer
 
             foreach (TSStream stream in playlist.SortedStreams.Where(stream => !stream.IsHidden))
             {
-                Language lang = !String.IsNullOrEmpty(stream.LanguageCode) ? Language.GetLanguage(stream.LanguageCode) : null;
+                Language lang = !String.IsNullOrEmpty(stream.LanguageCode) ? Language.FromCode(stream.LanguageCode) : null;
 
                 if (stream is TSVideoStream)
                     _videoTracks.Add(stream as TSVideoStream);

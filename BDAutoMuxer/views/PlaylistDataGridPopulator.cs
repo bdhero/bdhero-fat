@@ -73,7 +73,7 @@ namespace BDAutoMuxer.views
         {
             _dataGridView = dataGridView;
             _languageCodes = languageCodes;
-            _languages.AddRange(_languageCodes.Select(Language.GetLanguage));
+            _languages.AddRange(_languageCodes.Select(Language.FromCode));
 
             _dataGridView.AutoGenerateColumns = false;
             _dataGridView.AutoSize = true;
@@ -805,7 +805,7 @@ namespace BDAutoMuxer.views
 
         public Language VideoLanguageObject
         {
-            get { return Language.GetLanguage(VideoLanguage); }
+            get { return Language.FromCode(VideoLanguage); }
         }
 
 // ReSharper disable UnusedMember.Global
