@@ -57,11 +57,6 @@ namespace BDAutoMuxer
             _audienceLanguages = Language.AllLanguages.OrderBy(lang => lang.ISO_639_2).ToArray();
             _bdInfoAudioCodecs = MICodec.AudioCodecs.Where(codec => codec.StreamType != TSStreamType.Unknown && codec.IsMuxable).ToArray();
 
-            checkBoxFilterLoopingPlaylists.Checked = BDAutoMuxerSettings.FilterLoopingPlaylists;
-            checkBoxFilterShortPlaylists.Checked = BDAutoMuxerSettings.FilterShortPlaylists;
-            textBoxFilterShortPlaylistsValue.Text = BDAutoMuxerSettings.FilterShortPlaylistsValue.ToString();
-            checkBoxKeepStreamOrder.Checked = BDAutoMuxerSettings.KeepStreamOrder;
-            checkBoxEnableSSIF.Checked = BDAutoMuxerSettings.EnableSSIF;
             textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
             checkBoxCheckForUpdates.Checked = BDAutoMuxerSettings.CheckForUpdates;
             checkBoxSelectHighestChannelCount.Checked = BDAutoMuxerSettings.SelectHighestChannelCount;
@@ -204,17 +199,8 @@ namespace BDAutoMuxer
 
         private void SaveSettings(object sender = null, EventArgs e = null)
         {
-            BDAutoMuxerSettings.KeepStreamOrder = checkBoxKeepStreamOrder.Checked;
-            BDAutoMuxerSettings.FilterLoopingPlaylists = checkBoxFilterLoopingPlaylists.Checked;
-            BDAutoMuxerSettings.FilterShortPlaylists = checkBoxFilterShortPlaylists.Checked;
-            BDAutoMuxerSettings.EnableSSIF = checkBoxEnableSSIF.Checked;
             BDAutoMuxerSettings.ApiKey = textBoxApiKey.Text;
             BDAutoMuxerSettings.CheckForUpdates = checkBoxCheckForUpdates.Checked;
-            int filterShortPlaylistsValue;
-            if (int.TryParse(textBoxFilterShortPlaylistsValue.Text, out filterShortPlaylistsValue))
-            {
-                BDAutoMuxerSettings.FilterShortPlaylistsValue = filterShortPlaylistsValue;
-            }
             BDAutoMuxerSettings.AudienceLanguage = SelectedAudienceLanguage;
             BDAutoMuxerSettings.PreferredAudioCodecs = SelectedAudioCodecs;
             BDAutoMuxerSettings.SelectHighestChannelCount = checkBoxSelectHighestChannelCount.Checked;
@@ -291,79 +277,32 @@ namespace BDAutoMuxer
             }
         }
 
+        /// <summary>
+        /// StereoScopic Information File for 3D Blu-ray.  Determines the encryption, DRM, and type of 3D contained on the disc (separate streams for each eye, type of Delta, etc.).
+        /// </summary>
         public static bool EnableSSIF
         {
-            get
-            {
-                try { return UserSettings.EnableSSIF; }
-                catch { return true; }
-            }
-
-            set
-            {
-                try { UserSettings.EnableSSIF = value; }
-                catch { }
-            }
+            get { return true; }
         }
 
         public static bool FilterLoopingPlaylists
         {
-            get
-            {
-                try { return UserSettings.FilterLoopingPlaylists; }
-                catch { return false; }
-            }
-
-            set
-            {
-                try { UserSettings.FilterLoopingPlaylists = value; }
-                catch { }
-            }
+            get { return true; }
         }
 
         public static bool FilterShortPlaylists
         {
-            get
-            {
-                try { return UserSettings.FilterShortPlaylists; }
-                catch { return false; }
-            }
-
-            set
-            {
-                try { UserSettings.FilterShortPlaylists = value; }
-                catch { }
-            }
+            get { return true; }
         }
 
         public static int FilterShortPlaylistsValue
         {
-            get
-            {
-                try { return UserSettings.FilterShortPlaylistsValue; }
-                catch { return 0; }
-            }
-
-            set
-            {
-                try { UserSettings.FilterShortPlaylistsValue = value; }
-                catch { }
-            }
+            get { return 20; }
         }
 
         public static bool KeepStreamOrder
         {
-            get
-            {
-                try { return UserSettings.KeepStreamOrder; }
-                catch { return false; }
-            }
-
-            set
-            {
-                try { UserSettings.KeepStreamOrder = value; }
-                catch { }
-            }
+            get { return true; }
         }
 
         public static string ApiKey

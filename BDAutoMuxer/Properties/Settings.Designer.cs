@@ -25,30 +25,6 @@ namespace BDAutoMuxer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool FilterLoopingPlaylists {
-            get {
-                return ((bool)(this["FilterLoopingPlaylists"]));
-            }
-            set {
-                this["FilterLoopingPlaylists"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool KeepStreamOrder {
-            get {
-                return ((bool)(this["KeepStreamOrder"]));
-            }
-            set {
-                this["KeepStreamOrder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string LastPath {
             get {
@@ -56,42 +32,6 @@ namespace BDAutoMuxer.Properties {
             }
             set {
                 this["LastPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool FilterShortPlaylists {
-            get {
-                return ((bool)(this["FilterShortPlaylists"]));
-            }
-            set {
-                this["FilterShortPlaylists"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int FilterShortPlaylistsValue {
-            get {
-                return ((int)(this["FilterShortPlaylistsValue"]));
-            }
-            set {
-                this["FilterShortPlaylistsValue"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool EnableSSIF {
-            get {
-                return ((bool)(this["EnableSSIF"]));
-            }
-            set {
-                this["EnableSSIF"] = value;
             }
         }
         
