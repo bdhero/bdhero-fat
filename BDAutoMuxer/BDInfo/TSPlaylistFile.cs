@@ -1032,6 +1032,9 @@ namespace BDAutoMuxer.BDInfo
             }
         }
 
+        /// <summary>
+        /// Is initialized, longer than 20 seconds, and doesn't have loops.
+        /// </summary>
         public bool IsValid
         {
             get
