@@ -37,6 +37,10 @@ namespace BDAutoMuxer.BDInfo
         public DirectoryInfo DirectorySSIF = null;
         public DirectoryInfo DirectorySTREAM = null;
 
+        /// <summary>
+        /// Auto-detected main audience language of the disc.
+        /// Found by checking for the existence of META\DL\bdmt_[lang].xml for all languages.
+        /// </summary>
         public Language DiscLanguage = null;
         public string DiscName = null;
         public string VolumeLabel = null;
