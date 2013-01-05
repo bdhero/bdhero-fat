@@ -29,7 +29,7 @@ namespace BDAutoMuxer.BDROM
         /// <summary>
         /// Primary release language of the disc.
         /// </summary>
-        public Language Language = Language.FromCode("und");
+        public Language PrimaryLanguage = Language.FromCode("und");
 
         /// <summary>
         /// TMDb movie ID (e.g., 863).
@@ -66,7 +66,7 @@ namespace BDAutoMuxer.BDROM
                        {
                            volume_label = VolumeLabel,
                            meta_title = MetaTitle,
-                           iso639_2 = Language.ISO_639_2,
+                           iso639_2 = PrimaryLanguage.ISO_639_2,
                            tmdb_id = TmdbId,
                            movie_title = MovieTitle,
                            movie_year = MovieYear,
@@ -103,7 +103,7 @@ namespace BDAutoMuxer.BDROM
                            {
                                VolumeLabel = volume_label,
                                MetaTitle = meta_title,
-                               Language = Language.FromCode(iso639_2) ?? Language.FromCode("und"),
+                               PrimaryLanguage = Language.FromCode(iso639_2) ?? Language.FromCode("und"),
                                TmdbId = tmdb_id,
                                MovieTitle = movie_title,
                                MovieYear = movie_year,
