@@ -37,7 +37,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region DB Track type (main, commentary, special feature, accessible, misc)
+        #region DB Track type (main, commentary, special feature, PiP, descriptive, misc)
 
         public TrackType Type = TrackType.Misc;
 
@@ -57,9 +57,14 @@ namespace BDAutoMuxer.BDROM
         public bool IsSpecialFeature { get { return Type == TrackType.SpecialFeature; } }
 
         /// <summary>
-        /// Accessible audio, video, or subtitles for the blind / deaf.
+        /// Picture-in-Picture (PiP).
         /// </summary>
-        public bool IsAccessible { get { return Type == TrackType.Accessible; } }
+        public bool IsPiP { get { return Type == TrackType.PiP; } }
+
+        /// <summary>
+        /// Descriptive audio for the blind.
+        /// </summary>
+        public bool IsDescriptive { get { return Type == TrackType.Descriptive; } }
 
         /// <summary>
         /// Miscellaneous / extra / other track (e.g., trailer, FBI warning).
@@ -107,7 +112,7 @@ namespace BDAutoMuxer.BDROM
 
             #endregion
 
-            #region DB Track type (main, commentary, special feature, accessible, misc)
+            #region DB Track type (main, commentary, special feature, PiP, descriptive, misc)
 
             public TrackType type
             {
@@ -117,7 +122,8 @@ namespace BDAutoMuxer.BDROM
                         is_main_feature    ? TrackType.MainFeature :
                         is_commentary      ? TrackType.Commentary :
                         is_special_feature ? TrackType.SpecialFeature :
-                        is_accessible      ? TrackType.Accessible :
+                        is_pip             ? TrackType.PiP :
+                        is_descriptive     ? TrackType.Descriptive :
                                              TrackType.Misc;
                 }
                 set
@@ -125,7 +131,8 @@ namespace BDAutoMuxer.BDROM
                     is_main_feature    = value == TrackType.MainFeature;
                     is_commentary      = value == TrackType.Commentary;
                     is_special_feature = value == TrackType.SpecialFeature;
-                    is_accessible      = value == TrackType.Accessible;
+                    is_pip             = value == TrackType.PiP;
+                    is_descriptive     = value == TrackType.Descriptive;
                     is_misc            = value == TrackType.Misc;
                 }
             }
@@ -146,9 +153,14 @@ namespace BDAutoMuxer.BDROM
             public bool is_special_feature;
 
             /// <summary>
-            /// Accessible audio, video, or subtitles for the blind / deaf.
+            /// Picture-in-Picture (PiP).
             /// </summary>
-            public bool is_accessible;
+            public bool is_pip;
+
+            /// <summary>
+            /// Descriptive audio, video, or subtitles for the blind / deaf.
+            /// </summary>
+            public bool is_descriptive;
 
             /// <summary>
             /// Miscellaneous / extra / other track (e.g., trailer, FBI warning).
@@ -178,7 +190,8 @@ namespace BDAutoMuxer.BDROM
         MainFeature,
         Commentary,
         SpecialFeature,
-        Accessible,
+        PiP,
+        Descriptive,
         Misc
     }
 }
