@@ -12,7 +12,14 @@ namespace BDAutoMuxer.controllers
     {
         public static Icon ExtractIcon(string exePath)
         {
-            return Icon.ExtractAssociatedIcon(exePath);
+            try
+            {
+                return Icon.ExtractAssociatedIcon(exePath);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public static Image ExtractIconAsBitmap(string exePath)
