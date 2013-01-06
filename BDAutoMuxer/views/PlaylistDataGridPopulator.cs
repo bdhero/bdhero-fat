@@ -567,6 +567,7 @@ namespace BDAutoMuxer.views
         private DataGridViewTextBoxColumn  _filenameColumn;
         private DataGridViewTextBoxColumn  _lengthColumn;
         private DataGridViewTextBoxColumn  _sizeColumn;
+        private DataGridViewTextBoxColumn  _chaptersColumn;
         private DataGridViewComboBoxColumn _videoLanguageColumn;
         private DataGridViewComboBoxColumn _cutColumn;
         private DataGridViewCheckBoxColumn _hasCommentaryColumn;
@@ -578,6 +579,7 @@ namespace BDAutoMuxer.views
             _dataGridView.Columns.Add(_isMainMovieColumn   = CreateIsMainMovieColumn());
             _dataGridView.Columns.Add(_filenameColumn      = CreateFilenameColumn());
             _dataGridView.Columns.Add(_lengthColumn        = CreateLengthColumn());
+            _dataGridView.Columns.Add(_chaptersColumn      = CreateChaptersColumn());
             _dataGridView.Columns.Add(_sizeColumn          = CreateSizeColumn());
             _dataGridView.Columns.Add(_videoLanguageColumn = CreateVideoLanguageColumn());
             _dataGridView.Columns.Add(_cutColumn           = CreateCutColumn());
@@ -658,6 +660,17 @@ namespace BDAutoMuxer.views
                        };
         }
 
+        private DataGridViewTextBoxColumn CreateChaptersColumn()
+        {
+            return new DataGridViewTextBoxColumn
+                       {
+                           Name = "Chapters",
+                           DataPropertyName = "ChapterCount",
+                           DefaultCellStyle = {Alignment = DataGridViewContentAlignment.MiddleRight},
+                           ReadOnly = true
+                       };
+        }
+
         private DataGridViewComboBoxColumn CreateVideoLanguageColumn()
         {
             return new DataGridViewComboBoxColumn
@@ -728,6 +741,7 @@ namespace BDAutoMuxer.views
             Size = playlist.FileSize.ToString("N0");
 
             _length = playlist.TotalLength;
+            ChapterCount = playlist.Chapters.Count;
             _isMainMovie = playlist.IsLikelyMainMovie;
             _iso6392 = iso6392;
             _cut = Cut.Theatrical;
@@ -750,6 +764,7 @@ namespace BDAutoMuxer.views
             that.Filename = Filename;
             that.Size = Size;
             that._length = _length;
+            that.ChapterCount = ChapterCount;
             that._isMainMovie = _isMainMovie;
             that._iso6392 = _iso6392;
             that._cut = _cut;
@@ -784,6 +799,8 @@ namespace BDAutoMuxer.views
         public string Filename { get; private set; }
 
         public string Size { get; private set; }
+
+        public int ChapterCount { get; private set; }
 
         public string Length
         {
