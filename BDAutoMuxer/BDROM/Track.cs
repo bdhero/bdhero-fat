@@ -57,11 +57,6 @@ namespace BDAutoMuxer.BDROM
         public bool IsSpecialFeature { get { return Type == TrackType.SpecialFeature; } }
 
         /// <summary>
-        /// Picture-in-Picture (PiP).
-        /// </summary>
-        public bool IsPiP { get { return Type == TrackType.PiP; } }
-
-        /// <summary>
         /// Descriptive audio for the blind.
         /// </summary>
         public bool IsDescriptive { get { return Type == TrackType.Descriptive; } }
@@ -166,7 +161,6 @@ namespace BDAutoMuxer.BDROM
                         is_main_feature    ? TrackType.MainFeature :
                         is_commentary      ? TrackType.Commentary :
                         is_special_feature ? TrackType.SpecialFeature :
-                        is_pip             ? TrackType.PiP :
                         is_descriptive     ? TrackType.Descriptive :
                                              TrackType.Misc;
                 }
@@ -175,7 +169,6 @@ namespace BDAutoMuxer.BDROM
                     is_main_feature    = value == TrackType.MainFeature;
                     is_commentary      = value == TrackType.Commentary;
                     is_special_feature = value == TrackType.SpecialFeature;
-                    is_pip             = value == TrackType.PiP;
                     is_descriptive     = value == TrackType.Descriptive;
                     is_misc            = value == TrackType.Misc;
                 }
@@ -195,11 +188,6 @@ namespace BDAutoMuxer.BDROM
             /// Special feature.
             /// </summary>
             public bool is_special_feature;
-
-            /// <summary>
-            /// Picture-in-Picture (PiP).
-            /// </summary>
-            public bool is_pip;
 
             /// <summary>
             /// Descriptive audio, video, or subtitles for the blind / deaf.
@@ -227,6 +215,22 @@ namespace BDAutoMuxer.BDROM
                            };
             }
         }
+
+        #region Public utilities
+
+        public bool IsMainFeatureAudioTrack(int index)
+        {
+            return
+                index == 0 ||
+                index >= 1 && ChannelCount > 2;
+        }
+
+        public bool IsCommentaryAudioTrack(int index)
+        {
+            return index >= 1 && ChannelCount <= 2;
+        }
+
+        #endregion
     }
 
     public enum TrackType
@@ -234,7 +238,6 @@ namespace BDAutoMuxer.BDROM
         MainFeature,
         Commentary,
         SpecialFeature,
-        PiP,
         Descriptive,
         Misc
     }

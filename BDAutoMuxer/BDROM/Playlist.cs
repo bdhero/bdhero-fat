@@ -12,6 +12,11 @@ namespace BDAutoMuxer.BDROM
     /// </summary>
     public class Playlist
     {
+        /// <summary>
+        /// Threshold for considering a playlist to be "feature length" when comparing its length to the length of the longest playlist.
+        /// </summary>
+        private const double FeatureLengthPercentage = 0.9;
+
         #region DB Fields (filename, file size, length)
 
         /// <summary>
@@ -44,7 +49,7 @@ namespace BDAutoMuxer.BDROM
         /// E.G., this playlist is 480p or 720i but the highest-resolution playlist is 1080p,
         /// or this playlist has at most 2.0 audio channels but another playlist has 5.1.
         /// </summary>
-        public bool IsLowQuality;
+        public bool IsMaxQuality;
 
         #endregion
 
@@ -90,6 +95,37 @@ namespace BDAutoMuxer.BDROM
         #region DB Chapters
 
         public IList<Chapter> Chapters = new List<Chapter>();
+
+        #endregion
+
+        #region Non-DB Playlist fields
+
+        /// <summary>
+        /// Duplicate of another playlist.
+        /// </summary>
+        public bool IsDuplicate;
+
+        /// <summary>
+        /// Playlist contains duplicate stream clips.
+        /// </summary>
+        public bool HasDuplicateStreamClips;
+
+        #endregion
+
+        #region Non-DB Public properties
+
+        /// <summary>
+        /// First video track and/or first audio track is hidden.
+        /// </summary>
+        public bool HasHiddenFirstTracks
+        {
+            get
+            {
+                return
+                    (VideoTracks.Any() && VideoTracks.First().IsHidden) ||
+                    (AudioTracks.Any() && AudioTracks.First().IsHidden);
+            }
+        }
 
         #endregion
 
@@ -187,12 +223,12 @@ namespace BDAutoMuxer.BDROM
         /// </summary>
         public string FullPath;
 
-        public static IList<Playlist> Transform(IEnumerable<KeyValuePair<string, TSPlaylistFile>> playlistFiles)
+        public static List<Playlist> Transform(IEnumerable<KeyValuePair<string, TSPlaylistFile>> playlistFiles)
         {
             return Transform(playlistFiles.Select(pair => pair.Value).OrderBy(file => file.Name));
         }
 
-        public static IList<Playlist> Transform(IEnumerable<TSPlaylistFile> playlistFiles)
+        public static List<Playlist> Transform(IEnumerable<TSPlaylistFile> playlistFiles)
         {
             return playlistFiles.Select(Transform).ToList();
         }
@@ -207,7 +243,7 @@ namespace BDAutoMuxer.BDROM
                            LengthSec = (int) playlistFile.TotalLength,
                            Tracks = Track.Transform(playlistFile.SortedStreams),
                            Chapters = Chapter.Transform(playlistFile.Chapters),
-                           IsBogus = playlistFile.HasDuplicateClips
+                           HasDuplicateStreamClips = playlistFile.HasDuplicateClips
                        };
         }
 
@@ -225,7 +261,7 @@ namespace BDAutoMuxer.BDROM
                            filesize = Filesize,
                            length_sec = LengthSec,
                            is_bogus = IsBogus,
-                           is_low_quality = IsLowQuality,
+                           is_max_quality = IsMaxQuality,
                            cut = Cut,
                            tracks = Tracks.Select(track => track.ToJsonObject()).ToList(),
                            chapters = Chapters.Select(chapter => chapter.ToJsonObject()).ToList()
@@ -245,7 +281,7 @@ namespace BDAutoMuxer.BDROM
             #region DB Flags (bogus, low quality)
 
             public bool is_bogus;
-            public bool is_low_quality;
+            public bool is_max_quality;
 
             #endregion
 
@@ -301,7 +337,7 @@ namespace BDAutoMuxer.BDROM
                                Filesize = filesize,
                                LengthSec = length_sec,
                                IsBogus = is_bogus,
-                               IsLowQuality = is_low_quality,
+                               IsMaxQuality = is_max_quality,
                                Cut = cut,
                                Tracks = tracks.Select(track => track.ToTrack()).ToList(),
                                Chapters = chapters.Select(chapter => chapter.ToChapter()).ToList()
@@ -320,6 +356,32 @@ namespace BDAutoMuxer.BDROM
         {
             var video = VideoTracks.FirstOrDefault();
             return video != null && @delegate(video);
+        }
+
+        #endregion
+
+        #region Public utilities
+
+        public bool IsMainFeaturePlaylist(double maxPlaylistLength)
+        {
+            return
+                IsMaxQuality &&
+                IsFeatureLength(maxPlaylistLength) &&
+                VideoTracks.Count >= 1 &&
+                AudioTracks.Count >= 2 /* or >= 1? */ &&
+                SubtitleTracks.Count >= 1 &&
+                Chapters.Count >= 2;
+        }
+
+        public bool IsSpecialFeaturePlaylist(double maxPlaylistLength)
+        {
+            return (IsMaxQuality && !IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1) ||
+                   (!IsMaxQuality && IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1);
+        }
+
+        public bool IsFeatureLength(double maxPlaylistLength)
+        {
+            return LengthSec >= (maxPlaylistLength * FeatureLengthPercentage);
         }
 
         #endregion

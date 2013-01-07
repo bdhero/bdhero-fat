@@ -54,7 +54,7 @@ namespace BDAutoMuxer.BDROM
         /// <summary>
         /// List of all playlists in the order they appear on the disc.
         /// </summary>
-        public IList<Playlist> Playlists = new List<Playlist>();
+        public List<Playlist> Playlists = new List<Playlist>();
 
         #endregion
 
