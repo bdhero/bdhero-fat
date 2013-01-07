@@ -63,6 +63,7 @@
             this.objectListViewPlaylists.AllColumns.Add(this.language);
             this.objectListViewPlaylists.AllColumns.Add(this.cut);
             this.objectListViewPlaylists.AllColumns.Add(this.warnings);
+            this.objectListViewPlaylists.AllowColumnReorder = true;
             this.objectListViewPlaylists.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.type,
             this.filename,
@@ -73,9 +74,10 @@
             this.cut,
             this.warnings});
             this.objectListViewPlaylists.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.objectListViewPlaylists.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.objectListViewPlaylists.Location = new System.Drawing.Point(0, 0);
             this.objectListViewPlaylists.Name = "objectListViewPlaylists";
+            this.objectListViewPlaylists.SelectColumnsOnRightClickBehaviour = BrightIdeasSoftware.ObjectListView.ColumnSelectBehaviour.Submenu;
+            this.objectListViewPlaylists.ShowCommandMenuOnRightClick = true;
             this.objectListViewPlaylists.ShowGroups = false;
             this.objectListViewPlaylists.Size = new System.Drawing.Size(676, 554);
             this.objectListViewPlaylists.TabIndex = 0;
@@ -109,17 +111,23 @@
             // chapterCount
             // 
             this.chapterCount.AspectName = "ChapterCount";
+            this.chapterCount.AspectToStringFormat = "{0:n0}";
             this.chapterCount.CellPadding = null;
+            this.chapterCount.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.chapterCount.IsEditable = false;
             this.chapterCount.Text = "# Chapters";
+            this.chapterCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.chapterCount.ToolTipText = "";
             // 
             // filesize
             // 
             this.filesize.AspectName = "Filesize";
+            this.filesize.AspectToStringFormat = "{0:n0}";
             this.filesize.CellPadding = null;
+            this.filesize.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.filesize.IsEditable = false;
             this.filesize.Text = "Size (in bytes)";
+            this.filesize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // language
             // 
