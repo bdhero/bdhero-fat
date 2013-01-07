@@ -212,5 +212,17 @@ namespace BDAutoMuxer.Properties {
                 this["SelectHighestChannelCount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseMainMovieDb {
+            get {
+                return ((bool)(this["UseMainMovieDb"]));
+            }
+            set {
+                this["UseMainMovieDb"] = value;
+            }
+        }
     }
 }

@@ -436,7 +436,11 @@ namespace BDAutoMuxer
 
             ResetPlaylistDataGrid();
             PopulateOutputTab();
-            QueryMainMovie();
+
+            if (BDAutoMuxerSettings.UseMainMovieDb)
+                QueryMainMovie();
+            else
+                SearchTmdb();
 
             textBoxOutputDir_TextChanged(this, EventArgs.Empty);
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);

@@ -60,8 +60,8 @@ namespace BDAutoMuxer
             textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
             checkBoxCheckForUpdates.Checked = BDAutoMuxerSettings.CheckForUpdates;
             checkBoxSelectHighestChannelCount.Checked = BDAutoMuxerSettings.SelectHighestChannelCount;
+            checkBoxUseMainMovieDb.Checked = BDAutoMuxerSettings.UseMainMovieDb;
 
-            // Disable 
             checkBoxCheckForUpdates.Enabled = !UpdateNotifier.IsClickOnce;
 
             InitAudienceLanguage();
@@ -204,6 +204,7 @@ namespace BDAutoMuxer
             BDAutoMuxerSettings.AudienceLanguage = SelectedAudienceLanguage;
             BDAutoMuxerSettings.PreferredAudioCodecs = SelectedAudioCodecs;
             BDAutoMuxerSettings.SelectHighestChannelCount = checkBoxSelectHighestChannelCount.Checked;
+            BDAutoMuxerSettings.UseMainMovieDb = checkBoxUseMainMovieDb.Checked;
             BDAutoMuxerSettings.SaveSettings();
             Close();
         }
@@ -558,6 +559,21 @@ namespace BDAutoMuxer
             set
             {
                 try { UserSettings.SelectHighestChannelCount = value; }
+                catch { }
+            }
+        }
+
+        public static bool UseMainMovieDb
+        {
+            get
+            {
+                try { return UserSettings.UseMainMovieDb; }
+                catch { return true; }
+            }
+
+            set
+            {
+                try { UserSettings.UseMainMovieDb = value; }
                 catch { }
             }
         }

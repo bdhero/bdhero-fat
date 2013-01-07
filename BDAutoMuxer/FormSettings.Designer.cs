@@ -50,19 +50,20 @@ namespace BDAutoMuxer
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
             this.tabPageAdvanced = new System.Windows.Forms.TabPage();
-            this.textBoxApiKey = new System.Windows.Forms.TextBox();
-            this.labelApiKey = new System.Windows.Forms.Label();
-            this.buttonCheckForUpdates = new System.Windows.Forms.Button();
+            this.checkBoxUseMainMovieDb = new System.Windows.Forms.CheckBox();
             this.checkBoxCheckForUpdates = new System.Windows.Forms.CheckBox();
+            this.buttonCheckForUpdates = new System.Windows.Forms.Button();
+            this.labelApiKey = new System.Windows.Forms.Label();
+            this.textBoxApiKey = new System.Windows.Forms.TextBox();
             this.tabPageOutput = new System.Windows.Forms.TabPage();
-            this.labelAudienceLanguage = new System.Windows.Forms.Label();
-            this.labelAudioCodecs = new System.Windows.Forms.Label();
-            this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
-            this.checkedListBoxAudioCodecs = new System.Windows.Forms.CheckedListBox();
-            this.splitButtonSelectAudioCodecs = new BDAutoMuxer.views.SplitButton();
-            this.label1 = new System.Windows.Forms.Label();
-            this.checkBoxSelectHighestChannelCount = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.checkBoxSelectHighestChannelCount = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.splitButtonSelectAudioCodecs = new BDAutoMuxer.views.SplitButton();
+            this.checkedListBoxAudioCodecs = new System.Windows.Forms.CheckedListBox();
+            this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
+            this.labelAudioCodecs = new System.Windows.Forms.Label();
+            this.labelAudienceLanguage = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageAdvanced.SuspendLayout();
             this.tabPageOutput.SuspendLayout();
@@ -94,6 +95,7 @@ namespace BDAutoMuxer
             // 
             // tabPageAdvanced
             // 
+            this.tabPageAdvanced.Controls.Add(this.checkBoxUseMainMovieDb);
             this.tabPageAdvanced.Controls.Add(this.checkBoxCheckForUpdates);
             this.tabPageAdvanced.Controls.Add(this.buttonCheckForUpdates);
             this.tabPageAdvanced.Controls.Add(this.labelApiKey);
@@ -106,33 +108,17 @@ namespace BDAutoMuxer
             this.tabPageAdvanced.Text = "Advanced";
             this.tabPageAdvanced.UseVisualStyleBackColor = true;
             // 
-            // textBoxApiKey
+            // checkBoxUseMainMovieDb
             // 
-            this.textBoxApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxApiKey.Location = new System.Drawing.Point(59, 6);
-            this.textBoxApiKey.Name = "textBoxApiKey";
-            this.textBoxApiKey.Size = new System.Drawing.Size(395, 20);
-            this.textBoxApiKey.TabIndex = 14;
-            // 
-            // labelApiKey
-            // 
-            this.labelApiKey.AutoSize = true;
-            this.labelApiKey.Location = new System.Drawing.Point(6, 9);
-            this.labelApiKey.Name = "labelApiKey";
-            this.labelApiKey.Size = new System.Drawing.Size(47, 13);
-            this.labelApiKey.TabIndex = 13;
-            this.labelApiKey.Text = "API key:";
-            // 
-            // buttonCheckForUpdates
-            // 
-            this.buttonCheckForUpdates.Location = new System.Drawing.Point(175, 32);
-            this.buttonCheckForUpdates.Name = "buttonCheckForUpdates";
-            this.buttonCheckForUpdates.Size = new System.Drawing.Size(75, 23);
-            this.buttonCheckForUpdates.TabIndex = 16;
-            this.buttonCheckForUpdates.Text = "Check now";
-            this.buttonCheckForUpdates.UseVisualStyleBackColor = true;
-            this.buttonCheckForUpdates.Click += new System.EventHandler(this.buttonCheckForUpdates_Click);
+            this.checkBoxUseMainMovieDb.AutoSize = true;
+            this.checkBoxUseMainMovieDb.Checked = true;
+            this.checkBoxUseMainMovieDb.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseMainMovieDb.Location = new System.Drawing.Point(6, 6);
+            this.checkBoxUseMainMovieDb.Name = "checkBoxUseMainMovieDb";
+            this.checkBoxUseMainMovieDb.Size = new System.Drawing.Size(222, 17);
+            this.checkBoxUseMainMovieDb.TabIndex = 0;
+            this.checkBoxUseMainMovieDb.Text = "Use online &database to improve accuracy";
+            this.checkBoxUseMainMovieDb.UseVisualStyleBackColor = true;
             // 
             // checkBoxCheckForUpdates
             // 
@@ -140,12 +126,40 @@ namespace BDAutoMuxer
             this.checkBoxCheckForUpdates.Checked = global::BDAutoMuxer.Properties.Settings.Default.CheckForUpdates;
             this.checkBoxCheckForUpdates.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCheckForUpdates.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::BDAutoMuxer.Properties.Settings.Default, "CheckForUpdates", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxCheckForUpdates.Location = new System.Drawing.Point(6, 36);
+            this.checkBoxCheckForUpdates.Location = new System.Drawing.Point(6, 33);
             this.checkBoxCheckForUpdates.Name = "checkBoxCheckForUpdates";
             this.checkBoxCheckForUpdates.Size = new System.Drawing.Size(163, 17);
-            this.checkBoxCheckForUpdates.TabIndex = 15;
-            this.checkBoxCheckForUpdates.Text = "Check for updates on startup";
+            this.checkBoxCheckForUpdates.TabIndex = 1;
+            this.checkBoxCheckForUpdates.Text = "Check for &updates on startup";
             this.checkBoxCheckForUpdates.UseVisualStyleBackColor = true;
+            // 
+            // buttonCheckForUpdates
+            // 
+            this.buttonCheckForUpdates.Location = new System.Drawing.Point(175, 29);
+            this.buttonCheckForUpdates.Name = "buttonCheckForUpdates";
+            this.buttonCheckForUpdates.Size = new System.Drawing.Size(75, 23);
+            this.buttonCheckForUpdates.TabIndex = 2;
+            this.buttonCheckForUpdates.Text = "&Check now";
+            this.buttonCheckForUpdates.UseVisualStyleBackColor = true;
+            this.buttonCheckForUpdates.Click += new System.EventHandler(this.buttonCheckForUpdates_Click);
+            // 
+            // labelApiKey
+            // 
+            this.labelApiKey.AutoSize = true;
+            this.labelApiKey.Location = new System.Drawing.Point(6, 61);
+            this.labelApiKey.Name = "labelApiKey";
+            this.labelApiKey.Size = new System.Drawing.Size(47, 13);
+            this.labelApiKey.TabIndex = 13;
+            this.labelApiKey.Text = "API key:";
+            // 
+            // textBoxApiKey
+            // 
+            this.textBoxApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxApiKey.Location = new System.Drawing.Point(59, 58);
+            this.textBoxApiKey.Name = "textBoxApiKey";
+            this.textBoxApiKey.Size = new System.Drawing.Size(395, 20);
+            this.textBoxApiKey.TabIndex = 3;
             // 
             // tabPageOutput
             // 
@@ -165,64 +179,15 @@ namespace BDAutoMuxer
             this.tabPageOutput.Text = "Output";
             this.tabPageOutput.UseVisualStyleBackColor = true;
             // 
-            // labelAudienceLanguage
+            // label2
             // 
-            this.labelAudienceLanguage.AutoSize = true;
-            this.labelAudienceLanguage.Location = new System.Drawing.Point(4, 9);
-            this.labelAudienceLanguage.Name = "labelAudienceLanguage";
-            this.labelAudienceLanguage.Size = new System.Drawing.Size(153, 13);
-            this.labelAudienceLanguage.TabIndex = 7;
-            this.labelAudienceLanguage.Text = "Audience language (preferred):";
-            // 
-            // labelAudioCodecs
-            // 
-            this.labelAudioCodecs.AutoSize = true;
-            this.labelAudioCodecs.Location = new System.Drawing.Point(4, 33);
-            this.labelAudioCodecs.Name = "labelAudioCodecs";
-            this.labelAudioCodecs.Size = new System.Drawing.Size(126, 13);
-            this.labelAudioCodecs.TabIndex = 8;
-            this.labelAudioCodecs.Text = "Audio codecs (preferred):";
-            // 
-            // comboBoxAudienceLanguage
-            // 
-            this.comboBoxAudienceLanguage.FormattingEnabled = true;
-            this.comboBoxAudienceLanguage.Location = new System.Drawing.Point(160, 6);
-            this.comboBoxAudienceLanguage.Name = "comboBoxAudienceLanguage";
-            this.comboBoxAudienceLanguage.Size = new System.Drawing.Size(171, 21);
-            this.comboBoxAudienceLanguage.TabIndex = 9;
-            // 
-            // checkedListBoxAudioCodecs
-            // 
-            this.checkedListBoxAudioCodecs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkedListBoxAudioCodecs.FormattingEnabled = true;
-            this.checkedListBoxAudioCodecs.Location = new System.Drawing.Point(160, 33);
-            this.checkedListBoxAudioCodecs.Name = "checkedListBoxAudioCodecs";
-            this.checkedListBoxAudioCodecs.Size = new System.Drawing.Size(191, 109);
-            this.checkedListBoxAudioCodecs.TabIndex = 10;
-            // 
-            // splitButtonSelectAudioCodecs
-            // 
-            this.splitButtonSelectAudioCodecs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitButtonSelectAudioCodecs.AutoSize = true;
-            this.splitButtonSelectAudioCodecs.Location = new System.Drawing.Point(357, 33);
-            this.splitButtonSelectAudioCodecs.Name = "splitButtonSelectAudioCodecs";
-            this.splitButtonSelectAudioCodecs.Size = new System.Drawing.Size(97, 23);
-            this.splitButtonSelectAudioCodecs.TabIndex = 11;
-            this.splitButtonSelectAudioCodecs.Text = "Select all";
-            this.splitButtonSelectAudioCodecs.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.splitButtonSelectAudioCodecs.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 155);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 13);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Audio channels:";
+            this.label2.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.label2.Location = new System.Drawing.Point(4, 55);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(150, 44);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "If no preferred codecs are available, the first audio track will be selected inst" +
+                "ead";
             // 
             // checkBoxSelectHighestChannelCount
             // 
@@ -237,15 +202,64 @@ namespace BDAutoMuxer
             this.checkBoxSelectHighestChannelCount.Text = "Select tracks with the most channels";
             this.checkBoxSelectHighestChannelCount.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // label1
             // 
-            this.label2.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label2.Location = new System.Drawing.Point(4, 55);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(150, 44);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "If no preferred codecs are available, the first audio track will be selected inst" +
-                "ead";
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(4, 155);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(83, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Audio channels:";
+            // 
+            // splitButtonSelectAudioCodecs
+            // 
+            this.splitButtonSelectAudioCodecs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitButtonSelectAudioCodecs.AutoSize = true;
+            this.splitButtonSelectAudioCodecs.Location = new System.Drawing.Point(357, 33);
+            this.splitButtonSelectAudioCodecs.Name = "splitButtonSelectAudioCodecs";
+            this.splitButtonSelectAudioCodecs.Size = new System.Drawing.Size(97, 23);
+            this.splitButtonSelectAudioCodecs.TabIndex = 11;
+            this.splitButtonSelectAudioCodecs.Text = "Select all";
+            this.splitButtonSelectAudioCodecs.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.splitButtonSelectAudioCodecs.UseVisualStyleBackColor = true;
+            // 
+            // checkedListBoxAudioCodecs
+            // 
+            this.checkedListBoxAudioCodecs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkedListBoxAudioCodecs.FormattingEnabled = true;
+            this.checkedListBoxAudioCodecs.Location = new System.Drawing.Point(160, 33);
+            this.checkedListBoxAudioCodecs.Name = "checkedListBoxAudioCodecs";
+            this.checkedListBoxAudioCodecs.Size = new System.Drawing.Size(191, 109);
+            this.checkedListBoxAudioCodecs.TabIndex = 10;
+            // 
+            // comboBoxAudienceLanguage
+            // 
+            this.comboBoxAudienceLanguage.FormattingEnabled = true;
+            this.comboBoxAudienceLanguage.Location = new System.Drawing.Point(160, 6);
+            this.comboBoxAudienceLanguage.Name = "comboBoxAudienceLanguage";
+            this.comboBoxAudienceLanguage.Size = new System.Drawing.Size(171, 21);
+            this.comboBoxAudienceLanguage.TabIndex = 9;
+            // 
+            // labelAudioCodecs
+            // 
+            this.labelAudioCodecs.AutoSize = true;
+            this.labelAudioCodecs.Location = new System.Drawing.Point(4, 33);
+            this.labelAudioCodecs.Name = "labelAudioCodecs";
+            this.labelAudioCodecs.Size = new System.Drawing.Size(126, 13);
+            this.labelAudioCodecs.TabIndex = 8;
+            this.labelAudioCodecs.Text = "Audio codecs (preferred):";
+            // 
+            // labelAudienceLanguage
+            // 
+            this.labelAudienceLanguage.AutoSize = true;
+            this.labelAudienceLanguage.Location = new System.Drawing.Point(4, 9);
+            this.labelAudienceLanguage.Name = "labelAudienceLanguage";
+            this.labelAudienceLanguage.Size = new System.Drawing.Size(153, 13);
+            this.labelAudienceLanguage.TabIndex = 7;
+            this.labelAudienceLanguage.Text = "Audience language (preferred):";
             // 
             // tabControl
             // 
@@ -304,5 +318,6 @@ namespace BDAutoMuxer
         private System.Windows.Forms.Label labelAudioCodecs;
         private System.Windows.Forms.Label labelAudienceLanguage;
         private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.CheckBox checkBoxUseMainMovieDb;
     }
 }
