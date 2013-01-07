@@ -56,7 +56,12 @@ namespace BDAutoMuxer.BDROM
         private void TransformLanguageList()
         {
             // Sort languages alphabetically
-            Languages = new HashSet<Language>(Playlists.SelectMany(playlist => playlist.Tracks).Select(track => track.Language)).OrderBy(language => language.Name).ToList();
+            var languagesWithDups =
+                Playlists
+                    .SelectMany(playlist => playlist.Tracks)
+                    .Select(track => track.Language)
+                    .Where(language => language != null && language != Language.Undetermined);
+            Languages = new HashSet<Language>(languagesWithDups).OrderBy(language => language.Name).ToList();
 
             if (PrimaryLanguage == null || PrimaryLanguage == Language.Undetermined) return;
 
