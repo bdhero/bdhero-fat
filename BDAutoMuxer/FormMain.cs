@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BDAutoMuxer.BDInfo;
+using BDAutoMuxer.BDROM;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.Services;
 using BDAutoMuxer.controllers;
@@ -2556,6 +2557,11 @@ namespace BDAutoMuxer
         private void codecsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowCodecReference();
+        }
+
+        private void linkLabelPreviewPlaylistsUI_Click(object sender, EventArgs e)
+        {
+            new FormPlaylistsTest(_bdrom).ShowDialog(this);
         }
 
     }

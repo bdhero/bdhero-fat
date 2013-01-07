@@ -127,6 +127,39 @@ namespace BDAutoMuxer.BDROM
             }
         }
 
+        public string LengthHuman
+        {
+            get
+            {
+                var ts = new TimeSpan(0, 0, (int)LengthSec);
+                return string.Format("{0}:{1}:{2}", ts.Hours.ToString("00"), ts.Minutes.ToString("00"), ts.Seconds.ToString("00"));
+            }
+        }
+
+        public Language VideoLanguage
+        {
+            get { return VideoTracks.Any() ? VideoTracks.First().Language : null; }
+            set { if (VideoTracks.Any()) { VideoTracks.First().Language = value; } }
+        }
+
+        public string Warnings
+        {
+            get
+            {
+                var warnings = new List<string>();
+                if (IsBogus)
+                    warnings.Add("Bogus");
+                if (!IsMaxQuality)
+                    warnings.Add("Low Quality");
+                return string.Join(", ", warnings);
+            }
+        }
+
+        public int ChapterCount
+        {
+            get { return Chapters.Count; }
+        }
+
         #endregion
 
         #region Non-DB Video track properties (main feature, video commentary, special feature, misc.)

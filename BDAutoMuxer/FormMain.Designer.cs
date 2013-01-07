@@ -53,6 +53,7 @@
             this.hiddenTrackLabel = new System.Windows.Forms.Label();
             this.playlistsSplitContainerOuter = new BDAutoMuxer.views.SplitContainerWithDivider();
             this.playlistsGroupBox = new System.Windows.Forms.GroupBox();
+            this.linkLabelPreviewPlaylistsUI = new BDAutoMuxer.views.LinkLabel2();
             this.checkBoxShowLowQualityPlaylists = new System.Windows.Forms.CheckBox();
             this.checkBoxShowShortPlaylists = new System.Windows.Forms.CheckBox();
             this.buttonUnselectAll = new System.Windows.Forms.Button();
@@ -482,6 +483,7 @@
             this.playlistsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.playlistsGroupBox.Controls.Add(this.linkLabelPreviewPlaylistsUI);
             this.playlistsGroupBox.Controls.Add(this.checkBoxShowLowQualityPlaylists);
             this.playlistsGroupBox.Controls.Add(this.checkBoxShowShortPlaylists);
             this.playlistsGroupBox.Controls.Add(this.buttonUnselectAll);
@@ -495,6 +497,19 @@
             this.playlistsGroupBox.TabIndex = 0;
             this.playlistsGroupBox.TabStop = false;
             this.playlistsGroupBox.Text = "Playlists";
+            // 
+            // linkLabelPreviewPlaylistsUI
+            // 
+            this.linkLabelPreviewPlaylistsUI.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLabelPreviewPlaylistsUI.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelPreviewPlaylistsUI.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelPreviewPlaylistsUI.Location = new System.Drawing.Point(651, 20);
+            this.linkLabelPreviewPlaylistsUI.Name = "linkLabelPreviewPlaylistsUI";
+            this.linkLabelPreviewPlaylistsUI.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelPreviewPlaylistsUI.Size = new System.Drawing.Size(83, 14);
+            this.linkLabelPreviewPlaylistsUI.TabIndex = 103;
+            this.linkLabelPreviewPlaylistsUI.Text = "Preview new UI";
+            this.linkLabelPreviewPlaylistsUI.Click += new System.EventHandler(this.linkLabelPreviewPlaylistsUI_Click);
             // 
             // checkBoxShowLowQualityPlaylists
             // 
@@ -2015,5 +2030,6 @@
         private System.Windows.Forms.Label hiddenTrackLabel;
         private System.Windows.Forms.ComboBox comboBoxShowHiddenTracks;
         private System.Windows.Forms.Label label3;
+        private views.LinkLabel2 linkLabelPreviewPlaylistsUI;
     }
 }
