@@ -159,9 +159,14 @@ namespace BDAutoMuxer.BDROM
 
         private void DetectPlaylistTypes()
         {
+            var maxLengthPlaylist =
+                Playlists
+                    .OrderByDescending(p => p.LengthSec)
+                    .FirstOrDefault(playlist => !playlist.IsBogus && playlist.IsMaxQuality);
             var maxLength =
                 Playlists
                     .OrderByDescending(p => p.LengthSec)
+                    .Where(playlist => !playlist.IsBogus && playlist.IsMaxQuality)
                     .Select(playlist => playlist.LengthSec)
                     .FirstOrDefault();
 
