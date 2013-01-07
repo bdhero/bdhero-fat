@@ -165,6 +165,17 @@ namespace BDAutoMuxer
             }
         }
 
+        private ShowHiddenTracksOption[] ShowHiddenTracksOptions
+        {
+            get
+            {
+                var options = new List<ShowHiddenTracksOption> { ShowHiddenTracksOption.No };
+                if (_populator.SelectedPlaylistsHaveAnyHiddenTracks)
+                    options.Add(ShowHiddenTracksOption.Yes);
+                return options.ToArray();
+            }
+        }
+
         private Cut[] GetSortedCutArray(ICollection<Cut> collection)
         {
             int i = 0;
@@ -570,6 +581,12 @@ namespace BDAutoMuxer
             listBoxSubtitleLanguages.DataSource = SubtitleLanguages;
             listBoxSubtitleLanguages.Enabled = subtitleLanguages.Length > 1;
 
+            ShowHiddenTracksOption[] hiddenTracksOptions = ShowHiddenTracksOptions;
+            comboBoxShowHiddenTracks.DataSource = hiddenTracksOptions;
+            comboBoxShowHiddenTracks.Enabled = hiddenTracksOptions.Length > 1;
+            if (_populator.SelectedPlaylistsHaveAllHiddenTracks && hiddenTracksOptions.Length > 1)
+                comboBoxShowHiddenTracks.SelectedIndex = 1;
+
             Language userPrefAudienceLanguage = BDAutoMuxerSettings.AudienceLanguage;
             if (audienceLanguages.Contains(userPrefAudienceLanguage))
                 comboBoxAudienceLanguage.SelectedItem = userPrefAudienceLanguage;
@@ -649,7 +666,7 @@ namespace BDAutoMuxer
             if (playlist == null)
                 return;
 
-            foreach (TSStream stream in playlist.SortedStreams.Where(stream => !stream.IsHidden))
+            foreach (TSStream stream in playlist.SortedStreams.Where(IncludeStream))
             {
                 Language lang = !String.IsNullOrEmpty(stream.LanguageCode) ? Language.FromCode(stream.LanguageCode) : null;
 
@@ -670,6 +687,12 @@ namespace BDAutoMuxer
             ResizeOutputTab();
 
             textBoxOutputFileName_TextChanged(this, EventArgs.Empty);
+        }
+
+        private bool IncludeStream(TSStream stream)
+        {
+            return !stream.IsHidden ||
+                   (comboBoxShowHiddenTracks.SelectedIndex >= 0 && (ShowHiddenTracksOption) comboBoxShowHiddenTracks.SelectedItem == ShowHiddenTracksOption.Yes);
         }
 
         private void PopulateVideoTracks()
@@ -717,6 +740,8 @@ namespace BDAutoMuxer
                 streamItem.Tag = stream;
                 streamItem.Checked = stream == bestTrack;
                 streamItem.ImageIndex = i++;
+                if (stream.IsHidden)
+                    streamItem.ForeColor = SystemColors.GrayText;
                 listViewVideoTracks.Items.Add(streamItem);
 
                 icons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
@@ -767,6 +792,8 @@ namespace BDAutoMuxer
                 streamItem.Tag = stream;
                 streamItem.Checked = preferredAudioCodecs.Any(audioCodec => audioCodec.StreamType == stream.StreamType) && stream.ChannelCount >= minChannelCount;
                 streamItem.ImageIndex = i++;
+                if (stream.IsHidden)
+                    streamItem.ForeColor = SystemColors.GrayText;
                 listViewAudioTracks.Items.Add(streamItem);
 
                 icons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
@@ -807,6 +834,8 @@ namespace BDAutoMuxer
                 streamItem.Tag = stream;
                 streamItem.Checked = true;
                 streamItem.ImageIndex = i++;
+                if (stream.IsHidden)
+                    streamItem.ForeColor = SystemColors.GrayText;
                 listViewSubtitleTracks.Items.Add(streamItem);
 
                 icons.Images.Add(TSStream.GetCodecIcon(stream.StreamType));
@@ -1895,7 +1924,7 @@ namespace BDAutoMuxer
             var hasUnsupported = SelectedPlaylistHasUnsupportedCodecs;
 
             if (hasHidden)
-                notices.Add("* Hidden track - will not be muxed");
+                notices.Add("* Hidden track");
             if (hasUnsupported)
                 notices.Add("** Unsupported codec - will not be muxed");
 
@@ -2560,5 +2589,10 @@ namespace BDAutoMuxer
             _progressBar.Value = 0;
             _commandLine.Text = null;
         }
+    }
+
+    enum ShowHiddenTracksOption
+    {
+        No, Yes
     }
 }

@@ -323,6 +323,32 @@ namespace BDAutoMuxer.views
             }
         }
 
+        public bool SelectedPlaylistsHaveAnyHiddenTracks
+        {
+            get
+            {
+                return _playlistGridItems.Any(item => item.IsMainMovie && item.Playlist.HasHiddenTracks);
+            }
+        }
+
+        public bool SelectedPlaylistsHaveAllHiddenTracks
+        {
+            get
+            {
+                return _playlistGridItems.Any(HasAllHiddenTracks);
+            }
+        }
+
+        private static bool HasAllHiddenTracks(PlaylistGridItem item)
+        {
+            if (!item.IsMainMovie) return false;
+            var playlist = item.Playlist;
+            return playlist.AudioStreams
+                           .All(stream => stream.IsHidden) ||
+                   playlist.GraphicsStreams.Where(stream => stream.StreamType == TSStreamType.PRESENTATION_GRAPHICS)
+                           .All(stream => stream.IsHidden);
+        }
+
         public void AutoConfigure(IList<JsonPlaylist> jsonPlaylists)
         {
             _dataGridView.EndEdit();

@@ -113,6 +113,8 @@
             this.columnHeaderSubtitleLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelSubtitleTracks = new System.Windows.Forms.Label();
             this.groupBoxFilter = new System.Windows.Forms.GroupBox();
+            this.comboBoxShowHiddenTracks = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.listBoxSubtitleLanguages = new System.Windows.Forms.ListBox();
             this.listBoxAudioLanguages = new System.Windows.Forms.ListBox();
             this.comboBoxCommentary = new System.Windows.Forms.ComboBox();
@@ -756,7 +758,7 @@
             this.groupBoxDemuxOptions.Location = new System.Drawing.Point(3, 389);
             this.groupBoxDemuxOptions.Name = "groupBoxDemuxOptions";
             this.groupBoxDemuxOptions.Size = new System.Drawing.Size(742, 45);
-            this.groupBoxDemuxOptions.TabIndex = 4;
+            this.groupBoxDemuxOptions.TabIndex = 3;
             this.groupBoxDemuxOptions.TabStop = false;
             this.groupBoxDemuxOptions.Text = "Demux";
             // 
@@ -803,7 +805,7 @@
             this.groupBoxOutput.Location = new System.Drawing.Point(3, 440);
             this.groupBoxOutput.Name = "groupBoxOutput";
             this.groupBoxOutput.Size = new System.Drawing.Size(743, 140);
-            this.groupBoxOutput.TabIndex = 3;
+            this.groupBoxOutput.TabIndex = 4;
             this.groupBoxOutput.TabStop = false;
             this.groupBoxOutput.Text = "Output";
             // 
@@ -991,7 +993,7 @@
             this.buttonPlaylistOpen.Location = new System.Drawing.Point(219, 1);
             this.buttonPlaylistOpen.Name = "buttonPlaylistOpen";
             this.buttonPlaylistOpen.Size = new System.Drawing.Size(54, 23);
-            this.buttonPlaylistOpen.TabIndex = 5;
+            this.buttonPlaylistOpen.TabIndex = 1;
             this.buttonPlaylistOpen.Text = "Play";
             this.buttonPlaylistOpen.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonPlaylistOpen.UseVisualStyleBackColor = true;
@@ -1033,7 +1035,7 @@
             this.listViewVideoTracks.Location = new System.Drawing.Point(90, 29);
             this.listViewVideoTracks.Name = "listViewVideoTracks";
             this.listViewVideoTracks.Size = new System.Drawing.Size(391, 64);
-            this.listViewVideoTracks.TabIndex = 1;
+            this.listViewVideoTracks.TabIndex = 2;
             this.listViewVideoTracks.UseCompatibleStateImageBehavior = false;
             this.listViewVideoTracks.View = System.Windows.Forms.View.Details;
             this.listViewVideoTracks.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.OutputTrackChecked);
@@ -1174,6 +1176,8 @@
             // 
             this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxFilter.Controls.Add(this.comboBoxShowHiddenTracks);
+            this.groupBoxFilter.Controls.Add(this.label3);
             this.groupBoxFilter.Controls.Add(this.listBoxSubtitleLanguages);
             this.groupBoxFilter.Controls.Add(this.listBoxAudioLanguages);
             this.groupBoxFilter.Controls.Add(this.comboBoxCommentary);
@@ -1190,6 +1194,25 @@
             this.groupBoxFilter.TabIndex = 1;
             this.groupBoxFilter.TabStop = false;
             this.groupBoxFilter.Text = "Filter";
+            // 
+            // comboBoxShowHiddenTracks
+            // 
+            this.comboBoxShowHiddenTracks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxShowHiddenTracks.FormattingEnabled = true;
+            this.comboBoxShowHiddenTracks.Location = new System.Drawing.Point(115, 227);
+            this.comboBoxShowHiddenTracks.Name = "comboBoxShowHiddenTracks";
+            this.comboBoxShowHiddenTracks.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxShowHiddenTracks.TabIndex = 6;
+            this.comboBoxShowHiddenTracks.SelectedValueChanged += new System.EventHandler(this.FilterControlChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 230);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(104, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Show hidden tracks:";
             // 
             // listBoxSubtitleLanguages
             // 
@@ -1990,5 +2013,7 @@
         private System.Windows.Forms.Button buttonUnselectAll;
         private System.Windows.Forms.Button buttonSelectAll;
         private System.Windows.Forms.Label hiddenTrackLabel;
+        private System.Windows.Forms.ComboBox comboBoxShowHiddenTracks;
+        private System.Windows.Forms.Label label3;
     }
 }
