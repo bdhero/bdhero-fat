@@ -419,7 +419,7 @@ namespace BDAutoMuxer
                 movieNameSearchable = _bdrom.VolumeLabel ?? "";
                 movieNameSearchable = Regex.Replace(movieNameSearchable, @"^\d{6,}_", "");
                 movieNameSearchable = Regex.Replace(movieNameSearchable, @"_+", " ");
-                movieNameSearchable = movieNameSearchable.ToTitle();
+//                movieNameSearchable = movieNameSearchable.ToTitle();
             }
             if (Regex.Replace(movieNameSearchable, @"\W", "").ToLowerInvariant() == "bluray")
             {

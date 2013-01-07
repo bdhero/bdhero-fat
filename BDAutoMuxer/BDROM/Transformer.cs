@@ -68,7 +68,7 @@ namespace BDAutoMuxer.BDROM
                 MovieTitle = VolumeLabel;
                 MovieTitle = Regex.Replace(MovieTitle, @"^\d{6,}_", "");
                 MovieTitle = Regex.Replace(MovieTitle, @"_+", " ");
-                MovieTitle = MovieTitle.ToTitle();
+//                MovieTitle = MovieTitle.ToTitle();
             }
 
             MovieTitle = Regex.Replace(MovieTitle, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
