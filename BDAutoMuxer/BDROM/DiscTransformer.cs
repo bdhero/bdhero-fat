@@ -83,7 +83,7 @@ namespace BDAutoMuxer.BDROM
 
         private void TransformTitle()
         {
-            MovieTitle = MetaTitle.Trim();
+            MovieTitle = (MetaTitle ?? "").Trim();
 
             if (!string.IsNullOrWhiteSpace(MovieTitle))
             {
