@@ -131,7 +131,7 @@ namespace BDAutoMuxer.BDROM
         {
             get
             {
-                var ts = new TimeSpan(0, 0, (int)LengthSec);
+                var ts = TimeSpan.FromSeconds(LengthSec);
                 return string.Format("{0}:{1}:{2}", ts.Hours.ToString("00"), ts.Minutes.ToString("00"), ts.Seconds.ToString("00"));
             }
         }
