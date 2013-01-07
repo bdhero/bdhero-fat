@@ -17,6 +17,8 @@ namespace BDAutoMuxer.BDROM
         /// </summary>
         private const double FeatureLengthPercentage = 0.9;
 
+        private const int MinLengthSec = 120;
+
         #region DB Fields (filename, file size, length)
 
         /// <summary>
@@ -164,6 +166,12 @@ namespace BDAutoMuxer.BDROM
 
         #region Non-DB Video track properties (main feature, video commentary, special feature, misc.)
 
+        public TrackTypeDisplayable TypeDisplayable
+        {
+            get { return VideoTracks.Any() ? VideoTracks.First().TypeDisplayable : null; }
+            set { if (VideoTracks.Any()) { VideoTracks.First().TypeDisplayable = value; } }
+        }
+
         /// <summary>
         /// The main movie (a.k.a. feature film) without forced (burned in) video commentary.
         /// </summary>
@@ -241,7 +249,7 @@ namespace BDAutoMuxer.BDROM
         /// <summary>
         /// The maximum number of audio channels found in this playlist's audio tracks (e.g., 8, 6, or 2).
         /// </summary>
-        public int MaxAudioChannels
+        public double MaxAudioChannels
         {
             get
             {
@@ -403,13 +411,14 @@ namespace BDAutoMuxer.BDROM
                 VideoTracks.Count >= 1 &&
                 AudioTracks.Count >= 2 /* or >= 1? */ &&
                 SubtitleTracks.Count >= 1 &&
-                Chapters.Count >= 2;
+                Chapters.Count >= 2 &&
+                LengthSec > MinLengthSec;
         }
 
         public bool IsSpecialFeaturePlaylist(double maxPlaylistLength)
         {
-            return (IsMaxQuality && !IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1) ||
-                   (!IsMaxQuality && IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1);
+            return (IsMaxQuality && !IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1 && LengthSec > MinLengthSec) ||
+                   (!IsMaxQuality && IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1 && LengthSec > MinLengthSec);
         }
 
         public bool IsFeatureLength(double maxPlaylistLength)

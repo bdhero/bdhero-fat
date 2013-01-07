@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using BrightIdeasSoftware;
 
 namespace BDAutoMuxer.controllers
 {
@@ -71,6 +73,34 @@ namespace BDAutoMuxer.controllers
                 dic.Add(keyProvider(value), value);
             }
             return dic;
+        }
+    }
+
+    public static class ObjectListViewExtension
+    {
+        public static void AutoResizeColumnsSmart(this ObjectListView olv, int paddingRight = 0)
+        {
+            foreach (var column in olv.AllColumns)
+            {
+                AutoResizeColumn(column, paddingRight);
+            }
+            var lastColumn = olv.AllColumns.LastOrDefault();
+            if (lastColumn != null)
+            {
+                lastColumn.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+                lastColumn.Width += paddingRight;
+            }
+        }
+
+        private static void AutoResizeColumn(OLVColumn column, int paddingRight = 0)
+        {
+            column.AutoResize(ColumnHeaderAutoResizeStyle.None);
+            var noneWidth = column.Width;
+            column.AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
+            var headerWidth = column.Width;
+            column.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            var contentWidth = column.Width;
+            column.Width = Math.Max(headerWidth, contentWidth) + paddingRight;
         }
     }
 }

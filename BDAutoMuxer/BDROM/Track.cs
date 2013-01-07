@@ -37,7 +37,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region DB Track type (main, commentary, special feature, PiP, descriptive, misc)
+        #region DB Track type (main, commentary, special feature, descriptive, misc)
 
         public TrackType Type = TrackType.Misc;
 
@@ -71,14 +71,100 @@ namespace BDAutoMuxer.BDROM
         #region Non-DB Fields
 
         /// <summary>
+        /// Index of the track (i.e., its position or order) in the playlist.
+        /// </summary>
+        public int Index;
+
+        /// <summary>
+        /// Number of audio channels (e.g., 2.0, 5.1, 7.1).
+        /// </summary>
+        public double ChannelCount;
+
+        public TSVideoFormat VideoFormat;
+        public TSFrameRate FrameRate;
+        public TSAspectRatio AspectRatio;
+
+        #endregion
+
+        #region Non-DB Properties
+
+        public TrackTypeDisplayable TypeDisplayable
+        {
+            get { return TrackTypeDisplayable.Get(Type); }
+            set { Type = value != null ? value.Value : TrackType.Misc; }
+        }
+
+        /// <summary>
         /// Number of audio channels (e.g., 2, 6, 8).
         /// </summary>
-        public int ChannelCount;
+        public string QualityDisplayable
+        {
+            get
+            {
+                if (IsVideo) return VideoFormatDisplayable;
+                if (IsAudio) return ChannelCount.ToString("0.0");
+                return "N/A";
+            }
+        }
 
         /// <summary>
         /// Video height (e.g., 1080, 720, 480).
         /// </summary>
-        public int VideoHeight;
+        public int VideoHeight
+        {
+            get
+            {
+                return
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_1080i || VideoFormat == TSVideoFormat.VIDEOFORMAT_1080p ? 1080 :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_720p ? 720 :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_576i || VideoFormat == TSVideoFormat.VIDEOFORMAT_576p ? 576 :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_480i || VideoFormat == TSVideoFormat.VIDEOFORMAT_480p ? 480 : 0;
+
+            }
+        }
+
+        /// <summary>
+        /// Video height (e.g., 1080, 720, 480).
+        /// </summary>
+        public string VideoFormatDisplayable
+        {
+            get
+            {
+                return
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_1080i ? "1080i" :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_1080p ? "1080p" :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_720p ? "720p" :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_576i ? "576i" :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_576p ? "576p" :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_480i ? "480i" :
+                    VideoFormat == TSVideoFormat.VIDEOFORMAT_480p ? "480p" : "unknown";
+
+            }
+        }
+
+        public string FrameRateDisplayable
+        {
+            get
+            {
+                return
+                    FrameRate == TSFrameRate.FRAMERATE_23_976 ? "23.976" :
+                    FrameRate == TSFrameRate.FRAMERATE_24 ? "24" :
+                    FrameRate == TSFrameRate.FRAMERATE_25 ? "25" :
+                    FrameRate == TSFrameRate.FRAMERATE_29_97 ? "29.97" :
+                    FrameRate == TSFrameRate.FRAMERATE_50 ? "50" :
+                    FrameRate == TSFrameRate.FRAMERATE_59_94 ? "59.94" : "unknown";
+            }
+        }
+
+        public string AspectRatioDisplayable
+        {
+            get
+            {
+                return
+                    AspectRatio == TSAspectRatio.ASPECT_16_9 ? "16:9" :
+                    AspectRatio == TSAspectRatio.ASPECT_4_3 ? "4:3" : "unknown";
+            }
+        }
 
         #endregion
 
@@ -87,29 +173,44 @@ namespace BDAutoMuxer.BDROM
             return streams.Select(Transform).ToList();
         }
 
-        public static Track Transform(TSStream stream)
+        public static Track Transform(TSStream stream, int index)
         {
+            var audioStream = stream as TSAudioStream;
+            var videoStream = stream as TSVideoStream;
             return new Track
                        {
+                           Index = index,
                            Language = stream.Language,
                            IsHidden = stream.IsHidden,
                            Codec = MICodec.FromStreamType(stream.StreamType),
                            IsVideo = stream.IsVideoStream,
                            IsAudio = stream.IsAudioStream,
                            IsSubtitle = stream.IsGraphicsStream || stream.IsTextStream,
-                           ChannelCount = GetChannelCount(stream as TSAudioStream),
-                           VideoHeight = GetVideoHeight(stream as TSVideoStream)
+                           ChannelCount = GetChannelCount(audioStream),
+                           VideoFormat = GetVideoHeight(videoStream),
+                           FrameRate = GetVideoFrameRate(videoStream),
+                           AspectRatio = GetVideoAspectRatio(videoStream),
                        };
         }
 
-        private static int GetChannelCount(TSAudioStream audioStream)
+        private static double GetChannelCount(TSAudioStream audioStream)
         {
-            return audioStream != null ? audioStream.ChannelCount : 0;
+            return audioStream != null ? audioStream.ChannelCountDouble : 0;
         }
 
-        private static int GetVideoHeight(TSVideoStream videoStream)
+        private static TSVideoFormat GetVideoHeight(TSVideoStream videoStream)
         {
-            return videoStream != null ? videoStream.Height : 0;
+            return videoStream != null ? videoStream.VideoFormat : 0;
+        }
+
+        private static TSFrameRate GetVideoFrameRate(TSVideoStream videoStream)
+        {
+            return videoStream != null ? videoStream.FrameRate : TSFrameRate.Unknown;
+        }
+
+        private static TSAspectRatio GetVideoAspectRatio(TSVideoStream videoStream)
+        {
+            return videoStream != null ? videoStream.AspectRatio : TSAspectRatio.Unknown;
         }
 
         public Json ToJsonObject()
@@ -240,5 +341,37 @@ namespace BDAutoMuxer.BDROM
         SpecialFeature,
         Descriptive,
         Misc
+    }
+
+    public class TrackTypeDisplayable
+    {
+        public TrackType Value;
+        public string Displayable { get { return ToString(); } }
+        public override string ToString()
+        {
+            return
+                Value == TrackType.MainFeature ? "Main Feature" :
+                Value == TrackType.Commentary ? "Commentary" :
+                Value == TrackType.SpecialFeature ? "Special Feature" :
+                Value == TrackType.Descriptive ? "Descriptive" :
+                Value == TrackType.Misc ? "Misc." : "Unknown";
+        }
+
+        public static readonly List<TrackTypeDisplayable> List =
+            new List<TrackTypeDisplayable>
+                {
+                    new TrackTypeDisplayable { Value = TrackType.MainFeature },
+                    new TrackTypeDisplayable { Value = TrackType.Commentary },
+                    new TrackTypeDisplayable { Value = TrackType.SpecialFeature },
+                    new TrackTypeDisplayable { Value = TrackType.Descriptive },
+                    new TrackTypeDisplayable { Value = TrackType.Misc }
+                };
+
+        public static TrackTypeDisplayable Get(TrackType trackType)
+        {
+            if (List.Any(displayable => displayable.Value == trackType))
+                return List.First(displayable => displayable.Value == trackType);
+            return List.Last();
+        }
     }
 }

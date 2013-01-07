@@ -735,6 +735,32 @@ namespace BDAutoMuxer.BDInfo
             }
         }
 
+        public double ChannelCountDouble
+        {
+            get
+            {
+                if (ChannelLayout == TSChannelLayout.CHANNELLAYOUT_MONO &&
+                    ChannelCount == 2)
+                {
+                }
+
+                if (ChannelCount > 0)
+                {
+                    return ChannelCount + (0.1 * LFE);
+                }
+                switch (ChannelLayout)
+                {
+                    case TSChannelLayout.CHANNELLAYOUT_MONO:
+                        return 1.0;
+                    case TSChannelLayout.CHANNELLAYOUT_STEREO:
+                        return 2.0;
+                    case TSChannelLayout.CHANNELLAYOUT_MULTI:
+                        return 5.1;
+                }
+                return 0;
+            }
+        }
+
         public string ChannelDescription
         {
             get
