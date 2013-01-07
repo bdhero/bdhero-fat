@@ -143,19 +143,40 @@ namespace BDAutoMuxer.BDROM
 
         #region Non-DB Audio / Video properties
 
+        public IList<Track> VideoTracks
+        {
+            get { return Tracks.Where(track => track.IsVideo).ToList(); }
+        }
+
+        public IList<Track> AudioTracks
+        {
+            get { return Tracks.Where(track => track.IsAudio).ToList(); }
+        }
+
+        public IList<Track> SubtitleTracks
+        {
+            get { return Tracks.Where(track => track.IsSubtitle).ToList(); }
+        }
+
+        /// <summary>
+        /// The maximum height (in pixels) of this playlist's video tracks (e.g., 1080 or 720).
+        /// </summary>
         public int MaxVideoResolution
         {
             get
             {
-                return Tracks.Where(track => track.IsVideo).OrderByDescending(v => v.VideoHeight).Select(track => track.VideoHeight).FirstOrDefault();
+                return VideoTracks.OrderByDescending(v => v.VideoHeight).Select(track => track.VideoHeight).FirstOrDefault();
             }
         }
 
+        /// <summary>
+        /// The maximum number of audio channels found in this playlist's audio tracks (e.g., 8, 6, or 2).
+        /// </summary>
         public int MaxAudioChannels
         {
             get
             {
-                return Tracks.Where(track => track.IsAudio).OrderByDescending(v => v.ChannelCount).Select(track => track.ChannelCount).FirstOrDefault();
+                return AudioTracks.OrderByDescending(v => v.ChannelCount).Select(track => track.ChannelCount).FirstOrDefault();
             }
         }
 
@@ -297,7 +318,7 @@ namespace BDAutoMuxer.BDROM
         /// <returns>The delegate's return value if this playlist has a video track; otherwise false.</returns>
         bool TestFirstVideoTrack(FirstVideoTrackDelegate @delegate)
         {
-            var video = Tracks.FirstOrDefault(track => track.IsVideo);
+            var video = VideoTracks.FirstOrDefault();
             return video != null && @delegate(video);
         }
 
@@ -310,12 +331,12 @@ namespace BDAutoMuxer.BDROM
         {
             get
             {
-                var video = Tracks.FirstOrDefault(track => track.IsVideo);
+                var video = VideoTracks.FirstOrDefault();
                 return video != null ? video.Type : TrackType.Misc;
             }
             set
             {
-                var video = Tracks.FirstOrDefault(track => track.IsVideo);
+                var video = VideoTracks.FirstOrDefault();
                 if (video != null)
                     video.Type = value;
             }
