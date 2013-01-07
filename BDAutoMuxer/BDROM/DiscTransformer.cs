@@ -24,6 +24,7 @@ namespace BDAutoMuxer.BDROM
 
             // Data gathering
             disc.TransformPrimaryLanguage();
+            disc.TransformVideoLanguages();
             disc.TransformLanguageList();
             disc.TransformTitle();
             disc.TransformDuplicatePlaylists(bdrom);
@@ -51,6 +52,16 @@ namespace BDAutoMuxer.BDROM
                                        .OrderByDescending(grouping => grouping.Count())
                                        .Select(grouping => grouping.Key)
                                        .FirstOrDefault();
+        }
+
+        private void TransformVideoLanguages()
+        {
+            if (PrimaryLanguage == null) return;
+
+            foreach (var videoTrack in Playlists.SelectMany(playlist => playlist.VideoTracks))
+            {
+                videoTrack.Language = PrimaryLanguage;
+            }
         }
 
         private void TransformLanguageList()
