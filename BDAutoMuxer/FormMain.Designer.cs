@@ -503,12 +503,12 @@
             this.linkLabelPreviewPlaylistsUI.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabelPreviewPlaylistsUI.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.linkLabelPreviewPlaylistsUI.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelPreviewPlaylistsUI.Location = new System.Drawing.Point(651, 20);
+            this.linkLabelPreviewPlaylistsUI.Location = new System.Drawing.Point(608, 20);
             this.linkLabelPreviewPlaylistsUI.Name = "linkLabelPreviewPlaylistsUI";
             this.linkLabelPreviewPlaylistsUI.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelPreviewPlaylistsUI.Size = new System.Drawing.Size(83, 14);
+            this.linkLabelPreviewPlaylistsUI.Size = new System.Drawing.Size(126, 14);
             this.linkLabelPreviewPlaylistsUI.TabIndex = 103;
-            this.linkLabelPreviewPlaylistsUI.Text = "Preview new UI";
+            this.linkLabelPreviewPlaylistsUI.Text = "Preview new filter engine";
             this.linkLabelPreviewPlaylistsUI.Click += new System.EventHandler(this.linkLabelPreviewPlaylistsUI_Click);
             // 
             // checkBoxShowLowQualityPlaylists
