@@ -109,9 +109,6 @@ namespace BDAutoMuxer
 
         private void Scan(IList<string> filePaths)
         {
-            MediaInfo.Config.CLIPath = @"C:\Tools\MediaInfo\MediaInfo.exe";
-            MediaInfo.Config.CSVPath = @"C:\Projects\bdautomuxer\BDAutoMuxer\Resources\MediaInfo_XML.csv";
-
             _mediaInfos.Clear();
             _videoFormats.Clear();
             _audioFormats.Clear();
@@ -143,14 +140,6 @@ namespace BDAutoMuxer
             }
 
             _runTime = DateTime.Now - startAll;
-
-            /*
-            var miVideoTracks = _mediaInfos.SelectMany(mi => mi.VideoTracks).ToList();
-            var miAudioTracks = _mediaInfos.SelectMany(mi => mi.AudioTracks).ToList();
-
-            miVideoTracks.ForEach(track => _videoFormats[track.Format] = track.FilePath);
-            miAudioTracks.ForEach(track => _audioFormats[track.Format] = track.FilePath);
-            */
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
