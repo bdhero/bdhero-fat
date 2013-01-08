@@ -7,7 +7,7 @@ using MediaInfoWrapper;
 
 namespace BDAutoMuxer.tools
 {
-    class MediaInfoHelper
+    static class MediaInfoHelper
     {
         public static MICodec CodecFromStream(TSStream stream)
         {
