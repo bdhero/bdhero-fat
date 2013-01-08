@@ -312,6 +312,7 @@
             this.objectListViewTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectListViewTracks.FullRowSelect = true;
             this.objectListViewTracks.GridLines = true;
+            this.objectListViewTracks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.objectListViewTracks.Location = new System.Drawing.Point(0, 0);
             this.objectListViewTracks.Name = "objectListViewTracks";
             this.objectListViewTracks.SelectColumnsOnRightClick = false;
