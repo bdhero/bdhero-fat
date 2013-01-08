@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.controllers;
+using MediaInfoWrapper;
 
 namespace BDAutoMuxer.tools
 {
@@ -64,7 +65,7 @@ namespace BDAutoMuxer.tools
 
             _basePath = Path.Combine(_outputDirPath, _outputFileNameWithoutExtension);
 
-            var args = new Args { _playlist.FullName, "1)" };
+            var args = new CLIArguments { _playlist.FullName, "1)" };
 
             for (var i = 0; i < _playlist.SortedStreams.Count; i++)
             {

@@ -2,19 +2,59 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using BDAutoMuxer.BDInfo;
-using BDAutoMuxer.Properties;
-using Newtonsoft.Json;
+using MediaInfoWrapper.Resources;
 
-namespace BDAutoMuxer.tools
+namespace MediaInfoWrapper
 {
     public class MediaInfo
     {
         public static readonly MIConfig Config = new MIConfig();
+
+        private static bool _initialized;
+
+        private static void ExtractCoreFiles()
+        {
+            if (_initialized) return;
+            var assemblyName = Assembly.GetAssembly(typeof (MediaInfo)).GetName();
+            var processId = Process.GetCurrentProcess().Id;
+            var tempDir = Path.Combine(Path.GetTempPath(), assemblyName.Name, assemblyName.Version.ToString(), processId.ToString(CultureInfo.InvariantCulture));
+            var dllPath = Path.Combine(tempDir, "MediaInfo.dll");
+            var exePath = Path.Combine(tempDir, "MediaInfo.exe");
+            var csvPath = Path.Combine(tempDir, "MediaInfoXML.csv");
+            WriteCoreFile(dllPath, MediaInfoCoreFiles.MediaInfo_DLL);
+            WriteCoreFile(exePath, MediaInfoCoreFiles.MediaInfo_EXE);
+            WriteCoreFile(csvPath, MediaInfoCoreFiles.MediaInfoXML_CSV);
+            Config.CLIPath = exePath;
+            Config.CSVPath = csvPath;
+            _initialized = true;
+        }
+
+        private static void WriteCoreFile(string path, string text)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                System.IO.File.WriteAllText(path, text);
+            }
+            catch {}
+        }
+
+        private static void WriteCoreFile(string path, byte[] bytes)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                System.IO.File.WriteAllBytes(path, bytes);
+            }
+            catch {}
+        }
+
         private static readonly Regex TrackRegex = new Regex(@"<(Video|Audio|Subtitle|Chapter)Track>\s*(.*?)\s*</\1Track>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         private static readonly Regex NumberedPattern = new Regex(@"^(.+)\.(\d+)(\.wav)$", RegexOptions.IgnoreCase);
 
@@ -40,11 +80,7 @@ namespace BDAutoMuxer.tools
         public IList<MISubtitleTrack> SubtitleTracks { get { return _subtitleTracks.AsReadOnly(); } }
         public IList<MIChapterTrack> ChapterTracks { get { return _chapterTracks.AsReadOnly(); } }
 
-        static MediaInfo()
-        {
-            Config.CLIPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfo.exe");
-            Config.CSVPath = AbstractExternalTool.GetLibPathAbsolute("MediaInfoXML.csv");
-        }
+        
 
         #region Testing
 
@@ -125,7 +161,7 @@ namespace BDAutoMuxer.tools
 
             miVideoTracks.ForEach(track => videoCodecs[track.Format] = track.FilePath);
             miAudioTracks.ForEach(track => audioCodecs[track.Format] = track.FilePath);
-
+            /*
             var strVideoCodecs = JsonConvert.SerializeObject(videoCodecs);
             var strAudioCodecs = JsonConvert.SerializeObject(audioCodecs);
 
@@ -136,7 +172,7 @@ namespace BDAutoMuxer.tools
             Console.WriteLine("\n\nWrote output to {0}", outputFile);
 
             System.IO.File.WriteAllText(outputFile, text);
-
+            */
             Console.WriteLine();
         }
 
@@ -252,12 +288,14 @@ namespace BDAutoMuxer.tools
         {
             if (args == null) args = new string[0];
 
+            ExtractCoreFiles();
+
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = Config.CLIPath,
-                    Arguments = new Args(new List<string>(args) { _mediaFilePath }).ToString(),
+                    Arguments = new CLIArguments(new List<string>(args) { _mediaFilePath }).ToString(),
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     ErrorDialog = false,
@@ -1403,8 +1441,6 @@ namespace BDAutoMuxer.tools
         /// </summary>
         public abstract string SerializableName { get; }
 
-        public abstract TSStreamType StreamType { get; }
-
         /// <summary>
         /// Shown in MediaInfo.  Also stored in MKV headers.
         /// </summary>
@@ -1465,62 +1501,6 @@ namespace BDAutoMuxer.tools
         public override int GetHashCode()
         {
             return SerializableName.GetHashCode();
-        }
-
-        public static MICodec FromStream(TSStream stream)
-        {
-            if (stream == null) return UnknownCodec;
-
-            var audioStream = stream as TSAudioStream;
-
-            switch (stream.StreamType)
-            {
-                case TSStreamType.MPEG1_VIDEO:
-                    return MPEG1Video;
-                case TSStreamType.MPEG2_VIDEO:
-                    return MPEG2Video;
-                case TSStreamType.AVC_VIDEO:
-                    return AVC;
-                case TSStreamType.MVC_VIDEO:
-                    return UnknownVideo;
-                case TSStreamType.VC1_VIDEO:
-                    return VC1;
-                case TSStreamType.MPEG1_AUDIO:
-                    return MP3;
-                case TSStreamType.MPEG2_AUDIO:
-                    return UnknownAudio;
-                case TSStreamType.LPCM_AUDIO:
-                    return LPCM;
-                case TSStreamType.AC3_AUDIO:
-                    if (audioStream != null && audioStream.AudioMode == TSAudioMode.Extended)
-                        return AC3EX;
-                    if (audioStream != null && audioStream.AudioMode == TSAudioMode.Surround)
-                        return ProLogic;
-                    return AC3;
-                case TSStreamType.AC3_PLUS_AUDIO:
-                case TSStreamType.AC3_PLUS_SECONDARY_AUDIO:
-                    return EAC3;
-                case TSStreamType.AC3_TRUE_HD_AUDIO:
-                    return TrueHD;
-                case TSStreamType.DTS_AUDIO:
-                    if (audioStream != null && audioStream.AudioMode == TSAudioMode.Extended)
-                        return DTSES;
-                    return DTS;
-                case TSStreamType.DTS_HD_AUDIO:
-                    return DTSHDHRA;
-                case TSStreamType.DTS_HD_SECONDARY_AUDIO:
-                    return DTSExpress;
-                case TSStreamType.DTS_HD_MASTER_AUDIO:
-                    return DTSHDMA;
-                case TSStreamType.PRESENTATION_GRAPHICS:
-                    return PGS;
-                case TSStreamType.INTERACTIVE_GRAPHICS:
-                    return UnknownSubtitle;
-                case TSStreamType.SUBTITLE:
-                    return UnknownSubtitle;
-                default:
-                    return UnknownCodec;
-            }
         }
 
         #region Serializing / Deserializing
@@ -1632,11 +1612,6 @@ namespace BDAutoMuxer.tools
             get { return "V_H264"; }
         }
 
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.AVC_VIDEO; }
-        }
-
         public override string CodecId
         {
             get { return "V_MPEG4/ISO/AVC"; }
@@ -1689,7 +1664,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_h264; }
+            get { return Logos.logo_h264; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1706,11 +1681,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "V_VC1"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.VC1_VIDEO; }
         }
 
         public override string CodecId
@@ -1746,7 +1716,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_vc1; }
+            get { return Logos.logo_vc1; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1763,11 +1733,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "V_MPEG1"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.MPEG1_VIDEO; }
         }
 
         public override string CodecId
@@ -1812,7 +1777,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_mpeg1_video; }
+            get { return Logos.logo_mpeg1_video; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1829,11 +1794,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "V_MPEG2"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.MPEG2_VIDEO; }
         }
 
         public override string CodecId
@@ -1888,7 +1848,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_mpeg2_video; }
+            get { return Logos.logo_mpeg2_video; }
         }
 
         public static bool Matches(MIFormat format)
@@ -1902,11 +1862,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "V_UNKNOWN"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -1961,11 +1916,6 @@ namespace BDAutoMuxer.tools
             get { return "A_AC3_PL"; }
         }
 
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
-        }
-
         public override string CodecId
         {
             get { return "A_AC3"; }
@@ -2006,7 +1956,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dolby_pro_logic; }
+            get { return Logos.logo_dolby_pro_logic; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2023,11 +1973,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_AC3"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.AC3_AUDIO; }
         }
 
         public override string CodecId
@@ -2087,7 +2032,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dolby_digital; }
+            get { return Logos.logo_dolby_digital; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2104,11 +2049,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_AC3_EX"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -2163,7 +2103,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dolby_digital_ex; }
+            get { return Logos.logo_dolby_digital_ex; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2180,11 +2120,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_AC3_PLUS"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.AC3_PLUS_AUDIO; }
         }
 
         public override string CodecId
@@ -2234,7 +2169,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dolby_digital_plus; }
+            get { return Logos.logo_dolby_digital_plus; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2251,11 +2186,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_TRUEHD"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.AC3_TRUE_HD_AUDIO; }
         }
 
         public override string CodecId
@@ -2300,7 +2230,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dolby_truehd; }
+            get { return Logos.logo_dolby_truehd; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2321,11 +2251,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_DTS"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.DTS_AUDIO; }
         }
 
         public override string CodecId
@@ -2375,7 +2300,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dts; }
+            get { return Logos.logo_dts; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2392,11 +2317,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_DTS_ES"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -2446,7 +2366,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dts_es; }
+            get { return Logos.logo_dts_es; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2463,11 +2383,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_DTS_EXPRESS"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.DTS_HD_SECONDARY_AUDIO; }
         }
 
         public override string CodecId
@@ -2512,7 +2427,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dts_express; }
+            get { return Logos.logo_dts_express; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2529,11 +2444,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_DTS_HD_HRA"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.DTS_HD_AUDIO; }
         }
 
         public override string CodecId
@@ -2588,7 +2498,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dts_hd_hra; }
+            get { return Logos.logo_dts_hd_hra; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2605,11 +2515,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_DTS_HD_MA"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.DTS_HD_MASTER_AUDIO; }
         }
 
         public override string CodecId
@@ -2659,7 +2564,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_dts_hd_ma; }
+            get { return Logos.logo_dts_hd_ma; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2677,11 +2582,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_VORBIS"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -2716,7 +2616,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_vorbis; }
+            get { return Logos.logo_vorbis; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2730,11 +2630,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_FLAC"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -2769,7 +2664,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_flac; }
+            get { return Logos.logo_flac; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2789,12 +2684,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_MP3"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            // TODO: Should this return TSStreamType.MPEG1_AUDIO
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -2839,7 +2728,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_mp3; }
+            get { return Logos.logo_mp3; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2853,12 +2742,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_AAC"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            // TODO: Should this return TSStreamType.MPEG1_AUDIO
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -2898,7 +2781,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_aac; }
+            get { return Logos.logo_aac; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2916,11 +2799,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_LPCM"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.LPCM_AUDIO; }
         }
 
         public override string CodecId
@@ -2976,7 +2854,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_lpcm; }
+            get { return Logos.logo_lpcm; }
         }
 
         public static bool Matches(MIFormat format)
@@ -2994,11 +2872,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "A_UNKNOWN"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -3056,11 +2929,6 @@ namespace BDAutoMuxer.tools
             get { return "S_PGS"; }
         }
 
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.PRESENTATION_GRAPHICS; }
-        }
-
         public override string CodecId
         {
             get { return "S_HDMV/PGS"; }
@@ -3093,7 +2961,7 @@ namespace BDAutoMuxer.tools
 
         public override Image Logo
         {
-            get { return Resources.logo_pgs; }
+            get { return Logos.logo_pgs; }
         }
 
         public static bool Matches(string filename)
@@ -3112,11 +2980,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "S_VOBSUB"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -3172,11 +3035,6 @@ namespace BDAutoMuxer.tools
             get { return "S_SRT"; }
         }
 
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
-        }
-
         public override string CodecId
         {
             get { return "S_TEXT/UTF"; }
@@ -3223,11 +3081,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "S_UNKNOWN"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId
@@ -3300,11 +3153,6 @@ namespace BDAutoMuxer.tools
         public override string SerializableName
         {
             get { return "UNKNOWN"; }
-        }
-
-        public override TSStreamType StreamType
-        {
-            get { return TSStreamType.Unknown; }
         }
 
         public override string CodecId

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace BDAutoMuxer.tools
+namespace MediaInfoWrapper
 {
     /// <summary>
     /// Helper class for constructing a list of arguments to be passed to a command line application.
     /// </summary>
-    public class Args : List<string>
+    public class CLIArguments : List<string>
     {
         private const string DoubleQuote = "\"";
         private const string DoubleQuoteEscaped = "\\\"";
@@ -16,12 +16,12 @@ namespace BDAutoMuxer.tools
         /// </summary>
         public bool SkipNullArgs = true;
 
-        public Args(params string[] args)
+        public CLIArguments(params string[] args)
         {
             AddAll(args);
         }
 
-        public Args(IEnumerable<string> args)
+        public CLIArguments(IEnumerable<string> args)
         {
             AddAll(args);
         }

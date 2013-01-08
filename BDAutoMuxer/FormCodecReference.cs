@@ -11,6 +11,7 @@ using BDAutoMuxer.Properties;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
+using MediaInfoWrapper;
 
 namespace BDAutoMuxer
 {

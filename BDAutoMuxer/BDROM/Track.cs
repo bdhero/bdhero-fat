@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.tools;
+using MediaInfoWrapper;
 
 // ReSharper disable InconsistentNaming
 namespace BDAutoMuxer.BDROM
@@ -181,7 +182,7 @@ namespace BDAutoMuxer.BDROM
                            PID = stream.PID,
                            Language = stream.Language,
                            IsHidden = stream.IsHidden,
-                           Codec = MICodec.FromStream(stream),
+                           Codec = MediaInfoHelper.CodecFromStream(stream),
                            IsVideo = stream.IsVideoStream,
                            IsAudio = stream.IsAudioStream,
                            IsSubtitle = stream.IsGraphicsStream || stream.IsTextStream,

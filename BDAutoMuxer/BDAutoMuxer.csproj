@@ -136,7 +136,6 @@
     <Compile Include="BDInfo\TSInterleavedFile.cs" />
     <Compile Include="BDInfo\TSStreamBuffer.cs" />
     <Compile Include="BDInfo\TSStreamClipFile.cs" />
-    <Compile Include="BDInfo\Language.cs" />
     <Compile Include="BDInfo\TSStreamClip.cs" />
     <Compile Include="BDInfo\TSStreamFile.cs" />
     <Compile Include="BDInfo\TSPlaylistFile.cs" />
@@ -168,10 +167,10 @@
     <Compile Include="FormPlaylistsTest.Designer.cs">
       <DependentUpon>FormPlaylistsTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="tools\MediaInfo.cs" />
     <Compile Include="Services\BDService.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="tools\EAC3To.cs" />
+    <Compile Include="tools\MediaInfoHelper.cs" />
     <Compile Include="views\LinkLabel2.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -179,7 +178,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Win32\Browser.cs" />
-    <Compile Include="tools\Args.cs" />
     <Compile Include="FormRemux.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -252,9 +250,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="BDAutoMuxer_TemporaryKey.pfx" />
-    <None Include="lib\MediaInfoXML.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -383,12 +378,6 @@
     <Content Include="lib\eac3to\r8b.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\MediaInfo.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\MediaInfo.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="lib\tsMuxeR.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -465,6 +454,10 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MediaInfoWrapper\MediaInfoWrapper.csproj">
+      <Project>{0E38BA29-4A54-4461-9E73-283802161C55}</Project>
+      <Name>MediaInfoWrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ObjectListView\ObjectListView2010.csproj">
       <Project>{18FEDA0C-D147-4286-B39A-01204808106A}</Project>
       <Name>ObjectListView2010</Name>

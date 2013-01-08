@@ -35,6 +35,7 @@ using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
+using MediaInfoWrapper;
 using ComboBox = System.Windows.Forms.ComboBox;
 using ContextMenu = System.Windows.Forms.ContextMenu;
 using MenuItem = System.Windows.Forms.MenuItem;
@@ -55,7 +56,7 @@ namespace BDAutoMuxer
             InitializeComponent();
 
             _audienceLanguages = Language.AllLanguages.OrderBy(lang => lang.ISO_639_2).ToArray();
-            _bdInfoAudioCodecs = MICodec.AudioCodecs.Where(codec => codec.StreamType != TSStreamType.Unknown && codec.IsMuxable).ToArray();
+            _bdInfoAudioCodecs = MICodec.AudioCodecs.Where(codec => codec != null && codec.IsKnown && codec.IsMuxable).ToArray();
 
             textBoxApiKey.Text = BDAutoMuxerSettings.ApiKey;
             checkBoxCheckForUpdates.Checked = BDAutoMuxerSettings.CheckForUpdates;

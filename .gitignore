@@ -2,8 +2,8 @@
 *.DotSettings.user
 .DS_Store
 ._.DS_Store
-/BDAutoMuxer/bin
-/BDAutoMuxer/obj
 /_ReSharper.*
-/BDAutoMuxer/publish
+/*/bin
+/*/obj
+/*/publish
 /gh-pages

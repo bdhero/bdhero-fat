@@ -7,10 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BDAutoMuxer.controllers;
-using BDAutoMuxer.models;
-using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
+using MediaInfoWrapper;
 using Newtonsoft.Json;
 
 namespace BDAutoMuxer

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.controllers;
+using MediaInfoWrapper;
 
 namespace BDAutoMuxer.BDROM
 {

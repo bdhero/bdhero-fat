@@ -11,6 +11,7 @@ using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
 using BrightIdeasSoftware;
+using MediaInfoWrapper;
 using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace BDAutoMuxer

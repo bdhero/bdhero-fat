@@ -10,6 +10,7 @@ using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.models;
 using BDAutoMuxer.controllers;
+using MediaInfoWrapper;
 
 namespace BDAutoMuxer.views
 {

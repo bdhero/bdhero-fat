@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.views;
+using MediaInfoWrapper;
 using Microsoft.Win32;
 
 namespace BDAutoMuxer.tools
@@ -159,7 +160,7 @@ namespace BDAutoMuxer.tools
         /// Command line string used to execute the process, including the full path to the EXE and all arguments.
         /// </summary>
         /// <example>"C:\Users\Administrator\AppData\Local\Temp\BDAutoRip\584\TsMuxer\tsMuxeR.exe" "arg1" "arg 2"</example>
-        public string CommandLine { get { return Args.ForCommandLine(FullName) + " " + _strArgs; } }
+        public string CommandLine { get { return CLIArguments.ForCommandLine(FullName) + " " + _strArgs; } }
 
         public bool IsStarted { get; private set; }
         public bool IsPaused { get; private set; }
@@ -279,7 +280,7 @@ namespace BDAutoMuxer.tools
                                        FileName = FullName,
                                        CreateNoWindow = true,
                                        WindowStyle = ProcessWindowStyle.Hidden,
-                                       Arguments = _strArgs = new Args(args).ToString()
+                                       Arguments = _strArgs = new CLIArguments(args).ToString()
                                    }
                            };
 

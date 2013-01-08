@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
+using MediaInfoWrapper;
 
 namespace BDAutoMuxer
 {
@@ -38,12 +39,6 @@ namespace BDAutoMuxer
         static void Main(string[] args)
         {
             BDAutoMuxerSettings.UpgradeFromPreviousVersion();
-
-            if (args.Contains("--test"))
-            {
-                MediaInfo.Test();
-                return;
-            }
 
             // To embed referenced .DLL files in the output .EXE, uncomment the lines below and in BDAutoMuxer.csproj (close VS2010 first)
 //            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;

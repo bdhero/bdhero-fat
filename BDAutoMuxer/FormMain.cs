@@ -16,6 +16,7 @@ using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
 using BDAutoMuxer.views;
+using MediaInfoWrapper;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using WatTmdb.V3;
 
@@ -795,7 +796,7 @@ namespace BDAutoMuxer
 
                 ListViewItem streamItem = new ListViewItem(streamSubItems, 0);
                 streamItem.Tag = stream;
-                streamItem.Checked = preferredAudioCodecs.Any(audioCodec => audioCodec.StreamType == stream.StreamType) && stream.ChannelCount >= minChannelCount;
+                streamItem.Checked = preferredAudioCodecs.Any(audioCodec => audioCodec == MediaInfoHelper.CodecFromStream(stream)) && stream.ChannelCount >= minChannelCount;
                 streamItem.ImageIndex = i++;
                 if (stream.IsHidden)
                     streamItem.ForeColor = SystemColors.GrayText;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BDAutoMuxer.BDInfo;
+using MediaInfoWrapper;
 
 // ReSharper disable InconsistentNaming
 namespace BDAutoMuxer.BDROM

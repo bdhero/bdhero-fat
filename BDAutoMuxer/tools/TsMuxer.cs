@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.controllers;
+using MediaInfoWrapper;
 
 namespace BDAutoMuxer.tools
 {
@@ -155,7 +156,7 @@ namespace BDAutoMuxer.tools
 
         private string GetClipPath(TSStreamClip clip)
         {
-            return Args.ForCommandLine(Path.Combine(_bdrom.DirectorySTREAM.FullName, clip.DisplayName));
+            return CLIArguments.ForCommandLine(Path.Combine(_bdrom.DirectorySTREAM.FullName, clip.DisplayName));
         }
 
         private static string CodecMetaName(TSStream stream)

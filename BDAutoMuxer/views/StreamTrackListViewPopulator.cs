@@ -200,7 +200,7 @@ namespace BDAutoMuxer.views
             var selectedTrack = listViewTracks.SelectedItems.OfType<ListViewItem>().FirstOrDefault();
             if (selectedTrack == null) return;
             var stream = streams[selectedTrack.Index];
-            FormCodecReference.ShowReference(MICodec.FromStream(stream));
+            FormCodecReference.ShowReference(MediaInfoHelper.CodecFromStream(stream));
         }
     }
 }

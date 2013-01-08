@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using MediaInfoWrapper;
 
 namespace BDAutoMuxer.tools
 {
@@ -40,7 +41,7 @@ namespace BDAutoMuxer.tools
             var inputM2TsFlags = _keepM2TsAudio ? null : "--no-audio";
             var inputMkvFlags = _keepM2TsAudio ? "--no-audio" : null;
 
-            var args = new Args();
+            var args = new CLIArguments();
 
             // Chapter file
             args.AddIfAllNonEmpty("--chapters", _inputChaptersPath);
