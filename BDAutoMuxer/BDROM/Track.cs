@@ -74,6 +74,9 @@ namespace BDAutoMuxer.BDROM
         /// </summary>
         public int Index;
 
+        // MPEG-2 Transport Stream (M2TS) packet ID (PID) that uniquely identifies the track in the playlist.
+        public int PID;
+
         /// <summary>
         /// Number of audio channels (e.g., 2.0, 5.1, 7.1).
         /// </summary>
@@ -175,6 +178,7 @@ namespace BDAutoMuxer.BDROM
             return new Track
                        {
                            Index = index,
+                           PID = stream.PID,
                            Language = stream.Language,
                            IsHidden = stream.IsHidden,
                            Codec = MICodec.FromStream(stream),
