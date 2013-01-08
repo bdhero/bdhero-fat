@@ -55,23 +55,6 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region DB Flags (bogus, low resolution)
-
-        /// <summary>
-        /// Has repeated stream files, loops, or is a duplicate of another playlist.
-        /// </summary>
-        public bool IsBogus;
-
-        /// <summary>
-        /// Has a lower video resolution than the highest-resolution playlist or
-        /// a lower number of audio channels than the playlist with the highest number of channels.
-        /// E.G., this playlist is 480p or 720i but the highest-resolution playlist is 1080p,
-        /// or this playlist has at most 2.0 audio channels but another playlist has 5.1.
-        /// </summary>
-        public bool IsMaxQuality;
-
-        #endregion
-
         #region DB "Cut" (a.k.a. "release" or "edition")
 
         /// <summary>
@@ -101,7 +84,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region DB Tracks
+        #region DB Tracks and Chapters
 
         /// <summary>
         /// List of all tracks (TSStreams) in the order they appear in the playlist.
@@ -109,39 +92,34 @@ namespace BDAutoMuxer.BDROM
         /// </summary>
         public IList<Track> Tracks = new List<Track>();
 
-        #endregion
-
-        #region DB Chapters
-
         public IList<Chapter> Chapters = new List<Chapter>();
 
         #endregion
 
-        #region Non-DB Playlist fields
+        #region Non-DB Flags (max quality, duplicate, loops, hidden first tracks, bogus)
 
         /// <summary>
-        /// Duplicate of another playlist.
+        /// Has a lower video resolution than the highest-resolution playlist or
+        /// a lower number of audio channels than the playlist with the highest number of channels.
+        /// E.G., this playlist is 480p or 720i but the highest-resolution playlist is 1080p,
+        /// or this playlist has at most 2.0 audio channels but another playlist has 5.1.
+        /// </summary>
+        public bool IsMaxQuality;
+
+        /// <summary>
+        /// Is a duplicate of another playlist.
         /// </summary>
         public bool IsDuplicate;
 
         /// <summary>
-        /// Playlist contains duplicate stream clips.
+        /// Contains duplicate stream clips.
         /// </summary>
         public bool HasDuplicateStreamClips;
 
-        #endregion
-
-        #region Non-DB Public properties
-
         /// <summary>
-        /// Full absolute path to the .MPLS file.
+        /// Contains loops.
         /// </summary>
-        public string FullPath;
-
-        /// <summary>
-        /// List of .M2TS files referenced by this playlist.
-        /// </summary>
-        public List<StreamClip> StreamClips = new List<StreamClip>();
+        public bool HasLoops;
 
         /// <summary>
         /// First video track and/or first audio track is hidden.
@@ -156,18 +134,44 @@ namespace BDAutoMuxer.BDROM
             }
         }
 
+        /// <summary>
+        /// Has repeated stream clips (.M2TS files), contains loops, is a duplicate of another playlist, or has hidden primary audio/video tracks.
+        /// </summary>
+        public bool IsBogus
+        {
+            get { return IsDuplicate || HasDuplicateStreamClips || HasLoops || HasHiddenFirstTracks; }
+        }
+
+        #endregion
+
+        #region Non-DB Public properties (full path, stream clips, video language)
+
+        /// <summary>
+        /// Full absolute path to the .MPLS file.
+        /// </summary>
+        public string FullPath;
+
+        /// <summary>
+        /// List of .M2TS files referenced by this playlist.
+        /// </summary>
+        public List<StreamClip> StreamClips = new List<StreamClip>();
+
+        public Language VideoLanguage
+        {
+            get { return VideoTracks.Any() ? VideoTracks.First().Language : null; }
+            set { if (VideoTracks.Any()) { VideoTracks.First().Language = value; } }
+        }
+
+        #endregion
+
+        #region UI Properties (human length, warnings, chapter count)
+
         public string LengthHuman
         {
             get
             {
                 return string.Format("{0}:{1}:{2}", Length.Hours.ToString("00"), Length.Minutes.ToString("00"), Length.Seconds.ToString("00"));
             }
-        }
-
-        public Language VideoLanguage
-        {
-            get { return VideoTracks.Any() ? VideoTracks.First().Language : null; }
-            set { if (VideoTracks.Any()) { VideoTracks.First().Language = value; } }
         }
 
         public string Warnings
@@ -299,14 +303,22 @@ namespace BDAutoMuxer.BDROM
 
         #region Transformers
 
-        public static List<Playlist> Transform(IEnumerable<KeyValuePair<string, TSPlaylistFile>> playlistFiles)
+        /// <summary>
+        /// Returns a List of TSPlaylistFile objects from the given Dictionary.
+        /// </summary>
+        public static List<TSPlaylistFile> Transform(IEnumerable<KeyValuePair<string, TSPlaylistFile>> tsPlaylistFiles)
         {
-            return Transform(playlistFiles.Select(pair => pair.Value).OrderBy(file => file.Name));
+            return tsPlaylistFiles.Select(pair => pair.Value).ToList();
         }
 
+        /// <summary>
+        /// Transforms a List of TSPlaylistFile objects into a List of Playlist objects.
+        /// </summary>
+        /// <param name="playlistFiles"></param>
+        /// <returns></returns>
         public static List<Playlist> Transform(IEnumerable<TSPlaylistFile> playlistFiles)
         {
-            return playlistFiles.Select(Transform).ToList();
+            return playlistFiles.OrderBy(file => file.Name).Select(Transform).ToList();
         }
 
         public static Playlist Transform(TSPlaylistFile playlistFile)
@@ -320,7 +332,8 @@ namespace BDAutoMuxer.BDROM
                            StreamClips = StreamClip.Transform(playlistFile.StreamClips),
                            Tracks = Track.Transform(playlistFile.SortedStreams),
                            Chapters = Chapter.Transform(playlistFile.Chapters),
-                           HasDuplicateStreamClips = playlistFile.HasDuplicateClips
+                           HasDuplicateStreamClips = playlistFile.HasDuplicateClips,
+                           HasLoops = playlistFile.HasLoops
                        };
         }
 
@@ -382,17 +395,7 @@ namespace BDAutoMuxer.BDROM
 
         public Json ToJsonObject()
         {
-            return new Json
-                       {
-                           filename = Filename,
-                           filesize = Filesize,
-                           length_sec = Length.TotalSeconds,
-                           is_bogus = IsBogus,
-                           is_max_quality = IsMaxQuality,
-                           cut = Cut,
-                           tracks = Tracks.Select(track => track.ToJsonObject()).ToList(),
-                           chapters = Chapters.Select(chapter => chapter.ToJsonObject()).ToList()
-                       };
+            return Json.ToJsonObject(this);
         }
 
         public class Json
@@ -405,13 +408,6 @@ namespace BDAutoMuxer.BDROM
 
             #endregion
 
-            #region DB Flags (bogus, low quality)
-
-            public bool is_bogus;
-            public bool is_max_quality;
-
-            #endregion
-
             #region DB "Cut" (a.k.a. "release" or "edition")
 
             public PlaylistCut cut
@@ -419,17 +415,17 @@ namespace BDAutoMuxer.BDROM
                 get
                 {
                     return
-                        is_special_edition ? PlaylistCut.Special :
+                        is_special_edition  ? PlaylistCut.Special :
                         is_extended_edition ? PlaylistCut.Extended :
-                        is_unrated_edition ? PlaylistCut.Unrated :
+                        is_unrated_edition  ? PlaylistCut.Unrated :
                                               PlaylistCut.Theatrical;
                 }
                 set
                 {
                     is_theatrical_edition = value == PlaylistCut.Theatrical;
-                    is_special_edition = value == PlaylistCut.Special;
-                    is_extended_edition = value == PlaylistCut.Extended;
-                    is_unrated_edition = value == PlaylistCut.Unrated;
+                    is_special_edition    = value == PlaylistCut.Special;
+                    is_extended_edition   = value == PlaylistCut.Extended;
+                    is_unrated_edition    = value == PlaylistCut.Unrated;
                 }
             }
 
@@ -463,11 +459,22 @@ namespace BDAutoMuxer.BDROM
                                Filename = filename,
                                Filesize = filesize,
                                Length = TimeSpan.FromSeconds(length_sec),
-                               IsBogus = is_bogus,
-                               IsMaxQuality = is_max_quality,
                                Cut = cut,
                                Tracks = tracks.Select(track => track.ToTrack()).ToList(),
                                Chapters = chapters.Select(chapter => chapter.ToChapter()).ToList()
+                           };
+            }
+
+            public static Json ToJsonObject(Playlist playlist)
+            {
+                return new Json
+                           {
+                               filename = playlist.Filename,
+                               filesize = playlist.Filesize,
+                               length_sec = playlist.Length.TotalSeconds,
+                               cut = playlist.Cut,
+                               tracks = playlist.Tracks.Select(track => track.ToJsonObject()).ToList(),
+                               chapters = playlist.Chapters.Select(chapter => chapter.ToJsonObject()).ToList()
                            };
             }
         }

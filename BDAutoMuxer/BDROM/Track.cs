@@ -14,12 +14,24 @@ namespace BDAutoMuxer.BDROM
     /// </summary>
     public class Track
     {
-        #region DB Fields
+        #region DB User-configurable fields (language)
 
         /// <summary>
         /// Language of the track.
         /// </summary>
         public Language Language = Language.FromCode("und");
+
+        #endregion
+
+        #region DB Matching fields (index, PID, hidden, codec)
+
+        /// <summary>
+        /// Index of the track (i.e., its position or order) in the playlist.
+        /// </summary>
+        public int Index;
+
+        // MPEG-2 Transport Stream (M2TS) packet ID (PID) that uniquely identifies the track in the playlist.
+        public int PID;
 
         /// <summary>
         /// Track is physically present in the underlying .M2TS stream file(s), but is not listed in the .MPLS playlist file.
@@ -31,9 +43,22 @@ namespace BDAutoMuxer.BDROM
         /// </summary>
         public MICodec Codec = MICodec.UnknownCodec;
 
+        #endregion
+
+        #region DB "FYI" fields (not used for comparison, searching, or filtering)
+
         public bool IsVideo;
         public bool IsAudio;
         public bool IsSubtitle;
+
+        /// <summary>
+        /// Number of audio channels (e.g., 2.0, 5.1, 7.1).
+        /// </summary>
+        public double ChannelCount;
+
+        public TSVideoFormat VideoFormat;
+        public TSFrameRate FrameRate;
+        public TSAspectRatio AspectRatio;
 
         #endregion
 
@@ -68,28 +93,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region Non-DB Fields
-
-        /// <summary>
-        /// Index of the track (i.e., its position or order) in the playlist.
-        /// </summary>
-        public int Index;
-
-        // MPEG-2 Transport Stream (M2TS) packet ID (PID) that uniquely identifies the track in the playlist.
-        public int PID;
-
-        /// <summary>
-        /// Number of audio channels (e.g., 2.0, 5.1, 7.1).
-        /// </summary>
-        public double ChannelCount;
-
-        public TSVideoFormat VideoFormat;
-        public TSFrameRate FrameRate;
-        public TSAspectRatio AspectRatio;
-
-        #endregion
-
-        #region Non-DB UI display properties
+        #region UI display properties
 
         /// <summary>
         /// Number of audio channels (e.g., 2, 6, 8).
@@ -100,7 +104,7 @@ namespace BDAutoMuxer.BDROM
             {
                 if (IsVideo) return VideoFormatDisplayable;
                 if (IsAudio) return ChannelCount.ToString("0.0");
-                return "N/A";
+                return "";
             }
         }
 
@@ -215,40 +219,14 @@ namespace BDAutoMuxer.BDROM
 
         public Json ToJsonObject()
         {
-            return new Json
-                       {
-                           iso639_2 = Language.ISO_639_2,
-                           is_hidden = IsHidden,
-                           codec_id = Codec.SerializableName,
-                           is_video = IsVideo,
-                           is_audio = IsAudio,
-                           is_subtitle = IsSubtitle,
-                           type = Type
-                       };
+            return Json.ToJsonObject(this);
         }
 
         public class Json
         {
-            #region DB Fields
+            #region DB User-configurable fields (language)
 
-            /// <summary>
-            /// 3-letter ISO 639-2 language code in all lowercase (e.g., "eng").
-            /// </summary>
             public string iso639_2;
-
-            /// <summary>
-            /// Track is physically present in the underlying .M2TS stream file(s), but is not listed in the .MPLS playlist file.
-            /// </summary>
-            public bool is_hidden;
-
-            /// <summary>
-            /// Value of MICodec.SerializableName.
-            /// </summary>
-            public string codec_id;
-
-            public bool is_video;
-            public bool is_audio;
-            public bool is_subtitle;
 
             #endregion
 
@@ -302,11 +280,37 @@ namespace BDAutoMuxer.BDROM
 
             #endregion
 
+            #region DB Matching fields (index, pid, hidden, codec ID)
+
+            public int index;
+            public int pid;
+            public bool is_hidden;
+            public string codec_id;
+
+            #endregion
+
+            #region DB "FYI" fields (a/v/s, channel count, video format, frame rate, aspect ratio)
+
+            public bool is_video;
+            public bool is_audio;
+            public bool is_subtitle;
+
+            public double channel_count;
+            public string video_format;
+            public string frame_rate;
+            public string aspect_ratio;
+
+            #endregion
+
+            #region Converters
+
             public Track ToTrack()
             {
                 return new Track
                            {
-                               Language = Language.FromCode(iso639_2) ?? Language.FromCode("und"),
+                               Index = index,
+                               PID = pid,
+                               Language = Language.FromCode(iso639_2) ?? Language.Undetermined,
                                IsHidden = is_hidden,
                                Codec = MICodec.FromSerializableName(codec_id),
                                IsVideo = is_video,
@@ -315,6 +319,39 @@ namespace BDAutoMuxer.BDROM
                                Type = type
                            };
             }
+
+            public static Json ToJsonObject(Track track)
+            {
+                return new Json
+                           {
+                               index = track.Index,
+                               pid = track.PID,
+                               iso639_2 = (track.Language ?? Language.Undetermined).ISO_639_2,
+                               is_hidden = track.IsHidden,
+                               codec_id = track.Codec.SerializableName,
+                               is_video = track.IsVideo,
+                               is_audio = track.IsAudio,
+                               is_subtitle = track.IsSubtitle,
+                               type = track.Type
+                           };
+            }
+
+            #endregion
+
+            #region Matching (for DB search)
+
+            public bool Matches(Json other)
+            {
+                return
+                    other != null &&
+                    index == other.index &&
+                    pid == other.pid &&
+                    string.Equals(iso639_2, other.iso639_2) &&
+                    is_hidden.Equals(other.is_hidden) &&
+                    string.Equals(codec_id, other.codec_id);
+            }
+
+            #endregion
         }
 
         #endregion

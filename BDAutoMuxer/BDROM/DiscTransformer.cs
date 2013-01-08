@@ -15,13 +15,15 @@ namespace BDAutoMuxer.BDROM
     {
         public static Disc Transform(BDInfo.BDROM bdrom)
         {
+            var tsPlaylistFiles = Playlist.Transform(bdrom.PlaylistFiles);
+
             var disc =
                 new Disc
                     {
                         VolumeLabel = bdrom.VolumeLabel,
                         MetaTitle = bdrom.DiscName,
                         PrimaryLanguage = bdrom.DiscLanguage,
-                        Playlists = Playlist.Transform(bdrom.PlaylistFiles)
+                        Playlists = Playlist.Transform(tsPlaylistFiles)
                     };
 
             // Data gathering
@@ -29,8 +31,7 @@ namespace BDAutoMuxer.BDROM
             disc.TransformVideoLanguages();
             disc.TransformLanguageList();
             disc.TransformTitle();
-            disc.TransformDuplicatePlaylists(bdrom);
-            disc.TransformBogusPlaylists();
+            disc.TransformDuplicatePlaylists(tsPlaylistFiles);
             disc.TransformPlaylistQuality();
 
             // Auto-configuration
@@ -114,10 +115,10 @@ namespace BDAutoMuxer.BDROM
             MovieTitle = Regex.Replace(MovieTitle, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
         }
 
-        private void TransformDuplicatePlaylists(BDInfo.BDROM bdrom)
+        private void TransformDuplicatePlaylists(IEnumerable<TSPlaylistFile> tsPlaylistFiles)
         {
             var bdamPlaylistMap = Playlists.ToDictionary(playlist => playlist.Filename);
-            var bdinfoDuplicateMap = bdrom.PlaylistFiles.Values.ToMultiValueDictionary(GetTSPlaylistFileDupKey);
+            var bdinfoDuplicateMap = tsPlaylistFiles.ToMultiValueDictionary(GetTSPlaylistFileDupKey);
 
             var dups = (from key in bdinfoDuplicateMap.Keys
                         where bdinfoDuplicateMap[key].Count > 1
@@ -136,15 +137,6 @@ namespace BDAutoMuxer.BDROM
             IList<string> streamClips = playlistFile.StreamClips.Select(clip => clip.Name + "/" + clip.Length + "/" + clip.FileSize).ToList();
             var key = playlistFile.TotalLength + "/" + playlistFile.FileSize + "=[" + string.Join(",", streamClips) + "]";
             return key;
-        }
-
-        private void TransformBogusPlaylists()
-        {
-            foreach (var playlist in Playlists)
-            {
-                playlist.IsBogus = playlist.IsDuplicate || playlist.HasDuplicateStreamClips ||
-                                   playlist.HasHiddenFirstTracks;
-            }
         }
 
         private void TransformPlaylistQuality()
