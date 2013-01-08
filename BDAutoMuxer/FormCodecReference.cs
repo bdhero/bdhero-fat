@@ -20,22 +20,22 @@ namespace BDAutoMuxer
 
         private readonly ImageList _icons = new ImageList {ColorDepth = ColorDepth.Depth32Bit};
 
-        public static void ShowReference(TSStreamType autoSelectStreamType = TSStreamType.Unknown)
+        public static void ShowReference(MICodec autoSelectCodec = null)
         {
             if (_instance == null)
             {
-                _instance = new FormCodecReference(autoSelectStreamType);
+                _instance = new FormCodecReference(autoSelectCodec);
                 _instance.Disposed += (sender, eventArgs) => _instance = null;
                 _instance.Show();
             }
             else
             {
                 _instance.Focus();
-                _instance.SelectCodec(autoSelectStreamType);
+                _instance.SelectCodec(autoSelectCodec);
             }
         }
 
-        private FormCodecReference(TSStreamType autoSelectStreamType = TSStreamType.Unknown)
+        private FormCodecReference(MICodec autoSelectCodec = null)
         {
             InitializeComponent();
 
@@ -54,15 +54,15 @@ namespace BDAutoMuxer
 
             listViewCodecs.Items[0].Selected = true;
 
-            Load += (sender, args) => SelectCodec(autoSelectStreamType);
+            Load += (sender, args) => SelectCodec(autoSelectCodec);
         }
 
-        public void SelectCodec(TSStreamType streamType = TSStreamType.Unknown)
+        public void SelectCodec(MICodec codec = null)
         {
             if (CanFocus) Focus();
-            if (streamType != TSStreamType.Unknown)
+            if (codec != null && codec.IsKnown)
             {
-                var listViewItem = listViewCodecs.Items.OfType<ListViewItem>().FirstOrDefault(item => CodecMatches(item, streamType));
+                var listViewItem = listViewCodecs.Items.OfType<ListViewItem>().FirstOrDefault(item => CodecMatches(item, codec));
                 if (listViewItem != null)
                 {
                     listViewItem.Selected = true;
@@ -71,10 +71,9 @@ namespace BDAutoMuxer
             }
         }
 
-        private static bool CodecMatches(ListViewItem item, TSStreamType streamType)
+        private static bool CodecMatches(ListViewItem item, MICodec codec)
         {
-            var codec = item.Tag as MICodec;
-            return codec != null && codec.StreamType == streamType;
+            return (item.Tag as MICodec) == codec;
         }
 
         private void AddCodecs(int groupIndex, IEnumerable<MICodec> codecs)

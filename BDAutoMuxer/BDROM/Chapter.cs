@@ -8,10 +8,16 @@ namespace BDAutoMuxer.BDROM
 {
     public class Chapter
     {
+        #region DB Fields
+
         public int Number { get; private set; }
         public TimeSpan StartTime { get; private set; }
         public Language Language;
         public string Title;
+
+        #endregion
+
+        #region Constructors
 
         public Chapter()
         {
@@ -23,6 +29,10 @@ namespace BDAutoMuxer.BDROM
             StartTime = new TimeSpan((long)(value * TimeSpan.TicksPerSecond));
             Language = language;
         }
+
+        #endregion
+
+        #region Non-DB Properties (StartTimeXmlFormat)
 
         /// <summary>
         /// StartTime in Matroska XML format (e.g., "HH:MM:SS:mmm"
@@ -41,10 +51,18 @@ namespace BDAutoMuxer.BDROM
             }
         }
 
+        #endregion
+
+        #region Transformer
+
         public static IList<Chapter> Transform(IEnumerable<double> doubles)
         {
             return doubles.Select((t, i) => new Chapter(i + 1, t)).ToList();
         }
+
+        #endregion
+
+        #region JSON Conversion
 
         public Json ToJsonObject()
         {
@@ -67,5 +85,7 @@ namespace BDAutoMuxer.BDROM
                 return new Chapter {StartTime = start, Language = Language.FromCode(iso639_2), Title = title};
             }
         }
+
+        #endregion
     }
 }

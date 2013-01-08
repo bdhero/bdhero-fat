@@ -70,37 +70,7 @@ namespace BDAutoMuxer
 
             _disc = Disc.Transform(bdrom);
 
-            objectListViewPlaylists.CellEditStarting += HandleCellEditStarting;
-            objectListViewTracks.CellEditStarting += HandleCellEditStarting;
-
             UpdatePlaylists();
-        }
-
-        private void HandleCellEditStarting(object sender, CellEditEventArgs e)
-        {
-            ComboBox combo = new ComboBox();
-            combo.DropDownStyle = ComboBoxStyle.DropDownList;
-            combo.Bounds = e.CellBounds;
-//            combo.FlatStyle = FlatStyle.Flat;
-
-            if (e.Value is TrackTypeDisplayable)
-            {
-                var type = (TrackTypeDisplayable) e.Value;
-                var trackTypeDisplayables = TrackTypeDisplayable.List.ToArray();
-                combo.DataSource = trackTypeDisplayables;
-                combo.ValueMember = "Value";
-                combo.DisplayMember = "Displayable";
-                e.Control = combo;
-            }
-            if (e.Value is LanguageComboBoxWrapper)
-            {
-                var language = e.Value as LanguageComboBoxWrapper;
-                var languageComboBoxWrappers = _disc.Languages.Select(lang => lang.ComboBoxWrapper).ToArray();
-                combo.DataSource = languageComboBoxWrappers;
-                combo.ValueMember = "Value";
-                combo.DisplayMember = "Displayable";
-                e.Control = combo;
-            }
         }
 
         private void UpdatePlaylists(object sender = null, EventArgs e = null)

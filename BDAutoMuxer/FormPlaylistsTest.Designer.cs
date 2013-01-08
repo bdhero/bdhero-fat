@@ -51,6 +51,7 @@
             this.trackCodecColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.trackQualityColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.trackColumnIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.trackLanguageColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerWithDivider1)).BeginInit();
             this.splitContainerWithDivider1.Panel1.SuspendLayout();
             this.splitContainerWithDivider1.Panel2.SuspendLayout();
@@ -211,10 +212,11 @@
             // 
             // playlistTypeColumn
             // 
-            this.playlistTypeColumn.AspectName = "TypeDisplayable";
+            this.playlistTypeColumn.AspectName = "Type";
             this.playlistTypeColumn.CellPadding = null;
             this.playlistTypeColumn.DisplayIndex = 0;
             this.playlistTypeColumn.Hideable = false;
+            this.playlistTypeColumn.IsEditable = false;
             this.playlistTypeColumn.Text = "Video Type";
             this.playlistTypeColumn.Width = 72;
             // 
@@ -263,8 +265,9 @@
             // 
             // playlistLanguageColumn
             // 
-            this.playlistLanguageColumn.AspectName = "VideoLanguage.ComboBoxWrapper";
+            this.playlistLanguageColumn.AspectName = "VideoLanguage";
             this.playlistLanguageColumn.CellPadding = null;
+            this.playlistLanguageColumn.IsEditable = false;
             this.playlistLanguageColumn.Text = "Video Language";
             this.playlistLanguageColumn.Width = 96;
             // 
@@ -272,6 +275,7 @@
             // 
             this.playlistCutColumn.AspectName = "Cut";
             this.playlistCutColumn.CellPadding = null;
+            this.playlistCutColumn.IsEditable = false;
             this.playlistCutColumn.Text = "Cut";
             // 
             // playlistWarningsColumn
@@ -297,19 +301,22 @@
             this.objectListViewTracks.AllColumns.Add(this.trackTypeColumn);
             this.objectListViewTracks.AllColumns.Add(this.trackCodecColumn);
             this.objectListViewTracks.AllColumns.Add(this.trackQualityColumn);
+            this.objectListViewTracks.AllColumns.Add(this.trackLanguageColumn);
             this.objectListViewTracks.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
             this.objectListViewTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.trackColumnIndex,
             this.trackTypeColumn,
             this.trackCodecColumn,
-            this.trackQualityColumn});
+            this.trackQualityColumn,
+            this.trackLanguageColumn});
             this.objectListViewTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectListViewTracks.FullRowSelect = true;
             this.objectListViewTracks.GridLines = true;
             this.objectListViewTracks.Location = new System.Drawing.Point(0, 0);
             this.objectListViewTracks.Name = "objectListViewTracks";
-            this.objectListViewTracks.SelectColumnsOnRightClickBehaviour = BrightIdeasSoftware.ObjectListView.ColumnSelectBehaviour.Submenu;
-            this.objectListViewTracks.ShowCommandMenuOnRightClick = true;
+            this.objectListViewTracks.SelectColumnsOnRightClick = false;
+            this.objectListViewTracks.SelectColumnsOnRightClickBehaviour = BrightIdeasSoftware.ObjectListView.ColumnSelectBehaviour.None;
+            this.objectListViewTracks.ShowFilterMenuOnRightClick = false;
             this.objectListViewTracks.ShowGroups = false;
             this.objectListViewTracks.ShowImagesOnSubItems = true;
             this.objectListViewTracks.Size = new System.Drawing.Size(818, 252);
@@ -320,15 +327,17 @@
             // 
             // trackTypeColumn
             // 
-            this.trackTypeColumn.AspectName = "TypeDisplayable";
+            this.trackTypeColumn.AspectName = "Type";
             this.trackTypeColumn.CellPadding = null;
             this.trackTypeColumn.Hideable = false;
+            this.trackTypeColumn.IsEditable = false;
             this.trackTypeColumn.Text = "Track Type";
             // 
             // trackCodecColumn
             // 
             this.trackCodecColumn.AspectName = "Codec";
             this.trackCodecColumn.CellPadding = null;
+            this.trackCodecColumn.Hideable = false;
             this.trackCodecColumn.IsEditable = false;
             this.trackCodecColumn.Text = "Codec";
             // 
@@ -336,6 +345,7 @@
             // 
             this.trackQualityColumn.AspectName = "QualityDisplayable";
             this.trackQualityColumn.CellPadding = null;
+            this.trackQualityColumn.Hideable = false;
             this.trackQualityColumn.IsEditable = false;
             this.trackQualityColumn.Text = "Quality";
             // 
@@ -345,6 +355,14 @@
             this.trackColumnIndex.CellPadding = null;
             this.trackColumnIndex.IsEditable = false;
             this.trackColumnIndex.Text = "Index";
+            // 
+            // trackLanguageColumn
+            // 
+            this.trackLanguageColumn.AspectName = "Language";
+            this.trackLanguageColumn.CellPadding = null;
+            this.trackLanguageColumn.Hideable = false;
+            this.trackLanguageColumn.IsEditable = false;
+            this.trackLanguageColumn.Text = "Language";
             // 
             // FormPlaylistsTest
             // 
@@ -393,6 +411,7 @@
         private System.Windows.Forms.CheckBox checkBoxHideCommentary;
         private System.Windows.Forms.CheckBox checkBoxHideMisc;
         private BrightIdeasSoftware.OLVColumn trackColumnIndex;
+        private BrightIdeasSoftware.OLVColumn trackLanguageColumn;
 
 
     }

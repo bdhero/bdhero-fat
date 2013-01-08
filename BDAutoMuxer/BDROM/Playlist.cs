@@ -12,12 +12,28 @@ namespace BDAutoMuxer.BDROM
     /// </summary>
     public class Playlist
     {
+        #region Private constants
+
         /// <summary>
         /// Threshold for considering a playlist to be "feature length" when comparing its length to the length of the longest playlist.
         /// </summary>
         private const double FeatureLengthPercentage = 0.9;
 
+        /// <summary>
+        /// Minimum length (in seconds) for a playlist to be considered a "Main Feature."
+        /// </summary>
         private const int MinLengthSec = 120;
+
+        #endregion
+
+        #region Private static properties
+
+        private static TimeSpan MinLength 
+        {
+            get { return TimeSpan.FromSeconds(MinLengthSec); }
+        }
+
+        #endregion
 
         #region DB Fields (filename, file size, length)
 
@@ -32,9 +48,9 @@ namespace BDAutoMuxer.BDROM
         public ulong Filesize { get; private set; }
 
         /// <summary>
-        /// Duration of the playlist in seconds (e.g., 5545 = 1:32:25).
+        /// Duration of the playlist.
         /// </summary>
-        public double LengthSec { get; private set; }
+        public TimeSpan Length { get; private set; }
 
         #endregion
 
@@ -117,6 +133,11 @@ namespace BDAutoMuxer.BDROM
         #region Non-DB Public properties
 
         /// <summary>
+        /// Full absolute path to the .MPLS file.
+        /// </summary>
+        public string FullPath;
+
+        /// <summary>
         /// First video track and/or first audio track is hidden.
         /// </summary>
         public bool HasHiddenFirstTracks
@@ -133,8 +154,7 @@ namespace BDAutoMuxer.BDROM
         {
             get
             {
-                var ts = TimeSpan.FromSeconds(LengthSec);
-                return string.Format("{0}:{1}:{2}", ts.Hours.ToString("00"), ts.Minutes.ToString("00"), ts.Seconds.ToString("00"));
+                return string.Format("{0}:{1}:{2}", Length.Hours.ToString("00"), Length.Minutes.ToString("00"), Length.Seconds.ToString("00"));
             }
         }
 
@@ -166,10 +186,22 @@ namespace BDAutoMuxer.BDROM
 
         #region Non-DB Video track properties (main feature, video commentary, special feature, misc.)
 
-        public TrackTypeDisplayable TypeDisplayable
+        /// <summary>
+        /// The type of the first (primary) video track.
+        /// </summary>
+        public TrackType Type
         {
-            get { return VideoTracks.Any() ? VideoTracks.First().TypeDisplayable : null; }
-            set { if (VideoTracks.Any()) { VideoTracks.First().TypeDisplayable = value; } }
+            get
+            {
+                var video = VideoTracks.FirstOrDefault();
+                return video != null ? video.Type : TrackType.Misc;
+            }
+            set
+            {
+                var video = VideoTracks.FirstOrDefault();
+                if (video != null)
+                    video.Type = value;
+            }
         }
 
         /// <summary>
@@ -259,10 +291,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        /// <summary>
-        /// Full absolute path to the .MPLS file.
-        /// </summary>
-        public string FullPath;
+        #region Transformers
 
         public static List<Playlist> Transform(IEnumerable<KeyValuePair<string, TSPlaylistFile>> playlistFiles)
         {
@@ -281,18 +310,68 @@ namespace BDAutoMuxer.BDROM
                            Filename = playlistFile.Name,
                            FullPath = playlistFile.FullName,
                            Filesize = playlistFile.FileSize,
-                           LengthSec = (int) playlistFile.TotalLength,
+                           Length = TimeSpan.FromMilliseconds(playlistFile.TotalLength * 1000),
                            Tracks = Track.Transform(playlistFile.SortedStreams),
                            Chapters = Chapter.Transform(playlistFile.Chapters),
                            HasDuplicateStreamClips = playlistFile.HasDuplicateClips
                        };
         }
 
+        #endregion
+
+        #region Feature detection
+
+        public bool IsMainFeaturePlaylist(TimeSpan maxPlaylistLength)
+        {
+            return
+                IsMaxQuality &&
+                IsFeatureLength(maxPlaylistLength) &&
+                VideoTracks.Count >= 1 &&
+                AudioTracks.Count >= 2 /* or >= 1? */ &&
+                SubtitleTracks.Count >= 1 &&
+                Chapters.Count >= 2 &&
+                Length > MinLength;
+        }
+
+        public bool IsSpecialFeaturePlaylist(TimeSpan maxPlaylistLength)
+        {
+            return (IsMaxQuality && !IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1 && Length > MinLength) ||
+                   (!IsMaxQuality && IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1 && Length > MinLength);
+        }
+
+        public bool IsFeatureLength(TimeSpan maxPlaylistLength)
+        {
+            return Length >= TimeSpan.FromMilliseconds(FeatureLengthPercentage * maxPlaylistLength.TotalMilliseconds);
+        }
+
+        #endregion
+
+        #region Protected utilities
+
+        /// <summary>
+        /// Null-safe method for testing if the first video track meets certain criteria.
+        /// </summary>
+        /// <param name="delegate">Does NOT need to check if the video track is null.  It will not be invoked if there are no video tracks.</param>
+        /// <returns>The delegate's return value if this playlist has a video track; otherwise false.</returns>
+        bool TestFirstVideoTrack(FirstVideoTrackDelegate @delegate)
+        {
+            var video = VideoTracks.FirstOrDefault();
+            return video != null && @delegate(video);
+        }
+
+        #endregion
+
+        #region Default method overrides (GetHashCode)
+
         public override int GetHashCode()
         {
-            var hashes = string.Format("{0}, {1} bytes, {2} seconds, {3} tracks, {4} chapters", Filename, Filesize, LengthSec, Tracks.Count, Chapters.Count);
+            var hashes = string.Format("{0}, {1} bytes, {2} seconds, {3} tracks, {4} chapters", Filename, Filesize, Length, Tracks.Count, Chapters.Count);
             return hashes.GetHashCode();
         }
+
+        #endregion
+
+        #region JSON Conversion
 
         public Json ToJsonObject()
         {
@@ -300,7 +379,7 @@ namespace BDAutoMuxer.BDROM
                        {
                            filename = Filename,
                            filesize = Filesize,
-                           length_sec = LengthSec,
+                           length_sec = Length.TotalSeconds,
                            is_bogus = IsBogus,
                            is_max_quality = IsMaxQuality,
                            cut = Cut,
@@ -376,7 +455,7 @@ namespace BDAutoMuxer.BDROM
                            {
                                Filename = filename,
                                Filesize = filesize,
-                               LengthSec = length_sec,
+                               Length = TimeSpan.FromSeconds(length_sec),
                                IsBogus = is_bogus,
                                IsMaxQuality = is_max_quality,
                                Cut = cut,
@@ -386,65 +465,7 @@ namespace BDAutoMuxer.BDROM
             }
         }
 
-        #region Protected utilities
-
-        /// <summary>
-        /// Null-safe method for testing if the first video track meets certain criteria.
-        /// </summary>
-        /// <param name="delegate">Does NOT need to check if the video track is null.  It will not be invoked if there are no video tracks.</param>
-        /// <returns>The delegate's return value if this playlist has a video track; otherwise false.</returns>
-        bool TestFirstVideoTrack(FirstVideoTrackDelegate @delegate)
-        {
-            var video = VideoTracks.FirstOrDefault();
-            return video != null && @delegate(video);
-        }
-
         #endregion
-
-        #region Public utilities
-
-        public bool IsMainFeaturePlaylist(double maxPlaylistLength)
-        {
-            return
-                IsMaxQuality &&
-                IsFeatureLength(maxPlaylistLength) &&
-                VideoTracks.Count >= 1 &&
-                AudioTracks.Count >= 2 /* or >= 1? */ &&
-                SubtitleTracks.Count >= 1 &&
-                Chapters.Count >= 2 &&
-                LengthSec > MinLengthSec;
-        }
-
-        public bool IsSpecialFeaturePlaylist(double maxPlaylistLength)
-        {
-            return (IsMaxQuality && !IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1 && LengthSec > MinLengthSec) ||
-                   (!IsMaxQuality && IsFeatureLength(maxPlaylistLength) && AudioTracks.Count == 1 && LengthSec > MinLengthSec);
-        }
-
-        public bool IsFeatureLength(double maxPlaylistLength)
-        {
-            return LengthSec >= (maxPlaylistLength * FeatureLengthPercentage);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// The type of the first (primary) video track.
-        /// </summary>
-        public TrackType Type
-        {
-            get
-            {
-                var video = VideoTracks.FirstOrDefault();
-                return video != null ? video.Type : TrackType.Misc;
-            }
-            set
-            {
-                var video = VideoTracks.FirstOrDefault();
-                if (video != null)
-                    video.Type = value;
-            }
-        }
     }
 
     public enum PlaylistCut

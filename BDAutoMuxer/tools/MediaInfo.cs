@@ -1300,82 +1300,87 @@ namespace BDAutoMuxer.tools
 
         #region Codec Lists
 
-        public static readonly List<MIVideoCodec> VideoCodecs = new List<MIVideoCodec>()
-                                                                    {
-                                                                        AVC,
-                                                                        VC1,
-                                                                        MPEG1Video,
-                                                                        MPEG2Video
-                                                                    };
+        public static readonly List<MIVideoCodec> VideoCodecs =
+            new List<MIVideoCodec>()
+                {
+                    AVC,
+                    VC1,
+                    MPEG1Video,
+                    MPEG2Video
+                };
 
-        public static readonly List<MIAudioCodec> AudioCodecs = new List<MIAudioCodec>()
-                                                                    {
-                                                                        // LPCM
-                                                                        LPCM,
-                                                                        // DTS
-                                                                        DTSHDMA,
-                                                                        DTSHDHRA,
-                                                                        DTSES,
-                                                                        DTS,
-                                                                        DTSExpress,
-                                                                        // Dolby
-                                                                        TrueHD,
-                                                                        EAC3,
-                                                                        AC3EX,
-                                                                        AC3,
-                                                                        ProLogic,
-                                                                        // MPEG
-                                                                        AAC,
-                                                                        MP3,
-                                                                        // Misc
-                                                                        FLAC,
-                                                                        Vorbis
-                                                                    };
+        public static readonly List<MIAudioCodec> AudioCodecs =
+            new List<MIAudioCodec>()
+                {
+                    // LPCM
+                    LPCM,
+                    // DTS
+                    DTSHDMA,
+                    DTSHDHRA,
+                    DTSES,
+                    DTS,
+                    DTSExpress,
+                    // Dolby
+                    TrueHD,
+                    EAC3,
+                    AC3EX,
+                    AC3,
+                    ProLogic,
+                    // MPEG
+                    AAC,
+                    MP3,
+                    // Misc
+                    FLAC,
+                    Vorbis
+                };
 
-        public static readonly List<MIAudioCodec> MuxableBDAudioCodecs = new List<MIAudioCodec>()
-                                                                    {
-                                                                        // Lossless - All
-                                                                        LPCM,
-                                                                        DTSHDMA,
-                                                                        TrueHD,
-                                                                        // Lossy - DTS
-                                                                        DTSHDHRA,
-                                                                        DTS,
-                                                                        // Lossy - Dolby
-                                                                        EAC3,
-                                                                        AC3
-                                                                    };
+        public static readonly List<MIAudioCodec> MuxableBDAudioCodecs =
+            new List<MIAudioCodec>()
+                {
+                    // Lossless - All
+                    LPCM,
+                    DTSHDMA,
+                    TrueHD,
+                    // Lossy - DTS
+                    DTSHDHRA,
+                    DTS,
+                    // Lossy - Dolby
+                    EAC3,
+                    AC3
+                };
 
-        public static readonly List<MISubtitleCodec> SubtitleCodecs = new List<MISubtitleCodec>()
-                                                                          {
-                                                                              PGS,
-                                                                              VobSub,
-                                                                              SRT
-                                                                          };
+        public static readonly List<MISubtitleCodec> SubtitleCodecs =
+            new List<MISubtitleCodec>()
+                {
+                    PGS,
+                    VobSub,
+                    SRT
+                };
 
-        public static readonly List<MICodec> AllCodecs = new List<MICodec>()
-                                                             {
-                                                                 AVC,
-                                                                 VC1,
-                                                                 MPEG1Video,
-                                                                 MPEG2Video,
-                                                                 ProLogic,
-                                                                 AC3,
-                                                                 AC3EX,
-                                                                 EAC3,
-                                                                 TrueHD,
-                                                                 DTS,
-                                                                 DTSES,
-                                                                 DTSExpress,
-                                                                 DTSHDHRA,
-                                                                 DTSHDMA,
-                                                                 MP3,
-                                                                 AAC,
-                                                                 Vorbis,
-                                                                 FLAC,
-                                                                 LPCM,
-                                                                 PGS
-                                                             };
+        public static readonly List<MICodec> AllCodecs =
+            new List<MICodec>()
+                {
+                    AVC,
+                    VC1,
+                    MPEG1Video,
+                    MPEG2Video,
+                    ProLogic,
+                    AC3,
+                    AC3EX,
+                    EAC3,
+                    TrueHD,
+                    DTS,
+                    DTSES,
+                    DTSExpress,
+                    DTSHDHRA,
+                    DTSHDMA,
+                    MP3,
+                    AAC,
+                    Vorbis,
+                    FLAC,
+                    LPCM,
+                    PGS
+                };
 
         #endregion
 
@@ -1438,6 +1443,9 @@ namespace BDAutoMuxer.tools
         /// </summary>
         public virtual string FullNameDisambig { get { return FullName; } }
 
+        /// <summary>
+        /// "Audio", "Video", "Subtitle", or "Unknown"
+        /// </summary>
         public abstract string TypeDisplay { get; }
 
         public abstract Image Logo { get; }
@@ -1459,10 +1467,63 @@ namespace BDAutoMuxer.tools
             return SerializableName.GetHashCode();
         }
 
-        public static MICodec FromStreamType(TSStreamType streamType)
+        public static MICodec FromStream(TSStream stream)
         {
-            return AllCodecs.FirstOrDefault(codec => codec.StreamType == streamType) ?? UnknownCodec;
+            if (stream == null) return UnknownCodec;
+
+            var audioStream = stream as TSAudioStream;
+
+            switch (stream.StreamType)
+            {
+                case TSStreamType.MPEG1_VIDEO:
+                    return MPEG1Video;
+                case TSStreamType.MPEG2_VIDEO:
+                    return MPEG2Video;
+                case TSStreamType.AVC_VIDEO:
+                    return AVC;
+                case TSStreamType.MVC_VIDEO:
+                    return UnknownVideo;
+                case TSStreamType.VC1_VIDEO:
+                    return VC1;
+                case TSStreamType.MPEG1_AUDIO:
+                    return MP3;
+                case TSStreamType.MPEG2_AUDIO:
+                    return UnknownAudio;
+                case TSStreamType.LPCM_AUDIO:
+                    return LPCM;
+                case TSStreamType.AC3_AUDIO:
+                    if (audioStream != null && audioStream.AudioMode == TSAudioMode.Extended)
+                        return AC3EX;
+                    if (audioStream != null && audioStream.AudioMode == TSAudioMode.Surround)
+                        return ProLogic;
+                    return AC3;
+                case TSStreamType.AC3_PLUS_AUDIO:
+                case TSStreamType.AC3_PLUS_SECONDARY_AUDIO:
+                    return EAC3;
+                case TSStreamType.AC3_TRUE_HD_AUDIO:
+                    return TrueHD;
+                case TSStreamType.DTS_AUDIO:
+                    if (audioStream != null && audioStream.AudioMode == TSAudioMode.Extended)
+                        return DTSES;
+                    return DTS;
+                case TSStreamType.DTS_HD_AUDIO:
+                    return DTSHDHRA;
+                case TSStreamType.DTS_HD_SECONDARY_AUDIO:
+                    return DTSExpress;
+                case TSStreamType.DTS_HD_MASTER_AUDIO:
+                    return DTSHDMA;
+                case TSStreamType.PRESENTATION_GRAPHICS:
+                    return PGS;
+                case TSStreamType.INTERACTIVE_GRAPHICS:
+                    return UnknownSubtitle;
+                case TSStreamType.SUBTITLE:
+                    return UnknownSubtitle;
+                default:
+                    return UnknownCodec;
+            }
         }
+
+        #region Serializing / Deserializing
 
         public static MICodec FromSerializableName(string serializedName)
         {
@@ -1487,6 +1548,8 @@ namespace BDAutoMuxer.tools
             var matchingCodec = AllCodecs.FirstOrDefault(codec => codec.SerializableName == serializableName);
             return (matchingCodec ?? UnknownCodec) as T;
         }
+
+        #endregion
     }
 
     public abstract class MIAudioCodec : MICodec
@@ -2146,7 +2209,7 @@ namespace BDAutoMuxer.tools
 
         public override string AltMicroName
         {
-            get { return "AC3+"; }
+            get { return "DD+"; }
         }
 
         public override string FullNameDisambig

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BDAutoMuxer.BDInfo;
-using Newtonsoft.Json;
 
 // ReSharper disable InconsistentNaming
 namespace BDAutoMuxer.BDROM
@@ -13,11 +12,6 @@ namespace BDAutoMuxer.BDROM
     /// </summary>
     public partial class Disc
     {
-        private Disc()
-        {
-            Languages = new List<Language>();
-        }
-
         #region DB Fields
 
         /// <summary>
@@ -58,10 +52,25 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
+        #region Constructor
+
+        private Disc()
+        {
+            Languages = new List<Language>();
+        }
+
+        #endregion
+
+        #region Non-DB Properties
+
         /// <summary>
         /// Returns a list of all languages found on the disc, with the primary disc language first if it can be automatically detected.
         /// </summary>
         public IList<Language> Languages { get; private set; }
+
+        #endregion
+
+        #region Default method overrides
 
         public override int GetHashCode()
         {
@@ -69,6 +78,12 @@ namespace BDAutoMuxer.BDROM
             var hashes = string.Format("{0}: [ {1} ]", VolumeLabel, playlistHashes);
             return hashes.GetHashCode();
         }
+
+        #endregion
+
+        #region JSON Conversion
+
+        #region Serialization / Deserialization
 
         public Json ToJsonObject()
         {
@@ -88,6 +103,10 @@ namespace BDAutoMuxer.BDROM
         {
             return discs.Select(jsonObject => jsonObject.ToDisc()).ToList();
         }
+
+        #endregion
+
+        #region JSON Class
 
         public class Json
         {
@@ -121,5 +140,9 @@ namespace BDAutoMuxer.BDROM
                            };
             }
         }
+
+        #endregion
+
+        #endregion
     }
 }

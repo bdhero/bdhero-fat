@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
+using BDAutoMuxer.tools;
 
 namespace BDAutoMuxer.views
 {
@@ -199,8 +200,7 @@ namespace BDAutoMuxer.views
             var selectedTrack = listViewTracks.SelectedItems.OfType<ListViewItem>().FirstOrDefault();
             if (selectedTrack == null) return;
             var stream = streams[selectedTrack.Index];
-            if (stream == null) return;
-            FormCodecReference.ShowReference(stream.StreamType);
+            FormCodecReference.ShowReference(MICodec.FromStream(stream));
         }
     }
 }

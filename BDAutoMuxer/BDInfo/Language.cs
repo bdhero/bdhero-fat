@@ -57,11 +57,6 @@ namespace BDAutoMuxer.BDInfo
             get { return string.Format("{0} - {1}", ISO_639_2, Name); }
         }
 
-        public LanguageComboBoxWrapper ComboBoxWrapper
-        {
-            get { return new LanguageComboBoxWrapper {Value = this}; }
-        }
-
         public static ICollection<Language> AllLanguages
         {
             get { return Languages.AsReadOnly(); }
@@ -575,17 +570,7 @@ namespace BDAutoMuxer.BDInfo
 
         public static Language CurrentUILanguage
         {
-            get { return Language.FromCode(CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName); }
-        }
-    }
-
-    public class LanguageComboBoxWrapper
-    {
-        public Language Value;
-        public string Displayable { get { return ToString(); } }
-        public override string ToString()
-        {
-            return Value.UIDisplayName;
+            get { return FromCode(CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName); }
         }
     }
 }

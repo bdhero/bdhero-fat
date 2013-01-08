@@ -14,13 +14,14 @@ namespace BDAutoMuxer.BDROM
     {
         public static Disc Transform(BDInfo.BDROM bdrom)
         {
-            var disc = new Disc
-                           {
-                               VolumeLabel = bdrom.VolumeLabel,
-                               MetaTitle = bdrom.DiscName,
-                               PrimaryLanguage = bdrom.DiscLanguage,
-                               Playlists = Playlist.Transform(bdrom.PlaylistFiles)
-                           };
+            var disc =
+                new Disc
+                    {
+                        VolumeLabel = bdrom.VolumeLabel,
+                        MetaTitle = bdrom.DiscName,
+                        PrimaryLanguage = bdrom.DiscLanguage,
+                        Playlists = Playlist.Transform(bdrom.PlaylistFiles)
+                    };
 
             // Data gathering
             disc.TransformPrimaryLanguage();
@@ -170,15 +171,11 @@ namespace BDAutoMuxer.BDROM
 
         private void DetectPlaylistTypes()
         {
-            var maxLengthPlaylist =
-                Playlists
-                    .OrderByDescending(p => p.LengthSec)
-                    .FirstOrDefault(playlist => !playlist.IsBogus && playlist.IsMaxQuality);
             var maxLength =
                 Playlists
-                    .OrderByDescending(p => p.LengthSec)
+                    .OrderByDescending(p => p.Length)
                     .Where(playlist => !playlist.IsBogus && playlist.IsMaxQuality)
-                    .Select(playlist => playlist.LengthSec)
+                    .Select(playlist => playlist.Length)
                     .FirstOrDefault();
 
             foreach (var playlist in Playlists)

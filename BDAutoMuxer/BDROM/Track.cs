@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BDAutoMuxer.BDInfo;
-using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
 
 // ReSharper disable InconsistentNaming
@@ -86,13 +85,7 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
-        #region Non-DB Properties
-
-        public TrackTypeDisplayable TypeDisplayable
-        {
-            get { return TrackTypeDisplayable.Get(Type); }
-            set { Type = value != null ? value.Value : TrackType.Misc; }
-        }
+        #region Non-DB UI display properties
 
         /// <summary>
         /// Number of audio channels (e.g., 2, 6, 8).
@@ -168,6 +161,8 @@ namespace BDAutoMuxer.BDROM
 
         #endregion
 
+        #region Transformers
+
         public static IList<Track> Transform(IEnumerable<TSStream> streams)
         {
             return streams.Select(Transform).ToList();
@@ -175,43 +170,43 @@ namespace BDAutoMuxer.BDROM
 
         public static Track Transform(TSStream stream, int index)
         {
-            var audioStream = stream as TSAudioStream;
             var videoStream = stream as TSVideoStream;
+            var audioStream = stream as TSAudioStream;
             return new Track
                        {
                            Index = index,
                            Language = stream.Language,
                            IsHidden = stream.IsHidden,
-                           Codec = MICodec.FromStreamType(stream.StreamType),
+                           Codec = MICodec.FromStream(stream),
                            IsVideo = stream.IsVideoStream,
                            IsAudio = stream.IsAudioStream,
                            IsSubtitle = stream.IsGraphicsStream || stream.IsTextStream,
-                           ChannelCount = GetChannelCount(audioStream),
-                           VideoFormat = GetVideoHeight(videoStream),
-                           FrameRate = GetVideoFrameRate(videoStream),
-                           AspectRatio = GetVideoAspectRatio(videoStream),
+                           ChannelCount = audioStream != null ? audioStream.ChannelCountDouble : 0,
+                           VideoFormat = videoStream != null ? videoStream.VideoFormat : 0,
+                           FrameRate = videoStream != null ? videoStream.FrameRate : TSFrameRate.Unknown,
+                           AspectRatio = videoStream != null ? videoStream.AspectRatio : TSAspectRatio.Unknown,
                        };
         }
 
-        private static double GetChannelCount(TSAudioStream audioStream)
+        #endregion
+
+        #region Feature detection
+
+        public bool IsMainFeatureAudioTrack(int index)
         {
-            return audioStream != null ? audioStream.ChannelCountDouble : 0;
+            return
+                index == 0 ||
+                index >= 1 && ChannelCount > 2;
         }
 
-        private static TSVideoFormat GetVideoHeight(TSVideoStream videoStream)
+        public bool IsCommentaryAudioTrack(int index)
         {
-            return videoStream != null ? videoStream.VideoFormat : 0;
+            return index >= 1 && ChannelCount <= 2;
         }
 
-        private static TSFrameRate GetVideoFrameRate(TSVideoStream videoStream)
-        {
-            return videoStream != null ? videoStream.FrameRate : TSFrameRate.Unknown;
-        }
+        #endregion
 
-        private static TSAspectRatio GetVideoAspectRatio(TSVideoStream videoStream)
-        {
-            return videoStream != null ? videoStream.AspectRatio : TSAspectRatio.Unknown;
-        }
+        #region JSON Conversion
 
         public Json ToJsonObject()
         {
@@ -317,20 +312,6 @@ namespace BDAutoMuxer.BDROM
             }
         }
 
-        #region Public utilities
-
-        public bool IsMainFeatureAudioTrack(int index)
-        {
-            return
-                index == 0 ||
-                index >= 1 && ChannelCount > 2;
-        }
-
-        public bool IsCommentaryAudioTrack(int index)
-        {
-            return index >= 1 && ChannelCount <= 2;
-        }
-
         #endregion
     }
 
@@ -341,37 +322,5 @@ namespace BDAutoMuxer.BDROM
         SpecialFeature,
         Descriptive,
         Misc
-    }
-
-    public class TrackTypeDisplayable
-    {
-        public TrackType Value;
-        public string Displayable { get { return ToString(); } }
-        public override string ToString()
-        {
-            return
-                Value == TrackType.MainFeature ? "Main Feature" :
-                Value == TrackType.Commentary ? "Commentary" :
-                Value == TrackType.SpecialFeature ? "Special Feature" :
-                Value == TrackType.Descriptive ? "Descriptive" :
-                Value == TrackType.Misc ? "Misc." : "Unknown";
-        }
-
-        public static readonly List<TrackTypeDisplayable> List =
-            new List<TrackTypeDisplayable>
-                {
-                    new TrackTypeDisplayable { Value = TrackType.MainFeature },
-                    new TrackTypeDisplayable { Value = TrackType.Commentary },
-                    new TrackTypeDisplayable { Value = TrackType.SpecialFeature },
-                    new TrackTypeDisplayable { Value = TrackType.Descriptive },
-                    new TrackTypeDisplayable { Value = TrackType.Misc }
-                };
-
-        public static TrackTypeDisplayable Get(TrackType trackType)
-        {
-            if (List.Any(displayable => displayable.Value == trackType))
-                return List.First(displayable => displayable.Value == trackType);
-            return List.Last();
-        }
     }
 }
