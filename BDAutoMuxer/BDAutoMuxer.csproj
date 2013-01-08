@@ -145,6 +145,7 @@
     <Compile Include="BDROM\Chapter.cs" />
     <Compile Include="BDROM\Disc.cs" />
     <Compile Include="BDROM\Playlist.cs" />
+    <Compile Include="BDROM\StreamClip.cs" />
     <Compile Include="BDROM\Track.cs" />
     <Compile Include="BDROM\DiscTransformer.cs" />
     <Compile Include="controllers\Extensions.cs" />

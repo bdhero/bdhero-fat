@@ -138,6 +138,11 @@ namespace BDAutoMuxer.BDROM
         public string FullPath;
 
         /// <summary>
+        /// List of .M2TS files referenced by this playlist.
+        /// </summary>
+        public List<StreamClip> StreamClips = new List<StreamClip>();
+
+        /// <summary>
         /// First video track and/or first audio track is hidden.
         /// </summary>
         public bool HasHiddenFirstTracks
@@ -311,6 +316,7 @@ namespace BDAutoMuxer.BDROM
                            FullPath = playlistFile.FullName,
                            Filesize = playlistFile.FileSize,
                            Length = TimeSpan.FromMilliseconds(playlistFile.TotalLength * 1000),
+                           StreamClips = StreamClip.Transform(playlistFile.StreamClips),
                            Tracks = Track.Transform(playlistFile.SortedStreams),
                            Chapters = Chapter.Transform(playlistFile.Chapters),
                            HasDuplicateStreamClips = playlistFile.HasDuplicateClips
