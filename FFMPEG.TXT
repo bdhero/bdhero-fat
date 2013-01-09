@@ -12,7 +12,7 @@ ffmpeg -y -f concat -i Y:\BDAutoMuxer\BLACK_HAWK_DOWN.ffmpeg.concat.txt -map 0:0
 # Concatenate M2TS files (fails)
 ffmpeg -y -f concat -i Y:\BDAutoMuxer\BLACK_HAWK_DOWN.ffmpeg.concat.txt -c copy Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
 
-# Concatenate M2TS files (all tracks?? - SUCCEEDS)
+# Concatenate M2TS files (FIRST A/V/S TRACKS ONLY - SUCCEEDS)
 ffmpeg -y -i "concat:Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS|Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00001.M2TS" -c copy Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
 
 # Concatenate M2TS files (selected tracks only - FAILS)
