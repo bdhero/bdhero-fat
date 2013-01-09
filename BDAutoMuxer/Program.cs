@@ -24,9 +24,6 @@ using System.Reflection;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using BDAutoMuxer.models;
-using BDAutoMuxer.tools;
-using MediaInfoWrapper;
 
 namespace BDAutoMuxer
 {
