@@ -30,7 +30,7 @@
         {
             this.buttonScan = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
-            this.splitContainerWithDivider = new BDAutoMuxer.views.SplitContainerWithDivider();
+            this.splitContainerWithDivider = new BDAutoMuxer.Views.SplitContainerWithDivider();
             this.groupBoxInput = new System.Windows.Forms.GroupBox();
             this.textBoxInputFiles = new System.Windows.Forms.TextBox();
             this.groupBoxProgress = new System.Windows.Forms.GroupBox();
@@ -216,7 +216,7 @@
         private System.Windows.Forms.Label labelPercent;
         private System.Windows.Forms.Label labelCount;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private views.SplitContainerWithDivider splitContainerWithDivider;
+        private Views.SplitContainerWithDivider splitContainerWithDivider;
         private System.Windows.Forms.GroupBox groupBoxInput;
         private System.Windows.Forms.Button buttonScan;
         private System.Windows.Forms.TextBox textBoxInputFiles;

@@ -6,11 +6,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
-using BDAutoMuxer.views;
+using BDAutoMuxer.Views;
 using MediaInfoWrapper;
 
 namespace BDAutoMuxer

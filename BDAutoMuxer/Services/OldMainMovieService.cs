@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.models;
+using BDAutoMuxerCore.BDInfo;
+using BDAutoMuxerCore.Services;
 using Newtonsoft.Json;
 
 namespace BDAutoMuxer.Services

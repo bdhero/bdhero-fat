@@ -124,30 +124,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BDInfo\TSCodecAC3.cs" />
-    <Compile Include="BDInfo\TSCodecAVC.cs" />
-    <Compile Include="BDInfo\BDROM.cs" />
-    <Compile Include="BDInfo\TSCodecDTS.cs" />
-    <Compile Include="BDInfo\TSCodecDTSHD.cs" />
-    <Compile Include="BDInfo\TSCodecLPCM.cs" />
-    <Compile Include="BDInfo\TSCodecMPEG2.cs" />
-    <Compile Include="BDInfo\TSCodecMVC.cs" />
-    <Compile Include="BDInfo\TSCodecTrueHD.cs" />
-    <Compile Include="BDInfo\TSInterleavedFile.cs" />
-    <Compile Include="BDInfo\TSStreamBuffer.cs" />
-    <Compile Include="BDInfo\TSStreamClipFile.cs" />
-    <Compile Include="BDInfo\TSStreamClip.cs" />
-    <Compile Include="BDInfo\TSStreamFile.cs" />
-    <Compile Include="BDInfo\TSPlaylistFile.cs" />
-    <Compile Include="BDInfo\TSStream.cs" />
-    <Compile Include="BDInfo\TSCodecVC1.cs" />
-    <Compile Include="BDROM\Chapter.cs" />
-    <Compile Include="BDROM\Disc.cs" />
-    <Compile Include="BDROM\Playlist.cs" />
-    <Compile Include="BDROM\StreamClip.cs" />
-    <Compile Include="BDROM\Track.cs" />
-    <Compile Include="BDROM\DiscTransformer.cs" />
-    <Compile Include="controllers\Extensions.cs" />
     <Compile Include="controllers\PlaylistFinder.cs" />
     <Compile Include="FormCodecReference.cs">
       <SubType>Form</SubType>
@@ -161,44 +137,21 @@
     <Compile Include="FormCodecScanner.Designer.cs">
       <DependentUpon>FormCodecScanner.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormPlaylistsTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormPlaylistsTest.Designer.cs">
-      <DependentUpon>FormPlaylistsTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Services\BDService.cs" />
-    <Compile Include="Services\UpdateService.cs" />
-    <Compile Include="tools\EAC3To.cs" />
-    <Compile Include="tools\MediaInfoHelper.cs" />
-    <Compile Include="views\LinkLabel2.cs">
+    <Compile Include="Views\LinkLabel2.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="views\SplitButton.cs">
+    <Compile Include="Views\SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Win32\Browser.cs" />
-    <Compile Include="FormRemux.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormRemux.Designer.cs">
-      <DependentUpon>FormRemux.cs</DependentUpon>
-    </Compile>
-    <Compile Include="tools\AbstractExternalTool.cs" />
-    <Compile Include="controllers\ChapterWriter.cs" />
-    <Compile Include="Services\HttpRequest.cs" />
-    <Compile Include="tools\MkvMerge.cs" />
-    <Compile Include="views\DragUtils.cs" />
-    <Compile Include="controllers\FileUtils.cs" />
-    <Compile Include="views\FormUtils.cs" />
-    <Compile Include="Win32\JobObject.cs" />
-    <Compile Include="views\SplitContainerWithDivider.cs">
+    <Compile Include="Views\DragUtils.cs" />
+    <Compile Include="Views\FormUtils.cs" />
+    <Compile Include="Views\SplitContainerWithDivider.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="views\TaskbarProgress.cs" />
-    <Compile Include="tools\TsMuxer.cs" />
+    <Compile Include="Views\TaskbarProgress.cs" />
     <Compile Include="Services\OldMainMovieService.cs" />
-    <Compile Include="views\UpdateNotifier.cs" />
+    <Compile Include="Views\UpdateNotifier.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -208,8 +161,8 @@
     <Compile Include="models\JsonSearchResult.cs" />
     <Compile Include="models\JsonDisc.cs" />
     <Compile Include="models\JsonPlaylist.cs" />
-    <Compile Include="views\PlaylistDataGridPopulator.cs" />
-    <Compile Include="views\StreamTrackListViewPopulator.cs" />
+    <Compile Include="Views\PlaylistDataGridPopulator.cs" />
+    <Compile Include="Views\StreamTrackListViewPopulator.cs" />
     <Compile Include="FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,12 +176,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormPlaylistsTest.resx">
-      <DependentUpon>FormPlaylistsTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormRemux.resx">
-      <DependentUpon>FormRemux.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSettings.resx">
       <DependentUpon>FormSettings.cs</DependentUpon>
@@ -348,42 +295,6 @@
     <None Include="Resources\dd.ico" />
     <None Include="Resources\avc.ico" />
     <None Include="Resources\no-poster-w185.png" />
-    <Content Include="lib\eac3to\avcodec-54.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\avutil-52.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\eac3to.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\hdcd.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\HookSurcode.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\libAften.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\libFLAC.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\libMatrix.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\libSsrc.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\eac3to\r8b.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\tsMuxeR.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\mkvmerge.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="lib\Microsoft.WindowsAPICodePack.dll" />
     <Content Include="lib\Microsoft.WindowsAPICodePack.Shell.dll" />
     <Content Include="lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll" />
@@ -454,13 +365,21 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BDAutoMuxerCore\BDAutoMuxerCore.csproj">
+      <Project>{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}</Project>
+      <Name>BDAutoMuxerCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
+      <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
+      <Name>DotNetUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MediaInfoWrapper\MediaInfoWrapper.csproj">
       <Project>{0E38BA29-4A54-4461-9E73-283802161C55}</Project>
       <Name>MediaInfoWrapper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ObjectListView\ObjectListView2010.csproj">
-      <Project>{18FEDA0C-D147-4286-B39A-01204808106A}</Project>
-      <Name>ObjectListView2010</Name>
+    <ProjectReference Include="..\ProcessUtils\ProcessUtils.csproj">
+      <Project>{896F47DD-A9FC-413C-B125-8E999F72E101}</Project>
+      <Name>ProcessUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

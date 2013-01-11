@@ -2,7 +2,7 @@
 using System.Drawing;
 using Microsoft.WindowsAPICodePack.Taskbar;
 
-namespace BDAutoMuxer.views
+namespace BDAutoMuxer.Views
 {
     /// <summary>
     /// XP-safe static wrapper for Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager

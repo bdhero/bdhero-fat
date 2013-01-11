@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using MediaInfoWrapper.Resources;
+using ProcessUtils;
 
 namespace MediaInfoWrapper
 {
@@ -295,7 +296,7 @@ namespace MediaInfoWrapper
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = Config.CLIPath,
-                    Arguments = new CLIArguments(new List<string>(args) { _mediaFilePath }).ToString(),
+                    Arguments = new ArgumentList(new List<string>(args) { _mediaFilePath }).ToString(),
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     ErrorDialog = false,

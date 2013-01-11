@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Deployment.Application;
 using System.Windows.Forms;
-using BDAutoMuxer.Services;
+using BDAutoMuxerCore.Services;
 
-namespace BDAutoMuxer.views
+namespace BDAutoMuxer.Views
 {
     public delegate void UpdateNotifierCompleteDelegate();
 
@@ -16,11 +15,6 @@ namespace BDAutoMuxer.views
 // ReSharper restore LocalizableElement
     public class UpdateNotifier : BackgroundWorker
     {
-        public static bool IsClickOnce
-        {
-            get { return ApplicationDeployment.IsNetworkDeployed; }
-        }
-
         private readonly IUpdateService _updateService;
 
         private bool _isUpdateAvailable;
@@ -35,17 +29,12 @@ namespace BDAutoMuxer.views
             _notifyIfUpToDate = notifyIfUpToDate;
             _onComplete = onComplete;
 
-            _updateService = GetService(form);
+            _updateService = UpdateServiceFactory.GetUpdateService();
+            _updateService.UpdateStarted += message => MessageBox.Show(_form, message);
+            _updateService.UpdateFinished += delegate(string message) { MessageBox.Show(_form, message); Application.Restart(); };
 
             DoWork += CheckForUpdate;
             RunWorkerCompleted += OnRunWorkerCompleted;
-        }
-
-        private static IUpdateService GetService(Form form)
-        {
-            if (IsClickOnce)
-                return new ClickOnceUpdateService(form);
-            return new GitHubUpdateService();
         }
 
         private void CheckForUpdate(object sender, DoWorkEventArgs e)

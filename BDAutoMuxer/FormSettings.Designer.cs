@@ -59,7 +59,7 @@ namespace BDAutoMuxer
             this.label2 = new System.Windows.Forms.Label();
             this.checkBoxSelectHighestChannelCount = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.splitButtonSelectAudioCodecs = new BDAutoMuxer.views.SplitButton();
+            this.splitButtonSelectAudioCodecs = new BDAutoMuxer.Views.SplitButton();
             this.checkedListBoxAudioCodecs = new System.Windows.Forms.CheckedListBox();
             this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
             this.labelAudioCodecs = new System.Windows.Forms.Label();
@@ -312,7 +312,7 @@ namespace BDAutoMuxer
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox checkBoxSelectHighestChannelCount;
         private System.Windows.Forms.Label label1;
-        private views.SplitButton splitButtonSelectAudioCodecs;
+        private Views.SplitButton splitButtonSelectAudioCodecs;
         private System.Windows.Forms.CheckedListBox checkedListBoxAudioCodecs;
         private System.Windows.Forms.ComboBox comboBoxAudienceLanguage;
         private System.Windows.Forms.Label labelAudioCodecs;

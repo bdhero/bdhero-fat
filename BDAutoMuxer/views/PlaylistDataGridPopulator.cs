@@ -6,13 +6,13 @@ using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
-using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.models;
-using BDAutoMuxer.controllers;
+using BDAutoMuxerCore.BDInfo;
+using DotNetUtils;
 using MediaInfoWrapper;
 
-namespace BDAutoMuxer.views
+namespace BDAutoMuxer.Views
 {
     class PlaylistDataGridPopulator
     {

@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Windows.Forms;
-using BDAutoMuxer.BDInfo;
-using BDAutoMuxer.views;
+using BDAutoMuxer.Views;
+using BDAutoMuxerCore.BDInfo;
+using DotNetUtils;
 using MediaInfoWrapper;
 
 namespace BDAutoMuxer.controllers
@@ -361,7 +362,7 @@ namespace BDAutoMuxer.controllers
 
     public class PlaylistScanResult
     {
-        public readonly BDInfo.BDROM BDROM;
+        public readonly BDROM BDROM;
 
         public readonly ISet<Language> Languages = new HashSet<Language>();
         public readonly List<TSPlaylistFile> SortedPlaylists = new List<TSPlaylistFile>();
@@ -369,7 +370,7 @@ namespace BDAutoMuxer.controllers
 
         public PlaylistScanResult(string path)
         {
-            BDROM = new BDInfo.BDROM(path);
+            BDROM = new BDROM(path);
         }
     }
 }

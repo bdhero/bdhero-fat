@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Text.RegularExpressions;
-using BDAutoMuxer.controllers;
+using DotNetUtils;
 using Microsoft.Win32;
 
 namespace BDAutoMuxer.Win32

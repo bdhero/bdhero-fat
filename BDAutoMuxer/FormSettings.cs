@@ -25,21 +25,15 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Windows.Controls;
 using System.Windows.Forms;
-using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
-using BDAutoMuxer.controllers;
-using BDAutoMuxer.models;
-using BDAutoMuxer.tools;
-using BDAutoMuxer.views;
+using BDAutoMuxer.Services;
+using BDAutoMuxer.Views;
+using BDAutoMuxerCore.Services;
 using MediaInfoWrapper;
-using ComboBox = System.Windows.Forms.ComboBox;
 using ContextMenu = System.Windows.Forms.ContextMenu;
 using MenuItem = System.Windows.Forms.MenuItem;
-using ToolTip = System.Windows.Forms.ToolTip;
 
 // ReSharper disable EmptyGeneralCatchClause
 namespace BDAutoMuxer
@@ -63,7 +57,7 @@ namespace BDAutoMuxer
             checkBoxSelectHighestChannelCount.Checked = BDAutoMuxerSettings.SelectHighestChannelCount;
             checkBoxUseMainMovieDb.Checked = BDAutoMuxerSettings.UseMainMovieDb;
 
-            checkBoxCheckForUpdates.Enabled = !UpdateNotifier.IsClickOnce;
+            checkBoxCheckForUpdates.Enabled = !ClickOnceUpdateService.IsClickOnce;
 
             InitAudienceLanguage();
             InitPreferredAudioCodecs();
@@ -283,26 +277,6 @@ namespace BDAutoMuxer
         /// StereoScopic Information File for 3D Blu-ray.  Determines the encryption, DRM, and type of 3D contained on the disc (separate streams for each eye, type of Delta, etc.).
         /// </summary>
         public static bool EnableSSIF
-        {
-            get { return true; }
-        }
-
-        public static bool FilterLoopingPlaylists
-        {
-            get { return true; }
-        }
-
-        public static bool FilterShortPlaylists
-        {
-            get { return true; }
-        }
-
-        public static int FilterShortPlaylistsValue
-        {
-            get { return 20; }
-        }
-
-        public static bool KeepStreamOrder
         {
             get { return true; }
         }
@@ -585,7 +559,7 @@ namespace BDAutoMuxer
         public static void UpgradeFromPreviousVersion()
         {
             // ClickOnce automatically upgrades user.config settings when it auto-updates the application.
-            if (UpdateNotifier.IsClickOnce || !UpgradeRequired)
+            if (ClickOnceUpdateService.IsClickOnce || !UpgradeRequired)
                 return;
             try
             {

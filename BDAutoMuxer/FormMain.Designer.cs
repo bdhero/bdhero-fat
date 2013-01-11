@@ -51,9 +51,8 @@
             this.movieNameLabel = new System.Windows.Forms.Label();
             this.tabPagePlaylists = new System.Windows.Forms.TabPage();
             this.hiddenTrackLabel = new System.Windows.Forms.Label();
-            this.playlistsSplitContainerOuter = new BDAutoMuxer.views.SplitContainerWithDivider();
+            this.playlistsSplitContainerOuter = new BDAutoMuxer.Views.SplitContainerWithDivider();
             this.playlistsGroupBox = new System.Windows.Forms.GroupBox();
-            this.linkLabelPreviewPlaylistsUI = new BDAutoMuxer.views.LinkLabel2();
             this.checkBoxShowLowQualityPlaylists = new System.Windows.Forms.CheckBox();
             this.checkBoxShowShortPlaylists = new System.Windows.Forms.CheckBox();
             this.buttonUnselectAll = new System.Windows.Forms.Button();
@@ -62,7 +61,7 @@
             this.checkboxShowBogusPlaylists = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.playlistDataGridView = new System.Windows.Forms.DataGridView();
-            this.playlistsSplitContainerInner = new BDAutoMuxer.views.SplitContainerWithDivider();
+            this.playlistsSplitContainerInner = new BDAutoMuxer.Views.SplitContainerWithDivider();
             this.tracksGroupBox = new System.Windows.Forms.GroupBox();
             this.listViewStreams = new System.Windows.Forms.ListView();
             this.columnHeaderStreamCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -93,7 +92,7 @@
             this.labelOutputFileName = new System.Windows.Forms.Label();
             this.labelOutputDirectory = new System.Windows.Forms.Label();
             this.groupBoxTracks = new System.Windows.Forms.GroupBox();
-            this.splitContainerTracksOuter = new BDAutoMuxer.views.SplitContainerWithDivider();
+            this.splitContainerTracksOuter = new BDAutoMuxer.Views.SplitContainerWithDivider();
             this.buttonPlaylistOpen = new System.Windows.Forms.Button();
             this.labelPlaylist = new System.Windows.Forms.Label();
             this.comboBoxPlaylist = new System.Windows.Forms.ComboBox();
@@ -103,7 +102,7 @@
             this.columnHeaderVideoFrameRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderVideoAspectRatio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelVideoTracks = new System.Windows.Forms.Label();
-            this.splitContainerTracksInner = new BDAutoMuxer.views.SplitContainerWithDivider();
+            this.splitContainerTracksInner = new BDAutoMuxer.Views.SplitContainerWithDivider();
             this.listViewAudioTracks = new System.Windows.Forms.ListView();
             this.columnHeaderAudioCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderAudioLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -483,7 +482,6 @@
             this.playlistsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.playlistsGroupBox.Controls.Add(this.linkLabelPreviewPlaylistsUI);
             this.playlistsGroupBox.Controls.Add(this.checkBoxShowLowQualityPlaylists);
             this.playlistsGroupBox.Controls.Add(this.checkBoxShowShortPlaylists);
             this.playlistsGroupBox.Controls.Add(this.buttonUnselectAll);
@@ -497,19 +495,6 @@
             this.playlistsGroupBox.TabIndex = 0;
             this.playlistsGroupBox.TabStop = false;
             this.playlistsGroupBox.Text = "Playlists";
-            // 
-            // linkLabelPreviewPlaylistsUI
-            // 
-            this.linkLabelPreviewPlaylistsUI.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkLabelPreviewPlaylistsUI.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelPreviewPlaylistsUI.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelPreviewPlaylistsUI.Location = new System.Drawing.Point(608, 20);
-            this.linkLabelPreviewPlaylistsUI.Name = "linkLabelPreviewPlaylistsUI";
-            this.linkLabelPreviewPlaylistsUI.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelPreviewPlaylistsUI.Size = new System.Drawing.Size(126, 14);
-            this.linkLabelPreviewPlaylistsUI.TabIndex = 103;
-            this.linkLabelPreviewPlaylistsUI.Text = "Preview new filter engine";
-            this.linkLabelPreviewPlaylistsUI.Click += new System.EventHandler(this.linkLabelPreviewPlaylistsUI_Click);
             // 
             // checkBoxShowLowQualityPlaylists
             // 
@@ -1684,6 +1669,7 @@
             // 
             // remuxerToolStripMenuItem
             // 
+            this.remuxerToolStripMenuItem.Enabled = false;
             this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
             this.remuxerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
             this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
@@ -1932,14 +1918,14 @@
         private System.Windows.Forms.TextBox textBoxOutputFileNameHint;
         private System.Windows.Forms.TextBox textBoxOutputFileNamePreview;
         private System.Windows.Forms.TextBox textBoxOutputDirPreview;
-        private BDAutoMuxer.views.SplitContainerWithDivider splitContainerTracksOuter;
+        private BDAutoMuxer.Views.SplitContainerWithDivider splitContainerTracksOuter;
         private System.Windows.Forms.ListView listViewVideoTracks;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoCodec;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoResolution;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoFrameRate;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoAspectRatio;
         private System.Windows.Forms.Label labelVideoTracks;
-        private BDAutoMuxer.views.SplitContainerWithDivider splitContainerTracksInner;
+        private BDAutoMuxer.Views.SplitContainerWithDivider splitContainerTracksInner;
         private System.Windows.Forms.ListView listViewAudioTracks;
         private System.Windows.Forms.ColumnHeader columnHeaderAudioCodec;
         private System.Windows.Forms.ColumnHeader columnHeaderAudioLanguage;
@@ -2004,7 +1990,7 @@
         private System.Windows.Forms.TextBox movieNameTextBox;
         private System.Windows.Forms.Label discLanguageLabel;
         private System.Windows.Forms.Label movieNameLabel;
-        private views.SplitContainerWithDivider playlistsSplitContainerOuter;
+        private Views.SplitContainerWithDivider playlistsSplitContainerOuter;
         private System.Windows.Forms.GroupBox playlistsGroupBox;
         private System.Windows.Forms.CheckBox checkBoxShowLowQualityPlaylists;
         private System.Windows.Forms.CheckBox checkBoxShowShortPlaylists;
@@ -2012,7 +1998,7 @@
         private System.Windows.Forms.CheckBox checkboxShowBogusPlaylists;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView playlistDataGridView;
-        private views.SplitContainerWithDivider playlistsSplitContainerInner;
+        private Views.SplitContainerWithDivider playlistsSplitContainerInner;
         private System.Windows.Forms.GroupBox tracksGroupBox;
         private System.Windows.Forms.ListView listViewStreams;
         private System.Windows.Forms.ColumnHeader columnHeaderStreamCodec;
@@ -2030,6 +2016,5 @@
         private System.Windows.Forms.Label hiddenTrackLabel;
         private System.Windows.Forms.ComboBox comboBoxShowHiddenTracks;
         private System.Windows.Forms.Label label3;
-        private views.LinkLabel2 linkLabelPreviewPlaylistsUI;
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BDAutoMuxer.views
+namespace BDAutoMuxer.Views
 {
     public static class FormUtils
     {

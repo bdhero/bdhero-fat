@@ -5,11 +5,12 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using BDAutoMuxer.BDInfo;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.tools;
+using BDAutoMuxerCore;
+using BDAutoMuxerCore.BDInfo;
 
-namespace BDAutoMuxer.views
+namespace BDAutoMuxer.Views
 {
     static class StreamTrackListViewPopulator
     {
@@ -68,9 +69,7 @@ namespace BDAutoMuxer.views
                 }
                 else
                 {
-// ReSharper disable LocalizableElement
                     clipSize.Text = "-";
-// ReSharper restore LocalizableElement
                     clipSize.Tag = clip.FileSize;
                 }
 

@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLIArguments.cs" />
     <Compile Include="Resources\Icons.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -232,6 +231,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MediaInfo.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProcessUtils\ProcessUtils.csproj">
+      <Project>{896F47DD-A9FC-413C-B125-8E999F72E101}</Project>
+      <Name>ProcessUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

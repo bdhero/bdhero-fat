@@ -8,16 +8,19 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using BDAutoMuxer.BDInfo;
-using BDAutoMuxer.BDROM;
 using BDAutoMuxer.Properties;
 using BDAutoMuxer.Services;
 using BDAutoMuxer.controllers;
 using BDAutoMuxer.models;
 using BDAutoMuxer.tools;
-using BDAutoMuxer.views;
+using BDAutoMuxer.Views;
+using BDAutoMuxerCore;
+using BDAutoMuxerCore.BDInfo;
+using BDAutoMuxerCore.Services;
+using DotNetUtils;
 using MediaInfoWrapper;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using ProcessUtils;
 using WatTmdb.V3;
 
 // ReSharper disable SuggestUseVarKeywordEvident
@@ -40,7 +43,7 @@ namespace BDAutoMuxer
 
         private Tmdb _tmdbApi;
 
-        private BDInfo.BDROM _bdrom;
+        private BDROM _bdrom;
         private IList<TSPlaylistFile> _playlists;
         private IList<Language> _languages;
         private IList<string> _languageCodes;
@@ -66,8 +69,8 @@ namespace BDAutoMuxer
         private bool _ignoreFilterControlChange;
         private bool _ignoreDataGridItemChange;
 
-        private EAC3To _eac3To;
-        private TsMuxer _tsMuxer;
+        private TsMuxer _demuxer;
+        private TsMuxer _muxer;
         private string _tsMuxerOutputPath;
 
         private bool _shouldMux;
@@ -383,7 +386,7 @@ namespace BDAutoMuxer
             _subtitleTracks.Clear();
         }
 
-        private void Init(BDInfo.BDROM bdrom, ICollection<Language> languages, List<TSPlaylistFile> playlists)
+        private void Init(BDROM bdrom, ICollection<Language> languages, List<TSPlaylistFile> playlists)
         {
             _bdrom = bdrom;
             _languages = new List<Language>(languages).ToArray();
@@ -1165,8 +1168,8 @@ namespace BDAutoMuxer
             BDAutoMuxerSettings.DemuxSubtitles = checkBoxDemuxSubtitles.Checked;
             BDAutoMuxerSettings.SaveSettings();
 
-            _tsMuxer = null;
-            _eac3To = null;
+            _muxer = null;
+            _demuxer = null;
 
             _eac3ToProgressUIState.Reset();
             _tsMuxerProgressUIState.Reset();
@@ -1209,13 +1212,13 @@ namespace BDAutoMuxer
             progressBarTsMuxer.Value = 0;
             toolStripProgressBar.Visible = true;
 
-            _eac3To = new EAC3To(SelectedPlaylist, selectedStreams, IsDemuxLPCMChecked, IsDemuxSubtitlesChecked);
-            _eac3To.WorkerReportsProgress = true;
-            _eac3To.WorkerSupportsCancellation = true;
-            _eac3To.ProgressChanged += DemuxerBackgroundWorkerProgressChanged;
-            _eac3To.RunWorkerCompleted += DemuxerBackgroundWorkerCompleted;
+            _demuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedStreams, IsDemuxLPCMChecked, IsDemuxSubtitlesChecked);
+            _demuxer.WorkerReportsProgress = true;
+            _demuxer.WorkerSupportsCancellation = true;
+            _demuxer.ProgressChanged += DemuxerBackgroundWorkerProgressChanged;
+            _demuxer.RunWorkerCompleted += DemuxerBackgroundWorkerCompleted;
 
-            _eac3To.RunWorkerAsync(_tsMuxerOutputPath);
+            _demuxer.RunWorkerAsync(_tsMuxerOutputPath);
         }
 
         private void StartMuxer(ISet<TSStream> selectedStreams)
@@ -1233,31 +1236,31 @@ namespace BDAutoMuxer
             if (IsDemuxSubtitlesChecked)
                 selectedMuxingStreams.RemoveWhere(stream => stream.IsGraphicsStream || stream.IsTextStream);
 
-            _tsMuxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedMuxingStreams);
-            _tsMuxer.WorkerReportsProgress = true;
-            _tsMuxer.WorkerSupportsCancellation = true;
-            _tsMuxer.ProgressChanged += TsMuxerBackgroundWorkerProgressChanged;
-            _tsMuxer.RunWorkerCompleted += TsMuxerBackgroundWorkerCompleted;
+            _muxer = new TsMuxer(_bdrom, SelectedPlaylist, selectedMuxingStreams);
+            _muxer.WorkerReportsProgress = true;
+            _muxer.WorkerSupportsCancellation = true;
+            _muxer.ProgressChanged += MuxerBackgroundWorkerProgressChanged;
+            _muxer.RunWorkerCompleted += MuxerBackgroundWorkerCompleted;
 
-            _tsMuxer.RunWorkerAsync(_tsMuxerOutputPath);
+            _muxer.RunWorkerAsync(_tsMuxerOutputPath);
         }
 
         private void CancelRip()
         {
             _isCancelling = true;
             ResetUI();
-            CancelRip(_tsMuxer);
-            CancelRip(_eac3To);
+            CancelRip(_muxer);
+            CancelRip(_demuxer);
         }
 
-        private static void CancelRip(AbstractExternalTool tool)
+        private static void CancelRip(BackgroundProcess tool)
         {
             if (tool == null || !tool.IsBusy) return;
             tool.Resume();
             tool.CancelAsync();
         }
 
-        private void TsMuxerBackgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void MuxerBackgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             _isMuxing = true;
             ResetUI();
@@ -1267,10 +1270,10 @@ namespace BDAutoMuxer
         private void UpdateTsMuxerProgress(object sender = null, EventArgs e = null)
         {
             // 0.0 to 100.0
-            double muxerProgressPct = _tsMuxer.Progress;
+            double muxerProgressPct = _muxer.Progress;
             double overallProgressPct = muxerProgressPct;
 
-            if (_eac3To != null)
+            if (_demuxer != null)
             {
                 overallProgressPct /= 2;
                 overallProgressPct += 50.0;
@@ -1306,30 +1309,30 @@ namespace BDAutoMuxer
             SetTabStatus(tabPageProgress, "Muxing M2TS: " + muxerProgressStr);
 
             if (String.IsNullOrEmpty(textBoxTsMuxerCommandLine.Text))
-                textBoxTsMuxerCommandLine.Text = _tsMuxer.CommandLine;
+                textBoxTsMuxerCommandLine.Text = _muxer.CommandLine;
 
-            labelTsMuxerTimeRemaining.Text = GetElapsedTimeString(_tsMuxer.TimeRemaining);
-            labelTsMuxerTimeElapsed.Text = GetElapsedTimeString(_tsMuxer.TimeElapsed);
+            labelTsMuxerTimeRemaining.Text = GetElapsedTimeString(_muxer.TimeRemaining);
+            labelTsMuxerTimeElapsed.Text = GetElapsedTimeString(_muxer.TimeElapsed);
 
             // TODO: Refactor this logic into a separate method
-            if (!String.IsNullOrEmpty(_tsMuxer.State))
+            if (!String.IsNullOrEmpty(_muxer.State))
             {
-                labelTsMuxerProgress.Text += String.Format(" ({0})", _tsMuxer.State);
+                labelTsMuxerProgress.Text += String.Format(" ({0})", _muxer.State);
 
-                if (_tsMuxer.IsPaused)
+                if (_muxer.IsPaused)
                     TaskbarProgress.SetProgressState(TaskbarProgressBarState.Paused, Handle);
-                else if (_tsMuxer.IsCanceled || _tsMuxer.IsError)
+                else if (_muxer.IsCanceled || _muxer.IsError)
                     TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
             }
         }
 
-        private void TsMuxerBackgroundWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void MuxerBackgroundWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             _isMuxing = false;
 
             ResetUI();
 
-            if (e.Cancelled && _tsMuxer.IsCanceled)
+            if (e.Cancelled && _muxer.IsCanceled)
             {
                 TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
                 SetTabStatus(tabPageProgress, "Muxing canceled");
@@ -1345,7 +1348,7 @@ namespace BDAutoMuxer
                 ShowMessage(tabPageProgress, "Muxing completed!", "Finished muxing M2TS with tsMuxeR!");
             }
 
-            if (_tsMuxer != null && (_tsMuxer.IsCanceled || _tsMuxer.IsError))
+            if (_muxer != null && (_muxer.IsCanceled || _muxer.IsError))
                 CleanupFiles();
 
             _isCancelling = false;
@@ -1357,11 +1360,11 @@ namespace BDAutoMuxer
         {
             var junkFiles = new HashSet<string>();
 
-            if (_eac3To != null && _eac3To.HasOutputFiles())
-                junkFiles.AddRange(_eac3To.GetOutputFiles());
+            if (_demuxer != null && _demuxer.HasOutputFiles())
+                junkFiles.AddRange(_demuxer.GetOutputFiles());
 
-            if (_tsMuxer != null && _tsMuxer.HasOutputFiles())
-                junkFiles.AddRange(_tsMuxer.GetOutputFiles());
+            if (_muxer != null && _muxer.HasOutputFiles())
+                junkFiles.AddRange(_muxer.GetOutputFiles());
 
             var existingJunkFiles = junkFiles.Where(File.Exists).ToList();
 
@@ -1369,7 +1372,7 @@ namespace BDAutoMuxer
                 return;
 
             if (PromptToDeleteOutputFiles(existingJunkFiles.ToList()))
-                AbstractExternalTool.DeleteOutputFiles(existingJunkFiles);
+                BackgroundProcess.DeleteOutputFiles(existingJunkFiles);
         }
 
         public bool PromptToDeleteOutputFiles(ICollection<string> outputFiles)
@@ -1390,7 +1393,7 @@ namespace BDAutoMuxer
         private void UpdateDemuxerProgress(object sender = null, EventArgs e = null)
         {
             // 0.0 to 100.0
-            double demuxerProgressPct = _eac3To.Progress;
+            double demuxerProgressPct = _demuxer.Progress;
             double overallProgressPct = demuxerProgressPct;
 
             if (_shouldMux)
@@ -1426,19 +1429,19 @@ namespace BDAutoMuxer
             SetTabStatus(tabPageProgress, GetDemuxerProgressMessage(demuxerProgressStr));
 
             if (String.IsNullOrEmpty(textBoxDemuxingCommandLine.Text))
-                textBoxDemuxingCommandLine.Text = _eac3To.CommandLine;
+                textBoxDemuxingCommandLine.Text = _demuxer.CommandLine;
 
-            labelDemuxingTimeRemaining.Text = GetElapsedTimeString(_eac3To.TimeRemaining);
-            labelDemuxingTimeElapsed.Text = GetElapsedTimeString(_eac3To.TimeElapsed);
+            labelDemuxingTimeRemaining.Text = GetElapsedTimeString(_demuxer.TimeRemaining);
+            labelDemuxingTimeElapsed.Text = GetElapsedTimeString(_demuxer.TimeElapsed);
 
             // TODO: Refactor this logic into a separate method
-            if (!String.IsNullOrEmpty(_eac3To.State))
+            if (!String.IsNullOrEmpty(_demuxer.State))
             {
-                labelDemuxingProgress.Text += String.Format(" ({0})", _eac3To.State);
+                labelDemuxingProgress.Text += String.Format(" ({0})", _demuxer.State);
 
-                if (_eac3To.IsPaused)
+                if (_demuxer.IsPaused)
                     TaskbarProgress.SetProgressState(TaskbarProgressBarState.Paused, Handle);
-                else if (_eac3To.IsCanceled || _eac3To.IsError)
+                else if (_demuxer.IsCanceled || _demuxer.IsError)
                     TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
             }
         }
@@ -1463,7 +1466,7 @@ namespace BDAutoMuxer
 
             ResetUI();
 
-            if (e.Cancelled && _eac3To.IsCanceled)
+            if (e.Cancelled && _demuxer.IsCanceled)
             {
                 TaskbarProgress.SetProgressState(TaskbarProgressBarState.Error, Handle);
                 SetTabStatus(tabPageProgress, "Demuxing canceled");
@@ -1481,7 +1484,7 @@ namespace BDAutoMuxer
                     StartMuxer(SelectedStreams);
             }
 
-            if (_eac3To != null && (_eac3To.IsCanceled || _eac3To.IsError))
+            if (_demuxer != null && (_demuxer.IsCanceled || _demuxer.IsError))
                 CleanupFiles();
 
             _isCancelling = false;
@@ -1975,10 +1978,10 @@ namespace BDAutoMuxer
 
         private bool IsMuxingOrDemuxingPaused
         {
-            get { return (_tsMuxer != null && _tsMuxer.IsPaused) || (_eac3To != null && _eac3To.IsPaused); }
+            get { return (_muxer != null && _muxer.IsPaused) || (_demuxer != null && _demuxer.IsPaused); }
         }
 
-        private static void PauseResume(AbstractExternalTool tool, Control progressLabel)
+        private static void PauseResume(BackgroundProcess tool, Control progressLabel)
         {
             if (tool == null) return;
 
@@ -1999,10 +2002,10 @@ namespace BDAutoMuxer
         {
             if (_isMuxing)
             {
-                if (_eac3To != null && _eac3To.IsBusy)
-                    PauseResume(_eac3To, labelDemuxingProgress);
+                if (_demuxer != null && _demuxer.IsBusy)
+                    PauseResume(_demuxer, labelDemuxingProgress);
                 else
-                    PauseResume(_tsMuxer, labelTsMuxerProgress);
+                    PauseResume(_muxer, labelTsMuxerProgress);
             }
             else if (tabControl.SelectedTab == tabPageOutput)
             {
@@ -2331,7 +2334,6 @@ namespace BDAutoMuxer
 
         private void remuxerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new FormRemux().Show();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2536,7 +2538,7 @@ namespace BDAutoMuxer
 
         private void CheckForUpdateOnStartup()
         {
-            if (BDAutoMuxerSettings.CheckForUpdates && !UpdateNotifier.IsClickOnce)
+            if (BDAutoMuxerSettings.CheckForUpdates && !ClickOnceUpdateService.IsClickOnce)
             {
                 checkForUpdatesToolStripMenuItem.Enabled = false;
                 UpdateNotifier.CheckForUpdate(this, false, _updateNotifierComplete);
@@ -2562,7 +2564,6 @@ namespace BDAutoMuxer
 
         private void linkLabelPreviewPlaylistsUI_Click(object sender, EventArgs e)
         {
-            new FormPlaylistsTest(_bdrom).ShowDialog(this);
         }
 
     }
