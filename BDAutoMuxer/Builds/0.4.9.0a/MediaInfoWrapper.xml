@@ -1,0 +1,295 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MediaInfoWrapper</name>
+    </assembly>
+    <members>
+        <member name="M:MediaInfoWrapper.Language.FromCode(System.String)">
+            <summary>
+            Gets the Language object associated with the given 2-letter (ISO 639-1) or 3-letter (ISO 639-2) language code.
+            </summary>
+            <param name="code">2-letter (ISO 639-1) or 3-letter (ISO 639-2) ISO language code</param>
+            <returns>Language object that matches the ISO 639 code, or null if none exists</returns>
+        </member>
+        <member name="P:MediaInfoWrapper.Language.ISO_639_1">
+            <summary>2 digits (e.g., "en", "fr", "es")</summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Language.ISO_639_2">
+            <summary>3 digits (e.g., "eng", "fra", "spa")</summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Language.Name">
+            <summary>Human-friendly English name of the language (e.g., "English", "French", "Spanish")</summary>
+        </member>
+        <member name="F:MediaInfoWrapper.MITrack.Mux">
+            <summary>
+            Determines whether the track should be included (muxed) in the output file.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MITrack.IsAVS">
+            <summary>
+            Shortcut for IsAudio || IsVideo || IsSubtitle.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MITrack.StreamKindId">
+            <summary>
+            The order in which this track appears in the source media file, relative to other tracks of the same type (base = 0).
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MIAVSTrack.StreamOrder">
+            <summary>
+            The order in which this track appears in the source media file, irrespective of track type (base = 0).
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MIVideoTrack.DisplayResolution">
+            <summary>
+            "1080p", "1080i", "720p", "720i", "480p"
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MIAudioTrack.ChannelsInt">
+            <summary>
+            Integer value reported by MediaInfo as "Channels" (8 = 7.1, 6 = 5.1, etc.)
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MIAudioTrack.Channels">
+            <summary>
+            Decimal value calculated from ChannelPositions.
+            8.1, 7.1, 5.1, 2.1, 2.0, etc.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MIAudioTrack.ChannelsString">
+            <summary>
+            E.G., "6 channels"
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MIAudioTrack.ChannelPositions">
+            <summary>
+            Number of channels per spatial location, in Front/Side/Back format
+            </summary>
+            <example>3/2/0.1</example>
+        </member>
+        <member name="P:MediaInfoWrapper.MIAudioTrack.ChannelPositionsString">
+            <summary>
+            Spatial layout of channels in human-readable form
+            </summary>
+            <example>Front: L C R, Side: L R, LFE</example>
+        </member>
+        <member name="T:MediaInfoWrapper.MISubtitleTrack">
+            <summary>
+            MediaInfo refers to these as "Text".
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MIChapterTrack">
+            <summary>
+            MediaInfo refers to these as "Menu"; "Chapters" is something different (not sure what "Chapters" means to MediaInfo)
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MICodec.SerializableName">
+            <summary>
+            Serializable codec ID in all uppercase (e.g., "V_H264")
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MICodec.CodecId">
+            <summary>
+            Shown in MediaInfo.  Also stored in MKV headers.
+            </summary>
+            <example>A_AC3</example>
+            <example>A_DTS</example>
+            <example>V_MPEG4/ISO/AVC</example>
+        </member>
+        <member name="P:MediaInfoWrapper.MICodec.IsMuxable">
+            <summary>
+            Can this codec be muxed by standard, freely available consumer software?
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MICodec.FullNameDisambig">
+            <summary>
+            The full name of the codec plus any alternate names to avoid confusion (e.g., "Dolby Digital (AC-3)").
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MICodec.TypeDisplay">
+            <summary>
+            "Audio", "Video", "Subtitle", or "Unknown"
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecAVC">
+            <summary>
+            H.264/MPEG-4 AVC
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecVC1">
+            <summary>
+            VC-1
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecMPEG1Video">
+            <summary>
+            MPEG-1 Video (non-Blu-ray)
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecMPEG2Video">
+            <summary>
+            MPEG-2 Video
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecProLogic">
+            <summary>
+            Dolby Pro Logic
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.MICodecProLogic.AltFullName">
+            <summary>
+            "Dolby Pro Logic" is actually the name of the Decoder; "Dolby Surround" is the name of the Encoder.
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecAC3">
+            <summary>
+            Dolby Digital
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecAC3EX">
+            <summary>
+            Dolby Digital EX
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecEAC3">
+            <summary>
+            Dolby Digital Plus
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecTrueHD">
+            <summary>
+            Dolby TrueHD
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecDTS">
+            <summary>
+            Standard DTS
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecDTSES">
+            <summary>
+            DTS Extended Surround
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecDTSExpress">
+            <summary>
+            DTS Express
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecDTSHDHRA">
+            <summary>
+            DTS-HD High Resolution Audio
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.MICodecDTSHDMA">
+            <summary>
+            DTS-HD Master Audio
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.CLIArguments">
+            <summary>
+            Helper class for constructing a list of arguments to be passed to a command line application.
+            </summary>
+        </member>
+        <member name="F:MediaInfoWrapper.CLIArguments.SkipNullArgs">
+            <summary>
+            Gets or sets whether null arguments should be skipped by ToString().
+            </summary>
+        </member>
+        <member name="M:MediaInfoWrapper.CLIArguments.AddAll(System.String[])">
+            <summary>
+            Adds all arguments, regardless of whether they are null or empty.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:MediaInfoWrapper.CLIArguments.AddAll(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Adds all arguments, regardless of whether they are null or empty.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:MediaInfoWrapper.CLIArguments.AddNonEmpty(System.String[])">
+            <summary>
+            Adds all non-null, non-empty arguments (i.e., skips null/empty arguments).
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:MediaInfoWrapper.CLIArguments.AddIfAllNonEmpty(System.String[])">
+            <summary>
+            Adds all arguments iff all arguments are non-null and non-empty.  If any arguments are null or empty, nothing is added.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="T:MediaInfoWrapper.Resources.Logos">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Resources.Logos.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Resources.Logos.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.Resources.Icons">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Resources.Icons.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Resources.Icons.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:MediaInfoWrapper.Resources.MediaInfoCoreFiles">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Resources.MediaInfoCoreFiles.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Resources.MediaInfoCoreFiles.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:MediaInfoWrapper.Resources.MediaInfoCoreFiles.MediaInfoXML_CSV">
+             <summary>
+               Looks up a localized string similar to ;
+            ;
+            ;Bug: &quot;Page_Begin&quot;, &quot;Page_Middle&quot; and &quot;Page_End&quot; sections are picked on lines 10, 11 and 12 regardless what is there. So it is better to leave them there.
+            ;Bug: \r\n is not turned into a newline on &quot;Page&quot; entries.
+            ;Bug: &quot;Image&quot; sections are not active, but should.
+            ;
+            ;
+            ;
+            Page;(unused)\r\n
+            Page_Begin;
+            Page_Middle;
+            Page_End;&lt;/Tracks&gt;&lt;/MediaInfo&gt;
+            ;
+            File;(unused)\r\n
+            File_Begin;
+            File_Middle;(unused)\r\n
+            File_End;
+            ;
+            General;&lt;?xml version=&quot;1.0&quot;?&gt;\r\n&lt;MediaInfo&gt;\r\n    &lt;File&gt;\r\n        &lt;Folde [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+    </members>
+</doc>
