@@ -53,6 +53,11 @@ namespace BDAutoMuxerCore.BDROM
         /// </summary>
         public double ChannelCount;
 
+        /// <summary>
+        /// Audio only (e.g., 16-, 20-, or 24-bit for LPCM).
+        /// </summary>
+        public int BitDepth;
+
         public TSVideoFormat VideoFormat;
         public TSFrameRate FrameRate;
         public TSAspectRatio AspectRatio;
@@ -188,6 +193,7 @@ namespace BDAutoMuxerCore.BDROM
                            IsAudio = stream.IsAudioStream,
                            IsSubtitle = stream.IsGraphicsStream || stream.IsTextStream,
                            ChannelCount = audioStream != null ? audioStream.ChannelCountDouble : 0,
+                           BitDepth = audioStream != null ? audioStream.BitDepth : 0,
                            VideoFormat = videoStream != null ? videoStream.VideoFormat : 0,
                            FrameRate = videoStream != null ? videoStream.FrameRate : TSFrameRate.Unknown,
                            AspectRatio = videoStream != null ? videoStream.AspectRatio : TSAspectRatio.Unknown,
