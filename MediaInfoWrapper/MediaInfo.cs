@@ -1037,12 +1037,14 @@ namespace MediaInfoWrapper
         /// Number of channels per spatial location, in Front/Side/Back format
         /// </summary>
         /// <example>3/2/0.1</example>
+        /// <example>3/2/0.2.1 / 3/2/0.1</example>
         public string ChannelPositions { get; protected set; }
 
         /// <summary>
         /// Spatial layout of channels in human-readable form
         /// </summary>
         /// <example>Front: L C R, Side: L R, LFE</example>
+        /// <example>Front: L C R, Side: L R, Wide: L R, LFE / Front: L C R, Side: L R, LFE</example>
         public string ChannelPositionsString { get; protected set; }
 
         public int SamplingRate { get; protected set; }
