@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MediaInfoWrapper")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("C# / .NET wrapper for MediaInfo")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AndyDvorak.net")]
 [assembly: AssemblyProduct("MediaInfoWrapper")]
