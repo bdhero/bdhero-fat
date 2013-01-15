@@ -254,6 +254,8 @@ namespace MediaInfoWrapper
             if (!System.IO.File.Exists(_mediaFilePath))
                 throw new FileNotFoundException("Media file not found", _mediaFilePath);
 
+            ExtractCoreFiles();
+
             var validationException = Config.ValidationException;
             if (validationException != null) throw validationException;
 
@@ -288,8 +290,6 @@ namespace MediaInfoWrapper
         private MIProcessResult RunProcess(IEnumerable<string> args = null)
         {
             if (args == null) args = new string[0];
-
-            ExtractCoreFiles();
 
             var process = new Process
             {
@@ -1025,7 +1025,7 @@ namespace MediaInfoWrapper
         /// </summary>
         public double Channels
         {
-            get { return ChannelPositions != null ? ChannelPositions.Split('/').Sum(s => Double.Parse(s)) : -1; }
+            get { return !string.IsNullOrWhiteSpace(ChannelPositions) ? ChannelPositions.Split('/').Sum(s => Double.Parse(s)) : -1; }
         }
 
         /// <summary>
