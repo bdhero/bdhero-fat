@@ -1008,6 +1008,8 @@ namespace MediaInfoWrapper
 
     public class MIAudioTrack : MIAVSTrack
     {
+        private static readonly Regex ChannelRegex = new Regex(@"^\w+: ", RegexOptions.IgnoreCase);
+
         public int BitDepth { get; protected set; }
         public string BitDepthString { get; protected set; }
         public string BitRate { get; protected set; }
@@ -1020,12 +1022,43 @@ namespace MediaInfoWrapper
         public int ChannelsInt { get; protected set; }
 
         /// <summary>
-        /// Decimal value calculated from ChannelPositions.
+        /// Decimal value calculated from ChannelPositionsString.
         /// 8.1, 7.1, 5.1, 2.1, 2.0, etc.
         /// </summary>
         public double Channels
         {
-            get { return ChannelPositions != null ? ChannelPositions.Split('/').Sum(s => Double.Parse(s)) : -1; }
+            get
+            {
+                if (string.IsNullOrWhiteSpace(ChannelPositionsString)) return 0;
+
+                var channels = 0.0;
+
+                // DTS-HD MA and Dolby TrueHD tracks contain a lossy inner "core" that MediaInfo reports in addition to the lossless outer stream.
+                // E.G., a 7.1 DTS-HD MA track with an inner 5.1 DTS stream is reported as "Front: L C R, Side: L R, Wide: L R, LFE / Front: L C R, Side: L R, LFE".
+                var streams = ChannelPositionsString.Split(new[] {" / "}, StringSplitOptions.RemoveEmptyEntries);
+
+                // Get the channel positions for the outer stream only
+                var outerStream = streams[0];
+
+                // Front:, Side:, Back:, Wide:, LFE
+                var locations = outerStream.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var location in locations)
+                {
+                    if (location == "LFE")
+                    {
+                        channels += 0.1;
+                        continue;
+                    }
+                    if (ChannelRegex.IsMatch(location))
+                    {
+                        var speakers = ChannelRegex.Replace(location, "").Split(' ');
+                        channels += speakers.Length;
+                    }
+                }
+
+                return channels;
+            }
         }
 
         /// <summary>
