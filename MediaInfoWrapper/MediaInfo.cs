@@ -1008,13 +1008,23 @@ namespace MediaInfoWrapper
 
     public class MIAudioTrack : MIAVSTrack
     {
+        /// <summary>
+        /// Matches "Front: " in "Front: L C R"
+        /// </summary>
         private static readonly Regex ChannelRegex = new Regex(@"^\w+: ", RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// Matches "8" in "8 / 6"
+        /// </summary>
+        private static readonly Regex ChannelsIntRegex = new Regex(@"^(\d+)");
 
         public int BitDepth { get; protected set; }
         public string BitDepthString { get; protected set; }
         public string BitRate { get; protected set; }
         public string BitRateMode { get; protected set; }
         public string BitRateModeString { get; protected set; }
+
+        private int _channelsInt;
 
         /// <summary>
         /// Integer value reported by MediaInfo as "Channels" (8 = 7.1, 6 = 5.1, etc.)
@@ -1062,11 +1072,6 @@ namespace MediaInfoWrapper
         }
 
         /// <summary>
-        /// E.G., "6 channels"
-        /// </summary>
-        public string ChannelsString { get; protected set; }
-
-        /// <summary>
         /// Number of channels per spatial location, in Front/Side/Back format
         /// </summary>
         /// <example>5.1 = "3/2/0.1"</example>
@@ -1104,8 +1109,7 @@ namespace MediaInfoWrapper
             BitRateMode = XmlUtil.GetString(xml, "BitRateMode");
             BitRateModeString = XmlUtil.GetString(xml, "BitRateModeString");
 
-            ChannelsInt = XmlUtil.GetInt(xml, "Channels");
-            ChannelsString = XmlUtil.GetString(xml, "ChannelsString");
+            ChannelsInt = ParseChannels(XmlUtil.GetString(xml, "Channels"));
 
             ChannelPositions = XmlUtil.GetString(xml, "ChannelPositions");
             ChannelPositionsString = XmlUtil.GetString(xml, "ChannelPositionsString");
@@ -1117,6 +1121,15 @@ namespace MediaInfoWrapper
             Title = OldTitle = GetDefaultTitle();
 
             return this;
+        }
+
+        private static int ParseChannels(string channels)
+        {
+            if (ChannelsIntRegex.IsMatch(channels))
+            {
+                return Int32.Parse(ChannelsIntRegex.Match(channels).Groups[1].Value);
+            }
+            return 0;
         }
 
         protected override string GetDefaultTitle()
