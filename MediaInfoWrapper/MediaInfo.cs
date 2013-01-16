@@ -1024,8 +1024,6 @@ namespace MediaInfoWrapper
         public string BitRateMode { get; protected set; }
         public string BitRateModeString { get; protected set; }
 
-        private int _channelsInt;
-
         /// <summary>
         /// Integer value reported by MediaInfo as "Channels" (8 = 7.1, 6 = 5.1, etc.)
         /// </summary>
