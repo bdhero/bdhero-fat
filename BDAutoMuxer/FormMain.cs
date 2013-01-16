@@ -2566,6 +2566,11 @@ namespace BDAutoMuxer
         {
         }
 
+        private void findIncompleteMKVsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FormFindIncompleteMedia().Show();
+        }
+
     }
 
     class ProgressUIState

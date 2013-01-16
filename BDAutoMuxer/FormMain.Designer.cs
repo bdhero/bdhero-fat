@@ -173,6 +173,7 @@
             this.textBoxSource = new System.Windows.Forms.TextBox();
             this.labelSource = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.findIncompleteMKVsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -1661,6 +1662,7 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.remuxerToolStripMenuItem,
             this.toolStripMenuItem4,
+            this.findIncompleteMKVsToolStripMenuItem,
             this.toolStripMenuItem3,
             this.settingsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -1672,28 +1674,28 @@
             this.remuxerToolStripMenuItem.Enabled = false;
             this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
             this.remuxerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.remuxerToolStripMenuItem.Text = "&Remuxer";
             this.remuxerToolStripMenuItem.Click += new System.EventHandler(this.remuxerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(167, 22);
-            this.toolStripMenuItem4.Text = "Codec Scanner";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem4.Text = "&Codec Scanner";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(164, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(186, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.settingsToolStripMenuItem.Text = "&Settings...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -1789,6 +1791,13 @@
             this.cancelButton.Text = "Close";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // findIncompleteMKVsToolStripMenuItem
+            // 
+            this.findIncompleteMKVsToolStripMenuItem.Name = "findIncompleteMKVsToolStripMenuItem";
+            this.findIncompleteMKVsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.findIncompleteMKVsToolStripMenuItem.Text = "Find &Incomplete MKVs";
+            this.findIncompleteMKVsToolStripMenuItem.Click += new System.EventHandler(this.findIncompleteMKVsToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -2016,5 +2025,6 @@
         private System.Windows.Forms.Label hiddenTrackLabel;
         private System.Windows.Forms.ComboBox comboBoxShowHiddenTracks;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem findIncompleteMKVsToolStripMenuItem;
     }
 }
