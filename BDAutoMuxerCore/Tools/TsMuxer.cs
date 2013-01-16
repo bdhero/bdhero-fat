@@ -9,7 +9,7 @@ using BDAutoMuxerCore.BDInfo;
 using DotNetUtils;
 using ProcessUtils;
 
-namespace BDAutoMuxer.tools
+namespace BDAutoMuxerCore.Tools
 {
     /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
 // ReSharper disable LocalizableElement
@@ -30,7 +30,7 @@ namespace BDAutoMuxer.tools
         protected override string Name { get { return "TsMuxer"; } }
         protected override string Filename { get { return "tsMuxeR.exe"; } }
 
-        private readonly BDROM _bdrom;
+        private readonly BDInfo.BDROM _bdrom;
         private readonly TSPlaylistFile _playlist;
         private readonly ICollection<TSStream> _selectedTracks;
 
@@ -48,7 +48,7 @@ namespace BDAutoMuxer.tools
         /// </summary>
         private readonly Dictionary<string, string> _demuxedFilePaths = new Dictionary<string, string>();
 
-        public TsMuxer(BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks, bool demuxLPCM = false, bool demuxSubtitles = false)
+        public TsMuxer(BDInfo.BDROM bdrom, TSPlaylistFile playlist, ICollection<TSStream> selectedTracks, bool demuxLPCM = false, bool demuxSubtitles = false)
         {
             _bdrom = bdrom;
             _playlist = playlist;

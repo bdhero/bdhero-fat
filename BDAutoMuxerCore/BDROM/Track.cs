@@ -95,6 +95,15 @@ namespace BDAutoMuxerCore.BDROM
 
         #endregion
 
+        #region UI selection properties
+
+        /// <summary>
+        /// Position or order of the track relative to other tracks of the same type (audio, video, or subtitles).
+        /// </summary>
+        public int IndexOfType;
+
+        #endregion
+
         #region UI display properties
 
         /// <summary>
@@ -173,8 +182,14 @@ namespace BDAutoMuxerCore.BDROM
 
         #region Transformers
 
+        // TODO: Make this thread-safe
+        private static int _numVideo;
+        private static int _numAudio;
+        private static int _numSubtitle;
+
         public static IList<Track> Transform(IEnumerable<TSStream> streams)
         {
+            _numVideo = _numAudio = _numSubtitle = 0;
             return streams.Select(Transform).ToList();
         }
 
@@ -182,6 +197,14 @@ namespace BDAutoMuxerCore.BDROM
         {
             var videoStream = stream as TSVideoStream;
             var audioStream = stream as TSAudioStream;
+            var subtitleStream = stream as TSGraphicsStream;
+
+            var indexOfType = 0;
+
+            if (videoStream != null) indexOfType = _numVideo++;
+            if (audioStream != null) indexOfType = _numAudio++;
+            if (subtitleStream != null) indexOfType = _numSubtitle++;
+
             return new Track
                        {
                            Index = index,
@@ -197,6 +220,7 @@ namespace BDAutoMuxerCore.BDROM
                            VideoFormat = videoStream != null ? videoStream.VideoFormat : 0,
                            FrameRate = videoStream != null ? videoStream.FrameRate : TSFrameRate.Unknown,
                            AspectRatio = videoStream != null ? videoStream.AspectRatio : TSAspectRatio.Unknown,
+                           IndexOfType = indexOfType
                        };
         }
 

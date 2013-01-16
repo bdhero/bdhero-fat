@@ -95,6 +95,12 @@
     <Compile Include="Services\BDService.cs" />
     <Compile Include="Services\HttpRequest.cs" />
     <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="BinTools.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BinTools.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\FFmpeg.cs" />
     <Compile Include="Tools\MkvMerge.cs" />
     <Compile Include="Tools\TsMuxer.cs" />
   </ItemGroup>
@@ -120,6 +126,10 @@
     <EmbeddedResource Include="CodecLogos.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CodecLogos.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BinTools.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BinTools.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +245,8 @@
     <Content Include="Libraries\Newtonsoft.Json.dll" />
     <Content Include="Libraries\RestSharp.dll" />
     <Content Include="Libraries\WatTmdb.dll" />
+    <None Include="Resources\ffmpeg.exe" />
+    <None Include="Resources\mkvpropedit.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

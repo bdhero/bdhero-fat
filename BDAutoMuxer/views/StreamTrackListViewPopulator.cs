@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using BDAutoMuxer.Properties;
-using BDAutoMuxer.tools;
 using BDAutoMuxerCore;
 using BDAutoMuxerCore.BDInfo;
 

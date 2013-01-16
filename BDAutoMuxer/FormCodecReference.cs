@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDAutoMuxer.Properties;
-using BDAutoMuxer.models;
-using BDAutoMuxer.tools;
 using BDAutoMuxer.Views;
 using MediaInfoWrapper;
 
