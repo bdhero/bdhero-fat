@@ -59,21 +59,19 @@ namespace ProcessUtils
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        /// <see cref="http://stackoverflow.com/a/538238/467582"/>
+        private void Dispose(bool freeManagedObjectsAlso)
         {
             if (_disposed)
                 return;
 
-            if (disposing) { }
+            // Dispose managed objects (e.g., database connections, large images)
+            if (freeManagedObjectsAlso) { }
 
-            Close();
-            _disposed = true;
-        }
-
-        public void Close()
-        {
             CloseHandle(_handle);
+
             _handle = IntPtr.Zero;
+            _disposed = true;
         }
 
         public bool AddProcess(IntPtr processHandle)
