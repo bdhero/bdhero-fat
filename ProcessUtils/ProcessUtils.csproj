@@ -43,7 +43,9 @@
   <ItemGroup>
     <Compile Include="AbstractExternalTool.cs" />
     <Compile Include="ArgumentList.cs" />
+    <Compile Include="BackgroundProcess.cs" />
     <Compile Include="JobObject.cs" />
+    <Compile Include="ProcessExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
