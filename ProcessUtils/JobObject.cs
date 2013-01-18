@@ -88,7 +88,7 @@ namespace ProcessUtils
 
     }
 
-    #region Helper classes
+    #region Structs and Enums
 
     [StructLayout(LayoutKind.Sequential)]
     struct IO_COUNTERS
