@@ -39,7 +39,7 @@ namespace ProcessUtils
 
         #region IDisposable implementation
 
-        public ~JobObject()
+        ~JobObject()
         {
             Dispose(false);
         }
