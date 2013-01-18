@@ -46,6 +46,11 @@ namespace ProcessUtils
             _worker.DoWork += (sender, args) => Start();
         }
 
+        public void StartAsync()
+        {
+            _worker.RunWorkerAsync();
+        }
+
         /// <summary>
         /// Runs in UI and/or BackgroundWorker threads.
         /// </summary>
@@ -73,8 +78,11 @@ namespace ProcessUtils
         /// </summary>
         private void CalculateTimeRemaining()
         {
+            // Thread safety :-)
+            var progress = _progress;
+
             // 0.0 to 1.0
-            var pct = _progress / 100;
+            var pct = progress / 100;
 
             // Previously calculated estimate from the last tick
             var oldEstimate = _timeRemaining;
@@ -90,7 +98,7 @@ namespace ProcessUtils
                 newEstimate = new TimeSpan((long)(RunTime.Ticks / pct) - RunTime.Ticks);
 
             // Make sure the user gets fresh calculations when the process is first started and when it's nearly finished.
-            var isCriticalPeriod = _progress < .5 || _progress > 95;
+            var isCriticalPeriod = progress < .5 || progress > 95;
 
             // If the new estimate differs from the previous estimate by more than 2 minutes, use the new estimate.
             var isLargeChange = Math.Abs(newEstimate.TotalMinutes - oldEstimate.TotalMinutes) > 2;
@@ -117,7 +125,7 @@ namespace ProcessUtils
             _uiProgressState = new ProgressState
                                    {
                                        ProcessState = State,
-                                       PercentComplete = _progress,
+                                       PercentComplete = progress,
                                        TimeElapsed = RunTime,
                                        TimeRemaining = newEstimate
                                    };
