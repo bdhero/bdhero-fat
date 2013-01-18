@@ -208,6 +208,10 @@ namespace ProcessUtils
             AfterOutputLineHandled();
         }
 
+        /// <summary>
+        /// Called after StdOut and StdErr are invoked.
+        /// Used to calculate progress or do any other work that takes place every time a line of output has been parsed.
+        /// </summary>
         protected virtual void AfterOutputLineHandled()
         {
         }
