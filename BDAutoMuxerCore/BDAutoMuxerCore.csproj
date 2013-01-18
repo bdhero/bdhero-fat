@@ -54,7 +54,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyUtils.cs" />
     <Compile Include="BDInfo\BDInfoSettings.cs" />
     <Compile Include="BDInfo\BDROM.cs" />
     <Compile Include="BDInfo\TSCodecAC3.cs" />

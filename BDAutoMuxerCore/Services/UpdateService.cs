@@ -2,6 +2,7 @@
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using DotNetUtils;
 
 namespace BDAutoMuxerCore.Services
 {
@@ -62,7 +63,7 @@ namespace BDAutoMuxerCore.Services
 
         public ClickOnceUpdateService()
         {
-            _currentVersion = AssemblyUtils.AssemblyVersion;
+            _currentVersion = AssemblyUtils.GetAssemblyVersion(GetType());
         }
 
         public bool IsUpdateAvailable
@@ -176,7 +177,7 @@ namespace BDAutoMuxerCore.Services
         public GitHubUpdateService()
         {
             IsMandatory = false;
-            _currentVersion = AssemblyUtils.AssemblyVersion;
+            _currentVersion = AssemblyUtils.GetAssemblyVersion(GetType());
         }
 
         public bool IsUpdateAvailable
@@ -218,13 +219,14 @@ namespace BDAutoMuxerCore.Services
                     Message =
                         string.Format(
                             "An updated version of {0} is available!\n\nYour version: {1}\nNew version: {2} ({3:d})\n\nWould you like to visit the download page?",
-                            AssemblyUtils.AssemblyName, CurrentVersion, AvailableVersion, _latestDate);
+                            AssemblyUtils.GetAssemblyName(GetType()), CurrentVersion, AvailableVersion, _latestDate);
                     return true;
                 }
             }
 
-            Message = string.Format("You are using the latest version of {0} ({1}).", AssemblyUtils.AssemblyName,
-                                    AssemblyUtils.AssemblyVersionDisplay);
+            Message = string.Format("You are using the latest version of {0} ({1}).",
+                                    AssemblyUtils.GetAssemblyName(GetType()),
+                                    AssemblyUtils.GetAssemblyVersionShort(GetType()));
 
             return false;
         }

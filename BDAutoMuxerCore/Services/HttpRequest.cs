@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Cache;
+using DotNetUtils;
 
 namespace BDAutoMuxerCore.Services
 {
@@ -13,7 +14,7 @@ namespace BDAutoMuxerCore.Services
 
         static HttpRequest()
         {
-            UserAgent = AssemblyUtils.AssemblyName + "/" + AssemblyUtils.AssemblyVersion;
+            UserAgent = AssemblyUtils.GetAssemblyName(typeof(HttpRequest)) + "/" + AssemblyUtils.GetAssemblyVersion(typeof(HttpRequest));
         }
 
         public static string Get(string uri)
