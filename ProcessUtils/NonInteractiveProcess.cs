@@ -1,18 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using DotNetUtils;
+using ProcessUtils.Annotations;
 
 namespace ProcessUtils
 {
     /// <summary>
     /// Represents a console (CLI) process that runs in the background without any user interaction.
     /// </summary>
-    public class NonInteractiveProcess
+    public class NonInteractiveProcess : INotifyPropertyChanged
     {
-        private readonly string _exePath;
-        private readonly ArgumentList _arguments;
+        /// <summary>
+        /// Gets or sets the path to the executable.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if ExePath is modified after the process has started.</exception>
+        public string ExePath
+        {
+            get { return _exePath; }
+            set
+            {
+                if (State != NonInteractiveProcessState.Ready)
+                    throw new InvalidOperationException("Cannot modify ExePath after process has started.");
+                _exePath = value;
+            }
+        }
+        private string _exePath;
+
+        /// <summary>
+        /// Gets or sets the list of arguments passed to the executable.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if Arguments is modified after the process has started.</exception>
+        public ArgumentList Arguments
+        {
+            get { return _arguments; }
+            set
+            {
+                if (State != NonInteractiveProcessState.Ready)
+                    throw new InvalidOperationException("Cannot modify Arguments after process has started.");
+                _arguments = value;
+            }
+        }
+        private ArgumentList _arguments = new ArgumentList();
+
+        private Process _process;
 
         /// <summary>
         /// Gets the system process ID.
@@ -27,7 +61,18 @@ namespace ProcessUtils
         /// <summary>
         /// Gets the internal state of the process.
         /// </summary>
-        public NonInteractiveProcessState State { get { return _state; } }
+        public NonInteractiveProcessState State
+        {
+            get { return _state; }
+            private set
+            {
+                if (value != _state)
+                {
+                    _state = value;
+                    PropertyChanged.Notify(() => State);
+                }
+            }
+        }
         private NonInteractiveProcessState _state = NonInteractiveProcessState.Ready;
 
         /// <summary>
@@ -53,20 +98,14 @@ namespace ProcessUtils
         public event BackgroundProcessStdErrHandler StdErr;
 
         /// <summary>
-        /// Invoked when a NonInteractiveProcess is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
+        /// Invoked when the process is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
         /// </summary>
         public event BackgroundProcessExitedHandler Exited;
 
         /// <summary>
-        /// Constructs a new NonInteractiveProcess that will run the specified executable and pass it the 
+        /// Invoked whenever the state of the process changes.
         /// </summary>
-        /// <param name="exePath"></param>
-        /// <param name="arguments"></param>
-        public NonInteractiveProcess(string exePath, IEnumerable<string> arguments = null)
-        {
-            _exePath = exePath;
-            _arguments = new ArgumentList(arguments ?? new string[]{});
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #region Start / Kill
 
@@ -76,44 +115,53 @@ namespace ProcessUtils
         /// </summary>
         public void Start()
         {
-            if (_state != NonInteractiveProcessState.Ready)
+            if (State != NonInteractiveProcessState.Ready)
                 throw new InvalidOperationException("NonInteractiveProcess.Start() cannot be called more than once.");
 
             using (var jobObject = new JobObject())
             {
-                using (var process = CreateProcess())
+                using (_process = CreateProcess())
                 {
-                    process.StartInfo.FileName = _exePath;
-                    process.StartInfo.Arguments = _arguments.ToString();
-                    process.EnableRaisingEvents = true;
-                    process.Exited += ProcessOnExited;
+                    _process.StartInfo.FileName = ExePath;
+                    _process.StartInfo.Arguments = Arguments.ToString();
+                    _process.EnableRaisingEvents = true;
+                    _process.Exited += ProcessOnExited;
 
-                    process.Start();
+                    _process.Start();
 
-                    Id = process.Id;
-                    Name = process.ProcessName;
-                    _state = NonInteractiveProcessState.Running;
+                    Id = _process.Id;
+                    Name = _process.ProcessName;
+                    State = NonInteractiveProcessState.Running;
 
                     jobObject.AddProcess(Id);
 
                     _stopwatch.Start();
 
-                    while (!process.StandardOutput.EndOfStream)
+                    while (!_process.StandardOutput.EndOfStream && ShouldKeepRunning)
                     {
-                        HandleStdOut(process.StandardOutput.ReadLine());
+                        HandleStdOut(_process.StandardOutput.ReadLine());
                     }
 
-                    while (!process.StandardError.EndOfStream)
+                    while (!_process.StandardError.EndOfStream && ShouldKeepRunning)
                     {
-                        HandleStdOut(process.StandardError.ReadLine());
+                        HandleStdErr(_process.StandardError.ReadLine());
                     }
 
-                    process.WaitForExit();
+                    _process.WaitForExit();
 
-                    ExitCode = process.ExitCode;
+                    ExitCode = _process.ExitCode;
 
                     ProcessOnExited();
                 }
+            }
+        }
+
+        private bool ShouldKeepRunning
+        {
+            get
+            {
+                return State == NonInteractiveProcessState.Running ||
+                       State == NonInteractiveProcessState.Paused;
             }
         }
 
@@ -122,20 +170,24 @@ namespace ProcessUtils
         /// </summary>
         public void Kill()
         {
-            if (_state != NonInteractiveProcessState.Running &&
-                _state != NonInteractiveProcessState.Paused)
-                return;
-
+            if (!CanKill) return;
             try
             {
-                using (var process = GetProcess())
-                {
-                    if (process == null) return;
-                    _state = NonInteractiveProcessState.Killed;
-                    process.Kill();
-                }
+                State = NonInteractiveProcessState.Killed;
+                _process.Kill();
             }
             catch {}
+        }
+
+        private bool CanKill
+        {
+            get
+            {
+                var validState = (State == NonInteractiveProcessState.Running ||
+                                  State == NonInteractiveProcessState.Paused);
+                var validProcess = _process != null && !_process.HasExited;
+                return validState && validProcess;
+            }
         }
 
         #endregion
@@ -146,12 +198,18 @@ namespace ProcessUtils
         {
             if (StdOut != null)
                 StdOut(line);
+            AfterOutputLineHandled();
         }
 
         private void HandleStdErr(string line)
         {
             if (StdErr != null)
                 StdErr(line);
+            AfterOutputLineHandled();
+        }
+
+        protected virtual void AfterOutputLineHandled()
+        {
         }
 
         #endregion
@@ -165,11 +223,11 @@ namespace ProcessUtils
         {
             _stopwatch.Stop();
 
-            if (_state != NonInteractiveProcessState.Killed)
-                _state = ExitCode == 0 ? NonInteractiveProcessState.Completed : NonInteractiveProcessState.Error;
+            if (State != NonInteractiveProcessState.Killed)
+                State = ExitCode == 0 ? NonInteractiveProcessState.Completed : NonInteractiveProcessState.Error;
 
             if (Exited != null)
-                Exited(_state, ExitCode, RunTime);
+                Exited(State, ExitCode, RunTime);
         }
 
         /// <summary>
@@ -188,39 +246,26 @@ namespace ProcessUtils
         public void Pause()
         {
             if (!CanPause) return;
-            using (var process = GetProcess())
-            {
-                if (process == null) return;
 
-                process.Suspend();
-
-                _stopwatch.Stop();
-                _state = NonInteractiveProcessState.Paused;
-            }
+            _process.Suspend();
+            _stopwatch.Stop();
+            State = NonInteractiveProcessState.Paused;
         }
 
         public void Resume()
         {
             if (!CanResume) return;
-            using (var process = GetProcess())
-            {
-                if (process == null) return;
                 
-                process.Resume();
-
-                _stopwatch.Start();
-                _state = NonInteractiveProcessState.Running;
-            }
+            _process.Resume();
+            _stopwatch.Start();
+            State = NonInteractiveProcessState.Running;
         }
 
         private bool CanPause
         {
             get
             {
-                using (var process = GetProcess())
-                {
-                    return _state == NonInteractiveProcessState.Running && process != null;
-                }
+                return State == NonInteractiveProcessState.Running && _process != null && !_process.HasExited;
             }
         }
 
@@ -228,10 +273,7 @@ namespace ProcessUtils
         {
             get
             {
-                using (var process = GetProcess())
-                {
-                    return _state == NonInteractiveProcessState.Paused && process != null;
-                }
+                return State == NonInteractiveProcessState.Paused && _process != null && !_process.HasExited;
             }
         }
 
@@ -318,4 +360,9 @@ namespace ProcessUtils
     /// Event handler that is invoked when a NonInteractiveProcess is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
     /// </summary>
     public delegate void BackgroundProcessExitedHandler(NonInteractiveProcessState state, int exitCode, TimeSpan runTime);
+
+    /// <summary>
+    /// Event handler that is invoked whenever the state of a NonInteractiveProcess changes.
+    /// </summary>
+    public delegate void BackgroundProcessStateChangedHandler(NonInteractiveProcessState state);
 }

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AbstractExternalTool.cs" />
     <Compile Include="ArgumentList.cs" />
+    <Compile Include="BackgroundProcessWorker.cs" />
     <Compile Include="NonInteractiveProcess.cs" />
     <Compile Include="JobObject.cs" />
     <Compile Include="ProcessExtensions.cs" />
