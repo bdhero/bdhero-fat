@@ -44,7 +44,7 @@ namespace ProcessUtils
         /// <param name="args"></param>
         public void AddAll(IEnumerable<string> args)
         {
-            AddRange(args);
+            AddRange(args ?? new string[] { });
         }
 
         /// <summary>
