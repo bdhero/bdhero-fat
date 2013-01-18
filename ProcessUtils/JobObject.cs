@@ -54,6 +54,11 @@ namespace ProcessUtils
                 throw new Exception(string.Format("Unable to set information.  Error: {0}", Marshal.GetLastWin32Error()));
         }
 
+        public ~JobObject()
+        {
+            Dispose(false);
+        }
+
         /// <see cref="http://stackoverflow.com/a/538238/467582"/>
         public void Dispose()
         {
