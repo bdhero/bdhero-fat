@@ -27,8 +27,8 @@ namespace ProcessUtils
         /// <summary>
         /// Gets the internal state of the process.
         /// </summary>
-        public BackgroundProcessState State { get { return _state; } }
-        private BackgroundProcessState _state = BackgroundProcessState.Ready;
+        public NonInteractiveProcessState State { get { return _state; } }
+        private NonInteractiveProcessState _state = NonInteractiveProcessState.Ready;
 
         /// <summary>
         /// Gets the total elapsed run time of the process.
@@ -76,7 +76,7 @@ namespace ProcessUtils
         /// </summary>
         public void Start()
         {
-            if (_state != BackgroundProcessState.Ready)
+            if (_state != NonInteractiveProcessState.Ready)
                 throw new InvalidOperationException("NonInteractiveProcess.Start() cannot be called more than once.");
 
             using (var jobObject = new JobObject())
@@ -92,7 +92,7 @@ namespace ProcessUtils
 
                     Id = process.Id;
                     Name = process.ProcessName;
-                    _state = BackgroundProcessState.Running;
+                    _state = NonInteractiveProcessState.Running;
 
                     jobObject.AddProcess(Id);
 
@@ -122,8 +122,8 @@ namespace ProcessUtils
         /// </summary>
         public void Kill()
         {
-            if (_state != BackgroundProcessState.Running &&
-                _state != BackgroundProcessState.Paused)
+            if (_state != NonInteractiveProcessState.Running &&
+                _state != NonInteractiveProcessState.Paused)
                 return;
 
             try
@@ -131,7 +131,7 @@ namespace ProcessUtils
                 using (var process = GetProcess())
                 {
                     if (process == null) return;
-                    _state = BackgroundProcessState.Killed;
+                    _state = NonInteractiveProcessState.Killed;
                     process.Kill();
                 }
             }
@@ -165,8 +165,8 @@ namespace ProcessUtils
         {
             _stopwatch.Stop();
 
-            if (_state != BackgroundProcessState.Killed)
-                _state = ExitCode == 0 ? BackgroundProcessState.Completed : BackgroundProcessState.Error;
+            if (_state != NonInteractiveProcessState.Killed)
+                _state = ExitCode == 0 ? NonInteractiveProcessState.Completed : NonInteractiveProcessState.Error;
 
             if (Exited != null)
                 Exited(_state, ExitCode, RunTime);
@@ -195,7 +195,7 @@ namespace ProcessUtils
                 process.Suspend();
 
                 _stopwatch.Stop();
-                _state = BackgroundProcessState.Paused;
+                _state = NonInteractiveProcessState.Paused;
             }
         }
 
@@ -209,7 +209,7 @@ namespace ProcessUtils
                 process.Resume();
 
                 _stopwatch.Start();
-                _state = BackgroundProcessState.Running;
+                _state = NonInteractiveProcessState.Running;
             }
         }
 
@@ -219,7 +219,7 @@ namespace ProcessUtils
             {
                 using (var process = GetProcess())
                 {
-                    return _state == BackgroundProcessState.Running && process != null;
+                    return _state == NonInteractiveProcessState.Running && process != null;
                 }
             }
         }
@@ -230,7 +230,7 @@ namespace ProcessUtils
             {
                 using (var process = GetProcess())
                 {
-                    return _state == BackgroundProcessState.Paused && process != null;
+                    return _state == NonInteractiveProcessState.Paused && process != null;
                 }
             }
         }
@@ -271,7 +271,7 @@ namespace ProcessUtils
     /// Describes the state of a <see cref="NonInteractiveProcess"/>.
     /// States are mutually exclusive; a NonInteractiveProcess can only have one state at a time.
     /// </summary>
-    public enum BackgroundProcessState
+    public enum NonInteractiveProcessState
     {
         /// <summary>
         /// Process has not yet started.
@@ -317,5 +317,5 @@ namespace ProcessUtils
     /// <summary>
     /// Event handler that is invoked when a NonInteractiveProcess is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
     /// </summary>
-    public delegate void BackgroundProcessExitedHandler(BackgroundProcessState state, int exitCode, TimeSpan runTime);
+    public delegate void BackgroundProcessExitedHandler(NonInteractiveProcessState state, int exitCode, TimeSpan runTime);
 }
