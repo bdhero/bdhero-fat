@@ -90,6 +90,7 @@
     <Compile Include="BDROM\Playlist.cs" />
     <Compile Include="BDROM\StreamClip.cs" />
     <Compile Include="BDROM\Track.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BDService.cs" />
     <Compile Include="Services\HttpRequest.cs" />

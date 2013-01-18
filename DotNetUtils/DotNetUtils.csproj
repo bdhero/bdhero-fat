@@ -45,6 +45,7 @@
     <Compile Include="AssemblyUtils.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileUtils.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
