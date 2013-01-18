@@ -88,6 +88,11 @@ namespace ProcessUtils
         public int ExitCode { get; private set; }
 
         /// <summary>
+        /// Invoked immediately before the process starts running.
+        /// </summary>
+        public event EventHandler BeforeStart;
+
+        /// <summary>
         /// Event handler for processing individual lines of output from stdout.
         /// </summary>
         public event BackgroundProcessStdOutHandler StdOut;
@@ -126,6 +131,9 @@ namespace ProcessUtils
                     _process.StartInfo.Arguments = Arguments.ToString();
                     _process.EnableRaisingEvents = true;
                     _process.Exited += ProcessOnExited;
+
+                    if (BeforeStart != null)
+                        BeforeStart(this, EventArgs.Empty);
 
                     _process.Start();
 
