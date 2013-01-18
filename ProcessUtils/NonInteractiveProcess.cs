@@ -9,7 +9,7 @@ namespace ProcessUtils
     /// <summary>
     /// Represents a console (CLI) process that runs in the background without any user interaction.
     /// </summary>
-    public class BackgroundProcess
+    public class NonInteractiveProcess
     {
         private readonly string _exePath;
         private readonly ArgumentList _arguments;
@@ -53,16 +53,16 @@ namespace ProcessUtils
         public event BackgroundProcessStdErrHandler StdErr;
 
         /// <summary>
-        /// Invoked when a BackgroundProcess is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
+        /// Invoked when a NonInteractiveProcess is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
         /// </summary>
         public event BackgroundProcessExitedHandler Exited;
 
         /// <summary>
-        /// Constructs a new BackgroundProcess that will run the specified executable and pass it the 
+        /// Constructs a new NonInteractiveProcess that will run the specified executable and pass it the 
         /// </summary>
         /// <param name="exePath"></param>
         /// <param name="arguments"></param>
-        public BackgroundProcess(string exePath, IEnumerable<string> arguments = null)
+        public NonInteractiveProcess(string exePath, IEnumerable<string> arguments = null)
         {
             _exePath = exePath;
             _arguments = new ArgumentList(arguments ?? new string[]{});
@@ -71,13 +71,13 @@ namespace ProcessUtils
         #region Start / Kill
 
         /// <summary>
-        /// Starts the BackgroundProcess synchronously and blocks (i.e., does not return) until the process exits,
+        /// Starts the NonInteractiveProcess synchronously and blocks (i.e., does not return) until the process exits,
         /// either by completing successfully or terminating unsuccessfully.
         /// </summary>
         public void Start()
         {
             if (_state != BackgroundProcessState.Ready)
-                throw new InvalidOperationException("BackgroundProcess.Start() cannot be called more than once.");
+                throw new InvalidOperationException("NonInteractiveProcess.Start() cannot be called more than once.");
 
             using (var jobObject = new JobObject())
             {
@@ -268,8 +268,8 @@ namespace ProcessUtils
     }
 
     /// <summary>
-    /// Describes the state of a <see cref="BackgroundProcess"/>.
-    /// States are mutually exclusive; a BackgroundProcess can only have one state at a time.
+    /// Describes the state of a <see cref="NonInteractiveProcess"/>.
+    /// States are mutually exclusive; a NonInteractiveProcess can only have one state at a time.
     /// </summary>
     public enum BackgroundProcessState
     {
@@ -289,7 +289,7 @@ namespace ProcessUtils
         Paused,
 
         /// <summary>
-        /// Process was killed manually by calling <see cref="BackgroundProcess.Kill()"/>.
+        /// Process was killed manually by calling <see cref="NonInteractiveProcess.Kill()"/>.
         /// </summary>
         Killed,
 
@@ -315,7 +315,7 @@ namespace ProcessUtils
     public delegate void BackgroundProcessStdErrHandler(string line);
 
     /// <summary>
-    /// Event handler that is invoked when a BackgroundProcess is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
+    /// Event handler that is invoked when a NonInteractiveProcess is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
     /// </summary>
     public delegate void BackgroundProcessExitedHandler(BackgroundProcessState state, int exitCode, TimeSpan runTime);
 }
