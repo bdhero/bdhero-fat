@@ -10,7 +10,7 @@ using ProcessUtils;
 
 namespace BDAutoMuxerCore.Tools
 {
-    public class FFmpeg : BackgroundProcess
+    public class FFmpeg : AbstractExternalTool
     {
         private const string FFmpegExeFilename = "ffmpeg.exe";
         private readonly string _ffmpegExePath;

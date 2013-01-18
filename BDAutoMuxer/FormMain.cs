@@ -1253,7 +1253,7 @@ namespace BDAutoMuxer
             CancelRip(_demuxer);
         }
 
-        private static void CancelRip(BackgroundProcess tool)
+        private static void CancelRip(AbstractExternalTool tool)
         {
             if (tool == null || !tool.IsBusy) return;
             tool.Resume();
@@ -1372,7 +1372,7 @@ namespace BDAutoMuxer
                 return;
 
             if (PromptToDeleteOutputFiles(existingJunkFiles.ToList()))
-                BackgroundProcess.DeleteOutputFiles(existingJunkFiles);
+                AbstractExternalTool.DeleteOutputFiles(existingJunkFiles);
         }
 
         public bool PromptToDeleteOutputFiles(ICollection<string> outputFiles)
@@ -1981,7 +1981,7 @@ namespace BDAutoMuxer
             get { return (_muxer != null && _muxer.IsPaused) || (_demuxer != null && _demuxer.IsPaused); }
         }
 
-        private static void PauseResume(BackgroundProcess tool, Control progressLabel)
+        private static void PauseResume(AbstractExternalTool tool, Control progressLabel)
         {
             if (tool == null) return;
 

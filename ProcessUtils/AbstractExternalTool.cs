@@ -19,7 +19,7 @@ namespace ProcessUtils
     [System.ComponentModel.DesignerCategory("Code")]
 // ReSharper restore RedundantNameQualifier
 // ReSharper restore LocalizableElement
-    public abstract class BackgroundProcess : BackgroundWorker
+    public abstract class AbstractExternalTool : BackgroundWorker
     {
         #region Fields (private)
 
@@ -222,7 +222,7 @@ namespace ProcessUtils
 
         #region Constructor / Destructor
 
-        ~BackgroundProcess()
+        ~AbstractExternalTool()
         {
             DeleteTempFiles();
         }

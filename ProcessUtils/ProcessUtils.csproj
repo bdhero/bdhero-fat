@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundProcess.cs" />
+    <Compile Include="AbstractExternalTool.cs" />
     <Compile Include="ArgumentList.cs" />
     <Compile Include="JobObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

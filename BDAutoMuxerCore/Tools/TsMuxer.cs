@@ -17,7 +17,7 @@ namespace BDAutoMuxerCore.Tools
     [System.ComponentModel.DesignerCategory("Code")]
 // ReSharper restore RedundantNameQualifier
 // ReSharper restore LocalizableElement
-    public class TsMuxer : BackgroundProcess
+    public class TsMuxer : AbstractExternalTool
     {
         private string _outputFileNameWithoutExtension;
         private string _outputFilePath;

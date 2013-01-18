@@ -12,7 +12,7 @@ namespace BDAutoMuxerCore.Tools
     [System.ComponentModel.DesignerCategory("Code")]
 // ReSharper restore RedundantNameQualifier
 // ReSharper restore LocalizableElement
-    public class MkvMerge : BackgroundProcess
+    public class MkvMerge : AbstractExternalTool
     {
         private readonly string _inputM2TsPath;
         private readonly string _inputMkvPath;
