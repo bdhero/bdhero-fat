@@ -23,7 +23,7 @@ namespace BDAutoMuxerCore.BDROM
         #region DB Matching fields (index, PID, hidden, codec)
 
         /// <summary>
-        /// Index of the track (i.e., its position or order) in the playlist.
+        /// Zero-based index of the track (i.e., its position or order) in the playlist.
         /// </summary>
         public int Index;
 
