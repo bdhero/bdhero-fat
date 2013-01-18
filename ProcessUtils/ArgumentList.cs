@@ -12,7 +12,7 @@ namespace ProcessUtils
         private const string DoubleQuote = "\"";
         private const string DoubleQuoteEscaped = "\\\"";
 
-        private static readonly Regex reservedShellCharsRegex = new Regex("[ &|()<>^\"]");
+        private static readonly Regex ReservedShellCharsRegex = new Regex("[ &|()<>^\"]");
 
         /// <summary>
         /// Gets or sets whether null arguments should be skipped by ToString().
@@ -80,7 +80,7 @@ namespace ProcessUtils
 
         public static string ForCommandLine(string rawArg)
         {
-            return reservedShellCharsRegex.IsMatch(rawArg) ? string.Format("{0}{1}{0}", DoubleQuote, Escape(rawArg)) : rawArg;
+            return ReservedShellCharsRegex.IsMatch(rawArg) ? string.Format("{0}{1}{0}", DoubleQuote, Escape(rawArg)) : rawArg;
         }
 
         public override string ToString()
