@@ -7,6 +7,7 @@ using System.Diagnostics;
 // TODO: See http://jobobjectwrapper.codeplex.com/ for a (potentially) better solution
 namespace ProcessUtils
 {
+    /// <see cref="http://stackoverflow.com/a/538238/467582"/>
     /// <see cref="http://stackoverflow.com/a/9164742/467582"/>
     /// <see cref="http://stackoverflow.com/a/4657392/467582"/>
     public class JobObject : IDisposable
@@ -53,6 +54,7 @@ namespace ProcessUtils
                 throw new Exception(string.Format("Unable to set information.  Error: {0}", Marshal.GetLastWin32Error()));
         }
 
+        /// <see cref="http://stackoverflow.com/a/538238/467582"/>
         public void Dispose()
         {
             Dispose(true);
