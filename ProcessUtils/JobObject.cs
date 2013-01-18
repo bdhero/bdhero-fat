@@ -12,23 +12,6 @@ namespace ProcessUtils
     /// <see cref="http://stackoverflow.com/a/4657392/467582"/>
     public class JobObject : IDisposable
     {
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-        static extern IntPtr CreateJobObject(IntPtr a, string lpName);
-
-        [DllImport("kernel32.dll")]
-        static extern bool SetInformationJobObject(IntPtr hJob, JobObjectInfoType infoType, IntPtr lpJobObjectInfo, UInt32 cbJobObjectInfoLength);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool AssignProcessToJobObject(IntPtr job, IntPtr process);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool CloseHandle(
-            IntPtr hObject   // handle to object
-        );
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
         private IntPtr _handle;
         private bool _disposed;
 
@@ -53,6 +36,8 @@ namespace ProcessUtils
             if (!SetInformationJobObject(_handle, JobObjectInfoType.ExtendedLimitInformation, extendedInfoPtr, (uint)length))
                 throw new Exception(string.Format("Unable to set information.  Error: {0}", Marshal.GetLastWin32Error()));
         }
+
+        #region IDisposable implementation
 
         public ~JobObject()
         {
@@ -81,6 +66,8 @@ namespace ProcessUtils
             _disposed = true;
         }
 
+        #endregion
+
         public bool AddProcess(IntPtr processHandle)
         {
             return AssignProcessToJobObject(_handle, processHandle);
@@ -91,6 +78,26 @@ namespace ProcessUtils
             return AddProcess(Process.GetProcessById(processId).Handle);
         }
 
+        #region Win32 DLL imports
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+        static extern IntPtr CreateJobObject(IntPtr a, string lpName);
+
+        [DllImport("kernel32.dll")]
+        static extern bool SetInformationJobObject(IntPtr hJob, JobObjectInfoType infoType, IntPtr lpJobObjectInfo, UInt32 cbJobObjectInfoLength);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool AssignProcessToJobObject(IntPtr job, IntPtr process);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool CloseHandle(
+            IntPtr hObject   // handle to object
+        );
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+        #endregion
     }
 
     #region Structs and Enums
