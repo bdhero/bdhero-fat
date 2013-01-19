@@ -118,7 +118,7 @@ namespace ProcessUtils
         /// Starts the NonInteractiveProcess synchronously and blocks (i.e., does not return) until the process exits,
         /// either by completing successfully or terminating unsuccessfully.
         /// </summary>
-        public void Start()
+        public NonInteractiveProcess Start()
         {
             if (State != NonInteractiveProcessState.Ready)
                 throw new InvalidOperationException("NonInteractiveProcess.Start() cannot be called more than once.");
@@ -162,6 +162,8 @@ namespace ProcessUtils
                     ProcessOnExited();
                 }
             }
+
+            return this;
         }
 
         private bool ShouldKeepRunning

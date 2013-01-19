@@ -237,7 +237,7 @@ namespace BDAutoMuxerCore.BDInfo
             }
         }
 
-        public void Scan()
+        public BDROM Scan()
         {
             List<TSStreamClipFile> errorStreamClipFiles = new List<TSStreamClipFile>();
             foreach (TSStreamClipFile streamClipFile in StreamClipFiles.Values)
@@ -354,6 +354,8 @@ namespace BDAutoMuxerCore.BDInfo
                     }
                 }
             }
+
+            return this;
         }
 
         private DirectoryInfo GetDirectoryBDMV(

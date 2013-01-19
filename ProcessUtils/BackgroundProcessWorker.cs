@@ -46,9 +46,10 @@ namespace ProcessUtils
             _worker.DoWork += (sender, args) => Start();
         }
 
-        public void StartAsync()
+        public BackgroundProcessWorker StartAsync()
         {
             _worker.RunWorkerAsync();
+            return this;
         }
 
         /// <summary>
