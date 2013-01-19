@@ -77,6 +77,16 @@ namespace BDAutoMuxerCore.Tools
             ExtractResources();
 
             BeforeStart += OnBeforeStart;
+            ProgressUpdated += OnProgressUpdated;
+        }
+
+        private void OnProgressUpdated(ProgressState progressState)
+        {
+            Console.WriteLine("{0}: {1} - {2} elapsed, {3} remaining",
+                progressState.ProcessState,
+                progressState.PercentComplete,
+                progressState.TimeElapsed,
+                progressState.TimeRemaining);
         }
 
         private void OnBeforeStart(object sender, EventArgs eventArgs)
@@ -91,16 +101,29 @@ namespace BDAutoMuxerCore.Tools
             {
                 using (var reader = new StreamReader(stream))
                 {
-                    while (!reader.EndOfStream)
+                    while (KeepParsingProgress)
                     {
                         ParseProgressLine(reader.ReadLine());
                     }
                 }
+                Console.WriteLine("{0}% (FINISHED!)", _progress.ToString("0.00"));
+            }
+        }
+
+        private bool KeepParsingProgress
+        {
+            get
+            {
+                return (_progress < 100) &&
+                       (State == NonInteractiveProcessState.Ready ||
+                        State == NonInteractiveProcessState.Running ||
+                        State == NonInteractiveProcessState.Paused);
             }
         }
 
         private void ParseProgressLine(string line)
         {
+            if (line == null) return;
             if (FrameRegex.IsMatch(line))
                 _curFrame = long.Parse(FrameRegex.Match(line).Groups[1].Value);
             else if (FpsRegex.IsMatch(line))
@@ -118,8 +141,8 @@ namespace BDAutoMuxerCore.Tools
             if ("progress=end" == line)
                 _progress = 100;
 
-            if (prevProgress != _progress)
-                Console.WriteLine("{0}%", _progress.ToString("0.00"));
+//            if (prevProgress != _progress)
+//                Console.WriteLine("{0}%", _progress.ToString("0.00"));
         }
 
         private FileStream CreateProgressFileStream()
@@ -144,9 +167,9 @@ namespace BDAutoMuxerCore.Tools
             var bdrom = new BDInfo.BDROM(@"Y:\BD\49123204_BLACK_HAWK_DOWN");
             bdrom.Scan();
             var disc = Disc.Transform(bdrom);
-            var playlist = disc.Playlists.FirstOrDefault(playlist1 => playlist1.Filename.StartsWith("00039"));
-            var selectedTracks = playlist.Tracks;
-            var outputMKVPath = @"Y:\BDAM\out\progress\BLACK_HAWK_DOWN_00039.mpls.mkv";
+            var playlist = disc.Playlists.FirstOrDefault(mpls => mpls.Filename.StartsWith("00000"));
+            var selectedTracks = playlist.Tracks.Where(track => track.Language == Language.FromCode("eng") && track.Codec.IsKnown);
+            var outputMKVPath = @"Y:\BDAM\out\progress\BLACK_HAWK_DOWN_00000.mpls.mkv";
             var ffmpeg = new FFmpeg(playlist, selectedTracks, outputMKVPath);
             ffmpeg.StartAsync();
         }
