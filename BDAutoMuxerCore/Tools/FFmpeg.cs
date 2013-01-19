@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using BDAutoMuxerCore.BDROM;
 using DotNetUtils;
 using MediaInfoWrapper;
@@ -123,7 +124,11 @@ namespace BDAutoMuxerCore.Tools
 
         private void ParseProgressLine(string line)
         {
-            if (line == null) return;
+            if (line == null)
+            {
+                Thread.Sleep(500);
+                return;
+            }
             if (FrameRegex.IsMatch(line))
                 _curFrame = long.Parse(FrameRegex.Match(line).Groups[1].Value);
             else if (FpsRegex.IsMatch(line))
