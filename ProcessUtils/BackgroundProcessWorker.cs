@@ -128,7 +128,7 @@ namespace ProcessUtils
                                        ProcessState = State,
                                        PercentComplete = progress,
                                        TimeElapsed = RunTime,
-                                       TimeRemaining = newEstimate
+                                       TimeRemaining = finalEstimate
                                    };
         }
     }
