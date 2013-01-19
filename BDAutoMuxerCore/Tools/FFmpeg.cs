@@ -82,9 +82,9 @@ namespace BDAutoMuxerCore.Tools
 
         private void OnProgressUpdated(ProgressState progressState)
         {
-            Console.WriteLine("{0}: {1} - {2} elapsed, {3} remaining",
+            Console.WriteLine("{0}: {1}% - {2} elapsed, {3} remaining",
                 progressState.ProcessState,
-                progressState.PercentComplete,
+                progressState.PercentComplete.ToString("0.000"),
                 progressState.TimeElapsed,
                 progressState.TimeRemaining);
         }
@@ -140,9 +140,6 @@ namespace BDAutoMuxerCore.Tools
 
             if ("progress=end" == line)
                 _progress = 100;
-
-//            if (prevProgress != _progress)
-//                Console.WriteLine("{0}%", _progress.ToString("0.00"));
         }
 
         private FileStream CreateProgressFileStream()
