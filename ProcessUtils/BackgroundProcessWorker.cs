@@ -99,7 +99,7 @@ namespace ProcessUtils
                 newEstimate = new TimeSpan((long)(RunTime.Ticks / pct) - RunTime.Ticks);
 
             // Make sure the user gets fresh calculations when the process is first started and when it's nearly finished.
-            var isCriticalPeriod = progress < .5 || progress > 95;
+            var isCriticalPeriod = progress < .5 || progress > 95 || newEstimate < TimeSpan.FromMinutes(1.25);
 
             // If the new estimate differs from the previous estimate by more than 2 minutes, use the new estimate.
             var isLargeChange = Math.Abs(newEstimate.TotalMinutes - oldEstimate.TotalMinutes) > 2;
