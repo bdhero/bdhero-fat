@@ -89,7 +89,7 @@ namespace BDAutoMuxerCore.Tools
         [NotNull]
         private static string SaveChapters(IEnumerable<Chapter> chapters)
         {
-            var path = AssemblyUtils.GetTempFilePath(typeof(MkvPropEdit), string.Format("chapters-{0}.xml", new Random().Next()));
+            var path = AssemblyUtils.GetTempFilePath(typeof(MkvPropEdit), "chapters.xml");
             ChapterWriterV2.SaveAsXml(chapters, path);
             return path;
         }
