@@ -22,10 +22,10 @@ namespace BDAutoMuxerCore.BDROM
         {
         }
 
-        public Chapter(int number, double value, Language language = null)
+        public Chapter(int number, double seconds, Language language = null)
         {
             Number = number;
-            StartTime = new TimeSpan((long)(value * TimeSpan.TicksPerSecond));
+            StartTime = new TimeSpan((long)(seconds * TimeSpan.TicksPerSecond));
             Language = language;
         }
 
@@ -54,9 +54,9 @@ namespace BDAutoMuxerCore.BDROM
 
         #region Transformer
 
-        public static IList<Chapter> Transform(IEnumerable<double> doubles)
+        public static IList<Chapter> Transform(IEnumerable<double> chaptersInSeconds)
         {
-            return doubles.Select((t, i) => new Chapter(i + 1, t)).ToList();
+            return chaptersInSeconds.Select((t, i) => new Chapter(i + 1, t)).ToList();
         }
 
         #endregion
