@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using BDAutoMuxerCore.BDInfo;
 using BDAutoMuxerCore.BDROM;
 using DotNetUtils;
 using MediaInfoWrapper;
@@ -165,15 +166,39 @@ namespace BDAutoMuxerCore.Tools
 
         public static void Test()
         {
+            // Step 1: Scan BD-ROM
             var bdrom = new BDInfo.BDROM(@"Y:\BD\49123204_BLACK_HAWK_DOWN");
+            bdrom.ScanProgress += BDROMOnScanProgress;
             bdrom.Scan();
             var disc = Disc.Transform(bdrom);
+
+            // Step 2: Search TMDb
+            // ...
+
+            // Step 3: User selection
             var playlist = disc.Playlists.FirstOrDefault(mpls => mpls.Filename.StartsWith("00000"));
             var selectedTracks = playlist.Tracks.Where(track => track.Language == Language.FromCode("eng") && track.Codec.IsKnown);
             var outputMKVPath = @"Y:\BDAM\out\progress\BLACK_HAWK_DOWN_00000.mpls.mkv";
+
+            // Step 4: Mux selected tracks to MKV
             var ffmpeg = new FFmpeg(playlist, selectedTracks, outputMKVPath);
-//            ffmpeg.Exited += (state, code, time) => MkvPropEdit.Test(outputMKVPath);
+            ffmpeg.Exited += (state, code, time) => FfmpegOnExited(state, code, time, outputMKVPath);
             ffmpeg.StartAsync();
+        }
+
+        private static void FfmpegOnExited(NonInteractiveProcessState state, int exitCode, TimeSpan runTime, string outputMKVPath)
+        {
+            Console.WriteLine("Finished muxing with FFmpeg!");
+            Console.WriteLine("Adding metadata with mkvpropedit...");
+            MkvPropEdit.Test(outputMKVPath);
+            Console.WriteLine("********** DONE! **********");
+        }
+
+        private static void BDROMOnScanProgress(BDROMScanProgressState state)
+        {
+            Console.WriteLine("BDROM: {0}: scanning {1} of {2} ({3}%).  Total: {4} of {5} ({6}%).",
+                state.FileType, state.CurFileOfType, state.NumFilesOfType, state.TypeProgress.ToString("0.00"),
+                state.CurFileOverall, state.NumFilesOverall, state.OverallProgress.ToString("0.00"));
         }
     }
 }
