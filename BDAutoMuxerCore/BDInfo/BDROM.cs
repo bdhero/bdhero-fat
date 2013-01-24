@@ -237,13 +237,41 @@ namespace BDAutoMuxerCore.BDInfo
             }
         }
 
+        private void ReportScanProgress(string fileType, int curStep, int curFileOfType, int numFilesOfType, int curFileOverall, int numFilesOverall)
+        {
+            if (ScanProgress != null)
+                ScanProgress(new BDROMScanProgressState
+                                        {
+                                            FileType = fileType,
+                                            CurStep = curStep,
+                                            NumSteps = 3,
+                                            CurFileOfType = curFileOfType,
+                                            NumFilesOfType = numFilesOfType,
+                                            CurFileOverall = curFileOverall,
+                                            NumFilesOverall = numFilesOverall
+                                        });
+        }
+
+        public event BDROMScanProgressHandler ScanProgress;
+
         public BDROM Scan()
         {
+            var numStreamClipFiles = StreamClipFiles.Count;
+            var numPlaylists = PlaylistFiles.Count;
+            var numStreamFiles = StreamFiles.Count;
+            var numFilesOverall = numStreamClipFiles + numPlaylists + numStreamFiles;
+
+            var curStreamClipFile = 0;
+            var curPlaylist = 0;
+            var curStreamFile = 0;
+            var curFileOverall = 0;
+
             List<TSStreamClipFile> errorStreamClipFiles = new List<TSStreamClipFile>();
             foreach (TSStreamClipFile streamClipFile in StreamClipFiles.Values)
             {
                 try
                 {
+                    ReportScanProgress("stream clip", 1, curStreamClipFile++, numStreamClipFiles, curFileOverall++, numFilesOverall);
                     streamClipFile.Scan();
                 }
                 catch (Exception ex)
@@ -282,6 +310,7 @@ namespace BDAutoMuxerCore.BDInfo
             {
                 try
                 {
+                    ReportScanProgress("playlist", 2, curPlaylist++, numPlaylists, curFileOverall++, numFilesOverall);
                     playlistFile.Scan(StreamFiles, StreamClipFiles);
                 }
                 catch (Exception ex)
@@ -319,6 +348,7 @@ namespace BDAutoMuxerCore.BDInfo
                             }
                         }
                     }
+                    ReportScanProgress("stream", 3, curStreamFile++, numStreamFiles, curFileOverall++, numFilesOverall);
                     streamFile.Scan(playlists, false);
                 }
                 catch (Exception ex)
@@ -590,4 +620,39 @@ namespace BDAutoMuxerCore.BDInfo
             StringBuilder FileSystemNameBuffer,
             uint FileSystemNameSize);
     }
+
+    public class BDROMScanProgressState
+    {
+        /// <summary>
+        /// "stream clip", "playlist", or "stream"
+        /// </summary>
+        public string FileType;
+
+        public int CurStep;
+        public int NumSteps;
+
+        public int CurFileOfType;
+        public int NumFilesOfType;
+
+        /// <summary>
+        /// 0.0 to 100.0
+        /// </summary>
+        public double TypeProgress
+        {
+            get { return 100 * ((double) CurFileOfType)/NumFilesOfType; }
+        }
+
+        public int CurFileOverall;
+        public int NumFilesOverall;
+
+        /// <summary>
+        /// 0.0 to 100.0
+        /// </summary>
+        public double OverallProgress
+        {
+            get { return 100 * ((double)CurFileOverall) / NumFilesOverall; }
+        }
+    }
+
+    public delegate void BDROMScanProgressHandler(BDROMScanProgressState state);
 }
