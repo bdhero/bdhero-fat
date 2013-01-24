@@ -6,9 +6,46 @@ using System.Linq;
 using System.Xml;
 using System.Text;
 using BDAutoMuxerCore.BDInfo;
+using MediaInfoWrapper;
 
-namespace BDAutoMuxer.controllers
+namespace BDAutoMuxerCore.BDROM
 {
+    public static class ChapterWriterV2
+    {
+        public static void SaveAsXml(IEnumerable<Chapter> chapters, string filename)
+        {
+            var writer = new XmlTextWriter(filename, Encoding.GetEncoding("ISO-8859-1"));
+            writer.Formatting = Formatting.Indented;
+            writer.WriteStartDocument();
+                writer.WriteDocType("Chapters", null, "matroskachapters.dtd", null);
+                writer.WriteStartElement("Chapters");
+                    writer.WriteStartElement("EditionEntry");
+                    foreach (var chapter in chapters)
+                    {
+                        writer.WriteStartElement("ChapterAtom");
+                            writer.WriteStartElement("ChapterTimeStart");
+                                writer.WriteString(chapter.StartTimeXmlFormat); // 00:00:00.000
+                            writer.WriteEndElement();
+                            writer.WriteStartElement("ChapterDisplay");
+                                writer.WriteStartElement("ChapterString");
+                                    writer.WriteString(chapter.Title); // Chapter 01
+                                writer.WriteEndElement();
+                                if (chapter.Language != null && chapter.Language != Language.Undetermined)
+                                {
+                                writer.WriteStartElement("ChapterLanguage");
+                                    writer.WriteString(chapter.Language.ISO_639_2); // eng
+                                writer.WriteEndElement();
+                                }
+                            writer.WriteEndElement();
+                        writer.WriteEndElement();
+                    }
+                    writer.WriteEndElement();
+                writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Close();
+        }
+    }
+
     public class ChapterWriter
     {
         private List<ChapterTimeSpan> _chapters;

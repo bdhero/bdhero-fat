@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using BDAutoMuxer.controllers;
 using BDAutoMuxerCore.BDInfo;
+using BDAutoMuxerCore.BDROM;
 using DotNetUtils;
 using ProcessUtils;
 
