@@ -29,6 +29,13 @@ namespace BDAutoMuxerCore.BDROM
             Language = language;
         }
 
+        public Chapter(int number, TimeSpan startTime, Language language = null)
+        {
+            Number = number;
+            StartTime = startTime;
+            Language = language;
+        }
+
         #endregion
 
         #region Non-DB Properties (StartTimeXmlFormat)
