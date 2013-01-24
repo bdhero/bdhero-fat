@@ -49,6 +49,7 @@ namespace BDAutoMuxerCore.Tools
             _progressFilePath = Path.GetTempFileName();
 
             ExePath = AssemblyUtils.GetTempFilePath(GetType(), FFmpegExeFilename);
+            ExtractResources();
 
             var inputFiles = _inputM2TSPaths.Count == 1 ? _inputM2TSPaths[0] : "concat:" + string.Join("|", _inputM2TSPaths);
 
@@ -74,8 +75,6 @@ namespace BDAutoMuxerCore.Tools
                 .SelectMany(track => new[] { "-c:a:" + track.IndexOfType, "pcm_s" + (track.BitDepth == 16 ? 16 : 24) + "le" }));
 
             Arguments.Add(_outputMKVPath);
-
-            ExtractResources();
 
             BeforeStart += OnBeforeStart;
             ProgressUpdated += OnProgressUpdated;
@@ -173,6 +172,7 @@ namespace BDAutoMuxerCore.Tools
             var selectedTracks = playlist.Tracks.Where(track => track.Language == Language.FromCode("eng") && track.Codec.IsKnown);
             var outputMKVPath = @"Y:\BDAM\out\progress\BLACK_HAWK_DOWN_00000.mpls.mkv";
             var ffmpeg = new FFmpeg(playlist, selectedTracks, outputMKVPath);
+//            ffmpeg.Exited += (state, code, time) => MkvPropEdit.Test(outputMKVPath);
             ffmpeg.StartAsync();
         }
     }
