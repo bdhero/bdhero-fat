@@ -7,12 +7,18 @@ namespace BDAutoMuxerCore.BDROM
 {
     public class Chapter
     {
+        private string _title;
+
         #region DB Fields
 
         public int Number { get; private set; }
         public TimeSpan StartTime { get; private set; }
         public Language Language;
-        public string Title;
+        public string Title
+        {
+            get { return _title ?? "Chapter " + Number; }
+            set { _title = value; }
+        }
 
         #endregion
 
