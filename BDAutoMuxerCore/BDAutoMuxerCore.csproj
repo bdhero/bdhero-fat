@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="Tools\FFmpeg.cs" />
     <Compile Include="Tools\MkvMerge.cs" />
+    <Compile Include="Tools\MkvPropEdit.cs" />
     <Compile Include="Tools\TsMuxer.cs" />
   </ItemGroup>
   <ItemGroup>
