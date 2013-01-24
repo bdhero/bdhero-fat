@@ -135,6 +135,9 @@ namespace ProcessUtils
                     if (BeforeStart != null)
                         BeforeStart(this, EventArgs.Empty);
 
+                    _process.OutputDataReceived += (sender, args) => HandleStdOut(args.Data);
+                    _process.ErrorDataReceived += (sender, args) => HandleStdErr(args.Data);
+
                     _process.Start();
 
                     Id = _process.Id;
@@ -145,15 +148,8 @@ namespace ProcessUtils
 
                     _stopwatch.Start();
 
-                    while (!_process.StandardOutput.EndOfStream && ShouldKeepRunning)
-                    {
-                        HandleStdOut(_process.StandardOutput.ReadLine());
-                    }
-
-                    while (!_process.StandardError.EndOfStream && ShouldKeepRunning)
-                    {
-                        HandleStdErr(_process.StandardError.ReadLine());
-                    }
+                    _process.BeginOutputReadLine();
+                    _process.BeginErrorReadLine();
 
                     _process.WaitForExit();
 
