@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using MediaInfoWrapper;
 
@@ -60,6 +61,11 @@ namespace BDAutoMuxerCore.BDROM
         #endregion
 
         #region Non-DB Properties
+
+        /// <summary>
+        /// Poster image from TMDb.
+        /// </summary>
+        public Image CoverArt;
 
         /// <summary>
         /// Returns a list of all languages found on the disc, with the primary disc language first if it can be automatically detected.
