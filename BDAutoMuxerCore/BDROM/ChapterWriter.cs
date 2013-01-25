@@ -12,9 +12,9 @@ namespace BDAutoMuxerCore.BDROM
 {
     public static class ChapterWriterV2
     {
-        public static void SaveAsXml(IEnumerable<Chapter> chapters, string filename)
+        public static void SaveAsXml(IEnumerable<Chapter> chapters, string path)
         {
-            var writer = new XmlTextWriter(filename, Encoding.GetEncoding("ISO-8859-1"));
+            var writer = new XmlTextWriter(path, Encoding.GetEncoding("ISO-8859-1"));
             writer.Formatting = Formatting.Indented;
             writer.WriteStartDocument();
                 writer.WriteDocType("Chapters", null, "matroskachapters.dtd", null);
