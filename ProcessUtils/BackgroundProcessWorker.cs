@@ -103,7 +103,8 @@ namespace ProcessUtils
             var isCriticalPeriod = progress < .5 || progress > 95 || oldEstimate < criticalThreshold || newEstimate < criticalThreshold;
 
             // If the new estimate differs from the previous estimate by more than 2 minutes, use the new estimate.
-            var isLargeChange = Math.Abs(newEstimate.TotalMinutes - oldEstimate.TotalMinutes) > 2;
+            var changeThreshold = pct < 0.2 ? TimeSpan.FromMinutes(2) : TimeSpan.FromSeconds(20);
+            var isLargeChange = Math.Abs(newEstimate.TotalSeconds - oldEstimate.TotalSeconds) > changeThreshold.TotalSeconds;
 
             // If the previous estimate was less than 1 second remaining, use the new estimate.
             var lowPreviousEstimate = oldEstimate.TotalMilliseconds < 1000;
