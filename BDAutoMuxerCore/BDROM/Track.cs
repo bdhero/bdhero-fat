@@ -102,6 +102,37 @@ namespace BDAutoMuxerCore.BDROM
         /// </summary>
         public int IndexOfType;
 
+        /// <summary>
+        /// Should this track be kept when muxing to MKV?
+        /// </summary>
+        public bool Keep;
+
+        private string DefaultTitle
+        {
+            get
+            {
+                var type = IsMainFeature    ? "Main Feature" :
+                           IsCommentary     ? "Commentary" :
+                           IsSpecialFeature ? "Special Feature" :
+                           IsDescriptive    ? "Descriptive" :
+                                              "Misc";
+                var title = string.Format("{0}: {1}", type, Codec.CommonName);
+                if (IsVideo)
+                    return string.Format("{0} ({1})", title, VideoFormatDisplayable);
+                if (IsAudio)
+                    return string.Format("{0} ({1} ch)", title, ChannelCount.ToString("0.0"));
+                return title;
+            }
+        }
+
+        public string Title
+        {
+            get { return _title ?? DefaultTitle; }
+            set { _title = value; }
+        }
+
+        private string _title;
+
         #endregion
 
         #region UI display properties
@@ -136,7 +167,7 @@ namespace BDAutoMuxerCore.BDROM
         }
 
         /// <summary>
-        /// Video height (e.g., 1080, 720, 480).
+        /// Video height and format (e.g., 1080p, 720i, 480p).
         /// </summary>
         public string VideoFormatDisplayable
         {
