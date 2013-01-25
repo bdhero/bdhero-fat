@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using BDAutoMuxerCore.Annotations;
 using BDAutoMuxerCore.BDInfo;
 using BDAutoMuxerCore.BDROM;
 using DotNetUtils;
@@ -37,11 +39,11 @@ namespace BDAutoMuxerCore.Tools
 
         private readonly BackgroundWorker _progressWorker = new BackgroundWorker();
 
-        public FFmpeg(Playlist playlist, IEnumerable<Track> selectedTracks, string outputMKVPath)
+        public FFmpeg(Disc disc, Playlist playlist, string outputMKVPath)
         {
             _playlistLength = playlist.Length;
             _inputM2TSPaths = playlist.StreamClips.Select(clip => clip.FileInfo.FullName).ToList();
-            _selectedTracks = selectedTracks.ToList();
+            _selectedTracks = playlist.Tracks.Where(track => track.Keep).ToList();
             _outputMKVPath = outputMKVPath;
 
             if (_inputM2TSPaths.Count == 0)
@@ -62,8 +64,10 @@ namespace BDAutoMuxerCore.Tools
 
             Arguments.AddAll("-i", inputFiles);
 
+            Arguments.AddAll("-metadata", "title=" + disc.MovieTitle);
+
             // Map selected tracks to output file
-            Arguments.AddRange(_selectedTracks.SelectMany(track => new[] {"-map", "0:" + track.Index}));
+            Arguments.AddRange(_selectedTracks.SelectMany(TrackMetadataArgs));
 
             // Copy all codecs
             Arguments.AddAll("-c", "copy");
@@ -79,6 +83,17 @@ namespace BDAutoMuxerCore.Tools
 
             BeforeStart += OnBeforeStart;
             ProgressUpdated += OnProgressUpdated;
+            Exited += (state, code, time) => FFmpegOnExited(playlist, _selectedTracks, outputMKVPath);
+        }
+
+        private static IEnumerable<string> TrackMetadataArgs(Track track, int i)
+        {
+            return new[]
+                       {
+                           "-map", "0:" + track.Index,
+                           "-metadata:s:" + track.Index, "language=" + track.Language.ISO_639_2,
+                           "-metadata:s:" + i, "title=" + track.Title
+                       };
         }
 
         private void OnProgressUpdated(ProgressState progressState)
@@ -159,38 +174,48 @@ namespace BDAutoMuxerCore.Tools
         {
             try
             {
-                File.WriteAllBytes(ExePath, BinTools.ffmpeg);
+                File.WriteAllBytes(ExePath, BinTools.ffmpeg_exe);
             }
             catch { }
         }
 
-        public static void Test()
+        public static void Test(string bdromDir, string playlistFilename, string outputMKVPath)
         {
             // Step 1: Scan BD-ROM
-            var bdrom = new BDInfo.BDROM(@"Y:\BD\49123204_BLACK_HAWK_DOWN");
+            var bdrom = new BDInfo.BDROM(bdromDir);
             bdrom.ScanProgress += BDROMOnScanProgress;
             bdrom.Scan();
             var disc = Disc.Transform(bdrom);
 
-            // Step 2: Search TMDb
+            // Step 2: Search BDAM DB
             // ...
 
-            // Step 3: User selection
-            var playlist = disc.Playlists.FirstOrDefault(mpls => mpls.Filename.StartsWith("00000"));
-            var selectedTracks = playlist.Tracks.Where(track => track.Language == Language.FromCode("eng") && track.Codec.IsKnown);
-            var outputMKVPath = @"Y:\BDAM\out\progress\BLACK_HAWK_DOWN_00000.mpls.mkv";
+            // Step 3: Search TMDb
+            // ...
 
-            // Step 4: Mux selected tracks to MKV
-            var ffmpeg = new FFmpeg(playlist, selectedTracks, outputMKVPath);
-            ffmpeg.Exited += (state, code, time) => FfmpegOnExited(state, code, time, outputMKVPath);
+            // Step 4: User selection
+            var playlist = disc.Playlists.FirstOrDefault(mpls => mpls.Filename.Equals(playlistFilename, StringComparison.InvariantCultureIgnoreCase));
+            var selectedTracks = playlist.Tracks.Where(track => track.Language == Language.FromCode("eng") && track.Codec.IsKnown).ToList();
+            foreach (var track in selectedTracks)
+                track.Keep = true;
+
+            // Step 5: Mux selected tracks to MKV
+            var ffmpeg = new FFmpeg(disc, playlist, outputMKVPath);
             ffmpeg.StartAsync();
+//            FFmpegOnExited(playlist, selectedTracks, outputMKVPath);
         }
 
-        private static void FfmpegOnExited(NonInteractiveProcessState state, int exitCode, TimeSpan runTime, string outputMKVPath)
+        private static void FFmpegOnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
             Console.WriteLine("Finished muxing with FFmpeg!");
             Console.WriteLine("Adding metadata with mkvpropedit...");
-            MkvPropEdit.Test(outputMKVPath);
+            var coverArt = Image.FromFile(@"Y:\BDAM\cover-art\black-hawk-down\full.jpg");
+            var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
+//                .RemoveAllTags()
+                .AddCoverArt(coverArt)
+                .SetChapters(playlist.Chapters)
+                .SetDefaultTracksAuto(selectedTracks);
+            mkvPropEdit.Start();
             Console.WriteLine("********** DONE! **********");
         }
 

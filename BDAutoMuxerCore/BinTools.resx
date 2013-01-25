@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ffmpeg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ffmpeg_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ffmpeg.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="mkvpropedit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="mkvpropedit_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\mkvpropedit.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

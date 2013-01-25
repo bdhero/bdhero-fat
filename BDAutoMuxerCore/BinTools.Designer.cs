@@ -60,16 +60,16 @@ namespace BDAutoMuxerCore {
             }
         }
         
-        internal static byte[] ffmpeg {
+        internal static byte[] ffmpeg_exe {
             get {
-                object obj = ResourceManager.GetObject("ffmpeg", resourceCulture);
+                object obj = ResourceManager.GetObject("ffmpeg_exe", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
-        internal static byte[] mkvpropedit {
+        internal static byte[] mkvpropedit_exe {
             get {
-                object obj = ResourceManager.GetObject("mkvpropedit", resourceCulture);
+                object obj = ResourceManager.GetObject("mkvpropedit_exe", resourceCulture);
                 return ((byte[])(obj));
             }
         }

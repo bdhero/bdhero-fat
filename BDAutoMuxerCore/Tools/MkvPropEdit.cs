@@ -17,52 +17,112 @@ namespace BDAutoMuxerCore.Tools
     {
         private const string MkvPropEditFilename = "mkvpropedit.exe";
 
-        [NotNull]
-        private readonly string _mkvFilePath;
-
-        [CanBeNull]
-        private readonly string _movieTitle;
-
-        private readonly List<MkvTrackProps> _trackProps;
-        private readonly List<Chapter> _chapters;
-
-        public MkvPropEdit(
-            [NotNull] string mkvFilePath,
-            [CanBeNull] string movieTitle,
-            [CanBeNull] Image coverArt,
-            IEnumerable<MkvTrackProps> trackProps,
-            IEnumerable<Chapter> chapters)
+        /// <summary>
+        /// Gets or sets the path to the source Matroska file that will be modified by MkvPropEdit.
+        /// The setter automatically adds the source path to the list of <see cref="NonInteractiveProcess.Arguments"/>;
+        /// you should not add it manually.
+        /// </summary>
+        public string SourceFilePath
         {
-            _mkvFilePath = mkvFilePath;
-            _movieTitle = movieTitle;
-            _trackProps = trackProps.ToList();
-            _chapters = chapters.ToList();
+            get { return _sourceFilePath; }
+            set
+            {
+                if (_sourceFilePath != null)
+                    throw new InvalidOperationException("Source file path cannot be set more than once.");
+                if (Arguments.Any())
+                    throw new InvalidOperationException("Source file must be the first argument in the list; another agument is already present.");
+                _sourceFilePath = value;
+                Arguments.Add(_sourceFilePath);
+            }
+        }
+        private string _sourceFilePath;
 
-            ExePath = AssemblyUtils.GetTempFilePath(GetType(), MkvPropEditFilename);
-            ExtractResources();
+        public MkvPropEdit()
+        {
+            ExePath = ExtractExe();
+        }
 
-            Arguments.Add(_mkvFilePath);
+        public MkvPropEdit SetChapters(IEnumerable<Chapter> chapters)
+        {
+            var chapterXmlPath = SaveChaptersToXml(chapters);
+            Arguments.AddAll("--chapters", chapterXmlPath);
+            return this;
+        }
 
+        public MkvPropEdit RemoveAllTags()
+        {
+            Arguments.AddAll("--tags", "all:");
+            return this;
+        }
+
+        /// <summary>
+        /// Automatically sets the "default track" flag to <code>true</code> for the first track of each type (video, audio, and subtitle),
+        /// and the remaining tracks to <code>false</code>.
+        /// </summary>
+        public MkvPropEdit SetDefaultTracksAuto(List<Track> selectedTracks)
+        {
+            var numVideoTracks = selectedTracks.Count(track => track.IsVideo);
+            var numAudioTracks = selectedTracks.Count(track => track.IsAudio);
+            var numSubtitleTracks = selectedTracks.Count(track => track.IsSubtitle);
+
+            for (var i = 1; i <= numVideoTracks; i++)
+                SetDefaultTrackFlag("v", i, i == 1);
+            for (var i = 1; i <= numAudioTracks; i++)
+                SetDefaultTrackFlag("a", i, i == 1);
+            for (var i = 1; i <= numSubtitleTracks; i++)
+                SetDefaultTrackFlag("s", i, i == 1);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the "default track" flag of the specified track.
+        /// </summary>
+        /// <param name="trackType">"v", "a", or "s" for video, audio, and subtitle</param>
+        /// <param name="indexOfType"></param>
+        /// <param name="isDefault"></param>
+        /// <returns></returns>
+        public MkvPropEdit SetDefaultTrackFlag(string trackType, int indexOfType, bool isDefault)
+        {
+            Arguments.AddAll("--edit",
+                             string.Format("track:{0}{1}", trackType, indexOfType),
+                             "--set",
+                             string.Format("flag-default={0}", isDefault ? 1 : 0));
+            return this;
+        }
+
+        public MkvPropEdit AddAttachment([NotNull] string attachmentFilePath)
+        {
+            Arguments.AddAll("--add-attachment", attachmentFilePath);
+            return this;
+        }
+
+        public MkvPropEdit AddCoverArt([CanBeNull] Image coverArt)
+        {
             var coverImagePathLarge = ResizeCoverArt(coverArt, CoverArtSize.Large, "cover.jpg");
             var coverImagePathSmall = ResizeCoverArt(coverArt, CoverArtSize.Small, "small_cover.jpg");
 
             if (coverImagePathLarge != null)
-                Arguments.AddAll("--add-attachment", coverImagePathLarge);
+                AddAttachment(coverImagePathLarge);
 
             if (coverImagePathSmall != null)
-                Arguments.AddAll("--add-attachment", coverImagePathSmall);
+                AddAttachment(coverImagePathSmall);
 
-            var chapterXmlPath = SaveChapters(_chapters);
+            return this;
+        }
 
-            Arguments.AddAll("--chapters", chapterXmlPath);
-            Arguments.AddAll("--edit", "segment_info");
+        public MkvPropEdit SetMovieTitle([CanBeNull] string movieTitle)
+        {
+            if (!string.IsNullOrWhiteSpace(movieTitle))
+                Arguments.AddAll("--edit", "segment_info", "--set", "title=" + movieTitle);
+            return this;
+        }
 
-            if (!string.IsNullOrWhiteSpace(_movieTitle))
-                Arguments.AddAll("--set", "title=" + _movieTitle);
-
-            for (var i = 0; i < _trackProps.Count; i++)
+        public MkvPropEdit SetTrackProps(List<MkvTrackProps> trackProps)
+        {
+            for (var i = 0; i < trackProps.Count; i++)
             {
-                var track = _trackProps[i];
+                var track = trackProps[i];
 
                 Arguments.AddAll("--edit", "track:" + (i + 1));
                 Arguments.AddAll("--set", "name=" + track.Name);
@@ -79,6 +139,8 @@ namespace BDAutoMuxerCore.Tools
 
                 Arguments.AddAll("--set", "language=" + track.Language.ISO_639_2);
             }
+
+            return this;
         }
 
         /// <summary>
@@ -87,7 +149,7 @@ namespace BDAutoMuxerCore.Tools
         /// <param name="chapters"></param>
         /// <returns>Full, absolute path to the chapter XML file</returns>
         [NotNull]
-        private static string SaveChapters(IEnumerable<Chapter> chapters)
+        private static string SaveChaptersToXml(IEnumerable<Chapter> chapters)
         {
             var path = AssemblyUtils.GetTempFilePath(typeof(MkvPropEdit), "chapters.xml");
             ChapterWriterV2.SaveAsXml(chapters, path);
@@ -153,17 +215,19 @@ namespace BDAutoMuxerCore.Tools
                                    new Chapter(4, TimeSpan.FromMinutes(20)),
                                    new Chapter(5, TimeSpan.FromMinutes(25))
                                };
-            var mkvPropEdit = new MkvPropEdit(mkvFilePath, movieTitle, coverArt, trackProps, chapters);
+            var mkvPropEdit = new MkvPropEdit { SourceFilePath = mkvFilePath }
+                .SetMovieTitle(movieTitle)
+                .AddCoverArt(coverArt)
+                .SetChapters(chapters)
+                .SetTrackProps(trackProps);
             mkvPropEdit.Start();
         }
 
-        private void ExtractResources()
+        private string ExtractExe()
         {
-            try
-            {
-                File.WriteAllBytes(ExePath, BinTools.mkvpropedit);
-            }
-            catch { }
+            var path = AssemblyUtils.GetTempFilePath(GetType(), MkvPropEditFilename);
+            try { File.WriteAllBytes(path, BinTools.mkvpropedit_exe); } catch { }
+            return path;
         }
     }
 
