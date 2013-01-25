@@ -122,6 +122,9 @@ namespace ProcessUtils
             if (finalEstimate.TotalMilliseconds < 0)
                 finalEstimate = TimeSpan.FromSeconds(30);
 
+            // Truncate (remove) milliseconds from estimate
+            finalEstimate = TimeSpan.FromSeconds(Math.Floor(finalEstimate.TotalSeconds));
+
             _timeRemaining = finalEstimate;
             _uiProgressState = new ProgressState
                                    {
