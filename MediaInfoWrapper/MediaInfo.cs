@@ -949,16 +949,29 @@ namespace MediaInfoWrapper
         public string FilePath { get; protected set; }
 
         /// <summary>
-        /// "1080p", "1080i", "720p", "720i", "480p"
+        /// "8K", "4K", "1080p", "1080i", "720p", "720i", "480p"
         /// </summary>
         public string DisplayResolution
         {
             get
             {
-                var height = Width == 1920 ? 1080 : Width == 1280 ? 720 : 480;
                 var scanType = IsProgressive ? "p" : "i";
-                return string.Format("{0}{1}", height, scanType);
+                return
+                    IsResolution(Width, 7680) ?   "8K" :
+                    IsResolution(Width, 3840) ?   "4K" :
+                    IsResolution(Width, 1920) ? "1080" + scanType :
+                    IsResolution(Width, 1280) ?  "720" + scanType :
+                    IsResolution(Width,  720) ?  "480" + scanType :
+                                                 Width + scanType;
             }
+        }
+
+        private static bool IsResolution(int actualWidth, int expectedWidth)
+        {
+            int pct = expectedWidth / 3;
+            int min = expectedWidth - pct;
+            int max = expectedWidth + pct;
+            return actualWidth >= min && actualWidth <= max;
         }
 
         public bool IsProgressive
