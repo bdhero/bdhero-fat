@@ -955,7 +955,7 @@ namespace MediaInfoWrapper
         {
             get
             {
-                var scanType = IsProgressive ? "p" : "i";
+                var scanType = IsInterlaced ? "i" : "p";
                 return
                     IsResolution(Width, 7680) ?   "8K" :
                     IsResolution(Width, 3840) ?   "4K" :
@@ -966,11 +966,11 @@ namespace MediaInfoWrapper
             }
         }
 
-        private static bool IsResolution(int actualWidth, int expectedWidth)
+        private static bool IsResolution(int actualWidth, double expectedWidth)
         {
-            int pct = expectedWidth / 3;
-            int min = expectedWidth - pct;
-            int max = expectedWidth + pct;
+            int pct = (int) (expectedWidth * .15);
+            int min = (int) (expectedWidth - pct);
+            int max = (int) (expectedWidth + pct);
             return actualWidth >= min && actualWidth <= max;
         }
 
