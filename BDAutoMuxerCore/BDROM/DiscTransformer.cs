@@ -118,7 +118,7 @@ namespace BDAutoMuxerCore.BDROM
 
             var dups = (from key in bdinfoDuplicateMap.Keys
                         where bdinfoDuplicateMap[key].Count > 1
-                        select bdinfoDuplicateMap[key].OrderByDescending(file => file.HiddenTrackCount))
+                        select bdinfoDuplicateMap[key].OrderBy(file => file.HiddenTrackCount))
                 .SelectMany(sortedFiles => sortedFiles.Skip(1));
 
             foreach (var tsPlaylistFile in dups)
