@@ -825,7 +825,9 @@ namespace MediaInfoWrapper
                     XmlUtil.GetString(xml, "FormatVersion"),
                     XmlUtil.GetString(xml, "FormatProfile"),
                     XmlUtil.GetString(xml, "FormatCompression"),
-                    XmlUtil.GetString(xml, "FormatSettings")
+                    XmlUtil.GetString(xml, "FormatSettings"),
+                    XmlUtil.GetString(xml, "CodecID"),
+                    XmlUtil.GetString(xml, "CodecIDString")
                 );
             Duration = XmlUtil.GetLong(xml, "Duration");
             DurationString = XmlUtil.GetString(xml, "DurationString");
@@ -1283,7 +1285,10 @@ namespace MediaInfoWrapper
         public string Compresion { get; protected set; }
         public string Settings { get; protected set; }
 
-        public MIFormat(string id, string info, string version, string profile, string compression, string settings)
+        public string CodecID { get; protected set; }
+        public string CodecIDString { get; protected set; }
+
+        public MIFormat(string id, string info, string version, string profile, string compression, string settings, string codecID, string codecIDString)
         {
             Id = id;
             Info = info;
@@ -1291,6 +1296,8 @@ namespace MediaInfoWrapper
             Profile = profile;
             Compresion = compression;
             Settings = settings;
+            CodecID = codecID;
+            CodecIDString = codecIDString;
         }
 
         protected bool Equals(MIFormat other)
@@ -1301,7 +1308,9 @@ namespace MediaInfoWrapper
                 string.Equals(Version, other.Version) &&
                 string.Equals(Profile, other.Profile) &&
                 string.Equals(Compresion, other.Compresion) &&
-                string.Equals(Settings, other.Settings);
+                string.Equals(Settings, other.Settings) &&
+                string.Equals(CodecID, other.CodecID) &&
+                string.Equals(CodecIDString, other.CodecIDString);
         }
 
         public override bool Equals(object obj)
@@ -1731,7 +1740,7 @@ namespace MediaInfoWrapper
 
         public static bool Matches(MIFormat format)
         {
-            return format.Id == "AVC";
+            return format.Id == "AVC" || format.CodecID == "V_MPEG4/ISO/AVC";
         }
     }
 
@@ -1844,7 +1853,7 @@ namespace MediaInfoWrapper
 
         public static bool Matches(MIFormat format)
         {
-            return format.Id == "MPEG Video" && format.Version == "Version 1";
+            return (format.Id == "MPEG Video" && format.Version == "Version 1") || (format.CodecID == "V_MPEG1");
         }
     }
 
@@ -1915,7 +1924,7 @@ namespace MediaInfoWrapper
 
         public static bool Matches(MIFormat format)
         {
-            return format.Id == "MPEG Video" && format.Version == "Version 2";
+            return (format.Id == "MPEG Video" && format.Version == "Version 2") || (format.CodecID == "V_MPEG2");
         }
     }
 
@@ -2795,7 +2804,7 @@ namespace MediaInfoWrapper
 
         public static bool Matches(MIFormat format)
         {
-            return format.Id == "MPEG Audio" && format.Profile == "Layer 3";
+            return (format.Id == "MPEG Audio" && format.Profile == "Layer 3") || (format.CodecID == "A_MPEG/L3");
         }
     }
 
