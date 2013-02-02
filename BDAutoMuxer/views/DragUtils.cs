@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using DotNetUtils;
+using DotNetUtils.Annotations;
 
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -131,4 +135,90 @@ namespace BDAutoMuxer.Views
             return path == null ? null : Path.GetFileNameWithoutExtension(path);
         }
     }
+
+    public class ExternalDragProvider
+    {
+        private bool _leftMouseDown;
+        private Point _startPos;
+        private string _path;
+
+        private readonly Control _dragSource;
+        private readonly Control _droppableParent;
+
+        private bool _droppableParentAllowDrop;
+
+        /// <summary>
+        /// Gets or sets a delegate that returns an absolute path to the control's currently selected file.
+        /// </summary>
+        public PathGetter PathGetter;
+
+        /// <summary>
+        /// Gets or sets the minimum number of pixels the mouse must move in either axis (X or Y) before a drag event is triggered.
+        /// </summary>
+        public uint Threshold = 2;
+
+        public ExternalDragProvider([NotNull] Control dragSource, [CanBeNull] Control droppableParent)
+        {
+            _dragSource = dragSource;
+            _dragSource.MouseDown += OnMouseDown;
+            _dragSource.MouseMove += OnMouseMove;
+            _dragSource.MouseUp += OnMouseUp;
+
+            _droppableParent = droppableParent;
+        }
+
+        public static ExternalDragProvider Provide([NotNull] Control dragSource, [CanBeNull] Control droppableParent)
+        {
+            return new ExternalDragProvider(dragSource, droppableParent);
+        }
+
+        private bool HasPath
+        {
+            get { return (_path = PathGetter != null ? PathGetter(_dragSource) : null) != null; }
+        }
+
+        private void OnMouseDown(object sender, MouseEventArgs args)
+        {
+            _leftMouseDown = args.Button == MouseButtons.Left;
+
+            if (!_leftMouseDown) return;
+            if (!HasPath) return;
+
+            _startPos = args.Location;
+        }
+
+        private void OnMouseMove(object sender, MouseEventArgs args)
+        {
+            if (!_leftMouseDown) return;
+            if (_path == null) return;
+            if (Math.Abs(args.X - _startPos.X) < Threshold &&
+                Math.Abs(args.Y - _startPos.Y) < Threshold) return;
+
+            var paths = new StringCollection {_path};
+            var dataObject = new DataObject();
+
+            dataObject.SetFileDropList(paths);
+            dataObject.SetText(_path);
+
+            if (_droppableParent != null)
+            {
+                _droppableParentAllowDrop = _droppableParent.AllowDrop;
+                if (_droppableParent.AllowDrop)
+                    _droppableParent.AllowDrop = false;
+            }
+
+            _dragSource.DoDragDrop(dataObject, DragDropEffects.Copy);
+        }
+
+        private void OnMouseUp(object sender, MouseEventArgs args)
+        {
+            if (!_leftMouseDown) return;
+            _leftMouseDown = false;
+            if (_droppableParent == null) return;
+            if (_droppableParentAllowDrop)
+                _droppableParent.AllowDrop = true;
+        }
+    }
+
+    public delegate string PathGetter(Control sender);
 }
