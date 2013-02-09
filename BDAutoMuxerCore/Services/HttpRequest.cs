@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,10 +21,24 @@ namespace BDAutoMuxerCore.Services
         public static string Get(string uri)
         {
             var request = BuildRequest("GET", uri);
-            var httpResponse = (HttpWebResponse)request.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            using (var httpResponse = (HttpWebResponse) request.GetResponse())
             {
-                return streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    return streamReader.ReadToEnd();
+                }
+            }
+        }
+
+        public static Image GetImage(string uri)
+        {
+            var request = BuildRequest("GET", uri, cache: true);
+            using (var httpResponse = (HttpWebResponse) request.GetResponse())
+            {
+                using (var stream = httpResponse.GetResponseStream())
+                {
+                    return stream != null ? Image.FromStream(stream) : null;
+                }
             }
         }
 
@@ -62,14 +77,14 @@ namespace BDAutoMuxerCore.Services
             }
         }
 
-        private static HttpWebRequest BuildRequest(string method, string uri)
+        private static HttpWebRequest BuildRequest(string method, string uri, bool cache = false)
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
 
             request.Method = method;
             request.UserAgent = UserAgent;
             request.KeepAlive = true;
-            request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
+            request.CachePolicy = new RequestCachePolicy(cache ? RequestCacheLevel.CacheIfAvailable : RequestCacheLevel.BypassCache);
             request.Expect = null;
 
             if ("POST" == method || "PUT" == method)
