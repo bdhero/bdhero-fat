@@ -8,7 +8,7 @@ using DotNetUtils.Annotations;
 
 namespace BDAutoMuxerCore.Services
 {
-    public class HttpImageCache : IHttpImageCache
+    public class HttpImageCache
     {
         private static HttpImageCache _instance;
         public static HttpImageCache Instance

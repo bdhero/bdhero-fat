@@ -96,7 +96,6 @@
     <Compile Include="Services\BDService.cs" />
     <Compile Include="Services\HttpImageCache.cs" />
     <Compile Include="Services\HttpRequest.cs" />
-    <Compile Include="Services\IHttpImageCache.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="BinTools.Designer.cs">
       <AutoGen>True</AutoGen>
