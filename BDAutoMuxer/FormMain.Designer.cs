@@ -113,6 +113,11 @@
             this.columnHeaderSubtitleLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelSubtitleTracks = new System.Windows.Forms.Label();
             this.groupBoxFilter = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBoxLangauge = new System.Windows.Forms.ComboBox();
+            this.linkLabelEdit = new BDAutoMuxer.Views.LinkLabel2();
+            this.label4 = new System.Windows.Forms.Label();
+            this.pictureBoxCoverArt = new System.Windows.Forms.PictureBox();
             this.comboBoxShowHiddenTracks = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.listBoxSubtitleLanguages = new System.Windows.Forms.ListBox();
@@ -162,6 +167,7 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.remuxerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.findIncompleteMKVsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -173,7 +179,6 @@
             this.textBoxSource = new System.Windows.Forms.TextBox();
             this.labelSource = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.findIncompleteMKVsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -208,6 +213,7 @@
             this.splitContainerTracksInner.Panel2.SuspendLayout();
             this.splitContainerTracksInner.SuspendLayout();
             this.groupBoxFilter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCoverArt)).BeginInit();
             this.groupBoxMasterOverride.SuspendLayout();
             this.tabPageProgress.SuspendLayout();
             this.groupBoxDemuxingProgress.SuspendLayout();
@@ -298,13 +304,13 @@
             this.contextMenuStripTmdb.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemTmdb});
             this.contextMenuStripTmdb.Name = "contextMenuStripTmdb";
-            this.contextMenuStripTmdb.Size = new System.Drawing.Size(236, 26);
+            this.contextMenuStripTmdb.Size = new System.Drawing.Size(243, 26);
             this.contextMenuStripTmdb.Opened += new System.EventHandler(this.contextMenuStripTmdb_Opened);
             // 
             // toolStripMenuItemTmdb
             // 
             this.toolStripMenuItemTmdb.Name = "toolStripMenuItemTmdb";
-            this.toolStripMenuItemTmdb.Size = new System.Drawing.Size(235, 22);
+            this.toolStripMenuItemTmdb.Size = new System.Drawing.Size(242, 22);
             this.toolStripMenuItemTmdb.Text = "&View movie details at TMDb.org";
             this.toolStripMenuItemTmdb.Click += new System.EventHandler(this.toolStripMenuItemTmdb_Click);
             // 
@@ -1177,6 +1183,11 @@
             // 
             this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxFilter.Controls.Add(this.label6);
+            this.groupBoxFilter.Controls.Add(this.comboBoxLangauge);
+            this.groupBoxFilter.Controls.Add(this.linkLabelEdit);
+            this.groupBoxFilter.Controls.Add(this.label4);
+            this.groupBoxFilter.Controls.Add(this.pictureBoxCoverArt);
             this.groupBoxFilter.Controls.Add(this.comboBoxShowHiddenTracks);
             this.groupBoxFilter.Controls.Add(this.label3);
             this.groupBoxFilter.Controls.Add(this.listBoxSubtitleLanguages);
@@ -1195,6 +1206,56 @@
             this.groupBoxFilter.TabIndex = 1;
             this.groupBoxFilter.TabStop = false;
             this.groupBoxFilter.Text = "Filter";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(7, 257);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(102, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Cover Art Language";
+            // 
+            // comboBoxLangauge
+            // 
+            this.comboBoxLangauge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxLangauge.FormattingEnabled = true;
+            this.comboBoxLangauge.Location = new System.Drawing.Point(115, 254);
+            this.comboBoxLangauge.Name = "comboBoxLangauge";
+            this.comboBoxLangauge.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxLangauge.TabIndex = 10;
+            this.comboBoxLangauge.SelectionChangeCommitted += new System.EventHandler(this.comboBoxLangauge_SelectionChangeCommitted);
+            // 
+            // linkLabelEdit
+            // 
+            this.linkLabelEdit.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelEdit.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelEdit.Location = new System.Drawing.Point(57, 291);
+            this.linkLabelEdit.Name = "linkLabelEdit";
+            this.linkLabelEdit.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelEdit.Size = new System.Drawing.Size(35, 14);
+            this.linkLabelEdit.TabIndex = 9;
+            this.linkLabelEdit.Text = "Edit...";
+            this.linkLabelEdit.Click += new System.EventHandler(this.linkLabelEdit_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 291);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(54, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Cover Art:";
+            // 
+            // pictureBoxCoverArt
+            // 
+            this.pictureBoxCoverArt.Location = new System.Drawing.Point(130, 281);
+            this.pictureBoxCoverArt.Name = "pictureBoxCoverArt";
+            this.pictureBoxCoverArt.Size = new System.Drawing.Size(93, 139);
+            this.pictureBoxCoverArt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxCoverArt.TabIndex = 7;
+            this.pictureBoxCoverArt.TabStop = false;
+            this.pictureBoxCoverArt.DoubleClick += new System.EventHandler(this.pictureBoxCoverArt_DoubleClick);
             // 
             // comboBoxShowHiddenTracks
             // 
@@ -1570,7 +1631,7 @@
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(530, 17);
+            this.statusLabel.Size = new System.Drawing.Size(532, 17);
             this.statusLabel.Spring = true;
             this.statusLabel.Text = "Status";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1578,7 +1639,7 @@
             // progressLabel
             // 
             this.progressLabel.Name = "progressLabel";
-            this.progressLabel.Size = new System.Drawing.Size(34, 17);
+            this.progressLabel.Size = new System.Drawing.Size(32, 17);
             this.progressLabel.Text = "0.0%";
             this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -1611,7 +1672,7 @@
             this.toolStripMenuItem2,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // openFolderToolStripMenuItem
@@ -1619,7 +1680,7 @@
             this.openFolderToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.folder_open;
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
             this.openFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.openFolderToolStripMenuItem.Text = "&Open BD-ROM Folder...";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.buttonBrowse_Click);
             // 
@@ -1628,32 +1689,32 @@
             this.rescanToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.refresh_green;
             this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
             this.rescanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.rescanToolStripMenuItem.Text = "&Rescan";
             this.rescanToolStripMenuItem.Click += new System.EventHandler(this.buttonRescan_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(236, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(238, 6);
             // 
             // submitToDbToolStripMenuItem
             // 
             this.submitToDbToolStripMenuItem.Name = "submitToDbToolStripMenuItem";
-            this.submitToDbToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.submitToDbToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.submitToDbToolStripMenuItem.Text = "Submit to &Database";
             this.submitToDbToolStripMenuItem.Click += new System.EventHandler(this.SubmitJsonDisc);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(236, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(238, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1666,7 +1727,7 @@
             this.toolStripMenuItem3,
             this.settingsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // remuxerToolStripMenuItem
@@ -1674,28 +1735,35 @@
             this.remuxerToolStripMenuItem.Enabled = false;
             this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
             this.remuxerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.remuxerToolStripMenuItem.Text = "&Remuxer";
             this.remuxerToolStripMenuItem.Click += new System.EventHandler(this.remuxerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(193, 22);
             this.toolStripMenuItem4.Text = "&Codec Scanner";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            // 
+            // findIncompleteMKVsToolStripMenuItem
+            // 
+            this.findIncompleteMKVsToolStripMenuItem.Name = "findIncompleteMKVsToolStripMenuItem";
+            this.findIncompleteMKVsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.findIncompleteMKVsToolStripMenuItem.Text = "Find &Incomplete MKVs";
+            this.findIncompleteMKVsToolStripMenuItem.Click += new System.EventHandler(this.findIncompleteMKVsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(186, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(190, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.settingsToolStripMenuItem.Text = "&Settings...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -1706,7 +1774,7 @@
             this.codecsToolStripMenuItem,
             this.checkForUpdatesToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // aboutToolStripMenuItem
@@ -1715,20 +1783,20 @@
             this.aboutToolStripMenuItem.Image = global::BDAutoMuxer.Properties.Resources.info;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             // 
             // codecsToolStripMenuItem
             // 
             this.codecsToolStripMenuItem.Name = "codecsToolStripMenuItem";
-            this.codecsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.codecsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.codecsToolStripMenuItem.Text = "&Codec Reference";
             this.codecsToolStripMenuItem.Click += new System.EventHandler(this.codecsToolStripMenuItem_Click);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.checkForUpdatesToolStripMenuItem.Text = "Check for &Updates";
             this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
@@ -1791,13 +1859,6 @@
             this.cancelButton.Text = "Close";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
-            // findIncompleteMKVsToolStripMenuItem
-            // 
-            this.findIncompleteMKVsToolStripMenuItem.Name = "findIncompleteMKVsToolStripMenuItem";
-            this.findIncompleteMKVsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.findIncompleteMKVsToolStripMenuItem.Text = "Find &Incomplete MKVs";
-            this.findIncompleteMKVsToolStripMenuItem.Click += new System.EventHandler(this.findIncompleteMKVsToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -1863,6 +1924,7 @@
             this.splitContainerTracksInner.ResumeLayout(false);
             this.groupBoxFilter.ResumeLayout(false);
             this.groupBoxFilter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCoverArt)).EndInit();
             this.groupBoxMasterOverride.ResumeLayout(false);
             this.groupBoxMasterOverride.PerformLayout();
             this.tabPageProgress.ResumeLayout(false);
@@ -2026,5 +2088,10 @@
         private System.Windows.Forms.ComboBox comboBoxShowHiddenTracks;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripMenuItem findIncompleteMKVsToolStripMenuItem;
+        private System.Windows.Forms.PictureBox pictureBoxCoverArt;
+        private System.Windows.Forms.Label label4;
+        private Views.LinkLabel2 linkLabelEdit;
+        private System.Windows.Forms.ComboBox comboBoxLangauge;
+        private System.Windows.Forms.Label label6;
     }
 }

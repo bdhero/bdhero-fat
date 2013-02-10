@@ -65,6 +65,11 @@ namespace BDAutoMuxer
         private string _tmdbMovieTitle;
         private int? _tmdbMovieYear;
         private string _tmdbMovieUrl;
+        private HttpImageCache _imageCache = HttpImageCache.Instance;
+        private List<string> posterList;
+        private List<string> languageList;
+        private string _selectedLanguage;
+        private int posterIndex;
 
         private bool _ignoreFilterControlChange;
         private bool _ignoreDataGridItemChange;
@@ -260,6 +265,7 @@ namespace BDAutoMuxer
             get { return Path.Combine(textBoxOutputDirPreview.Text, textBoxOutputFileNamePreview.Text); }
         }
 
+
         #endregion
 
         #region Initialization
@@ -364,17 +370,17 @@ namespace BDAutoMuxer
                 Scan(textBoxSource.Text);
 
             new ExternalDragProvider(listViewStreamFiles, this)
-                {
-                    PathGetter = control => listViewStreamFiles.SelectedItems.Count > 0
-                                                ? Path.Combine(_bdrom.DirectorySTREAM.FullName, listViewStreamFiles.SelectedItems[0].Text)
-                                                : null
-                };
+            {
+                PathGetter = control => listViewStreamFiles.SelectedItems.Count > 0
+                                            ? Path.Combine(_bdrom.DirectorySTREAM.FullName, listViewStreamFiles.SelectedItems[0].Text)
+                                            : null
+            };
 
             new ExternalDragProvider(playlistDataGridView, this)
-                {
-                    PathGetter = control => _populator.SelectedPlaylist != null ? _populator.SelectedPlaylist.FullName : null,
-                    Threshold = 5
-                };
+            {
+                PathGetter = control => _populator.SelectedPlaylist != null ? _populator.SelectedPlaylist.FullName : null,
+                Threshold = 5
+            };
         }
 
         private void ResetState()
@@ -437,7 +443,7 @@ namespace BDAutoMuxer
                 movieNameSearchable = _bdrom.VolumeLabel ?? "";
                 movieNameSearchable = Regex.Replace(movieNameSearchable, @"^\d{6,}_", "");
                 movieNameSearchable = Regex.Replace(movieNameSearchable, @"_+", " ");
-//                movieNameSearchable = movieNameSearchable.ToTitle();
+                //                movieNameSearchable = movieNameSearchable.ToTitle();
             }
             if (Regex.Replace(movieNameSearchable, @"\W", "").ToLowerInvariant() == "bluray")
             {
@@ -626,8 +632,8 @@ namespace BDAutoMuxer
             _filteredPlaylists = new HashSet<TSPlaylistFile>(_playlists);
 
             Language videoLanguage = comboBoxVideoLanguage.SelectedValue as Language;
-            Cut cut = comboBoxCut.SelectedValue is Cut ? (Cut) comboBoxCut.SelectedValue : Cut.Theatrical;
-            CommentaryOption commentaryOption = comboBoxCommentary.SelectedValue is CommentaryOption ? (CommentaryOption) comboBoxCommentary.SelectedValue : CommentaryOption.Any;
+            Cut cut = comboBoxCut.SelectedValue is Cut ? (Cut)comboBoxCut.SelectedValue : Cut.Theatrical;
+            CommentaryOption commentaryOption = comboBoxCommentary.SelectedValue is CommentaryOption ? (CommentaryOption)comboBoxCommentary.SelectedValue : CommentaryOption.Any;
 
             _audioLanguages.Clear();
             _subtitleLanguages.Clear();
@@ -714,7 +720,7 @@ namespace BDAutoMuxer
         private bool IncludeStream(TSStream stream)
         {
             return !stream.IsHidden ||
-                   (comboBoxShowHiddenTracks.SelectedIndex >= 0 && (ShowHiddenTracksOption) comboBoxShowHiddenTracks.SelectedItem == ShowHiddenTracksOption.Yes);
+                   (comboBoxShowHiddenTracks.SelectedIndex >= 0 && (ShowHiddenTracksOption)comboBoxShowHiddenTracks.SelectedItem == ShowHiddenTracksOption.Yes);
         }
 
         private void PopulateVideoTracks()
@@ -921,7 +927,7 @@ namespace BDAutoMuxer
             string ISO_639_1 = language.ISO_639_1;
             string query = movieNameTextBox.Text;
             int? year = Regex.IsMatch(textBoxYear.Text, @"^\d{4}$") ? (int?)Int32.Parse(textBoxYear.Text) : null;
-            
+
             TmdbSearchRequestParams reqParams = new TmdbSearchRequestParams(query, year, ISO_639_1);
 
             _tmdbBackgroundWorker = new BackgroundWorker();
@@ -1295,13 +1301,13 @@ namespace BDAutoMuxer
             string muxerProgressStr = muxerProgressPct.ToString("##0.0") + "%";
             string overallProgressStr = overallProgressPct.ToString("##0.0") + "%";
 
-            int muxerProgressValue = (int) (muxerProgressPct * 10);
+            int muxerProgressValue = (int)(muxerProgressPct * 10);
             int overallProgressValue = (int)(overallProgressPct * 10);
 
             // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
             progressBarTsMuxer.Value = muxerProgressValue;
 
-// ReSharper disable EmptyGeneralCatchClause
+            // ReSharper disable EmptyGeneralCatchClause
             try
             {
                 // TODO: This throws a NPE if the window is closed while muxing is in progress
@@ -1310,7 +1316,7 @@ namespace BDAutoMuxer
             catch
             {
             }
-// ReSharper restore EmptyGeneralCatchClause
+            // ReSharper restore EmptyGeneralCatchClause
 
             TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
             TaskbarProgress.SetProgressValue(overallProgressValue, 1000, Handle);
@@ -1421,7 +1427,7 @@ namespace BDAutoMuxer
             // To show fractional progress, progress bar range is 0 to 1000 (instead of 0 to 100)
             progressBarDemuxing.Value = demuxerProgressValue;
 
-// ReSharper disable EmptyGeneralCatchClause
+            // ReSharper disable EmptyGeneralCatchClause
             try
             {
                 // TODO: This throws a NPE if the window is closed while muxing is in progress
@@ -1430,7 +1436,7 @@ namespace BDAutoMuxer
             catch
             {
             }
-// ReSharper restore EmptyGeneralCatchClause
+            // ReSharper restore EmptyGeneralCatchClause
 
             TaskbarProgress.SetProgressState(TaskbarProgressBarState.Normal, Handle);
             TaskbarProgress.SetProgressValue(overallProgressValue, 1000, Handle);
@@ -1559,7 +1565,7 @@ namespace BDAutoMuxer
             if (!CanSubmitToDb) return;
 
             DialogResult answer = MessageBox.Show(this, "Submit a new disc to the database?", "Changes detected", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            
+
             if (answer == DialogResult.Yes)
             {
                 SubmitJsonDisc();
@@ -1656,12 +1662,20 @@ namespace BDAutoMuxer
                     _tmdbMovieYear = GetYearInt(_tmdbMovieResult.release_date);
 
                     if (string.IsNullOrEmpty(_tmdbMovieResult.poster_path))
+                    {
                         pictureBoxMoviePoster.Image = Properties.Resources.no_poster_w185;
+                        pictureBoxCoverArt.Image = Properties.Resources.no_poster_w185;
+                    }
+
                     else
+                    {
                         pictureBoxMoviePoster.ImageLocation = _rootUrl + _tmdbMovieResult.poster_path;
+                        pictureBoxCoverArt.ImageLocation = _rootUrl + _tmdbMovieResult.poster_path;
+                        getLanguageList();
+                    }
 
                     _tmdbMovieUrl = string.Format("http://www.themoviedb.org/movie/{0}", _tmdbMovieResult.id);
-                    
+
                     pictureBoxMoviePoster.Cursor = Cursors.Hand;
                 }
             }
@@ -1714,7 +1728,7 @@ namespace BDAutoMuxer
         {
             Language audienceLanguage = comboBoxAudienceLanguage.SelectedValue as Language;
             IList<Language> list = new List<Language>(array);
-            
+
             if (!list.Contains(audienceLanguage) || control.DataSource == null) return;
 
             try
@@ -1937,7 +1951,7 @@ namespace BDAutoMuxer
 
             // Output tab
             AutoEnableOutputTab();
-            
+
             // Progress tab
             ShowProgressTabPage = ShowProgressTabPage || _isMuxing;
 
@@ -1966,6 +1980,12 @@ namespace BDAutoMuxer
             if (!_isMuxing)
             {
                 progressLabel.Text = "";
+            }
+
+            if (posterList != null && posterList.Count > 0)
+            {
+                posterList.Clear();
+                posterIndex = 0;
             }
 
             buttonSubmitToDB.Enabled = CanSubmitToDb;
@@ -2193,7 +2213,7 @@ namespace BDAutoMuxer
                 {
                     dialog.SelectedPath = dir;
                 }
-                
+
                 if (dialog.ShowDialog() != DialogResult.OK) return;
 
                 path = dialog.SelectedPath;
@@ -2452,6 +2472,26 @@ namespace BDAutoMuxer
             textBoxSource.BorderStyle = BorderStyle.Fixed3D;
         }
 
+        private void comboBoxLangauge_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            var index = comboBoxLangauge.SelectedIndex;
+            var x = (ComboboxItem)comboBoxLangauge.Items[index];
+            _selectedLanguage = x.Value.ToString();
+
+            getImageList(_tmdbMovieResult.id);
+        }
+
+        private void pictureBoxCoverArt_DoubleClick(object sender, EventArgs e)
+        {
+
+            if (posterList != null && posterList.Count > 0)
+            {
+                getCoverArt();
+            }
+            else
+                getImageList(_tmdbMovieResult.id);
+        }
+
         private void FormDetails_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_isMuxing)
@@ -2583,7 +2623,133 @@ namespace BDAutoMuxer
         {
             new FormFindIncompleteMedia().Show();
         }
+        
+        #region CoverArt
 
+        private void linkLabelEdit_Click(object sender, EventArgs e)
+        {
+            if (posterList != null && posterList.Count > 0)
+            {
+                getCoverArt();
+            }
+            else
+                getImageList(_tmdbMovieResult.id);
+        }
+
+        // Language Worker
+        private void getLanguageList()
+        {
+            comboBoxLangauge.Items.Clear();
+            var tmdbLanguageBackgroundWorker = new BackgroundWorker();
+            tmdbLanguageBackgroundWorker.DoWork += tmdbLanguageBackgroundWorkerOnDoWork;
+            tmdbLanguageBackgroundWorker.RunWorkerCompleted += tmdbLanguageBackgroundWorkerOnRunWorkerCompleted;
+            tmdbLanguageBackgroundWorker.RunWorkerAsync();
+        }
+
+        private void tmdbLanguageBackgroundWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            languageList = runWorkerCompletedEventArgs.Result as List<string>;
+            if (languageList != null && languageList.Count > 0)
+            {
+                var languegeList = languageList.Distinct().ToList();
+                languegeList.Sort();
+                var languages = languegeList;
+                
+                for (var i = 0; i < languages.Count(); i++ )
+                {
+                    var language = languages[i];
+                    if (!string.IsNullOrEmpty(language))
+                    {
+                        try
+                        {
+                            var lang = new CultureInfo(language).DisplayName;
+
+                            ComboboxItem item = new ComboboxItem();
+                            item.Text = lang;
+                            item.Value = language;
+                            comboBoxLangauge.Items.Add(item);
+                        }
+                        catch {}
+                    }
+                    else
+                    {
+                        /*To Do:  Handle Null Countries*/
+                    }
+                }
+
+                comboBoxLangauge.SelectedIndex = comboBoxLangauge.FindStringExact("English") ;
+            }
+        }
+
+        private void tmdbLanguageBackgroundWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            var tmdbMovieImages = _tmdbApi.GetMovieImages(_tmdbMovieResult.id, null);
+            doWorkEventArgs.Result = (tmdbMovieImages.posters.Select(poster => poster.iso_639_1).ToList());
+        }
+
+        public class ComboboxItem
+        {
+            public string Text { get; set; }
+            public object Value { get; set; }
+
+            public override string ToString()
+            {
+                return Text;
+            }
+        }
+
+        // Poster Worker
+        private void getImageList(int mID)
+        {
+            posterIndex = 0;
+            var tmdbImagebackgroundWorker = new BackgroundWorker();
+            tmdbImagebackgroundWorker.DoWork += tmdbImagebackgroundWorkerOnDoWork;
+            tmdbImagebackgroundWorker.RunWorkerCompleted += tmdbImagebackgroundWorkerOnRunWorkerCompleted;
+            tmdbImagebackgroundWorker.RunWorkerAsync();
+        }
+
+        private void tmdbImagebackgroundWorkerOnRunWorkerCompleted(object sender,RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            posterList = runWorkerCompletedEventArgs.Result as List<string>;
+            if (posterList != null && posterList.Count > 0)
+            {
+                getCoverArt();
+            }
+        }
+
+        private void tmdbImagebackgroundWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            if (!string.IsNullOrEmpty(_selectedLanguage))
+            {
+                var tmdbMovieImages = _tmdbApi.GetMovieImages(_tmdbMovieResult.id, _selectedLanguage);
+                doWorkEventArgs.Result = (tmdbMovieImages.posters.Select(poster => _rootUrl + poster.file_path).ToList());
+            }
+            else
+            {
+                var tmdbMovieImages = _tmdbApi.GetMovieImages(_tmdbMovieResult.id, "en");
+                doWorkEventArgs.Result = (tmdbMovieImages.posters.Select(poster => _rootUrl + poster.file_path).ToList());
+            }
+        }
+        
+        private void getCoverArt()
+        {
+            var formCoverArt = new FormCoverArt(posterList, posterIndex);
+            var dialogResult = formCoverArt.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                posterIndex = formCoverArt.SelectedIndex;
+                if (posterIndex > 0 && posterList != null)
+                {
+                    var PosterUrl = posterList[posterIndex];
+                    pictureBoxCoverArt.ImageLocation = PosterUrl;
+                }
+            }
+        }
+
+        
+
+        #endregion
+        
     }
 
     class ProgressUIState

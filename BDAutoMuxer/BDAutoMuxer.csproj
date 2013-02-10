@@ -137,6 +137,12 @@
     <Compile Include="FormCodecScanner.Designer.cs">
       <DependentUpon>FormCodecScanner.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormCoverArt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCoverArt.Designer.cs">
+      <DependentUpon>FormCoverArt.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormFindIncompleteMedia.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +185,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormCodecReference.resx">
       <DependentUpon>FormCodecReference.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCoverArt.resx">
+      <DependentUpon>FormCoverArt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormFindIncompleteMedia.resx">
       <DependentUpon>FormFindIncompleteMedia.cs</DependentUpon>
