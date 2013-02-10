@@ -102,7 +102,6 @@
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.panel1);
             this.Name = "FormCoverArt";
-            this.Text = "FormCoverArt";
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

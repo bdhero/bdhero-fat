@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using BDAutoMuxerCore.Services;
 
@@ -11,11 +12,28 @@ namespace BDAutoMuxer
         private readonly HttpImageCache _imageCache = HttpImageCache.Instance;
         public int SelectedIndex { get; private set;}
 
-        public FormCoverArt(List<string> posterList, int index)
+        public FormCoverArt(List<string> posterList, int index, string language)
         {
             InitializeComponent();
             PopulateCoverArt(posterList, index);
             AcceptButton.DialogResult = DialogResult.OK;
+            
+
+            if (string.IsNullOrEmpty(language))
+            {
+                this.Text = "Posters";
+            }
+            else
+            {
+                try
+                {
+                    var lang = new CultureInfo(language).DisplayName;
+                    this.Text = lang + " Posters";
+                }
+                catch
+                {
+                }
+            }
         }
 
         #region Private Methods

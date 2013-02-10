@@ -265,7 +265,6 @@ namespace BDAutoMuxer
             get { return Path.Combine(textBoxOutputDirPreview.Text, textBoxOutputFileNamePreview.Text); }
         }
 
-
         #endregion
 
         #region Initialization
@@ -2733,12 +2732,12 @@ namespace BDAutoMuxer
         
         private void getCoverArt()
         {
-            var formCoverArt = new FormCoverArt(posterList, posterIndex);
+            var formCoverArt = new FormCoverArt(posterList, posterIndex, _selectedLanguage);
             var dialogResult = formCoverArt.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
                 posterIndex = formCoverArt.SelectedIndex;
-                if (posterIndex > 0 && posterList != null)
+                if (posterIndex >= 0 && posterList != null)
                 {
                     var PosterUrl = posterList[posterIndex];
                     pictureBoxCoverArt.ImageLocation = PosterUrl;
