@@ -22,7 +22,11 @@ namespace BDAutoMuxer
 
             if (coverArtImages != null)
             {
-                Icon = Icon.FromHandle(((Bitmap)coverArtImages.Images[index]).GetHicon());
+                try
+                {
+                    Icon = Icon.FromHandle(((Bitmap)coverArtImages.Images[index]).GetHicon());
+                }
+                catch {}
             }
 
             if (string.IsNullOrEmpty(language))
