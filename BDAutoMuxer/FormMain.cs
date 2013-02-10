@@ -380,6 +380,8 @@ namespace BDAutoMuxer
                 PathGetter = control => _populator.SelectedPlaylist != null ? _populator.SelectedPlaylist.FullName : null,
                 Threshold = 5
             };
+
+            comboBoxLangauge.MouseWheel += new MouseEventHandler(comboBoxLangauge_MouseWheel);
         }
 
         private void ResetState()
@@ -2480,6 +2482,11 @@ namespace BDAutoMuxer
             getImageList(_tmdbMovieResult.id);
         }
 
+        private void comboBoxLangauge_MouseWheel(object sender, MouseEventArgs e)
+        {
+            ((HandledMouseEventArgs)e).Handled = true;
+        }
+
         private void pictureBoxCoverArt_DoubleClick(object sender, EventArgs e)
         {
 
@@ -2744,6 +2751,8 @@ namespace BDAutoMuxer
                 }
             }
         }
+
+        
 
         
 
