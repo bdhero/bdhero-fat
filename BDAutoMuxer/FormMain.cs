@@ -1664,14 +1664,15 @@ namespace BDAutoMuxer
 
                     if (string.IsNullOrEmpty(_tmdbMovieResult.poster_path))
                     {
-                        pictureBoxMoviePoster.Image = Properties.Resources.no_poster_w185;
-                        pictureBoxCoverArt.Image = Properties.Resources.no_poster_w185;
+                        pictureBoxMoviePoster.Image = Resources.no_poster_w185;
+                        pictureBoxCoverArt.Image = Resources.no_poster_w185;
                     }
 
                     else
                     {
-                        pictureBoxMoviePoster.ImageLocation = _rootUrl + _tmdbMovieResult.poster_path;
-                        pictureBoxCoverArt.ImageLocation = _rootUrl + _tmdbMovieResult.poster_path;
+                        var image = _imageCache.GetImage(_rootUrl + _tmdbMovieResult.poster_path);
+                        pictureBoxMoviePoster.Image = image;
+                        pictureBoxCoverArt.Image = image;
                         getLanguageList();
                     }
 
@@ -2487,7 +2488,7 @@ namespace BDAutoMuxer
             ((HandledMouseEventArgs)e).Handled = true;
         }
 
-        private void pictureBoxCoverArt_DoubleClick(object sender, EventArgs e)
+        private void pictureBoxCoverArt_Click(object sender, EventArgs e)
         {
 
             if (posterList != null && posterList.Count > 0)
@@ -2746,8 +2747,8 @@ namespace BDAutoMuxer
                 posterIndex = formCoverArt.SelectedIndex;
                 if (posterIndex >= 0 && posterList != null)
                 {
-                    var PosterUrl = posterList[posterIndex];
-                    pictureBoxCoverArt.ImageLocation = PosterUrl;
+                    var posterUrl = posterList[posterIndex];
+                    pictureBoxCoverArt.Image = _imageCache.GetImage(posterUrl);
                 }
             }
         }
