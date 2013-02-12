@@ -97,9 +97,15 @@ namespace BDAutoMuxerCore.Tools
             return this;
         }
 
-        public MkvPropEdit DeleteAttachment()
+        public MkvPropEdit DeleteAttachment(int? attachmentNumber)
         {
-            Arguments.AddAll("--delete-attachment", "mime-type:image/jpeg");
+            if (attachmentNumber != null)
+            {
+                var attachedNumber = attachmentNumber ?? default(int);
+                Arguments.AddAll("--delete-attachment", attachedNumber.ToString());
+            }
+            else
+                Arguments.AddAll("--delete-attachment", "mime-type:image/jpeg");
             return this;
         }
 
@@ -226,6 +232,13 @@ namespace BDAutoMuxerCore.Tools
                 .AddCoverArt(coverArt)
                 .SetChapters(chapters)
                 .SetTrackProps(trackProps);
+            mkvPropEdit.Start();
+        }
+
+        public static void DeleteAttachements(string mkvFilePath, int? attachmentNumber)
+        {
+            var mkvPropEdit = new MkvPropEdit { SourceFilePath = mkvFilePath }
+                .DeleteAttachment(attachmentNumber);
             mkvPropEdit.Start();
         }
 
