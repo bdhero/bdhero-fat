@@ -97,6 +97,12 @@ namespace BDAutoMuxerCore.Tools
             return this;
         }
 
+        public MkvPropEdit DeleteAttachment()
+        {
+            Arguments.AddAll("--delete-attachment", "mime-type:image/jpeg");
+            return this;
+        }
+
         public MkvPropEdit AddCoverArt([CanBeNull] Image coverArt)
         {
             var coverImagePathLarge = ResizeCoverArt(coverArt, CoverArtSize.Large, "cover.jpg");
