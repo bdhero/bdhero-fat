@@ -10,6 +10,17 @@ namespace DotNetUtils
 {
     public static class FileUtils
     {
+        /// <summary>
+        /// Creates an <see cref="Image"/> object without locking the source file.
+        /// </summary>
+        /// <param name="path">Path to the image file</param>
+        /// <returns><see cref="Image"/> object</returns>
+        /// <see cref="http://stackoverflow.com/a/1105330/467582"/>
+        public static Image ImageFromFile(string path)
+        {
+            return Image.FromStream(new MemoryStream(File.ReadAllBytes(path)));
+        }
+
         public static Icon ExtractIcon(string exePath)
         {
             try
