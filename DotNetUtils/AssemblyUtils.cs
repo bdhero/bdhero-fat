@@ -112,7 +112,7 @@ namespace DotNetUtils
                                 GetAssemblyVersion(assembly).ToString(),
                                 Process.GetCurrentProcess().Id.ToString("0")
                             };
-            folderNames.AddRange(subFolderNames);
+            folderNames.AddRange(subFolderNames.Where(s => !string.IsNullOrWhiteSpace(s)));
             var path = Path.Combine(folderNames.ToArray());
             Directory.CreateDirectory(path);
             return path;
