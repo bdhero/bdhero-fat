@@ -368,14 +368,14 @@ namespace BDAutoMuxer
             if (_scanOnLoad)
                 Scan(textBoxSource.Text);
 
-            new ExternalDragProvider(listViewStreamFiles, this)
+            new ExternalDragProvider(listViewStreamFiles)
             {
                 PathGetter = control => listViewStreamFiles.SelectedItems.Count > 0
                                             ? Path.Combine(_bdrom.DirectorySTREAM.FullName, listViewStreamFiles.SelectedItems[0].Text)
                                             : null
             };
 
-            new ExternalDragProvider(playlistDataGridView, this)
+            new ExternalDragProvider(playlistDataGridView)
             {
                 PathGetter = control => _populator.SelectedPlaylist != null ? _populator.SelectedPlaylist.FullName : null,
                 Threshold = 5
