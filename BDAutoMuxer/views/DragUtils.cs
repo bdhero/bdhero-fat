@@ -134,6 +134,15 @@ namespace BDAutoMuxer.Views
             var path = GetFirstFilePath(e);
             return path == null ? null : Path.GetFileNameWithoutExtension(path);
         }
+
+        public static string GetUnicodeText(DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.UnicodeText))
+            {
+                return (string)e.Data.GetData(DataFormats.UnicodeText, false);
+            }
+            return null;
+        }
     }
 
     public class ExternalDragProvider
