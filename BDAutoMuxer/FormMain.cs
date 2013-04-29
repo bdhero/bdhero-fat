@@ -2236,9 +2236,30 @@ namespace BDAutoMuxer
             }
         }
 
+        private bool AcceptDrop(DragEventArgs e)
+        {
+            var isExternalDragProvider = e.Data.GetDataPresent(typeof(ExternalDragProvider));
+            return CanDragAndDrop && !isExternalDragProvider;
+        }
+
+        private bool AcceptFileDrop(DragEventArgs e)
+        {
+            return DragUtils.HasFile(e) && AcceptDrop(e);
+        }
+
+        private bool AcceptDirectoryDrop(DragEventArgs e)
+        {
+            return DragUtils.HasDirectory(e) && AcceptDrop(e);
+        }
+
+        private bool AcceptFileOrDirectoryDrop(DragEventArgs e)
+        {
+            return AcceptFileDrop(e) || AcceptDirectoryDrop(e);
+        }
+
         private void textBoxOutputDir_DragEnter(object sender, DragEventArgs e)
         {
-            var accept = CanDragAndDrop && e.Data.GetDataPresent(DataFormats.FileDrop);
+            var accept = AcceptFileOrDirectoryDrop(e);
             e.Effect = accept ? DragDropEffects.All : DragDropEffects.None;
             textBoxOutputDir.BorderStyle = accept ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
         }
@@ -2247,7 +2268,7 @@ namespace BDAutoMuxer
         {
             string path = DragUtils.GetFirstPath(e);
 
-            if (CanDragAndDrop && path != null)
+            if (AcceptFileOrDirectoryDrop(e) && path != null)
                 textBoxOutputDir.Text = FileUtils.IsDirectory(path) ? path : Path.GetDirectoryName(path);
 
             textBoxOutputDir.BorderStyle = BorderStyle.Fixed3D;
@@ -2262,7 +2283,7 @@ namespace BDAutoMuxer
 
         private void textBoxOutputFileName_DragEnter(object sender, DragEventArgs e)
         {
-            var accept = CanDragAndDrop && DragUtils.HasFile(e) && !String.IsNullOrEmpty(DragUtils.GetFirstFileNameWithoutExtension(e));
+            var accept = AcceptFileDrop(e) && !String.IsNullOrEmpty(DragUtils.GetFirstFileNameWithoutExtension(e));
             e.Effect = accept ? DragDropEffects.All : DragDropEffects.None;
             textBoxOutputFileName.BorderStyle = accept ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
         }
@@ -2271,7 +2292,7 @@ namespace BDAutoMuxer
         {
             string filenameWithoutExtension = DragUtils.GetFirstFileNameWithoutExtension(e);
 
-            if (CanDragAndDrop && !String.IsNullOrEmpty(filenameWithoutExtension))
+            if (AcceptFileDrop(e) && !String.IsNullOrEmpty(filenameWithoutExtension))
                 textBoxOutputFileName.Text = filenameWithoutExtension;
 
             textBoxOutputFileName.BorderStyle = BorderStyle.Fixed3D;
@@ -2452,7 +2473,7 @@ namespace BDAutoMuxer
 
         private void FormDetails_DragEnter(object sender, DragEventArgs e)
         {
-            var accept = CanDragAndDrop && !String.IsNullOrEmpty(GetBDROMDirectory(e));
+            var accept = AcceptFileOrDirectoryDrop(e) && !String.IsNullOrEmpty(GetBDROMDirectory(e));
             e.Effect = accept ? DragDropEffects.All : DragDropEffects.None;
             textBoxSource.BorderStyle = accept ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
         }
@@ -2463,7 +2484,7 @@ namespace BDAutoMuxer
 
             textBoxSource.BorderStyle = BorderStyle.Fixed3D;
 
-            if (!CanDragAndDrop || String.IsNullOrEmpty(firstDirectoryPath)) return;
+            if (!AcceptFileOrDirectoryDrop(e) || String.IsNullOrEmpty(firstDirectoryPath)) return;
 
             textBoxSource.Text = firstDirectoryPath;
             buttonRescan_Click();
