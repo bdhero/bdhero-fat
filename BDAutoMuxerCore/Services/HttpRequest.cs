@@ -44,15 +44,15 @@ namespace BDAutoMuxerCore.Services
 
         public static string Post(string uri, IDictionary<string, string> formData = null)
         {
-            return PutPost("POST", uri, formData);
+            return PutOrPost("POST", uri, formData);
         }
 
         public static string Put(string uri, IDictionary<string, string> formData = null)
         {
-            return PutPost("PUT", uri, formData);
+            return PutOrPost("PUT", uri, formData);
         }
 
-        private static string PutPost(string method, string uri, IDictionary<string, string> formData)
+        private static string PutOrPost(string method, string uri, IDictionary<string, string> formData)
         {
             var request = BuildRequest(method, uri);
 
