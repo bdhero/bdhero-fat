@@ -68,7 +68,7 @@ namespace BDAutoMuxerCore.Services
         [CanBeNull]
         private static Image FetchAndCacheImage([NotNull] string url)
         {
-            var image = GetImage(url);
+            var image = GetImage(url, cache: false);
             ImageCache.Set(url, image, new CacheItemPolicy());
             return image;
         }
