@@ -1,25 +1,21 @@
 Y:\BD\THE_HUNGER_GAMES\BDMV\PLAYLIST\00076.MPLS
 Y:\BD\TOY_STORY_2_USA\BDMV\PLAYLIST\00200.mpls
+Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\PLAYLIST\00009.MPLS
+Y:\BDAM\BLACK_HAWK_DOWN_15min.m2ts
 
-ffmpeg -i Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS -i Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00001.M2TS -map 0:0 -map 0:1 -map 0:2 -map 0:4 -map 0:5 -map 0:6 -map 0:7 -map 0:8 -map 1:0 -map 1:1 -map 1:2 -map 1:4 -map 1:5 -map 1:6 -map 1:7 -map 1:8 -c copy Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
+# Concatenate M2TS files - FIRST A/V/S TRACKS ONLY - SUCCEEDS
+ffmpeg -y -i "concat:Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS|Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00001.M2TS" -c copy Y:\BDAM\BLACK_HAWK_DOWN.mkv
 
-# First M2TS only
-ffmpeg -y -i Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS -map 0:0 -map 0:1 -map 0:2 -map 0:4 -map 0:5 -map 0:6 -map 0:7 -map 0:8 -c copy -acodec:2 pcm_s16le Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
+# Concatenate M2TS files - selected tracks only + specific pcm_s16le codec for pcm_bluray track - SUCCEEDS (VERY VERY SLOW - Apparently pcm_bluray needs to be transcoded to pcm_s16le)
+ffmpeg -y -i "concat:Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS|Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00001.M2TS" -map 0:0 -map 0:1 -map 0:2 -map 0:4 -map 0:5 -map 0:6 -map 0:7 -map 0:8 -c copy -c:a:1 pcm_s16le Y:\BDAM\BLACK_HAWK_DOWN.mkv
 
-# Concatenate M2TS files (fails)
-ffmpeg -y -f concat -i Y:\BDAutoMuxer\BLACK_HAWK_DOWN.ffmpeg.concat.txt -map 0:0 -map 0:1 -map 0:2 -map 0:4 -map 0:5 -map 0:6 -map 0:7 -map 0:8 -c copy -c:a:1 pcm_s16le Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
+# Concatenate M2TS files - selected tracks only (no PCM)
+ffmpeg -y -i "concat:Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS|Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00001.M2TS" -map 0:0 -map 0:1 -map 0:4 -map 0:5 -map 0:6 -map 0:7 -map 0:8 -c copy Y:\BDAM\BLACK_HAWK_DOWN_FULL.mkv
 
-# Concatenate M2TS files (fails)
-ffmpeg -y -f concat -i Y:\BDAutoMuxer\BLACK_HAWK_DOWN.ffmpeg.concat.txt -c copy Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
+---
 
-# Concatenate M2TS files (FIRST A/V/S TRACKS ONLY - SUCCEEDS)
-ffmpeg -y -i "concat:Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS|Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00001.M2TS" -c copy Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
-
-# Concatenate M2TS files (selected tracks only - FAILS)
-ffmpeg -y -i "concat:Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS|Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00001.M2TS" -map 0:0 -map 0:1 -map 0:2 -map 0:4 -map 0:5 -map 0:6 -map 0:7 -map 0:8 -c copy Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
-
-# Concatenate M2TS files (selected tracks only + specific pcm_s16le codec for pcm_bluray track - SUCCEEDS)
-ffmpeg -y -i "concat:Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00000.M2TS|Y:\BD\49123204_BLACK_HAWK_DOWN\BDMV\STREAM\00001.M2TS" -map 0:0 -map 0:1 -map 0:2 -map 0:4 -map 0:5 -map 0:6 -map 0:7 -map 0:8 -c copy -c:a:1 pcm_s16le Y:\BDAutoMuxer\BLACK_HAWK_DOWN.mkv
+# Single 15 minute M2TS file - selected tracks only (no PCM)
+ffmpeg -y -i Y:\BDAM\BLACK_HAWK_DOWN_15min.m2ts -map 0:0 -map 0:1 -map 0:4 -map 0:5 -map 0:6 -map 0:7 -map 0:8 -c copy Y:\BDAM\BLACK_HAWK_DOWN_15min.mkv
 
 ---
 
