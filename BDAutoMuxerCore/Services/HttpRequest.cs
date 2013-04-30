@@ -11,6 +11,10 @@ namespace BDAutoMuxerCore.Services
 {
     public static class HttpRequest
     {
+        private readonly const string METHOD_GET = "GET";
+        private readonly const string METHOD_PUT = "PUT";
+        private readonly const string METHOD_POST = "POST";
+
         private static readonly string UserAgent;
 
         static HttpRequest()
@@ -20,7 +24,7 @@ namespace BDAutoMuxerCore.Services
 
         public static string Get(string uri)
         {
-            var request = BuildRequest("GET", uri);
+            var request = BuildRequest(METHOD_GET, uri);
             using (var httpResponse = (HttpWebResponse) request.GetResponse())
             {
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -32,7 +36,7 @@ namespace BDAutoMuxerCore.Services
 
         public static Image GetImage(string uri)
         {
-            var request = BuildRequest("GET", uri, cache: true);
+            var request = BuildRequest(METHOD_GET, uri, cache: true);
             using (var httpResponse = (HttpWebResponse) request.GetResponse())
             {
                 using (var stream = httpResponse.GetResponseStream())
@@ -44,12 +48,12 @@ namespace BDAutoMuxerCore.Services
 
         public static string Post(string uri, IDictionary<string, string> formData = null)
         {
-            return PutOrPost("POST", uri, formData);
+            return PutOrPost(METHOD_POST, uri, formData);
         }
 
         public static string Put(string uri, IDictionary<string, string> formData = null)
         {
-            return PutOrPost("PUT", uri, formData);
+            return PutOrPost(METHOD_PUT, uri, formData);
         }
 
         private static string PutOrPost(string method, string uri, IDictionary<string, string> formData)
@@ -87,7 +91,7 @@ namespace BDAutoMuxerCore.Services
             request.CachePolicy = new RequestCachePolicy(cache ? RequestCacheLevel.CacheIfAvailable : RequestCacheLevel.BypassCache);
             request.Expect = null;
 
-            if ("POST" == method || "PUT" == method)
+            if (METHOD_POST == method || METHOD_PUT == method)
                 request.ContentType = "application/x-www-form-urlencoded";
 
             return request;
