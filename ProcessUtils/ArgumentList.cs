@@ -15,9 +15,9 @@ namespace ProcessUtils
         private static readonly Regex ReservedShellCharsRegex = new Regex("[ &|()<>^\"]");
 
         /// <summary>
-        /// Gets or sets whether null arguments should be skipped by ToString().
+        /// Gets or sets whether null/empty arguments should be kept by ToString() as a set of two double quotes ("") or skipped.
         /// </summary>
-        public bool SkipNullArgs = true;
+        public bool KeepEmptyArgs = true;
 
         public ArgumentList(params string[] args)
         {
@@ -70,7 +70,7 @@ namespace ProcessUtils
 
         private bool KeepArg(string rawArg)
         {
-            return rawArg != null || !SkipNullArgs;
+            return rawArg != null || KeepEmptyArgs;
         }
 
         public static string Escape(string rawArg)
@@ -80,7 +80,11 @@ namespace ProcessUtils
 
         public static string ForCommandLine(string rawArg)
         {
-            return ReservedShellCharsRegex.IsMatch(rawArg) ? string.Format("{0}{1}{0}", DoubleQuote, Escape(rawArg)) : rawArg;
+            rawArg = rawArg ?? "";
+            return
+                string.IsNullOrEmpty(rawArg) || ReservedShellCharsRegex.IsMatch(rawArg)
+                    ? string.Format("{0}{1}{0}", DoubleQuote, Escape(rawArg))
+                    : rawArg;
         }
 
         public override string ToString()
