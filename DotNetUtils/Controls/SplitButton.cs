@@ -7,7 +7,7 @@ using System.Windows.Forms.VisualStyles;
 //Get the latest version of SplitButton at: http://wyday.com/splitbutton/
 
 
-namespace BDAutoMuxer.Views
+namespace DotNetUtils.Controls
 {
     public class SplitButton : Button
     {

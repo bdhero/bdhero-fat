@@ -149,19 +149,8 @@
     <Compile Include="FormFindIncompleteMedia.Designer.cs">
       <DependentUpon>FormFindIncompleteMedia.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\LinkLabel2.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Views\SplitButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Win32\Browser.cs" />
-    <Compile Include="Views\DragUtils.cs" />
-    <Compile Include="Views\FormUtils.cs" />
-    <Compile Include="Views\SplitContainerWithDivider.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Views\TaskbarProgress.cs" />
+    <Compile Include="Win32\Browser.cs" />
     <Compile Include="Services\OldMainMovieService.cs" />
     <Compile Include="Views\UpdateNotifier.cs" />
     <Compile Include="FormMain.cs">

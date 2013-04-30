@@ -17,6 +17,8 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //=============================================================================
 
+using DotNetUtils.Controls;
+
 namespace BDAutoMuxer
 {
     partial class FormSettings
@@ -59,7 +61,7 @@ namespace BDAutoMuxer
             this.label2 = new System.Windows.Forms.Label();
             this.checkBoxSelectHighestChannelCount = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.splitButtonSelectAudioCodecs = new BDAutoMuxer.Views.SplitButton();
+            this.splitButtonSelectAudioCodecs = new SplitButton();
             this.checkedListBoxAudioCodecs = new System.Windows.Forms.CheckedListBox();
             this.comboBoxAudienceLanguage = new System.Windows.Forms.ComboBox();
             this.labelAudioCodecs = new System.Windows.Forms.Label();
@@ -312,7 +314,7 @@ namespace BDAutoMuxer
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox checkBoxSelectHighestChannelCount;
         private System.Windows.Forms.Label label1;
-        private Views.SplitButton splitButtonSelectAudioCodecs;
+        private SplitButton splitButtonSelectAudioCodecs;
         private System.Windows.Forms.CheckedListBox checkedListBoxAudioCodecs;
         private System.Windows.Forms.ComboBox comboBoxAudienceLanguage;
         private System.Windows.Forms.Label labelAudioCodecs;

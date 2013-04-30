@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 // Bugs or suggestions: http://wyday.com/forum/
 
-namespace BDAutoMuxer.Views
+namespace DotNetUtils.Controls
 {
     public class LinkLabel2 : Control
     {

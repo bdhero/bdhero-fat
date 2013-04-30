@@ -1,4 +1,6 @@
-﻿namespace BDAutoMuxer
+﻿using DotNetUtils.Controls;
+
+namespace BDAutoMuxer
 {
     partial class FormMain
     {
@@ -135,7 +137,7 @@
             this.textBoxSource = new System.Windows.Forms.TextBox();
             this.labelSource = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.playlistsSplitContainerOuter = new BDAutoMuxer.Views.SplitContainerWithDivider();
+            this.playlistsSplitContainerOuter = new SplitContainerWithDivider();
             this.playlistsGroupBox = new System.Windows.Forms.GroupBox();
             this.checkBoxShowLowQualityPlaylists = new System.Windows.Forms.CheckBox();
             this.checkBoxShowShortPlaylists = new System.Windows.Forms.CheckBox();
@@ -145,7 +147,7 @@
             this.checkboxShowBogusPlaylists = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.playlistDataGridView = new System.Windows.Forms.DataGridView();
-            this.playlistsSplitContainerInner = new BDAutoMuxer.Views.SplitContainerWithDivider();
+            this.playlistsSplitContainerInner = new SplitContainerWithDivider();
             this.tracksGroupBox = new System.Windows.Forms.GroupBox();
             this.listViewStreams = new System.Windows.Forms.ListView();
             this.columnHeaderStreamCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -158,7 +160,7 @@
             this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderFileLength = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderFileSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.splitContainerTracksOuter = new BDAutoMuxer.Views.SplitContainerWithDivider();
+            this.splitContainerTracksOuter = new SplitContainerWithDivider();
             this.buttonPlaylistOpen = new System.Windows.Forms.Button();
             this.labelPlaylist = new System.Windows.Forms.Label();
             this.comboBoxPlaylist = new System.Windows.Forms.ComboBox();
@@ -168,7 +170,7 @@
             this.columnHeaderVideoFrameRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderVideoAspectRatio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelVideoTracks = new System.Windows.Forms.Label();
-            this.splitContainerTracksInner = new BDAutoMuxer.Views.SplitContainerWithDivider();
+            this.splitContainerTracksInner = new SplitContainerWithDivider();
             this.listViewAudioTracks = new System.Windows.Forms.ListView();
             this.columnHeaderAudioCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderAudioLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -178,7 +180,7 @@
             this.columnHeaderSubtitleCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderSubtitleLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelSubtitleTracks = new System.Windows.Forms.Label();
-            this.linkLabelSelectCoverArt = new BDAutoMuxer.Views.LinkLabel2();
+            this.linkLabelSelectCoverArt = new LinkLabel2();
             this.tabControl.SuspendLayout();
             this.tabPageDisc.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -1992,14 +1994,14 @@
         private System.Windows.Forms.TextBox textBoxOutputFileNameHint;
         private System.Windows.Forms.TextBox textBoxOutputFileNamePreview;
         private System.Windows.Forms.TextBox textBoxOutputDirPreview;
-        private BDAutoMuxer.Views.SplitContainerWithDivider splitContainerTracksOuter;
+        private SplitContainerWithDivider splitContainerTracksOuter;
         private System.Windows.Forms.ListView listViewVideoTracks;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoCodec;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoResolution;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoFrameRate;
         private System.Windows.Forms.ColumnHeader columnHeaderVideoAspectRatio;
         private System.Windows.Forms.Label labelVideoTracks;
-        private BDAutoMuxer.Views.SplitContainerWithDivider splitContainerTracksInner;
+        private SplitContainerWithDivider splitContainerTracksInner;
         private System.Windows.Forms.ListView listViewAudioTracks;
         private System.Windows.Forms.ColumnHeader columnHeaderAudioCodec;
         private System.Windows.Forms.ColumnHeader columnHeaderAudioLanguage;
@@ -2064,7 +2066,7 @@
         private System.Windows.Forms.TextBox movieNameTextBox;
         private System.Windows.Forms.Label discLanguageLabel;
         private System.Windows.Forms.Label movieNameLabel;
-        private Views.SplitContainerWithDivider playlistsSplitContainerOuter;
+        private SplitContainerWithDivider playlistsSplitContainerOuter;
         private System.Windows.Forms.GroupBox playlistsGroupBox;
         private System.Windows.Forms.CheckBox checkBoxShowLowQualityPlaylists;
         private System.Windows.Forms.CheckBox checkBoxShowShortPlaylists;
@@ -2072,7 +2074,7 @@
         private System.Windows.Forms.CheckBox checkboxShowBogusPlaylists;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView playlistDataGridView;
-        private Views.SplitContainerWithDivider playlistsSplitContainerInner;
+        private SplitContainerWithDivider playlistsSplitContainerInner;
         private System.Windows.Forms.GroupBox tracksGroupBox;
         private System.Windows.Forms.ListView listViewStreams;
         private System.Windows.Forms.ColumnHeader columnHeaderStreamCodec;
@@ -2093,7 +2095,7 @@
         private System.Windows.Forms.ToolStripMenuItem findIncompleteMKVsToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBoxCoverArt;
         private System.Windows.Forms.Label label4;
-        private Views.LinkLabel2 linkLabelSelectCoverArt;
+        private LinkLabel2 linkLabelSelectCoverArt;
         private System.Windows.Forms.ComboBox comboBoxLangauge;
         private System.Windows.Forms.Label label6;
     }

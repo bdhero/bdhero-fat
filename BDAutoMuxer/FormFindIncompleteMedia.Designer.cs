@@ -1,4 +1,6 @@
-﻿namespace BDAutoMuxer
+﻿using DotNetUtils.Controls;
+
+namespace BDAutoMuxer
 {
     partial class FormFindIncompleteMedia
     {
@@ -33,7 +35,7 @@
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.buttonScan = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.splitContainerWithDivider1 = new BDAutoMuxer.Views.SplitContainerWithDivider();
+            this.splitContainerWithDivider1 = new SplitContainerWithDivider();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxMissingChapters = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -204,7 +206,7 @@
         private System.Windows.Forms.Button buttonBrowse;
         private System.Windows.Forms.Button buttonScan;
         private System.Windows.Forms.GroupBox groupBox1;
-        private Views.SplitContainerWithDivider splitContainerWithDivider1;
+        private SplitContainerWithDivider splitContainerWithDivider1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxMissingChapters;
         private System.Windows.Forms.Label label3;

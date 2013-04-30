@@ -1,4 +1,6 @@
-﻿namespace BDAutoMuxer
+﻿using DotNetUtils.Controls;
+
+namespace BDAutoMuxer
 {
     partial class FormCodecScanner
     {
@@ -30,7 +32,7 @@
         {
             this.buttonScan = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
-            this.splitContainerWithDivider = new BDAutoMuxer.Views.SplitContainerWithDivider();
+            this.splitContainerWithDivider = new SplitContainerWithDivider();
             this.groupBoxInput = new System.Windows.Forms.GroupBox();
             this.textBoxInputFiles = new System.Windows.Forms.TextBox();
             this.groupBoxProgress = new System.Windows.Forms.GroupBox();
@@ -216,7 +218,7 @@
         private System.Windows.Forms.Label labelPercent;
         private System.Windows.Forms.Label labelCount;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private Views.SplitContainerWithDivider splitContainerWithDivider;
+        private SplitContainerWithDivider splitContainerWithDivider;
         private System.Windows.Forms.GroupBox groupBoxInput;
         private System.Windows.Forms.Button buttonScan;
         private System.Windows.Forms.TextBox textBoxInputFiles;
