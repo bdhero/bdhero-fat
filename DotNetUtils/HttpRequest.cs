@@ -5,17 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Cache;
+using System.Runtime.Caching;
 using DotNetUtils;
+using DotNetUtils.Annotations;
 
 namespace BDAutoMuxerCore.Services
 {
     public static class HttpRequest
     {
-        private readonly const string METHOD_GET = "GET";
-        private readonly const string METHOD_PUT = "PUT";
-        private readonly const string METHOD_POST = "POST";
+        private const string METHOD_GET = "GET";
+        private const string METHOD_PUT = "PUT";
+        private const string METHOD_POST = "POST";
 
         private static readonly string UserAgent;
+
+        private static readonly MemoryCache ImageCache = new MemoryCache("http_image_cache");
 
         static HttpRequest()
         {
@@ -34,7 +38,16 @@ namespace BDAutoMuxerCore.Services
             }
         }
 
-        public static Image GetImage(string uri)
+        #region Images
+
+        [CanBeNull]
+        public static Image GetImage(string uri, bool cache = false)
+        {
+            return cache ? GetImageCached(uri) : GetImageNoCache(uri);
+        }
+
+        [CanBeNull]
+        private static Image GetImageNoCache(string uri)
         {
             var request = BuildRequest(METHOD_GET, uri, cache: true);
             using (var httpResponse = (HttpWebResponse) request.GetResponse())
@@ -45,6 +58,22 @@ namespace BDAutoMuxerCore.Services
                 }
             }
         }
+
+        [CanBeNull]
+        private static Image GetImageCached([NotNull] string url)
+        {
+            return ImageCache.Contains(url) ? ImageCache[url] as Image : FetchAndCacheImage(url);
+        }
+
+        [CanBeNull]
+        private static Image FetchAndCacheImage([NotNull] string url)
+        {
+            var image = GetImage(url);
+            ImageCache.Set(url, image, new CacheItemPolicy());
+            return image;
+        }
+
+        #endregion
 
         public static string Post(string uri, IDictionary<string, string> formData = null)
         {
