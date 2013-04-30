@@ -65,7 +65,6 @@ namespace BDAutoMuxer
         private string _tmdbMovieTitle;
         private int? _tmdbMovieYear;
         private string _tmdbMovieUrl;
-        private HttpImageCache _imageCache = HttpImageCache.Instance;
         private List<string> posterList;
         private List<string> languageList;
         private string _selectedLanguage;
@@ -1670,7 +1669,7 @@ namespace BDAutoMuxer
 
                     else
                     {
-                        var image = _imageCache.GetImage(_rootUrl + _tmdbMovieResult.poster_path);
+                        var image = HttpRequest.GetImage(_rootUrl + _tmdbMovieResult.poster_path);
                         pictureBoxMoviePoster.Image = image;
                         pictureBoxCoverArt.Image = image;
                         getLanguageList();
@@ -2769,7 +2768,7 @@ namespace BDAutoMuxer
                 if (posterIndex >= 0 && posterList != null)
                 {
                     var posterUrl = posterList[posterIndex];
-                    pictureBoxCoverArt.Image = _imageCache.GetImage(posterUrl);
+                    pictureBoxCoverArt.Image = HttpRequest.GetImage(posterUrl);
                 }
             }
         }

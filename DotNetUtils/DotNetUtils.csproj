@@ -58,7 +58,6 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="FormUtils.cs" />
-    <Compile Include="HttpImageCache.cs" />
     <Compile Include="HttpRequest.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

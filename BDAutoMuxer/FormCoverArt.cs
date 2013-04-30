@@ -9,7 +9,6 @@ namespace BDAutoMuxer
 {
     public partial class FormCoverArt : Form
     {
-        private readonly HttpImageCache _imageCache = HttpImageCache.Instance;
         private readonly ImageList coverArtImages = new ImageList { ColorDepth = ColorDepth.Depth32Bit, ImageSize = new Size(93, 139) };
             
         public int SelectedIndex { get; private set;}
@@ -62,7 +61,7 @@ namespace BDAutoMuxer
                 var listViewItem = new ListViewItem("", i);
 
                 listViewCovers.Items.Add(listViewItem);
-                coverArtImages.Images.Add(_imageCache.GetImage(posterUrl));
+                coverArtImages.Images.Add(HttpRequest.GetImage(posterUrl));
             }
 
             listViewCovers.LargeImageList = coverArtImages;

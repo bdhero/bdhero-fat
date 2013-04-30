@@ -118,7 +118,7 @@ namespace CoverArtResizer
 
             try
             {
-                var poster = HttpImageCache.Instance.GetImage(textBoxImageUrl.Text);
+                var poster = HttpRequest.GetImage(textBoxImageUrl.Text);
 
                 string hash;
                 using (MD5 md5Hash = MD5.Create())
