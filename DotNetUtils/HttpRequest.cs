@@ -41,7 +41,7 @@ namespace BDAutoMuxerCore.Services
         #region Images
 
         [CanBeNull]
-        public static Image GetImage(string uri, bool cache = false)
+        public static Image GetImage(string uri, bool cache = true)
         {
             return cache ? GetImageCached(uri) : GetImageNoCache(uri);
         }
