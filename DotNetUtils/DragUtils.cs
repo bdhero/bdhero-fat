@@ -5,13 +5,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using DotNetUtils;
 using DotNetUtils.Annotations;
 
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
-namespace BDAutoMuxer.Views
+namespace DotNetUtils
 {
     public static class DragUtils
     {

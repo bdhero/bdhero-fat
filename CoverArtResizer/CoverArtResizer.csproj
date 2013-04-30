@@ -101,14 +101,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BDAutoMuxerCore\BDAutoMuxerCore.csproj">
-      <Project>{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}</Project>
-      <Name>BDAutoMuxerCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BDAutoMuxer\BDAutoMuxer.csproj">
-      <Project>{3209AF1D-4762-4960-9DE5-13E90E77EE96}</Project>
-      <Name>BDAutoMuxer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
       <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
       <Name>DotNetUtils</Name>

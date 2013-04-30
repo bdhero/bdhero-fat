@@ -10,11 +10,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
-using BDAutoMuxer.Views;
-using BDAutoMuxerCore.Annotations;
-using BDAutoMuxerCore.Services;
-using BDAutoMuxerCore.Tools;
 using DotNetUtils;
+using DotNetUtils.Annotations;
 
 namespace CoverArtResizer
 {
@@ -204,5 +201,11 @@ namespace CoverArtResizer
             }
             return newImage;
         }
+    }
+
+    enum CoverArtSize
+    {
+        Small = 120,
+        Large = 600
     }
 }

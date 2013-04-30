@@ -6,10 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Runtime.Caching;
-using DotNetUtils;
 using DotNetUtils.Annotations;
 
-namespace BDAutoMuxerCore.Services
+namespace DotNetUtils
 {
     public static class HttpRequest
     {
