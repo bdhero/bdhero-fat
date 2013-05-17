@@ -89,13 +89,13 @@ namespace MediaInfoWrapper
         {
             /*
 
-            var braveheart_mkv_path = @"Y:\BDAutoMuxer\BRAVEHEART_D1_AC\Braveheart (1995) [1080p].mkv";
+            var braveheart_mkv_path = @"Y:\BDHero\BRAVEHEART_D1_AC\Braveheart (1995) [1080p].mkv";
             var pirates_m2ts_path =
-                @"Y:\BDAutoMuxer\PIRATES3_FULL\Pirates of the Caribbean - At World's End (2007) [1080p].m2ts";
+                @"Y:\BDHero\PIRATES3_FULL\Pirates of the Caribbean - At World's End (2007) [1080p].m2ts";
             var pirates_wav_path =
-                @"Y:\BDAutoMuxer\PIRATES3_FULL\Pirates of the Caribbean - At World's End (2007) [1080p].track_4352.1.wav";
-            var pirates_mkv_path = @"Y:\BDAutoMuxer\PIRATES3_SHORT\PIRATES3_00001.mmg.mkv";
-            var thismeanswar_mka_path = @"Y:\BDAutoMuxer\THIS_MEANS_WAR\This Means War (2012) [1080p].mka";
+                @"Y:\BDHero\PIRATES3_FULL\Pirates of the Caribbean - At World's End (2007) [1080p].track_4352.1.wav";
+            var pirates_mkv_path = @"Y:\BDHero\PIRATES3_SHORT\PIRATES3_00001.mmg.mkv";
+            var thismeanswar_mka_path = @"Y:\BDHero\THIS_MEANS_WAR\This Means War (2012) [1080p].mka";
 
             var start5 = DateTime.Now;
 

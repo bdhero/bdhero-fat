@@ -390,7 +390,7 @@ namespace ProcessUtils
 
         private void OnComplete(CancelEventArgs e)
         {
-            // Prevent this method from being called twice (which crashes BDAutoMuxer)
+            // Prevent this method from being called twice (which crashes BDHero)
             if (_onCompleteHandled)
                 return;
 

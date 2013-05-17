@@ -1,8 +1,8 @@
-# BDAutoMuxer
+# BDHero
 
-## What Is BDAutoMuxer?
+## What Is BDHero?
 
-BDAutoMuxer is an intelligent, automatic tool for detecting main movie playlist(s) on Blu-ray Discs™ and muxing them to M2TS / MKV containers.
+BDHero is an intelligent, automatic tool for detecting main movie playlist(s) on Blu-ray Discs™ and muxing them to M2TS / MKV containers.
 
 ## Our Goal
 
@@ -41,21 +41,21 @@ The major issues we intend to solve are:
 
 ## The Solution
 
-BDAutoMuxer achieves our goals and solves the aforementioned issues with the following features:
+BDHero achieves our goals and solves the aforementioned issues with the following features:
 
 1.  **Online Database**
 
-    BDAutoMuxer leverages a small but growing database of Blu-ray Disc metadata contributed by other BDAutoMuxer users** that includes main movie playlists, video render languages, cut / edition / commentary information, and [TMDb][tmdb] IDs.
+    BDHero leverages a small but growing database of Blu-ray Disc metadata contributed by other BDHero users** that includes main movie playlists, video render languages, cut / edition / commentary information, and [TMDb][tmdb] IDs.
 
     _\* For the time being, only project maintainers are allowed to submit to the database.  Our goal is to ensure 100% accuracy of all database entries, and doing so requires great care and extensive knowledge of Blu-ray ripping.  In the future we may open up submissions to trusted committers and AVS / Doom9 forum users, but for now it's restricted to the developers only._
 
 2.  **Intelligent Detection of Main-Movie Playlist(s)**
 
-    Even in offline mode, BDAutoMuxer will do 90% of the work for you and auto-detect the main movie playlist(s).
+    Even in offline mode, BDHero will do 90% of the work for you and auto-detect the main movie playlist(s).
 
 3.  **Smart Output File Naming**
 
-    BDAutoMuxer detects the movie name and release year of each disc and allows you to insert useful metadata into the output path, including:
+    BDHero detects the movie name and release year of each disc and allows you to insert useful metadata into the output path, including:
 
     ##### Placeholders
 
@@ -89,11 +89,11 @@ BDAutoMuxer achieves our goals and solves the aforementioned issues with the fol
 
 # Credit
 
-BDAutoMuxer would not be possible without the **exceptional** work of these amazing free and open source projects:
+BDHero would not be possible without the **exceptional** work of these amazing free and open source projects:
 
 *  **BDInfo**
 
-    BDAutoMuxer is a fork of the **fantastic** [BDInfo][bdinfo] tool by [CinemaSquid][cinemasquid].
+    BDHero is a fork of the **fantastic** [BDInfo][bdinfo] tool by [CinemaSquid][cinemasquid].
 
 *  **tsMuxeR**
 
@@ -103,18 +103,18 @@ BDAutoMuxer would not be possible without the **exceptional** work of these amaz
 
     Remuxing from M2TS to MKV is done with [mkvmerge][mkvmerge], part of the **outstanding** [MKVToolNix][mkvtoolnix] suite.
 
-*  **BDAutoMuxer**
+*  **BDHero**
 
-    BDAutoMuxer is developed and maintained by [Andy Dvorak][andydvorak] and [Chris Spencer][chrisspencer].
+    BDHero is developed and maintained by [Andy Dvorak][andydvorak] and [Chris Spencer][chrisspencer].
 
 # License
 
-BDAutoMuxer
+BDHero
 -----------
 
 ### Overview
 
-BDAutoMuxer is free, [Open Source software as defined by the Open Source Initiative][open-source-def].  You may modify the program and distribute modified or verbatim copies of BDAutoMuxer without asking, provided that you make the source code available for others to view and modify as described by the GPL v3.0 (see below).
+BDHero is free, [Open Source software as defined by the Open Source Initiative][open-source-def].  You may modify the program and distribute modified or verbatim copies of BDHero without asking, provided that you make the source code available for others to view and modify as described by the GPL v3.0 (see below).
 
 *   License: [GPL 3.0][gpl-3.0]
 *   Source code: [GitHub project][bdam-src]
@@ -127,7 +127,7 @@ BDAutoMuxer is free, [Open Source software as defined by the Open Source Initiat
 
 ### GPL 3.0
 
-> BDAutoMuxer - Automated Blu-ray muxing tool
+> BDHero - Automated Blu-ray muxing tool
 > Copyright (C) 2012-2013 Andrew C. Dvorak (andy@andydvorak.net)
 
 > This program is free software: you can redistribute it and/or modify
