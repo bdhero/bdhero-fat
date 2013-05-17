@@ -133,6 +133,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\dummy_audio.mka" />
     <None Include="Resources\logo_vorbis.png" />
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +246,7 @@
     <Content Include="Libraries\Newtonsoft.Json.dll" />
     <Content Include="Libraries\RestSharp.dll" />
     <Content Include="Libraries\WatTmdb.dll" />
+    <None Include="Resources\mkvmerge.exe" />
     <None Include="Resources\ffmpeg.exe" />
     <None Include="Resources\mkvpropedit.exe" />
   </ItemGroup>

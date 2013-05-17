@@ -67,6 +67,13 @@ namespace BDAutoMuxerCore {
             }
         }
         
+        internal static byte[] mkvmerge_exe {
+            get {
+                object obj = ResourceManager.GetObject("mkvmerge_exe", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] mkvpropedit_exe {
             get {
                 object obj = ResourceManager.GetObject("mkvpropedit_exe", resourceCulture);

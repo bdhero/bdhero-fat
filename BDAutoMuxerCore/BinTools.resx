@@ -121,6 +121,9 @@
   <data name="ffmpeg_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ffmpeg.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="mkvmerge_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\mkvmerge.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="mkvpropedit_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\mkvpropedit.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
