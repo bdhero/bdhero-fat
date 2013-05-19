@@ -59,15 +59,14 @@
     <Compile Include="Transformer\PlaylistTransformer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libraries\Newtonsoft.Json.dll" />
-    <Content Include="Libraries\RestSharp.dll" />
-    <Content Include="Libraries\WatTmdb.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
       <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
       <Name>DotNetUtils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libraries\Newtonsoft.Json.dll" />
+    <Content Include="Libraries\RestSharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
