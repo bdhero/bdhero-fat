@@ -5,7 +5,7 @@ using System.Linq;
 namespace BDHero.BDROM
 {
     /// <summary>
-    /// Represents a .M2TS file
+    /// Represents an audio, video, or subtitle track in a .M2TS file.
     /// </summary>
     public class Track
     {
