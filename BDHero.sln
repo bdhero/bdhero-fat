@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDHeroCore", "BDHeroCore\BD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDHero", "BDHero\BDHero.csproj", "{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapterGrabberPlugin", "ChapterGrabberPlugin\ChapterGrabberPlugin.csproj", "{112762A2-52A3-4D52-A9F6-DA2D7220C758}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}.Release|Win32.ActiveCfg = Release|Any CPU
 		{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}.Release|x86.ActiveCfg = Release|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|Win32.ActiveCfg = Release|Any CPU
+		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
