@@ -25,9 +25,9 @@ namespace DotNetUtils
             UserAgent = AssemblyUtils.GetAssemblyName(typeof(HttpRequest)) + "/" + AssemblyUtils.GetAssemblyVersion(typeof(HttpRequest));
         }
 
-        public static string Get(string uri)
+        public static string Get(string uri, List<string> headers = null)
         {
-            var request = BuildRequest(METHOD_GET, uri);
+            var request = BuildRequest(METHOD_GET, uri, false, headers);
             using (var httpResponse = (HttpWebResponse) request.GetResponse())
             {
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -109,9 +109,17 @@ namespace DotNetUtils
             }
         }
 
-        private static HttpWebRequest BuildRequest(string method, string uri, bool cache = false)
+        private static HttpWebRequest BuildRequest(string method, string uri, bool cache = false, List<string> headers = null)
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
+
+            if (headers != null && headers.Count > 0)
+            {
+                foreach (var header in headers)
+                {
+                    request.Headers.Add(header);
+                }
+            }
 
             request.Method = method;
             request.UserAgent = UserAgent;
