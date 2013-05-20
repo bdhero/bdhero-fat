@@ -92,6 +92,13 @@ namespace TmdbPlugin
         private void tmdbGet_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             var result = e.Result;
+
+            //To Do:
+            // need to serialize Json results
+
+            // need to determine best match 
+
+            // need to return best match results to job.disc
         }
 
         private class TmdbApiParameters
