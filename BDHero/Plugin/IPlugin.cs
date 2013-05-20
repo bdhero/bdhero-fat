@@ -14,7 +14,7 @@ namespace BDHero.Plugin
     {
         IPluginHost Host { get; set; }
 
-        string Name { get; set; }
+        string Name { get; }
 
         void LoadPlugin();
         void UnloadPlugin();
