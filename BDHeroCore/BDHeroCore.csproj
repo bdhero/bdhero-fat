@@ -130,6 +130,7 @@
     <EmbeddedResource Include="BinTools.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>BinTools.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

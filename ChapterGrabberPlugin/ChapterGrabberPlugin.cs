@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml;
+using BDHero.Plugin;
+using BDHero.Queue;
+using DotNetUtils;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 using System.Text.RegularExpressions;
@@ -11,20 +13,36 @@ using System.Text.RegularExpressions;
 
 namespace ChapterGrabberPlugin
 {
-    public class ChapterGrabberPlugin
+    public class ChapterGrabberPlugin : INameProviderPlugin
     {
-        static void Main(string[] args)
+        private const string ApiGet = "http://chapterdb.org/chapters/search?title=";
+        private const string ApiGetEnd = "&chapterCount=0 HTTP/1.1";
+
+        public IPluginHost Host { get; set; }
+        public string Name { get; set; }
+        public void LoadPlugin()
         {
-            var lisT = GetChapters("Dark Knight");
-            var apiValues = CompareChapters(lisT);
-            if (apiValues != null && apiValues.Count > 0)
-            {
-                ReplaceChapters(apiValues);
-            }
+
         }
 
-        private const string _apiGet = "http://chapterdb.org/chapters/search?title=";
-        private const string _apiGetEnd = "&chapterCount=0 HTTP/1.1";
+        public void UnloadPlugin()
+        {
+
+        }
+
+        public event EditPluginPreferenceHandler EditPreferences;
+        public void Rename(Job job)
+        {
+            var playlist = job.Disc.Playlists[job.PlaylistIndex];
+
+            var apiResults = GetChapters(job.Disc.MovieTitle);
+
+            var apiValues = CompareChapters(apiResults, playlist.Chapters);
+            if (apiValues != null && apiValues.Count > 0)
+            {
+                ReplaceChapters(apiValues, playlist.Chapters);
+            }
+        }
 
         static private List<JsonChaps> GetChapters(string movieName)
         {
@@ -32,7 +50,7 @@ namespace ChapterGrabberPlugin
             var headers = new List<string>();
             headers.Add("ApiKey: G88IO875M9SKU6DPB82F");
             headers.Add("UserName: ChapterGrabber");
-            var xmlResponse = HttpRequest.Get(_apiGet + movieName + _apiGetEnd, headers);
+            var xmlResponse = HttpRequest.Get(ApiGet + movieName + ApiGetEnd, headers);
             var doc = new XmlDocument();
 
             doc.LoadXml(xmlResponse);
@@ -67,55 +85,10 @@ namespace ChapterGrabberPlugin
             return movieSearchResults;
         }
 
-        static private List<JsonChaps> CompareChapters(List<JsonChaps> apiData)
+        static private List<JsonChaps> CompareChapters(List<JsonChaps> apiData, IList<BDHero.BDROM.Chapter> discData)
         {
-            #region test data
-
-            List<TimeSpan> _chapterDisc = new List<TimeSpan>();
-            _chapterDisc.Add(TimeSpan.Parse("00:00:00.000"));
-            _chapterDisc.Add(TimeSpan.Parse("00:06:23.966"));
-            _chapterDisc.Add(TimeSpan.Parse("00:10:36.260"));
-            _chapterDisc.Add(TimeSpan.Parse("00:13:52.581"));
-            _chapterDisc.Add(TimeSpan.Parse("00:17:54.198"));
-            _chapterDisc.Add(TimeSpan.Parse("00:21:39.339"));
-            _chapterDisc.Add(TimeSpan.Parse("00:26:10.026"));
-            _chapterDisc.Add(TimeSpan.Parse("00:29:36.274"));
-            _chapterDisc.Add(TimeSpan.Parse("00:31:42.483"));
-            _chapterDisc.Add(TimeSpan.Parse("00:37:49.058"));
-            _chapterDisc.Add(TimeSpan.Parse("00:43:34.069"));
-            _chapterDisc.Add(TimeSpan.Parse("00:46:39.546"));
-            _chapterDisc.Add(TimeSpan.Parse("00:48:57.768"));
-            _chapterDisc.Add(TimeSpan.Parse("00:53:19.446"));
-            _chapterDisc.Add(TimeSpan.Parse("00:57:15.640"));
-            _chapterDisc.Add(TimeSpan.Parse("00:59:26.354"));
-            _chapterDisc.Add(TimeSpan.Parse("01:03:59.627"));
-            _chapterDisc.Add(TimeSpan.Parse("01:08:23.557"));
-            _chapterDisc.Add(TimeSpan.Parse("01:10:48.327"));
-            _chapterDisc.Add(TimeSpan.Parse("01:14:24.918"));
-            _chapterDisc.Add(TimeSpan.Parse("01:18:05.639"));
-            _chapterDisc.Add(TimeSpan.Parse("01:22:22.437"));
-            _chapterDisc.Add(TimeSpan.Parse("01:24:48.583"));
-            _chapterDisc.Add(TimeSpan.Parse("01:30:48.442"));
-            _chapterDisc.Add(TimeSpan.Parse("01:34:04.972"));
-            _chapterDisc.Add(TimeSpan.Parse("01:39:57.783"));
-            _chapterDisc.Add(TimeSpan.Parse("01:42:05.494"));
-            _chapterDisc.Add(TimeSpan.Parse("01:44:59.918"));
-            _chapterDisc.Add(TimeSpan.Parse("01:47:00.872"));
-            _chapterDisc.Add(TimeSpan.Parse("01:51:09.913"));
-            _chapterDisc.Add(TimeSpan.Parse("01:54:14.639"));
-            _chapterDisc.Add(TimeSpan.Parse("01:57:04.017"));
-            _chapterDisc.Add(TimeSpan.Parse("02:00:14.248"));
-            _chapterDisc.Add(TimeSpan.Parse("02:03:37.576"));
-            _chapterDisc.Add(TimeSpan.Parse("02:09:07.614"));
-            _chapterDisc.Add(TimeSpan.Parse("02:12:27.314"));
-            _chapterDisc.Add(TimeSpan.Parse("02:15:22.781"));
-            _chapterDisc.Add(TimeSpan.Parse("02:19:58.681"));
-            _chapterDisc.Add(TimeSpan.Parse("02:24:26.658"));
-
-            #endregion
-            //To Do: Replace _chapterDisc with Disc.Chapters from Disc Object in BD Hero Core
-            var apiResultsFilteredByChapter = apiData.Where(chaps => IsMatch(chaps, _chapterDisc)).ToList();
-
+            var apiResultsFilteredByChapter = apiData.Where(chaps => IsMatch(chaps, discData)).ToList();
+            
             var apiResultsFilteredByValidName = apiResultsFilteredByChapter.Where(IsValid).ToList();
             return apiResultsFilteredByValidName;
         }
@@ -139,7 +112,7 @@ namespace ChapterGrabberPlugin
             return false;
         }
 
-        private static bool IsMatch(JsonChaps jsonChaps, List<TimeSpan> chapterDisc)
+        private static bool IsMatch(JsonChaps jsonChaps, IList<BDHero.BDROM.Chapter> chapterDisc)
         {
             var chapterCountMatches = jsonChaps.chapterInfo.chapters.chapter.Count == chapterDisc.Count ||
                                       jsonChaps.chapterInfo.chapters.chapter.Count == chapterDisc.Count + 1;
@@ -150,25 +123,19 @@ namespace ChapterGrabberPlugin
             {
                 var discChapter = chapterDisc[i];
                 var apiChapter = jsonChaps.chapterInfo.chapters.chapter[i];
-                if ((int)discChapter.TotalSeconds != (int)apiChapter.time.TotalSeconds)
+                if ((int)discChapter.StartTime.TotalSeconds != (int)apiChapter.time.TotalSeconds)
                     return false;
             }
             return true;
         }
 
-        static private void ReplaceChapters(List<JsonChaps> apiData)
+        static private void ReplaceChapters(List<JsonChaps> apiData, IList<BDHero.BDROM.Chapter> discData )
         {
-            /*  Sudo for replacing the Default Chapter Names in the 
-            for (var i=0; i<Disc.Chapters.Count; i++)
+            // Sudo for replacing the Default Chapter Names in the 
+            for (var i=0; i<discData.Count; i++)
             {
-                Disc.Chapters[i].Title       
+                discData[i].Title = apiData[0].chapterInfo.chapters.chapter[i].name;
             }
-             */
-
         }
-
-
-
-
     }
 }

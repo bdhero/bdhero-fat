@@ -52,7 +52,4 @@ namespace ChapterGrabberPlugin
         public string updatedBy { get; set; }
         public string updatedDate { get; set; }
     }
-
-
-    
 }
