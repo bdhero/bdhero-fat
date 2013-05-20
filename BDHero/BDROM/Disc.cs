@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using I18N;
 using Newtonsoft.Json;
 
 // ReSharper disable InconsistentNaming
@@ -62,7 +63,7 @@ namespace BDHero.BDROM
 
         #region Constructor
 
-        private Disc()
+        public Disc()
         {
             Languages = new List<Language>();
         }

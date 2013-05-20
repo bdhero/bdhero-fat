@@ -4,7 +4,7 @@ using System.Globalization;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
-namespace BDHero.BDROM
+namespace I18N
 {
     public class Language
     {

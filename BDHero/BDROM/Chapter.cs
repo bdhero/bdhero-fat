@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using I18N;
 
 namespace BDHero.BDROM
 {
@@ -42,8 +43,9 @@ namespace BDHero.BDROM
         {
         }
 
-        public Chapter(double seconds)
+        public Chapter(int number, double seconds)
         {
+            Number = number;
             StartTime = new TimeSpan((long)(seconds * TimeSpan.TicksPerSecond));
         }
 
@@ -66,15 +68,6 @@ namespace BDHero.BDROM
                         StartTime.Milliseconds.ToString("000")
                     );
             }
-        }
-
-        #endregion
-
-        #region Transformer
-
-        public static IList<Chapter> FromSeconds(IEnumerable<double> chaptersInSeconds)
-        {
-            return chaptersInSeconds.Select((t, i) => new Chapter(t) { Number = i + 1 }).ToList();
         }
 
         #endregion

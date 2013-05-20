@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</ProjectGuid>
+    <ProjectGuid>{315ED78B-F3FD-4C69-8786-CCD216A5495D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BDHero</RootNamespace>
-    <AssemblyName>BDHero</AssemblyName>
+    <RootNamespace>BDHero.Plugin.DiscReader</RootNamespace>
+    <AssemblyName>DiscReaderPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,11 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,20 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BDROM\Chapter.cs" />
-    <Compile Include="BDROM\Codec.cs" />
-    <Compile Include="BDROM\Disc.cs" />
-    <Compile Include="BDROM\Playlist.cs" />
-    <Compile Include="BDROM\StreamClip.cs" />
-    <Compile Include="BDROM\Track.cs" />
-    <Compile Include="Controller.cs" />
-    <Compile Include="Plugin\IPlugin.cs" />
-    <Compile Include="Plugin\IPluginHost.cs" />
-    <Compile Include="Plugin\PluginService.cs" />
+    <Compile Include="DiscReader.cs" />
+    <Compile Include="Transformer\ChapterTransformer.cs" />
+    <Compile Include="Transformer\DiscTransformer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queue\Job.cs" />
+    <Compile Include="Transformer\CodecTransformer.cs" />
+    <Compile Include="Transformer\PlaylistTransformer.cs" />
+    <Compile Include="Transformer\StreamClipTransformer.cs" />
+    <Compile Include="Transformer\TrackTransformer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BDHero\BDHero.csproj">
+      <Project>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</Project>
+      <Name>BDHero</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BDInfo\BDInfo.csproj">
       <Project>{DFF91717-C9EF-4881-9827-81D25F9A71A3}</Project>
       <Name>BDInfo</Name>
@@ -69,10 +67,6 @@
       <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
       <Name>I18N</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Libraries\Newtonsoft.Json.dll" />
-    <Content Include="Libraries\RestSharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

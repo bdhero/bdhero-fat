@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BDHero.BDROM;
+using BDInfo;
 
-namespace BDHero.Transformer
+namespace BDHero.Plugin.DiscReader.Transformer
 {
-#if false
-    class PlaylistTransformer
+    static class PlaylistTransformer
     {
         /// <summary>
         /// Returns a List of TSPlaylistFile objects from the given Dictionary.
@@ -34,13 +35,12 @@ namespace BDHero.Transformer
                 FullPath = playlistFile.FullName,
                 Filesize = playlistFile.FileSize,
                 Length = TimeSpan.FromMilliseconds(playlistFile.TotalLength * 1000),
-                StreamClips = StreamClip.Transform(playlistFile.StreamClips),
-                Tracks = Track.Transform(playlistFile.SortedStreams),
-                Chapters = Chapter.Transform(playlistFile.Chapters),
+                StreamClips = StreamClipTransformer.Transform(playlistFile.StreamClips),
+                Tracks = TrackTransformer.Transform(playlistFile.SortedStreams),
+                Chapters = ChapterTransformer.Transform(playlistFile.Chapters),
                 HasDuplicateStreamClips = playlistFile.HasDuplicateClips,
                 HasLoops = playlistFile.HasLoops
             };
         }
     }
-#endif
 }

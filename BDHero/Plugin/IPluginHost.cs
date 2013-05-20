@@ -11,7 +11,7 @@ namespace BDHero.Plugin
         /// Allows plugins to report their progress to the host.
         /// </summary>
         /// <param name="plugin">Plugin that is reporting its progress</param>
-        /// <param name="progressPercent">0.0 to 1.0</param>
-        void ReportProgress(IPlugin plugin, double progressPercent);
+        /// <param name="progress">0.0 to 100.0</param>
+        void ReportProgress(IPlugin plugin, double progress);
     }
 }

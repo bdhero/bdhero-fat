@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using I18N;
 using Newtonsoft.Json;
 
 // ReSharper disable InconsistentNaming
@@ -40,19 +41,19 @@ namespace BDHero.BDROM
         /// Name of the playlist file in all uppercase (e.g., "00200.MPLS").
         /// </summary>
         [JsonProperty(PropertyName = "filename")]
-        public string Filename { get; private set; }
+        public string Filename { get; set; }
 
         /// <summary>
         /// Size of the playlist file in bytes.
         /// </summary>
         [JsonProperty(PropertyName = "filesize")]
-        public ulong Filesize { get; private set; }
+        public ulong Filesize { get; set; }
 
         /// <summary>
         /// Duration of the playlist.
         /// </summary>
         [JsonProperty(PropertyName = "length")]
-        public TimeSpan Length { get; private set; }
+        public TimeSpan Length { get; set; }
 
         #endregion
 
