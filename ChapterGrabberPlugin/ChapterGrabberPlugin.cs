@@ -19,7 +19,10 @@ namespace ChapterGrabberPlugin
         private const string ApiGetEnd = "&chapterCount=0 HTTP/1.1";
 
         public IPluginHost Host { get; set; }
-        public string Name { get; set; }
+        public string Name 
+        {
+            get { return "ChapterGrabber"; }
+        }
         public void LoadPlugin()
         {
 
@@ -40,7 +43,7 @@ namespace ChapterGrabberPlugin
             var apiValues = CompareChapters(apiResults, playlist.Chapters);
             if (apiValues != null && apiValues.Count > 0)
             {
-                ReplaceChapters(apiValues, playlist.Chapters);
+                ReplaceChapters(apiValues[0], playlist.Chapters);
             }
         }
 
@@ -90,6 +93,7 @@ namespace ChapterGrabberPlugin
             var apiResultsFilteredByChapter = apiData.Where(chaps => IsMatch(chaps, discData)).ToList();
             
             var apiResultsFilteredByValidName = apiResultsFilteredByChapter.Where(IsValid).ToList();
+
             return apiResultsFilteredByValidName;
         }
 
@@ -129,12 +133,11 @@ namespace ChapterGrabberPlugin
             return true;
         }
 
-        static private void ReplaceChapters(List<JsonChaps> apiData, IList<BDHero.BDROM.Chapter> discData )
+        static private void ReplaceChapters(JsonChaps apiData, IList<BDHero.BDROM.Chapter> discData )
         {
-            // Sudo for replacing the Default Chapter Names in the 
             for (var i=0; i<discData.Count; i++)
             {
-                discData[i].Title = apiData[0].chapterInfo.chapters.chapter[i].name;
+                discData[i].Title = apiData.chapterInfo.chapters.chapter[i].name;
             }
         }
     }
