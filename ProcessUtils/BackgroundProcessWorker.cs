@@ -159,6 +159,15 @@ namespace ProcessUtils
         /// Estimated length of time remaining before the process completes.
         /// </summary>
         public TimeSpan TimeRemaining = TimeSpan.Zero;
+
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}.  {2} elapsed, {3} remaining",
+                                 ProcessState,
+                                 PercentComplete,
+                                 TimeElapsed,
+                                 TimeRemaining);
+        }
     }
 
     public delegate void BackgroundProgressHandler(ProgressState progressState);
