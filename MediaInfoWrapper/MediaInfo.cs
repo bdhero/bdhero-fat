@@ -81,8 +81,6 @@ namespace MediaInfoWrapper
         public IList<MISubtitleTrack> SubtitleTracks { get { return _subtitleTracks.AsReadOnly(); } }
         public IList<MIChapterTrack> ChapterTracks { get { return _chapterTracks.AsReadOnly(); } }
 
-        
-
         #region Testing
 
         public static void Test(string[] files = null)
