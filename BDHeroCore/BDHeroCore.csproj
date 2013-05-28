@@ -54,28 +54,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BDInfo\BDInfoSettings.cs" />
-    <Compile Include="BDInfo\BDROM.cs" />
-    <Compile Include="BDInfo\TSCodecAC3.cs" />
-    <Compile Include="BDInfo\TSCodecAVC.cs" />
-    <Compile Include="BDInfo\TSCodecDTS.cs" />
-    <Compile Include="BDInfo\TSCodecDTSHD.cs" />
-    <Compile Include="BDInfo\TSCodecLPCM.cs" />
-    <Compile Include="BDInfo\TSCodecMPEG2.cs" />
-    <Compile Include="BDInfo\TSCodecMVC.cs" />
-    <Compile Include="BDInfo\TSCodecTrueHD.cs" />
-    <Compile Include="BDInfo\TSCodecVC1.cs" />
-    <Compile Include="BDInfo\TSInterleavedFile.cs" />
-    <Compile Include="BDInfo\TSPlaylistFile.cs" />
-    <Compile Include="BDInfo\TSStream.cs" />
-    <Compile Include="BDInfo\TSStreamBuffer.cs" />
-    <Compile Include="BDInfo\TSStreamClip.cs" />
-    <Compile Include="BDInfo\TSStreamClipFile.cs" />
-    <Compile Include="BDInfo\TSStreamFile.cs" />
-    <Compile Include="BDROM\Chapter.cs" />
-    <Compile Include="BDROM\ChapterWriter.cs" />
-    <Compile Include="BDROM\Disc.cs" />
-    <Compile Include="BDROM\DiscTransformer.cs" />
     <Compile Include="CodecIcons.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -86,10 +64,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CodecLogos.resx</DependentUpon>
     </Compile>
-    <Compile Include="MediaInfoHelper.cs" />
-    <Compile Include="BDROM\Playlist.cs" />
-    <Compile Include="BDROM\StreamClip.cs" />
-    <Compile Include="BDROM\Track.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BDService.cs" />
