@@ -25,5 +25,10 @@ namespace BDHero.Queue
         /// Poster image URL from TMDb.
         /// </summary>
         public string CoverArtUrl;
+
+        /// <summary>
+        /// Gets the playlist selected by the user.
+        /// </summary>
+        public Playlist SelectedPlaylist { get { return Disc.Playlists[PlaylistIndex]; } }
     }
 }
