@@ -1,15 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDAutoMuxer", "BDAutoMuxer\BDAutoMuxer.csproj", "{3209AF1D-4762-4960-9DE5-13E90E77EE96}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaInfoWrapper", "MediaInfoWrapper\MediaInfoWrapper.csproj", "{0E38BA29-4A54-4461-9E73-283802161C55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessUtils", "ProcessUtils\ProcessUtils.csproj", "{896F47DD-A9FC-413C-B125-8E999F72E101}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetUtils", "DotNetUtils\DotNetUtils.csproj", "{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDHeroCore", "BDHeroCore\BDHeroCore.csproj", "{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDHero", "BDHero\BDHero.csproj", "{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}"
 EndProject
@@ -31,18 +27,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Release|Win32.ActiveCfg = Release|Any CPU
-		{3209AF1D-4762-4960-9DE5-13E90E77EE96}.Release|x86.ActiveCfg = Release|Any CPU
 		{0E38BA29-4A54-4461-9E73-283802161C55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E38BA29-4A54-4461-9E73-283802161C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E38BA29-4A54-4461-9E73-283802161C55}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -79,18 +63,6 @@ Global
 		{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}.Release|Win32.ActiveCfg = Release|Any CPU
 		{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}.Release|x86.ActiveCfg = Release|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Release|Win32.ActiveCfg = Release|Any CPU
-		{0CB87CAA-B3F1-4DD7-8FC1-6A7D6834CE5C}.Release|x86.ActiveCfg = Release|Any CPU
 		{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
