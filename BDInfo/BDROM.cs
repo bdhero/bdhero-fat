@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -482,20 +483,44 @@ namespace BDInfo
             return size;
         }
 
+        // TODO: Fix this garbage
         private string GetBdmtPath()
         {
-            string bdmt_path = null;
+            var paths = new Dictionary<string, string>();
             foreach (string code in Language.GetISO6392Codes())
             {
                 string path = Path.Combine(DirectoryBDMV.FullName, @"META\DL\bdmt_" + code + @".xml");
                 if (File.Exists(path))
                 {
-                    bdmt_path = path;
-                    DiscLanguage = Language.FromCode(code);
-                    break;
+                    paths[code] = path;
                 }
             }
-            return bdmt_path;
+            if (paths.Count > 1)
+            {
+                string iso6392;
+
+                iso6392 = Language.CurrentUILanguage.ISO_639_2;
+                if (paths.ContainsKey(iso6392))
+                {
+                    DiscLanguage = Language.FromCode(iso6392);
+                    return paths[iso6392];
+                }
+
+                iso6392 = Language.English.ISO_639_2;
+                if (paths.ContainsKey(iso6392))
+                {
+                    DiscLanguage = Language.FromCode(iso6392);
+                    return paths[iso6392];
+                }
+            }
+            if (paths.Count >= 1)
+            {
+                var code = paths.Keys.OrderBy(s => s).First();
+                var path = paths[code];
+                DiscLanguage = Language.FromCode(code);
+                return path;
+            }
+            return null;
         }
 
         private string GetDiscName()
