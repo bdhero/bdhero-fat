@@ -11,6 +11,9 @@ namespace BDHeroCLI
         static void Main(string[] args)
         {
             var controller = new Controller();
+            controller.BeforeStart += (sender, eventArgs) => Console.WriteLine();
+            controller.Completed += delegate
+                { Console.WriteLine(); Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~"); };
             controller.Scan(@"W:\BD\49123204_BLACK_HAWK_DOWN");
             Console.Read();
         }

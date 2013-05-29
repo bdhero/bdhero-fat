@@ -14,6 +14,9 @@ namespace BDHero
     {
         private readonly PluginService _pluginService = new PluginService();
 
+        public event EventHandler BeforeStart;
+        public event EventHandler Completed;
+
         public Job Job { get; private set; }
 
         /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
@@ -61,18 +64,25 @@ namespace BDHero
 
         public void Scan(string bdromPath)
         {
+            if (BeforeStart != null)
+                BeforeStart(this, EventArgs.Empty);
+
             ReadBDROM(bdromPath);
             GetMetadata();
             AutoDetect();
             Rename();
             Mux();
             PostProcess();
+
+            if (Completed != null)
+                Completed(this, EventArgs.Empty);
         }
 
         #region 1 - Disc Reader
 
         private void ReadBDROM(string bdromPath)
         {
+            Console.WriteLine("Scanning {0}...", bdromPath);
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
             discReader.ProgressUpdated += DiscReaderOnProgressUpdated;
             var disc = discReader.ReadBDROM(bdromPath);
@@ -107,6 +117,11 @@ namespace BDHero
             foreach (var plugin in _pluginService.AutoDetectorPlugins)
             {
                 plugin.AutoDetect(Job.Disc);
+            }
+
+            foreach (var playlist in Job.Disc.ValidMainFeaturePlaylists)
+            {
+                Console.WriteLine(playlist);
             }
         }
 
