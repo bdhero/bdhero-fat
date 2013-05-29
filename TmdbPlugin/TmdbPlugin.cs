@@ -48,6 +48,7 @@ namespace TmdbPlugin
 
         public void GetMetadata(Disc disc)
         {
+            tmdbGet = new BackgroundWorker();
             tmdbGet.WorkerReportsProgress = false;
             tmdbGet.WorkerSupportsCancellation = false;
 
