@@ -49,7 +49,6 @@ namespace BDHero.Plugin.FFmpegMuxer
             VerifySelectedTracks();
 
             SetExePath();
-            ExtractResources();
 
             ReplaceExistingFiles();
             RedirectProgressToFile();
@@ -228,15 +227,6 @@ namespace BDHero.Plugin.FFmpegMuxer
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
             var assemblyDir = Path.GetDirectoryName(assemblyPath);
             ExePath = Path.Combine(assemblyDir, FFmpegExeFilename);
-        }
-
-        private void ExtractResources()
-        {
-            try
-            {
-//                File.WriteAllBytes(ExePath, BinTools.ffmpeg_exe);
-            }
-            catch { }
         }
 
 #if false
