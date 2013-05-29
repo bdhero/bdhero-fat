@@ -117,7 +117,7 @@ namespace BDHero
         {
             foreach (var plugin in _pluginService.AutoDetectorPlugins)
             {
-                plugin.AutoDetect(Job.Disc);
+                plugin.AutoDetect(Job);
             }
 
             foreach (var playlist in Job.Disc.ValidMainFeaturePlaylists)

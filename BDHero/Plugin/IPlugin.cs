@@ -34,7 +34,7 @@ namespace BDHero.Plugin
 
     public interface IAutoDetectorPlugin : IPlugin
     {
-        void AutoDetect(Disc disc);
+        void AutoDetect(Job job);
     }
 
     public interface INameProviderPlugin : IPlugin

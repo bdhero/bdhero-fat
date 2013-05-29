@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using BDHero.BDROM;
+using BDHero.Queue;
 using DotNetUtils;
 
 namespace BDHero.Plugin.AutoDetector
@@ -22,8 +23,10 @@ namespace BDHero.Plugin.AutoDetector
         {
         }
 
-        public void AutoDetect(Disc disc)
+        public void AutoDetect(Job job)
         {
+            var disc = job.Disc;
+
             // Data gathering (round 1)
             FindDuplicatePlaylists(disc);
             TransformPlaylistQuality(disc);
