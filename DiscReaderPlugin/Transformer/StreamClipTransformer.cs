@@ -11,12 +11,18 @@ namespace BDHero.Plugin.DiscReader.Transformer
     {
         public static List<StreamClip> Transform(IEnumerable<TSStreamClip> tsStreamClips)
         {
-            return tsStreamClips.Select(Transform).ToList();
+            // TODO: Add angle support!
+            return tsStreamClips.Where(IsDefaultAngle).Select(Transform).ToList();
+        }
+
+        private static bool IsDefaultAngle(TSStreamClip tsStreamClip)
+        {
+            return tsStreamClip.AngleIndex == 0;
         }
 
         private static StreamClip Transform(TSStreamClip tsStreamClip, int index)
         {
-            return new StreamClip(tsStreamClip.StreamFile.FileInfo, tsStreamClip.Name, tsStreamClip.FileSize, index, tsStreamClip.Length);
+            return new StreamClip(tsStreamClip.StreamFile.FileInfo, tsStreamClip.Name, tsStreamClip.FileSize, index, tsStreamClip.AngleIndex, tsStreamClip.Length);
         }
     }
 }

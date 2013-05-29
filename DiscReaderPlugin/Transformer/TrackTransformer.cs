@@ -9,18 +9,21 @@ namespace BDHero.Plugin.DiscReader.Transformer
 {
     static class TrackTransformer
     {
-        // TODO: Make this thread-safe
-        private static int _numVideo;
-        private static int _numAudio;
-        private static int _numSubtitle;
-
         public static IList<Track> Transform(IEnumerable<TSStream> streams)
         {
-            _numVideo = _numAudio = _numSubtitle = 0;
-            return streams.Select(Transform).ToList();
+            int numVideo = 0,
+                numAudio = 0,
+                numSubtitle = 0;
+            // TODO: Add angle support!
+            return streams.Where(IsDefaultAngle).Select((stream, i) => Transform(stream, i, ref numVideo, ref numAudio, ref numSubtitle)).ToList();
         }
 
-        public static Track Transform(TSStream stream, int index)
+        private static bool IsDefaultAngle(TSStream tsStream)
+        {
+            return tsStream.AngleIndex == 0;
+        }
+
+        private static Track Transform(TSStream stream, int index, ref int numVideo, ref int numAudio, ref int numSubtitle)
         {
             var videoStream = stream as TSVideoStream;
             var audioStream = stream as TSAudioStream;
@@ -28,9 +31,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
             var indexOfType = 0;
 
-            if (videoStream != null) indexOfType = _numVideo++;
-            if (audioStream != null) indexOfType = _numAudio++;
-            if (subtitleStream != null) indexOfType = _numSubtitle++;
+            if (videoStream != null) indexOfType = numVideo++;
+            if (audioStream != null) indexOfType = numAudio++;
+            if (subtitleStream != null) indexOfType = numSubtitle++;
 
             return new Track
             {
