@@ -370,6 +370,15 @@ namespace BDHero.BDROM
         }
 
         #endregion
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}, {2} bytes, {3} chapters, {4}", FileName, Length, FileSize, ChapterCount, Type);
+        }
+
+        #endregion
     }
 
     public enum PlaylistCut
