@@ -49,7 +49,7 @@ namespace BDHero.Plugin
 
 #if DEBUG
             var slnDir = @"C:\Projects\bdhero";
-            var projects = new[] { "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin", "FFmpegMuxerPlugin", "MKVMergeMuxerPlugin", "TmdbPlugin" };
+            var projects = new[] { "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin", "FFmpegMuxerPlugin", "FileNamerPlugin", "MKVMergeMuxerPlugin", "TmdbPlugin" };
             foreach (var projectName in projects)
             {
                 try

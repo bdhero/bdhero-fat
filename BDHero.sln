@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TmdbPlugin", "TmdbPlugin\Tm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapterGrabberPlugin", "ChapterGrabberPlugin\ChapterGrabberPlugin.csproj", "{112762A2-52A3-4D52-A9F6-DA2D7220C758}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileNamerPlugin", "FileNamerPlugin\FileNamerPlugin.csproj", "{1462CA15-D742-49A9-8612-DF1E87D1B2AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -209,6 +211,18 @@ Global
 		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|Win32.ActiveCfg = Release|Any CPU
 		{112762A2-52A3-4D52-A9F6-DA2D7220C758}.Release|x86.ActiveCfg = Release|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Release|Win32.ActiveCfg = Release|Any CPU
+		{1462CA15-D742-49A9-8612-DF1E87D1B2AE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
