@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using BDHero.BDROM;
 using BDHero.Plugin;
+using BDHero.Queue;
 using WatTmdb.V3;
 
 namespace TmdbPlugin
@@ -38,22 +39,19 @@ namespace TmdbPlugin
 
         public void LoadPlugin()
         {
-            
         }
 
         public void UnloadPlugin()
         {
-            
         }
 
-        public void GetMetadata(Disc disc)
+        public void GetMetadata(Job job)
         {
             tmdbGet = new BackgroundWorker();
             tmdbGet.WorkerReportsProgress = false;
             tmdbGet.WorkerSupportsCancellation = false;
 
-            ApiRequest(disc.MovieTitle);
-
+            ApiRequest(job.Disc.MovieTitle);
         }
 
         private void ApiRequest(string title)

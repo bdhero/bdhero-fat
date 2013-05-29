@@ -29,7 +29,7 @@ namespace BDHero.Plugin
 
     public interface IMetadataProviderPlugin : IPlugin
     {
-        void GetMetadata(Disc disc);
+        void GetMetadata(Job job);
     }
 
     public interface IAutoDetectorPlugin : IPlugin

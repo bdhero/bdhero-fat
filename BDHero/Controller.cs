@@ -105,7 +105,7 @@ namespace BDHero
         {
             foreach (var plugin in _pluginService.MetadataProviderPlugins)
             {
-                plugin.GetMetadata(Job.Disc);
+                plugin.GetMetadata(Job);
             }
         }
 
