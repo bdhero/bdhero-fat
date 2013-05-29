@@ -41,13 +41,13 @@ namespace BDHero.BDROM
         /// Name of the playlist file in all uppercase (e.g., "00200.MPLS").
         /// </summary>
         [JsonProperty(PropertyName = "filename")]
-        public string Filename { get; set; }
+        public string FileName { get; set; }
 
         /// <summary>
         /// Size of the playlist file in bytes.
         /// </summary>
         [JsonProperty(PropertyName = "filesize")]
-        public ulong Filesize { get; set; }
+        public ulong FileSize { get; set; }
 
         /// <summary>
         /// Duration of the playlist.

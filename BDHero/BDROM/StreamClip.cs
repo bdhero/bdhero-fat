@@ -11,8 +11,8 @@ namespace BDHero.BDROM
         #region Readonly fields
 
         public readonly FileInfo FileInfo;
-        public readonly String Filename;
-        public readonly ulong Filesize;
+        public readonly String FileName;
+        public readonly ulong FileSize;
         public readonly int Index;
         public readonly int AngleIndex;
         public readonly TimeSpan Length;
@@ -21,21 +21,21 @@ namespace BDHero.BDROM
 
         #region Constructors
 
-        public StreamClip(FileInfo fileInfo, string filename, ulong filesize, int index, int angleIndex, double lengthSec)
+        public StreamClip(FileInfo fileInfo, string fileName, ulong fileSize, int index, int angleIndex, double lengthSec)
         {
             FileInfo = fileInfo;
-            Filename = filename;
-            Filesize = filesize;
+            FileName = fileName;
+            FileSize = fileSize;
             Index = index;
             AngleIndex = angleIndex;
             Length = TimeSpan.FromMilliseconds(lengthSec * 1000);
         }
 
-        public StreamClip(FileInfo fileInfo, string filename, ulong filesize, int index, int angleIndex, TimeSpan length)
+        public StreamClip(FileInfo fileInfo, string fileName, ulong fileSize, int index, int angleIndex, TimeSpan length)
         {
             FileInfo = fileInfo;
-            Filename = filename;
-            Filesize = filesize;
+            FileName = fileName;
+            FileSize = fileSize;
             Index = index;
             AngleIndex = angleIndex;
             Length = length;

@@ -31,9 +31,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
         {
             return new Playlist
             {
-                Filename = playlistFile.Name,
+                FileName = playlistFile.Name,
                 FullPath = playlistFile.FullName,
-                Filesize = playlistFile.FileSize,
+                FileSize = playlistFile.FileSize,
                 Length = TimeSpan.FromMilliseconds(playlistFile.TotalLength * 1000),
                 StreamClips = StreamClipTransformer.Transform(playlistFile.StreamClips),
                 Tracks = TrackTransformer.Transform(playlistFile.SortedStreams),
