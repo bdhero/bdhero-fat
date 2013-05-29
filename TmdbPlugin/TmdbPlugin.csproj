@@ -53,6 +53,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Libraries\RestSharp.dll" />
     <Content Include="Libraries\WatTmdb.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
