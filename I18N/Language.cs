@@ -13,6 +13,7 @@ namespace I18N
         private static readonly Dictionary<string, Language> ISO_639_2_Map = new Dictionary<string, Language>();
 
         public static Language Undetermined { get { return FromCode("und"); } }
+        public static Language English { get { return FromCode("eng"); } }
 
         /// <summary>2 digits (e.g., "en", "fr", "es")</summary>
         public string ISO_639_1 { get; private set; }
