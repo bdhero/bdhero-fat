@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using BDHero.BDROM;
+using BDHero.Queue;
 using DotNetUtils;
 using ProcessUtils;
 
@@ -37,7 +38,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private readonly BackgroundWorker _progressWorker = new BackgroundWorker();
 
-        public FFmpeg(Disc disc, Playlist playlist, string outputMKVPath)
+        public FFmpeg(Job job, Playlist playlist, string outputMKVPath)
         {
             _playlistLength = playlist.Length;
             _inputM2TSPaths = playlist.StreamClips.Select(clip => clip.FileInfo.FullName).ToList();
@@ -53,7 +54,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             ReplaceExistingFiles();
             RedirectProgressToFile();
             SetInputFiles();
-            SetMovieTitle(disc.MovieTitle);
+            SetMovieTitle(job.Disc.MovieTitle);
             MapSelectedTracks();
             CopyAllCodecs();
             ConvertLPCM();

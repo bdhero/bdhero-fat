@@ -9,7 +9,7 @@ namespace BDHero.Queue
 {
     public class Job
     {
-        public Disc Disc;
+        public readonly Disc Disc;
 
         /// <summary>
         /// Playlist selected by the user to mux.
@@ -30,5 +30,10 @@ namespace BDHero.Queue
         /// Gets the playlist selected by the user.
         /// </summary>
         public Playlist SelectedPlaylist { get { return Disc.Playlists[SelectedPlaylistIndex]; } }
+
+        public Job(Disc disc)
+        {
+            Disc = disc;
+        }
     }
 }

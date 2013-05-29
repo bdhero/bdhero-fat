@@ -25,7 +25,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         public void Mux(Job job)
         {
-            var ffmpeg = new FFmpeg(job.Disc, job.SelectedPlaylist, job.OutputPath);
+            var ffmpeg = new FFmpeg(job, job.SelectedPlaylist, job.OutputPath);
             ffmpeg.ProgressUpdated += OnProgressUpdated;
             ffmpeg.ProgressUpdated += Console.WriteLine;
             ffmpeg.Exited += (state, code, time) => Console.WriteLine(state);

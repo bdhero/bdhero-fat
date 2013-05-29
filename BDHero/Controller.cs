@@ -87,7 +87,7 @@ namespace BDHero
             discReader.ProgressUpdated -= DiscReaderOnProgressUpdated;
             discReader.ProgressUpdated += DiscReaderOnProgressUpdated;
             var disc = discReader.ReadBDROM(bdromPath);
-            Job = new Job {Disc = disc};
+            Job = new Job(disc);
         }
 
         private void DiscReaderOnProgressUpdated(IPlugin plugin, ProgressState progressState)
