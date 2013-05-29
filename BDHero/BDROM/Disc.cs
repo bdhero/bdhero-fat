@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using I18N;
 using Newtonsoft.Json;
 
@@ -77,6 +78,11 @@ namespace BDHero.BDROM
         /// </summary>
         [JsonIgnore]
         public IList<Language> Languages { get; private set; }
+
+        public IList<Playlist> ValidMainFeaturePlaylists
+        {
+            get { return Playlists.Where(playlist => playlist.IsMainFeature && !playlist.IsBogus).ToList(); }
+        }
 
         #endregion
     }
