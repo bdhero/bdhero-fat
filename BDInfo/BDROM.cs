@@ -237,7 +237,9 @@ namespace BDInfo
             }
         }
 
-        private void ReportScanProgress(string fileType, int curStep, int curFileOfType, int numFilesOfType, int curFileOverall, int numFilesOverall)
+        private void ReportScanProgress(string fileType, int curStep,
+            int curFileOfType, int numFilesOfType, int completedFilesOfType,
+            int curFileOverall, int numFilesOverall, int completedFilesOverall)
         {
             if (ScanProgress != null)
                 ScanProgress(new BDROMScanProgressState
@@ -247,8 +249,10 @@ namespace BDInfo
                                             NumSteps = 3,
                                             CurFileOfType = curFileOfType,
                                             NumFilesOfType = numFilesOfType,
+                                            CompletedFilesOfType = completedFilesOfType,
                                             CurFileOverall = curFileOverall,
-                                            NumFilesOverall = numFilesOverall
+                                            NumFilesOverall = numFilesOverall,
+                                            CompletedFilesOverall = completedFilesOverall
                                         });
         }
 
@@ -266,13 +270,23 @@ namespace BDInfo
             var curStreamFile = 0;
             var curFileOverall = 0;
 
+            var completedStreamClipFiles = 0;
+            var completedPlaylists = 0;
+            var completedStreamFiles = 0;
+            var completedFilesOverall = 0;
+
             List<TSStreamClipFile> errorStreamClipFiles = new List<TSStreamClipFile>();
             foreach (TSStreamClipFile streamClipFile in StreamClipFiles.Values)
             {
                 try
                 {
-                    ReportScanProgress("stream clip", 1, curStreamClipFile++, numStreamClipFiles, curFileOverall++, numFilesOverall);
+                    ReportScanProgress("stream clip", 1,
+                        ++curStreamClipFile, numStreamClipFiles, completedStreamClipFiles,
+                        ++curFileOverall, numFilesOverall, completedFilesOverall);
                     streamClipFile.Scan();
+                    ReportScanProgress("stream clip", 1,
+                        curStreamClipFile, numStreamClipFiles, ++completedStreamClipFiles,
+                        curFileOverall, numFilesOverall, ++completedFilesOverall);
                 }
                 catch (Exception ex)
                 {
@@ -310,8 +324,13 @@ namespace BDInfo
             {
                 try
                 {
-                    ReportScanProgress("playlist", 2, curPlaylist++, numPlaylists, curFileOverall++, numFilesOverall);
+                    ReportScanProgress("playlist", 2,
+                        ++curPlaylist, numPlaylists, completedPlaylists,
+                        ++curFileOverall, numFilesOverall, completedFilesOverall);
                     playlistFile.Scan(StreamFiles, StreamClipFiles);
+                    ReportScanProgress("playlist", 2,
+                        curPlaylist, numPlaylists, ++completedPlaylists,
+                        curFileOverall, numFilesOverall, ++completedFilesOverall);
                 }
                 catch (Exception ex)
                 {
@@ -348,8 +367,13 @@ namespace BDInfo
                             }
                         }
                     }
-                    ReportScanProgress("stream", 3, curStreamFile++, numStreamFiles, curFileOverall++, numFilesOverall);
+                    ReportScanProgress("stream", 3,
+                        ++curStreamFile, numStreamFiles, completedStreamFiles,
+                        ++curFileOverall, numFilesOverall, completedFilesOverall);
                     streamFile.Scan(playlists, false);
+                    ReportScanProgress("stream", 3,
+                        curStreamFile, numStreamFiles, ++completedStreamFiles,
+                        curFileOverall, numFilesOverall, ++completedFilesOverall);
                 }
                 catch (Exception ex)
                 {
@@ -633,24 +657,26 @@ namespace BDInfo
 
         public int CurFileOfType;
         public int NumFilesOfType;
+        public int CompletedFilesOfType;
 
         /// <summary>
         /// 0.0 to 100.0
         /// </summary>
         public double TypeProgress
         {
-            get { return 100 * ((double) CurFileOfType)/NumFilesOfType; }
+            get { return 100 * ((double) CompletedFilesOfType)/NumFilesOfType; }
         }
 
         public int CurFileOverall;
         public int NumFilesOverall;
+        public int CompletedFilesOverall;
 
         /// <summary>
         /// 0.0 to 100.0
         /// </summary>
         public double OverallProgress
         {
-            get { return 100 * ((double)CurFileOverall) / NumFilesOverall; }
+            get { return 100 * ((double)CompletedFilesOverall) / NumFilesOverall; }
         }
     }
 

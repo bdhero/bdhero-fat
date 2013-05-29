@@ -5,6 +5,7 @@ using System.Text;
 using BDHero.BDROM;
 using BDHero.Plugin.DiscReader.Transformer;
 using BDInfo;
+using ProcessUtils;
 
 namespace BDHero.Plugin.DiscReader
 {
@@ -13,6 +14,7 @@ namespace BDHero.Plugin.DiscReader
         public IPluginHost Host { get; set; }
         public string Name { get { return "BDHero Disc Reader"; } }
 
+        public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
         public void LoadPlugin()
@@ -32,13 +34,24 @@ namespace BDHero.Plugin.DiscReader
             return disc;
         }
 
-        private void BDROMOnScanProgress(BDROMScanProgressState state)
+        private void BDROMOnScanProgress(BDROMScanProgressState bdromState)
         {
+#if false
             Console.WriteLine("BDROM: {0}: scanning {1} of {2} ({3}%).  Total: {4} of {5} ({6}%).",
-                state.FileType, state.CurFileOfType, state.NumFilesOfType, state.TypeProgress.ToString("0.00"),
-                state.CurFileOverall, state.NumFilesOverall, state.OverallProgress.ToString("0.00"));
+                bdromState.FileType, bdromState.CurFileOfType, bdromState.NumFilesOfType, bdromState.TypeProgress.ToString("0.00"),
+                bdromState.CurFileOverall, bdromState.NumFilesOverall, bdromState.OverallProgress.ToString("0.00"));
+#endif
 
-            Host.ReportProgress(this, state.OverallProgress);
+            var progressState = new ProgressState
+                {
+                    PercentComplete = bdromState.OverallProgress,
+                    ProcessState = bdromState.OverallProgress >= 100.0 ? NonInteractiveProcessState.Completed : NonInteractiveProcessState.Running
+                };
+
+            if (ProgressUpdated != null)
+                ProgressUpdated(this, progressState);
+
+            Host.ReportProgress(this, progressState);
         }
     }
 }

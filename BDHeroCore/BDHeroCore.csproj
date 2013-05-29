@@ -77,6 +77,8 @@
     <Compile Include="Tools\MkvMerge.cs" />
     <Compile Include="Tools\MkvPropEdit.cs" />
     <Compile Include="Tools\TsMuxer.cs" />
+    <Compile Include="Transformer\ChapterWriter.cs" />
+    <Compile Include="Transformer\DiscTransformer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">

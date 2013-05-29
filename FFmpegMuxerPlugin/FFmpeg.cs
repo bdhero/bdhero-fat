@@ -4,14 +4,15 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using BDHero.BDROM;
 using DotNetUtils;
-using MediaInfoWrapper;
 using ProcessUtils;
 
-namespace BDHeroCore.Tools
+namespace BDHero.Plugin.FFmpegMuxer
 {
     public class FFmpeg : BackgroundProcessWorker
     {
@@ -23,11 +24,11 @@ namespace BDHeroCore.Tools
         private static readonly Regex OutTimeMsRegex = new Regex(@"^out_time_ms=(\d+)$");
         private static readonly Regex ProgressRegex = new Regex(@"^progress=(\w+)$");
 
-        private readonly string _progressFilePath;
         private readonly TimeSpan _playlistLength;
         private readonly List<string> _inputM2TSPaths;
         private readonly List<Track> _selectedTracks;
         private readonly string _outputMKVPath;
+        private readonly string _progressFilePath;
 
         private long _curFrame;
         private double _curFps;
@@ -42,45 +43,69 @@ namespace BDHeroCore.Tools
             _inputM2TSPaths = playlist.StreamClips.Select(clip => clip.FileInfo.FullName).ToList();
             _selectedTracks = playlist.Tracks.Where(track => track.Keep).ToList();
             _outputMKVPath = outputMKVPath;
-
-            if (_inputM2TSPaths.Count == 0)
-                throw new ArgumentOutOfRangeException("At least one input M2TS file is required.");
-
             _progressFilePath = Path.GetTempFileName();
 
-            ExePath = AssemblyUtils.GetTempFilePath(GetType(), FFmpegExeFilename);
+            VerifyInputPaths();
+            VerifySelectedTracks();
+
+            SetExePath();
             ExtractResources();
 
-            var inputFiles = _inputM2TSPaths.Count == 1 ? _inputM2TSPaths[0] : "concat:" + string.Join("|", _inputM2TSPaths);
-
-            // Replace existing files
-            Arguments.AddAll("-y");
-
-            // Send progress information to temp file
-            Arguments.AddAll("-progress", _progressFilePath);
-
-            Arguments.AddAll("-i", inputFiles);
-
-            Arguments.AddAll("-metadata", "title=" + disc.MovieTitle);
-
-            // Map selected tracks to output file
-            Arguments.AddRange(_selectedTracks.SelectMany(TrackMetadataArgs));
-
-            // Copy all codecs
-            Arguments.AddAll("-c", "copy");
-
-            // Convert Blu-ray LPCM tracks to signed, little endian PCM for MKV.
-            // Blu-ray LPCM is signed, big endian, and either 16-, 20-, or 24-bit.
-            // FFmpeg only outputs 16- or 24- bit PCM, so 20-bit Blu-ray LPCM needs to be converted to 24-bit PCM.
-            Arguments.AddRange(_selectedTracks
-                .Where(track => track.Codec == MICodec.LPCM)
-                .SelectMany(track => new[] { "-c:a:" + track.IndexOfType, "pcm_s" + (track.BitDepth == 16 ? 16 : 24) + "le" }));
-
-            Arguments.Add(_outputMKVPath);
+            ReplaceExistingFiles();
+            RedirectProgressToFile();
+            SetInputFiles();
+            SetMovieTitle(disc.MovieTitle);
+            MapSelectedTracks();
+            CopyAllCodecs();
+            ConvertLPCM();
+            SetOutputMKVPath();
 
             BeforeStart += OnBeforeStart;
             ProgressUpdated += OnProgressUpdated;
             Exited += (state, code, time) => FFmpegOnExited(playlist, _selectedTracks, outputMKVPath);
+        }
+
+        private void VerifyInputPaths()
+        {
+            if (_inputM2TSPaths.Count == 0)
+                throw new ArgumentOutOfRangeException("At least one input M2TS file is required.");
+        }
+
+        private void VerifySelectedTracks()
+        {
+            if (_selectedTracks.Count == 0)
+                throw new ArgumentOutOfRangeException("At least one track must be selected.");
+        }
+
+        private static string GetInputFiles(IList<string> inputM2TsPaths)
+        {
+            return inputM2TsPaths.Count == 1 ? inputM2TsPaths[0] : "concat:" + string.Join("|", inputM2TsPaths);
+        }
+
+        private void ReplaceExistingFiles()
+        {
+            Arguments.AddAll("-y");
+        }
+
+        private void RedirectProgressToFile()
+        {
+            Arguments.AddAll("-progress", _progressFilePath);
+        }
+
+        private void SetInputFiles()
+        {
+            var inputFiles = GetInputFiles(_inputM2TSPaths);
+            Arguments.AddAll("-i", inputFiles);
+        }
+
+        private void SetMovieTitle(string movieTitle)
+        {
+            Arguments.AddAll("-metadata", "title=" + movieTitle);
+        }
+
+        private void MapSelectedTracks()
+        {
+            Arguments.AddRange(_selectedTracks.SelectMany(TrackMetadataArgs));
         }
 
         private static IEnumerable<string> TrackMetadataArgs(Track track, int i)
@@ -91,6 +116,36 @@ namespace BDHeroCore.Tools
                            "-metadata:s:" + track.Index, "language=" + track.Language.ISO_639_2,
                            "-metadata:s:" + i, "title=" + track.Title
                        };
+        }
+
+        private void CopyAllCodecs()
+        {
+            Arguments.AddAll("-c", "copy");
+        }
+
+        /// <summary>
+        /// Converts Blu-ray LPCM tracks to signed, little endian PCM for MKV.
+        /// Blu-ray LPCM is signed, big endian, and either 16-, 20-, or 24-bit.
+        /// FFmpeg only outputs 16- or 24- bit PCM, so 20-bit Blu-ray LPCM needs to be converted to 24-bit PCM.
+        /// </summary>
+        private void ConvertLPCM()
+        {
+            Arguments.AddRange(_selectedTracks.Where(IsLPCM).SelectMany(LPCMCodecArgs));
+        }
+
+        private static bool IsLPCM(Track track)
+        {
+            return track.Codec == Codec.LPCM;
+        }
+
+        private static IEnumerable<string> LPCMCodecArgs(Track track)
+        {
+            return new[] { "-c:a:" + track.IndexOfType, "pcm_s" + (track.BitDepth == 16 ? 16 : 24) + "le" };
+        }
+
+        private void SetOutputMKVPath()
+        {
+            Arguments.Add(_outputMKVPath);
         }
 
         private void OnProgressUpdated(ProgressState progressState)
@@ -167,15 +222,24 @@ namespace BDHeroCore.Tools
                                   FileShare.ReadWrite | FileShare.Delete);
         }
 
+        private void SetExePath()
+        {
+//            ExePath = AssemblyUtils.GetTempFilePath(GetType(), FFmpegExeFilename);
+            var assemblyPath = Assembly.GetExecutingAssembly().Location;
+            var assemblyDir = Path.GetDirectoryName(assemblyPath);
+            ExePath = Path.Combine(assemblyDir, FFmpegExeFilename);
+        }
+
         private void ExtractResources()
         {
             try
             {
-                File.WriteAllBytes(ExePath, BinTools.ffmpeg_exe);
+//                File.WriteAllBytes(ExePath, BinTools.ffmpeg_exe);
             }
             catch { }
         }
 
+#if false
         public static void Test(string bdromDir, string playlistFilename, string outputMKVPath)
         {
             // Step 1: Scan BD-ROM
@@ -202,9 +266,18 @@ namespace BDHeroCore.Tools
 //            FFmpegOnExited(playlist, selectedTracks, outputMKVPath);
         }
 
+        private static void BDROMOnScanProgress(BDROMScanProgressState state)
+        {
+            Console.WriteLine("BDROM: {0}: scanning {1} of {2} ({3}%).  Total: {4} of {5} ({6}%).",
+                state.FileType, state.CurFileOfType, state.NumFilesOfType, state.TypeProgress.ToString("0.00"),
+                state.CurFileOverall, state.NumFilesOverall, state.OverallProgress.ToString("0.00"));
+        }
+#endif
+
         private static void FFmpegOnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
             Console.WriteLine("Finished muxing with FFmpeg!");
+#if false
             Console.WriteLine("Adding metadata with mkvpropedit...");
             var coverArt = Image.FromFile(@"Y:\BDAM\cover-art\black-hawk-down\full.jpg");
             var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
@@ -214,13 +287,7 @@ namespace BDHeroCore.Tools
                 .SetDefaultTracksAuto(selectedTracks);
             mkvPropEdit.Start();
             Console.WriteLine("********** DONE! **********");
-        }
-
-        private static void BDROMOnScanProgress(BDROMScanProgressState state)
-        {
-            Console.WriteLine("BDROM: {0}: scanning {1} of {2} ({3}%).  Total: {4} of {5} ({6}%).",
-                state.FileType, state.CurFileOfType, state.NumFilesOfType, state.TypeProgress.ToString("0.00"),
-                state.CurFileOverall, state.NumFilesOverall, state.OverallProgress.ToString("0.00"));
+#endif
         }
     }
 }

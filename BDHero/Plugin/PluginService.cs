@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using DotNetUtils;
+using ProcessUtils;
 
 namespace BDHero.Plugin 
 {
@@ -12,6 +13,21 @@ namespace BDHero.Plugin
     public class PluginService : IPluginHost
     {
         public readonly IList<IPlugin> Plugins = new List<IPlugin>();
+
+        public IList<IDiscReaderPlugin>       DiscReaderPlugins       { get { return Plugins.OfType<IDiscReaderPlugin>().ToList(); } }
+        public IList<IMetadataProviderPlugin> MetadataProviderPlugins { get { return Plugins.OfType<IMetadataProviderPlugin>().ToList(); } }
+        public IList<IAutoDetectorPlugin>     AutoDetectorPlugins     { get { return Plugins.OfType<IAutoDetectorPlugin>().ToList(); } }
+        public IList<INameProviderPlugin>     NameProviderPlugins     { get { return Plugins.OfType<INameProviderPlugin>().ToList(); } }
+        public IList<IMuxerPlugin>            MuxerPlugins            { get { return Plugins.OfType<IMuxerPlugin>().ToList(); } }
+        public IList<IPostProcessorPlugin>    PostProcessorPlugins    { get { return Plugins.OfType<IPostProcessorPlugin>().ToList(); } }
+
+        public event PluginProgressHandler PluginProgress;
+
+        public void ReportProgress(IPlugin plugin, ProgressState progressState)
+        {
+            if (PluginProgress != null)
+                PluginProgress(plugin, progressState);
+        }
 
         /// <summary>
         /// Searches the Application's Startup Directory for Plugins
@@ -30,6 +46,23 @@ namespace BDHero.Plugin
 //            AddPluginsRecursive(AppDomain.CurrentDomain.BaseDirectory);
             AddPluginsRecursive(programDataPluginDir);
             AddPluginsRecursive(appDataPluginDir);
+
+#if DEBUG
+            var slnDir = @"C:\Projects\bdhero";
+            var projects = new[] { "AutoDetectorPlugin", "ChapterGrabberPlugin", "DiscReaderPlugin", "FFmpegMuxerPlugin", "MKVMergeMuxerPlugin" };
+            foreach (var projectName in projects)
+            {
+                try
+                {
+                    var pluginDir = Path.Combine(slnDir, projectName, "bin", "Debug");
+                    AddPluginsRecursive(pluginDir);
+                }
+                catch (Exception e)
+                {
+                    
+                }
+            }
+#endif
         }
 
         private static string GetPluginDir(string root)
@@ -47,22 +80,20 @@ namespace BDHero.Plugin
                 return;
 
             // Go through all the files in the plugin directory
-            foreach (string fileOn in Directory.GetFiles(pluginDir))
+            foreach (FileInfo file in Directory.GetFiles(pluginDir).Select(filePath => new FileInfo(filePath)).Where(IsPlugin))
             {
-                FileInfo file = new FileInfo(fileOn);
-
-                // Preliminary check, must be .dll
-                if (file.Extension.Equals(".plugin.dll"))
-                {
-                    // Add the 'plugin'
-                    AddPlugin(fileOn);
-                }
+                AddPlugin(file.FullName);
             }
 
-            foreach (var dir in Directory.GetDirectories(pluginDir))
+            foreach (string dir in Directory.GetDirectories(pluginDir))
             {
                 AddPluginsRecursive(dir);
             }
+        }
+
+        private static bool IsPlugin(FileInfo file)
+        {
+            return file.Extension.Equals(".plugin.dll") || file.Name.EndsWith("Plugin.dll", StringComparison.OrdinalIgnoreCase);
         }
 
         public void AddPlugin(string fileName)
@@ -73,9 +104,9 @@ namespace BDHero.Plugin
             // Next we'll loop through all the Types found in the assembly
             foreach (Type pluginType in pluginAssembly.GetTypes())
             {
-                if (pluginType.IsPublic) //Only look at public types
+                if (pluginType.IsPublic) // Only look at public types
                 {
-                    if (!pluginType.IsAbstract)  //Only look at non-abstract types
+                    if (!pluginType.IsAbstract)  // Only look at non-abstract types
                     {
                         // Gets a type object of the interface we need the plugins to match
                         Type typeInterface = pluginType.GetInterface(typeof(IPlugin).FullName);
@@ -119,11 +150,6 @@ namespace BDHero.Plugin
 
             // Finally, clear our collection of available plugins
             Plugins.Clear();
-        }
-
-        public void ReportProgress(IPlugin plugin, double progress)
-        {
-            throw new NotImplementedException();
         }
     }
 }

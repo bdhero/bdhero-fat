@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</ProjectGuid>
+    <ProjectGuid>{08A3C27D-B83F-4F46-B42A-C05B49ACBFED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BDHero</RootNamespace>
-    <AssemblyName>BDHero</AssemblyName>
+    <RootNamespace>BDHero.Plugin.ChapterWriter</RootNamespace>
+    <AssemblyName>ChapterWriterMuxerPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,11 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,41 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BDROM\Chapter.cs" />
-    <Compile Include="BDROM\Codec.cs" />
-    <Compile Include="BDROM\Disc.cs" />
-    <Compile Include="BDROM\Playlist.cs" />
-    <Compile Include="BDROM\StreamClip.cs" />
-    <Compile Include="BDROM\Track.cs" />
-    <Compile Include="Controller.cs" />
-    <Compile Include="Plugin\IPlugin.cs" />
-    <Compile Include="Plugin\IPluginHost.cs" />
-    <Compile Include="Plugin\PluginProgressHandler.cs" />
-    <Compile Include="Plugin\PluginService.cs" />
+    <Compile Include="ChapterWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queue\Job.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BDInfo\BDInfo.csproj">
-      <Project>{DFF91717-C9EF-4881-9827-81D25F9A71A3}</Project>
-      <Name>BDInfo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
-      <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
-      <Name>DotNetUtils</Name>
+    <ProjectReference Include="..\BDHero\BDHero.csproj">
+      <Project>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</Project>
+      <Name>BDHero</Name>
     </ProjectReference>
     <ProjectReference Include="..\I18N\I18N.csproj">
       <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
       <Name>I18N</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProcessUtils\ProcessUtils.csproj">
-      <Project>{896F47DD-A9FC-413C-B125-8E999F72E101}</Project>
-      <Name>ProcessUtils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Libraries\Newtonsoft.Json.dll" />
-    <Content Include="Libraries\RestSharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

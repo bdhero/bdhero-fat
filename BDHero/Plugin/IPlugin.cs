@@ -13,13 +13,13 @@ namespace BDHero.Plugin
     public interface IPlugin
     {
         IPluginHost Host { get; set; }
-
         string Name { get; }
+
+        event PluginProgressHandler ProgressUpdated;
+        event EditPluginPreferenceHandler EditPreferences;
 
         void LoadPlugin();
         void UnloadPlugin();
-
-        event EditPluginPreferenceHandler EditPreferences;
     }
 
     public interface IDiscReaderPlugin : IPlugin
