@@ -14,7 +14,7 @@ namespace BDHero.Queue
         /// <summary>
         /// Playlist selected by the user to mux.
         /// </summary>
-        public int PlaylistIndex;
+        public int SelectedPlaylistIndex;
 
         /// <summary>
         /// Full absolute path to the muxed output file.
@@ -29,6 +29,6 @@ namespace BDHero.Queue
         /// <summary>
         /// Gets the playlist selected by the user.
         /// </summary>
-        public Playlist SelectedPlaylist { get { return Disc.Playlists[PlaylistIndex]; } }
+        public Playlist SelectedPlaylist { get { return Disc.Playlists[SelectedPlaylistIndex]; } }
     }
 }

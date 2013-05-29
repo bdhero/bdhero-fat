@@ -46,7 +46,7 @@ namespace BDHero.Plugin.AutoDetector
             var bestPlaylist = job.Disc.ValidMainFeaturePlaylists.FirstOrDefault();
             if (bestPlaylist != null)
             {
-                job.PlaylistIndex = job.Disc.Playlists.IndexOf(bestPlaylist);
+                job.SelectedPlaylistIndex = job.Disc.Playlists.IndexOf(bestPlaylist);
             }
         }
 

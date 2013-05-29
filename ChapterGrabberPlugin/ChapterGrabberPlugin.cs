@@ -40,7 +40,7 @@ namespace ChapterGrabberPlugin
 
         public void Rename(Job job)
         {
-            var playlist = job.Disc.Playlists[job.PlaylistIndex];
+            var playlist = job.Disc.Playlists[job.SelectedPlaylistIndex];
 
             var apiResults = GetChapters(job.Disc.MovieTitle);
 
