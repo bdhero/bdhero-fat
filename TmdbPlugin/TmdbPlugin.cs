@@ -34,6 +34,7 @@ namespace TmdbPlugin
         }
 
         public event PluginProgressHandler ProgressUpdated;
+        public event EditPluginPreferenceHandler EditPreferences;
 
         public void LoadPlugin()
         {
@@ -44,8 +45,6 @@ namespace TmdbPlugin
         {
             
         }
-
-        public event EditPluginPreferenceHandler EditPreferences;
 
         public void GetMetadata(Disc disc)
         {
