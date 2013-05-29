@@ -61,6 +61,18 @@ namespace BDHero
 
         public void Scan(string bdromPath)
         {
+            ReadBDROM(bdromPath);
+            GetMetadata();
+            AutoDetect();
+            Rename();
+            Mux();
+            PostProcess();
+        }
+
+        #region 1 - Disc Reader
+
+        private void ReadBDROM(string bdromPath)
+        {
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
             discReader.ProgressUpdated += DiscReaderOnProgressUpdated;
             var disc = discReader.ReadBDROM(bdromPath);
@@ -69,8 +81,69 @@ namespace BDHero
 
         private void DiscReaderOnProgressUpdated(IPlugin plugin, ProgressState progressState)
         {
-            Console.WriteLine("Plugin {0} is {1}, {2}% complete", plugin.Name, progressState.ProcessState, progressState.PercentComplete.ToString("0.00"));
+            Console.Write("\rPlugin {0} is {1}, {2}% complete", plugin.Name, progressState.ProcessState, progressState.PercentComplete.ToString("0.00"));
+            if (progressState.ProcessState == NonInteractiveProcessState.Completed)
+                Console.WriteLine();
         }
+
+        #endregion
+
+        #region 2 - Metadata API Search
+
+        private void GetMetadata()
+        {
+            foreach (var plugin in _pluginService.MetadataProviderPlugins)
+            {
+                plugin.GetMetadata(Job.Disc);
+            }
+        }
+
+        #endregion
+
+        #region 3 - Auto Detect
+
+        private void AutoDetect()
+        {
+            foreach (var plugin in _pluginService.AutoDetectorPlugins)
+            {
+                plugin.AutoDetect(Job.Disc);
+            }
+        }
+
+        #endregion
+
+        #region 4 - Name Providers
+
+        private void Rename()
+        {
+            foreach (var plugin in _pluginService.NameProviderPlugins)
+            {
+                plugin.Rename(Job);
+            }
+        }
+
+        #endregion
+
+        #region 5 - Mux
+
+        private void Mux()
+        {
+            _pluginService.MuxerPlugins.First().Mux(Job);
+        }
+
+        #endregion
+
+        #region 6 - Post Process
+
+        private void PostProcess()
+        {
+            foreach (var plugin in _pluginService.PostProcessorPlugins)
+            {
+                plugin.PostProcess(Job);
+            }
+        }
+
+        #endregion
     }
 
     /// <summary>
