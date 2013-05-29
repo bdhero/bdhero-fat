@@ -40,8 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DiscTransformer.cs" />
+    <Compile Include="AutoDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BDHero\BDHero.csproj">
+      <Project>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</Project>
+      <Name>BDHero</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
+      <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
+      <Name>DotNetUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\I18N\I18N.csproj">
+      <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
+      <Name>I18N</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
