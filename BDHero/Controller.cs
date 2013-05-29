@@ -84,6 +84,7 @@ namespace BDHero
         {
             Console.WriteLine("Scanning {0}...", bdromPath);
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
+            discReader.ProgressUpdated -= DiscReaderOnProgressUpdated;
             discReader.ProgressUpdated += DiscReaderOnProgressUpdated;
             var disc = discReader.ReadBDROM(bdromPath);
             Job = new Job {Disc = disc};
