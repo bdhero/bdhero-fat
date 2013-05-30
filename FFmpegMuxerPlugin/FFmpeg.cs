@@ -62,7 +62,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
             BeforeStart += OnBeforeStart;
             ProgressUpdated += OnProgressUpdated;
-            Exited += (state, code, time) => FFmpegOnExited(playlist, _selectedTracks, outputMKVPath);
+            Exited += (state, code, time) => OnExited(playlist, _selectedTracks, outputMKVPath);
         }
 
         private void VerifyInputPaths()
@@ -254,7 +254,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             // Step 5: Mux selected tracks to MKV
             var ffmpeg = new FFmpeg(disc, playlist, outputMKVPath);
             ffmpeg.StartAsync();
-//            FFmpegOnExited(playlist, selectedTracks, outputMKVPath);
+//            OnExited(playlist, selectedTracks, outputMKVPath);
         }
 
         private static void BDROMOnScanProgress(BDROMScanProgressState state)
@@ -265,7 +265,7 @@ namespace BDHero.Plugin.FFmpegMuxer
         }
 #endif
 
-        private static void FFmpegOnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
+        private static void OnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
             Console.WriteLine("Finished muxing with FFmpeg!");
 #if false
