@@ -162,9 +162,9 @@ namespace ProcessUtils
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}.  {2} elapsed, {3} remaining",
+            return string.Format("{0}: {1}% complete - {2} elapsed, {3} remaining",
                                  ProcessState,
-                                 PercentComplete,
+                                 PercentComplete.ToString("0.000"),
                                  TimeElapsed,
                                  TimeRemaining);
         }
