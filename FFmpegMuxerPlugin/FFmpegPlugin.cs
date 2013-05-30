@@ -16,6 +16,11 @@ namespace BDHero.Plugin.FFmpegMuxer
         public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
+        public MatroskaFeatures MatroskaFeatures
+        {
+            get { return MatroskaFeatures.LPCM; }
+        }
+
         private readonly AutoResetEvent _mutex = new AutoResetEvent(false);
 
         public void LoadPlugin()

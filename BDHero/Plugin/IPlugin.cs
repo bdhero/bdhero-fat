@@ -44,11 +44,23 @@ namespace BDHero.Plugin
 
     public interface IMuxerPlugin : IPlugin
     {
+        MatroskaFeatures MatroskaFeatures { get; }
         void Mux(Job job);
     }
 
     public interface IPostProcessorPlugin : IPlugin
     {
         void PostProcess(Job job);
+    }
+
+    [Flags]
+    public enum MatroskaFeatures
+    {
+        None        = 0x00,
+        Chapters    = 0x01,
+        CoverArt    = 0x02,
+        LPCM        = 0x04,
+        DefaultFlag = 0x08,
+        ForcedFlag  = 0x10,
     }
 }
