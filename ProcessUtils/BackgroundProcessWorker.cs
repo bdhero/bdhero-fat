@@ -162,11 +162,12 @@ namespace ProcessUtils
 
         public override string ToString()
         {
+            const string timeSpanFormat = @"hh\:mm\:ss";
             return string.Format("{0}: {1}% complete - {2} elapsed, {3} remaining",
                                  ProcessState,
                                  PercentComplete.ToString("0.000"),
-                                 TimeElapsed,
-                                 TimeRemaining);
+                                 TimeElapsed.ToString(timeSpanFormat),
+                                 TimeRemaining.ToString(timeSpanFormat));
         }
     }
 
