@@ -113,7 +113,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             return new[]
                        {
                            "-map", "0:" + track.Index,
-                           "-metadata:s:" + track.Index, "language=" + track.Language.ISO_639_2,
+                           "-metadata:s:" + i, "language=" + track.Language.ISO_639_2,
                            "-metadata:s:" + i, "title=" + track.Title
                        };
         }
