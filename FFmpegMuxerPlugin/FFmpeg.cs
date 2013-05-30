@@ -150,11 +150,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private void OnProgressUpdated(ProgressState progressState)
         {
-            Console.WriteLine("{0}: {1}% - {2} elapsed, {3} remaining",
-                progressState.ProcessState,
-                progressState.PercentComplete.ToString("0.000"),
-                progressState.TimeElapsed,
-                progressState.TimeRemaining);
+            Console.Write("\r{0}", progressState);
         }
 
         private void OnBeforeStart(object sender, EventArgs eventArgs)
@@ -267,6 +263,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private static void OnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
+            Console.WriteLine();
             Console.WriteLine("Finished muxing with FFmpeg!");
 #if false
             Console.WriteLine("Adding metadata with mkvpropedit...");
