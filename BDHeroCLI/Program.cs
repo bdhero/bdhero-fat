@@ -48,7 +48,7 @@ namespace BDHeroCLI
             controller.Convert(mkvPath);
 
             Console.WriteLine();
-            Console.WriteLine("*** BDhero CLI Finished - press any key to exit ***");
+            Console.WriteLine("*** BDhero CLI Finished - press <ENTER> to exit ***");
             Console.WriteLine();
             Console.Read();
         }
