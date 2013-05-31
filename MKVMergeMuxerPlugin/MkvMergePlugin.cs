@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BDHero.Queue;
+using BDHero.JobQueue;
 
 namespace BDHero.Plugin.MKVMergeMuxer
 {
@@ -14,7 +14,7 @@ namespace BDHero.Plugin.MKVMergeMuxer
         public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
-        public MatroskaFeatures MatroskaFeatures
+        public MatroskaFeatures SupportedFeatures
         {
             get
             {

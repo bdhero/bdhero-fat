@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
-using BDHero.Queue;
+using BDHero.JobQueue;
 
 namespace BDHero.Plugin
 {
@@ -44,7 +44,7 @@ namespace BDHero.Plugin
 
     public interface IMuxerPlugin : IPlugin
     {
-        MatroskaFeatures MatroskaFeatures { get; }
+        MatroskaFeatures SupportedFeatures { get; }
         void Mux(Job job);
     }
 

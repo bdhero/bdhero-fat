@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using BDHero.Plugin;
-using BDHero.Queue;
+using BDHero.JobQueue;
 using DotNetUtils;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;

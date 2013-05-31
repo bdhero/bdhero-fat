@@ -10,6 +10,9 @@ using DotNetUtils.Annotations;
 
 namespace DotNetUtils
 {
+    /// <summary>
+    /// Helper utility class for making HTTP requests and parsing/caching the responses.
+    /// </summary>
     public static class HttpRequest
     {
         private const string METHOD_GET = "GET";
@@ -28,7 +31,7 @@ namespace DotNetUtils
         public static string Get(string uri, List<string> headers = null)
         {
             var request = BuildRequest(METHOD_GET, uri, false, headers);
-            using (var httpResponse = (HttpWebResponse) request.GetResponse())
+            using (var httpResponse = request.GetResponse())
             {
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
@@ -49,7 +52,7 @@ namespace DotNetUtils
         private static Image GetImageNoCache(string uri)
         {
             var request = BuildRequest(METHOD_GET, uri, cache: true);
-            using (var httpResponse = (HttpWebResponse) request.GetResponse())
+            using (var httpResponse = request.GetResponse())
             {
                 using (var stream = httpResponse.GetResponseStream())
                 {
@@ -67,7 +70,7 @@ namespace DotNetUtils
         [CanBeNull]
         private static Image FetchAndCacheImage([NotNull] string url)
         {
-            var image = GetImage(url, cache: false);
+            var image = GetImageNoCache(url);
             ImageCache.Set(url, image, new CacheItemPolicy());
             return image;
         }
@@ -101,7 +104,7 @@ namespace DotNetUtils
             }
 
             // This actually sends the request
-            var httpResponse = (HttpWebResponse) request.GetResponse();
+            var httpResponse = request.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var responseText = streamReader.ReadToEnd();
