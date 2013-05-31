@@ -48,13 +48,13 @@ namespace BDHero.Plugin
             AddPluginsRecursive(appDataPluginDir);
 
 #if DEBUG
-            var slnDir = @"C:\Projects\bdhero";
+            var solutionDir = GetSolutionDirPath();
             var projects = new[] { "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin", "FFmpegMuxerPlugin", "FileNamerPlugin", "MKVMergeMuxerPlugin", "TmdbPlugin" };
             foreach (var projectName in projects)
             {
                 try
                 {
-                    var pluginDir = Path.Combine(slnDir, projectName, "bin", "Debug");
+                    var pluginDir = Path.Combine(solutionDir, projectName, "bin", "Debug");
                     AddPluginsRecursive(pluginDir);
                 }
                 catch (Exception e)
@@ -65,15 +65,35 @@ namespace BDHero.Plugin
 #endif
         }
 
+#if DEBUG
+
+        private static string GetSolutionDirPath()
+        {
+            var curDir = Directory.GetCurrentDirectory();
+            DirectoryInfo parent;
+            while (!SolutionFileExists(curDir) && (parent = new DirectoryInfo(curDir).Parent) != null)
+            {
+                curDir = parent.FullName;
+            }
+            return SolutionFileExists(curDir) ? curDir : @"C:\Projects\bdhero";
+        }
+
+        private static bool SolutionFileExists(string dirPath)
+        {
+            return File.Exists(Path.Combine(dirPath, "BDHero.sln"));
+        }
+
+#endif
+
         private static string GetPluginDir(string root)
         {
             return Path.Combine(root, AssemblyUtils.GetAssemblyName(), "Plugins");
         }
 
         /// <summary>
-        /// Searches the passed path for Plugins
+        /// Searches the given directory and its subdirectories recursively for Plugins
         /// </summary>
-        /// <param name="pluginDir">Directory to search for Plugins in</param>
+        /// <param name="pluginDir">Root directory to search for Plugins in</param>
         public void AddPluginsRecursive(string pluginDir)
         {
             if (!Directory.Exists(pluginDir))
