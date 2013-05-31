@@ -34,9 +34,9 @@ namespace BDHero.Plugin.FileNamer
             if (firstVideoTrack != null)
                 firstVideoHeight = firstVideoTrack.VideoFormatDisplayable;
 
+            var directory = pathSpecified ? job.OutputPath : Environment.CurrentDirectory;
             var filename = string.Format(@"{0} [{1}].mkv", job.Disc.MovieTitle, firstVideoHeight);
-
-            job.OutputPath = pathSpecified ? Path.Combine(job.OutputPath, filename) : filename;
+            job.OutputPath = Path.Combine(directory, filename);
         }
     }
 }
