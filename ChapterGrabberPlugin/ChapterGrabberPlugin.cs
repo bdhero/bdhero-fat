@@ -142,7 +142,8 @@ namespace ChapterGrabberPlugin
 
         private static bool DoTimecodesMatch(double timeDisc, double timeApi)
         {
-            return Math.Abs(timeDisc - timeApi) >= 1.0;
+            var test = Math.Abs(timeDisc - timeApi);
+            return Math.Abs(timeDisc - timeApi) <= 1.0;
         }
 
         static private void ReplaceChapters(JsonChaps apiData, IList<BDHero.BDROM.Chapter> discData )
