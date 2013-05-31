@@ -43,7 +43,7 @@ namespace BDHero.Plugin
             var appDataRoot = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             var appDataPluginDir = GetPluginDir(appDataRoot);
 
-//            AddPluginsRecursive(AppDomain.CurrentDomain.BaseDirectory);
+            AddPluginsRecursive(AppDomain.CurrentDomain.BaseDirectory);
             AddPluginsRecursive(programDataPluginDir);
             AddPluginsRecursive(appDataPluginDir);
 
