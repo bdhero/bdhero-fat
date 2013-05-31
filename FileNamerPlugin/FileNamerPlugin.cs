@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using BDHero.Queue;
@@ -24,14 +25,18 @@ namespace BDHero.Plugin.FileNamer
 
         public void Rename(Job job)
         {
-            if (string.IsNullOrWhiteSpace(job.OutputPath))
-            {
-                var firstVideoTrack = job.SelectedPlaylist.VideoTracks.FirstOrDefault(track => track.Keep);
-                if (firstVideoTrack != null)
-                {
-                    job.OutputPath = string.Format(@"X:\BDHero\{0} [{1}].mkv", job.Disc.MovieTitle, firstVideoTrack.VideoFormatDisplayable);
-                }
-            }
+            var pathSpecified = !string.IsNullOrWhiteSpace(job.OutputPath);
+            if (pathSpecified && job.OutputPath.EndsWith(".mkv", StringComparison.InvariantCultureIgnoreCase))
+                return;
+
+            string firstVideoHeight = null;
+            var firstVideoTrack = job.SelectedPlaylist.VideoTracks.FirstOrDefault(track => track.Keep);
+            if (firstVideoTrack != null)
+                firstVideoHeight = firstVideoTrack.VideoFormatDisplayable;
+
+            var filename = string.Format(@"{0} [{1}].mkv", job.Disc.MovieTitle, firstVideoHeight);
+
+            job.OutputPath = pathSpecified ? Path.Combine(job.OutputPath, filename) : filename;
         }
     }
 }

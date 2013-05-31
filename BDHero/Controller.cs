@@ -14,8 +14,8 @@ namespace BDHero
     {
         private readonly PluginService _pluginService = new PluginService();
 
-        public event EventHandler BeforeStart;
-        public event EventHandler Completed;
+        public event EventHandler JobBeforeStart;
+        public event EventHandler JobCompleted;
 
         public Job Job { get; private set; }
 
@@ -64,18 +64,25 @@ namespace BDHero
 
         public void Scan(string bdromPath)
         {
-            if (BeforeStart != null)
-                BeforeStart(this, EventArgs.Empty);
+            if (JobBeforeStart != null)
+                JobBeforeStart(this, EventArgs.Empty);
 
             ReadBDROM(bdromPath);
             GetMetadata();
             AutoDetect();
             Rename();
+        }
+
+        public void Convert(string mkvPath = null)
+        {
+            if (!string.IsNullOrWhiteSpace(mkvPath))
+                Job.OutputPath = mkvPath;
+
             Mux();
             PostProcess();
 
-            if (Completed != null)
-                Completed(this, EventArgs.Empty);
+            if (JobCompleted != null)
+                JobCompleted(this, EventArgs.Empty);
         }
 
         #region 1 - Disc Reader
