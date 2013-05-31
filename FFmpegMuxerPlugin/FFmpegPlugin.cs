@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using BDHero.Queue;
+using BDHero.JobQueue;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
@@ -16,7 +16,7 @@ namespace BDHero.Plugin.FFmpegMuxer
         public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
-        public MatroskaFeatures MatroskaFeatures
+        public MatroskaFeatures SupportedFeatures
         {
             get { return MatroskaFeatures.LPCM; }
         }

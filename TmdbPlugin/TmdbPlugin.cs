@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using BDHero.BDROM;
 using BDHero.Plugin;
-using BDHero.Queue;
+using BDHero.JobQueue;
 using DotNetUtils;
 using WatTmdb.V3;
 

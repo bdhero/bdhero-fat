@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Instrumentation;
-using System.Runtime.Serialization;
 using System.Text;
 using BDHero.Plugin;
-using BDHero.Queue;
+using BDHero.JobQueue;
 using ProcessUtils;
 
 namespace BDHero

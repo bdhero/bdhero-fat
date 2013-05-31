@@ -3,11 +3,10 @@ using System.Linq;
 using I18N;
 using Newtonsoft.Json;
 
-// ReSharper disable InconsistentNaming
 namespace BDHero.BDROM
 {
     /// <summary>
-    /// Represents the top-level BD-ROM disc and movie
+    /// Represents a BD-ROM disc.
     /// </summary>
     public class Disc
     {
@@ -40,7 +39,7 @@ namespace BDHero.BDROM
 
         #endregion
 
-        #region Parsed metadata
+        #region Non-DB metadata
 
         /// <summary>
         /// Sanitized version of <see cref="MetaTitle"/> with junk characters removed and underscores replaced with spaces.
@@ -68,6 +67,7 @@ namespace BDHero.BDROM
         [JsonIgnore]
         public IList<Language> Languages { get; private set; }
 
+        [JsonIgnore]
         public IList<Playlist> ValidMainFeaturePlaylists
         {
             get { return Playlists.Where(playlist => playlist.IsMainFeature && !playlist.IsBogus).ToList(); }

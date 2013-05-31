@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using BDHero.BDROM;
-using BDHero.Queue;
+using BDHero.JobQueue;
 using DotNetUtils;
 
 namespace BDHero.Plugin.AutoDetector
