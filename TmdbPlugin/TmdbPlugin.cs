@@ -51,10 +51,11 @@ namespace TmdbPlugin
             tmdbGet.WorkerReportsProgress = false;
             tmdbGet.WorkerSupportsCancellation = false;
 
-            ApiRequest(job.Disc.MovieTitle);
+            ApiRequest(job);
+            getPosters(job);
         }
 
-        private void ApiRequest(string title)
+        private void ApiRequest(Job job)
         {
             // Language Needs to be user selectable
             string ISO_639_1 = "en";
@@ -62,45 +63,57 @@ namespace TmdbPlugin
 
             _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
 
-            TmdbApiParameters requestParameters = new TmdbApiParameters(title, year, ISO_639_1);
-
-            tmdbGet.DoWork += tmdbGet_DoWork;
-            tmdbGet.RunWorkerCompleted += tmdbGet_RunWorkerCompleted;
-            tmdbGet.RunWorkerAsync(requestParameters);
-        }
-       
-        private void tmdbGet_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var requestParameters = e.Argument as TmdbApiParameters;
+            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.MovieTitle, year, ISO_639_1);
 
             try
             {
-                _tmdbMovieSearch = _tmdbApi.SearchMovie(requestParameters.Query, 1, requestParameters.ISO_639_1, false, requestParameters.Year);
-            
                 if (string.IsNullOrEmpty(_tmdbRootUrl))
                 {
                     _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "w185";
                 }
 
-                e.Result = null;
+                _tmdbMovieSearch = _tmdbApi.SearchMovie(requestParameters.Query, 1, requestParameters.ISO_639_1, false, requestParameters.Year);
+                
+
+                if (_tmdbMovieSearch != null && _tmdbMovieSearch.results.Count > 0)
+                {
+                    MovieResult movieResult = _tmdbMovieSearch.results[0];
+                    DateTime releaseYear;
+                    var date = DateTime.TryParse(movieResult.release_date, out releaseYear);
+
+                    job.Disc.TmdbId = movieResult.id;
+                    job.Disc.MovieYear = releaseYear.Year;
+                    job.Disc.MovieTitle = movieResult.title;
+                    job.CoverArtUrl = _tmdbRootUrl + movieResult.poster_path;
+                }
             }
             catch (Exception ex)
             {
-                e.Result = ex;
+               
+            }            
+        }
+
+        private void getPosters(Job job)
+        {
+            if (job.Disc.TmdbId != null)
+            {
+                try
+                {
+                    var tmdbMovieImages = _tmdbApi.GetMovieImages(job.Disc.TmdbId, null);
+                    var posterLanguages = (tmdbMovieImages.posters.Select(poster => poster.iso_639_1).ToList());
+                    posterLanguages = posterLanguages.Distinct().ToList();
+
+                    if (posterLanguages.Count == 0)
+                    {
+                        tmdbMovieImages = _tmdbApi.GetMovieImages(job.Disc.TmdbId, "en");
+                    }
+
+                }
+                catch { }
+
             }
         }
-
-        private void tmdbGet_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            var result = e.Result;
-
-            //To Do:
-            // need to serialize Json results
-
-            // need to determine best match 
-
-            // need to return best match results to job.disc
-        }
+       
 
         private class TmdbApiParameters
         {
@@ -114,5 +127,7 @@ namespace TmdbPlugin
                 this.ISO_639_1 = ISO_639_1;
             }
         }
+
+        
     }
 }

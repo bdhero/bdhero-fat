@@ -131,10 +131,19 @@ namespace ChapterGrabberPlugin
             {
                 var discChapter = chapterDisc[i];
                 var apiChapter = jsonChaps.chapterInfo.chapters.chapter[i];
+                /*  -- Old match
                 if ((int)discChapter.StartTime.TotalSeconds != (int)apiChapter.time.TotalSeconds)
+                    return false;*/
+                if (!DoTimecodesMatch(discChapter.StartTime.TotalSeconds, apiChapter.time.TotalSeconds))
                     return false;
             }
             return true;
+        }
+
+        private static bool DoTimecodesMatch(double timeDisc, double timeApi)
+        {
+            var test = Math.Abs(timeDisc - timeApi);
+            return Math.Abs(timeDisc - timeApi) <= 1.0;
         }
 
         static private void ReplaceChapters(JsonChaps apiData, IList<BDHero.BDROM.Chapter> discData )
