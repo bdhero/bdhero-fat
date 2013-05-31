@@ -18,17 +18,17 @@ namespace TmdbPlugin
         private Tmdb _tmdbApi;
         private TmdbMovieSearch _tmdbMovieSearch;
         private MovieResult _tmdbMovieResult;
-        private BackgroundWorker tmdbGet;
 
         private string _tmdbMovieName;
         private int? _tmdbMovieYear;
         private int _tmdbID;
         private string _tmdbRootUrl;
+        /*
         private List<string> _moviePosterList;
         private List<string> _movieLanguageList;
         private string _selectedMovieLanguage;
         private int _selectedPosterIndex;
-
+        */
         public IPluginHost Host { get; set; }
         public string Name 
         {
@@ -48,10 +48,6 @@ namespace TmdbPlugin
 
         public void GetMetadata(Job job)
         {
-            tmdbGet = new BackgroundWorker();
-            tmdbGet.WorkerReportsProgress = false;
-            tmdbGet.WorkerSupportsCancellation = false;
-
             ApiRequest(job);
             GetPosters(job);
         }
@@ -60,7 +56,6 @@ namespace TmdbPlugin
         {
             job.Movies.Clear();
 
-            // Language Needs to be user selectable
             string ISO_639_1 = "en";
             int? year = null;
 
@@ -113,9 +108,14 @@ namespace TmdbPlugin
         {
             foreach (var movie in job.Movies)
             {
+                var tmdbMovieImages = new TmdbMovieImages();
                 try
                 {
-                    var tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, null);
+                    if (string.IsNullOrEmpty(_tmdbRootUrl))
+                    {
+                        _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "w185";
+                    }
+                    tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, null);
                     var posterLanguages = (tmdbMovieImages.posters.Select(poster => poster.iso_639_1).ToList());
                     posterLanguages = posterLanguages.Distinct().ToList();
 
@@ -123,13 +123,21 @@ namespace TmdbPlugin
                     {
                         tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, "en");
                     }
-
                 }
                 catch { }
-
+                if (tmdbMovieImages != null)
+                {
+                    foreach (var poster in tmdbMovieImages.posters)
+                    {
+                        movie.CoverArtImages.Add(new CoverArtImage
+                        {
+                            Uri = _tmdbRootUrl + poster.file_path,
+                            Language = I18N.Language.FromCode(poster.iso_639_1)
+                        });
+                    }
+                }
             }
-        }
-       
+        }       
 
         private class TmdbApiParameters
         {
@@ -142,8 +150,6 @@ namespace TmdbPlugin
                 Year = year;
                 this.ISO_639_1 = ISO_639_1;
             }
-        }
-
-        
+        }        
     }
 }
