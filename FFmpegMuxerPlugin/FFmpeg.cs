@@ -54,7 +54,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             ReplaceExistingFiles();
             RedirectProgressToFile();
             SetInputFiles();
-            SetMovieTitle(job.Disc.MovieTitle);
+            SetMovieTitle(job.Disc.SanitizedTitle);
             MapSelectedTracks();
             CopyAllCodecs();
             ConvertLPCM();

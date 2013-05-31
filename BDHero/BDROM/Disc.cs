@@ -40,25 +40,14 @@ namespace BDHero.BDROM
 
         #endregion
 
-        #region DB (TMDb / TVDB) Metadata
+        #region Parsed metadata
 
         /// <summary>
-        /// TMDb movie ID (e.g., 863).
+        /// Sanitized version of <see cref="MetaTitle"/> with junk characters removed and underscores replaced with spaces.
+        /// Useful for searching movie/TV databases.
         /// </summary>
-        [JsonProperty(PropertyName = "tmdb_id")]
-        public int TmdbId;
-
-        /// <summary>
-        /// Name of the movie in its primary release language (e.g., "Toy Story 2").
-        /// </summary>
-        [JsonProperty(PropertyName = "movie_title")]
-        public string MovieTitle;
-
-        /// <summary>
-        /// Year the movie was released (e.g., 1999).
-        /// </summary>
-        [JsonProperty(PropertyName = "movie_year")]
-        public int? MovieYear;
+        [JsonIgnore]
+        public string SanitizedTitle;
 
         #endregion
 

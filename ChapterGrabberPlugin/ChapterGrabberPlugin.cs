@@ -42,7 +42,7 @@ namespace ChapterGrabberPlugin
         {
             var playlist = job.Disc.Playlists[job.SelectedPlaylistIndex];
 
-            var apiResults = GetChapters(job.Disc.MovieTitle);
+            var apiResults = GetChapters(job.Disc.SanitizedTitle);
 
             var apiValues = CompareChapters(apiResults, playlist.Chapters);
             if (apiValues != null && apiValues.Count > 0)

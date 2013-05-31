@@ -6,6 +6,7 @@ using System.Text;
 using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.Queue;
+using DotNetUtils;
 using WatTmdb.V3;
 
 namespace TmdbPlugin
@@ -52,18 +53,20 @@ namespace TmdbPlugin
             tmdbGet.WorkerSupportsCancellation = false;
 
             ApiRequest(job);
-            getPosters(job);
+            GetPosters(job);
         }
 
         private void ApiRequest(Job job)
         {
+            job.Movies.Clear();
+
             // Language Needs to be user selectable
             string ISO_639_1 = "en";
             int? year = null;
 
             _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
 
-            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.MovieTitle, year, ISO_639_1);
+            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
 
             try
             {
@@ -75,37 +78,50 @@ namespace TmdbPlugin
                 _tmdbMovieSearch = _tmdbApi.SearchMovie(requestParameters.Query, 1, requestParameters.ISO_639_1, false, requestParameters.Year);
                 
 
-                if (_tmdbMovieSearch != null && _tmdbMovieSearch.results.Count > 0)
+                if (_tmdbMovieSearch != null)
                 {
-                    MovieResult movieResult = _tmdbMovieSearch.results[0];
-                    DateTime releaseYear;
-                    var date = DateTime.TryParse(movieResult.release_date, out releaseYear);
-
-                    job.Disc.TmdbId = movieResult.id;
-                    job.Disc.MovieYear = releaseYear.Year;
-                    job.Disc.MovieTitle = movieResult.title;
-                    job.CoverArtUrl = _tmdbRootUrl + movieResult.poster_path;
+                    job.Movies.AddRange(_tmdbMovieSearch.results.Select(ToMovie));
                 }
             }
             catch (Exception ex)
             {
-               
+
             }            
         }
 
-        private void getPosters(Job job)
+        private Movie ToMovie(MovieResult movieResult, int i)
         {
-            if (job.Disc.TmdbId != null)
+            DateTime releaseYear;
+            if (!DateTime.TryParse(movieResult.release_date, out releaseYear))
+                releaseYear = DateTime.MinValue;
+            var movie = new Movie
+                {
+                    Id = movieResult.id,
+                    ReleaseYear = releaseYear.Year,
+                    Title = movieResult.title,
+                    IsSelected = i == 0
+                };
+            movie.CoverArtImages.Add(new CoverArtImage
+                {
+                    Uri = _tmdbRootUrl + movieResult.poster_path,
+                    IsSelected = true
+                });
+            return movie;
+        }
+
+        private void GetPosters(Job job)
+        {
+            foreach (var movie in job.Movies)
             {
                 try
                 {
-                    var tmdbMovieImages = _tmdbApi.GetMovieImages(job.Disc.TmdbId, null);
+                    var tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, null);
                     var posterLanguages = (tmdbMovieImages.posters.Select(poster => poster.iso_639_1).ToList());
                     posterLanguages = posterLanguages.Distinct().ToList();
 
                     if (posterLanguages.Count == 0)
                     {
-                        tmdbMovieImages = _tmdbApi.GetMovieImages(job.Disc.TmdbId, "en");
+                        tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, "en");
                     }
 
                 }

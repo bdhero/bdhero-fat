@@ -21,10 +21,11 @@ namespace BDHero.Queue
         /// </summary>
         public string OutputPath;
 
-        /// <summary>
-        /// Poster image URL from TMDb.
-        /// </summary>
-        public string CoverArtUrl;
+        public readonly IList<Movie> Movies = new List<Movie>();
+
+        public readonly IList<TVShow> TVEpisodes = new List<TVShow>();
+
+        public ReleaseMediumType ReleaseMediumType = ReleaseMediumType.Unknown;
 
         /// <summary>
         /// Gets the playlist selected by the user.

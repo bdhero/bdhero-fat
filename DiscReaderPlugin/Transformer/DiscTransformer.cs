@@ -83,36 +83,36 @@ namespace BDHero.Plugin.DiscReader.Transformer
             var metaTitle = disc.MetaTitle;
             var volumeLabel = disc.VolumeLabel;
 
-            var movieTitle = (metaTitle ?? "").Trim();
+            var sanitizedTitle = (metaTitle ?? "").Trim();
 
-            if (!string.IsNullOrWhiteSpace(movieTitle))
+            if (!string.IsNullOrWhiteSpace(sanitizedTitle))
             {
-                movieTitle = Regex.Replace(movieTitle, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
-                movieTitle = Regex.Replace(movieTitle, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
-                movieTitle = Regex.Replace(movieTitle, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
-                movieTitle = movieTitle.Trim();
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
+                sanitizedTitle = sanitizedTitle.Trim();
             }
 
-            if (Regex.Replace(movieTitle, @"\W", "").ToLowerInvariant() == "bluray")
+            if (Regex.Replace(sanitizedTitle, @"\W", "").ToLowerInvariant() == "bluray")
             {
-                movieTitle = "";
+                sanitizedTitle = "";
             }
 
             // TMDb chokes on dashes
-            movieTitle = Regex.Replace(movieTitle, @"-+", " ");
+            sanitizedTitle = Regex.Replace(sanitizedTitle, @"-+", " ");
 
             // No valid bdmt_<lang>.xml value found; use volume label as fallback
-            if (string.IsNullOrWhiteSpace(movieTitle))
+            if (string.IsNullOrWhiteSpace(sanitizedTitle))
             {
-                movieTitle = volumeLabel;
-                movieTitle = Regex.Replace(movieTitle, @"^\d{6,}_", ""); // e.g., "01611720_GOODFELLAS" => "GOODFELLAS"
-                movieTitle = Regex.Replace(movieTitle, @"_NA$", ""); // remove trailing region codes (NA = North America)
-                movieTitle = Regex.Replace(movieTitle, @"_+", " ");
+                sanitizedTitle = volumeLabel;
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @"^\d{6,}_", ""); // e.g., "01611720_GOODFELLAS" => "GOODFELLAS"
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @"_NA$", ""); // remove trailing region codes (NA = North America)
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @"_+", " ");
             }
 
-            movieTitle = Regex.Replace(movieTitle, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
+            sanitizedTitle = Regex.Replace(sanitizedTitle, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
 
-            disc.MovieTitle = movieTitle;
+            disc.SanitizedTitle = sanitizedTitle;
         }
 
         #endregion
