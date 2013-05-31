@@ -64,43 +64,21 @@ namespace TmdbPlugin
 
             TmdbApiParameters requestParameters = new TmdbApiParameters(title, year, ISO_639_1);
 
-            tmdbGet.DoWork += tmdbGet_DoWork;
-            tmdbGet.RunWorkerCompleted += tmdbGet_RunWorkerCompleted;
-            tmdbGet.RunWorkerAsync(requestParameters);
-        }
-       
-        private void tmdbGet_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var requestParameters = e.Argument as TmdbApiParameters;
-
             try
             {
                 _tmdbMovieSearch = _tmdbApi.SearchMovie(requestParameters.Query, 1, requestParameters.ISO_639_1, false, requestParameters.Year);
-            
+
                 if (string.IsNullOrEmpty(_tmdbRootUrl))
                 {
                     _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "w185";
-                }
-
-                e.Result = null;
+                }                
             }
             catch (Exception ex)
             {
-                e.Result = ex;
-            }
+               
+            }            
         }
-
-        private void tmdbGet_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            var result = e.Result;
-
-            //To Do:
-            // need to serialize Json results
-
-            // need to determine best match 
-
-            // need to return best match results to job.disc
-        }
+       
 
         private class TmdbApiParameters
         {
