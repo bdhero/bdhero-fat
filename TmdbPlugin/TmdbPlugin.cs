@@ -8,6 +8,9 @@ using BDHero.Plugin;
 using BDHero.JobQueue;
 using DotNetUtils;
 using WatTmdb.V3;
+using System.IO;
+using Newtonsoft.Json;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace TmdbPlugin
 {
@@ -50,13 +53,19 @@ namespace TmdbPlugin
             GetPosters(job);
         }
 
+        private void checkConfig()
+        {
+            //var x = JsonConvert.DeserializeObject<Setting>(jsonText);
+
+        }
+
         private void ApiRequest(Job job)
         {
             job.Movies.Clear();
             string ISO_639_1 = "en";
             int? year = null;
             TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
-        
+                  
             try
             {
                 _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
