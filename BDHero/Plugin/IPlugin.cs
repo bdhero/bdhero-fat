@@ -18,38 +18,47 @@ namespace BDHero.Plugin
         event PluginProgressHandler ProgressUpdated;
         event EditPluginPreferenceHandler EditPreferences;
 
+        /// <exception cref="PluginException"></exception>
         void LoadPlugin();
+        /// <exception cref="PluginException"></exception>
         void UnloadPlugin();
     }
 
     public interface IDiscReaderPlugin : IPlugin
     {
+        /// <exception cref="PluginException"></exception>
         Disc ReadBDROM(string bdromPath);
     }
 
     public interface IMetadataProviderPlugin : IPlugin
     {
+        /// <exception cref="PluginException"></exception>
         void GetMetadata(Job job);
     }
 
     public interface IAutoDetectorPlugin : IPlugin
     {
+        /// <exception cref="PluginException"></exception>
         void AutoDetect(Job job);
     }
 
     public interface INameProviderPlugin : IPlugin
     {
+        /// <exception cref="PluginException"></exception>
         void Rename(Job job);
     }
 
     public interface IMuxerPlugin : IPlugin
     {
         MatroskaFeatures SupportedFeatures { get; }
+
+        /// <exception cref="PluginException"></exception>
         void Mux(Job job);
     }
 
     public interface IPostProcessorPlugin : IPlugin
     {
+        /// <exception cref="PluginException"></exception>
         void PostProcess(Job job);
     }
 
