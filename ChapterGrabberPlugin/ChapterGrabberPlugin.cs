@@ -28,6 +28,7 @@ namespace ChapterGrabberPlugin
 
         public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
+        
 
         public void LoadPlugin()
         {
@@ -69,9 +70,7 @@ namespace ChapterGrabberPlugin
             }
             catch (Exception ex)
             {
-                //To Do:
-                //wrap the exception in a new PluginException object
-                //Message = "Error: An Error occurred when contacting chapterdb.org
+                var error = new PluginException("Error: An error occurred when contacting chapterdb.org", ex, PluginExceptionSeverity.Error);
             }
 
             try
@@ -80,9 +79,7 @@ namespace ChapterGrabberPlugin
             }
             catch (Exception ex)
             {
-                //To Do:
-                //wrap the exception in a new PluginException object
-                //Message = "Error: An Error occurred when contacting chapterdb.org
+                var error = new PluginException("Error: An error occurred when processing the response from chapterdb.org", ex, PluginExceptionSeverity.Error);
             }
 
             if (doc.DocumentElement != null)
@@ -100,9 +97,7 @@ namespace ChapterGrabberPlugin
                     }
                     catch (Exception ex)
                     {
-                        //To Do:
-                        //wrap the exception in a new PluginException object
-                        //Message = "Error: One or more of the Results were rejected for containing bad data"
+                        var error = new PluginException("Error: An error occurred when serializing the response from chapterdb.org", ex, PluginExceptionSeverity.Error);
                     }
                 }
             }
