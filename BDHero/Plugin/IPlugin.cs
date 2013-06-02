@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BDHero.BDROM;
 using BDHero.JobQueue;
@@ -15,19 +17,14 @@ namespace BDHero.Plugin
         IPluginHost Host { get; }
 
         /// <summary>
-        /// Full path to the plugin DLL.
-        /// </summary>
-        string Location { get; }
-
-        /// <summary>
-        /// GUID of the plugin assembly DLL.
-        /// </summary>
-        string Guid { get; }
-
-        /// <summary>
         /// Human-friendly name of the plugin that will be displayed in the UI.
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// Contains information about the plugin DLL and config file.
+        /// </summary>
+        PluginAssemblyInfo AssemblyInfo { get; }
 
         event PluginProgressHandler ProgressUpdated;
         event EditPluginPreferenceHandler EditPreferences;
@@ -36,10 +33,9 @@ namespace BDHero.Plugin
         /// Invoked when the application first starts up and loads the plugin assembly.
         /// </summary>
         /// <param name="host">Host object that loaded the plugin</param>
-        /// <param name="location">Full path to the plugin DLL</param>
-        /// <param name="guid">The plugin assembly DLL's GUID</param>
+        /// <param name="assemblyInfo">Contains information about the plugin DLL and config file</param>
         /// <exception cref="PluginException"></exception>
-        void LoadPlugin(IPluginHost host, string location, string guid);
+        void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo);
 
         /// <summary>
         /// Invoked when the application is about to exit.
@@ -95,5 +91,39 @@ namespace BDHero.Plugin
         LPCM        = 0x04,
         DefaultFlag = 0x08,
         ForcedFlag  = 0x10,
+    }
+
+    /// <summary>
+    /// Contains information about the plugin DLL and config file.
+    /// </summary>
+    public class PluginAssemblyInfo
+    {
+        /// <summary>
+        /// Full path to the plugin DLL.
+        /// </summary>
+        public string Location { get; private set; }
+
+        /// <summary>
+        /// Version of the plugin assembly DLL.
+        /// </summary>
+        public Version Version { get; private set; }
+
+        /// <summary>
+        /// GUID of the plugin assembly DLL.
+        /// </summary>
+        public string Guid { get; private set; }
+
+        /// <summary>
+        /// Returns the full path to the plugin's JSON config file.
+        /// </summary>
+        /// <remarks>The path to the config file is the same as that of the DLL, except with a ".config.json" extension instead of ".dll".</remarks>
+        public string SettingsFile { get { return new Regex(@"\.dll$", RegexOptions.IgnoreCase).Replace(Location, ".config.json"); } }
+
+        public PluginAssemblyInfo(string location, Version version, string guid)
+        {
+            Location = location;
+            Version = version;
+            Guid = guid;
+        }
     }
 }

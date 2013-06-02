@@ -9,19 +9,18 @@ namespace BDHero.Plugin.AutoDetector
 {
     public class AutoDetector : IAutoDetectorPlugin
     {
-        public IPluginHost Host { get; set; }
-        public string Location { get; private set; }
-        public string Guid { get; private set; }
+        public IPluginHost Host { get; private set; }
+        public PluginAssemblyInfo AssemblyInfo { get; private set; }
+
         public string Name { get { return "BDHero Detective"; } }
 
         public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
-        public void LoadPlugin(IPluginHost host, string location, string guid)
+        public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
             Host = host;
-            Location = location;
-            Guid = guid;
+            AssemblyInfo = assemblyInfo;
         }
 
         public void UnloadPlugin()
