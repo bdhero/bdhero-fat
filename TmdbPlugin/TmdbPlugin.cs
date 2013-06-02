@@ -16,7 +16,9 @@ namespace TmdbPlugin
 {
     public class TmdbPlugin : IMetadataProviderPlugin
     {
-        private const string TmdbApiKey = "b59b366b0f0a457d58995537d847409a";
+        private string pluginDirectory;
+        private string pluginFileName = "TmdbPlugin.Config.json";
+        private string TmdbApiKey = "b59b366b0f0a457d58995537d847409a";
         private Tmdb _tmdbApi;
         private TmdbMovieSearch _tmdbMovieSearch;
         private MovieResult _tmdbMovieResult;
@@ -45,14 +47,34 @@ namespace TmdbPlugin
 
         public void GetMetadata(Job job)
         {
-            checkConfig();
+            checkConfigFile();
             ApiRequest(job);
             GetPosters(job);
         }
 
-        private void checkConfig()
-        {            
-            var x = JsonConvert.DeserializeObject<PluginSettings>(null);
+        private void checkConfigFile()
+        {
+            if (!File.Exists(AssemblyInfo.SettingsFile))
+            {                
+                PluginSettings settings = new PluginSettings
+                {
+                    settings = new Settings
+                    {
+                        apiKey = null,
+                        defaultLanguage = "en",
+                        url = "http://acdvorak.github.io/bdautomuxer/"                        
+                    }
+                };
+
+                var settingJson = JsonConvert.SerializeObject(settings, Formatting.Indented);
+                if (settingJson != null)
+                {
+                    File.WriteAllText(AssemblyInfo.SettingsFile, settingJson);
+                }
+            }
+
+            var reader = File.ReadAllText(AssemblyInfo.SettingsFile);
+            var fileSettings = JsonConvert.DeserializeObject<PluginSettings>(reader);
         }
 
         private void ApiRequest(Job job)
@@ -61,15 +83,16 @@ namespace TmdbPlugin
             string ISO_639_1 = "en";
             int? year = null;
             TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
-                  
-            try
+                
+            if(TmdbApiKey != null)
             {
                 _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
             }
-            catch (Exception ex)
-            {
-                var error = new PluginException("Error: An error has occurred", ex, PluginExceptionSeverity.Error);
+            else
+            {                
+                var error = new PluginException("Error: No APIKey was Found", PluginExceptionSeverity.Error);
             }
+            
 
             try
             {
