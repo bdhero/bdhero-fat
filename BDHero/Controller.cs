@@ -14,6 +14,9 @@ namespace BDHero
 
         public event EventHandler JobBeforeStart;
         public event EventHandler JobCompleted;
+        public event EventHandler JobFailed;
+        public event PluginExceptionEventHandler PluginException;
+        public event UnhandledExceptionEventHandler UnhandledException;
 
         public Job Job { get; private set; }
 
@@ -54,45 +57,79 @@ namespace BDHero
             Console.WriteLine("\t {0} ({1}):", name, plugins.Count);
             foreach (var plugin in plugins)
             {
-                Console.WriteLine("\t\t {0} - {1} - {2}", plugin.Name, plugin.Guid, plugin.Location);
+                Console.WriteLine("\t\t {0} v{1} - {2} - {3}", plugin.Name, plugin.AssemblyInfo.Version, plugin.AssemblyInfo.Guid, plugin.AssemblyInfo.Location);
             }
         }
 
         #endregion
 
-        public void Scan(string bdromPath)
+        /// <summary>
+        /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.
+        /// </summary>
+        /// <param name="bdromPath">Path to the BD-ROM directory</param>
+        /// <returns><code>true</code> if the scan succeeded; otherwise <code>false</code></returns>
+        public bool Scan(string bdromPath)
         {
             if (JobBeforeStart != null)
                 JobBeforeStart(this, EventArgs.Empty);
 
-            ReadBDROM(bdromPath);
+            if (!ReadBDROM(bdromPath))
+                return Fail();
+
             GetMetadata();
             AutoDetect();
             Rename();
+
+            return true;
         }
 
-        public void Convert(string mkvPath = null)
+        /// <summary>
+        /// Muxes the BD-ROM to MKV and runs any post-processing plugins.
+        /// </summary>
+        /// <param name="mkvPath">Optional path to the output MKV file (if overridden by the user)</param>
+        /// <returns><code>true</code> if all muxing plugins succeeded; otherwise <code>false</code></returns>
+        public bool Convert(string mkvPath = null)
         {
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
 
-            Mux();
+            if (!Mux())
+                return Fail();
+
             PostProcess();
 
             if (JobCompleted != null)
                 JobCompleted(this, EventArgs.Empty);
+
+            return true;
         }
 
         #region 1 - Disc Reader
 
-        private void ReadBDROM(string bdromPath)
+        private bool ReadBDROM(string bdromPath)
         {
             Console.WriteLine("Scanning {0}...", bdromPath);
+
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
             discReader.ProgressUpdated -= DiscReaderOnProgressUpdated;
             discReader.ProgressUpdated += DiscReaderOnProgressUpdated;
-            var disc = discReader.ReadBDROM(bdromPath);
-            Job = new Job(disc);
+
+            try
+            {
+                var disc = discReader.ReadBDROM(bdromPath);
+                Job = new Job(disc);
+                return true;
+            }
+            catch (PluginException e)
+            {
+                HandlePluginException(discReader, e);
+                return false;
+            }
+            catch (Exception e)
+            {
+                HandleUnhandledException(e);
+                return false;
+            }
         }
 
         private void DiscReaderOnProgressUpdated(IPlugin plugin, ProgressState progressState)
@@ -147,9 +184,26 @@ namespace BDHero
 
         #region 5 - Mux
 
-        private void Mux()
+        private bool Mux()
         {
-            _pluginService.MuxerPlugins.First().Mux(Job);
+            foreach (var plugin in _pluginService.MuxerPlugins)
+            {
+                try
+                {
+                    plugin.Mux(Job);
+                }
+                catch (PluginException e)
+                {
+                    HandlePluginException(plugin, e);
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    HandleUnhandledException(e);
+                    return false;
+                }
+            }
+            return _pluginService.MuxerPlugins.Count > 0;
         }
 
         #endregion
@@ -162,6 +216,29 @@ namespace BDHero
             {
                 plugin.PostProcess(Job);
             }
+        }
+
+        #endregion
+
+        #region Exception handling
+
+        private void HandlePluginException(IPlugin plugin, PluginException exception)
+        {
+            if (PluginException != null)
+                PluginException(plugin, exception);
+        }
+
+        private void HandleUnhandledException(Exception exception)
+        {
+            if (UnhandledException != null)
+                UnhandledException(this, new UnhandledExceptionEventArgs(exception, false));
+        }
+
+        private bool Fail()
+        {
+            if (JobFailed != null)
+                JobFailed(this, EventArgs.Empty);
+            return false;
         }
 
         #endregion

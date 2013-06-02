@@ -9,8 +9,6 @@ using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 using System.Text.RegularExpressions;
 
-
-
 namespace ChapterGrabberPlugin
 {
     public class ChapterGrabberPlugin : INameProviderPlugin
@@ -19,21 +17,18 @@ namespace ChapterGrabberPlugin
         private const string ApiGetEnd = "&chapterCount=0 HTTP/1.1";
         private static string xmlResponse;
 
+        public IPluginHost Host { get; private set; }
+        public PluginAssemblyInfo AssemblyInfo { get; private set; }
 
-        public IPluginHost Host { get; set; }
-        public string Location { get; private set; }
-        public string Guid { get; private set; }
         public string Name { get { return "ChapterGrabber"; } }
 
         public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
-        
 
-        public void LoadPlugin(IPluginHost host, string location, string guid)
+        public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
             Host = host;
-            Location = location;
-            Guid = guid;
+            AssemblyInfo = assemblyInfo;
         }
 
         public void UnloadPlugin()

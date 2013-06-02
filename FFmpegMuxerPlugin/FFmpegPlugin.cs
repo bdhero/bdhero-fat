@@ -10,9 +10,9 @@ namespace BDHero.Plugin.FFmpegMuxer
 {
     public class FFmpegPlugin : IMuxerPlugin
     {
-        public IPluginHost Host { get; set; }
-        public string Location { get; private set; }
-        public string Guid { get; private set; }
+        public IPluginHost Host { get; private set; }
+        public PluginAssemblyInfo AssemblyInfo { get; private set; }
+
         public string Name { get { return "FFmpeg"; } }
 
         public event PluginProgressHandler ProgressUpdated;
@@ -25,11 +25,10 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private readonly AutoResetEvent _mutex = new AutoResetEvent(false);
 
-        public void LoadPlugin(IPluginHost host, string location, string guid)
+        public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
             Host = host;
-            Location = location;
-            Guid = guid;
+            AssemblyInfo = assemblyInfo;
         }
 
         public void UnloadPlugin()
