@@ -109,7 +109,7 @@ namespace BDInfo
             
             if (DirectoryBDMV == null)
             {
-                throw new Exception("Unable to locate BD structure.");
+                throw new IOException("Unable to locate BD structure.");
             }
 
             DirectoryRoot = 
@@ -130,7 +130,7 @@ namespace BDInfo
             if (DirectoryCLIPINF == null
                 || DirectoryPLAYLIST == null)
             {
-                throw new Exception("Unable to locate BD structure.");
+                throw new IOException("Unable to locate BD structure.");
             }
 
             //

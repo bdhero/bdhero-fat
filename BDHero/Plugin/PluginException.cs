@@ -49,4 +49,6 @@ namespace BDHero.Plugin
         /// </example>
         Error
     }
+
+    public delegate void PluginExceptionEventHandler(IPlugin plugin, PluginException exception);
 }

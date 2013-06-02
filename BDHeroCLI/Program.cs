@@ -44,8 +44,24 @@ namespace BDHeroCLI
                 mkvPath = Console.ReadLine();
             }
 
-            controller.Scan(bdromPath);
-            controller.Convert(mkvPath);
+            if (controller.Scan(bdromPath))
+            {
+                if (controller.Convert(mkvPath))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("MUXING SUCCEEDED!");
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("MUXING FAILED!");
+                }
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("SCANNING FAILED!");
+            }
 
             Console.WriteLine();
             Console.WriteLine("*** BDhero CLI Finished - press <ENTER> to exit ***");
