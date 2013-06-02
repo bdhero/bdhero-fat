@@ -17,6 +17,8 @@ namespace ChapterGrabberPlugin
     {
         private const string ApiGet = "http://chapterdb.org/chapters/search?title=";
         private const string ApiGetEnd = "&chapterCount=0 HTTP/1.1";
+        private static string xmlResponse;
+
 
         public IPluginHost Host { get; set; }
         public string Name 
@@ -41,13 +43,15 @@ namespace ChapterGrabberPlugin
         public void Rename(Job job)
         {
             var playlist = job.Disc.Playlists[job.SelectedPlaylistIndex];
+            if (job.Disc.SanitizedTitle != null)
+            {  
+                var apiResults = GetChapters(job.Disc.SanitizedTitle);
 
-            var apiResults = GetChapters(job.Disc.SanitizedTitle);
-
-            var apiValues = CompareChapters(apiResults, playlist.Chapters);
-            if (apiValues != null && apiValues.Count > 0)
-            {
-                ReplaceChapters(apiValues[0], playlist.Chapters);
+                var apiValues = CompareChapters(apiResults, playlist.Chapters);
+                if (apiValues != null && apiValues.Count > 0)
+                {
+                    ReplaceChapters(apiValues[0], playlist.Chapters);
+                }
             }
         }
 
@@ -55,12 +59,31 @@ namespace ChapterGrabberPlugin
         {
             var movieSearchResults = new List<JsonChaps>();
             var headers = new List<string>();
-            headers.Add("ApiKey: G88IO875M9SKU6DPB82F");
-            headers.Add("UserName: ChapterGrabber");
-            var xmlResponse = HttpRequest.Get(ApiGet + movieName + ApiGetEnd, headers);
+                headers.Add("ApiKey: G88IO875M9SKU6DPB82F");
+                headers.Add("UserName: BDHero");
             var doc = new XmlDocument();
+            
+            try
+            {
+                xmlResponse = HttpRequest.Get(ApiGet + movieName + ApiGetEnd, headers);
+            }
+            catch (Exception ex)
+            {
+                //To Do:
+                //wrap the exception in a new PluginException object
+                //Message = "Error: An Error occurred when contacting chapterdb.org
+            }
 
-            doc.LoadXml(xmlResponse);
+            try
+            {
+                doc.LoadXml(xmlResponse);
+            }
+            catch (Exception ex)
+            {
+                //To Do:
+                //wrap the exception in a new PluginException object
+                //Message = "Error: An Error occurred when contacting chapterdb.org
+            }
 
             if (doc.DocumentElement != null)
             {
@@ -75,19 +98,27 @@ namespace ChapterGrabberPlugin
 
                         movieSearchResults.Add(JsonConvert.DeserializeObject<JsonChaps>(jsonText));
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        Console.WriteLine("Error: One or more of the Results were rejected for containing bad data");
+                        //To Do:
+                        //wrap the exception in a new PluginException object
+                        //Message = "Error: One or more of the Results were rejected for containing bad data"
                     }
                 }
             }
+
+            // Logging
             if (movieSearchResults.Count > 0)
             {
-                Console.WriteLine(movieSearchResults.Count + " matches were found for " + movieName);
+                //To Do:
+                //wrap the Log in a new Log object
+                //Console.WriteLine(movieSearchResults.Count + " matches were found for " + movieName);
             }
             else
             {
-                Console.WriteLine("No matches were found for " + movieName);
+                //To Do:
+                //wrap the Log in a new Log object
+                //Console.WriteLine("No matches were found for " + movieName);
             }
             return movieSearchResults;
         }
@@ -131,9 +162,6 @@ namespace ChapterGrabberPlugin
             {
                 var discChapter = chapterDisc[i];
                 var apiChapter = jsonChaps.chapterInfo.chapters.chapter[i];
-                /*  -- Old match
-                if ((int)discChapter.StartTime.TotalSeconds != (int)apiChapter.time.TotalSeconds)
-                    return false;*/
                 if (!DoTimecodesMatch(discChapter.StartTime.TotalSeconds, apiChapter.time.TotalSeconds))
                     return false;
             }
@@ -151,6 +179,15 @@ namespace ChapterGrabberPlugin
             for (var i=0; i<discData.Count; i++)
             {
                 discData[i].Title = apiData.chapterInfo.chapters.chapter[i].name;
+            }
+
+            // Logging
+            if (discData.Count != null && discData.Count > 0)
+            {
+                //To Do:
+                //wrap the Log in a new Log object
+                // Log Message:  "ChapterGrabber replaced " + discData.Count + " Chapters";
+
             }
         }
     }
