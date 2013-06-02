@@ -1,15 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using BDHero.Plugin;
 using BDHero.JobQueue;
+using DotNetUtils;
 using ProcessUtils;
 
 namespace BDHero
 {
     public class Controller
     {
+        private static log4net.ILog _logger;
+
+        private const string AppDataRootDirName = "BDHero";
+        private const string ConfigDirName = "Config";
+        private const string PluginDirName = "Plugins";
+        private const string LogDirName = "Logs";
+
+        private bool _isPortable;
+        private string _installDir;
+        private string _configDir;
+        private string _pluginDir;
+        private string _logDir;
+
         private readonly PluginService _pluginService = new PluginService();
 
         public event EventHandler JobBeforeStart;
@@ -20,26 +37,67 @@ namespace BDHero
 
         public Job Job { get; private set; }
 
+        /// <summary>
+        /// IMPORTANT: CONSTRUCTOR MUST BE THE FIRST THING CALLED WHEN THE PROGRAM STARTS UP TO INITIALIZE LOGGING!!!
+        /// </summary>
         /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
-        public Controller()
+        public Controller(FileInfo logConfig)
         {
-            LoadPlugins();
-            VerifyPlugins();
+            LocateDirectories();
+            InitLogging(logConfig);
+        }
+
+        private void LocateDirectories()
+        {
+            _installDir = AssemblyUtils.GetInstallDir(Assembly.GetEntryAssembly());
+            _isPortable = Directory.Exists(Path.Combine(_installDir, ConfigDirName));
+
+            if (_isPortable)
+            {
+                _configDir = Path.Combine(_installDir, ConfigDirName);
+                _pluginDir = Path.Combine(_installDir, PluginDirName);
+                _logDir = Path.Combine(_installDir, LogDirName);
+            }
+            else
+            {
+                var roamingAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppDataRootDirName);
+                var localAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppDataRootDirName);
+                _configDir = Path.Combine(roamingAppData, ConfigDirName);
+                _pluginDir = Path.Combine(roamingAppData, PluginDirName);
+                _logDir = Path.Combine(localAppData, LogDirName);
+            }
+
+            if (!Directory.Exists(_logDir))
+            {
+                Directory.CreateDirectory(_logDir);
+            }
+        }
+
+        private void InitLogging(FileInfo logConfig)
+        {
+            log4net.GlobalContext.Properties["logdir"] = _logDir;
+            log4net.GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(logConfig);
+            _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _logger.Info("Starting up");
+            _logger.DebugFormat("Portable = {0}", _isPortable);
+            _logger.DebugFormat("Config Dir = {0}", _configDir);
+            _logger.DebugFormat("Plugin Dir = {0}", _pluginDir);
+            _logger.DebugFormat("Log Dir = {0}", _logDir);
         }
 
         #region Plugins
 
-        private void LoadPlugins()
+        public void LoadPlugins()
         {
-            _pluginService.LoadPlugins();
+            LoadPluginsFromService();
+            LogPlugins();
+            VerifyPlugins();
+        }
 
-            Console.WriteLine("Loaded {0} plugins:", _pluginService.Plugins.Count);
-            ListPlugins("Disc Readers", _pluginService.DiscReaderPlugins);
-            ListPlugins("Metadata Providers", _pluginService.MetadataProviderPlugins);
-            ListPlugins("Auto Detectors", _pluginService.AutoDetectorPlugins);
-            ListPlugins("Name Providers", _pluginService.NameProviderPlugins);
-            ListPlugins("Muxers", _pluginService.MuxerPlugins);
-            ListPlugins("Post Processors", _pluginService.PostProcessorPlugins);
+        private void LoadPluginsFromService()
+        {
+            _pluginService.LoadPlugins(_pluginDir);
         }
 
         /// <summary>Checks that all required plugin types are loaded.</summary>
@@ -52,12 +110,23 @@ namespace BDHero
                 throw new RequiredPluginNotFoundException<IMuxerPlugin>("A Muxer plugin is required");
         }
 
-        private static void ListPlugins<T>(string name, IList<T> plugins) where T : IPlugin
+        private void LogPlugins()
         {
-            Console.WriteLine("\t {0} ({1}):", name, plugins.Count);
+            _logger.InfoFormat("Loaded {0} plugins:", _pluginService.Plugins.Count);
+            LogPlugins("Disc Readers", _pluginService.DiscReaderPlugins);
+            LogPlugins("Metadata Providers", _pluginService.MetadataProviderPlugins);
+            LogPlugins("Auto Detectors", _pluginService.AutoDetectorPlugins);
+            LogPlugins("Name Providers", _pluginService.NameProviderPlugins);
+            LogPlugins("Muxers", _pluginService.MuxerPlugins);
+            LogPlugins("Post Processors", _pluginService.PostProcessorPlugins);
+        }
+
+        private static void LogPlugins<T>(string name, IList<T> plugins) where T : IPlugin
+        {
+            _logger.InfoFormat("\t {0} ({1}):", name, plugins.Count);
             foreach (var plugin in plugins)
             {
-                Console.WriteLine("\t\t {0} v{1} - {2} - {3}", plugin.Name, plugin.AssemblyInfo.Version, plugin.AssemblyInfo.Guid, plugin.AssemblyInfo.Location);
+                _logger.InfoFormat("\t\t {0} v{1} - {2} - {3}", plugin.Name, plugin.AssemblyInfo.Version, plugin.AssemblyInfo.Guid, plugin.AssemblyInfo.Location);
             }
         }
 

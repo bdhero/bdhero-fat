@@ -33,11 +33,15 @@ namespace BDHero.Plugin
         /// <summary>
         /// Searches the Application's Startup Directory for Plugins
         /// </summary>
-        public void LoadPlugins()
+        /// <param name="path">Full path to the root Plugins directory</param>
+        public void LoadPlugins(string path)
         {
             // First empty the collection, we're reloading them all
             ClosePlugins();
 
+            AddPluginsRecursive(path);
+
+#if false
             var programDataRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             var programDataPluginDir = GetPluginDir(programDataRoot);
 
@@ -47,6 +51,7 @@ namespace BDHero.Plugin
             AddPluginsRecursive(AppDomain.CurrentDomain.BaseDirectory);
             AddPluginsRecursive(programDataPluginDir);
             AddPluginsRecursive(appDataPluginDir);
+#endif
 
 #if DEBUG
             var solutionDir = GetSolutionDirPath();

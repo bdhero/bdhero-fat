@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,21 @@ namespace BDHeroCLI
 {
     static class Program
     {
+        /// <summary>
+        /// IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
+        /// </summary>
+        private static readonly Controller Controller = new Controller(new FileInfo("Config/bdhero-cli.log.config"));
+
+        /// <summary>
+        /// Depends on <see cref="Controller"/> being initialized first.
+        /// </summary>
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         static void Main(string[] args)
         {
-            var controller = new Controller();
-
-            controller.JobBeforeStart += ControllerOnJobBeforeStart;
-            controller.JobCompleted += ControllerOnJobCompleted;
+            Controller.JobBeforeStart += ControllerOnJobBeforeStart;
+            Controller.JobCompleted += ControllerOnJobCompleted;
+            Controller.LoadPlugins();
 
             string bdromPath = "",
                    mkvPath = "";
@@ -44,9 +54,9 @@ namespace BDHeroCLI
                 mkvPath = Console.ReadLine();
             }
 
-            if (controller.Scan(bdromPath))
+            if (Controller.Scan(bdromPath))
             {
-                if (controller.Convert(mkvPath))
+                if (Controller.Convert(mkvPath))
                 {
                     Console.WriteLine();
                     Console.WriteLine("MUXING SUCCEEDED!");
