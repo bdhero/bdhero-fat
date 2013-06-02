@@ -53,10 +53,10 @@ namespace TmdbPlugin
         private void ApiRequest(Job job)
         {
             job.Movies.Clear();
-            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
-
             string ISO_639_1 = "en";
             int? year = null;
+            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
+        
             try
             {
                 _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
