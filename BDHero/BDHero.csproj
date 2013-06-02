@@ -52,6 +52,7 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Plugin\IPlugin.cs" />
     <Compile Include="Plugin\IPluginHost.cs" />
+    <Compile Include="Plugin\PluginException.cs" />
     <Compile Include="Plugin\PluginProgressHandler.cs" />
     <Compile Include="Plugin\PluginService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
