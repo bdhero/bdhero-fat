@@ -13,22 +13,15 @@ namespace TmdbPlugin
 {
     public class TmdbPlugin : IMetadataProviderPlugin
     {
-
         private const string TmdbApiKey = "b59b366b0f0a457d58995537d847409a";
         private Tmdb _tmdbApi;
         private TmdbMovieSearch _tmdbMovieSearch;
         private MovieResult _tmdbMovieResult;
-
         private string _tmdbMovieName;
         private int? _tmdbMovieYear;
         private int _tmdbID;
         private string _tmdbRootUrl;
-        /*
-        private List<string> _moviePosterList;
-        private List<string> _movieLanguageList;
-        private string _selectedMovieLanguage;
-        private int _selectedPosterIndex;
-        */
+
         public IPluginHost Host { get; set; }
         public string Name 
         {
@@ -80,7 +73,8 @@ namespace TmdbPlugin
             }
             catch (Exception ex)
             {
-
+                //To Do:
+                // wrap the exception in a new PluginException object
             }            
         }
 
@@ -124,7 +118,11 @@ namespace TmdbPlugin
                         tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, "en");
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    //To Do:
+                    //wrap the exception they catch in a new PluginException object
+                }
                 if (tmdbMovieImages != null)
                 {
                     foreach (var poster in tmdbMovieImages.posters)
