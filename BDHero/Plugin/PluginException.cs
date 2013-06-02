@@ -41,27 +41,12 @@ namespace BDHero.Plugin
         Fatal,
 
         /// <summary>
-        /// Non-fatal error that eliminates the usefulness of the plugin, but which the plugin can recover from, leaving it in a working, usable state.
+        /// Non-fatal error that reduces or eliminates the usefulness of the plugin, but which the plugin can recover from, leaving it in a working, usable state.
         /// </summary>
         /// <example>
         /// The user is behind a corporate proxy or filewall, and HTTP requests to TMDb return a 401 or 403 status.  The TMDb plugin is therefore
         /// unable to retrieve search results for a movie, which means it cannot provide any metadata (movie title, release date, or cover art).
         /// </example>
-        Error,
-
-        /// <summary>
-        /// Non-fatal error that reduces (but does not eliminate) the usefulness of the plugin, but which the plugin can recover from, leaving it in a working, usable state.
-        /// </summary>
-        /// <example>
-        /// One of the results from ChapterDb.org contains bad data (invalid characters) and cannot be deserialized, but the rest of the results
-        /// are perfectly valid and deserialize correctly.
-        /// </example>
-        Warning,
-
-        /// <summary>
-        /// Informational notice.  Not an error.
-        /// </summary>
-        /// <example>No search results were found when searching for an obscure movie on TMDb.org.</example>
-        Info
+        Error
     }
 }
