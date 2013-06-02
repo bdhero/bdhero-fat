@@ -7,12 +7,19 @@ namespace TmdbPlugin
 {
     class TmdbPluginSettings
     {
-        public class Setting
+        public class Setting()        
         {
-            public string apiKey { get; set { apiKey = null; } }
-            public string defaultLanguage { get; set { defaultLanguage = "en"; } }
-            public string url { get; set { url = "http://acdvorak.github.io/bdautomuxer/"; } }
+            public Setting()
+            {
+                apiKey = null;
+                defaultLanguage = "en";
+                url = "http://acdvorak.github.io/bdautomuxer/";
+            }
+            public string apiKey { get; set; }
+            public string defaultLanguage { get; set; }
+            public string url { get; set; }
         }
+
 
         public class PluginSettings
         {
