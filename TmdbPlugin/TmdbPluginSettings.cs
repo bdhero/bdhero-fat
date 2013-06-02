@@ -4,26 +4,23 @@ using System.Linq;
 using System.Text;
 
 namespace TmdbPlugin
-{
-    class TmdbPluginSettings
+{   
+    public class Settings        
     {
-        public class Setting()        
+        public Settings()
         {
-            public Setting()
-            {
-                apiKey = null;
-                defaultLanguage = "en";
-                url = "http://acdvorak.github.io/bdautomuxer/";
-            }
-            public string apiKey { get; set; }
-            public string defaultLanguage { get; set; }
-            public string url { get; set; }
+            apiKey = null;
+            defaultLanguage = "en";
+            url = "http://acdvorak.github.io/bdautomuxer/";
         }
-
-
-        public class PluginSettings
-        {
-            public List<Setting> settings { get; set; }
-        }
+        public string apiKey { get; set; }
+        public string defaultLanguage { get; set; }
+        public string url { get; set; }
+    }
+    
+    public class PluginSettings
+    {
+        public Settings settings { get; set; }
     }
 }
+

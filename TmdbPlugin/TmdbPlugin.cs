@@ -45,14 +45,14 @@ namespace TmdbPlugin
 
         public void GetMetadata(Job job)
         {
+            checkConfig();
             ApiRequest(job);
             GetPosters(job);
         }
 
         private void checkConfig()
-        {
-            //var x = JsonConvert.DeserializeObject<Setting>(jsonText);
-
+        {            
+            var x = JsonConvert.DeserializeObject<PluginSettings>(null);
         }
 
         private void ApiRequest(Job job)
@@ -147,7 +147,7 @@ namespace TmdbPlugin
                         });
                     }
 
-                    if (movie.CoverArtImages.Count != null && movie.CoverArtImages.Count > 0)
+                    if (movie.CoverArtImages.Count > 0)
                     {
                         //To Do:
                         //wrap the Log in a new Log object
