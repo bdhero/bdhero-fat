@@ -18,8 +18,15 @@ namespace BDHero.Plugin
         event PluginProgressHandler ProgressUpdated;
         event EditPluginPreferenceHandler EditPreferences;
 
+        /// <summary>
+        /// Invoked when the application first starts up and loads the plugin assembly.
+        /// </summary>
         /// <exception cref="PluginException"></exception>
         void LoadPlugin();
+
+        /// <summary>
+        /// Invoked when the application is about to exit.
+        /// </summary>
         /// <exception cref="PluginException"></exception>
         void UnloadPlugin();
     }
