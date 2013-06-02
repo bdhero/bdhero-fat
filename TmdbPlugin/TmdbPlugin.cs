@@ -13,22 +13,15 @@ namespace TmdbPlugin
 {
     public class TmdbPlugin : IMetadataProviderPlugin
     {
-
         private const string TmdbApiKey = "b59b366b0f0a457d58995537d847409a";
         private Tmdb _tmdbApi;
         private TmdbMovieSearch _tmdbMovieSearch;
         private MovieResult _tmdbMovieResult;
-
         private string _tmdbMovieName;
         private int? _tmdbMovieYear;
         private int _tmdbID;
         private string _tmdbRootUrl;
-        /*
-        private List<string> _moviePosterList;
-        private List<string> _movieLanguageList;
-        private string _selectedMovieLanguage;
-        private int _selectedPosterIndex;
-        */
+
         public IPluginHost Host { get; set; }
         public string Name 
         {
@@ -55,13 +48,19 @@ namespace TmdbPlugin
         private void ApiRequest(Job job)
         {
             job.Movies.Clear();
+            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
 
             string ISO_639_1 = "en";
             int? year = null;
-
-            _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
-
-            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
+            try
+            {
+                _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
+            }
+            catch (Exception ex)
+            {
+                //To Do:
+                // wrap the exception in a new PluginException object
+            }
 
             try
             {
@@ -80,7 +79,8 @@ namespace TmdbPlugin
             }
             catch (Exception ex)
             {
-
+                //To Do:
+                // wrap the exception in a new PluginException object
             }            
         }
 
@@ -124,7 +124,11 @@ namespace TmdbPlugin
                         tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, "en");
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    //To Do:
+                    //wrap the exception they catch in a new PluginException object
+                }
                 if (tmdbMovieImages != null)
                 {
                     foreach (var poster in tmdbMovieImages.posters)
@@ -135,6 +139,15 @@ namespace TmdbPlugin
                             Language = I18N.Language.FromCode(poster.iso_639_1)
                         });
                     }
+
+                    if (movie.CoverArtImages.Count != null && movie.CoverArtImages.Count > 0)
+                    {
+                        //To Do:
+                        //wrap the Log in a new Log object
+                        // Log Message:  "The Tmdb found " + movie.CoverArtImages.Count + " Movie Posters";
+
+                    }
+
                 }
             }
         }       
