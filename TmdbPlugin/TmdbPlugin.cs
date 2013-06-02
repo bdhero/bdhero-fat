@@ -63,8 +63,7 @@ namespace TmdbPlugin
             }
             catch (Exception ex)
             {
-                //To Do:
-                // wrap the exception in a new PluginException object
+                var error = new PluginException("Error: An error has occurred", ex, PluginExceptionSeverity.Error);
             }
 
             try
@@ -84,8 +83,7 @@ namespace TmdbPlugin
             }
             catch (Exception ex)
             {
-                //To Do:
-                // wrap the exception in a new PluginException object
+                var error = new PluginException("Error: An error occurred when contacting api.themoviedb.org", ex, PluginExceptionSeverity.Error);
             }            
         }
 
@@ -131,8 +129,7 @@ namespace TmdbPlugin
                 }
                 catch (Exception ex)
                 {
-                    //To Do:
-                    //wrap the exception they catch in a new PluginException object
+                    var error = new PluginException("Error: An error occurred when contacting api.themoviedb.org", ex, PluginExceptionSeverity.Error);
                 }
                 if (tmdbMovieImages != null)
                 {
