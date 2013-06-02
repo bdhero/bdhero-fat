@@ -48,13 +48,19 @@ namespace TmdbPlugin
         private void ApiRequest(Job job)
         {
             job.Movies.Clear();
+            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
 
             string ISO_639_1 = "en";
             int? year = null;
-
-            _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
-
-            TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
+            try
+            {
+                _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
+            }
+            catch (Exception ex)
+            {
+                //To Do:
+                // wrap the exception in a new PluginException object
+            }
 
             try
             {
@@ -133,6 +139,15 @@ namespace TmdbPlugin
                             Language = I18N.Language.FromCode(poster.iso_639_1)
                         });
                     }
+
+                    if (movie.CoverArtImages.Count != null && movie.CoverArtImages.Count > 0)
+                    {
+                        //To Do:
+                        //wrap the Log in a new Log object
+                        // Log Message:  "The Tmdb found " + movie.CoverArtImages.Count + " Movie Posters";
+
+                    }
+
                 }
             }
         }       
