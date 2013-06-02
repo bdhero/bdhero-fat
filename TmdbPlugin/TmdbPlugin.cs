@@ -23,6 +23,8 @@ namespace TmdbPlugin
         private string _tmdbRootUrl;
 
         public IPluginHost Host { get; set; }
+        public string Location { get; private set; }
+        public string Guid { get; private set; }
         public string Name 
         {
             get { return "TmdbPlugin"; }
@@ -31,8 +33,11 @@ namespace TmdbPlugin
         public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
-        public void LoadPlugin()
+        public void LoadPlugin(IPluginHost host, string location, string guid)
         {
+            Host = host;
+            Location = location;
+            Guid = guid;
         }
 
         public void UnloadPlugin()

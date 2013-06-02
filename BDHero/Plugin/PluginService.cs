@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using DotNetUtils;
 using ProcessUtils;
@@ -116,10 +117,12 @@ namespace BDHero.Plugin
             return file.Extension.Equals(".plugin.dll") || file.Name.EndsWith("Plugin.dll", StringComparison.OrdinalIgnoreCase);
         }
 
-        public void AddPlugin(string fileName)
+        public void AddPlugin(string dllPath)
         {
             // Create a new assembly from the plugin file we're adding..
-            Assembly pluginAssembly = Assembly.LoadFrom(fileName);
+            Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
+
+            var guid = ((GuidAttribute)pluginAssembly.GetCustomAttributes(typeof(GuidAttribute), true)[0]).Value;
 
             // Next we'll loop through all the Types found in the assembly
             foreach (Type pluginType in pluginAssembly.GetTypes())
@@ -141,11 +144,8 @@ namespace BDHero.Plugin
                             // For now we'll just make an instance of all the plugins
                             var newPlugin = (IPlugin)Activator.CreateInstance(pluginAssembly.GetType(pluginType.ToString()));
 
-                            // Set the Plugin's host to this class which inherited IPluginHost
-                            newPlugin.Host = this;
-
-                            // Call the initialization sub of the plugin
-                            newPlugin.LoadPlugin();
+                            // Initialize the plugin
+                            newPlugin.LoadPlugin(this, dllPath, guid);
 
                             // Add the new plugin to our collection here
                             Plugins.Add(newPlugin);

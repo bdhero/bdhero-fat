@@ -12,7 +12,21 @@ namespace BDHero.Plugin
 
     public interface IPlugin
     {
-        IPluginHost Host { get; set; }
+        IPluginHost Host { get; }
+
+        /// <summary>
+        /// Full path to the plugin DLL.
+        /// </summary>
+        string Location { get; }
+
+        /// <summary>
+        /// GUID of the plugin assembly DLL.
+        /// </summary>
+        string Guid { get; }
+
+        /// <summary>
+        /// Human-friendly name of the plugin that will be displayed in the UI.
+        /// </summary>
         string Name { get; }
 
         event PluginProgressHandler ProgressUpdated;
@@ -21,8 +35,11 @@ namespace BDHero.Plugin
         /// <summary>
         /// Invoked when the application first starts up and loads the plugin assembly.
         /// </summary>
+        /// <param name="host">Host object that loaded the plugin</param>
+        /// <param name="location">Full path to the plugin DLL</param>
+        /// <param name="guid">The plugin assembly DLL's GUID</param>
         /// <exception cref="PluginException"></exception>
-        void LoadPlugin();
+        void LoadPlugin(IPluginHost host, string location, string guid);
 
         /// <summary>
         /// Invoked when the application is about to exit.

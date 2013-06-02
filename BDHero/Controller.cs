@@ -54,7 +54,7 @@ namespace BDHero
             Console.WriteLine("\t {0} ({1}):", name, plugins.Count);
             foreach (var plugin in plugins)
             {
-                Console.WriteLine("\t\t {0} - {1}", plugin.Name, plugin.GetType().Assembly.Location);
+                Console.WriteLine("\t\t {0} - {1} - {2}", plugin.Name, plugin.Guid, plugin.Location);
             }
         }
 
