@@ -2,8 +2,8 @@ INSTALLED
 =========
 
 C:\Program Files\BDHero
-    - bdhero.exe
-    - bdheroc.exe
+    - bdhero-gui.exe
+    - bdhero-cli.exe
 
 C:\Users\Default\AppData\Local\BDHero
 C:\Users\<USERNAME>\AppData\Local\BDHero
@@ -36,8 +36,8 @@ PORTABLE
 ========
 
 <InstallDir>
-    - bdhero.exe
-    - bdheroc.exe
+    - bdhero-gui.exe
+    - bdhero-cli.exe
     - Config
         - app.config
         - bdhero.log.config
