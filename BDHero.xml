@@ -245,6 +245,7 @@
     <singleInstanceCheck>1</singleInstanceCheck>
     <vendor>BDHero</vendor>
     <windows64bitMode>1</windows64bitMode>
+    <windowsExecutableIcon>Assets/Icons/bdhero_gui.ico</windowsExecutableIcon>
     <windowsResourceFileVersion>${product_version}</windowsResourceFileVersion>
     <parameterList>
         <directoryParameter>
