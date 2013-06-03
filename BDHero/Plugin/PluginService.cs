@@ -54,8 +54,26 @@ namespace BDHero.Plugin
 #endif
 
 #if DEBUG
+            // Only load plugins from other project if running in bin\Debug directory
+            var installDir = AssemblyUtils.GetInstallDir();
+            var vhostFiles = Directory.GetFiles(installDir, "*.vshost.exe", SearchOption.TopDirectoryOnly);
+            if (vhostFiles.Any())
+            {
+                LoadDevPlugins();
+            }
+#endif
+        }
+
+#if DEBUG
+
+        private void LoadDevPlugins()
+        {
             var solutionDir = GetSolutionDirPath();
-            var projects = new[] { "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin", "FFmpegMuxerPlugin", "FileNamerPlugin", "MKVMergeMuxerPlugin", "TmdbPlugin" };
+            var projects = new[]
+                {
+                    "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin", "FFmpegMuxerPlugin",
+                    "FileNamerPlugin", "MKVMergeMuxerPlugin", "TmdbPlugin"
+                };
             foreach (var projectName in projects)
             {
                 try
@@ -65,13 +83,9 @@ namespace BDHero.Plugin
                 }
                 catch (Exception ex)
                 {
-                    
                 }
             }
-#endif
         }
-
-#if DEBUG
 
         private static string GetSolutionDirPath()
         {
