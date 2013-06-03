@@ -13,7 +13,7 @@ namespace BDHeroCLI
         /// <summary>
         /// IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
         /// </summary>
-        private static readonly Controller Controller = new Controller(new FileInfo("Config/bdhero-cli.log.config"));
+        private static readonly Controller Controller = new Controller("bdhero-cli.log.config");
 
         /// <summary>
         /// Depends on <see cref="Controller"/> being initialized first.

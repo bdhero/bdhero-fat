@@ -41,10 +41,10 @@ namespace BDHero
         /// IMPORTANT: CONSTRUCTOR MUST BE THE FIRST THING CALLED WHEN THE PROGRAM STARTS UP TO INITIALIZE LOGGING!!!
         /// </summary>
         /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
-        public Controller(FileInfo logConfig)
+        public Controller(string logConfigFileName)
         {
             LocateDirectories();
-            InitLogging(logConfig);
+            InitLogging(logConfigFileName);
         }
 
         private void LocateDirectories()
@@ -73,11 +73,12 @@ namespace BDHero
             }
         }
 
-        private void InitLogging(FileInfo logConfig)
+        private void InitLogging(string logConfigFileName)
         {
+            var logConfigPath = Path.Combine(_configDir, logConfigFileName);
             log4net.GlobalContext.Properties["logdir"] = _logDir;
             log4net.GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;
-            log4net.Config.XmlConfigurator.ConfigureAndWatch(logConfig);
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(logConfigPath));
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _logger.Info("Starting up");
             _logger.DebugFormat("Portable = {0}", _isPortable);
