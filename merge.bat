@@ -1,7 +1,5 @@
 @ECHO OFF
 
-mkdir Setup\ProgramFiles\Config
-
 set ConfigurationName=%1
 set SolutionDir=%2
 
@@ -9,6 +7,8 @@ IF "%ConfigurationName%"=="" set ConfigurationName=Debug
 IF NOT "%SolutionDir%"=="" cd "%SolutionDir%"
 
 echo %ConfigurationName%
+
+mkdir Setup\ProgramFiles\Config
 
 xcopy /Y BDHeroCLI\bin\%ConfigurationName%\bdhero-cli.exe Setup\ProgramFiles\
 xcopy /Y BDHeroCLI\bin\%ConfigurationName%\*.dll Setup\ProgramFiles\
