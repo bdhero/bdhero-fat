@@ -52,6 +52,8 @@ namespace TmdbPlugin
             GetPosters(job);
         }
 
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private void checkConfigFile()
         {
             if (!File.Exists(AssemblyInfo.SettingsFile))
@@ -91,8 +93,9 @@ namespace TmdbPlugin
             else
             {                
                 var error = new PluginException("Error: No APIKey was Found", PluginExceptionSeverity.Error);
-            }
-            
+                var Message = "Error: No APIKey was Found for the Tmdb plugin";
+                Logger.Debug(Message);
+            }            
 
             try
             {
@@ -108,6 +111,17 @@ namespace TmdbPlugin
                 {
                     job.Movies.AddRange(_tmdbMovieSearch.results.Select(ToMovie));
                 }
+
+                string results = null;
+                foreach (var movie in _tmdbMovieSearch.results)
+                {
+                    DateTime releaseYear;
+                    var releaseDate = DateTime.TryParse(movie.release_date, out releaseYear);
+                    results += movie.original_title + " (" + releaseYear.Year + ')' + ", ";
+                }
+
+                var Message = "The Tmdb plugin returned the following matches " + results;
+                Logger.Info(Message);
             }
             catch (Exception ex)
             {
@@ -169,17 +183,8 @@ namespace TmdbPlugin
                             Language = I18N.Language.FromCode(poster.iso_639_1)
                         });
                     }
-
-                    if (movie.CoverArtImages.Count > 0)
-                    {
-                        //To Do:
-                        //wrap the Log in a new Log object
-                        // Log Message:  "The Tmdb found " + movie.CoverArtImages.Count + " Movie Posters";
-
-                    }
-
                 }
-            }
+            }            
         }       
 
         private class TmdbApiParameters

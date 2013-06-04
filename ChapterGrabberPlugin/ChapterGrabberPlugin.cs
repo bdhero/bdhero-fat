@@ -25,6 +25,8 @@ namespace ChapterGrabberPlugin
         public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
             Host = host;
@@ -38,16 +40,30 @@ namespace ChapterGrabberPlugin
 
         public void Rename(Job job)
         {
-            var playlist = job.Disc.Playlists[job.SelectedPlaylistIndex];
+            //var playlist = job.Disc.Playlists[job.SelectedPlaylistIndex];
             if (job.Disc.SanitizedTitle != null)
             {  
                 var apiResults = GetChapters(job.Disc.SanitizedTitle);
-
+                /*
                 var apiValues = CompareChapters(apiResults, playlist.Chapters);
                 if (apiValues != null && apiValues.Count > 0)
                 {
                     ReplaceChapters(apiValues[0], playlist.Chapters);
-                }
+                }*/
+
+                foreach(var moviePlaylist in job.Disc.Playlists)
+                {
+                    var apiValues = CompareChapters(apiResults, moviePlaylist.Chapters);
+                    if (apiValues != null && apiValues.Count > 0)
+                    {
+                        // To Do:  Allow the user to select which chapter list to use when 
+                        // defaulted to [0] first chapter list that matches filter criteria
+                        ReplaceChapters(apiValues[0], moviePlaylist.Chapters);
+
+                        var Message = "Custom chapters were added to: " + moviePlaylist.FileName;
+                        Logger.Info(Message);
+                    }
+                }    
             }
         }
 
@@ -96,19 +112,16 @@ namespace ChapterGrabberPlugin
                     }
                 }
             }
-
-            // Logging
+           
             if (movieSearchResults.Count > 0)
-            {
-                //To Do:
-                //wrap the Log in a new Log object
-                //Console.WriteLine(movieSearchResults.Count + " matches were found for " + movieName);
+            {               
+                var Message = movieSearchResults.Count + " possible matches were found for " + movieName;
+                Logger.Info(Message);
             }
             else
             {
-                //To Do:
-                //wrap the Log in a new Log object
-                //Console.WriteLine("No matches were found for " + movieName);
+                var Message = "No matches were found for " + movieName;
+                Logger.Info(Message);
             }
             return movieSearchResults;
         }
@@ -118,6 +131,12 @@ namespace ChapterGrabberPlugin
             var apiResultsFilteredByChapter = apiData.Where(chaps => IsMatch(chaps, discData)).ToList();
             
             var apiResultsFilteredByValidName = apiResultsFilteredByChapter.Where(IsValid).ToList();
+
+            if (apiResultsFilteredByValidName.Count > 0)
+            {
+                var Message = apiResultsFilteredByValidName.Count + " result(s) matched the filter criteria for custom chapters";
+                Logger.Info(Message);
+            }
 
             return apiResultsFilteredByValidName;
         }
@@ -169,15 +188,6 @@ namespace ChapterGrabberPlugin
             for (var i=0; i<discData.Count; i++)
             {
                 discData[i].Title = apiData.chapterInfo.chapters.chapter[i].name;
-            }
-
-            // Logging
-            if (discData.Count != null && discData.Count > 0)
-            {
-                //To Do:
-                //wrap the Log in a new Log object
-                // Log Message:  "ChapterGrabber replaced " + discData.Count + " Chapters";
-
             }
         }
     }
