@@ -9,7 +9,7 @@ namespace TmdbPlugin
     {
         public Settings()
         {
-            apiKey = null;
+            apiKey = "b59b366b0f0a457d58995537d847409a";
             defaultLanguage = "en";
             url = "http://acdvorak.github.io/bdautomuxer/";
         }

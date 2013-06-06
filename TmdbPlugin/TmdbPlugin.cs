@@ -16,9 +16,8 @@ namespace TmdbPlugin
 {
     public class TmdbPlugin : IMetadataProviderPlugin
     {
-        private string pluginDirectory;
-        private string pluginFileName = "TmdbPlugin.Config.json";
-        private string TmdbApiKey = "b59b366b0f0a457d58995537d847409a";
+        //private string pluginDirectory;
+        //private string pluginFileName = "TmdbPlugin.Config.json";
         private Tmdb _tmdbApi;
         private TmdbMovieSearch _tmdbMovieSearch;
         private MovieResult _tmdbMovieResult;
@@ -26,6 +25,9 @@ namespace TmdbPlugin
         private int? _tmdbMovieYear;
         private int _tmdbID;
         private string _tmdbRootUrl;
+        string ISO_639_1;
+        int? year = null;
+        private string TmdbApiKey;
 
         public IPluginHost Host { get; private set; }
         public PluginAssemblyInfo AssemblyInfo { get; private set; }
@@ -47,17 +49,18 @@ namespace TmdbPlugin
 
         public void GetMetadata(Job job)
         {
-            checkConfigFile();
+            var pluginSettings = CheckConfigFile();
+            LoadConfig(pluginSettings);
             ApiRequest(job);
             GetPosters(job);
         }
 
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private void checkConfigFile()
+        private PluginSettings CheckConfigFile()
         {
             if (!File.Exists(AssemblyInfo.SettingsFile))
-            {                
+            {     
                 PluginSettings settings = new PluginSettings
                 {
                     settings = new Settings
@@ -66,7 +69,7 @@ namespace TmdbPlugin
                         defaultLanguage = "en",
                         url = "http://acdvorak.github.io/bdautomuxer/"                        
                     }
-                };
+                };      
 
                 var settingJson = JsonConvert.SerializeObject(settings, Formatting.Indented);
                 if (settingJson != null)
@@ -76,14 +79,30 @@ namespace TmdbPlugin
             }
 
             var reader = File.ReadAllText(AssemblyInfo.SettingsFile);
-            var fileSettings = JsonConvert.DeserializeObject<PluginSettings>(reader);
+            PluginSettings pluginSettings = JsonConvert.DeserializeObject<PluginSettings>(reader);
+            return pluginSettings;
+        }
+
+        private void LoadConfig(PluginSettings settings)
+        {
+            PluginSettings newSettings = new PluginSettings { settings = new Settings { } };
+            if (settings.settings.apiKey == null)
+            {
+                settings.settings.apiKey = newSettings.settings.apiKey;
+            }
+            if (settings.settings.defaultLanguage == null)
+            {
+                settings.settings.defaultLanguage = newSettings.settings.defaultLanguage;
+            }
+            
+            ISO_639_1 = settings.settings.defaultLanguage;
+            TmdbApiKey = settings.settings.apiKey;
         }
 
         private void ApiRequest(Job job)
         {
             job.Movies.Clear();
-            string ISO_639_1 = "en";
-            int? year = null;
+            
             TmdbApiParameters requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, ISO_639_1);
                 
             if(TmdbApiKey != null)
@@ -94,18 +113,17 @@ namespace TmdbPlugin
             {                
                 var error = new PluginException("Error: No APIKey was Found", PluginExceptionSeverity.Error);
                 var Message = "Error: No APIKey was Found for the Tmdb plugin";
-                Logger.Debug(Message);
+                Logger.Error(Message);
             }            
 
             try
             {
+                _tmdbMovieSearch = _tmdbApi.SearchMovie(requestParameters.Query, 1, requestParameters.ISO_639_1, false, requestParameters.Year);
+                
                 if (string.IsNullOrEmpty(_tmdbRootUrl))
                 {
                     _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "w185";
                 }
-
-                _tmdbMovieSearch = _tmdbApi.SearchMovie(requestParameters.Query, 1, requestParameters.ISO_639_1, false, requestParameters.Year);
-                
 
                 if (_tmdbMovieSearch != null)
                 {
@@ -125,7 +143,7 @@ namespace TmdbPlugin
             }
             catch (Exception ex)
             {
-                var error = new PluginException("Error: An error occurred when contacting api.themoviedb.org", ex, PluginExceptionSeverity.Error);
+                tmdbErrors(ex);
             }            
         }
 
@@ -171,7 +189,7 @@ namespace TmdbPlugin
                 }
                 catch (Exception ex)
                 {
-                    var error = new PluginException("Error: An error occurred when contacting api.themoviedb.org", ex, PluginExceptionSeverity.Error);
+                    tmdbErrors(ex);
                 }
                 if (tmdbMovieImages != null)
                 {
@@ -185,7 +203,20 @@ namespace TmdbPlugin
                     }
                 }
             }            
-        }       
+        }
+
+        private void tmdbErrors(Exception ex)
+        {
+            var tmdbResponse = _tmdbApi.ResponseContent;
+            try
+            {
+                var pluginSettings = JsonConvert.DeserializeObject<TmdbApiErrors>(tmdbResponse);
+                var message = "Error: api.themoviedb.org returned the following Status Code " + pluginSettings.status_code + " : " + pluginSettings.status_message;
+                var error = new PluginException(message, ex, PluginExceptionSeverity.Error);
+            }
+            catch { }
+            finally { var error = new PluginException("Unable to connect to api.themoviedb.org", ex, PluginExceptionSeverity.Error); }
+        }
 
         private class TmdbApiParameters
         {
@@ -198,6 +229,13 @@ namespace TmdbPlugin
                 Year = year;
                 this.ISO_639_1 = ISO_639_1;
             }
-        }        
+        }
+
+        private class TmdbApiErrors
+        {
+            public int status_code { get; set; }
+            public string status_message { get; set; }
+        }
+
     }
 }
