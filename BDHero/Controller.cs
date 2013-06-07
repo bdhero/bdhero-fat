@@ -31,6 +31,12 @@ namespace BDHero
         public event EventHandler JobBeforeStart;
         public event EventHandler JobSucceeded;
         public event EventHandler JobFailed;
+
+        /// <summary>
+        /// Invoked whenever a plugin's state or progress changes.
+        /// </summary>
+        public event PluginProgressHandler PluginProgressUpdated;
+
         public event PluginExceptionEventHandler PluginException;
         public event UnhandledExceptionEventHandler UnhandledException;
 
@@ -301,6 +307,9 @@ namespace BDHero
         {
             var progressProvider = _pluginService.GetProgressProvider(plugin);
 
+            progressProvider.Updated -= ProgressProviderOnUpdated;
+            progressProvider.Updated += ProgressProviderOnUpdated;
+
             progressProvider.Reset();
             progressProvider.Start();
 
@@ -322,6 +331,12 @@ namespace BDHero
                 HandleUnhandledException(plugin, e);
                 return false;
             }
+        }
+
+        private void ProgressProviderOnUpdated(ProgressProvider progressProvider)
+        {
+            if (PluginProgressUpdated != null)
+                PluginProgressUpdated(progressProvider.Plugin, progressProvider);
         }
 
         #endregion

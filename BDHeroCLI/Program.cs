@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using BDHero;
+using BDHero.Plugin;
 
 namespace BDHeroCLI
 {
@@ -24,6 +25,7 @@ namespace BDHeroCLI
         {
             Controller.JobBeforeStart += ControllerOnJobBeforeStart;
             Controller.JobSucceeded += ControllerOnJobSucceeded;
+            Controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
             Controller.LoadPlugins();
 
             string bdromPath = "",
@@ -88,6 +90,21 @@ namespace BDHeroCLI
         {
             Console.WriteLine();
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~");
+        }
+
+        private static void ControllerOnPluginProgressUpdated(IPlugin plugin, ProgressProvider progressProvider)
+        {
+            var line = string.Format("{0} is {1}, {2} complete - {3} elapsed, {4} remaining",
+                                     plugin.Name, progressProvider.State, (progressProvider.PercentComplete / 100.0).ToString("P"),
+                                     progressProvider.RunTime, progressProvider.TimeRemaining);
+            if (progressProvider.State == ProgressProviderState.Running)
+            {
+                Console.WriteLine("\r{0}", line);
+            }
+            else
+            {
+                Console.WriteLine(line);
+            }
         }
     }
 }

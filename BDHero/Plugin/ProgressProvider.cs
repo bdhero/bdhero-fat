@@ -15,8 +15,9 @@ namespace BDHero.Plugin
 
         /// <summary>
         /// Default timer interval between updates in milliseconds.
+        /// TODO: Remaining time calculation fails if this value is set to 250 ms.
         /// </summary>
-        public const double DefaultIntervalMs = 250;
+        public const double DefaultIntervalMs = 1000;
 
         #endregion
 
@@ -66,7 +67,7 @@ namespace BDHero.Plugin
         #region Public events
 
         /// <summary>
-        /// Invoked approximately once every 1/4 second and whenever the <see cref="State"/> changes.
+        /// Invoked approximately once every second and whenever the <see cref="State"/> changes.
         /// </summary>
         public event ProgressUpdateHandler Updated;
 

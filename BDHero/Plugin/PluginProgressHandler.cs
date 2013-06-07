@@ -6,7 +6,7 @@ using System.Text;
 namespace BDHero.Plugin
 {
     /// <summary>
-    /// Invoked by the <see cref="IPluginHost"/> whenever an <see cref="IPlugin"/>'s progress changes.
+    /// Invoked by the <see cref="IPluginHost"/> whenever an <see cref="IPlugin"/>'s state or progress changes.
     /// </summary>
     /// <param name="plugin">Plugin that is reporting its progress</param>
     /// <param name="progressProvider">Provides plugin status information</param>

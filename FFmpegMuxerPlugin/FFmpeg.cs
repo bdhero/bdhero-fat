@@ -150,7 +150,9 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private void OnProgressUpdated(ProgressState progressState)
         {
+#if FALSE
             Console.Write("\r{0}", progressState);
+#endif
         }
 
         private void OnBeforeStart(object sender, EventArgs eventArgs)
@@ -170,7 +172,9 @@ namespace BDHero.Plugin.FFmpegMuxer
                         ParseProgressLine(reader.ReadLine());
                     }
                 }
+#if FALSE
                 Console.WriteLine("{0}% (FINISHED!)", _progress.ToString("0.00"));
+#endif
             }
         }
 
@@ -263,9 +267,9 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private static void OnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
+#if false
             Console.WriteLine();
             Console.WriteLine("Finished muxing with FFmpeg!");
-#if false
             Console.WriteLine("Adding metadata with mkvpropedit...");
             var coverArt = Image.FromFile(@"Y:\BDAM\cover-art\black-hawk-down\full.jpg");
             var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
