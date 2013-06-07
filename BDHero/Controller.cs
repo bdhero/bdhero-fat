@@ -227,7 +227,7 @@ namespace BDHero
 
             foreach (var playlist in Job.Disc.ValidMainFeaturePlaylists)
             {
-                Console.WriteLine(playlist);
+                _logger.Info(playlist);
             }
         }
 
