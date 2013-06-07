@@ -50,7 +50,7 @@ namespace BDHero.Plugin
         public void LoadPlugins(string path)
         {
             // First empty the collection, we're reloading them all
-            ClosePlugins();
+            UnloadPlugins();
 
             AddPluginsRecursive(path);
 
@@ -118,16 +118,28 @@ namespace BDHero.Plugin
 
 #endif
 
-        private static string GetPluginDir(string root)
+        /// <summary>
+        /// Unloads and clears all available loaded plugins.
+        /// </summary>
+        public void UnloadPlugins()
         {
-            return Path.Combine(root, AssemblyUtils.GetAssemblyName(), "Plugins");
+            foreach (var plugin in Plugins)
+            {
+                // Close all plugin instances
+                // We call the plugins Dispose sub first incase it has to do
+                // Its own cleanup stuff
+                plugin.UnloadPlugin();
+            }
+
+            // Finally, clear our collection of available plugins
+            Plugins.Clear();
         }
 
         /// <summary>
         /// Searches the given directory and its subdirectories recursively for Plugins
         /// </summary>
         /// <param name="pluginDir">Root directory to search for Plugins in</param>
-        public void AddPluginsRecursive(string pluginDir)
+        private void AddPluginsRecursive(string pluginDir)
         {
             if (!Directory.Exists(pluginDir))
                 return;
@@ -149,7 +161,7 @@ namespace BDHero.Plugin
             return file.Extension.Equals(".plugin.dll") || file.Name.EndsWith("Plugin.dll", StringComparison.OrdinalIgnoreCase);
         }
 
-        public void AddPlugin(string dllPath)
+        private void AddPlugin(string dllPath)
         {
             // Create a new assembly from the plugin file we're adding..
             Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
@@ -189,23 +201,6 @@ namespace BDHero.Plugin
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Unloads and Closes all AvailablePlugins
-        /// </summary>
-        public void ClosePlugins()
-        {
-            foreach (var plugin in Plugins)
-            {
-                // Close all plugin instances
-                // We call the plugins Dispose sub first incase it has to do
-                // Its own cleanup stuff
-                plugin.UnloadPlugin();
-            }
-
-            // Finally, clear our collection of available plugins
-            Plugins.Clear();
         }
     }
 }
