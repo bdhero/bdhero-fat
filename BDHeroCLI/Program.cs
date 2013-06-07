@@ -94,8 +94,9 @@ namespace BDHeroCLI
 
         private static void ControllerOnPluginProgressUpdated(IPlugin plugin, ProgressProvider progressProvider)
         {
-            var line = string.Format("{0} is {1}, {2} complete - {3} elapsed, {4} remaining",
+            var line = string.Format("{0} is {1} - {2} complete - {3} - {4} elapsed, {5} remaining",
                                      plugin.Name, progressProvider.State, (progressProvider.PercentComplete / 100.0).ToString("P"),
+                                     progressProvider.Status,
                                      progressProvider.RunTime, progressProvider.TimeRemaining);
             if (progressProvider.State == ProgressProviderState.Running)
             {
