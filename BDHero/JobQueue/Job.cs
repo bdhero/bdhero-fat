@@ -35,7 +35,7 @@ namespace BDHero.JobQueue
         /// <summary>
         /// Collection of TV show search results returned from TVDB.
         /// </summary>
-        public readonly IList<TVShow> TVEpisodes = new List<TVShow>();
+        public readonly IList<TVShow> TVShows = new List<TVShow>();
 
         /// <summary>
         /// Auto-detected or user-selected release medium (movie or TV).
