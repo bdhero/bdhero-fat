@@ -39,7 +39,6 @@ namespace BDHero
         /// <summary>
         /// IMPORTANT: CONSTRUCTOR MUST BE THE FIRST THING CALLED WHEN THE PROGRAM STARTS UP TO INITIALIZE LOGGING!!!
         /// </summary>
-        /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
         public Controller(string logConfigFileName)
         {
             LocateDirectories();
@@ -88,6 +87,7 @@ namespace BDHero
 
         #region Plugins
 
+        /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
         public void LoadPlugins()
         {
             LoadPluginsFromService();
