@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Timers;
@@ -49,8 +50,9 @@ namespace BDHero.Plugin
 
         /// <summary>
         /// Gest the total amount of time spent actively running (i.e., not paused).
+        /// This property may be accessed at any time and in any state.
         /// </summary>
-        public TimeSpan RunTime { get; protected set; }
+        public TimeSpan RunTime { get { return _stopwatch.Elapsed; } }
 
         /// <summary>
         /// Gets the estimated amount of time remaining before the process completes.
@@ -117,6 +119,8 @@ namespace BDHero.Plugin
 
         private readonly Timer _timer;
 
+        private readonly Stopwatch _stopwatch = new Stopwatch();
+
         #endregion
 
         #region Constructors and initialization
@@ -132,8 +136,6 @@ namespace BDHero.Plugin
 
         private void Tick(object sender = null, ElapsedEventArgs elapsedEventArgs = null)
         {
-            RunTime += (DateTime.Now - _lastTick);
-
             CalculateTimeRemaining();
 
             if (Updated != null)
@@ -160,9 +162,9 @@ namespace BDHero.Plugin
             }
 
             _timer.Stop();
+            _stopwatch.Reset();
 
             State = ProgressProviderState.Ready;
-            RunTime = TimeSpan.Zero;
             TimeRemaining = TimeSpan.Zero;
             PercentComplete = 0.0;
             Exception = null;
@@ -183,6 +185,7 @@ namespace BDHero.Plugin
             Tick();
 
             _timer.Start();
+            _stopwatch.Start();
 
             if (Started != null)
                 Started(this);
@@ -206,6 +209,7 @@ namespace BDHero.Plugin
             Tick();
 
             _timer.Start();
+            _stopwatch.Start();
 
             if (Resumed != null)
                 Resumed(this);
@@ -224,6 +228,7 @@ namespace BDHero.Plugin
             }
 
             _timer.Stop();
+            _stopwatch.Stop();
 
             State = ProgressProviderState.Paused;
             Tick();
@@ -245,6 +250,7 @@ namespace BDHero.Plugin
             }
 
             _timer.Stop();
+            _stopwatch.Stop();
 
             State = ProgressProviderState.Canceled;
             Tick();
@@ -269,6 +275,7 @@ namespace BDHero.Plugin
             }
 
             _timer.Stop();
+            _stopwatch.Stop();
 
             State = ProgressProviderState.Error;
             Exception = exception;
@@ -294,6 +301,7 @@ namespace BDHero.Plugin
             }
 
             _timer.Stop();
+            _stopwatch.Stop();
 
             State = ProgressProviderState.Success;
             PercentComplete = 100.0;
