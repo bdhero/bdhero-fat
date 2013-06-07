@@ -36,6 +36,8 @@ namespace BDHero
 
         public Job Job { get; private set; }
 
+        #region Constructors and initialization
+
         /// <summary>
         /// IMPORTANT: CONSTRUCTOR MUST BE THE FIRST THING CALLED WHEN THE PROGRAM STARTS UP TO INITIALIZE LOGGING!!!
         /// </summary>
@@ -85,7 +87,9 @@ namespace BDHero
             _logger.DebugFormat("Log Dir = {0}", _logDir);
         }
 
-        #region Plugins
+        #endregion
+
+        #region Plugin loading and logging
 
         /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
         public void LoadPlugins()
@@ -132,6 +136,8 @@ namespace BDHero
 
         #endregion
 
+        #region Stages
+
         /// <summary>
         /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.
         /// </summary>
@@ -172,6 +178,10 @@ namespace BDHero
 
             return true;
         }
+
+        #endregion
+
+        #region Phases
 
         #region 1 - Disc Reader
 
@@ -274,7 +284,9 @@ namespace BDHero
 
         #endregion
 
-        #region Exception handling
+        #endregion
+
+        #region Plugin runner
 
         /// <summary>
         /// Runs a plugin.  Reports the plugin's state and progress and handles any exceptions that it throws.
@@ -311,6 +323,10 @@ namespace BDHero
                 return false;
             }
         }
+
+        #endregion
+
+        #region Exception handling
 
         private void HandlePluginException(IPlugin plugin, PluginException exception)
         {
