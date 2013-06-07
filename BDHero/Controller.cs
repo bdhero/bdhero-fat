@@ -29,7 +29,7 @@ namespace BDHero
         private readonly PluginService _pluginService = new PluginService();
 
         public event EventHandler JobBeforeStart;
-        public event EventHandler JobCompleted;
+        public event EventHandler JobSucceeded;
         public event EventHandler JobFailed;
         public event PluginExceptionEventHandler PluginException;
         public event UnhandledExceptionEventHandler UnhandledException;
@@ -173,8 +173,8 @@ namespace BDHero
 
             PostProcess();
 
-            if (JobCompleted != null)
-                JobCompleted(this, EventArgs.Empty);
+            if (JobSucceeded != null)
+                JobSucceeded(this, EventArgs.Empty);
 
             return true;
         }

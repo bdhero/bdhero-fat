@@ -23,7 +23,7 @@ namespace BDHeroCLI
         static void Main(string[] args)
         {
             Controller.JobBeforeStart += ControllerOnJobBeforeStart;
-            Controller.JobCompleted += ControllerOnJobCompleted;
+            Controller.JobSucceeded += ControllerOnJobSucceeded;
             Controller.LoadPlugins();
 
             string bdromPath = "",
@@ -84,7 +84,7 @@ namespace BDHeroCLI
             Console.WriteLine();
         }
 
-        private static void ControllerOnJobCompleted(object sender, EventArgs eventArgs)
+        private static void ControllerOnJobSucceeded(object sender, EventArgs eventArgs)
         {
             Console.WriteLine();
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~");
