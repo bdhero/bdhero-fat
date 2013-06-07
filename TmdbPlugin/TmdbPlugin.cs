@@ -15,6 +15,8 @@ namespace TmdbPlugin
 {
     public class TmdbPlugin : IMetadataProviderPlugin
     {
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         //private string pluginDirectory;
         //private string pluginFileName = "TmdbPlugin.Config.json";
         private Tmdb _tmdbApi;
@@ -33,7 +35,6 @@ namespace TmdbPlugin
 
         public string Name { get { return "TMDb"; } }
 
-        public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
@@ -48,13 +49,22 @@ namespace TmdbPlugin
 
         public void GetMetadata(Job job)
         {
-            var pluginSettings = CheckConfigFile();
-            LoadConfig(pluginSettings);
-            ApiRequest(job);
-            GetPosters(job);
-        }
+            Host.ReportProgress(this, 0.0, "Loading config file...");
 
-        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            var pluginSettings = CheckConfigFile();
+
+            LoadConfig(pluginSettings);
+
+            Host.ReportProgress(this, 100.0 * 1.0 / 3.0, "Querying TMDb...");
+
+            ApiRequest(job);
+
+            Host.ReportProgress(this, 100.0 * 2.0 / 3.0, "Getting poster images...");
+
+            GetPosters(job);
+
+            Host.ReportProgress(this, 100.0, "Finished querying TMDb");
+        }
 
         private PluginSettings CheckConfigFile()
         {

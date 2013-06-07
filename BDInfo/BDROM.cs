@@ -238,7 +238,7 @@ namespace BDInfo
             }
         }
 
-        private void ReportScanProgress(string fileType, int curStep,
+        private void ReportScanProgress(string fileType, string fileName, int curStep,
             int curFileOfType, int numFilesOfType, int completedFilesOfType,
             int curFileOverall, int numFilesOverall, int completedFilesOverall)
         {
@@ -246,6 +246,7 @@ namespace BDInfo
                 ScanProgress(new BDROMScanProgressState
                                         {
                                             FileType = fileType,
+                                            FileName = fileName,
                                             CurStep = curStep,
                                             NumSteps = 3,
                                             CurFileOfType = curFileOfType,
@@ -281,11 +282,11 @@ namespace BDInfo
             {
                 try
                 {
-                    ReportScanProgress("stream clip", 1,
+                    ReportScanProgress("stream clip", streamClipFile.Name, 1,
                         ++curStreamClipFile, numStreamClipFiles, completedStreamClipFiles,
                         ++curFileOverall, numFilesOverall, completedFilesOverall);
                     streamClipFile.Scan();
-                    ReportScanProgress("stream clip", 1,
+                    ReportScanProgress("stream clip", streamClipFile.Name, 1,
                         curStreamClipFile, numStreamClipFiles, ++completedStreamClipFiles,
                         curFileOverall, numFilesOverall, ++completedFilesOverall);
                 }
@@ -325,11 +326,11 @@ namespace BDInfo
             {
                 try
                 {
-                    ReportScanProgress("playlist", 2,
+                    ReportScanProgress("playlist", playlistFile.Name, 2,
                         ++curPlaylist, numPlaylists, completedPlaylists,
                         ++curFileOverall, numFilesOverall, completedFilesOverall);
                     playlistFile.Scan(StreamFiles, StreamClipFiles);
-                    ReportScanProgress("playlist", 2,
+                    ReportScanProgress("playlist", playlistFile.Name, 2,
                         curPlaylist, numPlaylists, ++completedPlaylists,
                         curFileOverall, numFilesOverall, ++completedFilesOverall);
                 }
@@ -368,11 +369,11 @@ namespace BDInfo
                             }
                         }
                     }
-                    ReportScanProgress("stream", 3,
+                    ReportScanProgress("stream", streamFile.Name, 3,
                         ++curStreamFile, numStreamFiles, completedStreamFiles,
                         ++curFileOverall, numFilesOverall, completedFilesOverall);
                     streamFile.Scan(playlists, false);
-                    ReportScanProgress("stream", 3,
+                    ReportScanProgress("stream", streamFile.Name, 3,
                         curStreamFile, numStreamFiles, ++completedStreamFiles,
                         curFileOverall, numFilesOverall, ++completedFilesOverall);
                 }
@@ -676,6 +677,11 @@ namespace BDInfo
         /// "stream clip", "playlist", or "stream"
         /// </summary>
         public string FileType;
+
+        /// <summary>
+        /// "00850.MPLS", "00100.CLPI", "00400.M2TS"
+        /// </summary>
+        public string FileName;
 
         public int CurStep;
         public int NumSteps;

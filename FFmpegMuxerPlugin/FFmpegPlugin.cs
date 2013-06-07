@@ -15,7 +15,6 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         public string Name { get { return "FFmpeg"; } }
 
-        public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
         public MatroskaFeatures SupportedFeatures
@@ -24,6 +23,8 @@ namespace BDHero.Plugin.FFmpegMuxer
         }
 
         private readonly AutoResetEvent _mutex = new AutoResetEvent(false);
+
+        private PluginException _exception;
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
@@ -37,22 +38,31 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         public void Mux(Job job)
         {
+            Host.ReportProgress(this, 0.0, "Starting FFmpeg process...");
+
+            _exception = null;
+
             var ffmpeg = new FFmpeg(job, job.SelectedPlaylist, job.OutputPath);
             ffmpeg.ProgressUpdated += OnProgressUpdated;
             ffmpeg.Exited += FFmpegOnExited;
             ffmpeg.StartAsync();
             WaitForThreadToExit();
+
+            if (_exception != null)
+                throw _exception;
         }
 
         private void OnProgressUpdated(ProgressState progressState)
         {
-            if (ProgressUpdated != null)
-                ProgressUpdated(this, progressState);
+            Host.ReportProgress(this, progressState.PercentComplete, "Muxing to MKV with FFmpeg...");
         }
 
         private void FFmpegOnExited(NonInteractiveProcessState state, int exitCode, TimeSpan runTime)
         {
-            Console.WriteLine("FFmpeg exited with state: {0}", state);
+            if (state != NonInteractiveProcessState.Completed)
+            {
+                _exception = new PluginException(string.Format("FFmpeg exited with state: {0}", state), PluginExceptionSeverity.Fatal);
+            }
             SignalThreadExited();
         }
 

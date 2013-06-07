@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,13 +7,15 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using DotNetUtils;
-using ProcessUtils;
 
 namespace BDHero.Plugin 
 {
     /// <see cref="http://www.codeproject.com/Articles/6334/Plug-ins-in-C"/>
     public class PluginService : IPluginHost
     {
+        private readonly ConcurrentDictionary<string, ProgressProvider> _progressProviders =
+            new ConcurrentDictionary<string, ProgressProvider>();
+
         public readonly IList<IPlugin> Plugins = new List<IPlugin>();
 
         public IList<IDiscReaderPlugin>       DiscReaderPlugins       { get { return Plugins.OfType<IDiscReaderPlugin>().ToList(); } }
@@ -22,12 +25,22 @@ namespace BDHero.Plugin
         public IList<IMuxerPlugin>            MuxerPlugins            { get { return Plugins.OfType<IMuxerPlugin>().ToList(); } }
         public IList<IPostProcessorPlugin>    PostProcessorPlugins    { get { return Plugins.OfType<IPostProcessorPlugin>().ToList(); } }
 
-        public event PluginProgressHandler PluginProgress;
+        public event PluginProgressHandler PluginProgressChanged;
 
-        public void ReportProgress(IPlugin plugin, ProgressState progressState)
+        public void ReportProgress(IPlugin plugin, double percentComplete, string status)
         {
-            if (PluginProgress != null)
-                PluginProgress(plugin, progressState);
+            var progressProvider = GetProgressProvider(plugin);
+
+            progressProvider.PercentComplete = percentComplete;
+            progressProvider.Status = status;
+
+            if (PluginProgressChanged != null)
+                PluginProgressChanged(plugin, progressProvider);
+        }
+
+        public ProgressProvider GetProgressProvider(IPlugin plugin)
+        {
+            return _progressProviders.GetOrAdd(plugin.AssemblyInfo.Guid, guid => new ProgressProvider());
         }
 
         /// <summary>

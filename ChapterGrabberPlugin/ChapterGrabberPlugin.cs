@@ -13,6 +13,8 @@ namespace ChapterGrabberPlugin
 {
     public class ChapterGrabberPlugin : INameProviderPlugin
     {
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private const string ApiGet = "http://chapterdb.org/chapters/search?title=";
         private const string ApiGetEnd = "&chapterCount=0 HTTP/1.1";
         private static string xmlResponse;
@@ -22,11 +24,8 @@ namespace ChapterGrabberPlugin
 
         public string Name { get { return "ChapterGrabber"; } }
 
-        public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
-        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
             Host = host;
@@ -40,6 +39,8 @@ namespace ChapterGrabberPlugin
 
         public void Rename(Job job)
         {
+            Host.ReportProgress(this, 0.0, "Querying ChapterDb.org...");
+
             //var playlist = job.Disc.Playlists[job.SelectedPlaylistIndex];
             if (job.Disc.SanitizedTitle != null)
             {  
@@ -50,6 +51,8 @@ namespace ChapterGrabberPlugin
                 {
                     ReplaceChapters(apiValues[0], playlist.Chapters);
                 }*/
+
+                Host.ReportProgress(this, 90.0, "Comparing search results to available playlists...");
 
                 foreach(var moviePlaylist in job.Disc.Playlists)
                 {
@@ -65,6 +68,8 @@ namespace ChapterGrabberPlugin
                     }
                 }    
             }
+
+            Host.ReportProgress(this, 100.0, "Finished querying ChapterDb.org");
         }
 
         static private List<JsonChaps> GetChapters(string movieName)

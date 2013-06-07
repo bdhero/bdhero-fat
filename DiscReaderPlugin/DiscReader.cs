@@ -5,7 +5,6 @@ using System.Text;
 using BDHero.BDROM;
 using BDHero.Plugin.DiscReader.Transformer;
 using BDInfo;
-using ProcessUtils;
 
 namespace BDHero.Plugin.DiscReader
 {
@@ -16,7 +15,6 @@ namespace BDHero.Plugin.DiscReader
 
         public string Name { get { return "BDHero Disc Reader"; } }
 
-        public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
@@ -31,10 +29,18 @@ namespace BDHero.Plugin.DiscReader
 
         public Disc ReadBDROM(string bdromPath)
         {
+            Host.ReportProgress(this, 0.0, "Scanning BD-ROM...");
+
             var bdrom = new BDInfo.BDROM(bdromPath);
             bdrom.ScanProgress += BDROMOnScanProgress;
             bdrom.Scan();
+
+            Host.ReportProgress(this, 99.0, "Transforming BDInfo structure into BDHero structure...");
+
             var disc = DiscTransformer.Transform(bdrom);
+
+            Host.ReportProgress(this, 100.0, "Finished scanning BD-ROM");
+
             return disc;
         }
 
@@ -45,17 +51,8 @@ namespace BDHero.Plugin.DiscReader
                 bdromState.FileType, bdromState.CurFileOfType, bdromState.NumFilesOfType, bdromState.TypeProgress.ToString("0.00"),
                 bdromState.CurFileOverall, bdromState.NumFilesOverall, bdromState.OverallProgress.ToString("0.00"));
 #endif
-
-            var progressState = new ProgressState
-                {
-                    PercentComplete = bdromState.OverallProgress,
-                    ProcessState = bdromState.OverallProgress >= 100.0 ? NonInteractiveProcessState.Completed : NonInteractiveProcessState.Running
-                };
-
-            if (ProgressUpdated != null)
-                ProgressUpdated(this, progressState);
-
-            Host.ReportProgress(this, progressState);
+            Host.ReportProgress(this, bdromState.OverallProgress * .99,
+                                string.Format("Scanning {0} file {1}", bdromState.FileType, bdromState.FileName));
         }
     }
 }

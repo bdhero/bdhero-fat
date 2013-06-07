@@ -17,16 +17,15 @@ namespace BDHero.Plugin
         IPluginHost Host { get; }
 
         /// <summary>
-        /// Human-friendly name of the plugin that will be displayed in the UI.
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         /// Contains information about the plugin DLL and config file.
         /// </summary>
         PluginAssemblyInfo AssemblyInfo { get; }
 
-        event PluginProgressHandler ProgressUpdated;
+        /// <summary>
+        /// Human-friendly name of the plugin that will be displayed in the UI.
+        /// </summary>
+        string Name { get; }
+
         event EditPluginPreferenceHandler EditPreferences;
 
         /// <summary>
@@ -99,22 +98,22 @@ namespace BDHero.Plugin
     public class PluginAssemblyInfo
     {
         /// <summary>
-        /// Full path to the plugin DLL.
+        /// Gets the full path to the plugin DLL.
         /// </summary>
         public string Location { get; private set; }
 
         /// <summary>
-        /// Version of the plugin assembly DLL.
+        /// Gets the version of the plugin assembly DLL.
         /// </summary>
         public Version Version { get; private set; }
 
         /// <summary>
-        /// GUID of the plugin assembly DLL.
+        /// Gets the GUID of the plugin assembly DLL.
         /// </summary>
         public string Guid { get; private set; }
 
         /// <summary>
-        /// Returns the full path to the plugin's JSON config file.
+        /// Gets the full path to the plugin's JSON config file.
         /// </summary>
         /// <remarks>The path to the config file is the same as that of the DLL, except with a ".config.json" extension instead of ".dll".</remarks>
         public string SettingsFile { get { return new Regex(@"\.dll$", RegexOptions.IgnoreCase).Replace(Location, ".config.json"); } }

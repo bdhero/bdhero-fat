@@ -14,7 +14,6 @@ namespace BDHero.Plugin.FileNamer
 
         public string Name { get { return "BDHero File Namer"; } }
 
-        public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
@@ -29,6 +28,8 @@ namespace BDHero.Plugin.FileNamer
 
         public void Rename(Job job)
         {
+            Host.ReportProgress(this, 0.0, "Auto-renaming output file...");
+
             var pathSpecified = !string.IsNullOrWhiteSpace(job.OutputPath);
             if (pathSpecified && job.OutputPath.EndsWith(".mkv", StringComparison.InvariantCultureIgnoreCase))
                 return;
@@ -41,6 +42,8 @@ namespace BDHero.Plugin.FileNamer
             var directory = pathSpecified ? job.OutputPath : Environment.CurrentDirectory;
             var filename = string.Format(@"{0} [{1}].mkv", job.Disc.SanitizedTitle, firstVideoHeight);
             job.OutputPath = Path.Combine(directory, filename);
+
+            Host.ReportProgress(this, 100.0, "Finished auto-renaming output file");
         }
     }
 }

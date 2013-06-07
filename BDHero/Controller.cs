@@ -181,32 +181,30 @@ namespace BDHero
             Console.WriteLine("Scanning {0}...", bdromPath);
 
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
-            discReader.ProgressUpdated -= DiscReaderOnProgressUpdated;
-            discReader.ProgressUpdated += DiscReaderOnProgressUpdated;
+            var progressProvider = _pluginService.GetProgressProvider(discReader);
+
+            progressProvider.Reset();
+            progressProvider.Start();
 
             try
             {
                 var disc = discReader.ReadBDROM(bdromPath);
                 Job = new Job(disc);
+                progressProvider.Succeed();
                 return true;
             }
             catch (PluginException e)
             {
+                progressProvider.Error(e);
                 HandlePluginException(discReader, e);
                 return false;
             }
             catch (Exception e)
             {
-                HandleUnhandledException(e);
+                progressProvider.Error(e);
+                HandleUnhandledException(discReader, e);
                 return false;
             }
-        }
-
-        private void DiscReaderOnProgressUpdated(IPlugin plugin, ProgressState progressState)
-        {
-            Console.Write("\rPlugin {0} is {1}, {2}% complete", plugin.Name, progressState.ProcessState, progressState.PercentComplete.ToString("0.00"));
-            if (progressState.ProcessState == NonInteractiveProcessState.Completed)
-                Console.WriteLine();
         }
 
         #endregion
@@ -256,20 +254,28 @@ namespace BDHero
 
         private bool Mux()
         {
-            foreach (var plugin in _pluginService.MuxerPlugins)
+            foreach (var muxer in _pluginService.MuxerPlugins)
             {
+                var progressProvider = _pluginService.GetProgressProvider(muxer);
+
+                progressProvider.Reset();
+                progressProvider.Start();
+
                 try
                 {
-                    plugin.Mux(Job);
+                    muxer.Mux(Job);
+                    progressProvider.Succeed();
                 }
                 catch (PluginException e)
                 {
-                    HandlePluginException(plugin, e);
+                    progressProvider.Error(e);
+                    HandlePluginException(muxer, e);
                     return false;
                 }
                 catch (Exception e)
                 {
-                    HandleUnhandledException(e);
+                    progressProvider.Error(e);
+                    HandleUnhandledException(muxer, e);
                     return false;
                 }
             }
@@ -298,7 +304,7 @@ namespace BDHero
                 PluginException(plugin, exception);
         }
 
-        private void HandleUnhandledException(Exception exception)
+        private void HandleUnhandledException(IPlugin plugin, Exception exception)
         {
             if (UnhandledException != null)
                 UnhandledException(this, new UnhandledExceptionEventArgs(exception, false));

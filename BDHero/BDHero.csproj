@@ -54,6 +54,7 @@
     <Compile Include="BDROM\StreamClip.cs" />
     <Compile Include="BDROM\Track.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Plugin\ProgressProvider.cs" />
     <Compile Include="Plugin\IPlugin.cs" />
     <Compile Include="Plugin\IPluginHost.cs" />
     <Compile Include="Plugin\PluginException.cs" />

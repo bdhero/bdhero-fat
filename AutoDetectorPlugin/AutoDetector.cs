@@ -13,7 +13,6 @@ namespace BDHero.Plugin.AutoDetector
 
         public string Name { get { return "BDHero Detective"; } }
 
-        public event PluginProgressHandler ProgressUpdated;
         public event EditPluginPreferenceHandler EditPreferences;
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
@@ -28,11 +27,15 @@ namespace BDHero.Plugin.AutoDetector
 
         public void AutoDetect(Job job)
         {
+            Host.ReportProgress(this, 0.0, "Gathering data...");
+
             var disc = job.Disc;
 
             // Data gathering (round 1)
             FindDuplicatePlaylists(disc);
             TransformPlaylistQuality(disc);
+
+            Host.ReportProgress(this, 25.0, "Auto-detecting track types...");
 
             // Auto-configuration
             DetectPlaylistTypes(disc);
@@ -40,8 +43,12 @@ namespace BDHero.Plugin.AutoDetector
             DetectCommentaryPlaylistTrackTypes(disc);
             DetectSpecialFeaturePlaylistTrackTypes(disc);
 
+            Host.ReportProgress(this, 75.0, "Auto-selecting best playlists and tracks...");
+
             SelectBestPlaylist(job);
             SelectBestTracks(disc);
+
+            Host.ReportProgress(this, 100.0, "Finished auto detecting");
         }
 
         private static void SelectBestPlaylist(Job job)
