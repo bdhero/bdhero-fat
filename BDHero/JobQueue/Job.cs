@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BDHero.BDROM;
+using Newtonsoft.Json;
 
 namespace BDHero.JobQueue
 {
@@ -45,16 +46,19 @@ namespace BDHero.JobQueue
         /// <summary>
         /// Gets the playlist selected by the user.
         /// </summary>
+        [JsonIgnore]
         public Playlist SelectedPlaylist { get { return Disc.Playlists[SelectedPlaylistIndex]; } }
 
         /// <summary>
         /// Gets the movie selected by the user.
         /// </summary>
+        [JsonIgnore]
         public Movie SelectedMovie { get { return Movies.FirstOrDefault(movie => movie.IsSelected); } }
 
         /// <summary>
         /// Gets the playlist selected by the user.
         /// </summary>
+        [JsonIgnore]
         public TVShow SelectedTVShow { get { return TVShows.FirstOrDefault(show => show.IsSelected); } }
 
         public Job(Disc disc)
