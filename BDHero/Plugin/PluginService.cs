@@ -31,8 +31,7 @@ namespace BDHero.Plugin
         {
             var progressProvider = GetProgressProvider(plugin);
 
-            progressProvider.PercentComplete = percentComplete;
-            progressProvider.Status = status;
+            progressProvider.Update(percentComplete, status);
 
             if (PluginProgressChanged != null)
                 PluginProgressChanged(plugin, progressProvider);

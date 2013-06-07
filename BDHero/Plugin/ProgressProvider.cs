@@ -31,12 +31,12 @@ namespace BDHero.Plugin
         /// <summary>
         /// Gets or sets the percentage of the provider's work that has been completed, from <code>0.0</code> to <code>100.0</code>.
         /// </summary>
-        public double PercentComplete { get; set; }
+        public double PercentComplete { get; private set; }
 
         /// <summary>
         /// Gets or sets what the provider is currently doing.  E.G., "Parsing 00800.MPLS", "Querying TMDb", "Muxing to MKV".
         /// </summary>
-        public string Status { get; set; }
+        public string Status { get; private set; }
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace BDHero.Plugin
         #region Public events
 
         /// <summary>
-        /// Invoked approximately once every second and whenever the <see cref="State"/> changes.
+        /// Invoked approximately once every second and whenever the <see cref="State"/> or <see cref="PercentComplete"/> changes.
         /// </summary>
         public event ProgressUpdateHandler Updated;
 
@@ -142,6 +142,15 @@ namespace BDHero.Plugin
             _lastTick = DateTime.Now;
         }
 
+        public void Update(double percentComplete, string status)
+        {
+            PercentComplete = percentComplete;
+            Status = status;
+
+            if (Updated != null)
+                Updated(this);
+        }
+
         public void Reset()
         {
             if (State == ProgressProviderState.Running)
@@ -177,6 +186,9 @@ namespace BDHero.Plugin
 
             if (Started != null)
                 Started(this);
+
+            if (Updated != null)
+                Updated(this);
         }
 
         public void Resume()
@@ -197,6 +209,9 @@ namespace BDHero.Plugin
 
             if (Resumed != null)
                 Resumed(this);
+
+            if (Updated != null)
+                Updated(this);
         }
 
         public void Pause()
@@ -215,6 +230,9 @@ namespace BDHero.Plugin
 
             if (Paused != null)
                 Paused(this);
+
+            if (Updated != null)
+                Updated(this);
         }
 
         public void Cancel()
@@ -236,6 +254,9 @@ namespace BDHero.Plugin
 
             if (Completed != null)
                 Completed(this);
+
+            if (Updated != null)
+                Updated(this);
         }
 
         public void Error(Exception exception)
@@ -258,6 +279,9 @@ namespace BDHero.Plugin
 
             if (Completed != null)
                 Completed(this);
+
+            if (Updated != null)
+                Updated(this);
         }
 
         public void Succeed()
@@ -280,6 +304,9 @@ namespace BDHero.Plugin
 
             if (Completed != null)
                 Completed(this);
+
+            if (Updated != null)
+                Updated(this);
         }
 
         private void CalculateTimeRemaining()
