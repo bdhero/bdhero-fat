@@ -1,3 +1,15 @@
+EXE File Names
+==============
+
+bdhero.exe
+bdheroc.exe
+
+vs.
+
+bdhero-cli.exe
+bdhero-gui.exe
+
+
 INSTALLED
 =========
 
