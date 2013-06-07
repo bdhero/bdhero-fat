@@ -8,6 +8,8 @@ using DotNetUtils;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 using System.Text.RegularExpressions;
+using System.Net;
+using System.IO;
 
 namespace ChapterGrabberPlugin
 {
@@ -22,7 +24,7 @@ namespace ChapterGrabberPlugin
         public IPluginHost Host { get; private set; }
         public PluginAssemblyInfo AssemblyInfo { get; private set; }
 
-        public string Name { get { return "ChapterGrabber"; } }
+        public string Name { get { return "ChapterDB"; } }
 
         public event EditPluginPreferenceHandler EditPreferences;
 
@@ -84,9 +86,26 @@ namespace ChapterGrabberPlugin
             {
                 xmlResponse = HttpRequest.Get(ApiGet + movieName + ApiGetEnd, headers);
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
-                var error = new PluginException("Error: An error occurred when contacting chapterdb.org", ex, PluginExceptionSeverity.Error);
+                if (ex.Response != null)
+                {
+                    using (var errorResponse = (HttpWebResponse)ex.Response)
+                    {
+                        using (var reader = new StreamReader(errorResponse.GetResponseStream()))
+                        {
+                            var errorBody = reader.ReadToEnd();
+                            var errorRegex = @"(?<=<title.*>)([\s\S]*)(?=</title>)";
+                            var rex = new Regex(errorRegex, RegexOptions.IgnoreCase);
+                            var errorTitle = rex.Match(errorBody).Value.Trim();
+                            throw new PluginException("Error: " + errorTitle, ex, PluginExceptionSeverity.Error);
+                        }
+                    }
+                }
+                else
+                {
+                    throw new PluginException("Error: An error occurred when contacting chapterdb.org", ex, PluginExceptionSeverity.Error);                    
+                }
             }
 
             try
@@ -95,7 +114,7 @@ namespace ChapterGrabberPlugin
             }
             catch (Exception ex)
             {
-                var error = new PluginException("Error: An error occurred when processing the response from chapterdb.org", ex, PluginExceptionSeverity.Error);
+                throw new PluginException("Error: An error occurred when processing the response from chapterdb.org", ex, PluginExceptionSeverity.Error);
             }
 
             if (doc.DocumentElement != null)
@@ -113,7 +132,7 @@ namespace ChapterGrabberPlugin
                     }
                     catch (Exception ex)
                     {
-                        var error = new PluginException("Error: An error occurred when serializing the response from chapterdb.org", ex, PluginExceptionSeverity.Error);
+                        throw new PluginException("Error: An error occurred when serializing the response from chapterdb.org", ex, PluginExceptionSeverity.Error);
                     }
                 }
             }

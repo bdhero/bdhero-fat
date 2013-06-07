@@ -17,8 +17,6 @@ namespace TmdbPlugin
     {
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        //private string pluginDirectory;
-        //private string pluginFileName = "TmdbPlugin.Config.json";
         private Tmdb _tmdbApi;
         private TmdbMovieSearch _tmdbMovieSearch;
         private MovieResult _tmdbMovieResult;
@@ -118,6 +116,7 @@ namespace TmdbPlugin
             {
                 _tmdbApi = new Tmdb(TmdbApiKey, ISO_639_1);
             }
+
             else
             {                
                 var error = new PluginException("Error: No APIKey was Found", PluginExceptionSeverity.Error);
@@ -221,10 +220,10 @@ namespace TmdbPlugin
             {
                 var pluginSettings = JsonConvert.DeserializeObject<TmdbApiErrors>(tmdbResponse);
                 var message = "Error: api.themoviedb.org returned the following Status Code " + pluginSettings.status_code + " : " + pluginSettings.status_message;
-                var error = new PluginException(message, ex, PluginExceptionSeverity.Error);
+                throw new PluginException(message, ex, PluginExceptionSeverity.Error);
             }
             catch { }
-            finally { var error = new PluginException("Unable to connect to api.themoviedb.org", ex, PluginExceptionSeverity.Error); }
+            finally { throw new PluginException("Unable to connect to api.themoviedb.org", ex, PluginExceptionSeverity.Error); }
         }
 
         private class TmdbApiParameters
