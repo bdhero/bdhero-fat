@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.JobQueue;
 using DotNetUtils;
