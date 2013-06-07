@@ -178,33 +178,8 @@ namespace BDHero
 
         private bool ReadBDROM(string bdromPath)
         {
-            Console.WriteLine("Scanning {0}...", bdromPath);
-
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
-            var progressProvider = _pluginService.GetProgressProvider(discReader);
-
-            progressProvider.Reset();
-            progressProvider.Start();
-
-            try
-            {
-                var disc = discReader.ReadBDROM(bdromPath);
-                Job = new Job(disc);
-                progressProvider.Succeed();
-                return true;
-            }
-            catch (PluginException e)
-            {
-                progressProvider.Error(e);
-                HandlePluginException(discReader, e);
-                return false;
-            }
-            catch (Exception e)
-            {
-                progressProvider.Error(e);
-                HandleUnhandledException(discReader, e);
-                return false;
-            }
+            return ExecutePlugin(discReader, () => Job = new Job(discReader.ReadBDROM(bdromPath)));
         }
 
         #endregion
@@ -215,8 +190,13 @@ namespace BDHero
         {
             foreach (var plugin in _pluginService.MetadataProviderPlugins)
             {
-                plugin.GetMetadata(Job);
+                GetMetadata(plugin);
             }
+        }
+
+        private void GetMetadata(IMetadataProviderPlugin plugin)
+        {
+            ExecutePlugin(plugin, () => plugin.GetMetadata(Job));
         }
 
         #endregion
@@ -227,13 +207,18 @@ namespace BDHero
         {
             foreach (var plugin in _pluginService.AutoDetectorPlugins)
             {
-                plugin.AutoDetect(Job);
+                AutoDetect(plugin);
             }
 
             foreach (var playlist in Job.Disc.ValidMainFeaturePlaylists)
             {
                 Console.WriteLine(playlist);
             }
+        }
+
+        private void AutoDetect(IAutoDetectorPlugin plugin)
+        {
+            ExecutePlugin(plugin, () => plugin.AutoDetect(Job));
         }
 
         #endregion
@@ -244,8 +229,13 @@ namespace BDHero
         {
             foreach (var plugin in _pluginService.NameProviderPlugins)
             {
-                plugin.Rename(Job);
+                Rename(plugin);
             }
+        }
+
+        private void Rename(INameProviderPlugin plugin)
+        {
+            ExecutePlugin(plugin, () => plugin.Rename(Job));
         }
 
         #endregion
@@ -254,32 +244,16 @@ namespace BDHero
 
         private bool Mux()
         {
-            foreach (var muxer in _pluginService.MuxerPlugins)
+            if (_pluginService.MuxerPlugins.Any(muxer => !Mux(muxer)))
             {
-                var progressProvider = _pluginService.GetProgressProvider(muxer);
-
-                progressProvider.Reset();
-                progressProvider.Start();
-
-                try
-                {
-                    muxer.Mux(Job);
-                    progressProvider.Succeed();
-                }
-                catch (PluginException e)
-                {
-                    progressProvider.Error(e);
-                    HandlePluginException(muxer, e);
-                    return false;
-                }
-                catch (Exception e)
-                {
-                    progressProvider.Error(e);
-                    HandleUnhandledException(muxer, e);
-                    return false;
-                }
+                return false;
             }
             return _pluginService.MuxerPlugins.Count > 0;
+        }
+
+        private bool Mux(IMuxerPlugin muxer)
+        {
+            return ExecutePlugin(muxer, () => muxer.Mux(Job));
         }
 
         #endregion
@@ -290,13 +264,54 @@ namespace BDHero
         {
             foreach (var plugin in _pluginService.PostProcessorPlugins)
             {
-                plugin.PostProcess(Job);
+                PostProcess(plugin);
             }
+        }
+
+        private void PostProcess(IPostProcessorPlugin plugin)
+        {
+            ExecutePlugin(plugin, () => plugin.PostProcess(Job));
         }
 
         #endregion
 
         #region Exception handling
+
+        /// <summary>
+        /// Runs a plugin.  Reports the plugin's state and progress and handles any exceptions that it throws.
+        /// </summary>
+        /// <param name="plugin">Plugin to execute</param>
+        /// <param name="handler">Delegate that will invoke the plugin's functionality (and may potentially throw an exception)</param>
+        /// <returns>
+        /// <code>true</code> if the plugin completed successfully;
+        /// <code>false</code> if the plugin threw an exception, terminated abnormally, or was canceled.
+        /// </returns>
+        private bool ExecutePlugin(IPlugin plugin, ExecutePluginHandler handler)
+        {
+            var progressProvider = _pluginService.GetProgressProvider(plugin);
+
+            progressProvider.Reset();
+            progressProvider.Start();
+
+            try
+            {
+                handler();
+                progressProvider.Succeed();
+                return true;
+            }
+            catch (PluginException e)
+            {
+                progressProvider.Error(e);
+                HandlePluginException(plugin, e);
+                return false;
+            }
+            catch (Exception e)
+            {
+                progressProvider.Error(e);
+                HandleUnhandledException(plugin, e);
+                return false;
+            }
+        }
 
         private void HandlePluginException(IPlugin plugin, PluginException exception)
         {
@@ -337,4 +352,6 @@ namespace BDHero
         {
         }
     }
+
+    internal delegate void ExecutePluginHandler();
 }
