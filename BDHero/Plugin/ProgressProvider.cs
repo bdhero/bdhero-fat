@@ -23,6 +23,11 @@ namespace BDHero.Plugin
         #region Public getters and setters
 
         /// <summary>
+        /// The plugin that reports progress to this provider.
+        /// </summary>
+        public IPlugin Plugin;
+
+        /// <summary>
         /// Gets or sets the percentage of the provider's work that has been completed, from <code>0.0</code> to <code>100.0</code>.
         /// </summary>
         public double PercentComplete { get; set; }

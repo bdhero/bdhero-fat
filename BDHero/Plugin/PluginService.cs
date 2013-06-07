@@ -40,7 +40,9 @@ namespace BDHero.Plugin
 
         public ProgressProvider GetProgressProvider(IPlugin plugin)
         {
-            return _progressProviders.GetOrAdd(plugin.AssemblyInfo.Guid, guid => new ProgressProvider());
+            var progressProvider = _progressProviders.GetOrAdd(plugin.AssemblyInfo.Guid, guid => new ProgressProvider());
+            progressProvider.Plugin = plugin;
+            return progressProvider;
         }
 
         /// <summary>
