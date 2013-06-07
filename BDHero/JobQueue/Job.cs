@@ -47,6 +47,16 @@ namespace BDHero.JobQueue
         /// </summary>
         public Playlist SelectedPlaylist { get { return Disc.Playlists[SelectedPlaylistIndex]; } }
 
+        /// <summary>
+        /// Gets the movie selected by the user.
+        /// </summary>
+        public Movie SelectedMovie { get { return Movies.FirstOrDefault(movie => movie.IsSelected); } }
+
+        /// <summary>
+        /// Gets the playlist selected by the user.
+        /// </summary>
+        public TVShow SelectedTVShow { get { return TVShows.FirstOrDefault(show => show.IsSelected); } }
+
         public Job(Disc disc)
         {
             Disc = disc;
