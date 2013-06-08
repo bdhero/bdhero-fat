@@ -61,7 +61,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
             BeforeStart += OnBeforeStart;
             ProgressUpdated += OnProgressUpdated;
-            Exited += (state, code, time) => OnExited(playlist, _selectedTracks, outputMKVPath);
+            Exited += (state, code, time) => OnExited(job.SelectedReleaseMedium, playlist, _selectedTracks, outputMKVPath);
         }
 
         private void VerifyInputPaths()
@@ -226,7 +226,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             ExePath = Path.Combine(ffmpegAssemblyDir, FFmpegExeFilename);
         }
 
-        private static void OnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
+        private static void OnExited(ReleaseMedium releaseMedium, Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
 #if false
             Console.WriteLine();
@@ -234,9 +234,11 @@ namespace BDHero.Plugin.FFmpegMuxer
             Console.WriteLine("Adding metadata with mkvpropedit...");
             var coverArt = Image.FromFile(@"Y:\BDAM\cover-art\black-hawk-down\full.jpg");
 #endif
+            var coverArt = releaseMedium.CoverArtImages.FirstOrDefault(image => image.IsSelected);
+            var coverArtImage = coverArt != null ? coverArt.Image : null;
             var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
                 .RemoveAllTags()
-//                .AddCoverArt(coverArt)
+                .AddCoverArt(coverArtImage)
                 .SetChapters(playlist.Chapters)
                 .SetDefaultTracksAuto(selectedTracks);
             mkvPropEdit.Start();
