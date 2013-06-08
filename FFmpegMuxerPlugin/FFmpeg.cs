@@ -222,8 +222,8 @@ namespace BDHero.Plugin.FFmpegMuxer
         private void SetExePath()
         {
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
-            var assemblyDir = Path.GetDirectoryName(assemblyPath);
-            ExePath = Path.Combine(assemblyDir, FFmpegExeFilename);
+            var ffmpegAssemblyDir = Path.GetDirectoryName(assemblyPath);
+            ExePath = Path.Combine(ffmpegAssemblyDir, FFmpegExeFilename);
         }
 
         private static void OnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
