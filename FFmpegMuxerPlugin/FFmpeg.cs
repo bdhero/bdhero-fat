@@ -233,12 +233,14 @@ namespace BDHero.Plugin.FFmpegMuxer
             Console.WriteLine("Finished muxing with FFmpeg!");
             Console.WriteLine("Adding metadata with mkvpropedit...");
             var coverArt = Image.FromFile(@"Y:\BDAM\cover-art\black-hawk-down\full.jpg");
+#endif
             var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
-//                .RemoveAllTags()
-                .AddCoverArt(coverArt)
+                .RemoveAllTags()
+//                .AddCoverArt(coverArt)
                 .SetChapters(playlist.Chapters)
                 .SetDefaultTracksAuto(selectedTracks);
             mkvPropEdit.Start();
+#if false
             Console.WriteLine("********** DONE! **********");
 #endif
         }
