@@ -16,9 +16,6 @@ namespace BDHero.Plugin.FFmpegMuxer
 {
     public class FFmpeg : BackgroundProcessWorker
     {
-        private static readonly log4net.ILog Logger =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         private const string FFmpegExeFilename = "ffmpeg.exe";
 
         private static readonly Regex FrameRegex = new Regex(@"^frame=(\d+)$");
@@ -227,46 +224,10 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private void SetExePath()
         {
-//            ExePath = AssemblyUtils.GetTempFilePath(GetType(), FFmpegExeFilename);
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
             var assemblyDir = Path.GetDirectoryName(assemblyPath);
             ExePath = Path.Combine(assemblyDir, FFmpegExeFilename);
         }
-
-#if false
-        public static void Test(string bdromDir, string playlistFilename, string outputMKVPath)
-        {
-            // Step 1: Scan BD-ROM
-            var bdrom = new BDInfo.BDROM(bdromDir);
-            bdrom.ScanProgress += BDROMOnScanProgress;
-            bdrom.Scan();
-            var disc = Disc.Transform(bdrom);
-
-            // Step 2: Search BDAM DB
-            // ...
-
-            // Step 3: Search TMDb
-            // ...
-
-            // Step 4: User selection
-            var playlist = disc.Playlists.FirstOrDefault(mpls => mpls.Filename.Equals(playlistFilename, StringComparison.InvariantCultureIgnoreCase));
-            var selectedTracks = playlist.Tracks.Where(track => track.Language == Language.FromCode("eng") && track.Codec.IsKnown).ToList();
-            foreach (var track in selectedTracks)
-                track.Keep = true;
-
-            // Step 5: Mux selected tracks to MKV
-            var ffmpeg = new FFmpeg(disc, playlist, outputMKVPath);
-            ffmpeg.StartAsync();
-//            OnExited(playlist, selectedTracks, outputMKVPath);
-        }
-
-        private static void BDROMOnScanProgress(BDROMScanProgressState state)
-        {
-            Console.WriteLine("BDROM: {0}: scanning {1} of {2} ({3}%).  Total: {4} of {5} ({6}%).",
-                state.FileType, state.CurFileOfType, state.NumFilesOfType, state.TypeProgress.ToString("0.00"),
-                state.CurFileOverall, state.NumFilesOverall, state.OverallProgress.ToString("0.00"));
-        }
-#endif
 
         private static void OnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
