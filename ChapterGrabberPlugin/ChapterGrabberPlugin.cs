@@ -211,7 +211,9 @@ namespace ChapterGrabberPlugin
         {
             for (var i=0; i<discData.Count; i++)
             {
-                discData[i].Title = apiData.chapterInfo.chapters.chapter[i].name;
+                var chapter = discData[i];
+                var jsonChapter = apiData.chapterInfo.chapters.chapter[i];
+                chapter.Title = jsonChapter.name;
             }
         }
     }
