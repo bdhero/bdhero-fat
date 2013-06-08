@@ -171,9 +171,6 @@ namespace BDHero.Plugin.FFmpegMuxer
                         ParseProgressLine(reader.ReadLine());
                     }
                 }
-#if FALSE
-                Console.WriteLine("{0}% (FINISHED!)", _progress.ToString("0.00"));
-#endif
             }
         }
 
