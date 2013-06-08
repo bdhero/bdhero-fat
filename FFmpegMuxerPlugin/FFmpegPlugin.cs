@@ -43,7 +43,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             _exception = null;
 
             var ffmpeg = new FFmpeg(job, job.SelectedPlaylist, job.OutputPath);
-            ffmpeg.ProgressUpdated += OnProgressUpdated;
+            ffmpeg.ProgressUpdated += state => OnProgressUpdated(ffmpeg, state);
             ffmpeg.Exited += FFmpegOnExited;
             ffmpeg.StartAsync();
             WaitForThreadToExit();
@@ -52,9 +52,25 @@ namespace BDHero.Plugin.FFmpegMuxer
                 throw _exception;
         }
 
-        private void OnProgressUpdated(ProgressState progressState)
+        /// <see cref="http://stackoverflow.com/a/4975942/467582"/>
+        static String BytesToString(long byteCount)
         {
-            Host.ReportProgress(this, progressState.PercentComplete, "Muxing to MKV with FFmpeg...");
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; // Longs run out around EB
+            if (byteCount == 0)
+                return "0" + suf[0];
+            long bytes = Math.Abs(byteCount);
+            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            return (Math.Sign(byteCount) * num) + suf[place];
+        }
+
+        private void OnProgressUpdated(FFmpeg ffmpeg, ProgressState progressState)
+        {
+            var status = string.Format("Muxing to MKV with FFmpeg: {0} - {1} @ {2} fps",
+                TimeSpan.FromMilliseconds(ffmpeg.CurOutTimeMs),
+                BytesToString(ffmpeg.CurSize),
+                ffmpeg.CurFps.ToString("0.0"));
+            Host.ReportProgress(this, progressState.PercentComplete, status);
         }
 
         private void FFmpegOnExited(NonInteractiveProcessState state, int exitCode, TimeSpan runTime)

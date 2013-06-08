@@ -10,13 +10,15 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using BDHero.BDROM;
 using BDHero.JobQueue;
-using DotNetUtils;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
 {
     public class FFmpeg : BackgroundProcessWorker
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private const string FFmpegExeFilename = "ffmpeg.exe";
 
         private static readonly Regex FrameRegex = new Regex(@"^frame=(\d+)$");
@@ -31,10 +33,10 @@ namespace BDHero.Plugin.FFmpegMuxer
         private readonly string _outputMKVPath;
         private readonly string _progressFilePath;
 
-        private long _curFrame;
-        private double _curFps;
-        private long _curSize;
-        private long _curOutTimeMs;
+        public long CurFrame { get; private set; }
+        public double CurFps { get; private set; }
+        public long CurSize { get; private set; }
+        public long CurOutTimeMs { get; private set; }
 
         private readonly BackgroundWorker _progressWorker = new BackgroundWorker();
 
@@ -196,18 +198,19 @@ namespace BDHero.Plugin.FFmpegMuxer
                 Thread.Sleep(500);
                 return;
             }
+
             if (FrameRegex.IsMatch(line))
-                _curFrame = long.Parse(FrameRegex.Match(line).Groups[1].Value);
+                CurFrame = long.Parse(FrameRegex.Match(line).Groups[1].Value);
             else if (FpsRegex.IsMatch(line))
-                _curFps = double.Parse(FpsRegex.Match(line).Groups[1].Value);
+                CurFps = double.Parse(FpsRegex.Match(line).Groups[1].Value);
             else if (TotalSizeRegex.IsMatch(line))
-                _curSize = long.Parse(TotalSizeRegex.Match(line).Groups[1].Value);
+                CurSize = long.Parse(TotalSizeRegex.Match(line).Groups[1].Value);
             else if (OutTimeMsRegex.IsMatch(line))
-                _curOutTimeMs = long.Parse(OutTimeMsRegex.Match(line).Groups[1].Value) / 1000;
+                CurOutTimeMs = long.Parse(OutTimeMsRegex.Match(line).Groups[1].Value) / 1000;
 
             var prevProgress = _progress;
 
-            _progress = 100 * (_curOutTimeMs / _playlistLength.TotalMilliseconds);
+            _progress = 100 * (CurOutTimeMs / _playlistLength.TotalMilliseconds);
             _progress = Math.Min(_progress, 100);
 
             if ("progress=end" == line)
