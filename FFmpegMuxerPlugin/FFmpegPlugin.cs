@@ -28,7 +28,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private readonly AutoResetEvent _mutex = new AutoResetEvent(false);
 
-        private PluginException _exception;
+        private Exception _exception;
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
@@ -73,7 +73,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             Logger.InfoFormat("FFmpeg exited with state {0} and code {1}", state, exitCode);
             if (state != NonInteractiveProcessState.Completed)
             {
-                _exception = new PluginException(string.Format("FFmpeg exited with state: {0}", state), PluginExceptionSeverity.Fatal);
+                _exception = new Exception(string.Format("FFmpeg exited with state: {0}", state));
             }
             SignalThreadExited();
         }

@@ -98,13 +98,13 @@ namespace ChapterGrabberPlugin
                             var errorRegex = @"(?<=<title.*>)([\s\S]*)(?=</title>)";
                             var rex = new Regex(errorRegex, RegexOptions.IgnoreCase);
                             var errorTitle = rex.Match(errorBody).Value.Trim();
-                            throw new PluginException("Error: " + errorTitle, ex, PluginExceptionSeverity.Error);
+                            throw new Exception("Error: " + errorTitle, ex);
                         }
                     }
                 }
                 else
                 {
-                    throw new PluginException("Error: An error occurred when contacting chapterdb.org", ex, PluginExceptionSeverity.Error);                    
+                    throw new Exception("Error: An error occurred when contacting chapterdb.org", ex);
                 }
             }
 
@@ -114,7 +114,7 @@ namespace ChapterGrabberPlugin
             }
             catch (Exception ex)
             {
-                throw new PluginException("Error: An error occurred when processing the response from chapterdb.org", ex, PluginExceptionSeverity.Error);
+                throw new Exception("Error: An error occurred when processing the response from chapterdb.org", ex);
             }
 
             if (doc.DocumentElement != null)
@@ -132,7 +132,7 @@ namespace ChapterGrabberPlugin
                     }
                     catch (Exception ex)
                     {
-                        throw new PluginException("Error: An error occurred when serializing the response from chapterdb.org", ex, PluginExceptionSeverity.Error);
+                        throw new Exception("Error: An error occurred when serializing the response from chapterdb.org", ex);
                     }
                 }
             }

@@ -119,7 +119,7 @@ namespace TmdbPlugin
 
             else
             {                
-                var error = new PluginException("Error: No APIKey was Found", PluginExceptionSeverity.Error);
+                var error = new Exception("Error: No APIKey was Found");
                 var Message = "Error: No APIKey was Found for the Tmdb plugin";
                 Logger.Error(Message);
             }            
@@ -219,11 +219,14 @@ namespace TmdbPlugin
             try
             {
                 var pluginSettings = JsonConvert.DeserializeObject<TmdbApiErrors>(tmdbResponse);
-                var message = "Error: api.themoviedb.org returned the following Status Code " + pluginSettings.status_code + " : " + pluginSettings.status_message;
-                throw new PluginException(message, ex, PluginExceptionSeverity.Error);
+                var message = "Error: api.themoviedb.org returned the following Status Code " +
+                              pluginSettings.status_code + " : " + pluginSettings.status_message;
+                throw new Exception(message, ex);
             }
-            catch { }
-            finally { throw new PluginException("Unable to connect to api.themoviedb.org", ex, PluginExceptionSeverity.Error); }
+            catch
+            {
+                throw new Exception("Unable to connect to api.themoviedb.org", ex);
+            }
         }
 
         private class TmdbApiParameters
