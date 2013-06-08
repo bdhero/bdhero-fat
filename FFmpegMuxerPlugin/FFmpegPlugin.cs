@@ -11,6 +11,9 @@ namespace BDHero.Plugin.FFmpegMuxer
 {
     public class FFmpegPlugin : IMuxerPlugin
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public IPluginHost Host { get; private set; }
         public PluginAssemblyInfo AssemblyInfo { get; private set; }
 
@@ -39,7 +42,10 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         public void Mux(Job job)
         {
-            Host.ReportProgress(this, 0.0, "Starting FFmpeg process...");
+            var startStatus = "Starting FFmpeg process...";
+
+            Host.ReportProgress(this, 0.0, startStatus);
+            Logger.Info(startStatus);
 
             _exception = null;
 
@@ -64,6 +70,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private void FFmpegOnExited(NonInteractiveProcessState state, int exitCode, TimeSpan runTime)
         {
+            Logger.InfoFormat("FFmpeg exited with state {0} and code {1}", state, exitCode);
             if (state != NonInteractiveProcessState.Completed)
             {
                 _exception = new PluginException(string.Format("FFmpeg exited with state: {0}", state), PluginExceptionSeverity.Fatal);
