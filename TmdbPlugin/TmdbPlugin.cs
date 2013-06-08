@@ -167,7 +167,7 @@ namespace TmdbPlugin
                     Title = movieResult.title,
                     IsSelected = i == 0
                 };
-            movie.CoverArtImages.Add(new CoverArtImage
+            movie.CoverArtImages.Add(new CoverArt
                 {
                     Uri = _tmdbRootUrl + movieResult.poster_path,
                     IsSelected = true
@@ -203,7 +203,7 @@ namespace TmdbPlugin
                 {
                     foreach (var poster in tmdbMovieImages.posters)
                     {
-                        movie.CoverArtImages.Add(new CoverArtImage
+                        movie.CoverArtImages.Add(new CoverArt
                         {
                             Uri = _tmdbRootUrl + poster.file_path,
                             Language = I18N.Language.FromCode(poster.iso_639_1)

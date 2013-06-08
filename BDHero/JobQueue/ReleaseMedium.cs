@@ -28,7 +28,7 @@ namespace BDHero.JobQueue
         /// <summary>
         /// Poster image URLs from TMDb / TVDB.
         /// </summary>
-        public readonly IList<CoverArtImage> CoverArtImages = new List<CoverArtImage>();
+        public readonly IList<CoverArt> CoverArtImages = new List<CoverArt>();
     }
 
     public class Movie : ReleaseMedium

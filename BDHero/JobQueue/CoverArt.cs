@@ -11,7 +11,7 @@ namespace BDHero.JobQueue
     /// <summary>
     /// Represents a movie or TV show's official cover art (a.k.a. poster) image.
     /// </summary>
-    public class CoverArtImage
+    public class CoverArt
     {
         /// <summary>
         /// Gets or sets the URI of the cover art image.
@@ -24,7 +24,7 @@ namespace BDHero.JobQueue
         public Language Language;
 
         /// <summary>
-        /// Gets or sets whether this CoverArtImage will be used in the output file.
+        /// Gets or sets whether this CoverArt will be used in the output file.
         /// </summary>
         public bool IsSelected;
 
