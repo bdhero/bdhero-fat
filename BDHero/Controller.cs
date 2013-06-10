@@ -338,6 +338,8 @@ namespace BDHero
 
         private void HandleUnhandledException(IPlugin plugin, Exception exception)
         {
+            var message = string.Format("Unhandled exception was thrown by plugin \"{0}\"", plugin.Name);
+            _logger.Error(message, exception);
             if (UnhandledException != null)
                 UnhandledException(this, new UnhandledExceptionEventArgs(exception, false));
         }
