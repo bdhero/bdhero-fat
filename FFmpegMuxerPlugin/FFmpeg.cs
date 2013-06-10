@@ -63,7 +63,14 @@ namespace BDHero.Plugin.FFmpegMuxer
             SetOutputMKVPath();
 
             BeforeStart += OnBeforeStart;
+            StdErr += OnStdErr;
             Exited += (state, code, exception, time) => OnExited(state, code, job.SelectedReleaseMedium, playlist, _selectedTracks, outputMKVPath);
+        }
+
+        private void OnStdErr(string line)
+        {
+            if (!string.IsNullOrWhiteSpace(line))
+                Exception = new Exception(line);
         }
 
         private void VerifyInputPaths()
