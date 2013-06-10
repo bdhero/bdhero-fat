@@ -52,6 +52,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
             SetExePath();
 
+            SetFFmpegLogLevel();
             ReplaceExistingFiles();
             RedirectProgressToFile();
             SetInputFiles();
@@ -80,6 +81,11 @@ namespace BDHero.Plugin.FFmpegMuxer
         private static string GetInputFiles(IList<string> inputM2TsPaths)
         {
             return inputM2TsPaths.Count == 1 ? inputM2TsPaths[0] : "concat:" + string.Join("|", inputM2TsPaths);
+        }
+
+        private void SetFFmpegLogLevel()
+        {
+            Arguments.AddAll("-loglevel", "error");
         }
 
         private void ReplaceExistingFiles()
