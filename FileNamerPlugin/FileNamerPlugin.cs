@@ -42,17 +42,18 @@ namespace BDHero.Plugin.FileNamer
             var directory = pathSpecified ? job.OutputPath : Environment.CurrentDirectory;
             var filename = string.Format(@"{0} [{1}].mkv", job.Disc.SanitizedTitle, firstVideoHeight);
 
-            if (job.ReleaseMediumType == ReleaseMediumType.Movie)
+            var movie = job.SelectedReleaseMedium as Movie;
+            var tvShow = job.SelectedReleaseMedium as TVShow;
+
+            if (movie != null)
             {
-                var movie = (Movie) job.SelectedReleaseMedium;
                 filename = string.Format("{0} ({1}) [{2}].mkv",
                                          movie.Title,
                                          movie.ReleaseYear,
                                          job.SelectedPlaylist.MaxVideoResolution);
             }
-            else if (job.ReleaseMediumType == ReleaseMediumType.TVShow)
+            else if (tvShow != null)
             {
-                var tvShow = (TVShow) job.SelectedReleaseMedium;
                 filename = string.Format("s{0}e{1} - {2} [{3}].mkv",
                                          tvShow.SelectedEpisode.SeasonNumber.ToString("00"),
                                          tvShow.SelectedEpisode.EpisodeNumber.ToString("00"),
