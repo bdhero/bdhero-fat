@@ -62,7 +62,6 @@ namespace BDHero.Plugin.FFmpegMuxer
             SetOutputMKVPath();
 
             BeforeStart += OnBeforeStart;
-            ProgressUpdated += OnProgressUpdated;
             Exited += (state, code, exception, time) => OnExited(state, code, job.SelectedReleaseMedium, playlist, _selectedTracks, outputMKVPath);
         }
 
@@ -173,13 +172,6 @@ namespace BDHero.Plugin.FFmpegMuxer
             Arguments.Add(_outputMKVPath);
         }
 
-        private void OnProgressUpdated(ProgressState progressState)
-        {
-#if FALSE
-            Console.Write("\r{0}", progressState);
-#endif
-        }
-
         private void OnBeforeStart(object sender, EventArgs eventArgs)
         {
             _progressWorker.DoWork += ProgressWorkerOnDoWork;
@@ -258,12 +250,6 @@ namespace BDHero.Plugin.FFmpegMuxer
             Logger.DebugFormat("FFmpeg exited with state {0} and code {1}", processState, exitCode);
 //            if (processState != NonInteractiveProcessState.Completed)
 //                return;
-#if false
-            Console.WriteLine();
-            Console.WriteLine("Finished muxing with FFmpeg!");
-            Console.WriteLine("Adding metadata with mkvpropedit...");
-            var coverArt = Image.FromFile(@"Y:\BDAM\cover-art\black-hawk-down\full.jpg");
-#endif
             var coverArt = releaseMedium.CoverArtImages.FirstOrDefault(image => image.IsSelected);
             var coverArtImage = coverArt != null ? coverArt.Image : null;
             var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
@@ -273,9 +259,6 @@ namespace BDHero.Plugin.FFmpegMuxer
 //                .SetDefaultTracksAuto(selectedTracks)
             ;
             mkvPropEdit.Start();
-#if false
-            Console.WriteLine("********** DONE! **********");
-#endif
         }
     }
 }
