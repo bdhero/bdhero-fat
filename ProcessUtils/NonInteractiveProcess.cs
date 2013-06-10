@@ -148,7 +148,6 @@ namespace ProcessUtils
                     Name = _process.ProcessName;
                     State = NonInteractiveProcessState.Running;
 
-                    jobObject.AssignCurrentProcess();
                     jobObject.AssignProcess(_process);
                     jobObject.SetKillOnClose();
 
