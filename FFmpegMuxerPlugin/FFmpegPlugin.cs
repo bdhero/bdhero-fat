@@ -23,7 +23,13 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         public MatroskaFeatures SupportedFeatures
         {
-            get { return MatroskaFeatures.LPCM; }
+            get
+            {
+                return MatroskaFeatures.Chapters
+                     | MatroskaFeatures.CoverArt
+                     | MatroskaFeatures.LPCM
+                    ;
+            }
         }
 
         private readonly AutoResetEvent _mutex = new AutoResetEvent(false);
