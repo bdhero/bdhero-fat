@@ -111,6 +111,11 @@ namespace ProcessUtils
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Gets the last error that occurred (or <code>null</code> if no errors have occurred).
+        /// </summary>
+        public Exception Exception { get; protected set; }
+
         #region Start / Kill
 
         /// <summary>
@@ -235,8 +240,11 @@ namespace ProcessUtils
             if (State != NonInteractiveProcessState.Killed)
                 State = ExitCode == 0 ? NonInteractiveProcessState.Completed : NonInteractiveProcessState.Error;
 
+            if (Exception != null)
+                State = NonInteractiveProcessState.Error;
+
             if (Exited != null)
-                Exited(State, ExitCode, RunTime);
+                Exited(State, ExitCode, Exception, RunTime);
         }
 
         /// <summary>
@@ -368,7 +376,7 @@ namespace ProcessUtils
     /// <summary>
     /// Event handler that is invoked when a NonInteractiveProcess is killed manually, terminates abnormally (aborts or crashes), or completes successfully.
     /// </summary>
-    public delegate void BackgroundProcessExitedHandler(NonInteractiveProcessState state, int exitCode, TimeSpan runTime);
+    public delegate void BackgroundProcessExitedHandler(NonInteractiveProcessState state, int exitCode, Exception exception, TimeSpan runTime);
 
     /// <summary>
     /// Event handler that is invoked whenever the state of a NonInteractiveProcess changes.

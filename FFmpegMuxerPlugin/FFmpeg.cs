@@ -63,7 +63,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
             BeforeStart += OnBeforeStart;
             ProgressUpdated += OnProgressUpdated;
-            Exited += (state, code, time) => OnExited(state, code, job.SelectedReleaseMedium, playlist, _selectedTracks, outputMKVPath);
+            Exited += (state, code, exception, time) => OnExited(state, code, job.SelectedReleaseMedium, playlist, _selectedTracks, outputMKVPath);
         }
 
         private void VerifyInputPaths()

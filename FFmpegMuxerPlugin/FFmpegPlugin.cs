@@ -68,7 +68,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             Host.ReportProgress(this, progressState.PercentComplete, status);
         }
 
-        private void FFmpegOnExited(NonInteractiveProcessState state, int exitCode, TimeSpan runTime)
+        private void FFmpegOnExited(NonInteractiveProcessState state, int exitCode, Exception exception, TimeSpan runTime)
         {
             Logger.InfoFormat("FFmpeg exited with state {0} and code {1}", state, exitCode);
             if (state != NonInteractiveProcessState.Completed)
