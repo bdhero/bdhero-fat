@@ -184,7 +184,7 @@ namespace TmdbPlugin
                 {
                     if (string.IsNullOrEmpty(_tmdbRootUrl))
                     {
-                        _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "w185";
+                        _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "original";
                     }
                     tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, null);
                     var posterLanguages = (tmdbMovieImages.posters.Select(poster => poster.iso_639_1).ToList());
