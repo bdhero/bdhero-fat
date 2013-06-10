@@ -12,6 +12,13 @@ namespace ProcessUtils
     /// <see cref="http://stackoverflow.com/a/4657392/467582"/>
     public class JobObject : IDisposable
     {
+        /// <summary>
+        /// Causes all processes associated with the job to terminate when the last handle to the job is closed.
+        /// This limit requires use of a JOBOBJECT_EXTENDED_LIMIT_INFORMATION structure. Its BasicLimitInformation member is a JOBOBJECT_BASIC_LIMIT_INFORMATION structure.
+        /// </summary>
+        /// <see cref="http://msdn.microsoft.com/en-us/library/windows/desktop/ms684147(v=vs.85).aspx"/>
+        private const int JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE = 0x00002000;
+
         private IntPtr _handle;
         private bool _disposed;
 
@@ -19,15 +26,13 @@ namespace ProcessUtils
         {
             _handle = CreateJobObject(IntPtr.Zero, null);
 
-            var info = new JOBOBJECT_BASIC_LIMIT_INFORMATION
-            {
-                LimitFlags = 0x2000
-            };
-
             var extendedInfo = new JOBOBJECT_EXTENDED_LIMIT_INFORMATION
-            {
-                BasicLimitInformation = info
-            };
+                {
+                    BasicLimitInformation = new JOBOBJECT_BASIC_LIMIT_INFORMATION
+                        {
+                            LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE
+                        }
+                };
 
             int length = Marshal.SizeOf(typeof(JOBOBJECT_EXTENDED_LIMIT_INFORMATION));
             IntPtr extendedInfoPtr = Marshal.AllocHGlobal(length);
@@ -78,6 +83,12 @@ namespace ProcessUtils
             return AddProcess(Process.GetProcessById(processId).Handle);
         }
 
+        public bool AddProcess(Process process)
+        {
+            var id = process.Id;
+            return AddProcess(process.Handle);
+        }
+
         #region Win32 DLL imports
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
@@ -89,13 +100,9 @@ namespace ProcessUtils
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern bool AssignProcessToJobObject(IntPtr job, IntPtr process);
 
+        /// <param name="hObject">handle to job object</param>
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool CloseHandle(
-            IntPtr hObject   // handle to object
-        );
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        static extern bool CloseHandle(IntPtr hObject);
 
         #endregion
     }
