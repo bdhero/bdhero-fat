@@ -261,8 +261,11 @@ namespace BDHero.Plugin.FFmpegMuxer
         private static void OnExited(NonInteractiveProcessState processState, int exitCode, ReleaseMedium releaseMedium, Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
             Logger.DebugFormat("FFmpeg exited with state {0} and code {1}", processState, exitCode);
+
+            // TODO: Uncomment this
 //            if (processState != NonInteractiveProcessState.Completed)
 //                return;
+
             var coverArt = releaseMedium.CoverArtImages.FirstOrDefault(image => image.IsSelected);
             var coverArtImage = coverArt != null ? coverArt.Image : null;
             var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
