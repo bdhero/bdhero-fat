@@ -127,7 +127,7 @@ namespace ProcessUtils
             if (State != NonInteractiveProcessState.Ready)
                 throw new InvalidOperationException("NonInteractiveProcess.Start() cannot be called more than once.");
 
-            using (var jobObject = new JobObject())
+            using (var jobObject = JobObject2.Create())
             {
                 using (_process = CreateProcess())
                 {
@@ -148,7 +148,9 @@ namespace ProcessUtils
                     Name = _process.ProcessName;
                     State = NonInteractiveProcessState.Running;
 
-                    jobObject.AddProcess(Id);
+                    jobObject.AssignCurrentProcess();
+                    jobObject.AssignProcess(_process);
+                    jobObject.SetKillOnClose();
 
                     _stopwatch.Start();
 
