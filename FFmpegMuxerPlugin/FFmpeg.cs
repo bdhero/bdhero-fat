@@ -16,6 +16,9 @@ namespace BDHero.Plugin.FFmpegMuxer
 {
     public class FFmpeg : BackgroundProcessWorker
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private const string FFmpegExeFilename = "ffmpeg.exe";
 
         private static readonly Regex FrameRegex = new Regex(@"^frame=(\d+)$");
@@ -61,7 +64,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
             BeforeStart += OnBeforeStart;
             ProgressUpdated += OnProgressUpdated;
-            Exited += (state, code, time) => OnExited(job.SelectedReleaseMedium, playlist, _selectedTracks, outputMKVPath);
+            Exited += (state, code, time) => OnExited(state, code, job.SelectedReleaseMedium, playlist, _selectedTracks, outputMKVPath);
         }
 
         private void VerifyInputPaths()
@@ -182,6 +185,7 @@ namespace BDHero.Plugin.FFmpegMuxer
         {
             _progressWorker.DoWork += ProgressWorkerOnDoWork;
             _progressWorker.RunWorkerAsync();
+            Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
         }
 
         private void ProgressWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
@@ -250,8 +254,11 @@ namespace BDHero.Plugin.FFmpegMuxer
             ExePath = Path.Combine(ffmpegAssemblyDir, FFmpegExeFilename);
         }
 
-        private static void OnExited(ReleaseMedium releaseMedium, Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
+        private static void OnExited(NonInteractiveProcessState processState, int exitCode, ReleaseMedium releaseMedium, Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
+            Logger.DebugFormat("FFmpeg exited with state {0} and code {1}", processState, exitCode);
+//            if (processState != NonInteractiveProcessState.Completed)
+//                return;
 #if false
             Console.WriteLine();
             Console.WriteLine("Finished muxing with FFmpeg!");
