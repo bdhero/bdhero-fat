@@ -41,6 +41,25 @@ namespace BDHero.Plugin.FileNamer
 
             var directory = pathSpecified ? job.OutputPath : Environment.CurrentDirectory;
             var filename = string.Format(@"{0} [{1}].mkv", job.Disc.SanitizedTitle, firstVideoHeight);
+
+            if (job.ReleaseMediumType == ReleaseMediumType.Movie)
+            {
+                var movie = (Movie) job.SelectedReleaseMedium;
+                filename = string.Format("{0} ({1}) [{2}].mkv",
+                                         movie.Title,
+                                         movie.ReleaseYear,
+                                         job.SelectedPlaylist.MaxVideoResolution);
+            }
+            else if (job.ReleaseMediumType == ReleaseMediumType.TVShow)
+            {
+                var tvShow = (TVShow) job.SelectedReleaseMedium;
+                filename = string.Format("s{0}e{1} - {2} [{3}].mkv",
+                                         tvShow.SelectedEpisode.SeasonNumber.ToString("00"),
+                                         tvShow.SelectedEpisode.EpisodeNumber.ToString("00"),
+                                         tvShow.Title,
+                                         job.SelectedPlaylist.MaxVideoResolution);
+            }
+
             job.OutputPath = Path.Combine(directory, filename);
 
             Host.ReportProgress(this, 100.0, "Finished auto-renaming output file");

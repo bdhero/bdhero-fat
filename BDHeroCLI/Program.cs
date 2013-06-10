@@ -56,9 +56,9 @@ namespace BDHeroCLI
                 mkvPath = Console.ReadLine();
             }
 
-            if (Controller.Scan(bdromPath))
+            if (Controller.Scan(bdromPath, mkvPath))
             {
-                if (Controller.Convert(mkvPath))
+                if (Controller.Convert())
                 {
                     Console.WriteLine();
                     Console.WriteLine("MUXING SUCCEEDED!");

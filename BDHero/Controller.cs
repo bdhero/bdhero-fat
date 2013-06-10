@@ -147,8 +147,9 @@ namespace BDHero
         /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.
         /// </summary>
         /// <param name="bdromPath">Path to the BD-ROM directory</param>
+        /// <param name="mkvPath">Optional path to the output directory or MKV file</param>
         /// <returns><code>true</code> if the scan succeeded; otherwise <code>false</code></returns>
-        public bool Scan(string bdromPath)
+        public bool Scan(string bdromPath, string mkvPath = null)
         {
             if (JobBeforeStart != null)
                 JobBeforeStart(this, EventArgs.Empty);
@@ -158,7 +159,7 @@ namespace BDHero
 
             GetMetadata();
             AutoDetect();
-            Rename();
+            Rename(mkvPath);
 
             return true;
         }
@@ -239,8 +240,9 @@ namespace BDHero
 
         #region 4 - Name Providers
 
-        private void Rename()
+        private void Rename(string mkvPath = null)
         {
+            Job.OutputPath = mkvPath;
             foreach (var plugin in _pluginService.NameProviderPlugins)
             {
                 Rename(plugin);
