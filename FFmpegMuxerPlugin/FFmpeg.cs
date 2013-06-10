@@ -53,7 +53,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             ReplaceExistingFiles();
             RedirectProgressToFile();
             SetInputFiles();
-            SetMovieTitle(job.Disc.SanitizedTitle);
+            SetMovieTitle(job);
             MapSelectedTracks();
             CopyAllCodecs();
             ConvertLPCM();
@@ -97,9 +97,33 @@ namespace BDHero.Plugin.FFmpegMuxer
             Arguments.AddAll("-i", inputFiles);
         }
 
-        private void SetMovieTitle(string movieTitle)
+        private void SetMovieTitle(Job job)
         {
-            Arguments.AddAll("-metadata", "title=" + movieTitle);
+            var title = job.Disc.SanitizedTitle;
+            var releaseMedium = job.SelectedReleaseMedium;
+            if (releaseMedium != null)
+            {
+                var movie = releaseMedium as Movie;
+                var tvShow = releaseMedium as TVShow;
+                if (movie != null)
+                {
+                    title = string.Format("{0} ({1})", movie.Title, movie.ReleaseYear);
+                }
+                else if (tvShow != null)
+                {
+                    title = string.Format("{0} - {1}, season {2}, episode {3} ({4})",
+                                          tvShow.SelectedEpisode.Title,
+                                          tvShow.Title,
+                                          tvShow.SelectedEpisode.SeasonNumber,
+                                          tvShow.SelectedEpisode.EpisodeNumber,
+                                          tvShow.SelectedEpisode.ReleaseDate.ToString("yyyy'-'MM'-'dd"));
+                }
+                else
+                {
+                    title = releaseMedium.Title;
+                }
+            }
+            Arguments.AddAll("-metadata", "title=" + title);
         }
 
         private void MapSelectedTracks()
