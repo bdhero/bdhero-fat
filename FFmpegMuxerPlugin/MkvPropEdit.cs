@@ -86,6 +86,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         /// <summary>
         /// Sets the "default track" flag of the specified track.
+        /// WARNING: This method BREAKS playback in MPC-HC!
         /// </summary>
         /// <param name="trackType">"v", "a", or "s" for video, audio, and subtitle</param>
         /// <param name="indexOfType"></param>
