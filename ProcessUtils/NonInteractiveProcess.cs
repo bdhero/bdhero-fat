@@ -159,10 +159,10 @@ namespace ProcessUtils
                     _process.WaitForExit();
 
                     ExitCode = _process.ExitCode;
-
-                    ProcessOnExited();
                 }
             }
+
+            ProcessOnExited();
 
             return this;
         }
