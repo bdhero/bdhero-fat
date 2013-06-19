@@ -75,19 +75,16 @@ namespace BDHeroCLI
             {
                 if (Controller.Convert())
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("MUXING SUCCEEDED!");
+                    Logger.Info("Muxing succeeded!");
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("MUXING FAILED!");
+                    Logger.Error("Muxing failed!");
                 }
             }
             else
             {
-                Console.WriteLine();
-                Console.WriteLine("SCANNING FAILED!");
+                Logger.Error("Scanning failed!");
             }
 
             Console.WriteLine();
