@@ -33,15 +33,16 @@ namespace BDHeroCLI
             var optionSet = new OptionSet
                 {
                     { "h|?|help", v => ShowHelp() },
-                    { "version", s => ShowVersion() },
-                    { "v|verbose", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Debug },
+                    { "-V|version", s => ShowVersion() },
+                    { "debug", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Debug },
+                    { "v|verbose", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Info },
                     { "w|warn", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Warn },
                     { "q|quiet", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Error },
                     { "s|silent", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Fatal },
                     { "i=|input=", s => bdromPath = s },
                     { "o=|output=", s => mkvPath = s },
-                    { "y", s => replace = true },
-                    { "n", s => replace = false }
+                    { "y|yes", s => replace = true },
+                    { "n|no", s => replace = false }
                 };
 
             var extraArgs = optionSet.Parse(args);
@@ -97,7 +98,9 @@ namespace BDHeroCLI
 
         private static void ShowHelp(int exitCode = 0)
         {
-            Console.Error.WriteLine("Usage: {0} -i BDROM_PATH -o OUTPUT_MKV_PATH", Path.GetFileName(AssemblyUtils.AssemblyOrDefault().Location));
+            var exeName = Path.GetFileName(AssemblyUtils.AssemblyOrDefault().Location);
+            var usage = new Usage(exeName).TransformText();
+            Console.Error.WriteLine(usage);
             Environment.Exit(exitCode);
         }
 
