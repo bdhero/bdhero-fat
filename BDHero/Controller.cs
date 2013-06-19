@@ -132,7 +132,7 @@ namespace BDHero
 
         private static void LogPlugins<T>(string name, IList<T> plugins) where T : IPlugin
         {
-            _logger.InfoFormat("\t {0} ({1}):", name, plugins.Count);
+            _logger.InfoFormat("\t {0} ({1}){2}", name, plugins.Count, plugins.Any() ? ":" : "");
             foreach (var plugin in plugins)
             {
                 _logger.InfoFormat("\t\t {0} v{1} - {2} - {3}", plugin.Name, plugin.AssemblyInfo.Version, plugin.AssemblyInfo.Guid, plugin.AssemblyInfo.Location);
