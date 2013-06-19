@@ -24,16 +24,23 @@ namespace BDHeroCLI
         /// </summary>
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private static string ExeFileName
+        {
+            get { return Path.GetFileName(AssemblyUtils.AssemblyOrDefault().Location); }
+        }
+
         static void Main(string[] args)
         {
+            ShowVersion();
+
+            bool? replace;
             string bdromPath = "",
                    mkvPath = "";
-            bool? replace;
 
             var optionSet = new OptionSet
                 {
                     { "h|?|help", v => ShowHelp() },
-                    { "-V|version", s => ShowVersion() },
+                    { "-V|version", s => Environment.Exit(0) },
                     { "debug", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Debug },
                     { "v|verbose", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Info },
                     { "w|warn", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Warn },
@@ -95,16 +102,15 @@ namespace BDHeroCLI
 
         private static void ShowHelp(int exitCode = 0)
         {
-            var exeName = Path.GetFileName(AssemblyUtils.AssemblyOrDefault().Location);
+            var exeName = ExeFileName;
             var usage = new Usage(exeName).TransformText();
             Console.Error.WriteLine(usage);
             Environment.Exit(exitCode);
         }
 
-        private static void ShowVersion(int exitCode = 0)
+        private static void ShowVersion()
         {
             Console.Error.WriteLine("{0} v{1} - compiled {2}", AssemblyUtils.GetAssemblyName(), AssemblyUtils.GetAssemblyVersion(), AssemblyUtils.GetLinkerTimestamp());
-            Environment.Exit(exitCode);
         }
 
         private static void ControllerOnJobBeforeStart(object sender, EventArgs eventArgs)
