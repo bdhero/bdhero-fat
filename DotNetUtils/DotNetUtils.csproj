@@ -59,6 +59,7 @@
     <Compile Include="FileUtils.cs" />
     <Compile Include="FormUtils.cs" />
     <Compile Include="HttpRequest.cs" />
+    <Compile Include="Mono.Options.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
