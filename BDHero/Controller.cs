@@ -80,12 +80,13 @@ namespace BDHero
 
         private void InitLogging(string logConfigFileName)
         {
+            var entryAssembly = Assembly.GetEntryAssembly();
             var logConfigPath = Path.Combine(_configDir, logConfigFileName);
             log4net.GlobalContext.Properties["logdir"] = _logDir;
             log4net.GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(logConfigPath));
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _logger.Info("Starting up");
+            _logger.InfoFormat("{0} v{1} starting up", entryAssembly.GetName().Name, entryAssembly.GetName().Version);
             _logger.DebugFormat("Portable = {0}", _isPortable);
             _logger.DebugFormat("Config Dir = {0}", _configDir);
             _logger.DebugFormat("Plugin Dir = {0}", _pluginDir);
