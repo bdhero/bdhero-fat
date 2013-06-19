@@ -97,6 +97,45 @@ namespace DotNetUtils
 
         #endregion
 
+        #region Dates
+
+        /// <summary>
+        /// Gets the date and time that the given assembly was linked.
+        /// </summary>
+        /// <returns>Date and time the assembly was linked</returns>
+        /// <seealso cref="http://stackoverflow.com/a/1600990/467582"/>
+        public static DateTime GetLinkerTimestamp(Assembly assembly = null)
+        {
+            assembly = AssemblyOrDefault(assembly);
+            string filePath = assembly.Location;
+            const int c_PeHeaderOffset = 60;
+            const int c_LinkerTimestampOffset = 8;
+            byte[] b = new byte[2048];
+            Stream s = null;
+
+            try
+            {
+                s = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                s.Read(b, 0, 2048);
+            }
+            finally
+            {
+                if (s != null)
+                {
+                    s.Close();
+                }
+            }
+
+            int i = BitConverter.ToInt32(b, c_PeHeaderOffset);
+            int secondsSince1970 = BitConverter.ToInt32(b, i + c_LinkerTimestampOffset);
+            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0);
+            dt = dt.AddSeconds(secondsSince1970);
+            dt = dt.AddHours(TimeZone.CurrentTimeZone.GetUtcOffset(dt).Hours);
+            return dt;
+        }
+
+        #endregion
+
         #region Temp Directories
 
         /// <summary>
