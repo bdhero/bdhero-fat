@@ -17,7 +17,7 @@ namespace BDHeroGUI
         /// <summary>
         /// IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
         /// </summary>
-        private IController _controller = new Controller("bdhero-gui.log.config");
+        private readonly IController _controller = new Controller("bdhero-gui.log.config");
 
         /// <summary>
         /// Depends on <see cref="Controller"/> being initialized first.
