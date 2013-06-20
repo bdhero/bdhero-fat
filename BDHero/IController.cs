@@ -75,9 +75,6 @@ namespace BDHero
 
         #region Methods
 
-        /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
-        void LoadPlugins();
-
         /// <summary>
         /// Sets the <code>TaskScheduler</code> that will be used to invoke event callbacks.
         /// This ensures that events are always invoked from the appropriate thread.

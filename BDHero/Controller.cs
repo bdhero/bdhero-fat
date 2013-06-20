@@ -1,35 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BDHero.Exceptions;
 using BDHero.Plugin;
 using BDHero.JobQueue;
-using DotNetUtils;
 
 namespace BDHero
 {
     public class Controller : IController
     {
-        private static log4net.ILog _logger;
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private const string AppDataRootDirName = "BDHero";
-        private const string ConfigDirName = "Config";
-        private const string PluginDirName = "Plugins";
-        private const string LogDirName = "Logs";
-
-        private bool _isPortable;
-        private string _installDir;
-        private string _configDir;
-        private string _pluginDir;
-        private string _logDir;
-
-        private readonly PluginService _pluginService = new PluginService();
+        private readonly PluginService _pluginService;
 
         /// <summary>
         /// Needed for <see cref="ProgressProviderOnUpdated"/> to invoke progress update callbacks on the correct thread.
@@ -55,105 +39,10 @@ namespace BDHero
 
         #endregion
 
-        #region Constructors and initialization
-
-        /// <summary>
-        /// IMPORTANT: CONSTRUCTOR MUST BE THE FIRST THING CALLED WHEN THE PROGRAM STARTS UP TO INITIALIZE LOGGING!!!
-        /// </summary>
-        public Controller(string logConfigFileName)
+        public Controller(PluginService pluginService)
         {
-            LocateDirectories();
-            InitLogging(logConfigFileName);
+            _pluginService = pluginService;
         }
-
-        private void LocateDirectories()
-        {
-            _installDir = AssemblyUtils.GetInstallDir(Assembly.GetEntryAssembly());
-            _isPortable = Directory.Exists(Path.Combine(_installDir, ConfigDirName));
-
-            if (_isPortable)
-            {
-                _configDir = Path.Combine(_installDir, ConfigDirName);
-                _pluginDir = Path.Combine(_installDir, PluginDirName);
-                _logDir = Path.Combine(_installDir, LogDirName);
-            }
-            else
-            {
-                var roamingAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppDataRootDirName);
-                var localAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppDataRootDirName);
-                _configDir = Path.Combine(roamingAppData, ConfigDirName);
-                _pluginDir = Path.Combine(roamingAppData, PluginDirName);
-                _logDir = Path.Combine(localAppData, LogDirName);
-            }
-
-            if (!Directory.Exists(_logDir))
-            {
-                Directory.CreateDirectory(_logDir);
-            }
-        }
-
-        private void InitLogging(string logConfigFileName)
-        {
-            var entryAssembly = Assembly.GetEntryAssembly();
-            var logConfigPath = Path.Combine(_configDir, logConfigFileName);
-            log4net.GlobalContext.Properties["logdir"] = _logDir;
-            log4net.GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;
-            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(logConfigPath));
-            _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _logger.InfoFormat("{0} v{1} starting up", entryAssembly.GetName().Name, entryAssembly.GetName().Version);
-            _logger.DebugFormat("Portable = {0}", _isPortable);
-            _logger.DebugFormat("Config Dir = {0}", _configDir);
-            _logger.DebugFormat("Plugin Dir = {0}", _pluginDir);
-            _logger.DebugFormat("Log Dir = {0}", _logDir);
-        }
-
-        #endregion
-
-        #region Plugin loading and logging
-
-        public void LoadPlugins()
-        {
-            LoadPluginsFromService();
-            LogPlugins();
-            VerifyPlugins();
-        }
-
-        private void LoadPluginsFromService()
-        {
-            _pluginService.LoadPlugins(_pluginDir);
-        }
-
-        /// <summary>Checks that all required plugin types are loaded.</summary>
-        /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
-        private void VerifyPlugins()
-        {
-            if (_pluginService.DiscReaderPlugins.Count == 0)
-                throw new RequiredPluginNotFoundException<IDiscReaderPlugin>("A Disc Reader plugin is required");
-            if (_pluginService.MuxerPlugins.Count == 0)
-                throw new RequiredPluginNotFoundException<IMuxerPlugin>("A Muxer plugin is required");
-        }
-
-        private void LogPlugins()
-        {
-            _logger.InfoFormat("Loaded {0} plugins:", _pluginService.Plugins.Count);
-            LogPlugins("Disc Readers", _pluginService.DiscReaderPlugins);
-            LogPlugins("Metadata Providers", _pluginService.MetadataProviderPlugins);
-            LogPlugins("Auto Detectors", _pluginService.AutoDetectorPlugins);
-            LogPlugins("Name Providers", _pluginService.NameProviderPlugins);
-            LogPlugins("Muxers", _pluginService.MuxerPlugins);
-            LogPlugins("Post Processors", _pluginService.PostProcessorPlugins);
-        }
-
-        private static void LogPlugins<T>(string name, IList<T> plugins) where T : IPlugin
-        {
-            _logger.InfoFormat("\t {0} ({1}){2}", name, plugins.Count, plugins.Any() ? ":" : "");
-            foreach (var plugin in plugins)
-            {
-                _logger.InfoFormat("\t\t {0} v{1} - {2} - {3}", plugin.Name, plugin.AssemblyInfo.Version, plugin.AssemblyInfo.Guid, plugin.AssemblyInfo.Location);
-            }
-        }
-
-        #endregion
 
         public void SetEventScheduler(TaskScheduler scheduler = null)
         {
@@ -265,7 +154,7 @@ namespace BDHero
 
             foreach (var playlist in Job.Disc.ValidMainFeaturePlaylists)
             {
-                _logger.Info(playlist);
+                Logger.Info(playlist);
             }
         }
 
@@ -383,7 +272,7 @@ namespace BDHero
         private void HandleUnhandledException(IPlugin plugin, Exception exception)
         {
             var message = string.Format("Unhandled exception was thrown by plugin \"{0}\"", plugin.Name);
-            _logger.Error(message, exception);
+            Logger.Error(message, exception);
             if (UnhandledException != null)
                 UnhandledException(this, new UnhandledExceptionEventArgs(exception, false));
         }

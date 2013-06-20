@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using BDHero;
 using BDHero.Plugin;
+using BDHero.Startup;
 using DotNetUtils;
 using Mono.Options;
 using ProcessUtils;
@@ -14,15 +15,30 @@ namespace BDHeroCLI
 {
     static class Program
     {
-        /// <summary>
-        /// IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
-        /// </summary>
-        private static readonly IController Controller = new Controller("bdhero-cli.log.config");
+        private const string LogConfigFileName = "bdhero-cli.log.config";
 
         /// <summary>
-        /// Depends on <see cref="Controller"/> being initialized first.
+        /// IMPORTANT: THIS MUST BE INSTANTIATED AND INITIALIZED FIRST TO ENABLE LOGGING!
         /// </summary>
-        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly Initializer Initializer;
+
+        /// <summary>
+        /// Depends on <see cref="Initializer"/> being initialized first.
+        /// </summary>
+        private static readonly log4net.ILog Logger;
+
+        /// <summary>
+        /// Depends on <see cref="Initializer"/> being initialized first.
+        /// </summary>
+        private static readonly IController Controller;
+
+        static Program()
+        {
+            // IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
+            Initializer = Initializer.GetInstance(LogConfigFileName);
+            Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            Controller = new Controller(Initializer.PluginService);
+        }
 
         private static string ExeFileName
         {
@@ -54,6 +70,8 @@ namespace BDHeroCLI
 
             var extraArgs = optionSet.Parse(args);
 
+            LogDirectoryPaths();
+
             if (extraArgs.Any())
             {
                 Logger.WarnFormat("Unknown argument{0}: {1}", extraArgs.Count == 1 ? "" : "s", new ArgumentList(extraArgs));
@@ -79,7 +97,6 @@ namespace BDHeroCLI
             Controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
 
             Controller.SetEventScheduler();
-            Controller.LoadPlugins();
 
             if (Scan(bdromPath, mkvPath))
             {
@@ -101,6 +118,15 @@ namespace BDHeroCLI
             Console.WriteLine("*** BDhero CLI Finished - press <ENTER> to exit ***");
             Console.WriteLine();
             Console.Read();
+        }
+
+        private static void LogDirectoryPaths()
+        {
+            Logger.InfoFormat("IsPortable = {0}", DirectoryLocator.Instance.IsPortable);
+            Logger.InfoFormat("InstallDir = {0}", DirectoryLocator.Instance.InstallDir);
+            Logger.InfoFormat("ConfigDir = {0}", DirectoryLocator.Instance.ConfigDir);
+            Logger.InfoFormat("PluginDir = {0}", DirectoryLocator.Instance.PluginDir);
+            Logger.InfoFormat("LogDir = {0}", DirectoryLocator.Instance.LogDir);
         }
 
         private static bool Scan(string bdromPath, string mkvPath)

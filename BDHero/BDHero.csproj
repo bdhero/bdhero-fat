@@ -65,6 +65,10 @@
     <Compile Include="JobQueue\CoverArt.cs" />
     <Compile Include="JobQueue\ReleaseMedium.cs" />
     <Compile Include="JobQueue\Job.cs" />
+    <Compile Include="Startup\DirectoryLocator.cs" />
+    <Compile Include="Startup\Initializer.cs" />
+    <Compile Include="Startup\LogInitializer.cs" />
+    <Compile Include="Startup\PluginLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\BDInfo\BDInfo.csproj">
