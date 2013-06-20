@@ -1,6 +1,6 @@
 ﻿namespace BDHeroGUI
 {
-    partial class Form1
+    partial class FormAsyncControllerTest
     {
         /// <summary>
         /// Required designer variable.

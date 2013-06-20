@@ -12,7 +12,7 @@ using BDHero.Plugin;
 
 namespace BDHeroGUI
 {
-    public partial class Form1 : Form
+    public partial class FormAsyncControllerTest : Form
     {
         /// <summary>
         /// IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
@@ -24,7 +24,7 @@ namespace BDHeroGUI
         /// </summary>
 //        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Form1()
+        public FormAsyncControllerTest()
         {
             InitializeComponent();
             Load += OnLoad;
