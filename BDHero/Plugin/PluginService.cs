@@ -92,7 +92,7 @@ namespace BDHero.Plugin
             {
                 try
                 {
-                    var pluginDir = Path.Combine(solutionDir, projectName, "bin", "Debug");
+                    var pluginDir = Path.Combine(solutionDir, "Plugins", projectName, "bin", "Debug");
                     AddPluginsRecursive(pluginDir);
                 }
                 catch (Exception ex)
