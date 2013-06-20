@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{315ED78B-F3FD-4C69-8786-CCD216A5495D}</ProjectGuid>
+    <ProjectGuid>{580ED668-6299-4147-BB62-8E6376DCBBD2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BDHero.Plugin.DiscReader</RootNamespace>
-    <AssemblyName>DiscReaderPlugin</AssemblyName>
+    <RootNamespace>BDHero.Plugin.FFmpegMuxer</RootNamespace>
+    <AssemblyName>FFmpegMuxerPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BDHero\Libraries\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -41,36 +45,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DiscReader.cs" />
-    <Compile Include="Transformer\ChapterTransformer.cs" />
-    <Compile Include="Transformer\DiscTransformer.cs" />
+    <Compile Include="FFmpeg.cs" />
+    <Compile Include="FFmpegPlugin.cs" />
+    <Compile Include="MkvPropEdit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Transformer\CodecTransformer.cs" />
-    <Compile Include="Transformer\PlaylistTransformer.cs" />
-    <Compile Include="Transformer\StreamClipTransformer.cs" />
-    <Compile Include="Transformer\TrackTransformer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BDHero\BDHero.csproj">
+    <ProjectReference Include="..\..\BDHero\BDHero.csproj">
       <Project>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</Project>
       <Name>BDHero</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BDInfo\BDInfo.csproj">
-      <Project>{DFF91717-C9EF-4881-9827-81D25F9A71A3}</Project>
-      <Name>BDInfo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
+    <ProjectReference Include="..\..\Libraries\DotNetUtils\DotNetUtils.csproj">
       <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
       <Name>DotNetUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\I18N\I18N.csproj">
+    <ProjectReference Include="..\..\Libraries\I18N\I18N.csproj">
       <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
       <Name>I18N</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProcessUtils\ProcessUtils.csproj">
+    <ProjectReference Include="..\..\Libraries\ProcessUtils\ProcessUtils.csproj">
       <Project>{896F47DD-A9FC-413C-B125-8E999F72E101}</Project>
       <Name>ProcessUtils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ffmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="mkvpropedit.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

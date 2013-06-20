@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{112762A2-52A3-4D52-A9F6-DA2D7220C758}</ProjectGuid>
+    <ProjectGuid>{08A3C27D-B83F-4F46-B42A-C05B49ACBFED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChapterGrabberPlugin</RootNamespace>
-    <AssemblyName>ChapterGrabberPlugin</AssemblyName>
+    <RootNamespace>BDHero.Plugin.ChapterWriter</RootNamespace>
+    <AssemblyName>ChapterWriterPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,13 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\BDHero\Libraries\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\BDAutoMuxer\lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,18 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChapterJson.cs" />
-    <Compile Include="ChapterGrabberPlugin.cs" />
+    <Compile Include="ChapterWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BDHero\BDHero.csproj">
+    <ProjectReference Include="..\..\BDHero\BDHero.csproj">
       <Project>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</Project>
       <Name>BDHero</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
-      <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
-      <Name>DotNetUtils</Name>
+    <ProjectReference Include="..\..\Libraries\I18N\I18N.csproj">
+      <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
+      <Name>I18N</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
