@@ -75,9 +75,11 @@ namespace BDHeroCLI
 
             Controller.ScanStarted += ControllerOnScanStarted;
             Controller.ScanSucceeded += ControllerOnScanSucceeded;
+
             Controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
-            Controller.LoadPlugins();
+
             Controller.SetEventScheduler();
+            Controller.LoadPlugins();
 
             if (Scan(bdromPath, mkvPath))
             {

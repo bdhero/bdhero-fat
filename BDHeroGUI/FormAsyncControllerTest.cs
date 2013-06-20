@@ -44,8 +44,8 @@ namespace BDHeroGUI
 
             _controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
             
-            _controller.LoadPlugins();
             _controller.SetEventScheduler();
+            _controller.LoadPlugins();
         }
 
         private void EnableControls(bool enabled)
