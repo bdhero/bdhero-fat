@@ -15,7 +15,7 @@ namespace BDHero
         /// <summary>
         /// Invoked immediately before the scanning stage starts.
         /// </summary>
-        event EventHandler ScanStart;
+        event EventHandler ScanStarted;
 
         /// <summary>
         /// Invoked when the scanning stage completes successfully.
@@ -36,7 +36,7 @@ namespace BDHero
         /// <summary>
         /// Invoked immediately before the conversion stage starts.
         /// </summary>
-        event EventHandler ConvertStart;
+        event EventHandler ConvertStarted;
 
         /// <summary>
         /// Invoked when the conversion stage completes successfully.

@@ -33,12 +33,12 @@ namespace BDHero
 
         #region Events
 
-        public event EventHandler ScanStart;
+        public event EventHandler ScanStarted;
         public event EventHandler ScanSucceeded;
         public event EventHandler ScanFailed;
         public event EventHandler ScanCompleted;
 
-        public event EventHandler ConvertStart;
+        public event EventHandler ConvertStarted;
         public event EventHandler ConvertSucceeded;
         public event EventHandler ConvertFailed;
         public event EventHandler ConvertCompleted;
@@ -157,15 +157,12 @@ namespace BDHero
 
         public Task<bool> Scan(string bdromPath, string mkvPath = null)
         {
-            if (ScanStart != null)
-                ScanStart(this, EventArgs.Empty);
-
             return CreateStageTask(() => ReadBDROM(bdromPath), delegate
                 {
                     GetMetadata();
                     AutoDetect();
                     Rename(mkvPath);
-                }, ScanSucceed, ScanFail);
+                }, ScanStart, ScanSucceed, ScanFail);
         }
 
         public Task<bool> Convert(string mkvPath = null)
@@ -173,10 +170,10 @@ namespace BDHero
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
 
-            return CreateStageTask(Mux, PostProcess, ConvertSucceed, ConvertFail);
+            return CreateStageTask(Mux, PostProcess, ConvertStart, ConvertSucceed, ConvertFail);
         }
 
-        private Task<bool> CreateStageTask(Func<bool> criticalPhase, Action optionalPhases, Func<bool> succeed, Func<bool> fail)
+        private Task<bool> CreateStageTask(Func<bool> criticalPhase, Action optionalPhases, Action start, Func<bool> succeed, Func<bool> fail)
         {
             // Get the calling thread's context
             _callingScheduler = SynchronizationContext.Current != null
@@ -186,6 +183,11 @@ namespace BDHero
             var stageTask = new Task<bool>(delegate
             {
                 var token = Task.Factory.CancellationToken;
+
+                // It's possible to start a task directly on
+                // the UI thread, but not common...
+                var startTask = Task.Factory.StartNew(start, token, TaskCreationOptions.None, _callingScheduler);
+                startTask.Wait();
 
                 if (!criticalPhase())
                 {
@@ -379,6 +381,12 @@ namespace BDHero
 
         #region Event calling methods
 
+        private void ScanStart()
+        {
+            if (ScanStarted != null)
+                ScanStarted(this, EventArgs.Empty);
+        }
+
         private bool ScanFail()
         {
             if (ScanFailed != null)
@@ -403,6 +411,12 @@ namespace BDHero
         {
             if (ScanCompleted != null)
                 ScanCompleted(this, EventArgs.Empty);
+        }
+
+        private void ConvertStart()
+        {
+            if (ConvertStarted != null)
+                ConvertStarted(this, EventArgs.Empty);
         }
 
         private bool ConvertFail()

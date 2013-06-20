@@ -32,12 +32,12 @@ namespace BDHeroGUI
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
-            _controller.ScanStart += ControllerOnScanStart;
+            _controller.ScanStarted += ControllerOnScanStarted;
             _controller.ScanSucceeded += ControllerOnScanSucceeded;
             _controller.ScanFailed += ControllerOnScanFailed;
             _controller.ScanCompleted += ControllerOnScanCompleted;
 
-            _controller.ConvertStart += ControllerOnConvertStart;
+            _controller.ConvertStarted += ControllerOnConvertStarted;
             _controller.ConvertSucceeded += ControllerOnConvertSucceeded;
             _controller.ConvertFailed += ControllerOnConvertFailed;
             _controller.ConvertCompleted += ControllerOnConvertCompleted;
@@ -56,14 +56,10 @@ namespace BDHeroGUI
 
         private void AppendStatus(string statusLine = null)
         {
-            if (textBoxStatus.Lines.Length > 1)
-                textBoxStatus.Text += Environment.NewLine;
-            textBoxStatus.Text += statusLine;
-            textBoxStatus.SelectionStart = textBoxStatus.Text.Length;
-            textBoxStatus.ScrollToCaret();
+            textBoxStatus.Text = (statusLine ?? string.Empty);
         }
 
-        private void ControllerOnScanStart(object sender, EventArgs eventArgs)
+        private void ControllerOnScanStarted(object sender, EventArgs eventArgs)
         {
             textBoxStatus.Text = "Scan started...";
             EnableControls(false);
@@ -85,9 +81,9 @@ namespace BDHeroGUI
             EnableControls(true);
         }
 
-        private void ControllerOnConvertStart(object sender, EventArgs eventArgs)
+        private void ControllerOnConvertStarted(object sender, EventArgs eventArgs)
         {
-            textBoxStatus.Text = "Convert started...";
+            AppendStatus("Convert started...");
             EnableControls(false);
         }
 

@@ -73,7 +73,7 @@ namespace BDHeroCLI
                 mkvPath = Console.ReadLine();
             }
 
-            Controller.ScanStart += ControllerOnScanStart;
+            Controller.ScanStarted += ControllerOnScanStarted;
             Controller.ScanSucceeded += ControllerOnScanSucceeded;
             Controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
             Controller.LoadPlugins();
@@ -117,7 +117,7 @@ namespace BDHeroCLI
             Console.Error.WriteLine("{0} v{1} - compiled {2}", AssemblyUtils.GetAssemblyName(), AssemblyUtils.GetAssemblyVersion(), AssemblyUtils.GetLinkerTimestamp());
         }
 
-        private static void ControllerOnScanStart(object sender, EventArgs eventArgs)
+        private static void ControllerOnScanStarted(object sender, EventArgs eventArgs)
         {
             Console.WriteLine();
         }
