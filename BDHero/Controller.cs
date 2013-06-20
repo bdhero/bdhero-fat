@@ -1,187 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using BDHero.Plugin;
 using BDHero.JobQueue;
-using DotNetUtils;
 
 namespace BDHero
 {
-    public class Controller
+    public class Controller : IController
     {
-        private static log4net.ILog _logger;
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private const string AppDataRootDirName = "BDHero";
-        private const string ConfigDirName = "Config";
-        private const string PluginDirName = "Plugins";
-        private const string LogDirName = "Logs";
-
-        private bool _isPortable;
-        private string _installDir;
-        private string _configDir;
-        private string _pluginDir;
-        private string _logDir;
-
-        private readonly PluginService _pluginService = new PluginService();
-
-        public event EventHandler JobBeforeStart;
-        public event EventHandler JobSucceeded;
-        public event EventHandler JobFailed;
+        private readonly PluginService _pluginService;
 
         /// <summary>
-        /// Invoked whenever a plugin's state or progress changes.
+        /// Needed for <see cref="ProgressProviderOnUpdated"/> to invoke progress update callbacks on the correct thread.
         /// </summary>
+<<<<<<< HEAD
         public event PluginProgressHandler PluginProgressUpdated;
 
         public event UnhandledExceptionEventHandler UnhandledException;
+=======
+        private TaskScheduler _callbackScheduler;
+>>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46
 
         public Job Job { get; private set; }
 
-        #region Constructors and initialization
+        #region Events
 
-        /// <summary>
-        /// IMPORTANT: CONSTRUCTOR MUST BE THE FIRST THING CALLED WHEN THE PROGRAM STARTS UP TO INITIALIZE LOGGING!!!
-        /// </summary>
-        public Controller(string logConfigFileName)
-        {
-            LocateDirectories();
-            InitLogging(logConfigFileName);
-        }
+        public event EventHandler ScanStarted;
+        public event EventHandler ScanSucceeded;
+        public event EventHandler ScanFailed;
+        public event EventHandler ScanCompleted;
 
-        private void LocateDirectories()
-        {
-            _installDir = AssemblyUtils.GetInstallDir(Assembly.GetEntryAssembly());
-            _isPortable = Directory.Exists(Path.Combine(_installDir, ConfigDirName));
+        public event EventHandler ConvertStarted;
+        public event EventHandler ConvertSucceeded;
+        public event EventHandler ConvertFailed;
+        public event EventHandler ConvertCompleted;
 
-            if (_isPortable)
-            {
-                _configDir = Path.Combine(_installDir, ConfigDirName);
-                _pluginDir = Path.Combine(_installDir, PluginDirName);
-                _logDir = Path.Combine(_installDir, LogDirName);
-            }
-            else
-            {
-                var roamingAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppDataRootDirName);
-                var localAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppDataRootDirName);
-                _configDir = Path.Combine(roamingAppData, ConfigDirName);
-                _pluginDir = Path.Combine(roamingAppData, PluginDirName);
-                _logDir = Path.Combine(localAppData, LogDirName);
-            }
-
-            if (!Directory.Exists(_logDir))
-            {
-                Directory.CreateDirectory(_logDir);
-            }
-        }
-
-        private void InitLogging(string logConfigFileName)
-        {
-            var logConfigPath = Path.Combine(_configDir, logConfigFileName);
-            log4net.GlobalContext.Properties["logdir"] = _logDir;
-            log4net.GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;
-            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(logConfigPath));
-            _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _logger.Info("Starting up");
-            _logger.DebugFormat("Portable = {0}", _isPortable);
-            _logger.DebugFormat("Config Dir = {0}", _configDir);
-            _logger.DebugFormat("Plugin Dir = {0}", _pluginDir);
-            _logger.DebugFormat("Log Dir = {0}", _logDir);
-        }
+        public event PluginProgressHandler PluginProgressUpdated;
+        public event UnhandledExceptionEventHandler UnhandledException;
 
         #endregion
 
-        #region Plugin loading and logging
-
-        /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
-        public void LoadPlugins()
+        public Controller(PluginService pluginService)
         {
-            LoadPluginsFromService();
-            LogPlugins();
-            VerifyPlugins();
+            _pluginService = pluginService;
         }
 
-        private void LoadPluginsFromService()
+        public void SetEventScheduler(TaskScheduler scheduler = null)
         {
-            _pluginService.LoadPlugins(_pluginDir);
+            // Get the calling thread's context
+            _callbackScheduler = scheduler ??
+                                (SynchronizationContext.Current != null
+                                     ? TaskScheduler.FromCurrentSynchronizationContext()
+                                     : TaskScheduler.Default);
         }
-
-        /// <summary>Checks that all required plugin types are loaded.</summary>
-        /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
-        private void VerifyPlugins()
-        {
-            if (_pluginService.DiscReaderPlugins.Count == 0)
-                throw new RequiredPluginNotFoundException<IDiscReaderPlugin>("A Disc Reader plugin is required");
-            if (_pluginService.MuxerPlugins.Count == 0)
-                throw new RequiredPluginNotFoundException<IMuxerPlugin>("A Muxer plugin is required");
-        }
-
-        private void LogPlugins()
-        {
-            _logger.InfoFormat("Loaded {0} plugins:", _pluginService.Plugins.Count);
-            LogPlugins("Disc Readers", _pluginService.DiscReaderPlugins);
-            LogPlugins("Metadata Providers", _pluginService.MetadataProviderPlugins);
-            LogPlugins("Auto Detectors", _pluginService.AutoDetectorPlugins);
-            LogPlugins("Name Providers", _pluginService.NameProviderPlugins);
-            LogPlugins("Muxers", _pluginService.MuxerPlugins);
-            LogPlugins("Post Processors", _pluginService.PostProcessorPlugins);
-        }
-
-        private static void LogPlugins<T>(string name, IList<T> plugins) where T : IPlugin
-        {
-            _logger.InfoFormat("\t {0} ({1}):", name, plugins.Count);
-            foreach (var plugin in plugins)
-            {
-                _logger.InfoFormat("\t\t {0} v{1} - {2} - {3}", plugin.Name, plugin.AssemblyInfo.Version, plugin.AssemblyInfo.Guid, plugin.AssemblyInfo.Location);
-            }
-        }
-
-        #endregion
 
         #region Stages
 
-        /// <summary>
-        /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.
-        /// </summary>
-        /// <param name="bdromPath">Path to the BD-ROM directory</param>
-        /// <returns><code>true</code> if the scan succeeded; otherwise <code>false</code></returns>
-        public bool Scan(string bdromPath)
+        public Task<bool> CreateScanTask(string bdromPath, string mkvPath = null)
         {
-            if (JobBeforeStart != null)
-                JobBeforeStart(this, EventArgs.Empty);
-
-            if (!ReadBDROM(bdromPath))
-                return Fail();
-
-            GetMetadata();
-            AutoDetect();
-            Rename();
-
-            return true;
+            return CreateStageTask(() => ReadBDROM(bdromPath), delegate
+                {
+                    GetMetadata();
+                    AutoDetect();
+                    Rename(mkvPath);
+                }, ScanStart, ScanSucceed, ScanFail);
         }
 
-        /// <summary>
-        /// Muxes the BD-ROM to MKV and runs any post-processing plugins.
-        /// </summary>
-        /// <param name="mkvPath">Optional path to the output MKV file (if overridden by the user)</param>
-        /// <returns><code>true</code> if all muxing plugins succeeded; otherwise <code>false</code></returns>
-        public bool Convert(string mkvPath = null)
+        public Task<bool> CreateConvertTask(string mkvPath = null)
         {
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
 
-            if (!Mux())
-                return Fail();
+            return CreateStageTask(Mux, PostProcess, ConvertStart, ConvertSucceed, ConvertFail);
+        }
 
-            PostProcess();
+        private Task<bool> CreateStageTask(Func<bool> criticalPhase, Action optionalPhases, Action start, Func<bool> succeed, Func<bool> fail)
+        {
+            var stageTask = new Task<bool>(delegate
+            {
+                var token = Task.Factory.CancellationToken;
 
-            if (JobSucceeded != null)
-                JobSucceeded(this, EventArgs.Empty);
+                if (_callbackScheduler == null)
+                {
+                    throw new InvalidOperationException("No callback TaskScheduler has been set; set one with IController.SetEventScheduler().");
+                }
 
-            return true;
+                // It's possible to start a task directly on
+                // the UI thread, but not common...
+                var startTask = Task.Factory.StartNew(start, token, TaskCreationOptions.None, _callbackScheduler);
+                startTask.Wait();
+
+                if (!criticalPhase())
+                {
+                    // It's possible to start a task directly on
+                    // the UI thread, but not common...
+                    var failTask = Task.Factory.StartNew(fail, token, TaskCreationOptions.None, _callbackScheduler);
+
+                    // Blocks until the task finishes executing
+                    return failTask.Result;
+                }
+
+                optionalPhases();
+
+                // It's possible to start a task directly on
+                // the UI thread, but not common...
+                var succeedTask = Task.Factory.StartNew(succeed, token, TaskCreationOptions.None, _callbackScheduler);
+
+                // Blocks until the task finishes executing
+                return succeedTask.Result;
+            });
+
+            return stageTask;
         }
 
         #endregion
@@ -226,7 +160,7 @@ namespace BDHero
 
             foreach (var playlist in Job.Disc.ValidMainFeaturePlaylists)
             {
-                _logger.Info(playlist);
+                Logger.Info(playlist);
             }
         }
 
@@ -239,8 +173,9 @@ namespace BDHero
 
         #region 4 - Name Providers
 
-        private void Rename()
+        private void Rename(string mkvPath = null)
         {
+            Job.OutputPath = mkvPath;
             foreach (var plugin in _pluginService.NameProviderPlugins)
             {
                 Rename(plugin);
@@ -328,8 +263,12 @@ namespace BDHero
 
         private void ProgressProviderOnUpdated(ProgressProvider progressProvider)
         {
-            if (PluginProgressUpdated != null)
-                PluginProgressUpdated(progressProvider.Plugin, progressProvider);
+            var token = Task.Factory.CancellationToken;
+            Task.Factory.StartNew(delegate
+                {
+                    if (PluginProgressUpdated != null)
+                        PluginProgressUpdated(progressProvider.Plugin, progressProvider);
+                }, token, TaskCreationOptions.None, _callbackScheduler);
         }
 
         #endregion
@@ -338,36 +277,81 @@ namespace BDHero
 
         private void HandleUnhandledException(IPlugin plugin, Exception exception)
         {
+            var message = string.Format("Unhandled exception was thrown by plugin \"{0}\"", plugin.Name);
+            Logger.Error(message, exception);
             if (UnhandledException != null)
                 UnhandledException(this, new UnhandledExceptionEventArgs(exception, false));
         }
 
-        private bool Fail()
+        #endregion
+
+        #region Event calling methods
+
+        private void ScanStart()
         {
-            if (JobFailed != null)
-                JobFailed(this, EventArgs.Empty);
+            if (ScanStarted != null)
+                ScanStarted(this, EventArgs.Empty);
+        }
+
+        private bool ScanFail()
+        {
+            if (ScanFailed != null)
+                ScanFailed(this, EventArgs.Empty);
+
+            ScanComplete();
+
             return false;
         }
 
+        private bool ScanSucceed()
+        {
+            if (ScanSucceeded != null)
+                ScanSucceeded(this, EventArgs.Empty);
+
+            ScanComplete();
+
+            return true;
+        }
+
+        private void ScanComplete()
+        {
+            if (ScanCompleted != null)
+                ScanCompleted(this, EventArgs.Empty);
+        }
+
+        private void ConvertStart()
+        {
+            if (ConvertStarted != null)
+                ConvertStarted(this, EventArgs.Empty);
+        }
+
+        private bool ConvertFail()
+        {
+            if (ConvertFailed != null)
+                ConvertFailed(this, EventArgs.Empty);
+
+            ConvertComplete();
+
+            return false;
+        }
+
+        private bool ConvertSucceed()
+        {
+            if (ConvertSucceeded != null)
+                ConvertSucceeded(this, EventArgs.Empty);
+
+            ConvertComplete();
+
+            return true;
+        }
+
+        private void ConvertComplete()
+        {
+            if (ConvertCompleted != null)
+                ConvertCompleted(this, EventArgs.Empty);
+        }
+
         #endregion
-    }
-
-    /// <summary>
-    /// Thrown when no instances of a required plugin could be found.
-    /// </summary>
-    public class RequiredPluginNotFoundException<T> : Exception where T : IPlugin
-    {
-        public RequiredPluginNotFoundException() : base("Required plugin " + typeof(T).Name + " not found")
-        {
-        }
-
-        public RequiredPluginNotFoundException(string message) : base(message)
-        {
-        }
-
-        public RequiredPluginNotFoundException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
     }
 
     internal delegate void ExecutePluginHandler();

@@ -54,30 +54,36 @@
     <Compile Include="BDROM\StreamClip.cs" />
     <Compile Include="BDROM\Track.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Exceptions\RequiredPluginNotFoundException.cs" />
+    <Compile Include="IController.cs" />
     <Compile Include="Plugin\ProgressProvider.cs" />
     <Compile Include="Plugin\IPlugin.cs" />
     <Compile Include="Plugin\IPluginHost.cs" />
     <Compile Include="Plugin\PluginProgressHandler.cs" />
     <Compile Include="Plugin\PluginService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="JobQueue\CoverArtImage.cs" />
+    <Compile Include="JobQueue\CoverArt.cs" />
     <Compile Include="JobQueue\ReleaseMedium.cs" />
     <Compile Include="JobQueue\Job.cs" />
+    <Compile Include="Startup\DirectoryLocator.cs" />
+    <Compile Include="Startup\Initializer.cs" />
+    <Compile Include="Startup\LogInitializer.cs" />
+    <Compile Include="Startup\PluginLoader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BDInfo\BDInfo.csproj">
+    <ProjectReference Include="..\Libraries\BDInfo\BDInfo.csproj">
       <Project>{DFF91717-C9EF-4881-9827-81D25F9A71A3}</Project>
       <Name>BDInfo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
+    <ProjectReference Include="..\Libraries\DotNetUtils\DotNetUtils.csproj">
       <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
       <Name>DotNetUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\I18N\I18N.csproj">
+    <ProjectReference Include="..\Libraries\I18N\I18N.csproj">
       <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
       <Name>I18N</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProcessUtils\ProcessUtils.csproj">
+    <ProjectReference Include="..\Libraries\ProcessUtils\ProcessUtils.csproj">
       <Project>{896F47DD-A9FC-413C-B125-8E999F72E101}</Project>
       <Name>ProcessUtils</Name>
     </ProjectReference>

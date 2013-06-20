@@ -6,40 +6,75 @@ using System.Linq;
 using System.Text;
 using BDHero;
 using BDHero.Plugin;
+using BDHero.Startup;
+using DotNetUtils;
+using Mono.Options;
+using ProcessUtils;
 
 namespace BDHeroCLI
 {
     static class Program
     {
-        /// <summary>
-        /// IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
-        /// </summary>
-        private static readonly Controller Controller = new Controller("bdhero-cli.log.config");
+        private const string LogConfigFileName = "bdhero-cli.log.config";
 
         /// <summary>
-        /// Depends on <see cref="Controller"/> being initialized first.
+        /// IMPORTANT: THIS MUST BE INSTANTIATED AND INITIALIZED FIRST TO ENABLE LOGGING!
         /// </summary>
-        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly Initializer Initializer;
+
+        /// <summary>
+        /// Depends on <see cref="Initializer"/> being initialized first.
+        /// </summary>
+        private static readonly log4net.ILog Logger;
+
+        /// <summary>
+        /// Depends on <see cref="Initializer"/> being initialized first.
+        /// </summary>
+        private static readonly IController Controller;
+
+        static Program()
+        {
+            // IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
+            Initializer = Initializer.GetInstance(LogConfigFileName);
+            Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            Controller = new Controller(Initializer.PluginService);
+        }
+
+        private static string ExeFileName
+        {
+            get { return Path.GetFileName(AssemblyUtils.AssemblyOrDefault().Location); }
+        }
 
         static void Main(string[] args)
         {
-            Controller.JobBeforeStart += ControllerOnJobBeforeStart;
-            Controller.JobSucceeded += ControllerOnJobSucceeded;
-            Controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
-            Controller.LoadPlugins();
+            ShowVersion();
 
+            bool? replace;
             string bdromPath = "",
                    mkvPath = "";
 
-            if (args.Length == 2)
+            var optionSet = new OptionSet
+                {
+                    { "h|?|help", v => ShowHelp() },
+                    { "-V|version", s => Environment.Exit(0) },
+                    { "debug", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Debug },
+                    { "v|verbose", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Info },
+                    { "w|warn", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Warn },
+                    { "q|quiet", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Error },
+                    { "s|silent", s => Logger.Logger.Repository.Threshold = log4net.Core.Level.Fatal },
+                    { "i=|input=", s => bdromPath = s },
+                    { "o=|output=", s => mkvPath = s },
+                    { "y|yes", s => replace = true },
+                    { "n|no", s => replace = false }
+                };
+
+            var extraArgs = optionSet.Parse(args);
+
+            LogDirectoryPaths();
+
+            if (extraArgs.Any())
             {
-                bdromPath = args[0];
-                mkvPath = args[1];
-            }
-            else if (args.Length != 0)
-            {
-                Console.Error.WriteLine("Usage: {0} BDROM_PATH OUTPUT_MKV_PATH");
-                Environment.Exit(1);
+                Logger.WarnFormat("Unknown argument{0}: {1}", extraArgs.Count == 1 ? "" : "s", new ArgumentList(extraArgs));
             }
 
             // Prompt user for path to BD-ROM directory
@@ -56,23 +91,27 @@ namespace BDHeroCLI
                 mkvPath = Console.ReadLine();
             }
 
-            if (Controller.Scan(bdromPath))
+            Controller.ScanStarted += ControllerOnScanStarted;
+            Controller.ScanSucceeded += ControllerOnScanSucceeded;
+
+            Controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
+
+            Controller.SetEventScheduler();
+
+            if (Scan(bdromPath, mkvPath))
             {
-                if (Controller.Convert(mkvPath))
+                if (Convert())
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("MUXING SUCCEEDED!");
+                    Logger.Info("Muxing succeeded!");
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("MUXING FAILED!");
+                    Logger.Error("Muxing failed!");
                 }
             }
             else
             {
-                Console.WriteLine();
-                Console.WriteLine("SCANNING FAILED!");
+                Logger.Error("Scanning failed!");
             }
 
             Console.WriteLine();
@@ -81,12 +120,48 @@ namespace BDHeroCLI
             Console.Read();
         }
 
-        private static void ControllerOnJobBeforeStart(object sender, EventArgs eventArgs)
+        private static void LogDirectoryPaths()
+        {
+            Logger.InfoFormat("IsPortable = {0}", DirectoryLocator.Instance.IsPortable);
+            Logger.InfoFormat("InstallDir = {0}", DirectoryLocator.Instance.InstallDir);
+            Logger.InfoFormat("ConfigDir = {0}", DirectoryLocator.Instance.ConfigDir);
+            Logger.InfoFormat("PluginDir = {0}", DirectoryLocator.Instance.PluginDir);
+            Logger.InfoFormat("LogDir = {0}", DirectoryLocator.Instance.LogDir);
+        }
+
+        private static bool Scan(string bdromPath, string mkvPath)
+        {
+            var scanTask = Controller.CreateScanTask(bdromPath, mkvPath);
+            scanTask.Start();
+            return scanTask.Result;
+        }
+
+        private static bool Convert()
+        {
+            var convertTask = Controller.CreateConvertTask();
+            convertTask.Start();
+            return convertTask.Result;
+        }
+
+        private static void ShowHelp(int exitCode = 0)
+        {
+            var exeName = ExeFileName;
+            var usage = new Usage(exeName).TransformText();
+            Console.Error.WriteLine(usage);
+            Environment.Exit(exitCode);
+        }
+
+        private static void ShowVersion()
+        {
+            Console.Error.WriteLine("{0} v{1} - compiled {2}", AssemblyUtils.GetAssemblyName(), AssemblyUtils.GetAssemblyVersion(), AssemblyUtils.GetLinkerTimestamp());
+        }
+
+        private static void ControllerOnScanStarted(object sender, EventArgs eventArgs)
         {
             Console.WriteLine();
         }
 
-        private static void ControllerOnJobSucceeded(object sender, EventArgs eventArgs)
+        private static void ControllerOnScanSucceeded(object sender, EventArgs eventArgs)
         {
             Console.WriteLine();
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~");
