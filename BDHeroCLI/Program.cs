@@ -73,14 +73,18 @@ namespace BDHeroCLI
                 mkvPath = Console.ReadLine();
             }
 
-            Controller.JobBeforeStart += ControllerOnJobBeforeStart;
-            Controller.JobSucceeded += ControllerOnJobSucceeded;
+            Controller.ScanStart += ControllerOnScanStart;
+            Controller.ScanSucceeded += ControllerOnScanSucceeded;
             Controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
             Controller.LoadPlugins();
 
-            if (Controller.Scan(bdromPath, mkvPath))
+            var scanTask = Controller.Scan(bdromPath, mkvPath);
+            scanTask.Start();
+            if (scanTask.Result)
             {
-                if (Controller.Convert())
+                var convertTask = Controller.Convert();
+                convertTask.Start();
+                if (convertTask.Result)
                 {
                     Logger.Info("Muxing succeeded!");
                 }
@@ -113,12 +117,12 @@ namespace BDHeroCLI
             Console.Error.WriteLine("{0} v{1} - compiled {2}", AssemblyUtils.GetAssemblyName(), AssemblyUtils.GetAssemblyVersion(), AssemblyUtils.GetLinkerTimestamp());
         }
 
-        private static void ControllerOnJobBeforeStart(object sender, EventArgs eventArgs)
+        private static void ControllerOnScanStart(object sender, EventArgs eventArgs)
         {
             Console.WriteLine();
         }
 
-        private static void ControllerOnJobSucceeded(object sender, EventArgs eventArgs)
+        private static void ControllerOnScanSucceeded(object sender, EventArgs eventArgs)
         {
             Console.WriteLine();
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~");

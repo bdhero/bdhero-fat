@@ -5,13 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using BDHero.Exceptions;
 using BDHero.Plugin;
 using BDHero.JobQueue;
 using DotNetUtils;
 
 namespace BDHero
 {
-    public class Controller
+    public class Controller : IController
     {
         private static log4net.ILog _logger;
 
@@ -28,16 +31,25 @@ namespace BDHero
 
         private readonly PluginService _pluginService = new PluginService();
 
-        public event EventHandler JobBeforeStart;
-        public event EventHandler JobSucceeded;
-        public event EventHandler JobFailed;
+        #region Events
 
-        /// <summary>
-        /// Invoked whenever a plugin's state or progress changes.
-        /// </summary>
+        public event EventHandler ScanStart;
+        public event EventHandler ScanSucceeded;
+        public event EventHandler ScanFailed;
+        public event EventHandler ScanCompleted;
+
+        public event EventHandler ConvertStart;
+        public event EventHandler ConvertSucceeded;
+        public event EventHandler ConvertFailed;
+        public event EventHandler ConvertCompleted;
+
         public event PluginProgressHandler PluginProgressUpdated;
-
         public event UnhandledExceptionEventHandler UnhandledException;
+
+        private ProgressProviderUpdatedHandler _progressProviderUpdated;
+        private TaskScheduler _callingScheduler;
+
+        #endregion
 
         public Job Job { get; private set; }
 
@@ -97,7 +109,6 @@ namespace BDHero
 
         #region Plugin loading and logging
 
-        /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
         public void LoadPlugins()
         {
             LoadPluginsFromService();
@@ -144,46 +155,59 @@ namespace BDHero
 
         #region Stages
 
-        /// <summary>
-        /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.
-        /// </summary>
-        /// <param name="bdromPath">Path to the BD-ROM directory</param>
-        /// <param name="mkvPath">Optional path to the output directory or MKV file</param>
-        /// <returns><code>true</code> if the scan succeeded; otherwise <code>false</code></returns>
-        public bool Scan(string bdromPath, string mkvPath = null)
+        public Task<bool> Scan(string bdromPath, string mkvPath = null)
         {
-            if (JobBeforeStart != null)
-                JobBeforeStart(this, EventArgs.Empty);
+            if (ScanStart != null)
+                ScanStart(this, EventArgs.Empty);
 
-            if (!ReadBDROM(bdromPath))
-                return Fail();
-
-            GetMetadata();
-            AutoDetect();
-            Rename(mkvPath);
-
-            return true;
+            return CreateStageTask(() => ReadBDROM(bdromPath), delegate
+                {
+                    GetMetadata();
+                    AutoDetect();
+                    Rename(mkvPath);
+                }, ScanSucceed, ScanFail);
         }
 
-        /// <summary>
-        /// Muxes the BD-ROM to MKV and runs any post-processing plugins.
-        /// </summary>
-        /// <param name="mkvPath">Optional path to the output MKV file (if overridden by the user)</param>
-        /// <returns><code>true</code> if all muxing plugins succeeded; otherwise <code>false</code></returns>
-        public bool Convert(string mkvPath = null)
+        public Task<bool> Convert(string mkvPath = null)
         {
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
 
-            if (!Mux())
-                return Fail();
+            return CreateStageTask(Mux, PostProcess, ConvertSucceed, ConvertFail);
+        }
 
-            PostProcess();
+        private Task<bool> CreateStageTask(Func<bool> criticalPhase, Action optionalPhases, Func<bool> succeed, Func<bool> fail)
+        {
+            // Get the calling thread's context
+            _callingScheduler = SynchronizationContext.Current != null
+                                    ? TaskScheduler.FromCurrentSynchronizationContext()
+                                    : TaskScheduler.Default;
 
-            if (JobSucceeded != null)
-                JobSucceeded(this, EventArgs.Empty);
+            var stageTask = new Task<bool>(delegate
+            {
+                var token = Task.Factory.CancellationToken;
 
-            return true;
+                if (!criticalPhase())
+                {
+                    // It's possible to start a task directly on
+                    // the UI thread, but not common...
+                    var failTask = Task.Factory.StartNew(fail, token, TaskCreationOptions.None, _callingScheduler);
+
+                    // Blocks until the task finishes executing
+                    return failTask.Result;
+                }
+
+                optionalPhases();
+
+                // It's possible to start a task directly on
+                // the UI thread, but not common...
+                var succeedTask = Task.Factory.StartNew(succeed, token, TaskCreationOptions.None, _callingScheduler);
+
+                // Blocks until the task finishes executing
+                return succeedTask.Result;
+            });
+
+            return stageTask;
         }
 
         #endregion
@@ -331,8 +355,12 @@ namespace BDHero
 
         private void ProgressProviderOnUpdated(ProgressProvider progressProvider)
         {
-            if (PluginProgressUpdated != null)
-                PluginProgressUpdated(progressProvider.Plugin, progressProvider);
+            var token = Task.Factory.CancellationToken;
+            Task.Factory.StartNew(delegate
+                {
+                    if (PluginProgressUpdated != null)
+                        PluginProgressUpdated(progressProvider.Plugin, progressProvider);
+                }, token, TaskCreationOptions.None, _callingScheduler);
         }
 
         #endregion
@@ -347,33 +375,66 @@ namespace BDHero
                 UnhandledException(this, new UnhandledExceptionEventArgs(exception, false));
         }
 
-        private bool Fail()
+        #endregion
+
+        #region Event calling methods
+
+        private bool ScanFail()
         {
-            if (JobFailed != null)
-                JobFailed(this, EventArgs.Empty);
+            if (ScanFailed != null)
+                ScanFailed(this, EventArgs.Empty);
+
+            ScanComplete();
+
             return false;
+        }
+
+        private bool ScanSucceed()
+        {
+            if (ScanSucceeded != null)
+                ScanSucceeded(this, EventArgs.Empty);
+
+            ScanComplete();
+
+            return true;
+        }
+
+        private void ScanComplete()
+        {
+            if (ScanCompleted != null)
+                ScanCompleted(this, EventArgs.Empty);
+        }
+
+        private bool ConvertFail()
+        {
+            if (ConvertFailed != null)
+                ConvertFailed(this, EventArgs.Empty);
+
+            ConvertComplete();
+
+            return false;
+        }
+
+        private bool ConvertSucceed()
+        {
+            if (ConvertSucceeded != null)
+                ConvertSucceeded(this, EventArgs.Empty);
+
+            ConvertComplete();
+
+            return true;
+        }
+
+        private void ConvertComplete()
+        {
+            if (ConvertCompleted != null)
+                ConvertCompleted(this, EventArgs.Empty);
         }
 
         #endregion
     }
 
-    /// <summary>
-    /// Thrown when no instances of a required plugin could be found.
-    /// </summary>
-    public class RequiredPluginNotFoundException<T> : Exception where T : IPlugin
-    {
-        public RequiredPluginNotFoundException() : base("Required plugin " + typeof(T).Name + " not found")
-        {
-        }
-
-        public RequiredPluginNotFoundException(string message) : base(message)
-        {
-        }
-
-        public RequiredPluginNotFoundException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-    }
-
     internal delegate void ExecutePluginHandler();
+
+    internal delegate void ProgressProviderUpdatedHandler(ProgressProvider progressProvider);
 }
