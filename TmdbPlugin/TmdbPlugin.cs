@@ -137,7 +137,18 @@ namespace TmdbPlugin
         {
             job.Movies.Clear();
 
+<<<<<<< HEAD
             if (job.Disc.SanitizedTitle != null)
+=======
+            else
+            {                
+                var error = new Exception("Error: No APIKey was Found");
+                var Message = "Error: No APIKey was Found for the Tmdb plugin";
+                Logger.Error(Message);
+            }            
+
+            try
+>>>>>>> bd3d15a6d0ab89eb70db6edf2e084bd5b0ed0628
             {
                 var requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, _iso6391);
 
@@ -278,6 +289,7 @@ namespace TmdbPlugin
             try
             {
                 var pluginSettings = JsonConvert.DeserializeObject<TmdbApiErrors>(tmdbResponse);
+<<<<<<< HEAD
                 Logger.ErrorFormat("Error: api.themoviedb.org returned the following Status Code {0} : {1}",
                                    pluginSettings.StatusCode,
                                    pluginSettings.StatusMessage);
@@ -286,6 +298,15 @@ namespace TmdbPlugin
             catch
             {
                 throw ex;
+=======
+                var message = "Error: api.themoviedb.org returned the following Status Code " +
+                              pluginSettings.status_code + " : " + pluginSettings.status_message;
+                throw new Exception(message, ex);
+            }
+            catch
+            {
+                throw new Exception("Unable to connect to api.themoviedb.org", ex);
+>>>>>>> bd3d15a6d0ab89eb70db6edf2e084bd5b0ed0628
             }
         }
 

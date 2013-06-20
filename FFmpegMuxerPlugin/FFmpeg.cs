@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using BDHero.BDROM;
 using BDHero.JobQueue;
-using DotNetUtils;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
@@ -31,10 +30,10 @@ namespace BDHero.Plugin.FFmpegMuxer
         private readonly string _outputMKVPath;
         private readonly string _progressFilePath;
 
-        private long _curFrame;
-        private double _curFps;
-        private long _curSize;
-        private long _curOutTimeMs;
+        public long CurFrame { get; private set; }
+        public double CurFps { get; private set; }
+        public long CurSize { get; private set; }
+        public long CurOutTimeMs { get; private set; }
 
         private readonly BackgroundWorker _progressWorker = new BackgroundWorker();
 
@@ -172,9 +171,6 @@ namespace BDHero.Plugin.FFmpegMuxer
                         ParseProgressLine(reader.ReadLine());
                     }
                 }
-#if FALSE
-                Console.WriteLine("{0}% (FINISHED!)", _progress.ToString("0.00"));
-#endif
             }
         }
 
@@ -196,18 +192,19 @@ namespace BDHero.Plugin.FFmpegMuxer
                 Thread.Sleep(500);
                 return;
             }
+
             if (FrameRegex.IsMatch(line))
-                _curFrame = long.Parse(FrameRegex.Match(line).Groups[1].Value);
+                CurFrame = long.Parse(FrameRegex.Match(line).Groups[1].Value);
             else if (FpsRegex.IsMatch(line))
-                _curFps = double.Parse(FpsRegex.Match(line).Groups[1].Value);
+                CurFps = double.Parse(FpsRegex.Match(line).Groups[1].Value);
             else if (TotalSizeRegex.IsMatch(line))
-                _curSize = long.Parse(TotalSizeRegex.Match(line).Groups[1].Value);
+                CurSize = long.Parse(TotalSizeRegex.Match(line).Groups[1].Value);
             else if (OutTimeMsRegex.IsMatch(line))
-                _curOutTimeMs = long.Parse(OutTimeMsRegex.Match(line).Groups[1].Value) / 1000;
+                CurOutTimeMs = long.Parse(OutTimeMsRegex.Match(line).Groups[1].Value) / 1000;
 
             var prevProgress = _progress;
 
-            _progress = 100 * (_curOutTimeMs / _playlistLength.TotalMilliseconds);
+            _progress = 100 * (CurOutTimeMs / _playlistLength.TotalMilliseconds);
             _progress = Math.Min(_progress, 100);
 
             if ("progress=end" == line)
@@ -224,46 +221,10 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private void SetExePath()
         {
-//            ExePath = AssemblyUtils.GetTempFilePath(GetType(), FFmpegExeFilename);
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
-            var assemblyDir = Path.GetDirectoryName(assemblyPath);
-            ExePath = Path.Combine(assemblyDir, FFmpegExeFilename);
+            var ffmpegAssemblyDir = Path.GetDirectoryName(assemblyPath);
+            ExePath = Path.Combine(ffmpegAssemblyDir, FFmpegExeFilename);
         }
-
-#if false
-        public static void Test(string bdromDir, string playlistFilename, string outputMKVPath)
-        {
-            // Step 1: Scan BD-ROM
-            var bdrom = new BDInfo.BDROM(bdromDir);
-            bdrom.ScanProgress += BDROMOnScanProgress;
-            bdrom.Scan();
-            var disc = Disc.Transform(bdrom);
-
-            // Step 2: Search BDAM DB
-            // ...
-
-            // Step 3: Search TMDb
-            // ...
-
-            // Step 4: User selection
-            var playlist = disc.Playlists.FirstOrDefault(mpls => mpls.Filename.Equals(playlistFilename, StringComparison.InvariantCultureIgnoreCase));
-            var selectedTracks = playlist.Tracks.Where(track => track.Language == Language.FromCode("eng") && track.Codec.IsKnown).ToList();
-            foreach (var track in selectedTracks)
-                track.Keep = true;
-
-            // Step 5: Mux selected tracks to MKV
-            var ffmpeg = new FFmpeg(disc, playlist, outputMKVPath);
-            ffmpeg.StartAsync();
-//            OnExited(playlist, selectedTracks, outputMKVPath);
-        }
-
-        private static void BDROMOnScanProgress(BDROMScanProgressState state)
-        {
-            Console.WriteLine("BDROM: {0}: scanning {1} of {2} ({3}%).  Total: {4} of {5} ({6}%).",
-                state.FileType, state.CurFileOfType, state.NumFilesOfType, state.TypeProgress.ToString("0.00"),
-                state.CurFileOverall, state.NumFilesOverall, state.OverallProgress.ToString("0.00"));
-        }
-#endif
 
         private static void OnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
@@ -272,12 +233,14 @@ namespace BDHero.Plugin.FFmpegMuxer
             Console.WriteLine("Finished muxing with FFmpeg!");
             Console.WriteLine("Adding metadata with mkvpropedit...");
             var coverArt = Image.FromFile(@"Y:\BDAM\cover-art\black-hawk-down\full.jpg");
+#endif
             var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
-//                .RemoveAllTags()
-                .AddCoverArt(coverArt)
+                .RemoveAllTags()
+//                .AddCoverArt(coverArt)
                 .SetChapters(playlist.Chapters)
                 .SetDefaultTracksAuto(selectedTracks);
             mkvPropEdit.Start();
+#if false
             Console.WriteLine("********** DONE! **********");
 #endif
         }

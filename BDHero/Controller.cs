@@ -37,7 +37,6 @@ namespace BDHero
         /// </summary>
         public event PluginProgressHandler PluginProgressUpdated;
 
-        public event PluginExceptionEventHandler PluginException;
         public event UnhandledExceptionEventHandler UnhandledException;
 
         public Job Job { get; private set; }
@@ -319,12 +318,6 @@ namespace BDHero
                 progressProvider.Succeed();
                 return true;
             }
-            catch (PluginException e)
-            {
-                progressProvider.Error(e);
-                HandlePluginException(plugin, e);
-                return false;
-            }
             catch (Exception e)
             {
                 progressProvider.Error(e);
@@ -342,12 +335,6 @@ namespace BDHero
         #endregion
 
         #region Exception handling
-
-        private void HandlePluginException(IPlugin plugin, PluginException exception)
-        {
-            if (PluginException != null)
-                PluginException(plugin, exception);
-        }
 
         private void HandleUnhandledException(IPlugin plugin, Exception exception)
         {
