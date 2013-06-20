@@ -31,6 +31,13 @@ namespace BDHero
 
         private readonly PluginService _pluginService = new PluginService();
 
+        /// <summary>
+        /// Needed for <see cref="ProgressProviderOnUpdated"/> to invoke progress update callbacks on the correct thread.
+        /// </summary>
+        private TaskScheduler _callbackScheduler;
+
+        public Job Job { get; private set; }
+
         #region Events
 
         public event EventHandler ScanStarted;
@@ -46,12 +53,7 @@ namespace BDHero
         public event PluginProgressHandler PluginProgressUpdated;
         public event UnhandledExceptionEventHandler UnhandledException;
 
-        private ProgressProviderUpdatedHandler _progressProviderUpdated;
-        private TaskScheduler _callingScheduler;
-
         #endregion
-
-        public Job Job { get; private set; }
 
         #region Constructors and initialization
 
@@ -153,9 +155,18 @@ namespace BDHero
 
         #endregion
 
+        public void SetEventScheduler(TaskScheduler scheduler = null)
+        {
+            // Get the calling thread's context
+            _callbackScheduler = scheduler ??
+                                (SynchronizationContext.Current != null
+                                     ? TaskScheduler.FromCurrentSynchronizationContext()
+                                     : TaskScheduler.Default);
+        }
+
         #region Stages
 
-        public Task<bool> Scan(string bdromPath, string mkvPath = null)
+        public Task<bool> CreateScanTask(string bdromPath, string mkvPath = null)
         {
             return CreateStageTask(() => ReadBDROM(bdromPath), delegate
                 {
@@ -165,7 +176,7 @@ namespace BDHero
                 }, ScanStart, ScanSucceed, ScanFail);
         }
 
-        public Task<bool> Convert(string mkvPath = null)
+        public Task<bool> CreateConvertTask(string mkvPath = null)
         {
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
@@ -175,25 +186,25 @@ namespace BDHero
 
         private Task<bool> CreateStageTask(Func<bool> criticalPhase, Action optionalPhases, Action start, Func<bool> succeed, Func<bool> fail)
         {
-            // Get the calling thread's context
-            _callingScheduler = SynchronizationContext.Current != null
-                                    ? TaskScheduler.FromCurrentSynchronizationContext()
-                                    : TaskScheduler.Default;
-
             var stageTask = new Task<bool>(delegate
             {
                 var token = Task.Factory.CancellationToken;
 
+                if (_callbackScheduler == null)
+                {
+                    throw new InvalidOperationException("No callback TaskScheduler has been set; set one with IController.SetEventScheduler().");
+                }
+
                 // It's possible to start a task directly on
                 // the UI thread, but not common...
-                var startTask = Task.Factory.StartNew(start, token, TaskCreationOptions.None, _callingScheduler);
+                var startTask = Task.Factory.StartNew(start, token, TaskCreationOptions.None, _callbackScheduler);
                 startTask.Wait();
 
                 if (!criticalPhase())
                 {
                     // It's possible to start a task directly on
                     // the UI thread, but not common...
-                    var failTask = Task.Factory.StartNew(fail, token, TaskCreationOptions.None, _callingScheduler);
+                    var failTask = Task.Factory.StartNew(fail, token, TaskCreationOptions.None, _callbackScheduler);
 
                     // Blocks until the task finishes executing
                     return failTask.Result;
@@ -203,7 +214,7 @@ namespace BDHero
 
                 // It's possible to start a task directly on
                 // the UI thread, but not common...
-                var succeedTask = Task.Factory.StartNew(succeed, token, TaskCreationOptions.None, _callingScheduler);
+                var succeedTask = Task.Factory.StartNew(succeed, token, TaskCreationOptions.None, _callbackScheduler);
 
                 // Blocks until the task finishes executing
                 return succeedTask.Result;
@@ -362,7 +373,7 @@ namespace BDHero
                 {
                     if (PluginProgressUpdated != null)
                         PluginProgressUpdated(progressProvider.Plugin, progressProvider);
-                }, token, TaskCreationOptions.None, _callingScheduler);
+                }, token, TaskCreationOptions.None, _callbackScheduler);
         }
 
         #endregion
@@ -449,6 +460,4 @@ namespace BDHero
     }
 
     internal delegate void ExecutePluginHandler();
-
-    internal delegate void ProgressProviderUpdatedHandler(ProgressProvider progressProvider);
 }

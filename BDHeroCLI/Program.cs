@@ -17,7 +17,7 @@ namespace BDHeroCLI
         /// <summary>
         /// IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
         /// </summary>
-        private static readonly Controller Controller = new Controller("bdhero-cli.log.config");
+        private static readonly IController Controller = new Controller("bdhero-cli.log.config");
 
         /// <summary>
         /// Depends on <see cref="Controller"/> being initialized first.
@@ -77,14 +77,11 @@ namespace BDHeroCLI
             Controller.ScanSucceeded += ControllerOnScanSucceeded;
             Controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
             Controller.LoadPlugins();
+            Controller.SetEventScheduler();
 
-            var scanTask = Controller.Scan(bdromPath, mkvPath);
-            scanTask.Start();
-            if (scanTask.Result)
+            if (Scan(bdromPath, mkvPath))
             {
-                var convertTask = Controller.Convert();
-                convertTask.Start();
-                if (convertTask.Result)
+                if (Convert())
                 {
                     Logger.Info("Muxing succeeded!");
                 }
@@ -102,6 +99,20 @@ namespace BDHeroCLI
             Console.WriteLine("*** BDhero CLI Finished - press <ENTER> to exit ***");
             Console.WriteLine();
             Console.Read();
+        }
+
+        private static bool Scan(string bdromPath, string mkvPath)
+        {
+            var scanTask = Controller.CreateScanTask(bdromPath, mkvPath);
+            scanTask.Start();
+            return scanTask.Result;
+        }
+
+        private static bool Convert()
+        {
+            var convertTask = Controller.CreateConvertTask();
+            convertTask.Start();
+            return convertTask.Result;
         }
 
         private static void ShowHelp(int exitCode = 0)

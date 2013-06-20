@@ -45,6 +45,7 @@ namespace BDHeroGUI
             _controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
             
             _controller.LoadPlugins();
+            _controller.SetEventScheduler();
         }
 
         private void EnableControls(bool enabled)
@@ -115,8 +116,8 @@ namespace BDHeroGUI
 
         private void buttonMux_Click(object sender, EventArgs e)
         {
-            var scanTask = _controller.Scan(textBoxInput.Text, textBoxOutput.Text);
-            var convertTask = _controller.Convert();
+            var scanTask = _controller.CreateScanTask(textBoxInput.Text, textBoxOutput.Text);
+            var convertTask = _controller.CreateConvertTask();
 
             scanTask.ContinueWith(task => convertTask.Start());
             scanTask.Start();
