@@ -136,34 +136,22 @@ namespace TmdbPlugin
         private void ApiRequest(Job job)
         {
             job.Movies.Clear();
-
-<<<<<<< HEAD
+            
             if (job.Disc.SanitizedTitle != null)
-=======
-            else
-            {                
-                var error = new Exception("Error: No APIKey was Found");
-                var Message = "Error: No APIKey was Found for the Tmdb plugin";
-                Logger.Error(Message);
-            }            
-
-            try
->>>>>>> bd3d15a6d0ab89eb70db6edf2e084bd5b0ed0628
             {
                 var requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, _iso6391);
 
                 if (_tmdbApiKey != null)
                 {
                     _tmdbApi = new Tmdb(_tmdbApiKey, _iso6391);
-                }
-
-                try
-                {
-                    SearchTmdb(requestParameters, job);
-                }
-                catch (Exception ex)
-                {
-                    TmdbErrors(ex);
+                    try
+                    {
+                        SearchTmdb(requestParameters, job);
+                    }
+                    catch (Exception ex)
+                    {
+                        TmdbErrors(ex);
+                    }
                 }
             }
             else
@@ -215,19 +203,6 @@ namespace TmdbPlugin
             if (!DateTime.TryParse(movieResult.release_date, out releaseYear))
                 releaseYear = DateTime.MinValue;
             var movie = new Movie
-<<<<<<< HEAD:TmdbPlugin/TmdbPlugin.cs
-                            {
-                                Id = movieResult.id,
-                                ReleaseYear = releaseYear.Year,
-                                Title = movieResult.title,
-                                IsSelected = i == 0
-                            };
-            movie.CoverArtImages.Add(new CoverArtImage
-                                         {
-                                             Uri = _tmdbRootUrl + movieResult.poster_path,
-                                             IsSelected = true
-                                         });
-=======
                 {
                     Id = movieResult.id,
                     ReleaseYear = releaseYear.Year,
@@ -239,7 +214,6 @@ namespace TmdbPlugin
                     Uri = _tmdbRootUrl + movieResult.poster_path,
                     IsSelected = true
                 });
->>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46:Plugins/TmdbPlugin/TmdbPlugin.cs
             return movie;
         }
 
@@ -254,9 +228,6 @@ namespace TmdbPlugin
                 var tmdbMovieImages = new TmdbMovieImages();
                 try
                 {
-<<<<<<< HEAD:TmdbPlugin/TmdbPlugin.cs
-                    tmdbMovieImages = SearchPosters(movie);
-=======
                     if (string.IsNullOrEmpty(_tmdbRootUrl))
                     {
                         _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "original";
@@ -269,7 +240,6 @@ namespace TmdbPlugin
                     {
                         tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, "en");
                     }
->>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46:Plugins/TmdbPlugin/TmdbPlugin.cs
                 }
                 catch (Exception ex)
                 {
@@ -282,38 +252,14 @@ namespace TmdbPlugin
 
                     if (movie.CoverArtImages.All(x => x.Uri != poster.file_path))
                     {
-<<<<<<< HEAD:TmdbPlugin/TmdbPlugin.cs
-                        movie.CoverArtImages.Add(new CoverArtImage
-                                                     {
-                                                         Uri = poster.file_path,
-                                                         Language = Language.FromCode(poster.iso_639_1)
-                                                     }
-                            );
-=======
                         movie.CoverArtImages.Add(new CoverArt
                         {
                             Uri = _tmdbRootUrl + poster.file_path,
-                            Language = I18N.Language.FromCode(poster.iso_639_1)
+                            Language = Language.FromCode(poster.iso_639_1)
                         });
->>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46:Plugins/TmdbPlugin/TmdbPlugin.cs
                     }
                 }
             }
-        }
-
-        private TmdbMovieImages SearchPosters(Movie movie)
-        {
-            if (string.IsNullOrEmpty(_tmdbRootUrl))
-            {
-                _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "w185";
-            }
-            var tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, null);
-
-            if (tmdbMovieImages.posters.Count == 0)
-            {
-                tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, "en");
-            }
-            return tmdbMovieImages;
         }
 
         #endregion
@@ -326,30 +272,12 @@ namespace TmdbPlugin
             try
             {
                 var pluginSettings = JsonConvert.DeserializeObject<TmdbApiErrors>(tmdbResponse);
-<<<<<<< HEAD:TmdbPlugin/TmdbPlugin.cs
-<<<<<<< HEAD
                 Logger.ErrorFormat("Error: api.themoviedb.org returned the following Status Code {0} : {1}",
                                    pluginSettings.StatusCode,
                                    pluginSettings.StatusMessage);
-                throw ex;
             }
             catch
             {
-                throw ex;
-=======
-=======
->>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46:Plugins/TmdbPlugin/TmdbPlugin.cs
-                var message = "Error: api.themoviedb.org returned the following Status Code " +
-                              pluginSettings.status_code + " : " + pluginSettings.status_message;
-                throw new Exception(message, ex);
-            }
-            catch
-            {
-                throw new Exception("Unable to connect to api.themoviedb.org", ex);
-<<<<<<< HEAD:TmdbPlugin/TmdbPlugin.cs
->>>>>>> bd3d15a6d0ab89eb70db6edf2e084bd5b0ed0628
-=======
->>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46:Plugins/TmdbPlugin/TmdbPlugin.cs
             }
         }
 
