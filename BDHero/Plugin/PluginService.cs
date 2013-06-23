@@ -170,38 +170,39 @@ namespace BDHero.Plugin
             var guid = ((GuidAttribute)pluginAssembly.GetCustomAttributes(typeof(GuidAttribute), true)[0]).Value;
 
             // Next we'll loop through all the Types found in the assembly
-            foreach (Type pluginType in pluginAssembly.GetTypes())
+            foreach (Type pluginType in pluginAssembly.GetTypes().Where(IsValidPlugin))
             {
-                if (pluginType.IsPublic) // Only look at public types
-                {
-                    if (!pluginType.IsAbstract)  // Only look at non-abstract types
-                    {
-                        // Gets a type object of the interface we need the plugins to match
-                        Type typeInterface = pluginType.GetInterface(typeof(IPlugin).FullName);
+                // Create a new instance and store the instance in the collection for later use
+                // We could change this later on to not load an instance.. we have 2 options
+                // 1- Make one instance, and use it whenever we need it.. it's always there
+                // 2- Don't make an instance, and instead make an instance whenever we use it, then close it
+                // For now we'll just make an instance of all the plugins
+                var newPlugin = (IPlugin)Activator.CreateInstance(pluginAssembly.GetType(pluginType.ToString()));
 
-                        // Make sure the interface we want to use actually exists
-                        if (typeInterface != null)
-                        {
-                            // Create a new instance and store the instance in the collection for later use
-                            // We could change this later on to not load an instance.. we have 2 options
-                            // 1- Make one instance, and use it whenever we need it.. it's always there
-                            // 2- Don't make an instance, and instead make an instance whenever we use it, then close it
-                            // For now we'll just make an instance of all the plugins
-                            var newPlugin = (IPlugin)Activator.CreateInstance(pluginAssembly.GetType(pluginType.ToString()));
+                var assemblyInfo = new PluginAssemblyInfo(dllPath,
+                                                          AssemblyUtils.GetAssemblyVersion(pluginAssembly),
+                                                          guid);
 
-                            var assemblyInfo = new PluginAssemblyInfo(dllPath,
-                                                                      AssemblyUtils.GetAssemblyVersion(pluginAssembly),
-                                                                      guid);
+                // Initialize the plugin
+                newPlugin.LoadPlugin(this, assemblyInfo);
 
-                            // Initialize the plugin
-                            newPlugin.LoadPlugin(this, assemblyInfo);
-
-                            // Add the new plugin to our collection here
-                            Plugins.Add(newPlugin);
-                        }
-                    }
-                }
+                // Add the new plugin to our collection here
+                Plugins.Add(newPlugin);
             }
+        }
+
+        private static bool IsValidPlugin(Type pluginType)
+        {
+            return pluginType.IsPublic && !pluginType.IsAbstract && !pluginType.IsInterface && HasPluginInterface(pluginType);
+        }
+
+        private static bool HasPluginInterface(Type pluginType)
+        {
+            // Gets a type object of the interface we need the plugins to match
+            Type typeInterface = pluginType.GetInterface(typeof(IPlugin).FullName);
+
+            // Make sure the interface we want to use actually exists
+            return typeInterface != null;
         }
     }
 }
