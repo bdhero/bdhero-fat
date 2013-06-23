@@ -15,11 +15,11 @@ namespace BDHero.Startup
         private const string PluginDirName = "Plugins";
         private const string LogDirName = "Logs";
 
-        public bool IsPortable { get; private set; }
+        public bool   IsPortable { get; private set; }
         public string InstallDir { get; private set; }
-        public string ConfigDir { get; private set; }
-        public string PluginDir { get; private set; }
-        public string LogDir { get; private set; }
+        public string ConfigDir  { get; private set; }
+        public string PluginDir  { get; private set; }
+        public string LogDir     { get; private set; }
 
         DirectoryLocator()
         {
