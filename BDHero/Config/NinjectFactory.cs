@@ -17,18 +17,6 @@ namespace BDHero.Config
         {
             return new StandardKernel(new MainModule());
         }
-
-        private static void InitializeCriticalDependencies(IKernel kernel)
-        {
-            // NOTE: The order of instantiation is EXTREMELY important:
-            // the DirectoryLocator MUST be initialized FIRST;
-            // the LogInitializer MUST be initialized SECOND;
-            // the PluginService and PluginLoader must be initialized LAST.
-//            var directoryLocator = DirectoryLocator.Instance;
-//            var logInitializer = new LogInitializer(logConfigFileName, directoryLocator);
-//            var pluginService = new PluginService();
-//            var pluginLoader = new PluginLoader(pluginService, directoryLocator);
-        }
     }
 
     /// <summary>
