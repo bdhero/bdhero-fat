@@ -257,20 +257,6 @@ namespace BDHero.Plugin.FFmpegMuxer
             var ffmpegAssemblyDir = Path.GetDirectoryName(assemblyPath);
             ExePath = Path.Combine(ffmpegAssemblyDir, FFmpegExeFilename);
         }
-<<<<<<< HEAD:FFmpegMuxerPlugin/FFmpeg.cs
-
-        private static void OnExited(Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
-        {
-#if false
-            Console.WriteLine();
-            Console.WriteLine("Finished muxing with FFmpeg!");
-            Console.WriteLine("Adding metadata with mkvpropedit...");
-            var coverArt = Image.FromFile(@"Y:\BDAM\cover-art\black-hawk-down\full.jpg");
-#endif
-            var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
-                .RemoveAllTags()
-//                .AddCoverArt(coverArt)
-=======
 
         private static void OnExited(NonInteractiveProcessState processState, int exitCode, ReleaseMedium releaseMedium, Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
@@ -284,17 +270,10 @@ namespace BDHero.Plugin.FFmpegMuxer
             var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
                 .RemoveAllTags()
                 .AddCoverArt(coverArtImage)
->>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46:Plugins/FFmpegMuxerPlugin/FFmpeg.cs
                 .SetChapters(playlist.Chapters)
 //                .SetDefaultTracksAuto(selectedTracks)
             ;
             mkvPropEdit.Start();
-<<<<<<< HEAD:FFmpegMuxerPlugin/FFmpeg.cs
-#if false
-            Console.WriteLine("********** DONE! **********");
-#endif
-=======
->>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46:Plugins/FFmpegMuxerPlugin/FFmpeg.cs
         }
     }
 }
