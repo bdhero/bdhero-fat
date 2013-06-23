@@ -11,7 +11,7 @@ using Ninject.Modules;
 
 namespace BDHero.Config
 {
-    public class NinjectFactory
+    public static class NinjectFactory
     {
         public static IKernel CreateMainKernel()
         {
