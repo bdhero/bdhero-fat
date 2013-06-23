@@ -118,128 +118,19 @@
             <canBeEdited>0</canBeEdited>
             <selected>1</selected>
             <show>1</show>
-            <componentList>
-                <component>
-                    <name>discreaderplugin</name>
-                    <description>Disc Reader</description>
-                    <canBeEdited>0</canBeEdited>
-                    <selected>1</selected>
-                    <show>1</show>
-                    <folderList>
-                        <folder>
-                            <description>Disc Reader</description>
-                            <destination>${windows_folder_appdata}/BDHero/Plugins/Required</destination>
-                            <name>discreaderfolder</name>
-                            <platforms>windows</platforms>
-                            <distributionFileList>
-                                <distributionDirectory>
-                                    <origin>Setup/ProgramFiles/Plugins/Required/DiscReader</origin>
-                                </distributionDirectory>
-                            </distributionFileList>
-                        </folder>
-                    </folderList>
-                </component>
-                <component>
-                    <name>tmdbplugin</name>
-                    <description>TMDb</description>
-                    <canBeEdited>0</canBeEdited>
-                    <selected>1</selected>
-                    <show>1</show>
-                    <folderList>
-                        <folder>
-                            <description>TMDb</description>
-                            <destination>${windows_folder_appdata}/BDHero/Plugins/Required</destination>
-                            <name>tmdbfolder</name>
-                            <platforms>windows</platforms>
-                            <distributionFileList>
-                                <distributionDirectory>
-                                    <origin>Setup/ProgramFiles/Plugins/Required/Tmdb</origin>
-                                </distributionDirectory>
-                            </distributionFileList>
-                        </folder>
-                    </folderList>
-                </component>
-                <component>
-                    <name>autodetectorplugin</name>
-                    <description>Auto Detector</description>
-                    <canBeEdited>0</canBeEdited>
-                    <selected>1</selected>
-                    <show>1</show>
-                    <folderList>
-                        <folder>
-                            <description>Auto Detector</description>
-                            <destination>${windows_folder_appdata}/BDHero/Plugins/Required</destination>
-                            <name>autodetectorfolder</name>
-                            <platforms>windows</platforms>
-                            <distributionFileList>
-                                <distributionDirectory>
-                                    <origin>Setup/ProgramFiles/Plugins/Required/AutoDetector</origin>
-                                </distributionDirectory>
-                            </distributionFileList>
-                        </folder>
-                    </folderList>
-                </component>
-                <component>
-                    <name>filenamerplugin</name>
-                    <description>File Namer</description>
-                    <canBeEdited>0</canBeEdited>
-                    <selected>1</selected>
-                    <show>1</show>
-                    <folderList>
-                        <folder>
-                            <description>File Namer</description>
-                            <destination>${windows_folder_appdata}/BDHero/Plugins/Required</destination>
-                            <name>filenamerfolder</name>
-                            <platforms>windows</platforms>
-                            <distributionFileList>
-                                <distributionDirectory>
-                                    <origin>Setup/ProgramFiles/Plugins/Required/FileNamer</origin>
-                                </distributionDirectory>
-                            </distributionFileList>
-                        </folder>
-                    </folderList>
-                </component>
-                <component>
-                    <name>chaptergrabberplugin</name>
-                    <description>Chapter Grabber</description>
-                    <canBeEdited>1</canBeEdited>
-                    <selected>1</selected>
-                    <show>1</show>
-                    <folderList>
-                        <folder>
-                            <description>Chapter Grabber</description>
-                            <destination>${windows_folder_appdata}/BDHero/Plugins/Required</destination>
-                            <name>chaptergrabberplugin</name>
-                            <platforms>windows</platforms>
-                            <distributionFileList>
-                                <distributionDirectory>
-                                    <origin>Setup/ProgramFiles/Plugins/Required/ChapterGrabber</origin>
-                                </distributionDirectory>
-                            </distributionFileList>
-                        </folder>
-                    </folderList>
-                </component>
-                <component>
-                    <name>ffmpegmuxerplugin</name>
-                    <description>FFmpeg Muxer</description>
-                    <canBeEdited>0</canBeEdited>
-                    <selected>1</selected>
-                    <show>1</show>
-                    <folderList>
-                        <folder>
-                            <description>FFmpeg Muxer</description>
-                            <destination>${windows_folder_appdata}/BDHero/Plugins/Required</destination>
-                            <name>ffmpegmuxerfolder</name>
-                            <platforms>windows</platforms>
-                            <distributionFileList>
-                                <distributionDirectory>
-                                    <origin>Setup/ProgramFiles/Plugins/Required/FFmpegMuxer</origin>
-                                </distributionDirectory>
-                            </distributionFileList>
-                        </folder>
-                    </folderList>
-                </component>
-            </componentList>
+            <folderList>
+                <folder>
+                    <description>Plugins</description>
+                    <destination>${windows_folder_appdata}/BDHero</destination>
+                    <name>pluginsfolder</name>
+                    <platforms>all</platforms>
+                    <distributionFileList>
+                        <distributionDirectory>
+                            <origin>Setup/ProgramFiles/Plugins</origin>
+                        </distributionDirectory>
+                    </distributionFileList>
+                </folder>
+            </folderList>
         </componentGroup>
     </componentList>
     <postBuildActionList>
