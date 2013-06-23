@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using DotNetUtils;
 
+// ReSharper disable ClassNeverInstantiated.Global
 namespace BDHero.Startup
 {
-    public class DirectoryLocator : IDirectoryLocator
+    public sealed class DirectoryLocator : IDirectoryLocator
     {
         private const string AppDataRootDirName = "BDHero";
         private const string ConfigDirName = "Config";
@@ -21,9 +22,12 @@ namespace BDHero.Startup
         public string PluginDir  { get; private set; }
         public string LogDir     { get; private set; }
 
-        DirectoryLocator()
+        public DirectoryLocator()
         {
-            InstallDir = AssemblyUtils.GetInstallDir(Assembly.GetEntryAssembly());
+            InstallDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+            Debug.Assert(InstallDir != null, "InstallDir != null");
+
             IsPortable = Directory.Exists(Path.Combine(InstallDir, ConfigDirName));
 
             if (IsPortable)
@@ -46,12 +50,5 @@ namespace BDHero.Startup
                 Directory.CreateDirectory(LogDir);
             }
         }
-
-        public static DirectoryLocator Instance
-        {
-            get { return _instance ?? (_instance = new DirectoryLocator()); }
-        }
-
-        private static DirectoryLocator _instance;
     }
 }

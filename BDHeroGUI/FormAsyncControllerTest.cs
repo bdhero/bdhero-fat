@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using BDHero;
 using BDHero.Plugin;
 using BDHero.Startup;
+using Ninject;
 
 namespace BDHeroGUI
 {
@@ -17,45 +18,56 @@ namespace BDHeroGUI
     {
         private const string LogConfigFileName = "bdhero-gui.log.config";
 
-        /// <summary>
-        /// IMPORTANT: THIS MUST BE INSTANTIATED AND INITIALIZED FIRST TO ENABLE LOGGING!
-        /// </summary>
-        private static readonly Initializer Initializer;
+        private readonly IKernel _kernel;
+        private readonly log4net.ILog _logger;
+        private readonly IDirectoryLocator _directoryLocator;
+        private readonly PluginLoader _pluginLoader;
+        private readonly IController _controller;
 
-        /// <summary>
-        /// Depends on <see cref="Initializer"/> being initialized first.
-        /// </summary>
-        private static readonly log4net.ILog Logger;
-
-        static FormAsyncControllerTest()
-        {
-            // IMPORTANT: This must be the absolute FIRST line of code that runs to initialize logging!
-            Initializer = Initializer.GetInstance(LogConfigFileName);
-            Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        }
-
-        /// <summary>
-        /// Depends on <see cref="Initializer"/> being initialized first.
-        /// </summary>
-        private readonly IController _controller = new Controller(Initializer.PluginService);
-
-        public FormAsyncControllerTest()
+        public FormAsyncControllerTest(IKernel kernel)
         {
             InitializeComponent();
-            LogDirectoryPaths();
+
+            _kernel = kernel;
+
+            _kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
+
+            _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _directoryLocator = _kernel.Get<IDirectoryLocator>();
+            _pluginLoader = _kernel.Get<PluginLoader>();
+            _controller = _kernel.Get<IController>();
+
             Load += OnLoad;
         }
 
-        private static void LogDirectoryPaths()
+        private void OnLoad(object sender, EventArgs eventArgs)
         {
-            Logger.InfoFormat("IsPortable = {0}", DirectoryLocator.Instance.IsPortable);
-            Logger.InfoFormat("InstallDir = {0}", DirectoryLocator.Instance.InstallDir);
-            Logger.InfoFormat("ConfigDir = {0}", DirectoryLocator.Instance.ConfigDir);
-            Logger.InfoFormat("PluginDir = {0}", DirectoryLocator.Instance.PluginDir);
-            Logger.InfoFormat("LogDir = {0}", DirectoryLocator.Instance.LogDir);
+            LogDirectoryPaths();
+            LoadPlugins();
+            LogPlugins();
+            InitController();
         }
 
-        private void OnLoad(object sender, EventArgs eventArgs)
+        private void LogDirectoryPaths()
+        {
+            _logger.InfoFormat("IsPortable = {0}", _directoryLocator.IsPortable);
+            _logger.InfoFormat("InstallDir = {0}", _directoryLocator.InstallDir);
+            _logger.InfoFormat("ConfigDir = {0}", _directoryLocator.ConfigDir);
+            _logger.InfoFormat("PluginDir = {0}", _directoryLocator.PluginDir);
+            _logger.InfoFormat("LogDir = {0}", _directoryLocator.LogDir);
+        }
+
+        private void LoadPlugins()
+        {
+            _pluginLoader.LoadPlugins();
+        }
+
+        private void LogPlugins()
+        {
+            _pluginLoader.LogPlugins();
+        }
+
+        private void InitController()
         {
             _controller.ScanStarted += ControllerOnScanStarted;
             _controller.ScanSucceeded += ControllerOnScanSucceeded;
@@ -68,7 +80,7 @@ namespace BDHeroGUI
             _controller.ConvertCompleted += ControllerOnConvertCompleted;
 
             _controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
-            
+
             _controller.SetEventScheduler();
         }
 

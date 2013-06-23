@@ -7,27 +7,24 @@ using BDHero.Plugin;
 
 namespace BDHero.Startup
 {
-    class PluginLoader
+    public class PluginLoader
     {
         private readonly log4net.ILog _logger;
         private readonly PluginService _pluginService;
-        private readonly DirectoryLocator _directoryLocator;
+        private readonly IDirectoryLocator _directoryLocator;
 
         /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
-        public PluginLoader(PluginService pluginService, DirectoryLocator directoryLocator)
+        public PluginLoader(PluginService pluginService, IDirectoryLocator directoryLocator)
         {
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _pluginService = pluginService;
             _directoryLocator = directoryLocator;
-
-            LoadPlugins();
         }
 
         /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
-        private void LoadPlugins()
+        public void LoadPlugins()
         {
             LoadPluginsFromService();
-            LogPlugins();
             VerifyPlugins();
         }
 
@@ -46,7 +43,7 @@ namespace BDHero.Startup
                 throw new RequiredPluginNotFoundException<IMuxerPlugin>("A Muxer plugin is required");
         }
 
-        private void LogPlugins()
+        public void LogPlugins()
         {
             _logger.InfoFormat("Loaded {0} plugins:", _pluginService.Plugins.Count);
             LogPlugins("Disc Readers", _pluginService.DiscReaderPlugins);

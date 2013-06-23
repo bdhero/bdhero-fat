@@ -57,6 +57,7 @@
     <Compile Include="BDROM\Playlist.cs" />
     <Compile Include="BDROM\StreamClip.cs" />
     <Compile Include="BDROM\Track.cs" />
+    <Compile Include="Config\NinjectFactory.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Exceptions\RequiredPluginNotFoundException.cs" />
     <Compile Include="IController.cs" />
@@ -71,7 +72,6 @@
     <Compile Include="JobQueue\Job.cs" />
     <Compile Include="Startup\DirectoryLocator.cs" />
     <Compile Include="Startup\IDirectoryLocator.cs" />
-    <Compile Include="Startup\Initializer.cs" />
     <Compile Include="Startup\LogInitializer.cs" />
     <Compile Include="Startup\PluginLoader.cs" />
   </ItemGroup>

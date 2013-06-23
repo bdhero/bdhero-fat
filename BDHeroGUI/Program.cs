@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using BDHero.Config;
 
 namespace BDHeroGUI
 {
@@ -15,7 +16,7 @@ namespace BDHeroGUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormAsyncControllerTest());
+            Application.Run(new FormAsyncControllerTest(NinjectFactory.CreateMainKernel()));
         }
     }
 }
