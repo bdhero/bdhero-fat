@@ -23,6 +23,10 @@ namespace BDHero.Startup
             if (Instances.ContainsKey(logConfigFileName))
                 return Instances[logConfigFileName];
 
+            // NOTE: The order of instantiation is EXTREMELY important:
+            // the DirectoryLocator MUST be initialized FIRST;
+            // the LogInitializer MUST be initialized SECOND;
+            // the PluginService and PluginLoader must be initialized LAST.
             var directoryLocator = DirectoryLocator.Instance;
             var logInitializer = new LogInitializer(logConfigFileName, directoryLocator);
             var pluginService = new PluginService();
