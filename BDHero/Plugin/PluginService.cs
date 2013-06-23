@@ -193,10 +193,23 @@ namespace BDHero.Plugin
 
         private static bool IsValidPlugin(Type pluginType)
         {
-            return pluginType.IsPublic && !pluginType.IsAbstract && !pluginType.IsInterface && HasPluginInterface(pluginType);
+            return HasPublicVisibility(pluginType)
+                && IsConcreteClass(pluginType)
+                && ImplementsPluginInterface(pluginType)
+                ;
         }
 
-        private static bool HasPluginInterface(Type pluginType)
+        private static bool HasPublicVisibility(Type pluginType)
+        {
+            return pluginType.IsPublic;
+        }
+
+        private static bool IsConcreteClass(Type pluginType)
+        {
+            return !pluginType.IsAbstract && !pluginType.IsInterface;
+        }
+
+        private static bool ImplementsPluginInterface(Type pluginType)
         {
             // Gets a type object of the interface we need the plugins to match
             Type typeInterface = pluginType.GetInterface(typeof(IPlugin).FullName);
