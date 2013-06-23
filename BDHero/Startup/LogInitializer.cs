@@ -12,10 +12,6 @@ namespace BDHero.Startup
     {
         private readonly log4net.ILog _logger;
 
-        public LogInitializer(string logConfigFileName) : this(logConfigFileName, DirectoryLocator.Instance)
-        {   
-        }
-
         public LogInitializer(string logConfigFileName, DirectoryLocator directoryLocator)
         {
             var entryAssembly = Assembly.GetEntryAssembly();
