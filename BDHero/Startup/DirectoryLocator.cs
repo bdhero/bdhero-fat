@@ -8,7 +8,7 @@ using DotNetUtils;
 
 namespace BDHero.Startup
 {
-    public class DirectoryLocator
+    public class DirectoryLocator : IDirectoryLocator
     {
         private const string AppDataRootDirName = "BDHero";
         private const string ConfigDirName = "Config";
