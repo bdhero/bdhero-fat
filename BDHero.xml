@@ -100,6 +100,16 @@
                     <windowsIcon></windowsIcon>
                     <windowsPath>${installdir}/</windowsPath>
                 </startMenuShortcut>
+                <startMenuShortcut>
+                    <comment>BDHero Graphical Interface</comment>
+                    <name>BDHero GUI</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/bdhero-gui.exe</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon></windowsIcon>
+                    <windowsPath>${installdir}/</windowsPath>
+                </startMenuShortcut>
             </startMenuShortcutList>
         </component>
         <componentGroup>
