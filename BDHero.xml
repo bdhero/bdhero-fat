@@ -18,10 +18,13 @@
                     <platforms>all</platforms>
                     <distributionFileList>
                         <distributionFile>
+                            <origin>Setup/ProgramFiles/BDHero.dll</origin>
+                        </distributionFile>
+                        <distributionFile>
                             <origin>Setup/ProgramFiles/bdhero-cli.exe</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>Setup/ProgramFiles/BDHero.dll</origin>
+                            <origin>Setup/ProgramFiles/bdhero-gui.exe</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>Setup/ProgramFiles/BDInfo.dll</origin>
@@ -37,6 +40,9 @@
                         </distributionFile>
                         <distributionFile>
                             <origin>Setup/ProgramFiles/Newtonsoft.Json.dll</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>Setup/ProgramFiles/Ninject.dll</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>Setup/ProgramFiles/ProcessUtils.dll</origin>
