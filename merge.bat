@@ -14,6 +14,10 @@ xcopy /Y BDHeroCLI\bin\%ConfigurationName%\bdhero-cli.exe Setup\ProgramFiles\
 xcopy /Y BDHeroCLI\bin\%ConfigurationName%\*.dll Setup\ProgramFiles\
 xcopy /Y BDHeroCLI\bin\%ConfigurationName%\Config Setup\ProgramFiles\Config\
 
+xcopy /Y BDHeroGUI\bin\%ConfigurationName%\bdhero-gui.exe Setup\ProgramFiles\
+xcopy /Y BDHeroGUI\bin\%ConfigurationName%\*.dll Setup\ProgramFiles\
+xcopy /Y BDHeroGUI\bin\%ConfigurationName%\Config Setup\ProgramFiles\Config\
+
 xcopy /Y Plugins\DiscReaderPlugin\bin\%ConfigurationName%\DiscReaderPlugin.dll Setup\ProgramFiles\Plugins\Required\DiscReader\
 
 xcopy /Y Plugins\TmdbPlugin\bin\%ConfigurationName%\TmdbPlugin.dll Setup\ProgramFiles\Plugins\Required\Tmdb\
