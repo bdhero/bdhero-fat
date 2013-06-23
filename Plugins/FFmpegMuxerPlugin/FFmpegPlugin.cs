@@ -79,7 +79,11 @@ namespace BDHero.Plugin.FFmpegMuxer
             Logger.InfoFormat("FFmpeg exited with state {0} and code {1}", state, exitCode);
             if (state != NonInteractiveProcessState.Completed)
             {
+<<<<<<< HEAD:FFmpegMuxerPlugin/FFmpegPlugin.cs
+                _exception = new Exception(string.Format("FFmpeg exited with state: {0}", state));
+=======
                 _exception = exception ?? new Exception(string.Format("FFmpeg exited with state: {0}", state));
+>>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46:Plugins/FFmpegMuxerPlugin/FFmpegPlugin.cs
             }
             SignalThreadExited();
         }

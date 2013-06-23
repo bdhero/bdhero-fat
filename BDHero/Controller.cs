@@ -18,7 +18,13 @@ namespace BDHero
         /// <summary>
         /// Needed for <see cref="ProgressProviderOnUpdated"/> to invoke progress update callbacks on the correct thread.
         /// </summary>
+<<<<<<< HEAD
+        public event PluginProgressHandler PluginProgressUpdated;
+
+        public event UnhandledExceptionEventHandler UnhandledException;
+=======
         private TaskScheduler _callbackScheduler;
+>>>>>>> 46e871ee1371fc80a90c1ca2203d7bb454906f46
 
         public Job Job { get; private set; }
 
