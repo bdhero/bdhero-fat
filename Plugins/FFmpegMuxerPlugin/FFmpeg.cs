@@ -271,7 +271,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private static void OnExited(NonInteractiveProcessState processState, int exitCode, ReleaseMedium releaseMedium, Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
-            Logger.DebugFormat("FFmpeg exited with state {0} and code {1}", processState, exitCode);
+            LogExit(processState, exitCode);
 
             if (processState != NonInteractiveProcessState.Completed)
                 return;
@@ -285,6 +285,23 @@ namespace BDHero.Plugin.FFmpegMuxer
 //                .SetDefaultTracksAuto(selectedTracks)
             ;
             mkvPropEdit.Start();
+        }
+
+        private static void LogExit(NonInteractiveProcessState processState, int exitCode)
+        {
+            var message = "FFmpeg exited with state {0} and code {1}";
+            switch (processState)
+            {
+                case NonInteractiveProcessState.Completed:
+                    Logger.DebugFormat(message, processState, exitCode);
+                    break;
+                case NonInteractiveProcessState.Killed:
+                    Logger.WarnFormat(message, processState, exitCode);
+                    break;
+                default:
+                    Logger.ErrorFormat(message, processState, exitCode);
+                    break;
+            }
         }
     }
 }
