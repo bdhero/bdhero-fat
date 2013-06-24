@@ -16,10 +16,15 @@ namespace BDHeroCLI
 
         static void Main(string[] args)
         {
+            CreateCLI().Run(args);
+        }
+
+        private static CLI CreateCLI()
+        {
             var kernel = InjectorFactory.CreateContainer();
             kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
             kernel.Bind<CLI>().ToSelf();
-            kernel.Get<CLI>().Run(args);
+            return kernel.Get<CLI>();
         }
     }
 }
