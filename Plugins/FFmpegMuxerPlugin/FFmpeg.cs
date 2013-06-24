@@ -189,6 +189,7 @@ namespace BDHero.Plugin.FFmpegMuxer
         private void OnBeforeStart(object sender, EventArgs eventArgs)
         {
             _progressWorker.DoWork += ProgressWorkerOnDoWork;
+            _progressWorker.RunWorkerCompleted += ProgressWorkerOnRunWorkerCompleted;
             _progressWorker.RunWorkerAsync();
             Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
         }
@@ -204,6 +205,15 @@ namespace BDHero.Plugin.FFmpegMuxer
                         ParseProgressLine(reader.ReadLine());
                     }
                 }
+            }
+        }
+
+        private void ProgressWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            if (runWorkerCompletedEventArgs.Error != null)
+            {
+                Exception = runWorkerCompletedEventArgs.Error;
+                Kill();
             }
         }
 
