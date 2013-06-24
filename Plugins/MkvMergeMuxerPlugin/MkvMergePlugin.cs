@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BDHero.JobQueue;
 
-namespace BDHero.Plugin.MKVMergeMuxer
+namespace BDHero.Plugin.MkvMergeMuxer
 {
     public class MkvMergePlugin : IMuxerPlugin
     {

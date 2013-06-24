@@ -8,8 +8,8 @@
     <ProjectGuid>{7E69F954-9BB3-4EB4-AB15-4727536945E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BDHero.Plugin.MKVMergeMuxer</RootNamespace>
-    <AssemblyName>MKVMergeMuxerPlugin</AssemblyName>
+    <RootNamespace>BDHero.Plugin.MkvMergeMuxer</RootNamespace>
+    <AssemblyName>MkvMergeMuxerPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

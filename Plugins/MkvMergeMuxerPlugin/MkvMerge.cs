@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using ProcessUtils;
 
-namespace BDHero.Plugin.MKVMergeMuxer
+namespace BDHero.Plugin.MkvMergeMuxer
 {
     /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
 // ReSharper disable LocalizableElement
