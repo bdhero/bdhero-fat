@@ -163,7 +163,8 @@ namespace BDHero.Plugin.FFmpegMuxer
         /// <summary>
         /// Converts Blu-ray LPCM tracks to signed, little endian PCM for MKV.
         /// Blu-ray LPCM is signed, big endian, and either 16-, 20-, or 24-bit.
-        /// FFmpeg only outputs 16- or 24- bit PCM, so 20-bit Blu-ray LPCM needs to be converted to 24-bit PCM.
+        /// FFmpeg only outputs 16- or 24- bit PCM, so 20-bit Blu-ray LPCM
+        /// needs to be converted to 24-bit PCM to avoid losing quality.
         /// </summary>
         private void ConvertLPCM()
         {
