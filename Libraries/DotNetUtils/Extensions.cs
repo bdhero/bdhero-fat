@@ -173,4 +173,22 @@ namespace DotNetUtils
             };
         }
     }
+
+    public static class TimeSpanExtensions
+    {
+        public static string ToStringShort(this TimeSpan timeSpan)
+        {
+            return timeSpan.ToString(@"hh\:mm\:ss");
+        }
+
+        public static string ToStringMedium(this TimeSpan timeSpan)
+        {
+            return timeSpan.ToString(@"hh\:mm\:ss\.fff");
+        }
+
+        public static string ToStringLong(this TimeSpan timeSpan)
+        {
+            return timeSpan.ToString(@"hh\:mm\:ss\.fffffff");
+        }
+    }
 }
