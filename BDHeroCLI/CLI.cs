@@ -182,7 +182,8 @@ namespace BDHeroCLI
             var line = string.Format("{0} is {1} - {2} complete - {3} - {4} elapsed, {5} remaining",
                                      plugin.Name, progressProvider.State, (progressProvider.PercentComplete / 100.0).ToString("P"),
                                      progressProvider.Status,
-                                     progressProvider.RunTime, progressProvider.TimeRemaining);
+                                     progressProvider.RunTime.ToStringShort(),
+                                     progressProvider.TimeRemaining.ToStringShort());
             if (progressProvider.State == ProgressProviderState.Running)
             {
                 Console.WriteLine("\r{0}", line);

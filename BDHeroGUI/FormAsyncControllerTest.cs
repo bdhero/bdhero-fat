@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using BDHero;
 using BDHero.Plugin;
 using BDHero.Startup;
+using DotNetUtils;
 
 namespace BDHeroGUI
 {
@@ -136,7 +137,8 @@ namespace BDHeroGUI
             var line = string.Format("{0} is {1} - {2} complete - {3} - {4} elapsed, {5} remaining",
                                      plugin.Name, progressProvider.State, (progressProvider.PercentComplete / 100.0).ToString("P"),
                                      progressProvider.Status,
-                                     progressProvider.RunTime, progressProvider.TimeRemaining);
+                                     progressProvider.RunTime.ToStringShort(),
+                                     progressProvider.TimeRemaining.ToStringShort());
             AppendStatus(line);
             progressBar.Value = (int) (progressProvider.PercentComplete * 1000d);
         }
