@@ -62,7 +62,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             WaitForThreadToExit();
 
             if (_exception != null)
-                throw _exception;
+                throw new Exception("Error occurred while muxing with FFmpeg", _exception);
         }
 
         private void OnProgressUpdated(FFmpeg ffmpeg, ProgressState progressState)

@@ -107,7 +107,7 @@ namespace TmdbPlugin
             {
                 const string apiMessage = "Error: An error occured trying to load the plugin settings file:";
                 Logger.ErrorFormat("{0} {1}", apiMessage, AssemblyInfo.SettingsFile);
-                throw ex;
+                throw;
             }
 
             return pluginSettings;
