@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BDHero.Exceptions;
 using BDHero.Plugin;
 using BDHero.Startup;
 using Ninject;
-using Ninject.Activation;
 using Ninject.Modules;
 
 namespace BDHero.Config
 {
-    public static class NinjectFactory
+    public static class InjectorFactory
     {
-        public static IKernel CreateMainKernel()
+        public static IKernel CreateContainer()
         {
             return new StandardKernel(new MainModule());
         }

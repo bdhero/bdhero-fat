@@ -12,7 +12,7 @@ namespace BDHeroCLI
     {
         static void Main(string[] args)
         {
-            var cli = new CLI(NinjectFactory.CreateMainKernel());
+            var cli = new CLI(InjectorFactory.CreateContainer());
             cli.Run(args);
         }
     }

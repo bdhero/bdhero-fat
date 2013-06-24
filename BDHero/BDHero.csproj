@@ -57,7 +57,7 @@
     <Compile Include="BDROM\Playlist.cs" />
     <Compile Include="BDROM\StreamClip.cs" />
     <Compile Include="BDROM\Track.cs" />
-    <Compile Include="Config\NinjectFactory.cs" />
+    <Compile Include="Config\InjectorFactory.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Exceptions\RequiredPluginNotFoundException.cs" />
     <Compile Include="IController.cs" />
