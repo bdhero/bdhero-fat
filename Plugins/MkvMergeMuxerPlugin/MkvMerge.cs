@@ -7,12 +7,12 @@ using ProcessUtils;
 namespace BDHero.Plugin.MkvMergeMuxer
 {
     /// <see cref="http://stackoverflow.com/a/11867784/467582"/>
+    /// TODO: Switch to BackgroundProcessWorker
 // ReSharper disable LocalizableElement
 // ReSharper disable RedundantNameQualifier
     [System.ComponentModel.DesignerCategory("Code")]
 // ReSharper restore RedundantNameQualifier
 // ReSharper restore LocalizableElement
-    /// TODO: Switch to BackgroundProcessWorker
     public class MkvMerge : AbstractExternalTool
     {
         private readonly string _inputM2TsPath;
