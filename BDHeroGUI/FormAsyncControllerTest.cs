@@ -19,6 +19,7 @@ namespace BDHeroGUI
         private readonly IDirectoryLocator _directoryLocator;
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
+        private ToolTip _progressBarToolTip;
 
         public FormAsyncControllerTest(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
@@ -30,6 +31,9 @@ namespace BDHeroGUI
             _controller = controller;
 
             Load += OnLoad;
+
+            _progressBarToolTip = new ToolTip();
+            _progressBarToolTip.SetToolTip(progressBar, null);
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -86,6 +90,7 @@ namespace BDHeroGUI
         private void AppendStatus(string statusLine = null)
         {
             textBoxStatus.Text = (statusLine ?? string.Empty);
+            _logger.Debug(statusLine);
         }
 
         private void ControllerOnScanStarted(object sender, EventArgs eventArgs)
@@ -134,13 +139,15 @@ namespace BDHeroGUI
 
         private void ControllerOnPluginProgressUpdated(IPlugin plugin, ProgressProvider progressProvider)
         {
+            var percentCompleteStr = (progressProvider.PercentComplete/100.0).ToString("P");
             var line = string.Format("{0} is {1} - {2} complete - {3} - {4} elapsed, {5} remaining",
-                                     plugin.Name, progressProvider.State, (progressProvider.PercentComplete / 100.0).ToString("P"),
+                                     plugin.Name, progressProvider.State, percentCompleteStr,
                                      progressProvider.Status,
                                      progressProvider.RunTime.ToStringShort(),
                                      progressProvider.TimeRemaining.ToStringShort());
             AppendStatus(line);
             progressBar.ValuePercent = progressProvider.PercentComplete;
+            _progressBarToolTip.SetToolTip(progressBar, string.Format("{0}: {1}", progressProvider.State, percentCompleteStr));
 
             switch (progressProvider.State)
             {
