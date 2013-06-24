@@ -8,21 +8,17 @@ using BDHero.Plugin;
 using BDHero.Startup;
 using DotNetUtils;
 using Mono.Options;
-using Ninject;
 using ProcessUtils;
 
 namespace BDHeroCLI
 {
     class CLI
     {
-        private const string LogConfigFileName = "bdhero-cli.log.config";
-
         private static string ExeFileName
         {
             get { return Path.GetFileName(AssemblyUtils.AssemblyOrDefault().Location); }
         }
 
-        private readonly IKernel _kernel;
         private readonly log4net.ILog _logger;
         private readonly IDirectoryLocator _directoryLocator;
         private readonly PluginLoader _pluginLoader;
@@ -32,16 +28,12 @@ namespace BDHeroCLI
         private string _bdromPath;
         private string _mkvPath;
 
-        public CLI(IKernel kernel)
+        public CLI(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
-            _kernel = kernel;
-
-            _kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
-
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _directoryLocator = _kernel.Get<IDirectoryLocator>();
-            _pluginLoader = _kernel.Get<PluginLoader>();
-            _controller = _kernel.Get<IController>();
+            _directoryLocator = directoryLocator;
+            _pluginLoader = pluginLoader;
+            _controller = controller;
         }
 
         public void Run(IEnumerable<string> args)

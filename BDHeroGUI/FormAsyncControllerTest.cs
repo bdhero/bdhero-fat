@@ -9,32 +9,24 @@ using System.Windows.Forms;
 using BDHero;
 using BDHero.Plugin;
 using BDHero.Startup;
-using Ninject;
 
 namespace BDHeroGUI
 {
     public partial class FormAsyncControllerTest : Form
     {
-        private const string LogConfigFileName = "bdhero-gui.log.config";
-
-        private readonly IKernel _kernel;
         private readonly log4net.ILog _logger;
         private readonly IDirectoryLocator _directoryLocator;
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
 
-        public FormAsyncControllerTest(IKernel kernel)
+        public FormAsyncControllerTest(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
             InitializeComponent();
 
-            _kernel = kernel;
-
-            _kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
-
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _directoryLocator = _kernel.Get<IDirectoryLocator>();
-            _pluginLoader = _kernel.Get<PluginLoader>();
-            _controller = _kernel.Get<IController>();
+            _directoryLocator = directoryLocator;
+            _pluginLoader = pluginLoader;
+            _controller = controller;
 
             Load += OnLoad;
         }
