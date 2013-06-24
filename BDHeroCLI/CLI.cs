@@ -56,7 +56,7 @@ namespace BDHeroCLI
             var optionSet = new OptionSet
                 {
                     { "h|?|help", v => ShowHelp() },
-                    { "-V|version", s => Environment.Exit(0) },
+                    { "V|version", s => Environment.Exit(0) },
                     { "debug", s => loggerRepository.Threshold = log4net.Core.Level.Debug },
                     { "v|verbose", s => loggerRepository.Threshold = log4net.Core.Level.Info },
                     { "w|warn", s => loggerRepository.Threshold = log4net.Core.Level.Warn },
