@@ -140,7 +140,23 @@ namespace BDHeroGUI
                                      progressProvider.RunTime.ToStringShort(),
                                      progressProvider.TimeRemaining.ToStringShort());
             AppendStatus(line);
-            progressBar.Value = (int) (progressProvider.PercentComplete * 1000d);
+            progressBar.ValuePercent = progressProvider.PercentComplete;
+
+            switch (progressProvider.State)
+            {
+                case ProgressProviderState.Error:
+                    progressBar.SetError();
+                    break;
+                case ProgressProviderState.Paused:
+                    progressBar.SetPaused();
+                    break;
+                case ProgressProviderState.Canceled:
+                    progressBar.SetMuted();
+                    break;
+                default:
+                    progressBar.SetSuccess();
+                    break;
+            }
         }
 
         private void buttonMux_Click(object sender, EventArgs e)

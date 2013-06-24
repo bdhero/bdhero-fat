@@ -35,7 +35,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxStatus = new System.Windows.Forms.TextBox();
             this.buttonMux = new System.Windows.Forms.Button();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.SuspendLayout();
             // 
             // label1
@@ -151,7 +151,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxStatus;
         private System.Windows.Forms.Button buttonMux;
-        private System.Windows.Forms.ProgressBar progressBar;
+        private DotNetUtils.Controls.ProgressBar2 progressBar;
     }
 }
 
