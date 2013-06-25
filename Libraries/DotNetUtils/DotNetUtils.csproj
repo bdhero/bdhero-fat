@@ -74,6 +74,9 @@
     <Compile Include="Mono.Options.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskUtils\IThreadInvoker.cs" />
+    <Compile Include="TaskUtils\ThreadInvoker.cs" />
+    <Compile Include="TaskUtils\TaskBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
