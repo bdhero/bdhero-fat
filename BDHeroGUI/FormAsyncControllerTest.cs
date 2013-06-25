@@ -26,6 +26,8 @@ namespace BDHeroGUI
         private CancellationTokenSource _scanCancellationTokenSource;
         private CancellationTokenSource _convertCancellationTokenSource;
 
+        private bool _isRunning;
+
         public FormAsyncControllerTest(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
             InitializeComponent();
@@ -92,6 +94,7 @@ namespace BDHeroGUI
             textBoxOutput.Enabled = enabled;
             buttonMux.Enabled = enabled;
             buttonCancel.Enabled = !enabled;
+            _isRunning = !enabled;
         }
 
         private void AppendStatus(string statusLine = null)
@@ -146,6 +149,9 @@ namespace BDHeroGUI
 
         private void ControllerOnPluginProgressUpdated(IPlugin plugin, ProgressProvider progressProvider)
         {
+            if (!_isRunning)
+                return;
+
             var percentCompleteStr = (progressProvider.PercentComplete/100.0).ToString("P");
             var line = string.Format("{0} is {1} - {2} complete - {3} - {4} elapsed, {5} remaining",
                                      plugin.Name, progressProvider.State, percentCompleteStr,
