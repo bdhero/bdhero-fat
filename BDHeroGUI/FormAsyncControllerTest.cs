@@ -21,7 +21,7 @@ namespace BDHeroGUI
         private readonly IDirectoryLocator _directoryLocator;
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
-        private ToolTip _progressBarToolTip;
+        private readonly ToolTip _progressBarToolTip;
 
         private CancellationTokenSource _scanCancellationTokenSource;
         private CancellationTokenSource _convertCancellationTokenSource;
