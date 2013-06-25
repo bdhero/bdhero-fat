@@ -13,9 +13,9 @@ namespace DotNetUtils.TaskUtils
 
         private Action<CancellationToken> _beforeStart;
         private Action<IThreadInvoker, CancellationToken> _work;
-        private Action<CancellationToken> _succeed;
-        private Action<CancellationToken, Exception> _fail;
-        private Action<CancellationToken> _finally;
+        private Action _succeed;
+        private Action<Exception> _fail;
+        private Action _finally;
 
         public TaskBuilder OnThread(TaskScheduler callbackThread)
         {
@@ -66,7 +66,7 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         /// <param name="succeed">Action to invoke on the UI thread when the main DoWork action completes successfully</param>
         /// <returns>Reference to this <code>TaskBuilder</code></returns>
-        public TaskBuilder Succeed(Action<CancellationToken> succeed)
+        public TaskBuilder Succeed(Action succeed)
         {
             _succeed = succeed;
             return this;
@@ -78,7 +78,7 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         /// <param name="fail">Action to invoke on the UI thread when the main DoWork action fails</param>
         /// <returns>Reference to this <code>TaskBuilder</code></returns>
-        public TaskBuilder Fail(Action<CancellationToken, Exception> fail)
+        public TaskBuilder Fail(Action<Exception> fail)
         {
             _fail = fail;
             return this;
@@ -90,13 +90,13 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         /// <param name="finally"></param>
         /// <returns>Reference to this <code>TaskBuilder</code></returns>
-        public TaskBuilder Finally(Action<CancellationToken> @finally)
+        public TaskBuilder Finally(Action @finally)
         {
             _finally = @finally;
             return this;
         }
 
-        public Task Build()
+        public Task<bool> Build()
         {
             var scheduler = _callbackThread;
             var token = _cancellationToken;
@@ -113,22 +113,26 @@ namespace DotNetUtils.TaskUtils
 
             _invoker = new ThreadInvoker(scheduler, token);
 
-            var stageTask = new Task(delegate
+            var task = new Task<bool>(delegate
                 {
                     try
                     {
                         if (InvokeBeforeStart() && InvokeDoWork())
                         {
                             InvokeSucceed();
+                            return true;
                         }
                     }
                     finally
                     {
+                        // TODO: Log uncaught exceptions?
+                        // TODO: Where to handle uncaught exceptions?
                         InvokeFinally();
                     }
-                });
+                    return false;
+                }, token, TaskCreationOptions.None);
 
-            return stageTask;
+            return task;
         }
 
         private bool InvokeBeforeStart()
@@ -139,20 +143,26 @@ namespace DotNetUtils.TaskUtils
 
         private bool InvokeDoWork()
         {
-            Debug.Assert(_work != null);
+            if (_work == null) return true;
             return Try(() => _work(_invoker, _cancellationToken));
         }
 
         private void InvokeSucceed()
         {
             if (_succeed == null) return;
-            Try(() => _invoker.InvokeOnUIThreadSync(_succeed));
+            _invoker.InvokeOnUIThreadSync(token => _succeed());
+        }
+
+        private void InvokeFail(Exception exception)
+        {
+            if (_fail == null) return;
+            _invoker.InvokeOnUIThreadSync(token => _fail(exception));
         }
 
         private void InvokeFinally()
         {
             if (_finally == null) return;
-            Try(() => _invoker.InvokeOnUIThreadSync(_finally));
+            _invoker.InvokeOnUIThreadSync(token => _finally());
         }
 
         private bool Try(Action action)
@@ -163,9 +173,13 @@ namespace DotNetUtils.TaskUtils
                 {
                     action();
                 }
+//                catch (OperationCanceledException exception)
+//                {
+//                    return false;
+//                }
                 catch (Exception exception)
                 {
-                    _fail(_cancellationToken, exception);
+                    InvokeFail(exception);
                     return false;
                 }
             }

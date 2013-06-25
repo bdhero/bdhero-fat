@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using BDHero.Plugin;
 using BDHero.JobQueue;
 using DotNetUtils;
@@ -46,17 +47,26 @@ namespace TmdbPlugin
         {
         }
 
-        public void GetMetadata(Job job)
+        public void GetMetadata(CancellationToken cancellationToken, Job job)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             Host.ReportProgress(this, 0.0, "Loading config file...");
 
             var pluginSettings = CheckConfigFile();
             
             LoadConfig(pluginSettings);
 
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             Host.ReportProgress(this, 100.0 * 1.0 / 3.0, "Querying TMDb...");
 
             ApiRequest(job);
+
+            if (cancellationToken.IsCancellationRequested)
+                return;
 
             Host.ReportProgress(this, 100.0 * 2.0 / 3.0, "Getting poster images...");
 

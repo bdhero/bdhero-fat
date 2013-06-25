@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Xml;
 using BDHero.Plugin;
 using BDHero.JobQueue;
@@ -39,8 +40,11 @@ namespace ChapterGrabberPlugin
         }
 
 
-        public void Rename(Job job)
+        public void Rename(CancellationToken cancellationToken, Job job)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             Host.ReportProgress(this, 0.0, "Querying ChapterDb.org...");
 
             //var playlist = job.Disc.Playlists[job.SelectedPlaylistIndex];
@@ -53,6 +57,9 @@ namespace ChapterGrabberPlugin
                 {
                     ReplaceChapters(apiValues[0], playlist.Chapters);
                 }*/
+
+                if (cancellationToken.IsCancellationRequested)
+                    return;
 
                 Host.ReportProgress(this, 90.0, "Comparing search results to available playlists...");
 
@@ -70,6 +77,9 @@ namespace ChapterGrabberPlugin
                     }
                 }    
             }
+
+            if (cancellationToken.IsCancellationRequested)
+                return;
 
             Host.ReportProgress(this, 100.0, "Finished querying ChapterDb.org");
         }

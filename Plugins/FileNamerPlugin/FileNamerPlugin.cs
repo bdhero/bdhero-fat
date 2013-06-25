@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using BDHero.JobQueue;
 
 namespace BDHero.Plugin.FileNamer
@@ -26,7 +27,7 @@ namespace BDHero.Plugin.FileNamer
         {
         }
 
-        public void Rename(Job job)
+        public void Rename(CancellationToken cancellationToken, Job job)
         {
             Host.ReportProgress(this, 0.0, "Auto-renaming output file...");
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using BDHero.JobQueue;
 
 namespace BDHero.Plugin.MkvMergeMuxer
@@ -37,7 +38,7 @@ namespace BDHero.Plugin.MkvMergeMuxer
         {
         }
 
-        public void Mux(Job job)
+        public void Mux(CancellationToken cancellationToken, Job job)
         {
         }
     }

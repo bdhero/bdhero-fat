@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using BDHero;
 using BDHero.Plugin;
 using BDHero.Startup;
@@ -141,14 +142,16 @@ namespace BDHeroCLI
 
         private bool Scan(string bdromPath, string mkvPath)
         {
-            var scanTask = _controller.CreateScanTask(bdromPath, mkvPath);
+            var cancellationToken = new CancellationToken();
+            var scanTask = _controller.CreateScanTask(cancellationToken, bdromPath, mkvPath);
             scanTask.Start();
             return scanTask.Result;
         }
 
         private bool Convert()
         {
-            var convertTask = _controller.CreateConvertTask();
+            var cancellationToken = new CancellationToken();
+            var convertTask = _controller.CreateConvertTask(cancellationToken);
             convertTask.Start();
             return convertTask.Result;
         }

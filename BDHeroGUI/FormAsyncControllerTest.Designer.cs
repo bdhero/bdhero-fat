@@ -36,6 +36,7 @@
             this.textBoxStatus = new System.Windows.Forms.TextBox();
             this.buttonMux = new System.Windows.Forms.Button();
             this.progressBar = new DotNetUtils.Controls.ProgressBar2();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -101,7 +102,7 @@
             // buttonMux
             // 
             this.buttonMux.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonMux.Location = new System.Drawing.Point(571, 65);
+            this.buttonMux.Location = new System.Drawing.Point(490, 65);
             this.buttonMux.Name = "buttonMux";
             this.buttonMux.Size = new System.Drawing.Size(75, 23);
             this.buttonMux.TabIndex = 6;
@@ -113,6 +114,7 @@
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.CustomColors = false;
             this.progressBar.Location = new System.Drawing.Point(17, 473);
             this.progressBar.Maximum = 100000;
             this.progressBar.Name = "progressBar";
@@ -120,13 +122,28 @@
             this.progressBar.Step = 1;
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 7;
+            this.progressBar.ValuePercent = 0D;
             // 
-            // Form1
+            // buttonCancel
+            // 
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(571, 65);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 8;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // FormAsyncControllerTest
             // 
             this.AcceptButton = this.buttonMux;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(658, 508);
+            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.buttonMux);
             this.Controls.Add(this.textBoxStatus);
@@ -135,7 +152,7 @@
             this.Controls.Add(this.textBoxInput);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "Form1";
+            this.Name = "FormAsyncControllerTest";
             this.Text = "BDHero Async Controller Test";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -152,6 +169,7 @@
         private System.Windows.Forms.TextBox textBoxStatus;
         private System.Windows.Forms.Button buttonMux;
         private DotNetUtils.Controls.ProgressBar2 progressBar;
+        private System.Windows.Forms.Button buttonCancel;
     }
 }
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using BDHero.BDROM;
 using BDHero.JobQueue;
@@ -33,52 +34,44 @@ namespace BDHero.Plugin
         /// </summary>
         /// <param name="host">Host object that loaded the plugin</param>
         /// <param name="assemblyInfo">Contains information about the plugin DLL and config file</param>
-        /// <exception cref="PluginException"></exception>
         void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo);
 
         /// <summary>
         /// Invoked when the application is about to exit.
         /// </summary>
-        /// <exception cref="PluginException"></exception>
         void UnloadPlugin();
     }
 
     public interface IDiscReaderPlugin : IPlugin
     {
-        /// <exception cref="PluginException"></exception>
-        Disc ReadBDROM(string bdromPath);
+        Disc ReadBDROM(CancellationToken cancellationToken, string bdromPath);
     }
 
     public interface IMetadataProviderPlugin : IPlugin
     {
-        /// <exception cref="PluginException"></exception>
-        void GetMetadata(Job job);
+        void GetMetadata(CancellationToken cancellationToken, Job job);
     }
 
     public interface IAutoDetectorPlugin : IPlugin
     {
-        /// <exception cref="PluginException"></exception>
-        void AutoDetect(Job job);
+        void AutoDetect(CancellationToken cancellationToken, Job job);
     }
 
     public interface INameProviderPlugin : IPlugin
     {
-        /// <exception cref="PluginException"></exception>
-        void Rename(Job job);
+        void Rename(CancellationToken cancellationToken, Job job);
     }
 
     public interface IMuxerPlugin : IPlugin
     {
         MatroskaFeatures SupportedFeatures { get; }
 
-        /// <exception cref="PluginException"></exception>
-        void Mux(Job job);
+        void Mux(CancellationToken cancellationToken, Job job);
     }
 
     public interface IPostProcessorPlugin : IPlugin
     {
-        /// <exception cref="PluginException"></exception>
-        void PostProcess(Job job);
+        void PostProcess(CancellationToken cancellationToken, Job job);
     }
 
     [Flags]

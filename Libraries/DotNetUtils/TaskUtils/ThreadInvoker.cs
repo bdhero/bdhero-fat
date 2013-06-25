@@ -39,7 +39,8 @@ namespace DotNetUtils.TaskUtils
 
         private Task StartTask(Action<CancellationToken> action, CancellationToken cancellationToken)
         {
-            return Task.Factory.StartNew(() => action(cancellationToken), _cancellationToken, TaskCreationOptions.None, _callbackThread);
+            var token = !cancellationToken.IsCancellationRequested ? cancellationToken : CancellationToken.None;
+            return Task.Factory.StartNew(() => action(token), token, TaskCreationOptions.None, _callbackThread);
         }
     }
 }

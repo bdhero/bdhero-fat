@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using BDHero.Exceptions;
 using BDHero.JobQueue;
@@ -85,17 +86,19 @@ namespace BDHero
         /// <summary>
         /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.
         /// </summary>
+        /// <param name="cancellationToken"></param>
         /// <param name="bdromPath">Path to the BD-ROM directory</param>
         /// <param name="mkvPath">Optional path to the output directory or MKV file</param>
         /// <returns><code>true</code> if the scan succeeded; otherwise <code>false</code></returns>
-        Task<bool> CreateScanTask(string bdromPath, string mkvPath = null);
+        Task<bool> CreateScanTask(CancellationToken cancellationToken, string bdromPath, string mkvPath = null);
 
         /// <summary>
         /// Muxes the BD-ROM to MKV and runs any post-processing plugins.
         /// </summary>
+        /// <param name="cancellationToken"></param>
         /// <param name="mkvPath">Optional path to the MKV output file or directory (if overridden by the user)</param>
         /// <returns><code>true</code> if all muxing plugins succeeded; otherwise <code>false</code></returns>
-        Task<bool> CreateConvertTask(string mkvPath = null);
+        Task<bool> CreateConvertTask(CancellationToken cancellationToken, string mkvPath = null);
 
         #endregion
     }

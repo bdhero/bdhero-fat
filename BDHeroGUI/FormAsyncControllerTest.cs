@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BDHero;
 using BDHero.Plugin;
@@ -20,6 +22,9 @@ namespace BDHeroGUI
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
         private ToolTip _progressBarToolTip;
+
+        private CancellationTokenSource _scanCancellationTokenSource;
+        private CancellationTokenSource _convertCancellationTokenSource;
 
         public FormAsyncControllerTest(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
@@ -42,6 +47,7 @@ namespace BDHeroGUI
             LoadPlugins();
             LogPlugins();
             InitController();
+            EnableControls(true);
         }
 
         private void LogDirectoryPaths()
@@ -76,8 +82,6 @@ namespace BDHeroGUI
             _controller.ConvertCompleted += ControllerOnConvertCompleted;
 
             _controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
-
-            _controller.SetEventScheduler();
         }
 
         private void EnableControls(bool enabled)
@@ -85,6 +89,7 @@ namespace BDHeroGUI
             textBoxInput.Enabled = enabled;
             textBoxOutput.Enabled = enabled;
             buttonMux.Enabled = enabled;
+            buttonCancel.Enabled = !enabled;
         }
 
         private void AppendStatus(string statusLine = null)
@@ -168,11 +173,26 @@ namespace BDHeroGUI
 
         private void buttonMux_Click(object sender, EventArgs e)
         {
-            var scanTask = _controller.CreateScanTask(textBoxInput.Text, textBoxOutput.Text);
-            var convertTask = _controller.CreateConvertTask();
+            _scanCancellationTokenSource = new CancellationTokenSource();
+            _convertCancellationTokenSource = new CancellationTokenSource();
 
-            scanTask.ContinueWith(task => convertTask.Start());
+            _controller.SetEventScheduler();
+
+            var scanTask = _controller.CreateScanTask(_scanCancellationTokenSource.Token, textBoxInput.Text, textBoxOutput.Text);
+            var convertTask = _controller.CreateConvertTask(_convertCancellationTokenSource.Token);
+
+            scanTask.ContinueWith(delegate(Task task)
+                {
+                    if (task.IsCompleted && !_scanCancellationTokenSource.Token.IsCancellationRequested)
+                        convertTask.Start();
+                });
             scanTask.Start();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            _scanCancellationTokenSource.Cancel();
+            _convertCancellationTokenSource.Cancel();
         }
     }
 }

@@ -46,8 +46,11 @@ namespace BDHero.Plugin.FFmpegMuxer
         {
         }
 
-        public void Mux(Job job)
+        public void Mux(CancellationToken cancellationToken, Job job)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             var startStatus = "Starting FFmpeg process...";
 
             Host.ReportProgress(this, 0.0, startStatus);
@@ -56,22 +59,31 @@ namespace BDHero.Plugin.FFmpegMuxer
             _exception = null;
 
             var ffmpeg = new FFmpeg(job, job.SelectedPlaylist, job.OutputPath);
-            ffmpeg.ProgressUpdated += state => OnProgressUpdated(ffmpeg, state);
+            ffmpeg.ProgressUpdated += state => OnProgressUpdated(ffmpeg, state, cancellationToken);
             ffmpeg.Exited += FFmpegOnExited;
             ffmpeg.StartAsync();
+            cancellationToken.Register(ffmpeg.Kill, true);
             WaitForThreadToExit();
 
             if (_exception != null)
+            {
+                if (_exception is OperationCanceledException)
+                    throw new OperationCanceledException("FFmpeg was canceled", _exception);
                 throw new Exception("Error occurred while muxing with FFmpeg", _exception);
+            }
         }
 
-        private void OnProgressUpdated(FFmpeg ffmpeg, ProgressState progressState)
+        private void OnProgressUpdated(FFmpeg ffmpeg, ProgressState progressState, CancellationToken cancellationToken)
         {
             var status = string.Format("Muxing to MKV with FFmpeg: {0} - {1} @ {2} fps",
                 TimeSpan.FromMilliseconds(ffmpeg.CurOutTimeMs).ToStringMedium(),
                 FileUtils.BytesToString(ffmpeg.CurSize),
                 ffmpeg.CurFps.ToString("0.0"));
+
             Host.ReportProgress(this, progressState.PercentComplete, status);
+
+            if (cancellationToken.IsCancellationRequested)
+                ffmpeg.Kill();
         }
 
         private void FFmpegOnExited(NonInteractiveProcessState state, int exitCode, Exception exception, TimeSpan runTime)
@@ -79,7 +91,14 @@ namespace BDHero.Plugin.FFmpegMuxer
             Logger.InfoFormat("FFmpeg exited with state {0} and code {1}", state, exitCode);
             if (state != NonInteractiveProcessState.Completed)
             {
-                _exception = exception ?? new Exception(string.Format("FFmpeg exited with state: {0}", state));
+                if (state == NonInteractiveProcessState.Killed)
+                {
+                    _exception = exception ?? new OperationCanceledException(string.Format("FFmpeg exited with state: {0}", state));
+                }
+                else
+                {
+                    _exception = exception ?? new Exception(string.Format("FFmpeg exited with state: {0}", state));
+                }
             }
             SignalThreadExited();
         }

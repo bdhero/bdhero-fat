@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using BDHero.BDROM;
 using BDHero.Plugin.DiscReader.Transformer;
 using BDInfo;
@@ -27,13 +28,19 @@ namespace BDHero.Plugin.DiscReader
         {
         }
 
-        public Disc ReadBDROM(string bdromPath)
+        public Disc ReadBDROM(CancellationToken cancellationToken, string bdromPath)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
             Host.ReportProgress(this, 0.0, "Scanning BD-ROM...");
 
             var bdrom = new BDInfo.BDROM(bdromPath);
             bdrom.ScanProgress += BDROMOnScanProgress;
-            bdrom.Scan();
+            bdrom.Scan(cancellationToken);
+
+            if (cancellationToken.IsCancellationRequested)
+                return null;
 
             Host.ReportProgress(this, 99.0, "Transforming BDInfo structure into BDHero structure...");
 

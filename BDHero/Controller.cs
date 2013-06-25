@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BDHero.Plugin;
 using BDHero.JobQueue;
+using DotNetUtils.TaskUtils;
 
 namespace BDHero
 {
@@ -47,69 +48,140 @@ namespace BDHero
         public void SetEventScheduler(TaskScheduler scheduler = null)
         {
             // Get the calling thread's context
+            var fromCurrentSynchronizationContext = TaskScheduler.FromCurrentSynchronizationContext();
             _callbackScheduler = scheduler ??
                                 (SynchronizationContext.Current != null
-                                     ? TaskScheduler.FromCurrentSynchronizationContext()
+                                     ? fromCurrentSynchronizationContext
                                      : TaskScheduler.Default);
         }
 
         #region Stages
 
-        public Task<bool> CreateScanTask(string bdromPath, string mkvPath = null)
+        public Task<bool> CreateScanTask(CancellationToken cancellationToken, string bdromPath, string mkvPath = null)
         {
-            return CreateStageTask(() => ReadBDROM(bdromPath), delegate
-                {
-                    GetMetadata();
-                    AutoDetect();
-                    Rename(mkvPath);
-                }, ScanStart, ScanSucceed, ScanFail);
+            return new TaskBuilder()
+                .OnThread(_callbackScheduler)
+                .CancelWith(cancellationToken)
+                .BeforeStart(_ => ScanStart())
+                .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
+                    {
+                        var fail = new Action(() => invoker.InvokeOnUIThreadAsync(_ => ScanFail()));
+
+                        if (ReadBDROM(token, bdromPath))
+                        {
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                fail();
+                                return;
+                            }
+
+                            GetMetadata(token);
+
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                fail();
+                                return;
+                            }
+
+                            AutoDetect(token);
+
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                fail();
+                                return;
+                            }
+
+                            Rename(token, mkvPath);
+
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                fail();
+                                return;
+                            }
+
+                            invoker.InvokeOnUIThreadAsync(_ => ScanSucceed());
+                        }
+                        else
+                        {
+                            fail();
+                        }
+                    })
+                .Build()
+            ;
         }
 
-        public Task<bool> CreateConvertTask(string mkvPath = null)
+        public Task<bool> CreateConvertTask(CancellationToken cancellationToken, string mkvPath = null)
         {
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
 
-            return CreateStageTask(Mux, PostProcess, ConvertStart, ConvertSucceed, ConvertFail);
+            return new TaskBuilder()
+                .OnThread(_callbackScheduler)
+                .CancelWith(cancellationToken)
+                .BeforeStart(_ => ConvertStart())
+                .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
+                    {
+                        if (Mux(token) && !token.IsCancellationRequested)
+                        {
+                            PostProcess(token);
+
+                            invoker.InvokeOnUIThreadAsync(_ => ConvertSucceed());
+                        }
+                        else
+                        {
+                            invoker.InvokeOnUIThreadAsync(_ => ConvertFail());
+                        }
+                    })
+                .Build()
+            ;
         }
 
-        private Task<bool> CreateStageTask(Func<bool> criticalPhase, Action optionalPhases, Action start, Func<bool> succeed, Func<bool> fail)
+        private Task<bool> CreatePluginTask(CancellationToken cancellationToken, IPlugin plugin, ExecutePluginHandler pluginRunner)
         {
-            var stageTask = new Task<bool>(delegate
-            {
-                var token = Task.Factory.CancellationToken;
+            return new TaskBuilder()
+                .OnThread(_callbackScheduler)
+                .CancelWith(cancellationToken)
+                .BeforeStart(delegate(CancellationToken token)
+                    {
+                        var progressProvider = _pluginService.GetProgressProvider(plugin);
 
-                if (_callbackScheduler == null)
-                {
-                    throw new InvalidOperationException("No callback TaskScheduler has been set; set one with IController.SetEventScheduler().");
-                }
+                        progressProvider.Updated -= ProgressProviderOnUpdated;
+                        progressProvider.Updated += ProgressProviderOnUpdated;
 
-                // It's possible to start a task directly on
-                // the UI thread, but not common...
-                var startTask = Task.Factory.StartNew(start, token, TaskCreationOptions.None, _callbackScheduler);
-                startTask.Wait();
-
-                if (!criticalPhase())
-                {
-                    // It's possible to start a task directly on
-                    // the UI thread, but not common...
-                    var failTask = Task.Factory.StartNew(fail, token, TaskCreationOptions.None, _callbackScheduler);
-
-                    // Blocks until the task finishes executing
-                    return failTask.Result;
-                }
-
-                optionalPhases();
-
-                // It's possible to start a task directly on
-                // the UI thread, but not common...
-                var succeedTask = Task.Factory.StartNew(succeed, token, TaskCreationOptions.None, _callbackScheduler);
-
-                // Blocks until the task finishes executing
-                return succeedTask.Result;
-            });
-
-            return stageTask;
+                        progressProvider.Reset();
+                        progressProvider.Start();
+                    })
+                .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
+                    {
+                        pluginRunner(token);
+                    })
+                .Fail(delegate(Exception exception)
+                    {
+                        var progressProvider = _pluginService.GetProgressProvider(plugin);
+                        if (exception is OperationCanceledException)
+                        {
+                            progressProvider.Cancel();
+                        }
+                        else
+                        {
+                            progressProvider.Error(exception);
+                            HandleUnhandledException(exception);
+                        }
+                    })
+                .Succeed(delegate
+                    {
+                        var progressProvider = _pluginService.GetProgressProvider(plugin);
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            progressProvider.Cancel();
+                        }
+                        else
+                        {
+                            progressProvider.Succeed();
+                        }
+                    })
+                .Build()
+            ;
         }
 
         #endregion
@@ -118,38 +190,42 @@ namespace BDHero
 
         #region 1 - Disc Reader
 
-        private bool ReadBDROM(string bdromPath)
+        private bool ReadBDROM(CancellationToken cancellationToken, string bdromPath)
         {
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
-            return ExecutePlugin(discReader, () => Job = new Job(discReader.ReadBDROM(bdromPath)));
+            var pluginTask = CreatePluginTask(cancellationToken, discReader, token => Job = new Job(discReader.ReadBDROM(token, bdromPath)));
+            pluginTask.RunSynchronously();
+            return pluginTask.IsCompleted && pluginTask.Result;
         }
 
         #endregion
 
         #region 2 - Metadata API Search
 
-        private void GetMetadata()
+        private void GetMetadata(CancellationToken cancellationToken)
         {
             foreach (var plugin in _pluginService.MetadataProviderPlugins)
             {
-                GetMetadata(plugin);
+                if (cancellationToken.IsCancellationRequested) return;
+                GetMetadata(cancellationToken, plugin);
             }
         }
 
-        private void GetMetadata(IMetadataProviderPlugin plugin)
+        private void GetMetadata(CancellationToken cancellationToken, IMetadataProviderPlugin plugin)
         {
-            ExecutePlugin(plugin, () => plugin.GetMetadata(Job));
+            CreatePluginTask(cancellationToken, plugin, token => plugin.GetMetadata(token, Job)).RunSynchronously();
         }
 
         #endregion
 
         #region 3 - Auto Detect
 
-        private void AutoDetect()
+        private void AutoDetect(CancellationToken cancellationToken)
         {
             foreach (var plugin in _pluginService.AutoDetectorPlugins)
             {
-                AutoDetect(plugin);
+                if (cancellationToken.IsCancellationRequested) return;
+                AutoDetect(cancellationToken, plugin);
             }
 
             foreach (var playlist in Job.Disc.ValidMainFeaturePlaylists)
@@ -158,62 +234,66 @@ namespace BDHero
             }
         }
 
-        private void AutoDetect(IAutoDetectorPlugin plugin)
+        private void AutoDetect(CancellationToken cancellationToken, IAutoDetectorPlugin plugin)
         {
-            ExecutePlugin(plugin, () => plugin.AutoDetect(Job));
+            CreatePluginTask(cancellationToken, plugin, token => plugin.AutoDetect(token, Job)).RunSynchronously();
         }
 
         #endregion
 
         #region 4 - Name Providers
 
-        private void Rename(string mkvPath = null)
+        private void Rename(CancellationToken cancellationToken, string mkvPath = null)
         {
             Job.OutputPath = mkvPath;
             foreach (var plugin in _pluginService.NameProviderPlugins)
             {
-                Rename(plugin);
+                if (cancellationToken.IsCancellationRequested) return;
+                Rename(cancellationToken, plugin);
             }
         }
 
-        private void Rename(INameProviderPlugin plugin)
+        private void Rename(CancellationToken cancellationToken, INameProviderPlugin plugin)
         {
-            ExecutePlugin(plugin, () => plugin.Rename(Job));
+            CreatePluginTask(cancellationToken, plugin, token => plugin.Rename(token, Job)).RunSynchronously();
         }
 
         #endregion
 
         #region 5 - Mux
 
-        private bool Mux()
+        private bool Mux(CancellationToken cancellationToken)
         {
-            if (_pluginService.MuxerPlugins.Any(muxer => !Mux(muxer)))
+            if (_pluginService.MuxerPlugins.Any(muxer => !Mux(cancellationToken, muxer)))
             {
                 return false;
             }
             return _pluginService.MuxerPlugins.Count > 0;
         }
 
-        private bool Mux(IMuxerPlugin muxer)
+        private bool Mux(CancellationToken cancellationToken, IMuxerPlugin plugin)
         {
-            return ExecutePlugin(muxer, () => muxer.Mux(Job));
+            var pluginTask = CreatePluginTask(cancellationToken, plugin, token => plugin.Mux(token, Job));
+            pluginTask.RunSynchronously();
+            return pluginTask.IsCompleted && pluginTask.Result;
         }
 
         #endregion
 
         #region 6 - Post Process
 
-        private void PostProcess()
+        private void PostProcess(CancellationToken cancellationToken)
         {
             foreach (var plugin in _pluginService.PostProcessorPlugins)
             {
-                PostProcess(plugin);
+                if (cancellationToken.IsCancellationRequested) return;
+                PostProcess(cancellationToken, plugin);
             }
         }
 
-        private void PostProcess(IPostProcessorPlugin plugin)
+        private void PostProcess(CancellationToken cancellationToken, IPostProcessorPlugin plugin)
         {
-            ExecutePlugin(plugin, () => plugin.PostProcess(Job));
+            CreatePluginTask(cancellationToken, plugin, token => plugin.PostProcess(token, Job)).RunSynchronously();
         }
 
         #endregion
@@ -222,56 +302,25 @@ namespace BDHero
 
         #region Plugin runner
 
-        /// <summary>
-        /// Runs a plugin.  Reports the plugin's state and progress and handles any exceptions that it throws.
-        /// </summary>
-        /// <param name="plugin">Plugin to execute</param>
-        /// <param name="handler">Delegate that will invoke the plugin's functionality (and may potentially throw an exception)</param>
-        /// <returns>
-        /// <code>true</code> if the plugin completed successfully;
-        /// <code>false</code> if the plugin threw an exception, terminated abnormally, or was canceled.
-        /// </returns>
-        private bool ExecutePlugin(IPlugin plugin, ExecutePluginHandler handler)
-        {
-            var progressProvider = _pluginService.GetProgressProvider(plugin);
-
-            progressProvider.Updated -= ProgressProviderOnUpdated;
-            progressProvider.Updated += ProgressProviderOnUpdated;
-
-            progressProvider.Reset();
-            progressProvider.Start();
-
-            try
-            {
-                handler();
-                progressProvider.Succeed();
-                return true;
-            }
-            catch (Exception e)
-            {
-                progressProvider.Error(e);
-                HandleUnhandledException(plugin, e);
-                return false;
-            }
-        }
-
         private void ProgressProviderOnUpdated(ProgressProvider progressProvider)
         {
-            var token = Task.Factory.CancellationToken;
-            Task.Factory.StartNew(delegate
-                {
-                    if (PluginProgressUpdated != null)
-                        PluginProgressUpdated(progressProvider.Plugin, progressProvider);
-                }, token, TaskCreationOptions.None, _callbackScheduler);
+            if (PluginProgressUpdated != null)
+            {
+                // Marshal event back to UI thread
+                new TaskBuilder().OnThread(_callbackScheduler)
+                                 .BeforeStart(token => PluginProgressUpdated(progressProvider.Plugin, progressProvider))
+                                 .Build()
+                                 .Start();
+            }
         }
 
         #endregion
 
         #region Exception handling
 
-        private void HandleUnhandledException(IPlugin plugin, Exception exception)
+        private void HandleUnhandledException(Exception exception)
         {
-            var message = string.Format("Unhandled exception was thrown by plugin \"{0}\"", plugin.Name);
+            var message = string.Format("Unhandled exception was thrown by plugin");
             Logger.Error(message, exception);
             if (UnhandledException != null)
                 UnhandledException(this, new UnhandledExceptionEventArgs(exception, false));
@@ -348,5 +397,5 @@ namespace BDHero
         #endregion
     }
 
-    internal delegate void ExecutePluginHandler();
+    internal delegate void ExecutePluginHandler(CancellationToken token);
 }

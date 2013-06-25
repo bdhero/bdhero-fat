@@ -24,6 +24,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using I18N;
 
 namespace BDInfo
@@ -260,7 +261,7 @@ namespace BDInfo
 
         public event BDROMScanProgressHandler ScanProgress;
 
-        public BDROM Scan()
+        public BDROM Scan(CancellationToken cancellationToken)
         {
             var numStreamClipFiles = StreamClipFiles.Count;
             var numPlaylists = PlaylistFiles.Count;
@@ -280,6 +281,9 @@ namespace BDInfo
             List<TSStreamClipFile> errorStreamClipFiles = new List<TSStreamClipFile>();
             foreach (TSStreamClipFile streamClipFile in StreamClipFiles.Values)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return this;
+
                 try
                 {
                     ReportScanProgress("stream clip", streamClipFile.Name, 1,
@@ -324,6 +328,9 @@ namespace BDInfo
             List<TSPlaylistFile> errorPlaylistFiles = new List<TSPlaylistFile>();
             foreach (TSPlaylistFile playlistFile in PlaylistFiles.Values)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return this;
+
                 try
                 {
                     ReportScanProgress("playlist", playlistFile.Name, 2,
@@ -355,6 +362,9 @@ namespace BDInfo
             List<TSStreamFile> errorStreamFiles = new List<TSStreamFile>();
             foreach (TSStreamFile streamFile in streamFiles)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return this;
+
                 try
                 {
                     List<TSPlaylistFile> playlists = new List<TSPlaylistFile>();
@@ -397,6 +407,9 @@ namespace BDInfo
 
             foreach (TSPlaylistFile playlistFile in PlaylistFiles.Values)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return this;
+
                 playlistFile.Initialize();
                 if (!Is50Hz)
                 {

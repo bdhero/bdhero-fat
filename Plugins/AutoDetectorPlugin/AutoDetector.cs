@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using BDHero.BDROM;
 using BDHero.JobQueue;
 using DotNetUtils;
@@ -25,8 +26,11 @@ namespace BDHero.Plugin.AutoDetector
         {
         }
 
-        public void AutoDetect(Job job)
+        public void AutoDetect(CancellationToken cancellationToken, Job job)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             Host.ReportProgress(this, 0.0, "Gathering data...");
 
             var disc = job.Disc;
@@ -34,6 +38,9 @@ namespace BDHero.Plugin.AutoDetector
             // Data gathering (round 1)
             FindDuplicatePlaylists(disc);
             TransformPlaylistQuality(disc);
+
+            if (cancellationToken.IsCancellationRequested)
+                return;
 
             Host.ReportProgress(this, 25.0, "Auto-detecting track types...");
 
@@ -43,10 +50,16 @@ namespace BDHero.Plugin.AutoDetector
             DetectCommentaryPlaylistTrackTypes(disc);
             DetectSpecialFeaturePlaylistTrackTypes(disc);
 
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             Host.ReportProgress(this, 75.0, "Auto-selecting best playlists and tracks...");
 
             SelectBestPlaylist(job);
             SelectBestTracks(disc);
+
+            if (cancellationToken.IsCancellationRequested)
+                return;
 
             Host.ReportProgress(this, 100.0, "Finished auto detecting");
         }
