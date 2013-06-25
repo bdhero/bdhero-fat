@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace BDHero
         /// Needed for <see cref="ProgressProviderOnUpdated"/> to invoke progress update callbacks on the correct thread.
         /// </summary>
         private TaskScheduler _callbackScheduler;
+
+        private readonly ConcurrentDictionary<string, int> _progressMap = new ConcurrentDictionary<string, int>();
 
         public Job Job { get; private set; }
 
@@ -306,7 +309,19 @@ namespace BDHero
             {
                 // Marshal event back to UI thread
                 new TaskBuilder().OnThread(_callbackScheduler)
-                                 .BeforeStart(token => PluginProgressUpdated(progressProvider.Plugin, progressProvider))
+                                 .BeforeStart(delegate(CancellationToken token)
+                                     {
+                                         var guid = progressProvider.Plugin.AssemblyInfo.Guid;
+                                         var hashCode = progressProvider.GetHashCode();
+
+                                         // Progress hasn't changed since last update
+                                         if (_progressMap.ContainsKey(guid) && _progressMap[guid] == hashCode)
+                                             return;
+
+                                         _progressMap[guid] = hashCode;
+
+                                         PluginProgressUpdated(progressProvider.Plugin, progressProvider);
+                                     })
                                  .Build()
                                  .Start();
             }
