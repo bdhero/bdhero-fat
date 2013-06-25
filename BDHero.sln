@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDHeroGUI", "BDHeroGUI\BDHeroGUI.csproj", "{0A807DFE-9F38-418E-A811-649B9AD78102}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Packager", "Packager\Packager.csproj", "{ADA19178-9578-4B0A-95B1-D26DB40A4972}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -243,6 +245,18 @@ Global
 		{0A807DFE-9F38-418E-A811-649B9AD78102}.Release|Win32.ActiveCfg = Release|x86
 		{0A807DFE-9F38-418E-A811-649B9AD78102}.Release|x86.ActiveCfg = Release|x86
 		{0A807DFE-9F38-418E-A811-649B9AD78102}.Release|x86.Build.0 = Release|x86
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Release|Win32.ActiveCfg = Release|Any CPU
+		{ADA19178-9578-4B0A-95B1-D26DB40A4972}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

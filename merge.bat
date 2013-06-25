@@ -10,13 +10,15 @@ echo %ConfigurationName%
 
 mkdir Setup\ProgramFiles\Config
 
-xcopy /Y BDHeroCLI\bin\%ConfigurationName%\bdhero-cli.exe Setup\ProgramFiles\
-xcopy /Y BDHeroCLI\bin\%ConfigurationName%\*.dll Setup\ProgramFiles\
-xcopy /Y BDHeroCLI\bin\%ConfigurationName%\Config Setup\ProgramFiles\Config\
+REM Delete empty dummy DLL
+del /F Packager\bin\%ConfigurationName%\Packager.dll
 
-xcopy /Y BDHeroGUI\bin\%ConfigurationName%\bdhero-gui.exe Setup\ProgramFiles\
-xcopy /Y BDHeroGUI\bin\%ConfigurationName%\*.dll Setup\ProgramFiles\
-xcopy /Y BDHeroGUI\bin\%ConfigurationName%\Config Setup\ProgramFiles\Config\
+REM Copy core BDHero EXEs, DLLs, and config files to Setup dir
+xcopy /Y Packager\bin\%ConfigurationName%\*.exe Setup\ProgramFiles\
+xcopy /Y Packager\bin\%ConfigurationName%\*.dll Setup\ProgramFiles\
+xcopy /Y Packager\bin\%ConfigurationName%\Config Setup\ProgramFiles\Config\
+
+REM Copy required plugins
 
 xcopy /Y Plugins\DiscReaderPlugin\bin\%ConfigurationName%\DiscReaderPlugin.dll Setup\ProgramFiles\Plugins\Required\DiscReader\
 
