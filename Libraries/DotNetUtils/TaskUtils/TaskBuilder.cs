@@ -173,10 +173,6 @@ namespace DotNetUtils.TaskUtils
                 {
                     action();
                 }
-//                catch (OperationCanceledException exception)
-//                {
-//                    return false;
-//                }
                 catch (Exception exception)
                 {
                     InvokeFail(exception);
