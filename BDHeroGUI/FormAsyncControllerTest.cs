@@ -39,6 +39,8 @@ namespace BDHeroGUI
 
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
+
+            progressBar.CustomColors = true;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
