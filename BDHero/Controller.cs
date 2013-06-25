@@ -48,10 +48,9 @@ namespace BDHero
         public void SetEventScheduler(TaskScheduler scheduler = null)
         {
             // Get the calling thread's context
-            var fromCurrentSynchronizationContext = TaskScheduler.FromCurrentSynchronizationContext();
             _callbackScheduler = scheduler ??
                                 (SynchronizationContext.Current != null
-                                     ? fromCurrentSynchronizationContext
+                                     ? TaskScheduler.FromCurrentSynchronizationContext()
                                      : TaskScheduler.Default);
         }
 
