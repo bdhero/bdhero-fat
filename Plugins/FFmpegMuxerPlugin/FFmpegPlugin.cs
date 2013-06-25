@@ -51,7 +51,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             if (cancellationToken.IsCancellationRequested)
                 return;
 
-            var startStatus = "Starting FFmpeg process...";
+            const string startStatus = "Starting FFmpeg process...";
 
             Host.ReportProgress(this, 0.0, startStatus);
             Logger.Info(startStatus);
