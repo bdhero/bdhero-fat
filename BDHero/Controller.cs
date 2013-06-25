@@ -58,55 +58,32 @@ namespace BDHero
 
         public Task<bool> CreateScanTask(CancellationToken cancellationToken, string bdromPath, string mkvPath = null)
         {
-            return new TaskBuilder()
-                .OnThread(_callbackScheduler)
-                .CancelWith(cancellationToken)
-                .BeforeStart(_ => ScanStart())
-                .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
-                    {
-                        var fail = new Action(() => invoker.InvokeOnUIThreadAsync(_ => ScanFail()));
+            var token = cancellationToken;
+            var readBDROMAction = new Func<bool>(() => ReadBDROM(token, bdromPath));
+            var optionalPhases = new[] { CreateGetMetadataAction(token), CreateAutoDetectAction(token), CreateRenameAction(token, mkvPath) };
+            return CreateStageTask(
+                token,
+                ScanStart,
+                readBDROMAction,
+                optionalPhases,
+                ScanFail,
+                ScanSucceed
+            );
+        }
 
-                        if (ReadBDROM(token, bdromPath))
-                        {
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                fail();
-                                return;
-                            }
+        private Action CreateGetMetadataAction(CancellationToken cancellationToken)
+        {
+            return () => GetMetadata(cancellationToken);
+        }
 
-                            GetMetadata(token);
+        private Action CreateAutoDetectAction(CancellationToken cancellationToken)
+        {
+            return () => AutoDetect(cancellationToken);
+        }
 
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                fail();
-                                return;
-                            }
-
-                            AutoDetect(token);
-
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                fail();
-                                return;
-                            }
-
-                            Rename(token, mkvPath);
-
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                fail();
-                                return;
-                            }
-
-                            invoker.InvokeOnUIThreadAsync(_ => ScanSucceed());
-                        }
-                        else
-                        {
-                            fail();
-                        }
-                    })
-                .Build()
-            ;
+        private Action CreateRenameAction(CancellationToken cancellationToken, string mkvPath = null)
+        {
+            return () => Rename(cancellationToken, mkvPath);
         }
 
         public Task<bool> CreateConvertTask(CancellationToken cancellationToken, string mkvPath = null)
@@ -114,22 +91,44 @@ namespace BDHero
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
 
+            var token = cancellationToken;
+            var muxAction = new Func<bool>(() => Mux(token));
+            var optionalpPhases = new Action[] { () => PostProcess(token) };
+            return CreateStageTask(
+                token,
+                ConvertStart,
+                muxAction,
+                optionalpPhases,
+                ConvertFail,
+                ConvertSucceed
+            );
+        }
+
+        private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalphases, Action fail, Action succeed)
+        {
+            var canContinue = new Func<bool>(() => !cancellationToken.IsCancellationRequested);
+            cancellationToken.Register(() => Logger.Warn("User canceled current operation"));
             return new TaskBuilder()
                 .OnThread(_callbackScheduler)
                 .CancelWith(cancellationToken)
-                .BeforeStart(_ => ConvertStart())
+                .BeforeStart(_ => beforeStart())
                 .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
                     {
-                        if (Mux(token) && !token.IsCancellationRequested)
+                        if (criticalPhase())
                         {
-                            PostProcess(token);
+                            foreach (var phase in optionalphases.TakeWhile(phase => canContinue()))
+                            {
+                                phase();
+                            }
 
-                            invoker.InvokeOnUIThreadAsync(_ => ConvertSucceed());
+                            if (canContinue())
+                            {
+                                invoker.InvokeOnUIThreadAsync(_ => succeed());
+                                return;
+                            }
                         }
-                        else
-                        {
-                            invoker.InvokeOnUIThreadAsync(_ => ConvertFail());
-                        }
+
+                        invoker.InvokeOnUIThreadAsync(_ => fail());
                     })
                 .Build()
             ;
@@ -299,7 +298,7 @@ namespace BDHero
 
         #endregion
 
-        #region Plugin runner
+        #region Plugin progress reporting
 
         private void ProgressProviderOnUpdated(ProgressProvider progressProvider)
         {
@@ -335,24 +334,20 @@ namespace BDHero
                 ScanStarted(this, EventArgs.Empty);
         }
 
-        private bool ScanFail()
+        private void ScanFail()
         {
             if (ScanFailed != null)
                 ScanFailed(this, EventArgs.Empty);
 
             ScanComplete();
-
-            return false;
         }
 
-        private bool ScanSucceed()
+        private void ScanSucceed()
         {
             if (ScanSucceeded != null)
                 ScanSucceeded(this, EventArgs.Empty);
 
             ScanComplete();
-
-            return true;
         }
 
         private void ScanComplete()
@@ -367,24 +362,20 @@ namespace BDHero
                 ConvertStarted(this, EventArgs.Empty);
         }
 
-        private bool ConvertFail()
+        private void ConvertFail()
         {
             if (ConvertFailed != null)
                 ConvertFailed(this, EventArgs.Empty);
 
             ConvertComplete();
-
-            return false;
         }
 
-        private bool ConvertSucceed()
+        private void ConvertSucceed()
         {
             if (ConvertSucceeded != null)
                 ConvertSucceeded(this, EventArgs.Empty);
 
             ConvertComplete();
-
-            return true;
         }
 
         private void ConvertComplete()
