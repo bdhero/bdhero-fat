@@ -369,6 +369,18 @@ namespace BDHero.Plugin
 
             TimeRemaining = finalEstimate;
         }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = TimeRemaining.GetHashCode();
+                hashCode = (hashCode*397) ^ (int) State;
+                hashCode = (hashCode*397) ^ (Status != null ? Status.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ PercentComplete.GetHashCode();
+                return hashCode;
+            }
+        }
     }
 
     public delegate void ProgressUpdateHandler(ProgressProvider progressProvider);
