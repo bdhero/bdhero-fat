@@ -1,0 +1,123 @@
+Chores
+======
+
+[ ] Add logging
+    [ ] ProcessUtils and DotNetUtils?
+[ ] Unit tests
+    [ ] Exception handling in all scenarios
+
+Features
+========
+
+[ ] Angle support
+[ ] Fix or remove "low quality" playlist detection
+[ ] Consider chapter count and timestamps when looking for duplicate playlists (playlists w/ identical streams but different chapters are not dups)
+
+[ ] CLI prompt to select TMDb search result, playlist, angle, overwrite existing file
+[ ] Plugin hooks for UI events:
+    [ ] Select a movie/TV show
+    [ ] Re-configure playlist (change Cut, Language, selected tracks) -- (for updating output file name, MKV title, track title)
+[ ] File Namer placeholders
+    [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
+[ ] Allow any BD-ROM file/subdirectory to be scanned
+
+Bugs
+====
+
+[ ] Filter bad chars in output file names
+[ ] mkvpropedit.exe
+[ ] What if mkvpropedit.exe, ffmpeg.exe, etc. don't exist?  Currently the UI just hangs
+[ ] Parse FFmpeg error output when output path is not writeable (dir doesn't exist)
+[ ] Create parent dirs of output file
+[ ] Estimated time left -- double decrement bug
+[ ] Exception when pressing cancel during FFmpeg after EXE has exited immediately due to an error:
+
+See the end of this message for details on invoking 
+just-in-time (JIT) debugging instead of this dialog box.
+
+************** Exception Text **************
+System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: No process is associated with this object.
+   at System.Diagnostics.Process.EnsureState(State state)
+   at System.Diagnostics.Process.get_HasExited()
+   at ProcessUtils.NonInteractiveProcess.get_CanKill()
+   at ProcessUtils.NonInteractiveProcess.Kill()
+   at System.Threading.CancellationToken.ActionToActionObjShunt(Object obj)
+   at System.Threading.CancellationCallbackInfo.ExecutionContextCallback(Object obj)
+   at System.Threading.ExecutionContext.runTryCode(Object userData)
+   at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.CancellationCallbackInfo.ExecuteCallback()
+   at System.Threading.CancellationTokenSource.CancellationCallbackCoreWork_OnSyncContext(Object obj)
+   at System.Threading.SynchronizationContext.Send(SendOrPostCallback d, Object state)
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
+   --- End of inner exception stack trace ---
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.NotifyCancellation(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.Cancel()
+   at BDHeroGUI.FormAsyncControllerTest.buttonCancel_Click(Object sender, EventArgs e)
+   at System.Windows.Forms.Control.OnClick(EventArgs e)
+   at System.Windows.Forms.Button.OnClick(EventArgs e)
+   at System.Windows.Forms.Button.OnMouseUp(MouseEventArgs mevent)
+   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ButtonBase.WndProc(Message& m)
+   at System.Windows.Forms.Button.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+---> (Inner Exception #0) System.InvalidOperationException: No process is associated with this object.
+   at System.Diagnostics.Process.EnsureState(State state)
+   at System.Diagnostics.Process.get_HasExited()
+   at ProcessUtils.NonInteractiveProcess.get_CanKill()
+   at ProcessUtils.NonInteractiveProcess.Kill()
+   at System.Threading.CancellationToken.ActionToActionObjShunt(Object obj)
+   at System.Threading.CancellationCallbackInfo.ExecutionContextCallback(Object obj)
+   at System.Threading.ExecutionContext.runTryCode(Object userData)
+   at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.CancellationCallbackInfo.ExecuteCallback()
+   at System.Threading.CancellationTokenSource.CancellationCallbackCoreWork_OnSyncContext(Object obj)
+   at System.Threading.SynchronizationContext.Send(SendOrPostCallback d, Object state)
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)<---
+
+Backlog
+=======
+
+[ ] Allow pausing of tasks
+
+[ ] CLI arg to dump list of main movie playlist files
+[ ] Separate file namer preferences for movies and TV shows
+[ ] Asynchronous TMDb poster/cover art getter thread (use futures?)
+
+[ ] Move output file name settings out into Preferences dialog (similar to mmg)
+
+Chris' Plugins
+==============
+
+[ ] Search ALL media types in Chapter Grabber plugin (not just Blu-ray)
+[ ] Use chapter grabber plugin to auto-detect main movie by comparing playlists to ChapterDb search results
+
+Complete
+========
+
+[X] Fix race condition in cancelation/status reporting
+[X] Allow cancellation of tasks
+[X] Dependency Injection
+[X] Threaded controller
+    http://reedcopsey.com/2009/11/17/synchronizing-net-4-tasks-with-the-ui-thread/
+[X] Break Controller.cs into separate classes: AppConfig (initialize directories; singleton), LogInitializer (singleton), PluginLoader
+[X] Reorganize solution using VS "Solution Folders"
+[X] Basic CLI args
+[X] Remove PluginException
+[X] Auto file namer
+[X] Error detection, handling, and status for FFmpeg (stderr + exit code)
+[X] Job objects not working
+[X] Movie title (year) in MKV title field
+[X] Use larger poster image
+
+[N] Don't set PGS subs to default
+[!] Auto-default tracks in FFmpeg/MkvPropEdit (doesn't appear to be possible: FFmpeg doesn't include the flags in its output, so adding them with mkvpropedit breaks the MKV file)
