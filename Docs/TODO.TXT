@@ -28,59 +28,6 @@ Bugs
 [ ] Parse FFmpeg error output when output path is not writeable (dir doesn't exist)
 [ ] Create parent dirs of output file
 [ ] Estimated time left -- double decrement bug
-[ ] Exception when pressing cancel during FFmpeg after EXE has exited immediately due to an error:
-
-See the end of this message for details on invoking 
-just-in-time (JIT) debugging instead of this dialog box.
-
-************** Exception Text **************
-System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: No process is associated with this object.
-   at System.Diagnostics.Process.EnsureState(State state)
-   at System.Diagnostics.Process.get_HasExited()
-   at ProcessUtils.NonInteractiveProcess.get_CanKill()
-   at ProcessUtils.NonInteractiveProcess.Kill()
-   at System.Threading.CancellationToken.ActionToActionObjShunt(Object obj)
-   at System.Threading.CancellationCallbackInfo.ExecutionContextCallback(Object obj)
-   at System.Threading.ExecutionContext.runTryCode(Object userData)
-   at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.CancellationCallbackInfo.ExecuteCallback()
-   at System.Threading.CancellationTokenSource.CancellationCallbackCoreWork_OnSyncContext(Object obj)
-   at System.Threading.SynchronizationContext.Send(SendOrPostCallback d, Object state)
-   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
-   --- End of inner exception stack trace ---
-   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
-   at System.Threading.CancellationTokenSource.NotifyCancellation(Boolean throwOnFirstException)
-   at System.Threading.CancellationTokenSource.Cancel()
-   at BDHeroGUI.FormAsyncControllerTest.buttonCancel_Click(Object sender, EventArgs e)
-   at System.Windows.Forms.Control.OnClick(EventArgs e)
-   at System.Windows.Forms.Button.OnClick(EventArgs e)
-   at System.Windows.Forms.Button.OnMouseUp(MouseEventArgs mevent)
-   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
-   at System.Windows.Forms.Control.WndProc(Message& m)
-   at System.Windows.Forms.ButtonBase.WndProc(Message& m)
-   at System.Windows.Forms.Button.WndProc(Message& m)
-   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
-   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
-   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
----> (Inner Exception #0) System.InvalidOperationException: No process is associated with this object.
-   at System.Diagnostics.Process.EnsureState(State state)
-   at System.Diagnostics.Process.get_HasExited()
-   at ProcessUtils.NonInteractiveProcess.get_CanKill()
-   at ProcessUtils.NonInteractiveProcess.Kill()
-   at System.Threading.CancellationToken.ActionToActionObjShunt(Object obj)
-   at System.Threading.CancellationCallbackInfo.ExecutionContextCallback(Object obj)
-   at System.Threading.ExecutionContext.runTryCode(Object userData)
-   at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.CancellationCallbackInfo.ExecuteCallback()
-   at System.Threading.CancellationTokenSource.CancellationCallbackCoreWork_OnSyncContext(Object obj)
-   at System.Threading.SynchronizationContext.Send(SendOrPostCallback d, Object state)
-   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)<---
 
 Backlog
 =======
@@ -96,12 +43,17 @@ Backlog
 Chris' Plugins
 ==============
 
+[ ] URI encoding (e.g., http://chapterdb.org/chapters/search?title=BLACK HAWK DOWN&chapterCount=0)
 [ ] Search ALL media types in Chapter Grabber plugin (not just Blu-ray)
 [ ] Use chapter grabber plugin to auto-detect main movie by comparing playlists to ChapterDb search results
 
 Complete
 ========
 
+[X] Exception when pressing cancel during FFmpeg after EXE has exited immediately due to an error:
+System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: No process is associated with this object.
+   at System.Diagnostics.Process.get_HasExited()
+   at ProcessUtils.NonInteractiveProcess.get_CanKill()
 [X] mkvpropedit.exe
 [X] Filter bad chars in output file names
 [X] Fix race condition in cancelation/status reporting
