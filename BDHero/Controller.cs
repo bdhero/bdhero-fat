@@ -109,7 +109,7 @@ namespace BDHero
 
         private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalphases, Action fail, Action succeed)
         {
-            var canContinue = new Func<bool>(() => !cancellationToken.IsCancellationRequested);
+            var canContinue = CreateCanContinueFunc(cancellationToken);
             return new TaskBuilder()
                 .OnThread(_callbackScheduler)
                 .CancelWith(cancellationToken)
@@ -136,6 +136,11 @@ namespace BDHero
                     })
                 .Build()
             ;
+        }
+
+        private static Func<bool> CreateCanContinueFunc(CancellationToken cancellationToken)
+        {
+            return () => !cancellationToken.IsCancellationRequested;
         }
 
         private Task<bool> CreatePluginTask(CancellationToken cancellationToken, IPlugin plugin, ExecutePluginHandler pluginRunner)
