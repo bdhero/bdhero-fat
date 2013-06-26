@@ -184,10 +184,10 @@ namespace ProcessUtils
             if (!CanKill) return;
             try
             {
-                State = NonInteractiveProcessState.Killed;
                 _process.Kill();
             }
             catch {}
+            State = NonInteractiveProcessState.Killed;
         }
 
         private bool CanKill
