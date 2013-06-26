@@ -15,6 +15,9 @@ namespace DotNetUtils
     /// </summary>
     public static class HttpRequest
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private const string METHOD_GET = "GET";
         private const string METHOD_PUT = "PUT";
         private const string METHOD_POST = "POST";
@@ -114,6 +117,9 @@ namespace DotNetUtils
 
         private static HttpWebRequest BuildRequest(string method, string uri, bool cache = false, List<string> headers = null)
         {
+            var strHeaders = (headers != null && headers.Count > 0 ? string.Format(" with headers: {0}", string.Join("; ", headers)) : "");
+            Logger.DebugFormat("{0} {1} -- cache = {2}{3}", method, uri, cache, strHeaders);
+
             var request = (HttpWebRequest)WebRequest.Create(uri);
 
             if (headers != null && headers.Count > 0)

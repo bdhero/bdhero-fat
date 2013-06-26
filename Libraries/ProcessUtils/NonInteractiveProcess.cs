@@ -13,6 +13,9 @@ namespace ProcessUtils
     /// </summary>
     public class NonInteractiveProcess : INotifyPropertyChanged
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// Gets or sets the path to the executable.
         /// </summary>
@@ -67,6 +70,7 @@ namespace ProcessUtils
             {
                 if (value != _state)
                 {
+                    Logger.DebugFormat("Process \"{0}\" changing state from {1} to {2}", ExePath, _state, value);
                     _state = value;
                     PropertyChanged.Notify(() => State);
                 }
@@ -142,6 +146,8 @@ namespace ProcessUtils
                     _process.OutputDataReceived += (sender, args) => HandleStdOut(args.Data);
                     _process.ErrorDataReceived += (sender, args) => HandleStdErr(args.Data);
 
+                    Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
+
                     _process.Start();
 
                     Id = _process.Id;
@@ -156,7 +162,11 @@ namespace ProcessUtils
                     _process.BeginOutputReadLine();
                     _process.BeginErrorReadLine();
 
+                    Logger.DebugFormat("Waiting for process \"{0}\" w/ PID = {1} to exit...", ExePath, Id);
+
                     _process.WaitForExit();
+
+                    Logger.DebugFormat("Process \"{0}\" w/ PID = {1} exited", ExePath, Id);
 
                     ExitCode = _process.ExitCode;
                 }
@@ -182,11 +192,15 @@ namespace ProcessUtils
         public void Kill()
         {
             if (!CanKill) return;
+            Logger.DebugFormat("Killing process \"{0}\" w/ PID = {1}...", ExePath, Id);
             try
             {
                 _process.Kill();
             }
-            catch {}
+            catch (Exception exception)
+            {
+                Logger.WarnFormat("Unable to kill process \"{0}\": Exception was thrown:\n{1}", ExePath, exception);
+            }
             State = NonInteractiveProcessState.Killed;
         }
 
@@ -264,6 +278,8 @@ namespace ProcessUtils
         {
             if (!CanPause) return;
 
+            Logger.DebugFormat("Pausing process \"{0}\"", ExePath);
+
             _process.Suspend();
             _stopwatch.Stop();
             State = NonInteractiveProcessState.Paused;
@@ -272,6 +288,8 @@ namespace ProcessUtils
         public void Resume()
         {
             if (!CanResume) return;
+
+            Logger.DebugFormat("Resuming process \"{0}\"", ExePath);
                 
             _process.Resume();
             _stopwatch.Start();

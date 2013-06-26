@@ -191,7 +191,6 @@ namespace BDHero.Plugin.FFmpegMuxer
             _progressWorker.DoWork += ProgressWorkerOnDoWork;
             _progressWorker.RunWorkerCompleted += ProgressWorkerOnRunWorkerCompleted;
             _progressWorker.RunWorkerAsync();
-            Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
         }
 
         private void ProgressWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
