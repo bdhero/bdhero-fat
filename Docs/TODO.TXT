@@ -24,7 +24,6 @@ Features
 Bugs
 ====
 
-[ ] Filter bad chars in output file names
 [ ] mkvpropedit.exe
 [ ] What if mkvpropedit.exe, ffmpeg.exe, etc. don't exist?  Currently the UI just hangs
 [ ] Parse FFmpeg error output when output path is not writeable (dir doesn't exist)
@@ -104,6 +103,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Filter bad chars in output file names
 [X] Fix race condition in cancelation/status reporting
 [X] Allow cancellation of tasks
 [X] Dependency Injection
