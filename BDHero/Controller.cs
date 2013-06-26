@@ -110,13 +110,14 @@ namespace BDHero
         private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalphases, Action fail, Action succeed)
         {
             var canContinue = new Func<bool>(() => !cancellationToken.IsCancellationRequested);
-            cancellationToken.Register(() => Logger.Warn("User canceled current operation"));
             return new TaskBuilder()
                 .OnThread(_callbackScheduler)
                 .CancelWith(cancellationToken)
                 .BeforeStart(_ => beforeStart())
                 .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
                     {
+                        cancellationToken.Register(() => Logger.Warn("User canceled current operation"));
+
                         if (criticalPhase())
                         {
                             foreach (var phase in optionalphases.TakeWhile(phase => canContinue()))
