@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using BDHero.JobQueue;
+using DotNetUtils;
 
 namespace BDHero.Plugin.FileNamer
 {
@@ -49,7 +50,7 @@ namespace BDHero.Plugin.FileNamer
             if (movie != null)
             {
                 filename = string.Format("{0} ({1}) [{2}].mkv",
-                                         movie.Title,
+                                         FileUtils.SanitizeFileName(movie.Title),
                                          movie.ReleaseYear,
                                          job.SelectedPlaylist.MaxVideoResolution);
             }
@@ -58,7 +59,7 @@ namespace BDHero.Plugin.FileNamer
                 filename = string.Format("s{0}e{1} - {2} [{3}].mkv",
                                          tvShow.SelectedEpisode.SeasonNumber.ToString("00"),
                                          tvShow.SelectedEpisode.EpisodeNumber.ToString("00"),
-                                         tvShow.Title,
+                                         FileUtils.SanitizeFileName(tvShow.Title),
                                          job.SelectedPlaylist.MaxVideoResolution);
             }
 
