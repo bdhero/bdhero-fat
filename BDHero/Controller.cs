@@ -165,9 +165,9 @@ namespace BDHero
         /// <param name="plugin"></param>
         /// <param name="pluginRunner"></param>
         /// <returns></returns>
-        private Task<bool> CreatePluginTask(CancellationToken cancellationToken, IPlugin plugin, ExecutePluginHandler pluginRunner)
+        private Task<bool> RunPluginSync(CancellationToken cancellationToken, IPlugin plugin, ExecutePluginHandler pluginRunner)
         {
-            return new TaskBuilder()
+            var task = new TaskBuilder()
                 .OnThread(_callbackScheduler)
                 .CancelWith(cancellationToken)
                 .BeforeStart(delegate(CancellationToken token)
@@ -211,6 +211,8 @@ namespace BDHero
                     })
                 .Build()
             ;
+            task.RunSynchronously();
+            return task;
         }
 
         #endregion
@@ -222,8 +224,7 @@ namespace BDHero
         private bool ReadBDROM(CancellationToken cancellationToken, string bdromPath)
         {
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
-            var pluginTask = CreatePluginTask(cancellationToken, discReader, token => Job = new Job(discReader.ReadBDROM(token, bdromPath)));
-            pluginTask.RunSynchronously();
+            var pluginTask = RunPluginSync(cancellationToken, discReader, token => Job = new Job(discReader.ReadBDROM(token, bdromPath)));
             return pluginTask.IsCompleted && pluginTask.Result;
         }
 
@@ -242,7 +243,7 @@ namespace BDHero
 
         private void GetMetadata(CancellationToken cancellationToken, IMetadataProviderPlugin plugin)
         {
-            CreatePluginTask(cancellationToken, plugin, token => plugin.GetMetadata(token, Job)).RunSynchronously();
+            RunPluginSync(cancellationToken, plugin, token => plugin.GetMetadata(token, Job));
         }
 
         #endregion
@@ -265,7 +266,7 @@ namespace BDHero
 
         private void AutoDetect(CancellationToken cancellationToken, IAutoDetectorPlugin plugin)
         {
-            CreatePluginTask(cancellationToken, plugin, token => plugin.AutoDetect(token, Job)).RunSynchronously();
+            RunPluginSync(cancellationToken, plugin, token => plugin.AutoDetect(token, Job));
         }
 
         #endregion
@@ -284,7 +285,7 @@ namespace BDHero
 
         private void Rename(CancellationToken cancellationToken, INameProviderPlugin plugin)
         {
-            CreatePluginTask(cancellationToken, plugin, token => plugin.Rename(token, Job)).RunSynchronously();
+            RunPluginSync(cancellationToken, plugin, token => plugin.Rename(token, Job));
         }
 
         #endregion
@@ -302,8 +303,7 @@ namespace BDHero
 
         private bool Mux(CancellationToken cancellationToken, IMuxerPlugin plugin)
         {
-            var pluginTask = CreatePluginTask(cancellationToken, plugin, token => plugin.Mux(token, Job));
-            pluginTask.RunSynchronously();
+            var pluginTask = RunPluginSync(cancellationToken, plugin, token => plugin.Mux(token, Job));
             return pluginTask.IsCompleted && pluginTask.Result;
         }
 
@@ -322,7 +322,7 @@ namespace BDHero
 
         private void PostProcess(CancellationToken cancellationToken, IPostProcessorPlugin plugin)
         {
-            CreatePluginTask(cancellationToken, plugin, token => plugin.PostProcess(token, Job)).RunSynchronously();
+            RunPluginSync(cancellationToken, plugin, token => plugin.PostProcess(token, Job)).RunSynchronously();
         }
 
         #endregion
