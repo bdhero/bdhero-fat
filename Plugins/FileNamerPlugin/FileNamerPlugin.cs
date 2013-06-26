@@ -28,6 +28,7 @@ namespace BDHero.Plugin.FileNamer
         {
         }
 
+        // TODO: Write full implementation
         public void Rename(CancellationToken cancellationToken, Job job)
         {
             Host.ReportProgress(this, 0.0, "Auto-renaming output file...");
