@@ -107,7 +107,21 @@ namespace BDHero
             );
         }
 
-        private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalphases, Action fail, Action succeed)
+        /// <summary>
+        /// Creates an asynchronous Task object that executes the given critical phase and optional phases in a background thread
+        /// and invokes all other callbacks on the UI thread.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <param name="beforeStart">Invoked on UI thread</param>
+        /// <param name="criticalPhase">First phase to run.  Must succeed (by returning <code>true</code> and not throwing an exception) for the optional phases to run.  Invoked on the background thread.</param>
+        /// <param name="optionalPhases">Collection of phases that can fail (by throwing an exception) without preventing subsequent phases from running.  Invoked on the background thread.</param>
+        /// <param name="fail">Called if the operation is canceled or the critical phase throws an exception.  Invoked on the UI thread.</param>
+        /// <param name="succeed">Called if the operation completes successfully without being canceled.  Invoked on the UI thread.</param>
+        /// <returns>
+        /// Task object that returns <code>false</code> if the operation was canceled by the user or
+        /// the critical phase threw an exception; otherwise <code>true</code>.
+        /// </returns>
+        private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalPhases, Action fail, Action succeed)
         {
             var canContinue = CreateCanContinueFunc(cancellationToken);
             return new TaskBuilder()
@@ -120,7 +134,7 @@ namespace BDHero
 
                         if (criticalPhase())
                         {
-                            foreach (var phase in optionalphases.TakeWhile(phase => canContinue()))
+                            foreach (var phase in optionalPhases.TakeWhile(phase => canContinue()))
                             {
                                 phase();
                             }
@@ -143,6 +157,14 @@ namespace BDHero
             return () => !cancellationToken.IsCancellationRequested;
         }
 
+        /// <summary>
+        /// Creates an asynchronous Task object that executes the given plugin on a background thread and
+        /// invokes all other callbacks (success, failure, etc.) on the UI thread.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <param name="plugin"></param>
+        /// <param name="pluginRunner"></param>
+        /// <returns></returns>
         private Task<bool> CreatePluginTask(CancellationToken cancellationToken, IPlugin plugin, ExecutePluginHandler pluginRunner)
         {
             return new TaskBuilder()
@@ -314,22 +336,23 @@ namespace BDHero
             if (PluginProgressUpdated != null)
             {
                 // Marshal event back to UI thread
-                new TaskBuilder().OnThread(_callbackScheduler)
-                                 .BeforeStart(delegate(CancellationToken token)
-                                     {
-                                         var guid = progressProvider.Plugin.AssemblyInfo.Guid;
-                                         var hashCode = progressProvider.GetHashCode();
+                new TaskBuilder()
+                    .OnThread(_callbackScheduler)
+                    .BeforeStart(delegate(CancellationToken token)
+                        {
+                            var guid = progressProvider.Plugin.AssemblyInfo.Guid;
+                            var hashCode = progressProvider.GetHashCode();
 
-                                         // Progress hasn't changed since last update
-                                         if (_progressMap.ContainsKey(guid) && _progressMap[guid] == hashCode)
-                                             return;
+                            // Progress hasn't changed since last update
+                            if (_progressMap.ContainsKey(guid) && _progressMap[guid] == hashCode)
+                                return;
 
-                                         _progressMap[guid] = hashCode;
+                            _progressMap[guid] = hashCode;
 
-                                         PluginProgressUpdated(progressProvider.Plugin, progressProvider);
-                                     })
-                                 .Build()
-                                 .Start();
+                            PluginProgressUpdated(progressProvider.Plugin, progressProvider);
+                        })
+                    .Build()
+                    .Start();
             }
         }
 
