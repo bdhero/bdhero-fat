@@ -289,7 +289,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private static void LogExit(NonInteractiveProcessState processState, int exitCode)
         {
-            var message = "FFmpeg exited with state {0} and code {1}";
+            const string message = "FFmpeg exited with state {0} and code {1}";
             switch (processState)
             {
                 case NonInteractiveProcessState.Completed:
