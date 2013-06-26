@@ -196,8 +196,7 @@ namespace ProcessUtils
             {
                 var validState = (State == NonInteractiveProcessState.Running ||
                                   State == NonInteractiveProcessState.Paused);
-                var validProcess = _process != null && !_process.HasExited;
-                return validState && validProcess;
+                return validState && _process != null && !_process.HasExited;
             }
         }
 
