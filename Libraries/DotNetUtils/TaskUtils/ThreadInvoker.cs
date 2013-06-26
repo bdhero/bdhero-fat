@@ -19,7 +19,7 @@ namespace DotNetUtils.TaskUtils
         /// <summary>
         /// Constructs a thread invoker that executes actions in the context of the specified task scheduler, passing them 
         /// </summary>
-        /// <param name="callbackThread"></param>
+        /// <param name="callbackThread">Thread context in which actions will run</param>
         /// <param name="cancellationToken"></param>
         public ThreadInvoker(TaskScheduler callbackThread, CancellationToken cancellationToken)
         {
