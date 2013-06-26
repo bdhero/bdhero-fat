@@ -8,7 +8,8 @@ IF NOT "%SolutionDir%"=="" cd "%SolutionDir%"
 
 echo %ConfigurationName%
 
-mkdir Setup\ProgramFiles\Config
+REM Clean up old merged files
+rmdir /S /Q Setup\ProgramFiles
 
 REM Delete empty dummy DLL
 del /F Packager\bin\%ConfigurationName%\Packager.dll
