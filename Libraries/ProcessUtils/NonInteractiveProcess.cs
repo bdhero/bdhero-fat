@@ -258,11 +258,12 @@ namespace ProcessUtils
 
             _stopwatch.Stop();
 
-            if (State != NonInteractiveProcessState.Killed)
-                State = ExitCode == 0 ? NonInteractiveProcessState.Completed : NonInteractiveProcessState.Error;
+            var hasError = (State == NonInteractiveProcessState.Error) || ExitCode != 0 || Exception != null;
 
-            if (Exception != null)
+            if (hasError)
                 State = NonInteractiveProcessState.Error;
+            else if (State != NonInteractiveProcessState.Killed)
+                State = NonInteractiveProcessState.Completed;
 
             if (Exited != null)
                 Exited(State, ExitCode, Exception, RunTime);
