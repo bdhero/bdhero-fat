@@ -141,7 +141,7 @@ namespace DotNetUtils
         public static string SanitizeFileName(string fileName)
         {
             var badCharRegex = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]+");
-            var multiBadCharRegex = new Regex(@"-(?:\s+-)+");
+            var multiBadCharRegex = new Regex(@"-(?:\s*-)+");
             var multiSpaceRegex = new Regex(@"\s{2,}");
 
             var sanitizedFileName = fileName;
