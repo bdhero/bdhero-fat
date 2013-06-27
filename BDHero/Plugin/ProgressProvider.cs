@@ -267,7 +267,7 @@ namespace BDHero.Plugin
 
         public void Error(Exception exception)
         {
-            if (State != ProgressProviderState.Ready || State != ProgressProviderState.Running)
+            if (State != ProgressProviderState.Ready && State != ProgressProviderState.Running)
             {
                 throw new InvalidOperationException(
                     string.Format("Unable to switch to {0} state: must be in {1} or {2} state, but object is in {3} state",
