@@ -6,6 +6,12 @@ Chores
 [ ] Unit tests
     [ ] Exception handling in all scenarios
 
+Bugs
+====
+
+[ ] Parse FFmpeg error output when output path is not writeable (dir doesn't exist)
+[ ] Estimated time left -- double decrement bug
+
 Features
 ========
 
@@ -20,14 +26,6 @@ Features
 [ ] File Namer placeholders
     [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
 [ ] Allow any BD-ROM file/subdirectory to be scanned
-
-Bugs
-====
-
-[ ] What if mkvpropedit.exe, ffmpeg.exe, etc. don't exist?  Currently the UI just hangs
-[ ] Parse FFmpeg error output when output path is not writeable (dir doesn't exist)
-[ ] Create parent dirs of output file
-[ ] Estimated time left -- double decrement bug
 
 Backlog
 =======
@@ -50,6 +48,9 @@ Chris' Plugins
 Complete
 ========
 
+[X] Create parent dirs of output file
+[X] What if mkvpropedit.exe, ffmpeg.exe, etc. don't exist?  Currently the UI just hangs
+    [X] Exceptions thrown in NonInteractiveProcess.Start() are not caught - they just disappear and the UI hangs
 [X] Exception when pressing cancel during FFmpeg after EXE has exited immediately due to an error:
 System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: No process is associated with this object.
    at System.Diagnostics.Process.get_HasExited()
