@@ -43,7 +43,7 @@ namespace DotNetUtils
         /// <param name="e"></param>
         /// <param name="extensions">Collection of file extensions of the form ".ext" or "ext" (case insensitive)</param>
         /// <returns></returns>
-        public static bool HasFileExtension(DragEventArgs e, ICollection<string> extensions)
+        public static bool HasFileExtension(DragEventArgs e, IEnumerable<string> extensions)
         {
             var normalizedExtensions = NormalizeFileExtensions(extensions);
             return GetFilePaths(e).Any(path => IsIn(normalizedExtensions, path));
@@ -54,7 +54,7 @@ namespace DotNetUtils
             return GetFilesWithExtension(e, new[] { extension });
         }
 
-        public static IList<string> GetFilesWithExtension(DragEventArgs e, ICollection<string> extensions)
+        public static IList<string> GetFilesWithExtension(DragEventArgs e, IEnumerable<string> extensions)
         {
             var normalizedExtensions = NormalizeFileExtensions(extensions);
             return GetFilePaths(e).Where(path => IsIn(normalizedExtensions, path)).ToList();
