@@ -336,23 +336,29 @@ namespace BDHero
             if (PluginProgressUpdated != null)
             {
                 // Marshal event back to UI thread
-                new TaskBuilder()
-                    .OnThread(_callbackScheduler)
-                    .BeforeStart(delegate(CancellationToken token)
-                        {
-                            var guid = progressProvider.Plugin.AssemblyInfo.Guid;
-                            var hashCode = progressProvider.GetHashCode();
+                Task.Factory.StartNew(delegate
+                    {
+                        var guid = progressProvider.Plugin.AssemblyInfo.Guid;
+                        var hashCode = progressProvider.GetHashCode();
 
-                            // Progress hasn't changed since last update
-                            if (_progressMap.ContainsKey(guid) && _progressMap[guid] == hashCode)
-                                return;
+                        var containsKey = _progressMap.ContainsKey(guid);
+                        var prevHashCode = containsKey ? _progressMap[guid] : -1;
 
-                            _progressMap[guid] = hashCode;
+                        Logger.DebugFormat(
+                            "ProgressProviderOnUpdated() - Plugin \"{0}\": prev progress hashCode = {1}, cur progress hashCode= {2}",
+                            progressProvider.Plugin.Name, prevHashCode, hashCode
+                        );
 
-                            PluginProgressUpdated(progressProvider.Plugin, progressProvider);
-                        })
-                    .Build()
-                    .Start();
+                        // Progress hasn't changed since last update
+                        if (containsKey && prevHashCode == hashCode)
+                            return;
+
+                        _progressMap[guid] = hashCode;
+
+                        Logger.Debug("ProgressProviderOnUpdated() - Calling PluginProgressUpdated event handlers");
+
+                        PluginProgressUpdated(progressProvider.Plugin, progressProvider);
+                    }, CancellationToken.None, TaskCreationOptions.None, _callbackScheduler);
             }
         }
 
