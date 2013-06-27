@@ -45,8 +45,7 @@ namespace DotNetUtils
         /// <returns></returns>
         public static bool HasFileExtension(DragEventArgs e, IEnumerable<string> extensions)
         {
-            var normalizedExtensions = NormalizeFileExtensions(extensions);
-            return GetFilePaths(e).Any(path => IsIn(normalizedExtensions, path));
+            return GetFilePaths(e).Any(path => FileUtils.FileHasExtension(path, extensions));
         }
 
         public static IList<string> GetFilesWithExtension(DragEventArgs e, string extension)
@@ -56,14 +55,7 @@ namespace DotNetUtils
 
         public static IList<string> GetFilesWithExtension(DragEventArgs e, IEnumerable<string> extensions)
         {
-            var normalizedExtensions = NormalizeFileExtensions(extensions);
-            return GetFilePaths(e).Where(path => IsIn(normalizedExtensions, path)).ToList();
-        }
-
-        private static bool IsIn(ICollection<string> normalizedExtensions, string path)
-        {
-            var extension = Path.GetExtension(path);
-            return extension != null && normalizedExtensions.Contains(extension.ToLower());
+            return GetFilePaths(e).Where(path => FileUtils.FileHasExtension(path, extensions)).ToList();
         }
 
         public static string GetFirstFileWithExtension(DragEventArgs e, string extension)
@@ -75,20 +67,6 @@ namespace DotNetUtils
         {
             var files = GetFilesWithExtension(e, extensions);
             return files.Count > 0 ? files[0] : null;
-        }
-
-        private static ICollection<string> NormalizeFileExtensions(ICollection<string> extensions)
-        {
-            return extensions.Select(NormalizeFileExtension).ToList();
-        }
-
-        private static string NormalizeFileExtension(string ext)
-        {
-            // Make sure every extension starts with a period (e.g., ".ext")
-            var extNorm = ext.Trim().ToLower();
-            if (!ext.StartsWith("."))
-                extNorm = "." + extNorm;
-            return extNorm;
         }
 
         public static ICollection<string> GetPaths(DragEventArgs e)

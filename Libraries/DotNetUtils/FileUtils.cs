@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -150,6 +152,34 @@ namespace DotNetUtils
             sanitizedFileName = multiSpaceRegex.Replace(sanitizedFileName, " ");
 
             return sanitizedFileName;
+        }
+
+        public static string NormalizeFileExtension([NotNull] string ext)
+        {
+            // Make sure every extension starts with a period (e.g., ".ext")
+            var extNorm = ext.Trim().ToLower();
+            if (!extNorm.StartsWith("."))
+                extNorm = "." + extNorm;
+            return extNorm;
+        }
+
+        public static ICollection<string> NormalizeFileExtensions(IEnumerable<string> extensions)
+        {
+            return extensions.Select(NormalizeFileExtension).ToList();
+        }
+
+        public static bool FileHasExtension(string path, IEnumerable<string> extensions)
+        {
+            var extension = Path.GetExtension(path);
+            var normalized = NormalizeFileExtensions(extensions);
+            return extension != null && normalized.Contains(NormalizeFileExtension(extension));
+        }
+
+        public static string CreateTemporaryDirectory()
+        {
+            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(tempDirectory);
+            return tempDirectory;
         }
 
         public static bool IsEmpty(DirectoryInfo dir)
