@@ -12,6 +12,9 @@ namespace BDHero.Plugin
     /// </summary>
     public class ProgressProvider
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         #region Constants
 
         /// <summary>
@@ -136,25 +139,35 @@ namespace BDHero.Plugin
 
         private void Tick(object sender = null, ElapsedEventArgs elapsedEventArgs = null)
         {
+            Logger.Debug("Entering Tick() method");
+
             CalculateTimeRemaining();
 
             if (Updated != null)
                 Updated(this);
 
             _lastTick = DateTime.Now;
+
+            Logger.Debug("Exiting Tick() method");
         }
 
         public void Update(double percentComplete, string status)
         {
+            Logger.Debug("Entering Update(double, string) method");
+
             PercentComplete = percentComplete;
             Status = status;
 
             if (Updated != null)
                 Updated(this);
+
+            Logger.Debug("Exiting Update(double, string) method");
         }
 
         public void Reset()
         {
+            Logger.Debug("Entering Reset() method");
+
             if (State == ProgressProviderState.Running)
             {
                 throw new InvalidOperationException(
@@ -168,10 +181,14 @@ namespace BDHero.Plugin
             TimeRemaining = TimeSpan.Zero;
             PercentComplete = 0.0;
             Exception = null;
+
+            Logger.Debug("Exiting Reset() method");
         }
 
         public void Start()
         {
+            Logger.Debug("Entering Start() method");
+
             if (State != ProgressProviderState.Ready)
             {
                 throw new InvalidOperationException(
@@ -192,10 +209,14 @@ namespace BDHero.Plugin
 
             if (Updated != null)
                 Updated(this);
+
+            Logger.Debug("Exiting Start() method");
         }
 
         public void Resume()
         {
+            Logger.Debug("Entering Resume() method");
+
             if (State != ProgressProviderState.Paused)
             {
                 throw new InvalidOperationException(
@@ -216,10 +237,14 @@ namespace BDHero.Plugin
 
             if (Updated != null)
                 Updated(this);
+
+            Logger.Debug("Exiting Resume() method");
         }
 
         public void Pause()
         {
+            Logger.Debug("Entering Pause() method");
+
             if (State != ProgressProviderState.Running)
             {
                 throw new InvalidOperationException(
@@ -238,10 +263,14 @@ namespace BDHero.Plugin
 
             if (Updated != null)
                 Updated(this);
+
+            Logger.Debug("Exiting Pause() method");
         }
 
         public void Cancel()
         {
+            Logger.Debug("Entering Cancel() method");
+
             if (State != ProgressProviderState.Running)
             {
                 throw new InvalidOperationException(
@@ -263,10 +292,14 @@ namespace BDHero.Plugin
 
             if (Updated != null)
                 Updated(this);
+
+            Logger.Debug("Exiting Cancel() method");
         }
 
         public void Error(Exception exception)
         {
+            Logger.Debug("Entering Error(Exception) method");
+
             if (State != ProgressProviderState.Ready && State != ProgressProviderState.Running)
             {
                 throw new InvalidOperationException(
@@ -290,10 +323,14 @@ namespace BDHero.Plugin
 
             if (Updated != null)
                 Updated(this);
+
+            Logger.Debug("Exiting Error() method");
         }
 
         public void Succeed()
         {
+            Logger.Debug("Entering Succeed() method");
+
             if (State != ProgressProviderState.Running)
             {
                 throw new InvalidOperationException(
@@ -316,10 +353,14 @@ namespace BDHero.Plugin
 
             if (Updated != null)
                 Updated(this);
+
+            Logger.Debug("Exiting Succeed() method");
         }
 
         private void CalculateTimeRemaining()
         {
+            Logger.Debug("Entering CalculateTimeRemaining() method");
+
             // Thread safety :-)
             var percentComplete = PercentComplete;
 
@@ -369,6 +410,8 @@ namespace BDHero.Plugin
             finalEstimate = TimeSpan.FromSeconds(Math.Floor(finalEstimate.TotalSeconds));
 
             TimeRemaining = finalEstimate;
+
+            Logger.Debug("Exiting CalculateTimeRemaining() method");
         }
 
         public override int GetHashCode()
