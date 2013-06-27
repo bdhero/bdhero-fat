@@ -127,7 +127,28 @@ namespace ProcessUtils
         /// Starts the NonInteractiveProcess synchronously and blocks (i.e., does not return) until the process exits,
         /// either by completing successfully or terminating unsuccessfully.
         /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
         public NonInteractiveProcess Start()
+        {
+            try
+            {
+                return StartImpl();
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Error occurred while starting/running NonInteractiveProcess", e);
+                Kill();
+                Exception = e;
+                State = NonInteractiveProcessState.Error;
+                ProcessOnExited();
+                throw;
+            }
+        }
+
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
+        private NonInteractiveProcess StartImpl()
         {
             if (State != NonInteractiveProcessState.Ready)
                 throw new InvalidOperationException("NonInteractiveProcess.Start() cannot be called more than once.");
