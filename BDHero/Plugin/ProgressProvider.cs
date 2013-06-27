@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Timers;
 
@@ -137,9 +139,37 @@ namespace BDHero.Plugin
 
         #endregion
 
+        private enum MethodEntry
+        {
+            Entering, Exiting
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void LogMethod(MethodBase method, MethodEntry entryType)
+        {
+            var @params = method.GetParameters();
+            var strMethod = string.Format("{0}({1})", method.Name, string.Join(", ", @params.Select(info => info.ParameterType.Name + " " + info.Name)));
+            var name = Plugin != null ? Plugin.Name : "??? UNINITIALIZED ???";
+            Logger.DebugFormat("ProgressProvider for \"{0}\" plugin - {1} {2} method", name, entryType, strMethod);
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void LogMethodEntry()
+        {
+            var method = new StackFrame(1, true).GetMethod();
+            LogMethod(method, MethodEntry.Entering);
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void LogMethodExit()
+        {
+            var method = new StackFrame(1, true).GetMethod();
+            LogMethod(method, MethodEntry.Exiting);
+        }
+
         private void Tick(object sender = null, ElapsedEventArgs elapsedEventArgs = null)
         {
-            Logger.Debug("Entering Tick() method");
+            LogMethodEntry();
 
             CalculateTimeRemaining();
 
@@ -148,12 +178,12 @@ namespace BDHero.Plugin
 
             _lastTick = DateTime.Now;
 
-            Logger.Debug("Exiting Tick() method");
+            LogMethodExit();
         }
 
         public void Update(double percentComplete, string status)
         {
-            Logger.Debug("Entering Update(double, string) method");
+            LogMethodEntry();
 
             PercentComplete = percentComplete;
             Status = status;
@@ -161,12 +191,12 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            Logger.Debug("Exiting Update(double, string) method");
+            LogMethodExit();
         }
 
         public void Reset()
         {
-            Logger.Debug("Entering Reset() method");
+            LogMethodEntry();
 
             if (State == ProgressProviderState.Running)
             {
@@ -182,12 +212,12 @@ namespace BDHero.Plugin
             PercentComplete = 0.0;
             Exception = null;
 
-            Logger.Debug("Exiting Reset() method");
+            LogMethodExit();
         }
 
         public void Start()
         {
-            Logger.Debug("Entering Start() method");
+            LogMethodEntry();
 
             if (State != ProgressProviderState.Ready)
             {
@@ -210,12 +240,12 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            Logger.Debug("Exiting Start() method");
+            LogMethodExit();
         }
 
         public void Resume()
         {
-            Logger.Debug("Entering Resume() method");
+            LogMethodEntry();
 
             if (State != ProgressProviderState.Paused)
             {
@@ -238,12 +268,12 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            Logger.Debug("Exiting Resume() method");
+            LogMethodExit();
         }
 
         public void Pause()
         {
-            Logger.Debug("Entering Pause() method");
+            LogMethodEntry();
 
             if (State != ProgressProviderState.Running)
             {
@@ -264,12 +294,12 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            Logger.Debug("Exiting Pause() method");
+            LogMethodExit();
         }
 
         public void Cancel()
         {
-            Logger.Debug("Entering Cancel() method");
+            LogMethodEntry();
 
             if (State != ProgressProviderState.Running)
             {
@@ -293,12 +323,12 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            Logger.Debug("Exiting Cancel() method");
+            LogMethodExit();
         }
 
         public void Error(Exception exception)
         {
-            Logger.Debug("Entering Error(Exception) method");
+            LogMethodEntry();
 
             if (State != ProgressProviderState.Ready && State != ProgressProviderState.Running)
             {
@@ -324,12 +354,12 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            Logger.Debug("Exiting Error() method");
+            LogMethodExit();
         }
 
         public void Succeed()
         {
-            Logger.Debug("Entering Succeed() method");
+            LogMethodEntry();
 
             if (State != ProgressProviderState.Running)
             {
@@ -354,12 +384,12 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            Logger.Debug("Exiting Succeed() method");
+            LogMethodExit();
         }
 
         private void CalculateTimeRemaining()
         {
-            Logger.Debug("Entering CalculateTimeRemaining() method");
+            LogMethodEntry();
 
             // Thread safety :-)
             var percentComplete = PercentComplete;
@@ -411,7 +441,7 @@ namespace BDHero.Plugin
 
             TimeRemaining = finalEstimate;
 
-            Logger.Debug("Exiting CalculateTimeRemaining() method");
+            LogMethodExit();
         }
 
         public override int GetHashCode()
