@@ -11,6 +11,60 @@ Bugs
 
 [ ] Parse FFmpeg error output when output path is not writeable (dir doesn't exist)
 [ ] Estimated time left -- double decrement bug
+[ ] Exception not propagated to UI and doesn't stop UI:
+    2013-06-27 16:57:24,023 [6620][7] DEBUG ProcessUtils.NonInteractiveProcess - Process "M:\Dropbox\BDHero\Builds\BDHero-0.5.2.0-windows-portable\Plugins\Required\FFmpegMuxer\ffmpeg.exe" changing state from Ready to Running
+    2013-06-27 16:57:24,043 [6620][7] ERROR ProcessUtils.NonInteractiveProcess - Error occurred while starting/running NonInteractiveProcess
+    System.InvalidOperationException: Requested process already belongs to another job group. Check http://stackoverflow.com/a/4232259/3205 for help.
+       at ProcessUtils.JobObject2.AssignProcess(IntPtr handle)
+       at ProcessUtils.JobObject2.AssignProcess(Process process)
+       at ProcessUtils.NonInteractiveProcess.StartImpl()
+       at ProcessUtils.NonInteractiveProcess.Start()
+    2013-06-27 16:57:24,063 [6620][7] ERROR ProcessUtils.BackgroundProcessWorker - Error occurred while running NonInteractiveProcess in BackgroundWorker
+    System.InvalidOperationException: No process is associated with this object.
+       at System.Diagnostics.Process.EnsureState(State state)
+       at System.Diagnostics.Process.get_HasExited()
+       at ProcessUtils.NonInteractiveProcess.get_CanKill()
+       at ProcessUtils.NonInteractiveProcess.Kill()
+       at ProcessUtils.NonInteractiveProcess.Start()
+       at ProcessUtils.BackgroundProcessWorker.<.ctor>b__1(Object sender, DoWorkEventArgs args)
+       at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+       
+   Then, when cancelling afterward:
+       
+    System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: No process is associated with this object.
+       at System.Diagnostics.Process.EnsureState(State state)
+       at System.Diagnostics.Process.get_HasExited()
+       at ProcessUtils.NonInteractiveProcess.get_CanKill()
+       at ProcessUtils.NonInteractiveProcess.Kill()
+       at System.Threading.ExecutionContext.runTryCode(Object userData)
+       at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
+       at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+       at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+       at System.Threading.CancellationCallbackInfo.ExecuteCallback()
+       at System.Threading.CancellationTokenSource.CancellationCallbackCoreWork_OnSyncContext(Object obj)
+       at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
+       --- End of inner exception stack trace ---
+       at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
+       at BDHeroGUI.FormAsyncControllerTest.buttonCancel_Click(Object sender, EventArgs e)
+       at System.Windows.Forms.Button.OnMouseUp(MouseEventArgs mevent)
+       at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+       at System.Windows.Forms.Control.WndProc(Message& m)
+       at System.Windows.Forms.ButtonBase.WndProc(Message& m)
+       at System.Windows.Forms.Button.WndProc(Message& m)
+       at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+    ---> (Inner Exception #0) System.InvalidOperationException: No process is associated with this object.
+       at System.Diagnostics.Process.EnsureState(State state)
+       at System.Diagnostics.Process.get_HasExited()
+       at ProcessUtils.NonInteractiveProcess.get_CanKill()
+       at ProcessUtils.NonInteractiveProcess.Kill()
+       at System.Threading.ExecutionContext.runTryCode(Object userData)
+       at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
+       at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+       at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+       at System.Threading.CancellationCallbackInfo.ExecuteCallback()
+       at System.Threading.CancellationTokenSource.CancellationCallbackCoreWork_OnSyncContext(Object obj)
+       at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)<---
+
 
 Features
 ========
