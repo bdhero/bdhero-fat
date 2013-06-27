@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BDHero.Plugin;
 using BDHero.JobQueue;
+using DotNetUtils;
 using DotNetUtils.TaskUtils;
 
 namespace BDHero
@@ -294,6 +295,14 @@ namespace BDHero
 
         #region 5 - Mux
 
+        private void EnsureOutputDirExists()
+        {
+            if (string.IsNullOrWhiteSpace(Job.OutputPath))
+                throw new FileNotFoundException("Required output path not specified");
+
+            FileUtils.CreateDirectory(Job.OutputPath);
+        }
+
         private bool Mux(CancellationToken cancellationToken)
         {
             if (!_pluginService.MuxerPlugins.Any())
@@ -302,33 +311,6 @@ namespace BDHero
             EnsureOutputDirExists();
 
             return _pluginService.MuxerPlugins.All(muxer => Mux(cancellationToken, muxer));
-        }
-
-        // TODO: UNIT TEST THIS METHOD
-        // TODO: MOVE THIS INTO FILE UTILS
-        private void EnsureOutputDirExists()
-        {
-            if (string.IsNullOrWhiteSpace(Job.OutputPath))
-                throw new FileNotFoundException("Required output path not specified");
-
-            var dirPath = Job.OutputPath;
-
-            if (HasFileName(Job.OutputPath))
-            {
-                dirPath = new FileInfo(dirPath).DirectoryName;
-            }
-
-            if (!string.IsNullOrWhiteSpace(dirPath))
-            {
-                Directory.CreateDirectory(dirPath);
-            }
-        }
-
-        // TODO: UNIT TEST THIS METHOD
-        // TODO: MOVE THIS INTO FILE UTILS
-        private static bool HasFileName(string outputPath)
-        {
-            return new Regex(@"\.\w+$").IsMatch(outputPath);
         }
 
         private bool Mux(CancellationToken cancellationToken, IMuxerPlugin plugin)

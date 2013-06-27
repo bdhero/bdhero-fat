@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using DotNetUtils.Annotations;
 
 namespace DotNetUtils
 {
@@ -77,6 +78,57 @@ namespace DotNetUtils
             // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
             // show a single decimal place, and no space.
             return String.Format("{0:0" + fractionalFormat + "} {1}", len, sizes[order]);
+        }
+
+        // TODO: UNIT TEST THIS METHOD
+        /// <summary>
+        /// Creates all directories in the specified path hierarchy if they do not already exist.
+        /// If the path contains a file name with an extension, the file's parent directory will be created.
+        /// </summary>
+        /// <param name="path">Path to a file or directory</param>
+        public static void CreateDirectory(string path)
+        {
+            // TODO: Does this check make sense?
+            // Path will resolve to current working directory
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            // More accurate checks first
+            if (File.Exists(path) || Directory.Exists(path))
+                return;
+
+            var dirPath = path;
+
+            if (ContainsFileName(dirPath))
+            {
+                dirPath = Path.GetDirectoryName(dirPath);
+            }
+
+            if (!string.IsNullOrEmpty(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+        }
+
+        // TODO: UNIT TEST THIS METHOD
+        /// <summary>
+        /// Determines whether the given path <em>likely</em> contains (ends with) a standard Windows filename (i.e., one that has an extension).
+        /// </summary>
+        /// <param name="path">Relative or absolute path to a file or directory</param>
+        /// <returns><code>true</code> if the path ends in a period followed by at least one letter; otherwise <code>false</code></returns>
+        /// <example>"C:\some\dir\a.out" => true</example>
+        /// <example>"a.out" => true</example>
+        /// <example>"file.c" => true</example>
+        /// <example>"file.php3" => true</example>
+        /// <example>"file.3" => true</example>
+        /// <example>"file" => false</example>
+        /// <example>"C:\some\dir\file" => false</example>
+        /// <example>"C:\some\dir" => false</example>
+        /// <example>"C:\" => false</example>
+        /// <example>"" => false</example>
+        public static bool ContainsFileName([NotNull] string path)
+        {
+            return new Regex(@"[^/\\]\.\w+$").IsMatch(path);
         }
 
         /// <see cref="http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows"/>
