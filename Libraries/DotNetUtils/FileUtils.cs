@@ -77,7 +77,7 @@ namespace DotNetUtils
 
             // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
             // show a single decimal place, and no space.
-            return String.Format("{0:0" + fractionalFormat + "} {1}", len, sizes[order]);
+            return string.Format("{0:0" + fractionalFormat + "} {1}", len, sizes[order]);
         }
 
         // TODO: UNIT TEST THIS METHOD
@@ -183,7 +183,7 @@ namespace DotNetUtils
                 try
                 {
                     var defaultProgram = FileExtentionInfo(AssocStr.Executable, Path.GetExtension(filePath));
-                    hasAssoc = !String.IsNullOrEmpty(defaultProgram) && File.Exists(defaultProgram);
+                    hasAssoc = !string.IsNullOrEmpty(defaultProgram) && File.Exists(defaultProgram);
                 }
                 catch
                 {
