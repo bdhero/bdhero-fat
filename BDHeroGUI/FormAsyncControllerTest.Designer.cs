@@ -114,7 +114,7 @@
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.CustomColors = false;
+            this.progressBar.UseCustomColors = false;
             this.progressBar.Location = new System.Drawing.Point(17, 473);
             this.progressBar.Maximum = 100000;
             this.progressBar.Name = "progressBar";

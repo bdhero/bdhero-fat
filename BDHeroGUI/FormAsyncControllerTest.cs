@@ -28,6 +28,8 @@ namespace BDHeroGUI
 
         private bool _isRunning;
 
+        private ProgressProviderState _state = ProgressProviderState.Ready;
+
         public FormAsyncControllerTest(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
             InitializeComponent();
@@ -42,11 +44,13 @@ namespace BDHeroGUI
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
 
-            progressBar.CustomColors = true;
+            progressBar.UseCustomColors = true;
+            progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
+            DoubleBuffered = true;
             LogDirectoryPaths();
             LoadPlugins();
             LogPlugins();
@@ -151,6 +155,8 @@ namespace BDHeroGUI
         {
             if (!_isRunning)
                 return;
+
+            _state = progressProvider.State;
 
             var percentCompleteStr = (progressProvider.PercentComplete/100.0).ToString("P");
             var line = string.Format("{0} is {1} - {2} complete - {3} - {4} elapsed, {5} remaining",
