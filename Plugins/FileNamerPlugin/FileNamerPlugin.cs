@@ -33,6 +33,7 @@ namespace BDHero.Plugin.FileNamer
         {
             Host.ReportProgress(this, 0.0, "Auto-renaming output file...");
 
+            // User already specified filename
             var pathSpecified = !string.IsNullOrWhiteSpace(job.OutputPath);
             if (pathSpecified && job.OutputPath.EndsWith(".mkv", StringComparison.InvariantCultureIgnoreCase))
                 return;
