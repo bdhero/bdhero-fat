@@ -112,7 +112,6 @@ namespace DotNetUtils
             }
         }
 
-        // TODO: UNIT TEST THIS METHOD
         /// <summary>
         /// Determines whether the given path <em>likely</em> contains (ends with) a standard Windows filename (i.e., one that has an extension).
         /// </summary>
