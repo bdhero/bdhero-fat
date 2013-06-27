@@ -254,6 +254,8 @@ namespace ProcessUtils
         /// </summary>
         private void ProcessOnExited()
         {
+            Logger.DebugFormat("Process \"{0}\" exited (synchronous event)", ExePath);
+
             _stopwatch.Stop();
 
             if (State != NonInteractiveProcessState.Killed)
@@ -271,6 +273,7 @@ namespace ProcessUtils
         /// </summary>
         private void ProcessOnExited(object sender, EventArgs eventArgs)
         {
+            Logger.DebugFormat("Process \"{0}\" exited (asynchronous event)", ExePath);
             var process = sender as Process;
             if (process == null) return;
         }
