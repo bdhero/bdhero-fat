@@ -5,3 +5,4 @@ BitRock InstallBuilder 8 Enterprise suggestions
 *  Checkbox labels
 *  Input width
 *  Escape/Enter key in forms
+*  Clear recent project list
