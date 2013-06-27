@@ -12,6 +12,9 @@ namespace ProcessUtils
     /// </summary>
     public class BackgroundProcessWorker : NonInteractiveProcess
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly Timer _timer = new Timer(1000);
 
         private readonly BackgroundWorker _worker = new BackgroundWorker
@@ -44,6 +47,13 @@ namespace ProcessUtils
             PropertyChanged += OnPropertyChanged;
             _timer.Elapsed += TimerOnTick;
             _worker.DoWork += (sender, args) => Start();
+            _worker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs args)
+                {
+                    if (args.Error != null)
+                    {
+                        Logger.Error("Error occurred while running NonInteractiveProcess in BackgroundWorker", args.Error);
+                    }
+                };
         }
 
         public BackgroundProcessWorker StartAsync()
@@ -72,6 +82,7 @@ namespace ProcessUtils
             if (ProgressUpdated != null)
                 ProgressUpdated(_uiProgressState);
             _lastTick = DateTime.Now;
+            Logger.Debug("Timer tick");
         }
         
         /// <summary>
