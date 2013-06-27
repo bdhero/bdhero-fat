@@ -82,7 +82,6 @@ namespace DotNetUtils
             return string.Format("{0:0" + fractionalFormat + "} {1}", len, sizes[order]);
         }
 
-        // TODO: UNIT TEST THIS METHOD
         /// <summary>
         /// Creates all directories in the specified path hierarchy if they do not already exist.
         /// If the path contains a file name with an extension, the file's parent directory will be created.

@@ -153,7 +153,6 @@ namespace ProcessUtils
             if (State != NonInteractiveProcessState.Ready)
                 throw new InvalidOperationException("NonInteractiveProcess.Start() cannot be called more than once.");
 
-            // TODO: This exception is not caught when running inside a Task
             if (!File.Exists(ExePath))
                 throw new FileNotFoundException(string.Format("Unable to Start NonInteractiveProcess: File \"{0}\" does not exist", ExePath));
 
