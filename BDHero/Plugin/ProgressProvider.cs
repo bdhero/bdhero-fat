@@ -246,7 +246,7 @@ namespace BDHero.Plugin
             {
                 throw new InvalidOperationException(
                     string.Format("Unable to cancel: must be in {0} state, but object is in {1} state",
-                                  ProgressProviderState.Running, ProgressProviderState.Running, State));
+                                  ProgressProviderState.Running, State));
             }
 
             _timer.Stop();
