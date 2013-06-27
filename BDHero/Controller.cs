@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using BDHero.Plugin;
@@ -294,11 +296,39 @@ namespace BDHero
 
         private bool Mux(CancellationToken cancellationToken)
         {
-            if (_pluginService.MuxerPlugins.Any(muxer => !Mux(cancellationToken, muxer)))
-            {
+            if (!_pluginService.MuxerPlugins.Any())
                 return false;
+
+            EnsureOutputDirExists();
+
+            return _pluginService.MuxerPlugins.All(muxer => Mux(cancellationToken, muxer));
+        }
+
+        // TODO: UNIT TEST THIS METHOD
+        // TODO: MOVE THIS INTO FILE UTILS
+        private void EnsureOutputDirExists()
+        {
+            if (string.IsNullOrWhiteSpace(Job.OutputPath))
+                throw new FileNotFoundException("Required output path not specified");
+
+            var dirPath = Job.OutputPath;
+
+            if (HasFileName(Job.OutputPath))
+            {
+                dirPath = new FileInfo(dirPath).DirectoryName;
             }
-            return _pluginService.MuxerPlugins.Count > 0;
+
+            if (!string.IsNullOrWhiteSpace(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+        }
+
+        // TODO: UNIT TEST THIS METHOD
+        // TODO: MOVE THIS INTO FILE UTILS
+        private static bool HasFileName(string outputPath)
+        {
+            return new Regex(@"\.\w+$").IsMatch(outputPath);
         }
 
         private bool Mux(CancellationToken cancellationToken, IMuxerPlugin plugin)
