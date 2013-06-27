@@ -345,7 +345,7 @@ namespace BDHero
                         var prevHashCode = containsKey ? _progressMap[guid] : -1;
 
                         Logger.DebugFormat(
-                            "ProgressProviderOnUpdated() - Plugin \"{0}\": prev progress hashCode = {1}, cur progress hashCode= {2}",
+                            "ProgressProviderOnUpdated() - Plugin \"{0}\": prev progress hashCode = {1}, cur progress hashCode = {2}",
                             progressProvider.Plugin.Name, prevHashCode, hashCode
                         );
 
