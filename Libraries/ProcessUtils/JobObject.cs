@@ -4,12 +4,12 @@ using System.Diagnostics;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable InconsistentNaming
-// TODO: See http://jobobjectwrapper.codeplex.com/ for a (potentially) better solution
 namespace ProcessUtils
 {
-    /// <see cref="http://stackoverflow.com/a/538238/467582"/>
-    /// <see cref="http://stackoverflow.com/a/9164742/467582"/>
-    /// <see cref="http://stackoverflow.com/a/4657392/467582"/>
+    /// <seealso cref="http://stackoverflow.com/a/538238/467582"/>
+    /// <seealso cref="http://stackoverflow.com/a/9164742/467582"/>
+    /// <seealso cref="http://stackoverflow.com/a/4657392/467582"/>
+    /// <seealso cref="http://jobobjectwrapper.codeplex.com/"/> for a (potentially) better solution
     public class JobObject : IDisposable
     {
         /// <summary>
