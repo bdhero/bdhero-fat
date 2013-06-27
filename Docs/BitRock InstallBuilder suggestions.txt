@@ -1,0 +1,7 @@
+BitRock InstallBuilder 8 Enterprise suggestions
+===============================================
+
+*  Can't pin InstallBuilder to taskbar
+*  Checkbox labels
+*  Input width
+*  Escape/Enter key in forms
