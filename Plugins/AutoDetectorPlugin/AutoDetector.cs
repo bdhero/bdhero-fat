@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using BDHero.BDROM;
 using BDHero.JobQueue;
 using DotNetUtils;
+using I18N;
 
 namespace BDHero.Plugin.AutoDetector
 {
@@ -196,22 +198,23 @@ namespace BDHero.Plugin.AutoDetector
         {
             foreach (var playlist in disc.Playlists.Where(playlist => playlist.IsMainFeature))
             {
-                // Additional video tracks are PiP commentary
+                // Additional video tracks are usually PiP commentary
                 foreach (var videoTrack in playlist.VideoTracks.Skip(1))
                 {
                     videoTrack.Type = TrackType.Commentary;
                 }
 
-                var audioLanguages = playlist.AudioTracks.Select(track => track.Language);
+                var audioLanguages = new HashSet<Language>(playlist.AudioTracks.Select(track => track.Language)).ToArray();
+                var subtitleLanguages = new HashSet<Language>(playlist.SubtitleTracks.Select(track => track.Language)).ToArray();
 
                 // Detect type of audio tracks (per-language)
                 foreach (var audioLanguage in audioLanguages)
                 {
                     var lang = audioLanguage;
-                    var audioTracksWithLang = playlist.AudioTracks.Where(track => track.Language == lang).ToList();
+                    var audioTracksWithLang = playlist.AudioTracks.Where(track => track.Language == lang).ToArray();
 
                     // Detect type of audio tracks
-                    for (var i = 0; i < audioTracksWithLang.Count; i++)
+                    for (var i = 0; i < audioTracksWithLang.Length; i++)
                     {
                         var audioTrack = audioTracksWithLang[i];
 
@@ -223,11 +226,20 @@ namespace BDHero.Plugin.AutoDetector
                     }
                 }
 
-                // Subtitle track types cannot be inferred programmatically;
-                // assume "Main Feature" and the user can override if necessary.
-                foreach (var subtitleTrack in playlist.SubtitleTracks)
+                // Detect type of audio tracks (per-language)
+                // Assume the first subtitle track of every language is the Main Feature,
+                // and all other subtitle tracks of that language are Commentary
+                foreach (var subtitleLanguage in subtitleLanguages)
                 {
-                    subtitleTrack.Type = TrackType.MainFeature;
+                    var lang = subtitleLanguage;
+                    var subtitleTracksWithLang = playlist.SubtitleTracks.Where(track => track.Language == lang).ToArray();
+
+                    // Detect type of subtitle tracks
+                    for (var i = 0; i < subtitleTracksWithLang.Length; i++)
+                    {
+                        var subtitleTrack = subtitleTracksWithLang[i];
+                        subtitleTrack.Type = i == 0 ? TrackType.MainFeature : TrackType.Commentary;
+                    }
                 }
             }
         }
