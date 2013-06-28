@@ -145,9 +145,20 @@ namespace BDHero.Plugin.AutoDetector
 
         private static string GetPlaylistDupKey(Playlist playlist)
         {
-            IList<string> streamClips = playlist.StreamClips.Select(clip => clip.FileName + "/" + clip.Length + "/" + clip.FileSize).ToList();
-            var key = playlist.Length + "/" + playlist.FileSize + "=[" + string.Join(",", streamClips) + "]";
+            var streamClips = string.Join(",", playlist.StreamClips.Select(GetStreamClipDupKey));
+            var chapters = string.Join(",", playlist.Chapters.Select(GetChapterDupKey));
+            var key = string.Format("{0}/{1}=[{2}]+[{3}]", playlist.Length, playlist.FileSize, streamClips, chapters);
             return key;
+        }
+
+        private static string GetStreamClipDupKey(StreamClip clip)
+        {
+            return string.Format("{0}/{1}/{2}", clip.FileName, clip.Length, clip.FileSize);
+        }
+
+        private static string GetChapterDupKey(Chapter chapter)
+        {
+            return string.Format("{0}/{1}", chapter.Number, chapter.StartTime);
         }
 
         private void TransformPlaylistQuality(Disc disc)
