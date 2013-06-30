@@ -69,8 +69,17 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private void OnStdErr(string line)
         {
-            if (!string.IsNullOrWhiteSpace(line))
-                Exception = new Exception(line);
+            if (string.IsNullOrWhiteSpace(line)) return;
+
+            try
+            {
+                // Preserve stack trace by throwing and catching exception
+                throw new Exception(line);
+            }
+            catch (Exception e)
+            {
+                Exception = e;
+            }
         }
 
         private void VerifyInputPaths()
