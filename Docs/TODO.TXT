@@ -9,7 +9,6 @@ Chores
 Bugs
 ====
 
-[ ] Parse FFmpeg error output when output path is not writeable (dir doesn't exist)
 [ ] Estimated time left -- double decrement bug
 
 Features
@@ -72,6 +71,7 @@ Complete
 System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: No process is associated with this object.
    at System.Diagnostics.Process.get_HasExited()
    at ProcessUtils.NonInteractiveProcess.get_CanKill()
+[X] Parse FFmpeg error output when output path is not writeable (dir doesn't exist)
 [X] mkvpropedit.exe
 [X] Filter bad chars in output file names
 [X] Fix race condition in cancelation/status reporting
