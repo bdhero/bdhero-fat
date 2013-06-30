@@ -49,6 +49,7 @@ namespace ProcessUtils
         }
         private ArgumentList _arguments = new ArgumentList();
 
+        private bool _hasStarted;
         private bool _hasExited;
 
         /// <summary>
@@ -175,6 +176,8 @@ namespace ProcessUtils
 
                     process.Start();
 
+                    _hasStarted = true;
+
                     Id = process.Id;
                     Name = process.ProcessName;
                     State = NonInteractiveProcessState.Running;
@@ -235,7 +238,7 @@ namespace ProcessUtils
         {
             get
             {
-                if (_hasExited)
+                if (!_hasStarted || _hasExited)
                     return false;
 
                 try
