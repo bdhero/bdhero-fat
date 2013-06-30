@@ -127,8 +127,16 @@ namespace BDHeroGUI
 
         private void ControllerOnScanFailed(object sender, EventArgs eventArgs)
         {
-            AppendStatus("Scan failed!");
-            _taskbarItem.Error();
+            if (_scanCancellationTokenSource.IsCancellationRequested)
+            {
+                AppendStatus("Scan canceled!");
+                _taskbarItem.NoProgress();
+            }
+            else
+            {
+                AppendStatus("Scan failed!");
+                _taskbarItem.Error();
+            }
         }
 
         private void ControllerOnScanCompleted(object sender, EventArgs eventArgs)
@@ -152,8 +160,16 @@ namespace BDHeroGUI
 
         private void ControllerOnConvertFailed(object sender, EventArgs eventArgs)
         {
-            AppendStatus("Convert failed!");
-            _taskbarItem.Error();
+            if (_convertCancellationTokenSource.IsCancellationRequested)
+            {
+                AppendStatus("Convert canceled!");
+                _taskbarItem.NoProgress();
+            }
+            else
+            {
+                AppendStatus("Convert failed!");
+                _taskbarItem.Error();
+            }
         }
 
         private void ControllerOnConvertCompleted(object sender, EventArgs eventArgs)
