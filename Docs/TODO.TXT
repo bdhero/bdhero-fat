@@ -9,7 +9,7 @@ Chores
 Bugs
 ====
 
-[ ] Estimated time left -- double decrement bug
+
 
 Features
 ========
@@ -50,6 +50,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Estimated time left -- double decrement bug
 [X] Exception not propagated to UI and doesn't stop UI:
     2013-06-27 16:57:24,043 [6620][7] ERROR ProcessUtils.NonInteractiveProcess - Error occurred while starting/running NonInteractiveProcess
     System.InvalidOperationException: Requested process already belongs to another job group. Check http://stackoverflow.com/a/4232259/3205 for help.
