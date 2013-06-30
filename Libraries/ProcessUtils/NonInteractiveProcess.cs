@@ -49,7 +49,7 @@ namespace ProcessUtils
         }
         private ArgumentList _arguments = new ArgumentList();
 
-        private Process _process;
+        private bool _hasExited;
 
         /// <summary>
         /// Gets the system process ID.
@@ -158,42 +158,44 @@ namespace ProcessUtils
 
             using (var jobObject = JobObject2.Create())
             {
-                using (_process = CreateProcess())
+                using (var process = CreateProcess())
                 {
-                    _process.StartInfo.FileName = ExePath;
-                    _process.StartInfo.Arguments = Arguments.ToString();
-                    _process.EnableRaisingEvents = true;
-                    _process.Exited += ProcessOnExited;
+                    process.StartInfo.FileName = ExePath;
+                    process.StartInfo.Arguments = Arguments.ToString();
+                    process.EnableRaisingEvents = true;
+                    process.Exited += ProcessOnExited;
 
                     if (BeforeStart != null)
                         BeforeStart(this, EventArgs.Empty);
 
-                    _process.OutputDataReceived += (sender, args) => HandleStdOut(args.Data);
-                    _process.ErrorDataReceived += (sender, args) => HandleStdErr(args.Data);
+                    process.OutputDataReceived += (sender, args) => HandleStdOut(args.Data);
+                    process.ErrorDataReceived += (sender, args) => HandleStdErr(args.Data);
 
                     Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
 
-                    _process.Start();
+                    process.Start();
 
-                    Id = _process.Id;
-                    Name = _process.ProcessName;
+                    Id = process.Id;
+                    Name = process.ProcessName;
                     State = NonInteractiveProcessState.Running;
 
-                    jobObject.AssignProcess(_process);
+                    jobObject.AssignProcess(process);
                     jobObject.SetKillOnClose();
 
                     _stopwatch.Start();
 
-                    _process.BeginOutputReadLine();
-                    _process.BeginErrorReadLine();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
 
                     Logger.DebugFormat("Waiting for process \"{0}\" w/ PID = {1} to exit...", ExePath, Id);
 
-                    _process.WaitForExit();
+                    process.WaitForExit();
+
+                    _hasExited = true;
 
                     Logger.DebugFormat("Process \"{0}\" w/ PID = {1} exited", ExePath, Id);
 
-                    ExitCode = _process.ExitCode;
+                    ExitCode = process.ExitCode;
                 }
             }
 
@@ -220,7 +222,7 @@ namespace ProcessUtils
             Logger.DebugFormat("Killing process \"{0}\" w/ PID = {1}...", ExePath, Id);
             try
             {
-                _process.Kill();
+                GetProcess().Kill();
             }
             catch (Exception exception)
             {
@@ -229,13 +231,36 @@ namespace ProcessUtils
             State = NonInteractiveProcessState.Killed;
         }
 
+        private bool IsValidProcess
+        {
+            get
+            {
+                if (_hasExited)
+                    return false;
+
+                try
+                {
+                    using (var process = GetProcess())
+                    {
+                        return process != null && !process.HasExited;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("Exception thrown while trying to access process information", e);
+                }
+
+                return false;
+            }
+        }
+
         private bool CanKill
         {
             get
             {
                 var validState = (State == NonInteractiveProcessState.Running ||
                                   State == NonInteractiveProcessState.Paused);
-                return validState && _process != null && !_process.HasExited;
+                return validState && IsValidProcess;
             }
         }
 
@@ -274,6 +299,8 @@ namespace ProcessUtils
         /// </summary>
         private void ProcessOnExited()
         {
+            _hasExited = true;
+
             Logger.DebugFormat("Process \"{0}\" exited (synchronous event)", ExePath);
 
             _stopwatch.Stop();
@@ -293,7 +320,10 @@ namespace ProcessUtils
         /// </summary>
         private void ProcessOnExited(object sender, EventArgs eventArgs)
         {
+            _hasExited = true;
+
             Logger.DebugFormat("Process \"{0}\" exited (asynchronous event)", ExePath);
+
             var process = sender as Process;
             if (process == null) return;
         }
@@ -308,7 +338,7 @@ namespace ProcessUtils
 
             Logger.DebugFormat("Pausing process \"{0}\"", ExePath);
 
-            _process.Suspend();
+            GetProcess().Suspend();
             _stopwatch.Stop();
             State = NonInteractiveProcessState.Paused;
         }
@@ -318,8 +348,8 @@ namespace ProcessUtils
             if (!CanResume) return;
 
             Logger.DebugFormat("Resuming process \"{0}\"", ExePath);
-                
-            _process.Resume();
+
+            GetProcess().Resume();
             _stopwatch.Start();
             State = NonInteractiveProcessState.Running;
         }
@@ -328,7 +358,7 @@ namespace ProcessUtils
         {
             get
             {
-                return State == NonInteractiveProcessState.Running && _process != null && !_process.HasExited;
+                return State == NonInteractiveProcessState.Running && IsValidProcess;
             }
         }
 
@@ -336,7 +366,7 @@ namespace ProcessUtils
         {
             get
             {
-                return State == NonInteractiveProcessState.Paused && _process != null && !_process.HasExited;
+                return State == NonInteractiveProcessState.Paused && IsValidProcess;
             }
         }
 
