@@ -92,6 +92,9 @@ Backlog
 
 [ ] Move output file name settings out into Preferences dialog (similar to mmg)
 
+[ ] Add Windows 7 Taskbar buttons for pause/resume and cancel
+[ ] Add Windows 7 Taskbar jump lists?
+
 Chris' Plugins
 ==============
 
