@@ -12,6 +12,8 @@ using BDHero;
 using BDHero.Plugin;
 using BDHero.Startup;
 using DotNetUtils;
+using OSUtils.TaskbarUtils;
+using WindowsOSUtils.TaskbarUtils;
 
 namespace BDHeroGUI
 {
@@ -22,6 +24,7 @@ namespace BDHeroGUI
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
         private readonly ToolTip _progressBarToolTip;
+        private readonly ITaskbarItem _taskbarItem;
 
         private CancellationTokenSource _scanCancellationTokenSource;
         private CancellationTokenSource _convertCancellationTokenSource;
@@ -43,6 +46,8 @@ namespace BDHeroGUI
 
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
+
+            _taskbarItem = new WindowsTaskbarItemFactory().GetInstance(Handle);
 
             progressBar.UseCustomColors = true;
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
@@ -111,6 +116,7 @@ namespace BDHeroGUI
         {
             textBoxStatus.Text = "Scan started...";
             EnableControls(false);
+            _taskbarItem.SetProgress(0).Indeterminate();
         }
 
         private void ControllerOnScanSucceeded(object sender, EventArgs eventArgs)
@@ -133,6 +139,7 @@ namespace BDHeroGUI
         {
             AppendStatus("Convert started...");
             EnableControls(false);
+            _taskbarItem.SetProgress(0).Indeterminate();
         }
 
         private void ControllerOnConvertSucceeded(object sender, EventArgs eventArgs)
@@ -165,22 +172,28 @@ namespace BDHeroGUI
                                      progressProvider.RunTime.ToStringShort(),
                                      progressProvider.TimeRemaining.ToStringShort());
             AppendStatus(line);
+
             progressBar.ValuePercent = progressProvider.PercentComplete;
             _progressBarToolTip.SetToolTip(progressBar, string.Format("{0}: {1}", progressProvider.State, percentCompleteStr));
+            _taskbarItem.Progress = progressProvider.PercentComplete;
 
             switch (progressProvider.State)
             {
                 case ProgressProviderState.Error:
                     progressBar.SetError();
+                    _taskbarItem.Error();
                     break;
                 case ProgressProviderState.Paused:
                     progressBar.SetPaused();
+                    _taskbarItem.Pause();
                     break;
                 case ProgressProviderState.Canceled:
                     progressBar.SetMuted();
+                    _taskbarItem.NoProgress();
                     break;
                 default:
                     progressBar.SetSuccess();
+                    _taskbarItem.Normal();
                     break;
             }
         }
