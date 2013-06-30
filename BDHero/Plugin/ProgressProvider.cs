@@ -122,8 +122,14 @@ namespace BDHero.Plugin
         /// </summary>
         private DateTime _lastTick;
 
+        /// <summary>
+        /// Calculates time remaining approximately once per second.
+        /// </summary>
         private readonly Timer _timer;
 
+        /// <summary>
+        /// Used to calculate elapsed time.  Allows for pause/resume.
+        /// </summary>
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
         #endregion
