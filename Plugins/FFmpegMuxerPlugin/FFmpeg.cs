@@ -290,7 +290,7 @@ namespace BDHero.Plugin.FFmpegMuxer
                 .RemoveAllTags()
                 .AddCoverArt(coverArtImage)
                 .SetChapters(playlist.Chapters)
-//                .SetDefaultTracksAuto(selectedTracks)
+//                .SetDefaultTracksAuto(selectedTracks) // Breaks MediaInfo
             ;
             mkvPropEdit.Start();
         }
