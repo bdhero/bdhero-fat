@@ -65,12 +65,11 @@ namespace BDHero.Plugin.FFmpegMuxer
             cancellationToken.Register(ffmpeg.Kill, true);
             WaitForThreadToExit();
 
-            if (_exception != null)
-            {
-                if (_exception is OperationCanceledException)
-                    throw new OperationCanceledException("FFmpeg was canceled", _exception);
-                throw new Exception("Error occurred while muxing with FFmpeg", _exception);
-            }
+            if (_exception == null) return;
+
+            if (_exception is OperationCanceledException)
+                throw new OperationCanceledException("FFmpeg was canceled", _exception);
+            throw new Exception("Error occurred while muxing with FFmpeg", _exception);
         }
 
         private void OnProgressUpdated(FFmpeg ffmpeg, ProgressState progressState, CancellationToken cancellationToken)
