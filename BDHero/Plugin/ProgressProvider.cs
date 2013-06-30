@@ -22,7 +22,7 @@ namespace BDHero.Plugin
         /// <summary>
         /// Default timer interval between updates in milliseconds.
         /// </summary>
-        public const double DefaultIntervalMs = 1000;
+        public const double DefaultIntervalMs = 250;
 
         #endregion
 
