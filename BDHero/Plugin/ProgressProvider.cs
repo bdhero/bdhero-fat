@@ -21,7 +21,6 @@ namespace BDHero.Plugin
 
         /// <summary>
         /// Default timer interval between updates in milliseconds.
-        /// TODO: Remaining time calculation fails if this value is set to 250 ms.
         /// </summary>
         public const double DefaultIntervalMs = 1000;
 
@@ -468,9 +467,6 @@ namespace BDHero.Plugin
                 // If the estimate dips below 0, set it to 30 seconds
                 if (finalEstimate.TotalMilliseconds < 0)
                     finalEstimate = TimeSpan.FromSeconds(30);
-
-                // Truncate (remove) milliseconds from estimate
-                finalEstimate = TimeSpan.FromSeconds(Math.Floor(finalEstimate.TotalSeconds));
 
                 TimeRemaining = finalEstimate;
 
