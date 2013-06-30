@@ -118,9 +118,19 @@ namespace BDHero.Plugin
         #region Private members
 
         /// <summary>
+        /// Synchronization primitive for multi-threading.
+        /// </summary>
+        private readonly object _lock = new object();
+
+        /// <summary>
         /// Last time the <see cref="_timer"/> interval elapsed.  Used to calculate <see cref="RunTime"/>.
         /// </summary>
         private DateTime _lastTick;
+
+        /// <summary>
+        /// The value of <see cref="_lastTick"/> the last time <see cref="CalculateTimeRemaining"/> was called.
+        /// </summary>
+        private DateTime _lastCalculationTick;
 
         /// <summary>
         /// Calculates time remaining approximately once per second.
@@ -182,7 +192,7 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            _lastTick = DateTime.Now;
+            SetLastTick();
 
             LogMethodExit();
         }
@@ -232,7 +242,7 @@ namespace BDHero.Plugin
                                   ProgressProviderState.Ready, State));
             }
 
-            _lastTick = DateTime.Now;
+            SetLastTick();
 
             State = ProgressProviderState.Running;
             Tick();
@@ -260,7 +270,7 @@ namespace BDHero.Plugin
                                   ProgressProviderState.Paused, State));
             }
 
-            _lastTick = DateTime.Now;
+            SetLastTick();
 
             State = ProgressProviderState.Running;
             Tick();
@@ -393,61 +403,81 @@ namespace BDHero.Plugin
             LogMethodExit();
         }
 
+        private void SetLastTick()
+        {
+            lock (_lock)
+            {
+                _lastTick = DateTime.Now;
+            }
+        }
+
         private void CalculateTimeRemaining()
         {
-            LogMethodEntry();
-
-            // Thread safety :-)
-            var percentComplete = PercentComplete;
-
-            // 0.0 to 1.0
-            var pct = percentComplete / 100;
-
-            // Previously calculated estimate from the last tick
-            var oldEstimate = TimeRemaining;
-
-            // Fresh estimate (might be jerky)
-            var newEstimate = TimeSpan.Zero;
-
-            // The final estimate value that will actually be used
-            var finalEstimate = oldEstimate;
-
-            // Make sure progress percentage is within legal bounds (0%, 100%)
-            if (pct > 0 && pct < 1)
-                newEstimate = new TimeSpan((long)(RunTime.Ticks / pct) - RunTime.Ticks);
-
-            // Make sure the user gets fresh calculations when the process is first started and when it's nearly finished.
-            var criticalThreshold = TimeSpan.FromMinutes(1.25);
-            var isCriticalPeriod = percentComplete < .5 || percentComplete > 95 || oldEstimate < criticalThreshold || newEstimate < criticalThreshold;
-
-            // If the new estimate differs from the previous estimate by more than 2 minutes, use the new estimate.
-            var changeThreshold = pct < 0.2 ? TimeSpan.FromMinutes(2) : TimeSpan.FromSeconds(20);
-            var isLargeChange = Math.Abs(newEstimate.TotalSeconds - oldEstimate.TotalSeconds) > changeThreshold.TotalSeconds;
-
-            // If the previous estimate was less than 1 second remaining, use the new estimate.
-            var lowPreviousEstimate = oldEstimate.TotalMilliseconds < 1000;
-
-            // Use the new estimate
-            if (isCriticalPeriod || isLargeChange || lowPreviousEstimate)
+            lock (_lock)
             {
-                finalEstimate = newEstimate;
+                var lastTick = _lastTick;
+
+                if (_lastCalculationTick == lastTick)
+                    return;
+
+                LogMethodEntry();
+
+                var ticks = RunTime.Ticks;
+
+                // Thread safety :-)
+                var percentComplete = PercentComplete;
+
+                // 0.0 to 1.0
+                var pct = percentComplete / 100;
+
+                // Previously calculated estimate from the last tick
+                var oldEstimate = TimeRemaining;
+
+                // Fresh estimate (might be jerky)
+                var newEstimate = TimeSpan.Zero;
+
+                // The final estimate value that will actually be used
+                var finalEstimate = oldEstimate;
+
+                // Make sure progress percentage is within legal bounds (0%, 100%)
+                if (pct > 0 && pct < 1)
+                    newEstimate = new TimeSpan((long)(ticks / pct) - ticks);
+
+                // Make sure the user gets fresh calculations when the process is first started and when it's nearly finished.
+                var criticalThreshold = TimeSpan.FromMinutes(1.25);
+                var isCriticalPeriod = percentComplete < .5 || percentComplete > 95 || oldEstimate < criticalThreshold || newEstimate < criticalThreshold;
+
+                // If the new estimate differs from the previous estimate by more than 2 minutes, use the new estimate.
+                var changeThreshold = pct < 0.2 ? TimeSpan.FromMinutes(2) : TimeSpan.FromSeconds(20);
+                var isLargeChange = Math.Abs(newEstimate.TotalSeconds - oldEstimate.TotalSeconds) > changeThreshold.TotalSeconds;
+
+                // If the previous estimate was less than 1 second remaining, use the new estimate.
+                var lowPreviousEstimate = oldEstimate.TotalMilliseconds < 1000;
+
+                // Use the new estimate
+                if (isCriticalPeriod || isLargeChange || lowPreviousEstimate)
+                {
+                    finalEstimate = newEstimate;
+                }
+                // Decrement the previous estimate by roughly 1 second
+                else
+                {
+                    finalEstimate -= (DateTime.Now - lastTick);
+                }
+
+                // If the estimate dips below 0, set it to 30 seconds
+                if (finalEstimate.TotalMilliseconds < 0)
+                    finalEstimate = TimeSpan.FromSeconds(30);
+
+                // Truncate (remove) milliseconds from estimate
+                finalEstimate = TimeSpan.FromSeconds(Math.Floor(finalEstimate.TotalSeconds));
+
+                TimeRemaining = finalEstimate;
+
+                _lastCalculationTick = lastTick;
+
+                LogMethodExit();
             }
-            // Decrement the previous estimate by roughly 1 second
-            else
-            {
-                finalEstimate -= (DateTime.Now - _lastTick);
-            }
-
-            // If the estimate dips below 0, set it to 30 seconds
-            if (finalEstimate.TotalMilliseconds < 0)
-                finalEstimate = TimeSpan.FromSeconds(30);
-
-            // Truncate (remove) milliseconds from estimate
-            finalEstimate = TimeSpan.FromSeconds(Math.Floor(finalEstimate.TotalSeconds));
-
-            TimeRemaining = finalEstimate;
-
-            LogMethodExit();
         }
 
         public override int GetHashCode()
