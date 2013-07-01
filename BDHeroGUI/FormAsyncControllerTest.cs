@@ -43,14 +43,14 @@ namespace BDHeroGUI
         {
             InitializeComponent();
 
+            Load += OnLoad;
+
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _directoryLocator = directoryLocator;
             _pluginLoader = pluginLoader;
             _controller = controller;
 
             _filter = new PlaylistFilter();
-
-            Load += OnLoad;
 
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
