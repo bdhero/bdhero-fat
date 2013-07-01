@@ -60,6 +60,7 @@
     <Compile Include="Controls\LinkLabel2.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ListViewColumnSorter.cs" />
     <Compile Include="Controls\ProgressBar2.cs">
       <SubType>Component</SubType>
     </Compile>
