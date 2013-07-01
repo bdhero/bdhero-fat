@@ -148,5 +148,12 @@ namespace BDHeroGUI.Components
                 });
             return item;
         }
+
+        public void SelectFirstPlaylist()
+        {
+            if (!VisiblePlaylistsInSortOrder.Any())
+                return;
+            SelectedPlaylist = VisiblePlaylistsInSortOrder.First();
+        }
     }
 }
