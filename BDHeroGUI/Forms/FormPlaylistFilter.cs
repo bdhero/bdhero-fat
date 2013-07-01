@@ -27,6 +27,7 @@ namespace BDHeroGUI.Forms
         {
             var values = Enum.GetValues(typeof (TrackType)).OfType<object>().ToArray();
             checkedListBoxTypes.Items.AddRange(values);
+            this.EnableSelectAll();
         }
 
         private void OnShown(object sender, EventArgs eventArgs)

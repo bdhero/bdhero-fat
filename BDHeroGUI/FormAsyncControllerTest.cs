@@ -72,6 +72,7 @@ namespace BDHeroGUI
             LogPlugins();
             InitController();
             EnableControls(true);
+            this.EnableSelectAll();
         }
 
         private void LogDirectoryPaths()
