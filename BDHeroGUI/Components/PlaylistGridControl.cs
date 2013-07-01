@@ -72,6 +72,8 @@ namespace BDHeroGUI.Components
                     if (ItemSelectionChanged != null)
                         ItemSelectionChanged(sender, args);
                 };
+
+            Resize += (sender, args) => listView.Columns.OfType<ColumnHeader>().Last().Width = -2;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
