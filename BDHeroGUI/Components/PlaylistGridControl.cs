@@ -58,6 +58,8 @@ namespace BDHeroGUI.Components
 
         public Func<Playlist, bool> Filter;
 
+        public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged;
+
         public PlaylistGridControl()
         {
             InitializeComponent();
@@ -65,6 +67,11 @@ namespace BDHeroGUI.Components
 
             listView.ListViewItemSorter = _columnSorter;
             listView.ColumnClick += (_, e) => ListViewOnColumnClick(e.Column);
+            listView.ItemSelectionChanged += delegate(object sender, ListViewItemSelectionChangedEventArgs args)
+                {
+                    if (ItemSelectionChanged != null)
+                        ItemSelectionChanged(sender, args);
+                };
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
