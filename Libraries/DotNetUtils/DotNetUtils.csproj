@@ -54,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyUtils.cs" />
+    <Compile Include="Controls\DoubleBufferedListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\LinkLabel2.cs">
       <SubType>Component</SubType>
     </Compile>
