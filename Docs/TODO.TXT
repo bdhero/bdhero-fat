@@ -28,6 +28,7 @@ Bugs
        at BDHero.Controller.<>c__DisplayClass22.<RunPluginSync>b__20(IThreadInvoker invoker, CancellationToken token)
        at DotNetUtils.TaskUtils.TaskBuilder.<InvokeDoWork>b__2()
        at DotNetUtils.TaskUtils.TaskBuilder.Try(Action action)
+[ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
 
 Features
 ========
