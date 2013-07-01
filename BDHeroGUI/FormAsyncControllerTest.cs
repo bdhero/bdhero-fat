@@ -30,13 +30,13 @@ namespace BDHeroGUI
 
         private bool _isRunning;
 
-        private Stage _stage = Stage.Ready;
-
         private CancellationTokenSource _cancellationTokenSource;
 
         private ProgressProviderState _state = ProgressProviderState.Ready;
 
         private readonly PlaylistFilter _filter;
+
+        private bool _showAllPlaylists;
 
         public FormAsyncControllerTest(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
@@ -59,7 +59,7 @@ namespace BDHeroGUI
             progressBar.UseCustomColors = true;
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
 
-            playlistListView.Filter = playlist => _filter.Show(playlist);
+            playlistListView.Filter = playlist => _filter.Show(playlist) || _showAllPlaylists;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -110,8 +110,10 @@ namespace BDHeroGUI
         {
             textBoxInput.Enabled = enabled;
             textBoxOutput.Enabled = enabled;
-            buttonMux.Enabled = enabled;
+            buttonScan.Enabled = enabled;
             buttonCancel.Enabled = !enabled;
+            buttonConvert.Enabled = enabled && _controller.Job != null;
+            buttonCancelConvert.Enabled = !enabled && _controller.Job != null;
             playlistListView.Enabled = enabled;
             _isRunning = !enabled;
         }
@@ -126,8 +128,7 @@ namespace BDHeroGUI
 
         private void ControllerOnScanStarted(object sender, EventArgs eventArgs)
         {
-            _stage = Stage.Scanning;
-            buttonMux.Text = "Scanning...";
+            buttonScan.Text = "Scanning...";
             textBoxStatus.Text = "Scan started...";
             EnableControls(false);
             _taskbarItem.SetProgress(0).Indeterminate();
@@ -135,16 +136,14 @@ namespace BDHeroGUI
 
         private void ControllerOnScanSucceeded(object sender, EventArgs eventArgs)
         {
-            buttonMux.Text = "Mux";
+            textBoxOutput.Text = _controller.Job.OutputPath;
             AppendStatus("Scan succeeded!");
             _taskbarItem.NoProgress();
-            playlistListView.Playlists = _controller.Job.Disc.Playlists;
+            RefreshPlaylists();
         }
 
         private void ControllerOnScanFailed(object sender, EventArgs eventArgs)
         {
-            _stage = Stage.Ready;
-            buttonMux.Text = "Scan";
             if (_cancellationTokenSource.IsCancellationRequested)
             {
                 AppendStatus("Scan canceled!");
@@ -159,6 +158,7 @@ namespace BDHeroGUI
 
         private void ControllerOnScanCompleted(object sender, EventArgs eventArgs)
         {
+            buttonScan.Text = "Scan";
             AppendStatus("Scan completed!");
             EnableControls(true);
         }
@@ -169,8 +169,7 @@ namespace BDHeroGUI
 
         private void ControllerOnConvertStarted(object sender, EventArgs eventArgs)
         {
-            _stage = Stage.Converting;
-            buttonMux.Text = "Converting...";
+            buttonConvert.Text = "Converting...";
             AppendStatus("Convert started...");
             EnableControls(false);
             _taskbarItem.SetProgress(0).Indeterminate();
@@ -178,16 +177,12 @@ namespace BDHeroGUI
 
         private void ControllerOnConvertSucceeded(object sender, EventArgs eventArgs)
         {
-            _stage = Stage.Scanning;
-            buttonMux.Text = "Mux";
             AppendStatus("Convert succeeded!");
             _taskbarItem.NoProgress();
         }
 
         private void ControllerOnConvertFailed(object sender, EventArgs eventArgs)
         {
-            _stage = Stage.Scanning;
-            buttonMux.Text = "Mux";
             if (_cancellationTokenSource.IsCancellationRequested)
             {
                 AppendStatus("Convert canceled!");
@@ -202,6 +197,7 @@ namespace BDHeroGUI
 
         private void ControllerOnConvertCompleted(object sender, EventArgs eventArgs)
         {
+            buttonConvert.Text = "Convert";
             AppendStatus("Convert completed!");
             EnableControls(true);
         }
@@ -252,6 +248,12 @@ namespace BDHeroGUI
 
         #endregion
 
+        private void RefreshPlaylists()
+        {
+            if (_controller.Job != null)
+                playlistListView.Playlists = _controller.Job.Disc.Playlists;
+        }
+
         private void Scan()
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -280,24 +282,26 @@ namespace BDHeroGUI
             _controller.SetEventScheduler();
 
             _controller
-                .CreateConvertTask(_cancellationTokenSource.Token)
+                .CreateConvertTask(_cancellationTokenSource.Token, textBoxOutput.Text)
                 .Start();
         }
 
         private void buttonMux_Click(object sender, EventArgs e)
         {
-            switch (_stage)
-            {
-                case Stage.Ready:
-                    Scan();
-                    break;
-                case Stage.Scanning:
-                    Convert();
-                    break;
-            }
+            Scan();
+        }
+
+        private void buttonConvert_Click(object sender, EventArgs e)
+        {
+            Convert();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            _cancellationTokenSource.Cancel();
+        }
+
+        private void buttonCancelConvert_Click(object sender, EventArgs e)
         {
             _cancellationTokenSource.Cancel();
         }
@@ -306,10 +310,16 @@ namespace BDHeroGUI
         {
             var result = new FormPlaylistFilter(_filter).ShowDialog(this);
 
-            if (result == DialogResult.OK && _controller.Job != null)
+            if (result == DialogResult.OK)
             {
-                playlistListView.Playlists = _controller.Job.Disc.Playlists;
+                RefreshPlaylists();
             }
+        }
+
+        private void checkBoxShowAllPlaylists_CheckedChanged(object sender, EventArgs e)
+        {
+            _showAllPlaylists = checkBoxShowAllPlaylists.Checked;
+            RefreshPlaylists();
         }
     }
 

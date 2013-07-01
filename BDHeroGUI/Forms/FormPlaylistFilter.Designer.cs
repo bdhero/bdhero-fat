@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBoxMinDuration = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBoxMinChapterCount = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.checkedListBoxTypes = new System.Windows.Forms.CheckedListBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxMinChapterCount = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBoxMinDuration = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.checkBoxHideDuplicatePlaylists = new System.Windows.Forms.CheckBox();
-            this.checkBoxHideDuplicateStreamClips = new System.Windows.Forms.CheckBox();
-            this.checkBoxHideLoops = new System.Windows.Forms.CheckBox();
             this.checkBoxHideHiddenFirstTracks = new System.Windows.Forms.CheckBox();
+            this.checkBoxHideLoops = new System.Windows.Forms.CheckBox();
+            this.checkBoxHideDuplicateStreamClips = new System.Windows.Forms.CheckBox();
+            this.checkBoxHideDuplicatePlaylists = new System.Windows.Forms.CheckBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -67,55 +67,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Show";
             // 
-            // label1
+            // checkedListBoxTypes
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Duration:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(64, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(19, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = ">=";
-            // 
-            // textBoxMinDuration
-            // 
-            this.textBoxMinDuration.Location = new System.Drawing.Point(89, 17);
-            this.textBoxMinDuration.Name = "textBoxMinDuration";
-            this.textBoxMinDuration.Size = new System.Drawing.Size(83, 20);
-            this.textBoxMinDuration.TabIndex = 0;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 46);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(52, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Chapters:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(64, 46);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(19, 13);
-            this.label4.TabIndex = 4;
-            this.label4.Text = ">=";
-            // 
-            // textBoxMinChapterCount
-            // 
-            this.textBoxMinChapterCount.Location = new System.Drawing.Point(89, 43);
-            this.textBoxMinChapterCount.Name = "textBoxMinChapterCount";
-            this.textBoxMinChapterCount.Size = new System.Drawing.Size(83, 20);
-            this.textBoxMinChapterCount.TabIndex = 1;
+            this.checkedListBoxTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkedListBoxTypes.FormattingEnabled = true;
+            this.checkedListBoxTypes.Location = new System.Drawing.Point(89, 70);
+            this.checkedListBoxTypes.Name = "checkedListBoxTypes";
+            this.checkedListBoxTypes.Size = new System.Drawing.Size(174, 94);
+            this.checkedListBoxTypes.TabIndex = 2;
             // 
             // label5
             // 
@@ -126,15 +86,55 @@
             this.label5.TabIndex = 6;
             this.label5.Text = "Types:";
             // 
-            // checkedListBoxTypes
+            // textBoxMinChapterCount
             // 
-            this.checkedListBoxTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkedListBoxTypes.FormattingEnabled = true;
-            this.checkedListBoxTypes.Location = new System.Drawing.Point(89, 70);
-            this.checkedListBoxTypes.Name = "checkedListBoxTypes";
-            this.checkedListBoxTypes.Size = new System.Drawing.Size(174, 94);
-            this.checkedListBoxTypes.TabIndex = 2;
+            this.textBoxMinChapterCount.Location = new System.Drawing.Point(89, 43);
+            this.textBoxMinChapterCount.Name = "textBoxMinChapterCount";
+            this.textBoxMinChapterCount.Size = new System.Drawing.Size(83, 20);
+            this.textBoxMinChapterCount.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(64, 46);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(19, 13);
+            this.label4.TabIndex = 4;
+            this.label4.Text = ">=";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 46);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Chapters:";
+            // 
+            // textBoxMinDuration
+            // 
+            this.textBoxMinDuration.Location = new System.Drawing.Point(89, 17);
+            this.textBoxMinDuration.Name = "textBoxMinDuration";
+            this.textBoxMinDuration.Size = new System.Drawing.Size(83, 20);
+            this.textBoxMinDuration.TabIndex = 0;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(64, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(19, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = ">=";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Duration:";
             // 
             // groupBox2
             // 
@@ -146,20 +146,30 @@
             this.groupBox2.Controls.Add(this.checkBoxHideDuplicatePlaylists);
             this.groupBox2.Location = new System.Drawing.Point(13, 195);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(278, 120);
+            this.groupBox2.Size = new System.Drawing.Size(278, 115);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Hide";
             // 
-            // checkBoxHideDuplicatePlaylists
+            // checkBoxHideHiddenFirstTracks
             // 
-            this.checkBoxHideDuplicatePlaylists.AutoSize = true;
-            this.checkBoxHideDuplicatePlaylists.Location = new System.Drawing.Point(10, 20);
-            this.checkBoxHideDuplicatePlaylists.Name = "checkBoxHideDuplicatePlaylists";
-            this.checkBoxHideDuplicatePlaylists.Size = new System.Drawing.Size(110, 17);
-            this.checkBoxHideDuplicatePlaylists.TabIndex = 0;
-            this.checkBoxHideDuplicatePlaylists.Text = "Duplicate playlists";
-            this.checkBoxHideDuplicatePlaylists.UseVisualStyleBackColor = true;
+            this.checkBoxHideHiddenFirstTracks.AutoSize = true;
+            this.checkBoxHideHiddenFirstTracks.Location = new System.Drawing.Point(10, 91);
+            this.checkBoxHideHiddenFirstTracks.Name = "checkBoxHideHiddenFirstTracks";
+            this.checkBoxHideHiddenFirstTracks.Size = new System.Drawing.Size(171, 17);
+            this.checkBoxHideHiddenFirstTracks.TabIndex = 3;
+            this.checkBoxHideHiddenFirstTracks.Text = "Playlists with hidden first tracks";
+            this.checkBoxHideHiddenFirstTracks.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxHideLoops
+            // 
+            this.checkBoxHideLoops.AutoSize = true;
+            this.checkBoxHideLoops.Location = new System.Drawing.Point(10, 67);
+            this.checkBoxHideLoops.Name = "checkBoxHideLoops";
+            this.checkBoxHideLoops.Size = new System.Drawing.Size(113, 17);
+            this.checkBoxHideLoops.TabIndex = 2;
+            this.checkBoxHideLoops.Text = "Playlists with loops";
+            this.checkBoxHideLoops.UseVisualStyleBackColor = true;
             // 
             // checkBoxHideDuplicateStreamClips
             // 
@@ -171,31 +181,21 @@
             this.checkBoxHideDuplicateStreamClips.Text = "Playlists with duplicate stream clips";
             this.checkBoxHideDuplicateStreamClips.UseVisualStyleBackColor = true;
             // 
-            // checkBoxHideLoops
+            // checkBoxHideDuplicatePlaylists
             // 
-            this.checkBoxHideLoops.AutoSize = true;
-            this.checkBoxHideLoops.Location = new System.Drawing.Point(9, 68);
-            this.checkBoxHideLoops.Name = "checkBoxHideLoops";
-            this.checkBoxHideLoops.Size = new System.Drawing.Size(113, 17);
-            this.checkBoxHideLoops.TabIndex = 2;
-            this.checkBoxHideLoops.Text = "Playlists with loops";
-            this.checkBoxHideLoops.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxHideHiddenFirstTracks
-            // 
-            this.checkBoxHideHiddenFirstTracks.AutoSize = true;
-            this.checkBoxHideHiddenFirstTracks.Location = new System.Drawing.Point(9, 92);
-            this.checkBoxHideHiddenFirstTracks.Name = "checkBoxHideHiddenFirstTracks";
-            this.checkBoxHideHiddenFirstTracks.Size = new System.Drawing.Size(171, 17);
-            this.checkBoxHideHiddenFirstTracks.TabIndex = 3;
-            this.checkBoxHideHiddenFirstTracks.Text = "Playlists with hidden first tracks";
-            this.checkBoxHideHiddenFirstTracks.UseVisualStyleBackColor = true;
+            this.checkBoxHideDuplicatePlaylists.AutoSize = true;
+            this.checkBoxHideDuplicatePlaylists.Location = new System.Drawing.Point(10, 20);
+            this.checkBoxHideDuplicatePlaylists.Name = "checkBoxHideDuplicatePlaylists";
+            this.checkBoxHideDuplicatePlaylists.Size = new System.Drawing.Size(110, 17);
+            this.checkBoxHideDuplicatePlaylists.TabIndex = 0;
+            this.checkBoxHideDuplicatePlaylists.Text = "Duplicate playlists";
+            this.checkBoxHideDuplicatePlaylists.UseVisualStyleBackColor = true;
             // 
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(215, 322);
+            this.buttonCancel.Location = new System.Drawing.Point(218, 316);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 3;
@@ -206,7 +206,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Location = new System.Drawing.Point(134, 322);
+            this.buttonSave.Location = new System.Drawing.Point(137, 316);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 2;
@@ -220,11 +220,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(303, 356);
+            this.ClientSize = new System.Drawing.Size(303, 350);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormPlaylistFilter";
