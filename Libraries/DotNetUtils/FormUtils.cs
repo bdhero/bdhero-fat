@@ -146,5 +146,40 @@ namespace DotNetUtils
             // Alternative:
 //            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
+
+        /// <summary>
+        /// Sets whether the control paints itself rather than the operating system doing so.
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="userPaint">
+        /// If <c>true</c>, the control paints itself rather than the operating system doing so.
+        /// If <c>false</c>, the <see cref="Control.Paint"/> event is not raised.
+        /// </param>
+        public static void SetUserPaint(this Control control, bool userPaint)
+        {
+            System.Reflection.MethodInfo method =
+                  typeof(Control).GetMethod(
+                        "SetStyle",
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Instance);
+            var @params = new object[] { ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, userPaint };
+            method.Invoke(control, @params);
+        }
+
+        /// <summary>
+        /// Gets whether the control paints itself rather than the operating system doing so.
+        /// </summary>
+        /// <param name="control"></param>
+        /// <returns><c>true</c> if the control paints itself; otherwise <c>false</c></returns>
+        public static bool GetUserPaint(this Control control)
+        {
+            System.Reflection.MethodInfo method =
+                  typeof(Control).GetMethod(
+                        "GetStyle",
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Instance);
+            var @params = new object[] { ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint };
+            return (bool) method.Invoke(control, @params);
+        }
     }
 }
