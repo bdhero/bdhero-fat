@@ -50,7 +50,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormUtils\FormExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskbarUtils\Windows7TaskbarItem.cs" />
     <Compile Include="TaskbarUtils\WindowsTaskbarItemFactory.cs" />
