@@ -56,7 +56,7 @@ namespace BDHeroGUI.Components
 
         private readonly ListViewColumnSorter _columnSorter = new ListViewColumnSorter();
 
-        public Func<Playlist, bool> Filter; 
+        public Func<Playlist, bool> Filter;
 
         public PlaylistGridControl()
         {
