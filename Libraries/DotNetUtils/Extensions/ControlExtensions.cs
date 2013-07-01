@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -181,5 +182,57 @@ namespace DotNetUtils.Extensions
             var @params = new object[] { ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint };
             return (bool) method.Invoke(control, @params);
         }
+
+        #region OS-specific extensions
+
+#if __MonoCS__
+
+        /// <summary>
+        /// Does nothing on this platform.
+        /// </summary>
+        /// <param name="parent"></param>
+        public static void SuspendDrawing(this Control parent)
+        {
+        }
+
+        /// <summary>
+        /// Does nothing on this platform.
+        /// </summary>
+        /// <param name="parent"></param>
+        public static void ResumeDrawing(this Control parent)
+        {
+        }
+
+#else
+
+        [DllImport("user32.dll")]
+        private static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
+
+        private const int WM_SETREDRAW = 11;
+
+        /// <summary>
+        /// Prevents controls from repainting.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <seealso cref="http://stackoverflow.com/a/487757/467582"/>
+        public static void SuspendDrawing(this Control parent)
+        {
+            SendMessage(parent.Handle, WM_SETREDRAW, false, 0);
+        }
+
+        /// <summary>
+        /// Allows controls to repaint.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <seealso cref="http://stackoverflow.com/a/487757/467582"/>
+        public static void ResumeDrawing(this Control parent)
+        {
+            SendMessage(parent.Handle, WM_SETREDRAW, true, 0);
+            parent.Refresh();
+        }
+
+#endif
+
+        #endregion
     }
 }
