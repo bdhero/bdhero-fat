@@ -117,6 +117,17 @@ namespace DotNetUtils
 
     public static class ControlExtensions
     {
+        /// <summary>
+        /// Sets whether the control is first drawn to a buffer rather than directly to the screen,
+        /// which can reduce flicker.  If this method is called while the user is in a Terminal session,
+        /// double buffering will be automatically disabled to improve performance.
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="doubleBuffered">
+        /// If <c>true</c>, the control is first drawn to a buffer rather than directly to the screen,
+        /// which can reduce flicker.  If you set this property to <c>true</c>, you should also set
+        /// the <see cref="ControlStyles.AllPaintingInWmPaint"/> flag to true.
+        /// </param>
         /// <seealso cref="http://stackoverflow.com/a/77233/467582"/>
         public static void SetDoubleBuffered(this Control control, bool doubleBuffered)
         {
