@@ -131,6 +131,9 @@ namespace DotNetUtils
             var @value = doubleBuffered && !SystemInformation.TerminalServerSession;
 
             prop.SetValue(control, @value, null);
+
+            // Alternative:
+//            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
     }
 }
