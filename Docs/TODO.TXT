@@ -29,6 +29,7 @@ Bugs
        at DotNetUtils.TaskUtils.TaskBuilder.<InvokeDoWork>b__2()
        at DotNetUtils.TaskUtils.TaskBuilder.Try(Action action)
 [ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
+[ ] Time Remaining is jumpy, esp. > 80% complete.  Thread queue?
 
 Features
 ========
@@ -62,6 +63,14 @@ Backlog
 Chris' Plugins
 ==============
 
+[ ] Chapter Grabber: (THE MATRIX REVOLUTIONS):
+    01:57:31.210: Freedom and Sunlight
+    02:00:12.371: End Credits
+    02:09:13.745: 
+[ ] Chapter Grabber: (IN_TIME)
+    Scene 1
+    Scene 2
+    Scene 3
 [ ] URI encoding (e.g., http://chapterdb.org/chapters/search?title=BLACK HAWK DOWN&chapterCount=0)
 [ ] Search ALL media types in Chapter Grabber plugin (not just Blu-ray)
 [ ] Use chapter grabber plugin to auto-detect main movie by comparing playlists to ChapterDb search results
