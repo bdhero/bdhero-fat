@@ -60,6 +60,8 @@ namespace BDHeroGUI
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
 
             playlistListView.Filter = playlist => _filter.Show(playlist) || _showAllPlaylists;
+            playlistListView.ItemSelectionChanged +=
+                (sender, args) => buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -112,8 +114,8 @@ namespace BDHeroGUI
             textBoxOutput.Enabled = enabled;
             buttonScan.Enabled = enabled;
             buttonCancel.Enabled = !enabled;
-            buttonConvert.Enabled = enabled && _controller.Job != null;
-            buttonCancelConvert.Enabled = !enabled && _controller.Job != null;
+            buttonConvert.Enabled = enabled && playlistListView.SelectedPlaylist != null;
+            buttonCancelConvert.Enabled = !enabled && playlistListView.SelectedPlaylist != null;
             playlistListView.Enabled = enabled;
             _isRunning = !enabled;
         }
