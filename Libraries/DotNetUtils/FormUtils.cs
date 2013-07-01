@@ -120,7 +120,7 @@ namespace DotNetUtils
         /// <seealso cref="http://stackoverflow.com/a/77233/467582"/>
         public static void SetDoubleBuffered(this Control control, bool doubleBuffered)
         {
-            System.Reflection.PropertyInfo aProp =
+            System.Reflection.PropertyInfo prop =
                   typeof(Control).GetProperty(
                         "DoubleBuffered",
                         System.Reflection.BindingFlags.NonPublic |
@@ -128,7 +128,9 @@ namespace DotNetUtils
 
             // Taxes: Remote Desktop Connection and painting
             // http://blogs.msdn.com/oldnewthing/archive/2006/01/03/508694.aspx
-            aProp.SetValue(control, doubleBuffered && !SystemInformation.TerminalServerSession, null);
+            var @value = doubleBuffered && !SystemInformation.TerminalServerSession;
+
+            prop.SetValue(control, @value, null);
         }
     }
 }
