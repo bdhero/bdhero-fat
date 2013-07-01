@@ -66,7 +66,7 @@ namespace BDHeroGUI
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
-            DoubleBuffered = true;
+            this.SetDoubleBuffered(true);
             LogDirectoryPaths();
             LoadPlugins();
             LogPlugins();
