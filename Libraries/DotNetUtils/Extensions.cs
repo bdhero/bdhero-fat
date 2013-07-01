@@ -192,29 +192,4 @@ namespace DotNetUtils
             return timeSpan.ToString(@"hh\:mm\:ss\.fffffff");
         }
     }
-
-    public static class ListViewExtensions
-    {
-        public static void AutoSizeColumns(this ListView listView)
-        {
-            // Loop through and size each column header to fit the column header text.
-            foreach (ColumnHeader ch in listView.Columns)
-            {
-                ch.Width = -2;
-            }
-
-            var before = listView.Columns.OfType<ColumnHeader>().Select(header => header.Width).ToArray();
-
-            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-
-            var after = listView.Columns.OfType<ColumnHeader>().Select(header => header.Width).ToArray();
-
-            var i = 0;
-            foreach (var column in listView.Columns.OfType<ColumnHeader>())
-            {
-                column.Width = Math.Max(before[i], after[i]);
-                i++;
-            }
-        }
-    }
 }
