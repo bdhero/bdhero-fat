@@ -70,7 +70,7 @@ namespace BDHeroGUI.Components
         private void OnLoad(object sender, EventArgs eventArgs)
         {
             DoubleBuffered = true;
-            ListViewOnColumnClick(0);
+            ListViewOnColumnClick(columnHeaderType.Index);
         }
 
         private void ListViewOnColumnClick(int columnIndex)
