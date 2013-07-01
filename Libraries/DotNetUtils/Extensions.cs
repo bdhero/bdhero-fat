@@ -132,9 +132,9 @@ namespace DotNetUtils
             foreach (Delegate del in EventHandler.GetInvocationList())
             {
                 del.DynamicInvoke(new[]
-            {
-                constantExpression.Value, new PropertyChangedEventArgs(propertyInfo.Name)
-            });
+                    {
+                        constantExpression.Value, new PropertyChangedEventArgs(propertyInfo.Name)
+                    });
             }
         }
 
