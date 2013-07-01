@@ -9,8 +9,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BDHero;
+using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.Startup;
+using BDHeroGUI.Forms;
 using DotNetUtils;
 using OSUtils.TaskbarUtils;
 using WindowsOSUtils.TaskbarUtils;
@@ -26,12 +28,15 @@ namespace BDHeroGUI
         private readonly ToolTip _progressBarToolTip;
         private readonly ITaskbarItem _taskbarItem;
 
-        private CancellationTokenSource _scanCancellationTokenSource;
-        private CancellationTokenSource _convertCancellationTokenSource;
-
         private bool _isRunning;
 
+        private Stage _stage = Stage.Ready;
+
+        private CancellationTokenSource _cancellationTokenSource;
+
         private ProgressProviderState _state = ProgressProviderState.Ready;
+
+        private readonly PlaylistFilter _filter;
 
         public FormAsyncControllerTest(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
@@ -42,6 +47,8 @@ namespace BDHeroGUI
             _pluginLoader = pluginLoader;
             _controller = controller;
 
+            _filter = new PlaylistFilter();
+
             Load += OnLoad;
 
             _progressBarToolTip = new ToolTip();
@@ -51,6 +58,8 @@ namespace BDHeroGUI
 
             progressBar.UseCustomColors = true;
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
+
+            playlistListView.Filter = playlist => _filter.Show(playlist);
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -103,6 +112,7 @@ namespace BDHeroGUI
             textBoxOutput.Enabled = enabled;
             buttonMux.Enabled = enabled;
             buttonCancel.Enabled = !enabled;
+            playlistListView.Enabled = enabled;
             _isRunning = !enabled;
         }
 
@@ -112,8 +122,12 @@ namespace BDHeroGUI
             _logger.Debug(statusLine);
         }
 
+        #region Scan stage - event handling
+
         private void ControllerOnScanStarted(object sender, EventArgs eventArgs)
         {
+            _stage = Stage.Scanning;
+            buttonMux.Text = "Scanning...";
             textBoxStatus.Text = "Scan started...";
             EnableControls(false);
             _taskbarItem.SetProgress(0).Indeterminate();
@@ -121,13 +135,17 @@ namespace BDHeroGUI
 
         private void ControllerOnScanSucceeded(object sender, EventArgs eventArgs)
         {
+            buttonMux.Text = "Mux";
             AppendStatus("Scan succeeded!");
             _taskbarItem.NoProgress();
+            playlistListView.Playlists = _controller.Job.Disc.Playlists;
         }
 
         private void ControllerOnScanFailed(object sender, EventArgs eventArgs)
         {
-            if (_scanCancellationTokenSource.IsCancellationRequested)
+            _stage = Stage.Ready;
+            buttonMux.Text = "Scan";
+            if (_cancellationTokenSource.IsCancellationRequested)
             {
                 AppendStatus("Scan canceled!");
                 _taskbarItem.NoProgress();
@@ -145,8 +163,14 @@ namespace BDHeroGUI
             EnableControls(true);
         }
 
+        #endregion
+
+        #region Convert stage - event handling
+
         private void ControllerOnConvertStarted(object sender, EventArgs eventArgs)
         {
+            _stage = Stage.Converting;
+            buttonMux.Text = "Converting...";
             AppendStatus("Convert started...");
             EnableControls(false);
             _taskbarItem.SetProgress(0).Indeterminate();
@@ -154,13 +178,17 @@ namespace BDHeroGUI
 
         private void ControllerOnConvertSucceeded(object sender, EventArgs eventArgs)
         {
+            _stage = Stage.Scanning;
+            buttonMux.Text = "Mux";
             AppendStatus("Convert succeeded!");
             _taskbarItem.NoProgress();
         }
 
         private void ControllerOnConvertFailed(object sender, EventArgs eventArgs)
         {
-            if (_convertCancellationTokenSource.IsCancellationRequested)
+            _stage = Stage.Scanning;
+            buttonMux.Text = "Mux";
+            if (_cancellationTokenSource.IsCancellationRequested)
             {
                 AppendStatus("Convert canceled!");
                 _taskbarItem.NoProgress();
@@ -177,6 +205,10 @@ namespace BDHeroGUI
             AppendStatus("Convert completed!");
             EnableControls(true);
         }
+
+        #endregion
+
+        #region Progress event handling
 
         private void ControllerOnPluginProgressUpdated(IPlugin plugin, ProgressProvider progressProvider)
         {
@@ -218,28 +250,74 @@ namespace BDHeroGUI
             }
         }
 
-        private void buttonMux_Click(object sender, EventArgs e)
+        #endregion
+
+        private void Scan()
         {
-            _scanCancellationTokenSource = new CancellationTokenSource();
-            _convertCancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
 
             _controller.SetEventScheduler();
 
-            var scanTask = _controller.CreateScanTask(_scanCancellationTokenSource.Token, textBoxInput.Text, textBoxOutput.Text);
-            var convertTask = _controller.CreateConvertTask(_convertCancellationTokenSource.Token);
+            _controller
+                .CreateScanTask(_cancellationTokenSource.Token, textBoxInput.Text, textBoxOutput.Text)
+                .Start();
+        }
 
-            scanTask.ContinueWith(delegate(Task task)
-                {
-                    if (task.IsCompleted && !_scanCancellationTokenSource.Token.IsCancellationRequested)
-                        convertTask.Start();
-                });
-            scanTask.Start();
+        private void Convert()
+        {
+            var selectedPlaylist = playlistListView.SelectedPlaylist;
+            if (selectedPlaylist == null)
+            {
+                MessageBox.Show(this, "Please select a playlist to mux", "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Stop);
+                return;
+            }
+
+            _controller.Job.SelectedPlaylistIndex = _controller.Job.Disc.Playlists.IndexOf(selectedPlaylist);
+
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            _controller.SetEventScheduler();
+
+            _controller
+                .CreateConvertTask(_cancellationTokenSource.Token)
+                .Start();
+        }
+
+        private void buttonMux_Click(object sender, EventArgs e)
+        {
+            switch (_stage)
+            {
+                case Stage.Ready:
+                    Scan();
+                    break;
+                case Stage.Scanning:
+                    Convert();
+                    break;
+            }
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            _scanCancellationTokenSource.Cancel();
-            _convertCancellationTokenSource.Cancel();
+            _cancellationTokenSource.Cancel();
         }
+
+        private void linkLabelShowFilterWindow_Click(object sender, EventArgs e)
+        {
+            var result = new FormPlaylistFilter(_filter).ShowDialog(this);
+
+            if (result == DialogResult.OK && _controller.Job != null)
+            {
+                playlistListView.Playlists = _controller.Job.Disc.Playlists;
+            }
+        }
+    }
+
+    enum Stage
+    {
+        Ready,
+        Scanning,
+        Converting,
+        Finished
     }
 }

@@ -70,16 +70,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\PlaylistGridControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\PlaylistGridControl.Designer.cs">
+      <DependentUpon>PlaylistGridControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormAsyncControllerTest.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormAsyncControllerTest.Designer.cs">
       <DependentUpon>FormAsyncControllerTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPlaylistFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPlaylistFilter.Designer.cs">
+      <DependentUpon>FormPlaylistFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PlaylistFilter.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Components\PlaylistGridControl.resx">
+      <DependentUpon>PlaylistGridControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormAsyncControllerTest.resx">
       <DependentUpon>FormAsyncControllerTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPlaylistFilter.resx">
+      <DependentUpon>FormPlaylistFilter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -115,6 +135,10 @@
       <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
       <Name>DotNetUtils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Libraries\I18N\I18N.csproj">
+      <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
+      <Name>I18N</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Libraries\OSUtils\OSUtils.csproj">
       <Project>{EE69E896-8779-4E3D-A033-75A96F28DE2F}</Project>
       <Name>OSUtils</Name>
@@ -124,6 +148,7 @@
       <Name>WindowsOSUtils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
