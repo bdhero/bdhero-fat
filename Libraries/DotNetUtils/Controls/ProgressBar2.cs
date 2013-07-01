@@ -45,19 +45,16 @@ namespace DotNetUtils.Controls
         /// </summary>
         public bool UseCustomColors
         {
-            get { return GetStyle(ControlStyles.UserPaint); }
-            set
-            {
-//                SetStyle(ControlStyles.UserPaint, value);
-                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, value);
-            }
+            get { return this.GetUserPaint(); }
+            set { this.SetUserPaint(value); }
         }
 
         public ProgressBar2()
         {
             Maximum = 100 * 1000;
 
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+//            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetDoubleBuffered(true);
 
             GenerateText = d => string.Format("{0:0.00}%", d);
 
