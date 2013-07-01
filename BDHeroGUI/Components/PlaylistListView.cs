@@ -8,14 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
-using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
-using WindowsOSUtils.FormUtils;
 
 namespace BDHeroGUI.Components
 {
-    public partial class PlaylistGridControl : UserControl
+    public partial class PlaylistListView : UserControl
     {
         public IList<Playlist> Playlists
         {
@@ -61,7 +59,7 @@ namespace BDHeroGUI.Components
 
         public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged;
 
-        public PlaylistGridControl()
+        public PlaylistListView()
         {
             InitializeComponent();
             Load += OnLoad;
@@ -74,7 +72,8 @@ namespace BDHeroGUI.Components
                         ItemSelectionChanged(sender, args);
                 };
 
-            Resize += (sender, args) => listView.Columns.OfType<ColumnHeader>().Last().Width = -2;
+            // Automatically resize the last column to take up all remaining free space
+            Resize += (sender, args) => listView.AutoSizeLastColumn();
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)

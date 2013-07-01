@@ -2,7 +2,7 @@
 
 namespace BDHeroGUI.Components
 {
-    partial class PlaylistGridControl
+    partial class PlaylistListView
     {
         /// <summary> 
         /// Required designer variable.
@@ -108,12 +108,12 @@ namespace BDHeroGUI.Components
             this.columnHeaderWarnings.Text = "Warnings";
             this.columnHeaderWarnings.Width = 160;
             // 
-            // PlaylistGridControl
+            // PlaylistListView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.listView);
-            this.Name = "PlaylistGridControl";
+            this.Name = "PlaylistListView";
             this.Size = new System.Drawing.Size(709, 558);
             this.ResumeLayout(false);
 

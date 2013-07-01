@@ -42,7 +42,7 @@
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
-            this.playlistListView = new BDHeroGUI.Components.PlaylistGridControl();
+            this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.SuspendLayout();
             // 
             // label1
@@ -251,7 +251,7 @@
         private System.Windows.Forms.Button buttonScan;
         private DotNetUtils.Controls.ProgressBar2 progressBar;
         private System.Windows.Forms.Button buttonCancel;
-        private Components.PlaylistGridControl playlistListView;
+        private Components.PlaylistListView playlistListView;
         private System.Windows.Forms.Label label4;
         private DotNetUtils.Controls.LinkLabel2 linkLabelShowFilterWindow;
         private System.Windows.Forms.TextBox textBoxOutput;

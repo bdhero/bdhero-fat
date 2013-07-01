@@ -70,11 +70,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\PlaylistGridControl.cs">
+    <Compile Include="Components\PlaylistListView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Components\PlaylistGridControl.Designer.cs">
-      <DependentUpon>PlaylistGridControl.cs</DependentUpon>
+    <Compile Include="Components\PlaylistListView.Designer.cs">
+      <DependentUpon>PlaylistListView.cs</DependentUpon>
     </Compile>
     <Compile Include="FormAsyncControllerTest.cs">
       <SubType>Form</SubType>
@@ -92,8 +92,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Components\PlaylistGridControl.resx">
-      <DependentUpon>PlaylistGridControl.cs</DependentUpon>
+    <EmbeddedResource Include="Components\PlaylistListView.resx">
+      <DependentUpon>PlaylistListView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAsyncControllerTest.resx">
       <DependentUpon>FormAsyncControllerTest.cs</DependentUpon>
