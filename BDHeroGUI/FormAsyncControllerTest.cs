@@ -143,6 +143,7 @@ namespace BDHeroGUI
             AppendStatus("Scan succeeded!");
             _taskbarItem.NoProgress();
             RefreshPlaylists();
+            playlistListView.SelectFirstPlaylist();
         }
 
         private void ControllerOnScanFailed(object sender, EventArgs eventArgs)
