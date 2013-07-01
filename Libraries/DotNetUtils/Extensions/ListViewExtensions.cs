@@ -40,9 +40,11 @@ namespace DotNetUtils.Extensions
         /// <param name="listView"></param>
         public static void AutoSizeColumns(this ListView listView)
         {
+            listView.SuspendDrawing();
 
             listView.Columns.OfType<ColumnHeader>().ForEach(header => header.AutoResize());
 
+            listView.ResumeDrawing();
         }
 
         /// <summary>
@@ -51,11 +53,13 @@ namespace DotNetUtils.Extensions
         /// <param name="listView"></param>
         public static void AutoSizeLastColumn(this ListView listView)
         {
+            listView.SuspendDrawing();
 
             var lastColumn = listView.Columns.OfType<ColumnHeader>().LastOrDefault();
             if (lastColumn != null)
                 lastColumn.AutoResize();
 
+            listView.ResumeDrawing();
         }
 
         /// <summary>
