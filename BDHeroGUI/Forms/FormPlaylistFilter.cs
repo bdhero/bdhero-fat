@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
-using DotNetUtils;
+using DotNetUtils.Extensions;
 
 namespace BDHeroGUI.Forms
 {

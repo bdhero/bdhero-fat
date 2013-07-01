@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using BDHero.BDROM;
-using DotNetUtils;
+using DotNetUtils.Extensions;
 using I18N;
 
 namespace BDHero.Plugin.DiscReader.Transformer

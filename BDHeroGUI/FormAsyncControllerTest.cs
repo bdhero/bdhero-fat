@@ -14,6 +14,7 @@ using BDHero.Plugin;
 using BDHero.Startup;
 using BDHeroGUI.Forms;
 using DotNetUtils;
+using DotNetUtils.Extensions;
 using OSUtils.TaskbarUtils;
 using WindowsOSUtils.TaskbarUtils;
 

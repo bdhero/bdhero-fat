@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Threading;
 using BDHero.Plugin;
 using BDHero.JobQueue;
-using DotNetUtils;
+using DotNetUtils.Extensions;
 using I18N;
 using WatTmdb.V3;
 using System.IO;

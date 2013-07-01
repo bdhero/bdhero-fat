@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using BDHero.BDROM;
 using DotNetUtils;
 using DotNetUtils.Controls;
+using DotNetUtils.Extensions;
 using WindowsOSUtils.FormUtils;
 
 namespace BDHeroGUI.Components

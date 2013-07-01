@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using BDHero.JobQueue;
 using DotNetUtils;
+using DotNetUtils.Extensions;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
