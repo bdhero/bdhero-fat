@@ -30,6 +30,7 @@ Bugs
        at DotNetUtils.TaskUtils.TaskBuilder.Try(Action action)
 [ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
 [ ] Time Remaining is jumpy, esp. > 80% complete.  Thread queue?
+[ ] GUI repaints but does not respond to user input while scanning disc.  Thread queue?
 
 Features
 ========
