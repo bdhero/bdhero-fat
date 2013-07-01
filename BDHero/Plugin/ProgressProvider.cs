@@ -34,7 +34,7 @@ namespace BDHero.Plugin
         public IPlugin Plugin;
 
         /// <summary>
-        /// Gets or sets the percentage of the provider's work that has been completed, from <code>0.0</code> to <code>100.0</code>.
+        /// Gets or sets the percentage of the provider's work that has been completed, from <c>0.0</c> to <c>100.0</c>.
         /// </summary>
         public double PercentComplete { get; private set; }
 
@@ -64,7 +64,7 @@ namespace BDHero.Plugin
         public TimeSpan TimeRemaining { get; protected set; }
 
         /// <summary>
-        /// Gets the last exception that was thrown or <code>null</code> if no exceptions have been thrown.
+        /// Gets the last exception that was thrown or <c>null</c> if no exceptions have been thrown.
         /// </summary>
         public Exception Exception { get; protected set; }
 

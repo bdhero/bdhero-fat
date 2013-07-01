@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DotNetUtils.TaskUtils
 {
     /// <summary>
-    /// Concrete implementation of <code>IThreadInvoker</code>.
+    /// Concrete implementation of <c>IThreadInvoker</c>.
     /// </summary>
     public class ThreadInvoker : IThreadInvoker
     {

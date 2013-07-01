@@ -115,7 +115,7 @@ namespace DotNetUtils
         /// Determines whether the given path <em>likely</em> contains (ends with) a standard Windows filename (i.e., one that has an extension).
         /// </summary>
         /// <param name="path">Relative or absolute path to a file or directory</param>
-        /// <returns><code>true</code> if the path ends in a period followed by at least one letter; otherwise <code>false</code></returns>
+        /// <returns><c>true</c> if the path ends in a period followed by at least one letter; otherwise <c>false</c></returns>
         /// <example>"C:\some\dir\a.out" => true</example>
         /// <example>"a.out" => true</example>
         /// <example>"file.c" => true</example>

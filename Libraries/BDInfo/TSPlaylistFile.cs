@@ -175,7 +175,7 @@ namespace BDInfo
         }
 
         /// <summary>
-        /// Shortcut for <code>!IsMaxQuality</code>.
+        /// Shortcut for <c>!IsMaxQuality</c>.
         /// </summary>
         public bool IsLowQuality
         {

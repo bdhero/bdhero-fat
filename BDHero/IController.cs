@@ -77,7 +77,7 @@ namespace BDHero
         #region Methods
 
         /// <summary>
-        /// Sets the <code>TaskScheduler</code> that will be used to invoke event callbacks.
+        /// Sets the <c>TaskScheduler</c> that will be used to invoke event callbacks.
         /// This ensures that events are always invoked from the appropriate thread.
         /// </summary>
         /// <param name="scheduler">Scheduler to use for event callbacks.  If none is specified, the calling thread's scheduler will be used.</param>
@@ -89,7 +89,7 @@ namespace BDHero
         /// <param name="cancellationToken"></param>
         /// <param name="bdromPath">Path to the BD-ROM directory</param>
         /// <param name="mkvPath">Optional path to the output directory or MKV file</param>
-        /// <returns><code>true</code> if the scan succeeded; otherwise <code>false</code></returns>
+        /// <returns><c>true</c> if the scan succeeded; otherwise <c>false</c></returns>
         Task<bool> CreateScanTask(CancellationToken cancellationToken, string bdromPath, string mkvPath = null);
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace BDHero
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <param name="mkvPath">Optional path to the MKV output file or directory (if overridden by the user)</param>
-        /// <returns><code>true</code> if all muxing plugins succeeded; otherwise <code>false</code></returns>
+        /// <returns><c>true</c> if all muxing plugins succeeded; otherwise <c>false</c></returns>
         Task<bool> CreateConvertTask(CancellationToken cancellationToken, string mkvPath = null);
 
         #endregion

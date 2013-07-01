@@ -118,7 +118,7 @@ namespace ProcessUtils
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Gets the last error that occurred (or <code>null</code> if no errors have occurred).
+        /// Gets the last error that occurred (or <c>null</c> if no errors have occurred).
         /// </summary>
         public Exception Exception { get; protected set; }
 

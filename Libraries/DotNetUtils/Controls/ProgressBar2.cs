@@ -11,7 +11,7 @@ namespace DotNetUtils.Controls
 {
     /// <summary>
     /// A more sensible extension of the standard <see cref="ProgressBar"/> class that adds
-    /// a getter/setter for <see cref="ProgressBar.Value"/> that accepts a <code>double</code>
+    /// a getter/setter for <see cref="ProgressBar.Value"/> that accepts a <c>double</c>
     /// in the range 0.0 to 100.0.  It also supports custom colors to denote state.
     /// </summary>
     public class ProgressBar2 : ProgressBar
