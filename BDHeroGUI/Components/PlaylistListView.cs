@@ -15,6 +15,9 @@ namespace BDHeroGUI.Components
 {
     public partial class PlaylistListView : UserControl
     {
+        /// <summary>
+        /// Gets or sets the  list of playlists to display, maintaining the user's current selection if possible.
+        /// </summary>
         public IList<Playlist> Playlists
         {
             get { return _playlists; }
@@ -35,15 +38,27 @@ namespace BDHeroGUI.Components
             }
         }
 
+        public IList<Playlist> VisiblePlaylistsInSortOrder
+        {
+            get { return listView.Items.OfType<ListViewItem>().Select(item => item.Tag as Playlist).ToList(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the currently selected playlist.  A value of <c>null</c> indicates that no playlist is selected.
+        /// </summary>
         public Playlist SelectedPlaylist
         {
             get { return listView.SelectedItems.Count > 0 ? listView.SelectedItems[0].Tag as Playlist : null; }
             set
             {
-                foreach (var item in listView.Items.OfType<ListViewItem>().Where(item => item.Tag == value))
+                if (value == null)
                 {
-                    item.Selected = true;
+                    listView.SelectNone();
+                    return;
                 }
+
+                listView.SelectWhere(item => item.Tag == value);
+
                 if (listView.SelectedItems.Count == 0 && listView.Items.Count > 0)
                 {
                     listView.Items[0].Selected = true;
@@ -51,13 +66,19 @@ namespace BDHeroGUI.Components
             }
         }
 
+        /// <summary>
+        /// Function that determines the visibility of playlists within the ListView.
+        /// </summary>
+        public Func<Playlist, bool> Filter;
+
+        /// <summary>
+        /// Triggered whenever the user selects a new playlist or deselects the current playlist.
+        /// </summary>
+        public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged;
+
         private IList<Playlist> _playlists;
 
         private readonly ListViewColumnSorter _columnSorter = new ListViewColumnSorter();
-
-        public Func<Playlist, bool> Filter;
-
-        public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged;
 
         public PlaylistListView()
         {
