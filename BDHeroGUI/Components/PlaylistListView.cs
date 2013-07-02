@@ -95,7 +95,6 @@ namespace BDHeroGUI.Components
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
-            listView.SetDoubleBuffered(true);
             listView.SetSortColumn(columnHeaderType.Index);
         }
 
