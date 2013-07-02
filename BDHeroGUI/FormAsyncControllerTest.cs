@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BDHero;
-using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.Startup;
+using BDHeroGUI.Annotations;
 using BDHeroGUI.Forms;
-using DotNetUtils;
 using DotNetUtils.Extensions;
 using OSUtils.TaskbarUtils;
 using WindowsOSUtils.TaskbarUtils;
 
 namespace BDHeroGUI
 {
+    [UsedImplicitly]
     public partial class FormAsyncControllerTest : Form
     {
         private readonly log4net.ILog _logger;
