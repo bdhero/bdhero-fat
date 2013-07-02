@@ -1,5 +1,8 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using System.Drawing;
+using DotNetUtils.Extensions;
+using DotNetUtils.Win32;
 
 namespace DotNetUtils.Controls
 {
@@ -12,7 +15,30 @@ namespace DotNetUtils.Controls
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+
+            // Built-in method to draw a grab handle.  Draws an ugly solid bar across the entire divider.
+//            ControlPaint.DrawGrabHandle(e.Graphics, SplitterRectangle, false, Enabled);
+
             PaintGrabHandle(this, e);
+        }
+
+        /// <summary>
+        /// Fixes grab handle flickering, but causes border flickering and doesn't repaint while the user is dragging the grab handle.
+        /// </summary>
+        /// <seealso cref="http://stackoverflow.com/a/89125/467582"/>
+        /// <seealso cref="http://social.msdn.microsoft.com/Forums/windows/en-US/aaed00ce-4bc9-424e-8c05-c30213171c2c/flickerfree-painting"/>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+
+                // Uncomment this line to fix grab handle flickering,
+                // at the cost of causing border flickering and not repainting while the user drags the grab handle.
+//                cp.ExStyle |= ExtendedWindowStyles.WS_EX_COMPOSITED;
+
+                return cp;
+            }
         }
 
         /// <seealso cref="http://stackoverflow.com/a/4405758/467582"/>
