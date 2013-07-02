@@ -38,7 +38,7 @@ namespace BDHeroGUI.Components
                 {
                     var item = new ListViewItem(track.Codec.CommonName)
                         {
-                            Checked = i == 0,
+                            Checked = track.Keep,
                             Tag = track
                         };
                     item.SubItems.AddRange(new[]
