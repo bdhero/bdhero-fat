@@ -36,7 +36,7 @@ namespace BDHeroGUI.Components
                     new ListViewCell { Text = track.FrameRateDisplayable },
                     new ListViewCell { Text = track.AspectRatioDisplayable },
                     new ListViewCell { Text = track.Type.ToString(), Tag = track.Type },
-                    new ListViewCell { Text = track.IndexOfType.ToString("D"), Tag = track.IndexOfType }
+                    new ListViewCell { Text = (track.IndexOfType + 1).ToString("D"), Tag = track.IndexOfType }
                 };
         }
     }

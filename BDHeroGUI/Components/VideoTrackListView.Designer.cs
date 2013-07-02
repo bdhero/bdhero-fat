@@ -33,8 +33,8 @@
             this.columnHeaderResolution = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderFrameRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderAspectRatio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listViewVideoTracks
@@ -85,17 +85,18 @@
             this.columnHeaderAspectRatio.Text = "Aspect Ratio";
             this.columnHeaderAspectRatio.Width = 80;
             // 
-            // columnHeaderIndex
-            // 
-            this.columnHeaderIndex.DisplayIndex = 0;
-            this.columnHeaderIndex.Text = "#";
-            this.columnHeaderIndex.Width = 25;
-            // 
             // columnHeaderType
             // 
             this.columnHeaderType.DisplayIndex = 5;
             this.columnHeaderType.Text = "Type";
             this.columnHeaderType.Width = 169;
+            // 
+            // columnHeaderIndex
+            // 
+            this.columnHeaderIndex.DisplayIndex = 0;
+            this.columnHeaderIndex.Text = "#";
+            this.columnHeaderIndex.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeaderIndex.Width = 25;
             // 
             // VideoTrackListView
             // 

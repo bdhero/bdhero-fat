@@ -32,8 +32,8 @@
             this.columnHeaderCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderChannels = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listViewAudioTracks
@@ -51,7 +51,6 @@
             this.listViewAudioTracks.GridLines = true;
             this.listViewAudioTracks.HideSelection = false;
             this.listViewAudioTracks.Location = new System.Drawing.Point(0, 0);
-            this.listViewAudioTracks.MultiSelect = false;
             this.listViewAudioTracks.Name = "listViewAudioTracks";
             this.listViewAudioTracks.ShowItemToolTips = true;
             this.listViewAudioTracks.Size = new System.Drawing.Size(518, 333);
@@ -77,16 +76,18 @@
             this.columnHeaderLanguage.Text = "Language";
             this.columnHeaderLanguage.Width = 80;
             // 
-            // columnHeaderIndex
-            // 
-            this.columnHeaderIndex.DisplayIndex = 0;
-            this.columnHeaderIndex.Text = "#";
-            this.columnHeaderIndex.Width = 25;
-            // 
             // columnHeaderType
             // 
             this.columnHeaderType.DisplayIndex = 4;
             this.columnHeaderType.Text = "Type";
+            this.columnHeaderType.Width = 209;
+            // 
+            // columnHeaderIndex
+            // 
+            this.columnHeaderIndex.DisplayIndex = 0;
+            this.columnHeaderIndex.Text = "#";
+            this.columnHeaderIndex.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeaderIndex.Width = 25;
             // 
             // AudioTrackListView
             // 
