@@ -40,6 +40,7 @@ namespace BDHeroGUI.Components
             _filter = filter;
             _transform = transform;
 
+            _listView.MultiSelect = true;
             _listView.ItemChecked += ListViewOnItemChecked;
         }
 
