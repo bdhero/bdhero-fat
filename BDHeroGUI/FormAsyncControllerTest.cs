@@ -112,6 +112,12 @@ namespace BDHeroGUI
             _controller.ConvertCompleted += ControllerOnConvertCompleted;
 
             _controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
+            _controller.UnhandledException += ControllerOnUnhandledException;
+        }
+
+        private void ControllerOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            MessageBox.Show(this, args.ExceptionObject.ToString(), "BDHero Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void EnableControls(bool enabled)
