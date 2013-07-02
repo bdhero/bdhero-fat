@@ -61,8 +61,13 @@ namespace BDHeroGUI
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
 
             playlistListView.Filter = playlist => _filter.Show(playlist) || _showAllPlaylists;
-            playlistListView.ItemSelectionChanged +=
-                (sender, args) => buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
+            playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
+        }
+
+        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
+        {
+            buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
+            tracksPanel.Playlist = playlistListView.SelectedPlaylist;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)

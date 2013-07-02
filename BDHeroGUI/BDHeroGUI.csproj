@@ -76,6 +76,18 @@
     <Compile Include="Components\PlaylistListView.Designer.cs">
       <DependentUpon>PlaylistListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\TracksPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\TracksPanel.Designer.cs">
+      <DependentUpon>TracksPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\VideoTrackListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\VideoTrackListView.Designer.cs">
+      <DependentUpon>VideoTrackListView.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormAsyncControllerTest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +106,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Components\PlaylistListView.resx">
       <DependentUpon>PlaylistListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\TracksPanel.resx">
+      <DependentUpon>TracksPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\VideoTrackListView.resx">
+      <DependentUpon>VideoTrackListView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAsyncControllerTest.resx">
       <DependentUpon>FormAsyncControllerTest.cs</DependentUpon>

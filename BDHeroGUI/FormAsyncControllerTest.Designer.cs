@@ -42,6 +42,7 @@
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
+            this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.SuspendLayout();
             // 
@@ -60,7 +61,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxInput.Location = new System.Drawing.Point(100, 13);
             this.textBoxInput.Name = "textBoxInput";
-            this.textBoxInput.Size = new System.Drawing.Size(737, 20);
+            this.textBoxInput.Size = new System.Drawing.Size(991, 20);
             this.textBoxInput.TabIndex = 0;
             this.textBoxInput.Text = "X:\\BD\\49123204_BLACK_HAWK_DOWN";
             // 
@@ -83,13 +84,13 @@
             this.textBoxStatus.Name = "textBoxStatus";
             this.textBoxStatus.ReadOnly = true;
             this.textBoxStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxStatus.Size = new System.Drawing.Size(820, 67);
+            this.textBoxStatus.Size = new System.Drawing.Size(1074, 67);
             this.textBoxStatus.TabIndex = 9;
             // 
             // buttonScan
             // 
             this.buttonScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonScan.Location = new System.Drawing.Point(681, 39);
+            this.buttonScan.Location = new System.Drawing.Point(935, 39);
             this.buttonScan.Name = "buttonScan";
             this.buttonScan.Size = new System.Drawing.Size(75, 23);
             this.buttonScan.TabIndex = 1;
@@ -101,7 +102,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(762, 39);
+            this.buttonCancel.Location = new System.Drawing.Point(1016, 39);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -125,7 +126,7 @@
             this.progressBar.Location = new System.Drawing.Point(17, 473);
             this.progressBar.Maximum = 100000;
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(820, 23);
+            this.progressBar.Size = new System.Drawing.Size(1074, 23);
             this.progressBar.Step = 1;
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 11;
@@ -153,7 +154,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutput.Location = new System.Drawing.Point(100, 337);
             this.textBoxOutput.Name = "textBoxOutput";
-            this.textBoxOutput.Size = new System.Drawing.Size(737, 20);
+            this.textBoxOutput.Size = new System.Drawing.Size(991, 20);
             this.textBoxOutput.TabIndex = 6;
             this.textBoxOutput.Text = "X:\\BDHero\\";
             // 
@@ -171,7 +172,7 @@
             // 
             this.buttonCancelConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancelConvert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancelConvert.Location = new System.Drawing.Point(762, 363);
+            this.buttonCancelConvert.Location = new System.Drawing.Point(1016, 363);
             this.buttonCancelConvert.Name = "buttonCancelConvert";
             this.buttonCancelConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonCancelConvert.TabIndex = 8;
@@ -182,7 +183,7 @@
             // buttonConvert
             // 
             this.buttonConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonConvert.Location = new System.Drawing.Point(681, 363);
+            this.buttonConvert.Location = new System.Drawing.Point(935, 363);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonConvert.TabIndex = 7;
@@ -201,6 +202,16 @@
             this.checkBoxShowAllPlaylists.UseVisualStyleBackColor = true;
             this.checkBoxShowAllPlaylists.CheckedChanged += new System.EventHandler(this.checkBoxShowAllPlaylists_CheckedChanged);
             // 
+            // tracksPanel
+            // 
+            this.tracksPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tracksPanel.Location = new System.Drawing.Point(774, 88);
+            this.tracksPanel.Name = "tracksPanel";
+            this.tracksPanel.Playlist = null;
+            this.tracksPanel.Size = new System.Drawing.Size(317, 243);
+            this.tracksPanel.TabIndex = 13;
+            // 
             // playlistListView
             // 
             this.playlistListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -210,7 +221,7 @@
             this.playlistListView.Name = "playlistListView";
             this.playlistListView.Playlists = null;
             this.playlistListView.SelectedPlaylist = null;
-            this.playlistListView.Size = new System.Drawing.Size(825, 243);
+            this.playlistListView.Size = new System.Drawing.Size(756, 243);
             this.playlistListView.TabIndex = 5;
             // 
             // FormAsyncControllerTest
@@ -219,7 +230,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(849, 508);
+            this.ClientSize = new System.Drawing.Size(1103, 508);
+            this.Controls.Add(this.tracksPanel);
             this.Controls.Add(this.checkBoxShowAllPlaylists);
             this.Controls.Add(this.buttonCancelConvert);
             this.Controls.Add(this.buttonConvert);
@@ -259,6 +271,7 @@
         private System.Windows.Forms.Button buttonCancelConvert;
         private System.Windows.Forms.Button buttonConvert;
         private System.Windows.Forms.CheckBox checkBoxShowAllPlaylists;
+        private Components.TracksPanel tracksPanel;
     }
 }
 
