@@ -1,4 +1,6 @@
-﻿namespace BDHeroGUI
+﻿using DotNetUtils.Controls;
+
+namespace BDHeroGUI
 {
     partial class FormAsyncControllerTest
     {
@@ -29,15 +31,11 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBoxInput = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxStatus = new System.Windows.Forms.TextBox();
             this.buttonScan = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
-            this.linkLabelShowFilterWindow = new DotNetUtils.Controls.LinkLabel2();
-            this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
@@ -45,6 +43,10 @@
             this.splitContainerWithDivider1 = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
+            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
+            this.linkLabelShowFilterWindow = new DotNetUtils.Controls.LinkLabel2();
+            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
+            this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerWithDivider1)).BeginInit();
             this.splitContainerWithDivider1.Panel1.SuspendLayout();
             this.splitContainerWithDivider1.Panel2.SuspendLayout();
@@ -54,21 +56,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 16);
+            this.label1.Location = new System.Drawing.Point(14, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Input BD-ROM:";
-            // 
-            // textBoxInput
-            // 
-            this.textBoxInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxInput.Location = new System.Drawing.Point(100, 13);
-            this.textBoxInput.Name = "textBoxInput";
-            this.textBoxInput.Size = new System.Drawing.Size(991, 20);
-            this.textBoxInput.TabIndex = 0;
-            this.textBoxInput.Text = "X:\\BD\\49123204_BLACK_HAWK_DOWN";
             // 
             // label3
             // 
@@ -95,7 +87,7 @@
             // buttonScan
             // 
             this.buttonScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonScan.Location = new System.Drawing.Point(935, 39);
+            this.buttonScan.Location = new System.Drawing.Point(935, 43);
             this.buttonScan.Name = "buttonScan";
             this.buttonScan.Size = new System.Drawing.Size(75, 23);
             this.buttonScan.TabIndex = 1;
@@ -107,7 +99,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(1016, 39);
+            this.buttonCancel.Location = new System.Drawing.Point(1016, 43);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -118,11 +110,119 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 68);
+            this.label4.Location = new System.Drawing.Point(14, 72);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(47, 13);
             this.label4.TabIndex = 6;
             this.label4.Text = "Playlists:";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 342);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 13);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "Output folder:";
+            // 
+            // buttonCancelConvert
+            // 
+            this.buttonCancelConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancelConvert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancelConvert.Location = new System.Drawing.Point(1016, 367);
+            this.buttonCancelConvert.Name = "buttonCancelConvert";
+            this.buttonCancelConvert.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancelConvert.TabIndex = 7;
+            this.buttonCancelConvert.Text = "Cancel";
+            this.buttonCancelConvert.UseVisualStyleBackColor = true;
+            this.buttonCancelConvert.Click += new System.EventHandler(this.buttonCancelConvert_Click);
+            // 
+            // buttonConvert
+            // 
+            this.buttonConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonConvert.Location = new System.Drawing.Point(935, 367);
+            this.buttonConvert.Name = "buttonConvert";
+            this.buttonConvert.Size = new System.Drawing.Size(75, 23);
+            this.buttonConvert.TabIndex = 6;
+            this.buttonConvert.Text = "Convert";
+            this.buttonConvert.UseVisualStyleBackColor = true;
+            this.buttonConvert.Click += new System.EventHandler(this.buttonConvert_Click);
+            // 
+            // checkBoxShowAllPlaylists
+            // 
+            this.checkBoxShowAllPlaylists.AutoSize = true;
+            this.checkBoxShowAllPlaylists.Location = new System.Drawing.Point(112, 71);
+            this.checkBoxShowAllPlaylists.Name = "checkBoxShowAllPlaylists";
+            this.checkBoxShowAllPlaylists.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxShowAllPlaylists.TabIndex = 4;
+            this.checkBoxShowAllPlaylists.Text = "Show &all";
+            this.checkBoxShowAllPlaylists.UseVisualStyleBackColor = true;
+            this.checkBoxShowAllPlaylists.CheckedChanged += new System.EventHandler(this.checkBoxShowAllPlaylists_CheckedChanged);
+            // 
+            // splitContainerWithDivider1
+            // 
+            this.splitContainerWithDivider1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainerWithDivider1.Location = new System.Drawing.Point(12, 94);
+            this.splitContainerWithDivider1.Name = "splitContainerWithDivider1";
+            // 
+            // splitContainerWithDivider1.Panel1
+            // 
+            this.splitContainerWithDivider1.Panel1.Controls.Add(this.playlistListView);
+            // 
+            // splitContainerWithDivider1.Panel2
+            // 
+            this.splitContainerWithDivider1.Panel2.Controls.Add(this.tracksPanel);
+            this.splitContainerWithDivider1.Size = new System.Drawing.Size(1079, 237);
+            this.splitContainerWithDivider1.SplitterDistance = 644;
+            this.splitContainerWithDivider1.TabIndex = 5;
+            // 
+            // playlistListView
+            // 
+            this.playlistListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playlistListView.Location = new System.Drawing.Point(0, 0);
+            this.playlistListView.Name = "playlistListView";
+            this.playlistListView.Playlists = null;
+            this.playlistListView.SelectedPlaylist = null;
+            this.playlistListView.Size = new System.Drawing.Size(644, 237);
+            this.playlistListView.TabIndex = 0;
+            // 
+            // tracksPanel
+            // 
+            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
+            this.tracksPanel.Name = "tracksPanel";
+            this.tracksPanel.Playlist = null;
+            this.tracksPanel.Size = new System.Drawing.Size(431, 237);
+            this.tracksPanel.TabIndex = 0;
+            // 
+            // textBoxOutput
+            // 
+            this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutput.DialogTitle = "Save MKV file to folder:";
+            this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
+            this.textBoxOutput.Location = new System.Drawing.Point(100, 337);
+            this.textBoxOutput.Name = "textBoxOutput";
+            this.textBoxOutput.OverwritePrompt = false;
+            this.textBoxOutput.SelectedPath = "X:\\BDHero\\";
+            this.textBoxOutput.ShowNewFolderButton = false;
+            this.textBoxOutput.Size = new System.Drawing.Size(991, 24);
+            this.textBoxOutput.TabIndex = 5;
+            // 
+            // linkLabelShowFilterWindow
+            // 
+            this.linkLabelShowFilterWindow.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelShowFilterWindow.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelShowFilterWindow.Location = new System.Drawing.Point(67, 72);
+            this.linkLabelShowFilterWindow.Name = "linkLabelShowFilterWindow";
+            this.linkLabelShowFilterWindow.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelShowFilterWindow.Size = new System.Drawing.Size(39, 14);
+            this.linkLabelShowFilterWindow.TabIndex = 3;
+            this.linkLabelShowFilterWindow.Text = "Filter...";
+            this.linkLabelShowFilterWindow.Click += new System.EventHandler(this.linkLabelShowFilterWindow_Click);
             // 
             // progressBar
             // 
@@ -141,109 +241,19 @@
             this.progressBar.UseCustomColors = false;
             this.progressBar.ValuePercent = 0D;
             // 
-            // linkLabelShowFilterWindow
+            // textBoxInput
             // 
-            this.linkLabelShowFilterWindow.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelShowFilterWindow.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelShowFilterWindow.Location = new System.Drawing.Point(67, 68);
-            this.linkLabelShowFilterWindow.Name = "linkLabelShowFilterWindow";
-            this.linkLabelShowFilterWindow.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelShowFilterWindow.Size = new System.Drawing.Size(39, 14);
-            this.linkLabelShowFilterWindow.TabIndex = 3;
-            this.linkLabelShowFilterWindow.Text = "Filter...";
-            this.linkLabelShowFilterWindow.Click += new System.EventHandler(this.linkLabelShowFilterWindow_Click);
-            // 
-            // textBoxOutput
-            // 
-            this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutput.Location = new System.Drawing.Point(100, 337);
-            this.textBoxOutput.Name = "textBoxOutput";
-            this.textBoxOutput.Size = new System.Drawing.Size(991, 20);
-            this.textBoxOutput.TabIndex = 5;
-            this.textBoxOutput.Text = "X:\\BDHero\\";
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 340);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 13);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "Output MKV:";
-            // 
-            // buttonCancelConvert
-            // 
-            this.buttonCancelConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancelConvert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancelConvert.Location = new System.Drawing.Point(1016, 363);
-            this.buttonCancelConvert.Name = "buttonCancelConvert";
-            this.buttonCancelConvert.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancelConvert.TabIndex = 7;
-            this.buttonCancelConvert.Text = "Cancel";
-            this.buttonCancelConvert.UseVisualStyleBackColor = true;
-            this.buttonCancelConvert.Click += new System.EventHandler(this.buttonCancelConvert_Click);
-            // 
-            // buttonConvert
-            // 
-            this.buttonConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonConvert.Location = new System.Drawing.Point(935, 363);
-            this.buttonConvert.Name = "buttonConvert";
-            this.buttonConvert.Size = new System.Drawing.Size(75, 23);
-            this.buttonConvert.TabIndex = 6;
-            this.buttonConvert.Text = "Convert";
-            this.buttonConvert.UseVisualStyleBackColor = true;
-            this.buttonConvert.Click += new System.EventHandler(this.buttonConvert_Click);
-            // 
-            // checkBoxShowAllPlaylists
-            // 
-            this.checkBoxShowAllPlaylists.AutoSize = true;
-            this.checkBoxShowAllPlaylists.Location = new System.Drawing.Point(112, 67);
-            this.checkBoxShowAllPlaylists.Name = "checkBoxShowAllPlaylists";
-            this.checkBoxShowAllPlaylists.Size = new System.Drawing.Size(66, 17);
-            this.checkBoxShowAllPlaylists.TabIndex = 4;
-            this.checkBoxShowAllPlaylists.Text = "Show &all";
-            this.checkBoxShowAllPlaylists.UseVisualStyleBackColor = true;
-            this.checkBoxShowAllPlaylists.CheckedChanged += new System.EventHandler(this.checkBoxShowAllPlaylists_CheckedChanged);
-            // 
-            // splitContainerWithDivider1
-            // 
-            this.splitContainerWithDivider1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainerWithDivider1.Location = new System.Drawing.Point(12, 90);
-            this.splitContainerWithDivider1.Name = "splitContainerWithDivider1";
-            // 
-            // splitContainerWithDivider1.Panel1
-            // 
-            this.splitContainerWithDivider1.Panel1.Controls.Add(this.playlistListView);
-            // 
-            // splitContainerWithDivider1.Panel2
-            // 
-            this.splitContainerWithDivider1.Panel2.Controls.Add(this.tracksPanel);
-            this.splitContainerWithDivider1.Size = new System.Drawing.Size(1079, 241);
-            this.splitContainerWithDivider1.SplitterDistance = 644;
-            this.splitContainerWithDivider1.TabIndex = 5;
-            // 
-            // playlistListView
-            // 
-            this.playlistListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playlistListView.Location = new System.Drawing.Point(0, 0);
-            this.playlistListView.Name = "playlistListView";
-            this.playlistListView.Playlists = null;
-            this.playlistListView.SelectedPlaylist = null;
-            this.playlistListView.Size = new System.Drawing.Size(644, 241);
-            this.playlistListView.TabIndex = 0;
-            // 
-            // tracksPanel
-            // 
-            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
-            this.tracksPanel.Name = "tracksPanel";
-            this.tracksPanel.Playlist = null;
-            this.tracksPanel.Size = new System.Drawing.Size(431, 241);
-            this.tracksPanel.TabIndex = 0;
+            this.textBoxInput.DialogTitle = "Select a BD-ROM folder:";
+            this.textBoxInput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
+            this.textBoxInput.Location = new System.Drawing.Point(100, 13);
+            this.textBoxInput.Name = "textBoxInput";
+            this.textBoxInput.OverwritePrompt = false;
+            this.textBoxInput.SelectedPath = "X:\\BD\\49123204_BLACK_HAWK_DOWN";
+            this.textBoxInput.ShowNewFolderButton = false;
+            this.textBoxInput.Size = new System.Drawing.Size(991, 24);
+            this.textBoxInput.TabIndex = 0;
             // 
             // FormAsyncControllerTest
             // 
@@ -281,7 +291,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBoxInput;
+        private DotNetUtils.Controls.FileTextBox textBoxInput;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxStatus;
         private System.Windows.Forms.Button buttonScan;
@@ -289,7 +299,7 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Label label4;
         private DotNetUtils.Controls.LinkLabel2 linkLabelShowFilterWindow;
-        private System.Windows.Forms.TextBox textBoxOutput;
+        private DotNetUtils.Controls.FileTextBox textBoxOutput;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonCancelConvert;
         private System.Windows.Forms.Button buttonConvert;
