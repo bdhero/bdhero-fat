@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AssemblyUtils.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\ColumnHeaderExtensions.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Controls\LinkLabel2.cs">
       <SubType>Component</SubType>
