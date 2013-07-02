@@ -26,7 +26,7 @@ namespace BDHeroGUI.Components
 
                 var items = Transform(_playlist.VideoTracks);
                 listViewVideoTracks.Items.AddRange(items);
-                AutoSizeColumns();
+                listViewVideoTracks.AutoSizeColumns();
             }
         }
 
@@ -62,6 +62,7 @@ namespace BDHeroGUI.Components
         private void OnLoad(object sender, EventArgs eventArgs)
         {
             listViewVideoTracks.SetSortColumn(columnHeaderIndex.Index);
+            listViewVideoTracks.AutoSizeColumns();
         }
 
         private static void ListViewVideoTracksOnItemChecked(object sender, ItemCheckedEventArgs args)
@@ -71,11 +72,6 @@ namespace BDHeroGUI.Components
             {
                 track.Keep = args.Item.Checked;
             }
-        }
-
-        public void AutoSizeColumns()
-        {
-            listViewVideoTracks.AutoSizeColumns();
         }
     }
 }
