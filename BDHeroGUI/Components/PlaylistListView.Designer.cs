@@ -30,7 +30,7 @@ namespace BDHeroGUI.Components
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView = new System.Windows.Forms.ListView();
+            this.listView = new ListView2();
             this.columnHeaderFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLength = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderChapterCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -43,7 +43,6 @@ namespace BDHeroGUI.Components
             // 
             // listView
             // 
-            this.listView.AllowColumnReorder = true;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderFileName,
             this.columnHeaderLength,
@@ -54,17 +53,11 @@ namespace BDHeroGUI.Components
             this.columnHeaderVideoLanguage,
             this.columnHeaderWarnings});
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView.FullRowSelect = true;
-            this.listView.GridLines = true;
-            this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(0, 0);
-            this.listView.MultiSelect = false;
             this.listView.Name = "listView";
-            this.listView.ShowItemToolTips = true;
             this.listView.Size = new System.Drawing.Size(709, 558);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
-            this.listView.View = System.Windows.Forms.View.Details;
             // 
             // columnHeaderFileName
             // 
@@ -121,7 +114,7 @@ namespace BDHeroGUI.Components
 
         #endregion
 
-        private System.Windows.Forms.ListView listView;
+        private ListView2 listView;
         private System.Windows.Forms.ColumnHeader columnHeaderFileName;
         private System.Windows.Forms.ColumnHeader columnHeaderLength;
         private System.Windows.Forms.ColumnHeader columnHeaderChapterCount;

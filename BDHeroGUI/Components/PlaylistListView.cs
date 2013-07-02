@@ -78,15 +78,11 @@ namespace BDHeroGUI.Components
 
         private IList<Playlist> _playlists;
 
-        private readonly ListViewColumnSorter _columnSorter = new ListViewColumnSorter();
-
         public PlaylistListView()
         {
             InitializeComponent();
             Load += OnLoad;
 
-            listView.ListViewItemSorter = _columnSorter;
-            listView.ColumnClick += (_, e) => ListViewOnColumnClick(e.Column);
             listView.ItemSelectionChanged += delegate(object sender, ListViewItemSelectionChangedEventArgs args)
                 {
                     if (ItemSelectionChanged != null)
@@ -94,33 +90,13 @@ namespace BDHeroGUI.Components
                 };
 
             // Automatically resize the last column to take up all remaining free space
-            Resize += (sender, args) => listView.AutoSizeLastColumn();
+//            Resize += (sender, args) => listView.AutoSizeLastColumn();
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
             listView.SetDoubleBuffered(true);
-            ListViewOnColumnClick(columnHeaderType.Index);
-        }
-
-        private void ListViewOnColumnClick(int columnIndex)
-        {
-            // Determine if clicked column is already the column that is being sorted.
-            if (columnIndex == _columnSorter.SortColumn)
-            {
-                // Reverse the current sort direction for this column.
-                _columnSorter.Order = _columnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            }
-            else
-            {
-                // Set the column number that is to be sorted; default to ascending.
-                _columnSorter.SortColumn = columnIndex;
-                _columnSorter.Order = SortOrder.Ascending;
-            }
-
-            // Perform the sort with these new sort options.
-            listView.Sort();
-            listView.SetSortIcon(_columnSorter.SortColumn, _columnSorter.Order);
+            listView.SetSortColumn(columnHeaderType.Index);
         }
 
         private ListViewItem[] Transform(IEnumerable<Playlist> playlists)
