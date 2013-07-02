@@ -30,7 +30,16 @@ namespace BDHeroGUI.Components
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView = new ListView2();
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            "00009.MPLS",
+            "02:24:19:651",
+            "16",
+            "37,233,334,272",
+            "SpecialFeature",
+            "Theatrical",
+            "English",
+            "Bogus, Low Quality"}, -1);
+            this.listView = new DotNetUtils.Controls.ListView2();
             this.columnHeaderFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLength = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderChapterCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -43,6 +52,7 @@ namespace BDHeroGUI.Components
             // 
             // listView
             // 
+            this.listView.AllowColumnReorder = true;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderFileName,
             this.columnHeaderLength,
@@ -53,53 +63,62 @@ namespace BDHeroGUI.Components
             this.columnHeaderVideoLanguage,
             this.columnHeaderWarnings});
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView.FullRowSelect = true;
+            this.listView.GridLines = true;
+            this.listView.HideSelection = false;
+            this.listView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem1});
             this.listView.Location = new System.Drawing.Point(0, 0);
+            this.listView.MultiSelect = false;
             this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size(709, 558);
+            this.listView.ShowItemToolTips = true;
+            this.listView.Size = new System.Drawing.Size(657, 98);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
             // 
             // columnHeaderFileName
             // 
             this.columnHeaderFileName.Text = "Name";
-            this.columnHeaderFileName.Width = 80;
+            this.columnHeaderFileName.Width = 72;
             // 
             // columnHeaderLength
             // 
             this.columnHeaderLength.Text = "Duration";
             this.columnHeaderLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeaderLength.Width = 80;
+            this.columnHeaderLength.Width = 75;
             // 
             // columnHeaderChapterCount
             // 
             this.columnHeaderChapterCount.Text = "Chapters";
             this.columnHeaderChapterCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeaderChapterCount.Width = 56;
             // 
             // columnHeaderFileSize
             // 
             this.columnHeaderFileSize.Text = "Size (bytes)";
             this.columnHeaderFileSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeaderFileSize.Width = 120;
+            this.columnHeaderFileSize.Width = 87;
             // 
             // columnHeaderType
             // 
             this.columnHeaderType.Text = "Type";
-            this.columnHeaderType.Width = 100;
+            this.columnHeaderType.Width = 83;
             // 
             // columnHeaderCut
             // 
             this.columnHeaderCut.Text = "Cut";
-            this.columnHeaderCut.Width = 100;
+            this.columnHeaderCut.Width = 59;
             // 
             // columnHeaderVideoLanguage
             // 
             this.columnHeaderVideoLanguage.Text = "Video Language";
-            this.columnHeaderVideoLanguage.Width = 120;
+            this.columnHeaderVideoLanguage.Width = 93;
             // 
             // columnHeaderWarnings
             // 
             this.columnHeaderWarnings.Text = "Warnings";
-            this.columnHeaderWarnings.Width = 160;
+            this.columnHeaderWarnings.Width = 128;
             // 
             // PlaylistListView
             // 
@@ -107,7 +126,7 @@ namespace BDHeroGUI.Components
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.listView);
             this.Name = "PlaylistListView";
-            this.Size = new System.Drawing.Size(709, 558);
+            this.Size = new System.Drawing.Size(657, 98);
             this.ResumeLayout(false);
 
         }
