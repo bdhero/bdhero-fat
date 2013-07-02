@@ -34,6 +34,7 @@
             this.columnHeaderFrameRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderAspectRatio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listViewVideoTracks
@@ -45,6 +46,7 @@
             this.columnHeaderResolution,
             this.columnHeaderFrameRate,
             this.columnHeaderAspectRatio,
+            this.columnHeaderType,
             this.columnHeaderIndex});
             this.listViewVideoTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewVideoTracks.FullRowSelect = true;
@@ -89,6 +91,12 @@
             this.columnHeaderIndex.Text = "#";
             this.columnHeaderIndex.Width = 25;
             // 
+            // columnHeaderType
+            // 
+            this.columnHeaderType.DisplayIndex = 5;
+            this.columnHeaderType.Text = "Type";
+            this.columnHeaderType.Width = 169;
+            // 
             // VideoTrackListView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -108,5 +116,6 @@
         private System.Windows.Forms.ColumnHeader columnHeaderFrameRate;
         private System.Windows.Forms.ColumnHeader columnHeaderAspectRatio;
         private System.Windows.Forms.ColumnHeader columnHeaderIndex;
+        private System.Windows.Forms.ColumnHeader columnHeaderType;
     }
 }

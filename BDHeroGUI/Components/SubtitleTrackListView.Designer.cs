@@ -32,6 +32,7 @@
             this.columnHeaderCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listViewAudioTracks
@@ -40,6 +41,7 @@
             this.listViewAudioTracks.CheckBoxes = true;
             this.listViewAudioTracks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderCodec,
+            this.columnHeaderLanguage,
             this.columnHeaderType,
             this.columnHeaderIndex});
             this.listViewAudioTracks.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -63,7 +65,7 @@
             // 
             // columnHeaderType
             // 
-            this.columnHeaderType.DisplayIndex = 2;
+            this.columnHeaderType.DisplayIndex = 3;
             this.columnHeaderType.Text = "Type";
             this.columnHeaderType.Width = 100;
             // 
@@ -72,6 +74,12 @@
             this.columnHeaderIndex.DisplayIndex = 0;
             this.columnHeaderIndex.Text = "#";
             this.columnHeaderIndex.Width = 25;
+            // 
+            // columnHeaderLanguage
+            // 
+            this.columnHeaderLanguage.DisplayIndex = 2;
+            this.columnHeaderLanguage.Text = "Language";
+            this.columnHeaderLanguage.Width = 80;
             // 
             // SubtitleTrackListView
             // 
@@ -90,5 +98,6 @@
         private System.Windows.Forms.ColumnHeader columnHeaderCodec;
         private System.Windows.Forms.ColumnHeader columnHeaderType;
         private System.Windows.Forms.ColumnHeader columnHeaderIndex;
+        private System.Windows.Forms.ColumnHeader columnHeaderLanguage;
     }
 }

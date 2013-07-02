@@ -33,6 +33,7 @@
             this.columnHeaderChannels = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listViewAudioTracks
@@ -43,6 +44,7 @@
             this.columnHeaderCodec,
             this.columnHeaderChannels,
             this.columnHeaderLanguage,
+            this.columnHeaderType,
             this.columnHeaderIndex});
             this.listViewAudioTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewAudioTracks.FullRowSelect = true;
@@ -73,13 +75,18 @@
             // 
             this.columnHeaderLanguage.DisplayIndex = 3;
             this.columnHeaderLanguage.Text = "Language";
-            this.columnHeaderLanguage.Width = 120;
+            this.columnHeaderLanguage.Width = 80;
             // 
             // columnHeaderIndex
             // 
             this.columnHeaderIndex.DisplayIndex = 0;
             this.columnHeaderIndex.Text = "#";
             this.columnHeaderIndex.Width = 25;
+            // 
+            // columnHeaderType
+            // 
+            this.columnHeaderType.DisplayIndex = 4;
+            this.columnHeaderType.Text = "Type";
             // 
             // AudioTrackListView
             // 
@@ -99,5 +106,6 @@
         private System.Windows.Forms.ColumnHeader columnHeaderLanguage;
         private System.Windows.Forms.ColumnHeader columnHeaderChannels;
         private System.Windows.Forms.ColumnHeader columnHeaderIndex;
+        private System.Windows.Forms.ColumnHeader columnHeaderType;
     }
 }
