@@ -7,11 +7,16 @@ namespace DotNetUtils.Controls
     {
         public SplitContainerWithDivider()
         {
-            Paint += SplitContainer_Paint;
         }
 
-        /// <see cref="http://stackoverflow.com/a/4405758/467582"/>
-        private static void SplitContainer_Paint(object sender, PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            PaintGrabHandle(this, e);
+        }
+
+        /// <seealso cref="http://stackoverflow.com/a/4405758/467582"/>
+        private static void PaintGrabHandle(object sender, PaintEventArgs e)
         {
             var control = (SplitContainer)sender;
             var points = new Point[3];
