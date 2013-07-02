@@ -11,7 +11,7 @@ using DotNetUtils.Extensions;
 
 namespace BDHeroGUI.Components
 {
-    public partial class VideoTrackListView : UserControl
+    public partial class AudioTrackListView : UserControl
     {
         public Playlist Playlist
         {
@@ -20,12 +20,12 @@ namespace BDHeroGUI.Components
             {
                 _playlist = value;
 
-                listViewVideoTracks.Items.Clear();
+                listViewAudioTracks.Items.Clear();
 
                 if (_playlist == null) return;
 
-                var items = Transform(_playlist.VideoTracks);
-                listViewVideoTracks.Items.AddRange(items);
+                var items = Transform(_playlist.AudioTracks);
+                listViewAudioTracks.Items.AddRange(items);
                 AutoSizeColumns();
             }
         }
@@ -43,16 +43,15 @@ namespace BDHeroGUI.Components
                         };
                     item.SubItems.AddRange(new[]
                         {
-                            new ListViewItem.ListViewSubItem(item, track.VideoFormatDisplayable),
-                            new ListViewItem.ListViewSubItem(item, track.FrameRateDisplayable),
-                            new ListViewItem.ListViewSubItem(item, track.AspectRatioDisplayable),
+                            new ListViewItem.ListViewSubItem(item, track.ChannelCount.ToString("F1")) { Tag = track.ChannelCount }, 
+                            new ListViewItem.ListViewSubItem(item, track.Language.Name) { Tag = track.Language.Name },
                             new ListViewItem.ListViewSubItem(item, track.IndexOfType.ToString("D")) { Tag = track.IndexOfType }
                         });
                     return item;
                 }).ToArray();
         }
 
-        public VideoTrackListView()
+        public AudioTrackListView()
         {
             InitializeComponent();
             Load += OnLoad;
@@ -60,12 +59,12 @@ namespace BDHeroGUI.Components
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
-            listViewVideoTracks.SetSortColumn(columnHeaderIndex.Index);
+            listViewAudioTracks.SetSortColumn(columnHeaderIndex.Index);
         }
 
         public void AutoSizeColumns()
         {
-            listViewVideoTracks.AutoSizeColumns();
+            listViewAudioTracks.AutoSizeColumns();
         }
     }
 }

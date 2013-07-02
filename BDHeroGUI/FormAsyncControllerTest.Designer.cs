@@ -42,8 +42,13 @@
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
-            this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
+            this.splitContainerWithDivider1 = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
+            this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerWithDivider1)).BeginInit();
+            this.splitContainerWithDivider1.Panel1.SuspendLayout();
+            this.splitContainerWithDivider1.Panel2.SuspendLayout();
+            this.splitContainerWithDivider1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -85,7 +90,7 @@
             this.textBoxStatus.ReadOnly = true;
             this.textBoxStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxStatus.Size = new System.Drawing.Size(1074, 67);
-            this.textBoxStatus.TabIndex = 9;
+            this.textBoxStatus.TabIndex = 8;
             // 
             // buttonScan
             // 
@@ -155,7 +160,7 @@
             this.textBoxOutput.Location = new System.Drawing.Point(100, 337);
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.Size = new System.Drawing.Size(991, 20);
-            this.textBoxOutput.TabIndex = 6;
+            this.textBoxOutput.TabIndex = 5;
             this.textBoxOutput.Text = "X:\\BDHero\\";
             // 
             // label2
@@ -175,7 +180,7 @@
             this.buttonCancelConvert.Location = new System.Drawing.Point(1016, 363);
             this.buttonCancelConvert.Name = "buttonCancelConvert";
             this.buttonCancelConvert.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancelConvert.TabIndex = 8;
+            this.buttonCancelConvert.TabIndex = 7;
             this.buttonCancelConvert.Text = "Cancel";
             this.buttonCancelConvert.UseVisualStyleBackColor = true;
             this.buttonCancelConvert.Click += new System.EventHandler(this.buttonCancelConvert_Click);
@@ -186,7 +191,7 @@
             this.buttonConvert.Location = new System.Drawing.Point(935, 363);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(75, 23);
-            this.buttonConvert.TabIndex = 7;
+            this.buttonConvert.TabIndex = 6;
             this.buttonConvert.Text = "Convert";
             this.buttonConvert.UseVisualStyleBackColor = true;
             this.buttonConvert.Click += new System.EventHandler(this.buttonConvert_Click);
@@ -202,27 +207,43 @@
             this.checkBoxShowAllPlaylists.UseVisualStyleBackColor = true;
             this.checkBoxShowAllPlaylists.CheckedChanged += new System.EventHandler(this.checkBoxShowAllPlaylists_CheckedChanged);
             // 
-            // tracksPanel
+            // splitContainerWithDivider1
             // 
-            this.tracksPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.splitContainerWithDivider1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tracksPanel.Location = new System.Drawing.Point(774, 88);
-            this.tracksPanel.Name = "tracksPanel";
-            this.tracksPanel.Playlist = null;
-            this.tracksPanel.Size = new System.Drawing.Size(317, 243);
-            this.tracksPanel.TabIndex = 13;
+            this.splitContainerWithDivider1.Location = new System.Drawing.Point(12, 90);
+            this.splitContainerWithDivider1.Name = "splitContainerWithDivider1";
+            // 
+            // splitContainerWithDivider1.Panel1
+            // 
+            this.splitContainerWithDivider1.Panel1.Controls.Add(this.playlistListView);
+            // 
+            // splitContainerWithDivider1.Panel2
+            // 
+            this.splitContainerWithDivider1.Panel2.Controls.Add(this.tracksPanel);
+            this.splitContainerWithDivider1.Size = new System.Drawing.Size(1079, 241);
+            this.splitContainerWithDivider1.SplitterDistance = 644;
+            this.splitContainerWithDivider1.TabIndex = 5;
             // 
             // playlistListView
             // 
-            this.playlistListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.playlistListView.Location = new System.Drawing.Point(12, 88);
+            this.playlistListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playlistListView.Location = new System.Drawing.Point(0, 0);
             this.playlistListView.Name = "playlistListView";
             this.playlistListView.Playlists = null;
             this.playlistListView.SelectedPlaylist = null;
-            this.playlistListView.Size = new System.Drawing.Size(756, 243);
-            this.playlistListView.TabIndex = 5;
+            this.playlistListView.Size = new System.Drawing.Size(644, 241);
+            this.playlistListView.TabIndex = 0;
+            // 
+            // tracksPanel
+            // 
+            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
+            this.tracksPanel.Name = "tracksPanel";
+            this.tracksPanel.Playlist = null;
+            this.tracksPanel.Size = new System.Drawing.Size(431, 241);
+            this.tracksPanel.TabIndex = 0;
             // 
             // FormAsyncControllerTest
             // 
@@ -231,7 +252,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(1103, 508);
-            this.Controls.Add(this.tracksPanel);
+            this.Controls.Add(this.splitContainerWithDivider1);
             this.Controls.Add(this.checkBoxShowAllPlaylists);
             this.Controls.Add(this.buttonCancelConvert);
             this.Controls.Add(this.buttonConvert);
@@ -239,7 +260,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.linkLabelShowFilterWindow);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.playlistListView);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.buttonScan);
@@ -249,6 +269,10 @@
             this.Controls.Add(this.label1);
             this.Name = "FormAsyncControllerTest";
             this.Text = "BDHero Async Controller Test";
+            this.splitContainerWithDivider1.Panel1.ResumeLayout(false);
+            this.splitContainerWithDivider1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerWithDivider1)).EndInit();
+            this.splitContainerWithDivider1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,7 +287,6 @@
         private System.Windows.Forms.Button buttonScan;
         private DotNetUtils.Controls.ProgressBar2 progressBar;
         private System.Windows.Forms.Button buttonCancel;
-        private Components.PlaylistListView playlistListView;
         private System.Windows.Forms.Label label4;
         private DotNetUtils.Controls.LinkLabel2 linkLabelShowFilterWindow;
         private System.Windows.Forms.TextBox textBoxOutput;
@@ -271,6 +294,8 @@
         private System.Windows.Forms.Button buttonCancelConvert;
         private System.Windows.Forms.Button buttonConvert;
         private System.Windows.Forms.CheckBox checkBoxShowAllPlaylists;
+        private DotNetUtils.Controls.SplitContainerWithDivider splitContainerWithDivider1;
+        private Components.PlaylistListView playlistListView;
         private Components.TracksPanel tracksPanel;
     }
 }

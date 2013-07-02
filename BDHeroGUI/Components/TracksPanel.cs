@@ -19,6 +19,8 @@ namespace BDHeroGUI.Components
             {
                 _playlist = value;
                 videoTrackListView.Playlist = _playlist;
+                audioTrackListView.Playlist = _playlist;
+                AutoResizeSplitContainers();
             }
         }
 
@@ -27,6 +29,31 @@ namespace BDHeroGUI.Components
         public TracksPanel()
         {
             InitializeComponent();
+            Resize += OnResize;
+        }
+
+        private void OnResize(object sender, EventArgs eventArgs)
+        {
+            videoTrackListView.AutoSizeColumns();
+            audioTrackListView.AutoSizeColumns();
+        }
+
+        private void AutoResizeSplitContainers()
+        {
+            if (Playlist == null)
+                return;
+
+            var numTracks = (double)Playlist.Tracks.Count;
+            var pctVideo = Playlist.VideoTracks.Count / numTracks;
+            var pctAudio = Playlist.AudioTracks.Count / numTracks;
+            var pctSub = Playlist.SubtitleTracks.Count / numTracks;
+
+            var height = splitContainerOuter.Height - (splitContainerOuter.SplitterWidth + splitContainerInner.SplitterWidth);
+            var outerDistance = Math.Max(pctVideo * height, 65);
+            var innerDistance = Math.Max(pctAudio * height, 80);
+
+            splitContainerOuter.SplitterDistance = (int) outerDistance;
+            splitContainerInner.SplitterDistance = (int) innerDistance;
         }
     }
 }

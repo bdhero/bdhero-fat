@@ -33,6 +33,7 @@
             this.columnHeaderResolution = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderFrameRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderAspectRatio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listViewVideoTracks
@@ -43,7 +44,8 @@
             this.columnHeaderCodec,
             this.columnHeaderResolution,
             this.columnHeaderFrameRate,
-            this.columnHeaderAspectRatio});
+            this.columnHeaderAspectRatio,
+            this.columnHeaderIndex});
             this.listViewVideoTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewVideoTracks.FullRowSelect = true;
             this.listViewVideoTracks.GridLines = true;
@@ -59,23 +61,33 @@
             // 
             // columnHeaderCodec
             // 
+            this.columnHeaderCodec.DisplayIndex = 1;
             this.columnHeaderCodec.Text = "Codec";
             this.columnHeaderCodec.Width = 80;
             // 
             // columnHeaderResolution
             // 
+            this.columnHeaderResolution.DisplayIndex = 2;
             this.columnHeaderResolution.Text = "Resolution";
             this.columnHeaderResolution.Width = 80;
             // 
             // columnHeaderFrameRate
             // 
+            this.columnHeaderFrameRate.DisplayIndex = 3;
             this.columnHeaderFrameRate.Text = "Frame Rate";
             this.columnHeaderFrameRate.Width = 80;
             // 
             // columnHeaderAspectRatio
             // 
+            this.columnHeaderAspectRatio.DisplayIndex = 4;
             this.columnHeaderAspectRatio.Text = "Aspect Ratio";
             this.columnHeaderAspectRatio.Width = 80;
+            // 
+            // columnHeaderIndex
+            // 
+            this.columnHeaderIndex.DisplayIndex = 0;
+            this.columnHeaderIndex.Text = "#";
+            this.columnHeaderIndex.Width = 25;
             // 
             // VideoTrackListView
             // 
@@ -95,5 +107,6 @@
         private System.Windows.Forms.ColumnHeader columnHeaderResolution;
         private System.Windows.Forms.ColumnHeader columnHeaderFrameRate;
         private System.Windows.Forms.ColumnHeader columnHeaderAspectRatio;
+        private System.Windows.Forms.ColumnHeader columnHeaderIndex;
     }
 }
