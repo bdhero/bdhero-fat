@@ -88,9 +88,6 @@ namespace BDHeroGUI.Components
                     if (ItemSelectionChanged != null)
                         ItemSelectionChanged(sender, args);
                 };
-
-            // Automatically resize the last column to take up all remaining free space
-//            Resize += (sender, args) => listView.AutoSizeLastColumn();
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
