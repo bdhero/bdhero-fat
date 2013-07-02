@@ -1,6 +1,4 @@
-﻿using BDHeroGUI.Annotations;
-
-namespace BDHeroGUI.Components
+﻿namespace BDHeroGUI.Components
 {
     public class ListViewCell
     {
