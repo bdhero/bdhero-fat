@@ -55,11 +55,21 @@ namespace BDHeroGUI.Components
         {
             InitializeComponent();
             Load += OnLoad;
+            listViewAudioTracks.ItemChecked += ListViewAudioTracksOnItemChecked;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
             listViewAudioTracks.SetSortColumn(columnHeaderIndex.Index);
+        }
+
+        private static void ListViewAudioTracksOnItemChecked(object sender, ItemCheckedEventArgs args)
+        {
+            var track = args.Item.Tag as Track;
+            if (track != null)
+            {
+                track.Keep = args.Item.Checked;
+            }
         }
 
         public void AutoSizeColumns()
