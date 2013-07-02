@@ -29,10 +29,10 @@ namespace BDHeroGUI.Components
         public TracksPanel()
         {
             InitializeComponent();
-            Resize += OnResize;
+            Load += OnLoad;
         }
 
-        private void OnResize(object sender, EventArgs eventArgs)
+        private void OnLoad(object sender, EventArgs eventArgs)
         {
             videoTrackListView.AutoSizeColumns();
             audioTrackListView.AutoSizeColumns();
