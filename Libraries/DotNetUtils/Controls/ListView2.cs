@@ -26,8 +26,18 @@ namespace DotNetUtils.Controls
             ListViewItemSorter = _columnSorter;
             ColumnClick += (_, e) => SetSortColumn(e.Column);
 
+            var isResizing = false;
+
             // Automatically resize the last column to take up all remaining free space
-            Resize += (sender, args) => this.AutoSizeLastColumn();
+            Resize += delegate
+                {
+                    // listView.AutoSizeLastColumn() calls listView.ResumeDrawing(), which raises the Resize event.
+                    // To prevent multiple recursive invocations of the Resize event, we make sure it's not already in progress.
+                    if (isResizing) return;
+                    isResizing = true;
+                    this.AutoSizeLastColumn();
+                    isResizing = false;
+                };
         }
 
         public void SetSortColumn(int columnIndex)
