@@ -20,7 +20,7 @@ namespace DotNetUtils.Controls
             var d = control.SplitterDistance;
             var sW = control.SplitterWidth;
 
-            //calculate the position of the points'
+            // Calculate the position of the points
             if (control.Orientation == Orientation.Horizontal)
             {
                 points[0] = new Point((w / 2), d + (sW / 2));
