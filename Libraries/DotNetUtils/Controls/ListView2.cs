@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DotNetUtils.Annotations;
 using DotNetUtils.Extensions;
 
 namespace DotNetUtils.Controls
@@ -58,6 +59,36 @@ namespace DotNetUtils.Controls
             // Perform the sort with these new sort options.
             Sort();
             this.SetSortIcon(_columnSorter.SortColumn, _columnSorter.Order);
+        }
+
+        /// <summary>
+        /// Gets the first column on the left based on <see cref="ColumnHeader.DisplayIndex"/>.
+        /// </summary>
+        public ColumnHeader FirstDisplayedColumn
+        {
+            [CanBeNull]
+            get
+            {
+                var columnHeaders = Columns.OfType<ColumnHeader>().ToArray();
+                var minDisplayIndex = columnHeaders.Min(header => header.DisplayIndex);
+                var firstColumn = columnHeaders.FirstOrDefault(header => header.DisplayIndex == minDisplayIndex);
+                return firstColumn;
+            }
+        }
+
+        /// <summary>
+        /// Gets the last column on the right based on <see cref="ColumnHeader.DisplayIndex"/>.
+        /// </summary>
+        public ColumnHeader LastDisplayedColumn
+        {
+            [CanBeNull]
+            get
+            {
+                var columnHeaders = Columns.OfType<ColumnHeader>().ToArray();
+                var maxDisplayIndex = columnHeaders.Max(header => header.DisplayIndex);
+                var lastColumn = columnHeaders.LastOrDefault(header => header.DisplayIndex == maxDisplayIndex);
+                return lastColumn;
+            }
         }
     }
 }
