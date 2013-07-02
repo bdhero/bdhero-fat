@@ -51,6 +51,21 @@ namespace DotNetUtils.Extensions
         }
 
         /// <summary>
+        /// Iterates over each item in the collection and applies the specified action to it.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="action">Operation to invoke on each item in the collection</param>
+        /// <typeparam name="T"></typeparam>
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T, int> action)
+        {
+            var i = 0;
+            foreach (T item in collection)
+            {
+                action(item, i++);
+            }
+        }
+
+        /// <summary>
         /// Converts the Enumerable to a MultiValueDictionary using the specified key provider function.
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
