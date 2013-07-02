@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using BDHero.BDROM;
 using BDHero.JobQueue;
+using DotNetUtils.Extensions;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
@@ -177,7 +178,13 @@ namespace BDHero.Plugin.FFmpegMuxer
         /// </summary>
         private void ConvertLPCM()
         {
-            Arguments.AddRange(_selectedTracks.Where(IsLPCM).SelectMany(LPCMCodecArgs));
+            _selectedTracks.Where(track => track.IsAudio).ForEach(delegate(Track track, int i)
+                {
+                    if (IsLPCM(track))
+                    {
+                        Arguments.AddRange(LPCMCodecArgs(track, i));
+                    }
+                });
         }
 
         private static bool IsLPCM(Track track)
@@ -185,9 +192,9 @@ namespace BDHero.Plugin.FFmpegMuxer
             return track.Codec == Codec.LPCM;
         }
 
-        private static IEnumerable<string> LPCMCodecArgs(Track track)
+        private static IEnumerable<string> LPCMCodecArgs(Track track, int outputIndexOfType)
         {
-            return new[] { "-c:a:" + track.IndexOfType, "pcm_s" + (track.BitDepth == 16 ? 16 : 24) + "le" };
+            return new[] { "-c:a:" + outputIndexOfType, "pcm_s" + (track.BitDepth == 16 ? 16 : 24) + "le" };
         }
 
         private void SetOutputMKVPath()
