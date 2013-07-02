@@ -54,6 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyUtils.cs" />
+    <Compile Include="Controls\FileTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FileTextBox.Designer.cs">
+      <DependentUpon>FileTextBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ListView2.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -93,7 +99,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\FileTextBox.resx">
+      <DependentUpon>FileTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
