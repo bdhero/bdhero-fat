@@ -8,10 +8,6 @@ namespace DotNetUtils.Controls
 {
     public class SplitContainerWithDivider : SplitContainer
     {
-        public SplitContainerWithDivider()
-        {
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
