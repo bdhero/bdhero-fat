@@ -76,6 +76,12 @@
     <Compile Include="Components\AudioTrackListView.Designer.cs">
       <DependentUpon>AudioTrackListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\SubtitleTrackListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\SubtitleTrackListView.Designer.cs">
+      <DependentUpon>SubtitleTrackListView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\ListViewCell.cs" />
     <Compile Include="Components\PlaylistListView.cs">
       <SubType>UserControl</SubType>
@@ -114,6 +120,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Components\AudioTrackListView.resx">
       <DependentUpon>AudioTrackListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\SubtitleTrackListView.resx">
+      <DependentUpon>SubtitleTrackListView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Components\PlaylistListView.resx">
       <DependentUpon>PlaylistListView.cs</DependentUpon>

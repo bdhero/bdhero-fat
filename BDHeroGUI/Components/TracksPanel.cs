@@ -20,6 +20,7 @@ namespace BDHeroGUI.Components
                 _playlist = value;
                 videoTrackListView.Playlist = _playlist;
                 audioTrackListView.Playlist = _playlist;
+                subtitleTrackListView.Playlist = _playlist;
                 AutoResizeSplitContainers();
             }
         }

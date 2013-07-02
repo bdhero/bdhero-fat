@@ -32,11 +32,12 @@ namespace BDHeroGUI.Components
         {
             this.splitContainerOuter = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.label1 = new System.Windows.Forms.Label();
-            this.videoTrackListView = new BDHeroGUI.Components.VideoTrackListView();
             this.splitContainerInner = new DotNetUtils.Controls.SplitContainerWithDivider();
-            this.audioTrackListView = new BDHeroGUI.Components.AudioTrackListView();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.videoTrackListView = new BDHeroGUI.Components.VideoTrackListView();
+            this.audioTrackListView = new BDHeroGUI.Components.AudioTrackListView();
+            this.subtitleTrackListView = new BDHeroGUI.Components.SubtitleTrackListView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerOuter)).BeginInit();
             this.splitContainerOuter.Panel1.SuspendLayout();
             this.splitContainerOuter.Panel2.SuspendLayout();
@@ -75,17 +76,6 @@ namespace BDHeroGUI.Components
             this.label1.TabIndex = 2;
             this.label1.Text = "Video Tracks:";
             // 
-            // videoTrackListView
-            // 
-            this.videoTrackListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoTrackListView.Location = new System.Drawing.Point(90, 3);
-            this.videoTrackListView.Name = "videoTrackListView";
-            this.videoTrackListView.Playlist = null;
-            this.videoTrackListView.Size = new System.Drawing.Size(574, 162);
-            this.videoTrackListView.TabIndex = 0;
-            // 
             // splitContainerInner
             // 
             this.splitContainerInner.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -100,21 +90,11 @@ namespace BDHeroGUI.Components
             // 
             // splitContainerInner.Panel2
             // 
+            this.splitContainerInner.Panel2.Controls.Add(this.subtitleTrackListView);
             this.splitContainerInner.Panel2.Controls.Add(this.label3);
             this.splitContainerInner.Size = new System.Drawing.Size(667, 398);
             this.splitContainerInner.SplitterDistance = 186;
             this.splitContainerInner.TabIndex = 0;
-            // 
-            // audioTrackListView
-            // 
-            this.audioTrackListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.audioTrackListView.Location = new System.Drawing.Point(90, 3);
-            this.audioTrackListView.Name = "audioTrackListView";
-            this.audioTrackListView.Playlist = null;
-            this.audioTrackListView.Size = new System.Drawing.Size(574, 180);
-            this.audioTrackListView.TabIndex = 0;
             // 
             // label2
             // 
@@ -133,6 +113,39 @@ namespace BDHeroGUI.Components
             this.label3.Size = new System.Drawing.Size(81, 13);
             this.label3.TabIndex = 0;
             this.label3.Text = "Subtitle Tracks:";
+            // 
+            // videoTrackListView
+            // 
+            this.videoTrackListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoTrackListView.Location = new System.Drawing.Point(90, 3);
+            this.videoTrackListView.Name = "videoTrackListView";
+            this.videoTrackListView.Playlist = null;
+            this.videoTrackListView.Size = new System.Drawing.Size(574, 162);
+            this.videoTrackListView.TabIndex = 0;
+            // 
+            // audioTrackListView
+            // 
+            this.audioTrackListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioTrackListView.Location = new System.Drawing.Point(90, 3);
+            this.audioTrackListView.Name = "audioTrackListView";
+            this.audioTrackListView.Playlist = null;
+            this.audioTrackListView.Size = new System.Drawing.Size(574, 180);
+            this.audioTrackListView.TabIndex = 0;
+            // 
+            // subtitleTrackListView
+            // 
+            this.subtitleTrackListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.subtitleTrackListView.Location = new System.Drawing.Point(90, 3);
+            this.subtitleTrackListView.Name = "subtitleTrackListView";
+            this.subtitleTrackListView.Playlist = null;
+            this.subtitleTrackListView.Size = new System.Drawing.Size(574, 202);
+            this.subtitleTrackListView.TabIndex = 1;
             // 
             // TracksPanel
             // 
@@ -165,6 +178,7 @@ namespace BDHeroGUI.Components
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private AudioTrackListView audioTrackListView;
+        private SubtitleTrackListView subtitleTrackListView;
 
     }
 }
