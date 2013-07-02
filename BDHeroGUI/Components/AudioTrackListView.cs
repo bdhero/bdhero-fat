@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
-using DotNetUtils.Extensions;
 
 namespace BDHeroGUI.Components
 {
@@ -15,62 +14,28 @@ namespace BDHeroGUI.Components
     {
         public Playlist Playlist
         {
-            get { return _playlist; }
-            set
-            {
-                _playlist = value;
-
-                listViewAudioTracks.Items.Clear();
-
-                if (_playlist == null) return;
-
-                var items = Transform(_playlist.AudioTracks);
-                listViewAudioTracks.Items.AddRange(items);
-                listViewAudioTracks.AutoSizeColumns();
-            }
+            get { return _helper.Playlist; }
+            set { _helper.Playlist = value; }
         }
 
-        private Playlist _playlist;
-
-        private ListViewItem[] Transform(IList<Track> videoTracks)
-        {
-            return videoTracks.Select(delegate(Track track, int i)
-                {
-                    var item = new ListViewItem(track.Codec.CommonName)
-                        {
-                            Checked = track.Keep,
-                            Tag = track
-                        };
-                    item.SubItems.AddRange(new[]
-                        {
-                            new ListViewItem.ListViewSubItem(item, track.ChannelCount.ToString("F1")) { Tag = track.ChannelCount }, 
-                            new ListViewItem.ListViewSubItem(item, track.Language.Name) { Tag = track.Language.Name },
-                            new ListViewItem.ListViewSubItem(item, track.IndexOfType.ToString("D")) { Tag = track.IndexOfType }
-                        });
-                    return item;
-                }).ToArray();
-        }
+        private readonly TrackListViewHelper _helper;
 
         public AudioTrackListView()
         {
             InitializeComponent();
-            Load += OnLoad;
-            listViewAudioTracks.ItemChecked += ListViewAudioTracksOnItemChecked;
+            _helper = new TrackListViewHelper(listViewAudioTracks, columnHeaderIndex.Index, track => track.IsAudio, GetListItem);
+            Load += _helper.OnLoad;
         }
 
-        private void OnLoad(object sender, EventArgs eventArgs)
+        private static ICollection<ListViewCell> GetListItem(Track track)
         {
-            listViewAudioTracks.SetSortColumn(columnHeaderIndex.Index);
-            listViewAudioTracks.AutoSizeColumns();
-        }
-
-        private static void ListViewAudioTracksOnItemChecked(object sender, ItemCheckedEventArgs args)
-        {
-            var track = args.Item.Tag as Track;
-            if (track != null)
-            {
-                track.Keep = args.Item.Checked;
-            }
+            return new[]
+                {
+                    new ListViewCell { Text = track.Codec.CommonName },
+                    new ListViewCell { Text = track.ChannelCount.ToString("F1"), Tag = track.ChannelCount },
+                    new ListViewCell { Text = track.Language.Name, Tag = track.Language.Name },
+                    new ListViewCell { Text = track.IndexOfType.ToString("D"), Tag = track.IndexOfType }
+                };
         }
     }
 }

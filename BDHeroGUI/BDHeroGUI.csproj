@@ -76,12 +76,14 @@
     <Compile Include="Components\AudioTrackListView.Designer.cs">
       <DependentUpon>AudioTrackListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\ListViewCell.cs" />
     <Compile Include="Components\PlaylistListView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Components\PlaylistListView.Designer.cs">
       <DependentUpon>PlaylistListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\TrackListViewHelper.cs" />
     <Compile Include="Components\TracksPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

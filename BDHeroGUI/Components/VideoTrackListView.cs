@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
-using DotNetUtils.Extensions;
 
 namespace BDHeroGUI.Components
 {
@@ -15,63 +14,29 @@ namespace BDHeroGUI.Components
     {
         public Playlist Playlist
         {
-            get { return _playlist; }
-            set
-            {
-                _playlist = value;
-
-                listViewVideoTracks.Items.Clear();
-
-                if (_playlist == null) return;
-
-                var items = Transform(_playlist.VideoTracks);
-                listViewVideoTracks.Items.AddRange(items);
-                listViewVideoTracks.AutoSizeColumns();
-            }
+            get { return _helper.Playlist; }
+            set { _helper.Playlist = value; }
         }
 
-        private Playlist _playlist;
-
-        private ListViewItem[] Transform(IList<Track> videoTracks)
-        {
-            return videoTracks.Select(delegate(Track track, int i)
-                {
-                    var item = new ListViewItem(track.Codec.CommonName)
-                        {
-                            Checked = track.Keep,
-                            Tag = track
-                        };
-                    item.SubItems.AddRange(new[]
-                        {
-                            new ListViewItem.ListViewSubItem(item, track.VideoFormatDisplayable),
-                            new ListViewItem.ListViewSubItem(item, track.FrameRateDisplayable),
-                            new ListViewItem.ListViewSubItem(item, track.AspectRatioDisplayable),
-                            new ListViewItem.ListViewSubItem(item, track.IndexOfType.ToString("D")) { Tag = track.IndexOfType }
-                        });
-                    return item;
-                }).ToArray();
-        }
+        private readonly TrackListViewHelper _helper;
 
         public VideoTrackListView()
         {
             InitializeComponent();
-            Load += OnLoad;
-            listViewVideoTracks.ItemChecked += ListViewVideoTracksOnItemChecked;
+            _helper = new TrackListViewHelper(listViewVideoTracks, columnHeaderIndex.Index, track => track.IsVideo, GetListItem);
+            Load += _helper.OnLoad;
         }
 
-        private void OnLoad(object sender, EventArgs eventArgs)
+        private static ICollection<ListViewCell> GetListItem(Track track)
         {
-            listViewVideoTracks.SetSortColumn(columnHeaderIndex.Index);
-            listViewVideoTracks.AutoSizeColumns();
-        }
-
-        private static void ListViewVideoTracksOnItemChecked(object sender, ItemCheckedEventArgs args)
-        {
-            var track = args.Item.Tag as Track;
-            if (track != null)
-            {
-                track.Keep = args.Item.Checked;
-            }
+            return new[]
+                {
+                    new ListViewCell { Text = track.Codec.CommonName },
+                    new ListViewCell { Text = track.VideoFormatDisplayable },
+                    new ListViewCell { Text = track.FrameRateDisplayable },
+                    new ListViewCell { Text = track.AspectRatioDisplayable },
+                    new ListViewCell { Text = track.IndexOfType.ToString("D"), Tag = track.IndexOfType }
+                };
         }
     }
 }
