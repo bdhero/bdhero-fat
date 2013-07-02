@@ -12,7 +12,18 @@ namespace DotNetUtils.Controls
     public partial class FileTextBox : UserControl
     {
         /// <summary>
-        /// Gets or sets the value of the TextBox.
+        /// Gets or sets the value of the TextBox.  Alias of <see cref="SelectedPath"/>.
+        /// </summary>
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string Text
+        {
+            get { return SelectedPath; }
+            set { SelectedPath = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the value of the TextBox.  Alias of <see cref="Text"/>.
         /// </summary>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
