@@ -40,6 +40,8 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private readonly BackgroundWorker _progressWorker = new BackgroundWorker();
 
+        private readonly FFmpegTrackIndexer _indexer;
+
         public FFmpeg(Job job, Playlist playlist, string outputMKVPath)
         {
             _playlistLength = playlist.Length;
@@ -47,6 +49,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             _selectedTracks = playlist.Tracks.Where(track => track.Keep).ToList();
             _outputMKVPath = outputMKVPath;
             _progressFilePath = Path.GetTempFileName();
+            _indexer = new FFmpegTrackIndexer(playlist);
 
             VerifyInputPaths();
             VerifySelectedTracks();
@@ -155,13 +158,14 @@ namespace BDHero.Plugin.FFmpegMuxer
             Arguments.AddRange(_selectedTracks.SelectMany(TrackMetadataArgs));
         }
 
-        private static IEnumerable<string> TrackMetadataArgs(Track track, int i)
+        private IEnumerable<string> TrackMetadataArgs(Track track)
         {
+            var index = _indexer[track];
             return new[]
                        {
-                           "-map", "0:" + track.Index,
-                           "-metadata:s:" + i, "language=" + track.Language.ISO_639_2,
-                           "-metadata:s:" + i, "title=" + track.Title
+                           "-map", "0:" + index.InputIndex,
+                           "-metadata:s:" + index.OutputIndex, "language=" + track.Language.ISO_639_2,
+                           "-metadata:s:" + index.OutputIndex, "title=" + track.Title
                        };
         }
 
@@ -178,13 +182,7 @@ namespace BDHero.Plugin.FFmpegMuxer
         /// </summary>
         private void ConvertLPCM()
         {
-            _selectedTracks.Where(track => track.IsAudio).ForEach(delegate(Track track, int i)
-                {
-                    if (IsLPCM(track))
-                    {
-                        Arguments.AddRange(LPCMCodecArgs(track, i));
-                    }
-                });
+            Arguments.AddRange(_selectedTracks.Where(IsLPCM).SelectMany(LPCMCodecArgs));
         }
 
         private static bool IsLPCM(Track track)
@@ -192,9 +190,10 @@ namespace BDHero.Plugin.FFmpegMuxer
             return track.Codec == Codec.LPCM;
         }
 
-        private static IEnumerable<string> LPCMCodecArgs(Track track, int outputIndexOfType)
+        private IEnumerable<string> LPCMCodecArgs(Track track)
         {
-            return new[] { "-c:a:" + outputIndexOfType, "pcm_s" + (track.BitDepth == 16 ? 16 : 24) + "le" };
+            var index = _indexer[track];
+            return new[] { "-c:a:" + index.OutputIndexOfType, "pcm_s" + (track.BitDepth == 16 ? 16 : 24) + "le" };
         }
 
         private void SetOutputMKVPath()
