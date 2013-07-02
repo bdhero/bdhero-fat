@@ -95,11 +95,11 @@ namespace DotNetUtils.Controls
             BackColor = Color.Gray;
         }
 
-        protected override void OnPaintBackground(PaintEventArgs pevent)
+        protected override void OnPaintBackground(PaintEventArgs e)
         {
             if (!UseCustomColors)
             {
-                base.OnPaintBackground(pevent);
+                base.OnPaintBackground(e);
             }
             // None... Helps control the flicker.
         }
