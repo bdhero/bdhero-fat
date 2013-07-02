@@ -31,14 +31,12 @@ namespace BDHeroGUI.Components
         private Playlist _playlist;
 
         private readonly ListView2 _listView;
-        private readonly int _initialSortIndex;
         private readonly Func<Track, bool> _filter;
         private readonly Func<Track, ICollection<ListViewCell>> _transform;
 
-        public TrackListViewHelper(ListView2 listView, int initialSortIndex, Func<Track, bool> filter, Func<Track, ICollection<ListViewCell>> transform)
+        public TrackListViewHelper(ListView2 listView, Func<Track, bool> filter, Func<Track, ICollection<ListViewCell>> transform)
         {
             _listView = listView;
-            _initialSortIndex = initialSortIndex;
             _filter = filter;
             _transform = transform;
 
@@ -47,7 +45,7 @@ namespace BDHeroGUI.Components
 
         public void OnLoad(object sender = null, EventArgs eventArgs = null)
         {
-            _listView.SetSortColumn(_initialSortIndex);
+            _listView.SetSortColumn(_listView.FirstDisplayedColumn.Index);
             _listView.AutoSizeColumns();
         }
 

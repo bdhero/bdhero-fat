@@ -23,7 +23,7 @@ namespace BDHeroGUI.Components
         public VideoTrackListView()
         {
             InitializeComponent();
-            _helper = new TrackListViewHelper(listViewVideoTracks, columnHeaderIndex.Index, track => track.IsVideo, GetListItem);
+            _helper = new TrackListViewHelper(listViewVideoTracks, track => track.IsVideo, GetListItem);
             Load += _helper.OnLoad;
         }
 

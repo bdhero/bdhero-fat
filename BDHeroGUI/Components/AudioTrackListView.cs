@@ -23,7 +23,7 @@ namespace BDHeroGUI.Components
         public AudioTrackListView()
         {
             InitializeComponent();
-            _helper = new TrackListViewHelper(listViewAudioTracks, columnHeaderIndex.Index, track => track.IsAudio, GetListItem);
+            _helper = new TrackListViewHelper(listViewAudioTracks, track => track.IsAudio, GetListItem);
             Load += _helper.OnLoad;
         }
 
