@@ -32,7 +32,9 @@ namespace DotNetUtils.Extensions
         {
             listView.SuspendDrawing();
 
-            var lastColumn = listView.Columns.OfType<ColumnHeader>().LastOrDefault();
+            var columnHeaders = listView.Columns.OfType<ColumnHeader>().ToArray();
+            var maxDisplayIndex = columnHeaders.Max(header => header.DisplayIndex);
+            var lastColumn = columnHeaders.LastOrDefault(header => header.DisplayIndex == maxDisplayIndex);
             if (lastColumn != null)
                 lastColumn.AutoResize();
 
