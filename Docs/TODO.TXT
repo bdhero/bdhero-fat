@@ -9,25 +9,6 @@ Chores
 Bugs
 ====
 
-[ ] NPE when scanning CASINO_ROYAL:
-    2013-07-01 00:59:14,967 [1176][1] ERROR BDHero.Controller - Unhandled exception was thrown by plugin
-    System.NullReferenceException: Object reference not set to an instance of an object.
-       at BDHero.Plugin.DiscReader.Transformer.StreamClipTransformer.Transform(TSStreamClip tsStreamClip, Int32 index)
-       at System.Linq.Enumerable.<SelectIterator>d__7`2.MoveNext()
-       at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
-       at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
-       at BDHero.Plugin.DiscReader.Transformer.StreamClipTransformer.Transform(IEnumerable`1 tsStreamClips)
-       at BDHero.Plugin.DiscReader.Transformer.PlaylistTransformer.Transform(TSPlaylistFile playlistFile)
-       at System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
-       at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
-       at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
-       at BDHero.Plugin.DiscReader.Transformer.PlaylistTransformer.Transform(IEnumerable`1 playlistFiles)
-       at BDHero.Plugin.DiscReader.Transformer.DiscTransformer.Transform(BDROM bdrom)
-       at BDHero.Plugin.DiscReader.DiscReader.ReadBDROM(CancellationToken cancellationToken, String bdromPath)
-       at BDHero.Controller.<>c__DisplayClass25.<ReadBDROM>b__24(CancellationToken token)
-       at BDHero.Controller.<>c__DisplayClass22.<RunPluginSync>b__20(IThreadInvoker invoker, CancellationToken token)
-       at DotNetUtils.TaskUtils.TaskBuilder.<InvokeDoWork>b__2()
-       at DotNetUtils.TaskUtils.TaskBuilder.Try(Action action)
 [ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
 [ ] Time Remaining is jumpy, esp. > 80% complete.  Thread queue?
 [ ] GUI repaints but does not respond to user input while scanning disc.  Thread queue?
@@ -88,6 +69,25 @@ Chris' Plugins
 Complete
 ========
 
+[X] NPE when scanning CASINO_ROYAL:
+    2013-07-01 00:59:14,967 [1176][1] ERROR BDHero.Controller - Unhandled exception was thrown by plugin
+    System.NullReferenceException: Object reference not set to an instance of an object.
+       at BDHero.Plugin.DiscReader.Transformer.StreamClipTransformer.Transform(TSStreamClip tsStreamClip, Int32 index)
+       at System.Linq.Enumerable.<SelectIterator>d__7`2.MoveNext()
+       at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+       at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+       at BDHero.Plugin.DiscReader.Transformer.StreamClipTransformer.Transform(IEnumerable`1 tsStreamClips)
+       at BDHero.Plugin.DiscReader.Transformer.PlaylistTransformer.Transform(TSPlaylistFile playlistFile)
+       at System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
+       at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+       at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+       at BDHero.Plugin.DiscReader.Transformer.PlaylistTransformer.Transform(IEnumerable`1 playlistFiles)
+       at BDHero.Plugin.DiscReader.Transformer.DiscTransformer.Transform(BDROM bdrom)
+       at BDHero.Plugin.DiscReader.DiscReader.ReadBDROM(CancellationToken cancellationToken, String bdromPath)
+       at BDHero.Controller.<>c__DisplayClass25.<ReadBDROM>b__24(CancellationToken token)
+       at BDHero.Controller.<>c__DisplayClass22.<RunPluginSync>b__20(IThreadInvoker invoker, CancellationToken token)
+       at DotNetUtils.TaskUtils.TaskBuilder.<InvokeDoWork>b__2()
+       at DotNetUtils.TaskUtils.TaskBuilder.Try(Action action)
 [X] Don't skip unknown codecs - ffmpeg includes ALL codecs when counting streams (even IGS and DTS Express), which means BDHero's track indexes won't match
 [X] Estimated time left -- double decrement bug
 [X] Exception not propagated to UI and doesn't stop UI:
