@@ -42,6 +42,7 @@ namespace BDHeroGUI.Components
             _transform = transform;
 
             _listView.MultiSelect = true;
+            _listView.ItemCheck += ListViewOnItemCheck;
             _listView.ItemChecked += ListViewOnItemChecked;
         }
 
@@ -49,6 +50,16 @@ namespace BDHeroGUI.Components
         {
             _listView.SetSortColumn(_listView.FirstDisplayedColumn.Index);
             _listView.AutoSizeColumns();
+        }
+
+        private void ListViewOnItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            var track = _listView.Items[e.Index].Tag as Track;
+            if (track == null) return;
+            if (ShouldDisable(track))
+            {
+                e.NewValue = CheckState.Unchecked;
+            }
         }
 
         private static void ListViewOnItemChecked(object sender, ItemCheckedEventArgs args)
