@@ -60,12 +60,6 @@ namespace BDHeroGUI
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
         }
 
-        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
-        {
-            buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
-            tracksPanel.Playlist = playlistListView.SelectedPlaylist;
-        }
-
         private void OnLoad(object sender, EventArgs eventArgs)
         {
             LogDirectoryPaths();
@@ -75,6 +69,8 @@ namespace BDHeroGUI
             EnableControls(true);
             this.EnableSelectAll();
         }
+
+        #region Initialization
 
         private void LogDirectoryPaths()
         {
@@ -111,9 +107,12 @@ namespace BDHeroGUI
             _controller.UnhandledException += ControllerOnUnhandledException;
         }
 
-        private void ControllerOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        #endregion
+
+        private void RefreshPlaylists()
         {
-            MessageBox.Show(this, args.ExceptionObject.ToString(), "BDHero Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (_controller.Job != null)
+                playlistListView.Playlists = _controller.Job.Disc.Playlists;
         }
 
         private void EnableControls(bool enabled)
@@ -259,11 +258,16 @@ namespace BDHeroGUI
 
         #endregion
 
-        private void RefreshPlaylists()
+        #region Exception handling
+
+        private void ControllerOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
-            if (_controller.Job != null)
-                playlistListView.Playlists = _controller.Job.Disc.Playlists;
+            MessageBox.Show(this, args.ExceptionObject.ToString(), "BDHero Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        #endregion
+
+        #region Stages: Scan & Convert
 
         private void Scan()
         {
@@ -297,7 +301,17 @@ namespace BDHeroGUI
                 .Start();
         }
 
-        private void buttonMux_Click(object sender, EventArgs e)
+        #endregion
+
+        #region UI controls - event handling
+
+        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
+        {
+            buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
+            tracksPanel.Playlist = playlistListView.SelectedPlaylist;
+        }
+
+        private void buttonScan_Click(object sender, EventArgs e)
         {
             Scan();
         }
@@ -332,13 +346,7 @@ namespace BDHeroGUI
             _showAllPlaylists = checkBoxShowAllPlaylists.Checked;
             RefreshPlaylists();
         }
-    }
 
-    enum Stage
-    {
-        Ready,
-        Scanning,
-        Converting,
-        Finished
+        #endregion
     }
 }

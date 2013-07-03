@@ -93,7 +93,7 @@ namespace BDHeroGUI
             this.buttonScan.TabIndex = 1;
             this.buttonScan.Text = "Scan";
             this.buttonScan.UseVisualStyleBackColor = true;
-            this.buttonScan.Click += new System.EventHandler(this.buttonMux_Click);
+            this.buttonScan.Click += new System.EventHandler(this.buttonScan_Click);
             // 
             // buttonCancel
             // 
