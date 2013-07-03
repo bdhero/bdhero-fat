@@ -66,7 +66,7 @@ namespace BDHeroGUI
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 384);
+            this.label3.Location = new System.Drawing.Point(14, 579);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 13);
             this.label3.TabIndex = 9;
@@ -76,7 +76,7 @@ namespace BDHeroGUI
             // 
             this.textBoxStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxStatus.Location = new System.Drawing.Point(17, 400);
+            this.textBoxStatus.Location = new System.Drawing.Point(17, 595);
             this.textBoxStatus.Multiline = true;
             this.textBoxStatus.Name = "textBoxStatus";
             this.textBoxStatus.ReadOnly = true;
@@ -120,7 +120,7 @@ namespace BDHeroGUI
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 342);
+            this.label2.Location = new System.Drawing.Point(14, 537);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 13);
             this.label2.TabIndex = 12;
@@ -130,7 +130,7 @@ namespace BDHeroGUI
             // 
             this.buttonCancelConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancelConvert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancelConvert.Location = new System.Drawing.Point(1016, 367);
+            this.buttonCancelConvert.Location = new System.Drawing.Point(1016, 562);
             this.buttonCancelConvert.Name = "buttonCancelConvert";
             this.buttonCancelConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonCancelConvert.TabIndex = 7;
@@ -141,7 +141,7 @@ namespace BDHeroGUI
             // buttonConvert
             // 
             this.buttonConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonConvert.Location = new System.Drawing.Point(935, 367);
+            this.buttonConvert.Location = new System.Drawing.Point(935, 562);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonConvert.TabIndex = 6;
@@ -175,8 +175,8 @@ namespace BDHeroGUI
             // splitContainerWithDivider1.Panel2
             // 
             this.splitContainerWithDivider1.Panel2.Controls.Add(this.tracksPanel);
-            this.splitContainerWithDivider1.Size = new System.Drawing.Size(1079, 237);
-            this.splitContainerWithDivider1.SplitterDistance = 644;
+            this.splitContainerWithDivider1.Size = new System.Drawing.Size(1079, 432);
+            this.splitContainerWithDivider1.SplitterDistance = 536;
             this.splitContainerWithDivider1.TabIndex = 5;
             // 
             // playlistListView
@@ -186,7 +186,7 @@ namespace BDHeroGUI
             this.playlistListView.Name = "playlistListView";
             this.playlistListView.Playlists = null;
             this.playlistListView.SelectedPlaylist = null;
-            this.playlistListView.Size = new System.Drawing.Size(644, 237);
+            this.playlistListView.Size = new System.Drawing.Size(536, 432);
             this.playlistListView.TabIndex = 0;
             // 
             // tracksPanel
@@ -195,7 +195,7 @@ namespace BDHeroGUI
             this.tracksPanel.Location = new System.Drawing.Point(0, 0);
             this.tracksPanel.Name = "tracksPanel";
             this.tracksPanel.Playlist = null;
-            this.tracksPanel.Size = new System.Drawing.Size(431, 237);
+            this.tracksPanel.Size = new System.Drawing.Size(539, 432);
             this.tracksPanel.TabIndex = 0;
             // 
             // textBoxOutput
@@ -204,7 +204,7 @@ namespace BDHeroGUI
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutput.DialogTitle = "Save MKV file to folder:";
             this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
-            this.textBoxOutput.Location = new System.Drawing.Point(100, 337);
+            this.textBoxOutput.Location = new System.Drawing.Point(100, 532);
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.OverwritePrompt = false;
             this.textBoxOutput.SelectedPath = "X:\\BDHero\\";
@@ -228,7 +228,7 @@ namespace BDHeroGUI
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(17, 473);
+            this.progressBar.Location = new System.Drawing.Point(17, 668);
             this.progressBar.Maximum = 100000;
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(1074, 23);
@@ -261,7 +261,7 @@ namespace BDHeroGUI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(1103, 508);
+            this.ClientSize = new System.Drawing.Size(1103, 703);
             this.Controls.Add(this.splitContainerWithDivider1);
             this.Controls.Add(this.checkBoxShowAllPlaylists);
             this.Controls.Add(this.buttonCancelConvert);
