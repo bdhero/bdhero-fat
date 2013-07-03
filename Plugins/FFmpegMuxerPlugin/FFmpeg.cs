@@ -82,6 +82,8 @@ namespace BDHero.Plugin.FFmpegMuxer
         {
             if (string.IsNullOrWhiteSpace(line)) return;
 
+            Logger.Error(line);
+
             try
             {
                 // Preserve stack trace by throwing and catching exception
