@@ -38,6 +38,8 @@ Features
 [ ] Drag-n-drop scanning
 [ ] Scan automatically after Browse
 
+[ ] Don't load AppData plugins when *.vhost.exe is present in PluginService.cs
+
 [ ] Update output MKV path when user's selection changes
 [ ] Switch to "Save File" dialog for output MKV path
 [ ] Split output MKV path into directory and file name
