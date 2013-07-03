@@ -17,7 +17,6 @@ namespace BDHero.Plugin.DiscReader.Transformer
             // TODO: Add angle support!
             return streams.Where(IsDefaultAngle)
                           .Select((stream, i) => Transform(stream, i, ref numVideo, ref numAudio, ref numSubtitle))
-                          .Where(track => track.Codec.IsKnown)
                           .ToList();
         }
 
