@@ -35,6 +35,12 @@ Bugs
 Features
 ========
 
+[ ] Update output MKV path when user's selection changes
+[ ] Switch to "Save File" dialog for output MKV path
+[ ] Split output MKV path into directory and file name
+[ ] File Namer placeholders
+    [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
+
 [ ] Angle support
 [ ] Fix or remove "low quality" playlist detection
 [ ] Consider chapter count and timestamps when looking for duplicate playlists (playlists w/ identical streams but different chapters are not dups)
@@ -43,8 +49,6 @@ Features
 [ ] Plugin hooks for UI events:
     [ ] Select a movie/TV show
     [ ] Re-configure playlist (change Cut, Language, selected tracks) -- (for updating output file name, MKV title, track title)
-[ ] File Namer placeholders
-    [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
 [ ] Allow any BD-ROM file/subdirectory to be scanned
 
 Backlog
@@ -79,6 +83,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Don't skip unknown codecs - ffmpeg includes ALL codecs when counting streams (even IGS and DTS Express), which means BDHero's track indexes won't match
 [X] Estimated time left -- double decrement bug
 [X] Exception not propagated to UI and doesn't stop UI:
     2013-06-27 16:57:24,043 [6620][7] ERROR ProcessUtils.NonInteractiveProcess - Error occurred while starting/running NonInteractiveProcess
