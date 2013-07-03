@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -59,6 +60,28 @@ namespace BDHeroGUI.Components
             }
         }
 
+        private static bool ShouldDisable(Track track)
+        {
+            return !track.Codec.IsKnown || !track.Codec.IsMuxable;
+        }
+
+        private static bool ShouldMarkHidden(Track track)
+        {
+            return track.IsHidden;
+        }
+
+        private static void VisuallyDisable(ListViewItem item)
+        {
+            item.ForeColor = SystemColors.GrayText;
+            item.Font = new Font(item.Font, FontStyle.Strikeout);
+        }
+
+        private static void MarkHidden(ListViewItem item)
+        {
+            item.Font = new Font(item.Font, FontStyle.Italic);
+            item.Text += " *";
+        }
+
         private ListViewItem[] Transform(IEnumerable<Track> tracks)
         {
             return tracks.Where(_filter).Select(delegate(Track track)
@@ -70,10 +93,17 @@ namespace BDHeroGUI.Components
                     var item = new ListViewItem(firstCell.Text)
                         {
                             Checked = track.Keep,
-                            Tag = track
+                            Tag = track,
+                            UseItemStyleForSubItems = true
                         };
 
                     item.SubItems.AddRange(subCells.Select(cell => CreateListViewSubItem(item, cell)).ToArray());
+
+                    if (ShouldDisable(track))
+                        VisuallyDisable(item);
+
+                    if (ShouldMarkHidden(track))
+                        MarkHidden(item);
 
                     return item;
                 }).ToArray();
