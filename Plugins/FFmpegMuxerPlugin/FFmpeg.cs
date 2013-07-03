@@ -69,6 +69,13 @@ namespace BDHero.Plugin.FFmpegMuxer
             BeforeStart += OnBeforeStart;
             StdErr += OnStdErr;
             Exited += (state, code, exception, time) => OnExited(state, code, job.SelectedReleaseMedium, playlist, _selectedTracks, outputMKVPath);
+
+            foreach (var track in playlist.Tracks)
+            {
+                var index = _indexer[track];
+                Logger.InfoFormat("Track w/ stream PID {0} (0x{0:x4}): index {1} => {2} ({3})",
+                    track.PID, index.InputIndex, index.OutputIndex, track.Codec);
+            }
         }
 
         private void OnStdErr(string line)
