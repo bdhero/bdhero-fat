@@ -41,13 +41,8 @@ namespace BDHero.Plugin.FFmpegMuxer
                 ai = 0, // audio index
                 si = 0; // subtitle index
 
-            // Output indexes
-            int io = 0, // absolute index
-                vo = 0, // video index
-                ao = 0, // audio index
-                so = 0; // subtitle index
-
-            foreach (var track in _playlist.Tracks)
+            // Input tracks in FFmpeg order (by PID ascending)
+            foreach (var track in _playlist.Tracks.OrderBy(track => track.PID))
             {
                 var inputIndex = ii++;
                 var inputIndexOfType = -1;
@@ -58,26 +53,12 @@ namespace BDHero.Plugin.FFmpegMuxer
 
                 Debug.Assert(inputIndexOfType != -1, "Track must be video, audio, or subtitle");
 
-                var outputIndex = -1;
-                var outputIndexOfType = -1;
-
-                if (track.Keep)
-                {
-                    outputIndex = io++;
-
-                    if (track.IsVideo) outputIndexOfType = vo++;
-                    if (track.IsAudio) outputIndexOfType = ao++;
-                    if (track.IsSubtitle) outputIndexOfType = so++;
-
-                    Debug.Assert(outputIndexOfType != -1, "Track must be video, audio, or subtitle");
-                }
-
                 _trackIndices[track.PID] = new FFmpegTrackIndex
                     {
                         InputIndex = inputIndex,
                         InputIndexOfType = inputIndexOfType,
-                        OutputIndex = outputIndex,
-                        OutputIndexOfType = outputIndexOfType
+                        OutputIndex = -1,
+                        OutputIndexOfType = -1
                     };
 
                 // Count TrueHD tracks twice to match FFmpeg's numbering system
@@ -87,6 +68,28 @@ namespace BDHero.Plugin.FFmpegMuxer
                     ii++;
                     ai++;
                 }
+            }
+
+            // Output indexes
+            int io = 0, // absolute index
+                vo = 0, // video index
+                ao = 0, // audio index
+                so = 0; // subtitle index
+
+            // Output tracks in original BDInfo order
+            foreach (var track in _playlist.Tracks.Where(track => track.Keep))
+            {
+                var outputIndex = io++;
+                var outputIndexOfType = -1;
+
+                if (track.IsVideo) outputIndexOfType = vo++;
+                if (track.IsAudio) outputIndexOfType = ao++;
+                if (track.IsSubtitle) outputIndexOfType = so++;
+
+                Debug.Assert(outputIndexOfType != -1, "Track must be video, audio, or subtitle");
+
+                _trackIndices[track.PID].OutputIndex = outputIndex;
+                _trackIndices[track.PID].OutputIndexOfType = outputIndexOfType;
             }
         }
 
