@@ -34,7 +34,7 @@ namespace BDHeroGUI
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxStatus = new System.Windows.Forms.TextBox();
             this.buttonScan = new System.Windows.Forms.Button();
-            this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonCancelScan = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonCancelConvert = new System.Windows.Forms.Button();
@@ -95,17 +95,17 @@ namespace BDHeroGUI
             this.buttonScan.UseVisualStyleBackColor = true;
             this.buttonScan.Click += new System.EventHandler(this.buttonScan_Click);
             // 
-            // buttonCancel
+            // buttonCancelScan
             // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(714, 13);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 2;
-            this.buttonCancel.Text = "Cancel";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.buttonCancelScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancelScan.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancelScan.Location = new System.Drawing.Point(714, 13);
+            this.buttonCancelScan.Name = "buttonCancelScan";
+            this.buttonCancelScan.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancelScan.TabIndex = 2;
+            this.buttonCancelScan.Text = "Cancel";
+            this.buttonCancelScan.UseVisualStyleBackColor = true;
+            this.buttonCancelScan.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // label4
             // 
@@ -268,14 +268,14 @@ namespace BDHeroGUI
             this.AcceptButton = this.buttonScan;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.buttonCancel;
+            this.CancelButton = this.buttonCancelScan;
             this.ClientSize = new System.Drawing.Size(801, 538);
             this.Controls.Add(this.splitContainerWithDivider1);
             this.Controls.Add(this.buttonCancelConvert);
             this.Controls.Add(this.buttonConvert);
             this.Controls.Add(this.textBoxOutput);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.buttonCancelScan);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.buttonScan);
             this.Controls.Add(this.textBoxStatus);
@@ -302,7 +302,7 @@ namespace BDHeroGUI
         private System.Windows.Forms.TextBox textBoxStatus;
         private System.Windows.Forms.Button buttonScan;
         private DotNetUtils.Controls.ProgressBar2 progressBar;
-        private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button buttonCancelScan;
         private System.Windows.Forms.Label label4;
         private DotNetUtils.Controls.LinkLabel2 linkLabelShowFilterWindow;
         private DotNetUtils.Controls.FileTextBox textBoxOutput;

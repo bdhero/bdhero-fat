@@ -120,7 +120,7 @@ namespace BDHeroGUI
             textBoxInput.Enabled = enabled;
             textBoxOutput.Enabled = enabled;
             buttonScan.Enabled = enabled;
-            buttonCancel.Enabled = !enabled;
+            buttonCancelScan.Enabled = !enabled;
             buttonConvert.Enabled = enabled && playlistListView.SelectedPlaylist != null;
             buttonCancelConvert.Enabled = !enabled && playlistListView.SelectedPlaylist != null;
             playlistListView.Enabled = enabled;
