@@ -84,12 +84,12 @@ namespace BDHeroGUI.Components
         private static void VisuallyDisable(ListViewItem item)
         {
             item.ForeColor = SystemColors.GrayText;
-            item.Font = new Font(item.Font, FontStyle.Strikeout);
+            item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Strikeout);
         }
 
         private static void MarkHidden(ListViewItem item)
         {
-            item.Font = new Font(item.Font, FontStyle.Italic);
+            item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Italic);
             item.Text += " *";
         }
 
