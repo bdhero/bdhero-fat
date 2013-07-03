@@ -39,22 +39,22 @@ namespace BDHero.Plugin.DiscReader.Transformer
             if (subtitleStream != null) indexOfType = numSubtitle++;
 
             return new Track
-            {
-                Index = index,
-                PID = stream.PID,
-                Language = stream.Language,
-                IsHidden = stream.IsHidden,
-                Codec = CodecTransformer.CodecFromStream(stream),
-                IsVideo = stream.IsVideoStream,
-                IsAudio = stream.IsAudioStream,
-                IsSubtitle = stream.IsGraphicsStream || stream.IsTextStream,
-                ChannelCount = audioStream != null ? audioStream.ChannelCountDouble : 0,
-                BitDepth = audioStream != null ? audioStream.BitDepth : 0,
-                VideoFormat = videoStream != null ? videoStream.VideoFormat : 0,
-                FrameRate = videoStream != null ? videoStream.FrameRate : TSFrameRate.Unknown,
-                AspectRatio = videoStream != null ? videoStream.AspectRatio : TSAspectRatio.Unknown,
-                IndexOfType = indexOfType
-            };
+                {
+                    Index = index,
+                    PID = stream.PID,
+                    Language = stream.Language,
+                    IsHidden = stream.IsHidden,
+                    Codec = CodecTransformer.CodecFromStream(stream),
+                    IsVideo = stream.IsVideoStream,
+                    IsAudio = stream.IsAudioStream,
+                    IsSubtitle = stream.IsGraphicsStream || stream.IsTextStream,
+                    ChannelCount = audioStream != null ? audioStream.ChannelCountDouble : 0,
+                    BitDepth = audioStream != null ? audioStream.BitDepth : 0,
+                    VideoFormat = videoStream != null ? videoStream.VideoFormat : 0,
+                    FrameRate = videoStream != null ? videoStream.FrameRate : TSFrameRate.Unknown,
+                    AspectRatio = videoStream != null ? videoStream.AspectRatio : TSAspectRatio.Unknown,
+                    IndexOfType = indexOfType
+                };
         }
     }
 }
