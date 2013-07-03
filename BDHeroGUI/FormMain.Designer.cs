@@ -30,6 +30,7 @@ namespace BDHeroGUI
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxStatus = new System.Windows.Forms.TextBox();
@@ -41,12 +42,12 @@ namespace BDHeroGUI
             this.buttonConvert = new System.Windows.Forms.Button();
             this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
             this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
-            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
+            this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.linkLabelShowFilterWindow = new DotNetUtils.Controls.LinkLabel2();
+            this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
+            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
             this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
-            this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
-            this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
@@ -184,19 +185,17 @@ namespace BDHeroGUI
             this.splitContainerMain.SplitterDistance = 108;
             this.splitContainerMain.TabIndex = 3;
             // 
-            // textBoxOutput
+            // playlistListView
             // 
-            this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.playlistListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutput.DialogTitle = "Save MKV file to folder:";
-            this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
-            this.textBoxOutput.Location = new System.Drawing.Point(100, 417);
-            this.textBoxOutput.Name = "textBoxOutput";
-            this.textBoxOutput.OverwritePrompt = false;
-            this.textBoxOutput.SelectedPath = "X:\\BDHero\\";
-            this.textBoxOutput.ShowNewFolderButton = false;
-            this.textBoxOutput.Size = new System.Drawing.Size(527, 24);
-            this.textBoxOutput.TabIndex = 4;
+            this.playlistListView.Location = new System.Drawing.Point(3, 16);
+            this.playlistListView.Name = "playlistListView";
+            this.playlistListView.Playlists = null;
+            this.playlistListView.SelectedPlaylist = null;
+            this.playlistListView.Size = new System.Drawing.Size(771, 66);
+            this.playlistListView.TabIndex = 0;
             // 
             // linkLabelShowFilterWindow
             // 
@@ -210,6 +209,29 @@ namespace BDHeroGUI
             this.linkLabelShowFilterWindow.TabIndex = 2;
             this.linkLabelShowFilterWindow.Text = "Filter...";
             this.linkLabelShowFilterWindow.Click += new System.EventHandler(this.linkLabelShowFilterWindow_Click);
+            // 
+            // tracksPanel
+            // 
+            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
+            this.tracksPanel.Name = "tracksPanel";
+            this.tracksPanel.Playlist = null;
+            this.tracksPanel.Size = new System.Drawing.Size(777, 256);
+            this.tracksPanel.TabIndex = 0;
+            // 
+            // textBoxOutput
+            // 
+            this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutput.DialogTitle = "Save MKV file to folder:";
+            this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
+            this.textBoxOutput.Location = new System.Drawing.Point(100, 417);
+            this.textBoxOutput.Name = "textBoxOutput";
+            this.textBoxOutput.OverwritePrompt = false;
+            this.textBoxOutput.SelectedPath = "X:\\BDHero\\";
+            this.textBoxOutput.ShowNewFolderButton = false;
+            this.textBoxOutput.Size = new System.Drawing.Size(527, 24);
+            this.textBoxOutput.TabIndex = 4;
             // 
             // progressBar
             // 
@@ -242,28 +264,7 @@ namespace BDHeroGUI
             this.textBoxInput.Size = new System.Drawing.Size(527, 24);
             this.textBoxInput.TabIndex = 0;
             // 
-            // playlistListView
-            // 
-            this.playlistListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.playlistListView.Location = new System.Drawing.Point(3, 16);
-            this.playlistListView.Name = "playlistListView";
-            this.playlistListView.Playlists = null;
-            this.playlistListView.SelectedPlaylist = null;
-            this.playlistListView.Size = new System.Drawing.Size(771, 66);
-            this.playlistListView.TabIndex = 0;
-            // 
-            // tracksPanel
-            // 
-            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
-            this.tracksPanel.Name = "tracksPanel";
-            this.tracksPanel.Playlist = null;
-            this.tracksPanel.Size = new System.Drawing.Size(777, 256);
-            this.tracksPanel.TabIndex = 0;
-            // 
-            // FormAsyncControllerTest
+            // FormMain
             // 
             this.AcceptButton = this.buttonScan;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -282,8 +283,9 @@ namespace BDHeroGUI
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBoxInput);
             this.Controls.Add(this.label1);
-            this.Name = "FormAsyncControllerTest";
-            this.Text = "BDHero Async Controller Test";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "FormMain";
+            this.Text = "BDHero GUI";
             this.splitContainerMain.Panel1.ResumeLayout(false);
             this.splitContainerMain.Panel1.PerformLayout();
             this.splitContainerMain.Panel2.ResumeLayout(false);
