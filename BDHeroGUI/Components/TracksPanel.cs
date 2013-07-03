@@ -38,9 +38,8 @@ namespace BDHeroGUI.Components
                 return;
 
             var numTracks = (double)Playlist.Tracks.Count;
-            var pctVideo = Playlist.VideoTracks.Count / numTracks;
-            var pctAudio = Playlist.AudioTracks.Count / numTracks;
-            var pctSub = Playlist.SubtitleTracks.Count / numTracks;
+            var pctVideo = Math.Min(.33, Playlist.VideoTracks.Count / numTracks);
+            var pctAudio = Math.Min(.33, Playlist.AudioTracks.Count / numTracks);
 
             var height = splitContainerOuter.Height - (splitContainerOuter.SplitterWidth + splitContainerInner.SplitterWidth);
             var outerDistance = Math.Max(pctVideo * height, 65);
