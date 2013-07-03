@@ -107,6 +107,12 @@ namespace BDHero.BDROM
         /// </summary>
         public bool Keep;
 
+        /// <summary>
+        /// Gets or sets whether this track represents BDHero's "best guess" for the user's preferred track
+        /// based on the user's preferences.
+        /// </summary>
+        public bool IsBestGuess;
+
         private string DefaultTitle
         {
             get

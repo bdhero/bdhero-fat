@@ -233,11 +233,13 @@ namespace BDHero.Plugin.AutoDetector
 
         private static void SelectBestPlaylist(Job job)
         {
-            var bestPlaylist = job.Disc.ValidMainFeaturePlaylists.FirstOrDefault();
-            if (bestPlaylist != null)
-            {
-                job.SelectedPlaylistIndex = job.Disc.Playlists.IndexOf(bestPlaylist);
-            }
+            var bestPlaylists = job.Disc.ValidMainFeaturePlaylists;
+            var bestPlaylist = bestPlaylists.FirstOrDefault();
+
+            if (bestPlaylist == null) return;
+
+            bestPlaylists.ForEach(playlist => playlist.IsBestGuess = true);
+            job.SelectedPlaylistIndex = job.Disc.Playlists.IndexOf(bestPlaylist);
         }
 
         private static void SelectBestTracks(Disc disc)
@@ -246,6 +248,7 @@ namespace BDHero.Plugin.AutoDetector
             {
                 // Video
 
+                playlist.VideoTracks.First().IsBestGuess = true;
                 playlist.VideoTracks.First().Keep = true;
 
                 // Audio
@@ -286,6 +289,7 @@ namespace BDHero.Plugin.AutoDetector
 
         private static void SelectTrack(Track track)
         {
+            track.IsBestGuess = true;
             track.Keep = true;
         }
 

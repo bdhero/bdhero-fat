@@ -151,6 +151,12 @@ namespace BDHero.BDROM
             get { return IsDuplicate || HasDuplicateStreamClips || HasLoops || HasHiddenFirstTracks; }
         }
 
+        /// <summary>
+        /// Gets or sets whether this playlist represents BDHero's "best guess" based on the user's preferences.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsBestGuess { get; set; }
+
         #endregion
 
         #region Non-DB Public properties (full path, stream clips, video language)

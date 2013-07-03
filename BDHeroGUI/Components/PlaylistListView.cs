@@ -108,6 +108,7 @@ namespace BDHeroGUI.Components
         private static ListViewItem Transform(Playlist playlist)
         {
             var item = new ListViewItem(playlist.FileName) { Tag = playlist };
+
             item.SubItems.AddRange(new[]
                 {
                     new ListViewItem.ListViewSubItem(item, playlist.Length.ToStringMedium()) { Tag = playlist.Length },
@@ -118,7 +119,27 @@ namespace BDHeroGUI.Components
                     new ListViewItem.ListViewSubItem(item, playlist.FirstVideoLanguage.ToString()) { Tag = playlist.FirstVideoLanguage },
                     new ListViewItem.ListViewSubItem(item, playlist.Warnings) { Tag = playlist.Warnings },
                 });
+
+            if (IsBestChoice(playlist))
+                MarkBestChoice(item);
+
             return item;
+        }
+
+        private static bool IsBestChoice(Playlist playlist)
+        {
+            return playlist.IsBestGuess;
+        }
+
+        private static void MarkBestChoice(ListViewItem item)
+        {
+            item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Bold);
+            AppendToolTip(item, "Best choice based on your preferences");
+        }
+
+        private static void AppendToolTip(ListViewItem item, string text)
+        {
+            item.ToolTipText = string.IsNullOrEmpty(item.ToolTipText) ? text : string.Format("{0}; {1}", item.ToolTipText, text);
         }
 
         public void SelectFirstPlaylist()
