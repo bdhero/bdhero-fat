@@ -38,6 +38,8 @@ namespace BDHero.Plugin.FFmpegMuxer
         public long CurSize { get; private set; }
         public long CurOutTimeMs { get; private set; }
 
+        private readonly IList<string> _errors = new List<string>();
+
         private readonly BackgroundWorker _progressWorker = new BackgroundWorker();
 
         private readonly FFmpegTrackIndexer _indexer;
@@ -82,12 +84,14 @@ namespace BDHero.Plugin.FFmpegMuxer
         {
             if (string.IsNullOrWhiteSpace(line)) return;
 
+            _errors.Add(line);
+
             Logger.Error(line);
 
             try
             {
                 // Preserve stack trace by throwing and catching exception
-                throw new Exception(line);
+                throw new Exception(string.Join(Environment.NewLine, _errors));
             }
             catch (Exception e)
             {
