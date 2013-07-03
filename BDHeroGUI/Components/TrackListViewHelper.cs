@@ -85,11 +85,19 @@ namespace BDHeroGUI.Components
         {
             item.ForeColor = SystemColors.GrayText;
             item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Strikeout);
+
+            const string toolTipText = "Unsupported codec: cannot be muxed";
+
+            item.ToolTipText = string.IsNullOrEmpty(item.ToolTipText) ? toolTipText : string.Format("{0}; {1}", item.ToolTipText, toolTipText);
         }
 
         private static void MarkHidden(ListViewItem item)
         {
             item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Italic);
+
+            const string toolTipText = "Hidden track";
+
+            item.ToolTipText = string.IsNullOrEmpty(item.ToolTipText) ? toolTipText : string.Format("{0}; {1}", item.ToolTipText, toolTipText);
             item.Text += " *";
         }
 
