@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using BDHero.BDROM;
@@ -22,6 +23,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static StreamClip Transform(TSStreamClip tsStreamClip, int index)
         {
+            Debug.Assert(tsStreamClip != null, "tsStreamClip argument is null");
+            Debug.Assert(tsStreamClip.StreamFile != null, "tsStreamClip.StreamFile is null");
+
             return new StreamClip(tsStreamClip.StreamFile.FileInfo, tsStreamClip.Name, tsStreamClip.FileSize, index, tsStreamClip.AngleIndex, tsStreamClip.Length);
         }
     }
