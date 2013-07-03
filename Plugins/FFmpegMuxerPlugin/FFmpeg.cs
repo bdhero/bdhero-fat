@@ -116,9 +116,48 @@ namespace BDHero.Plugin.FFmpegMuxer
             return inputM2TsPaths.Count == 1 ? inputM2TsPaths[0] : "concat:" + string.Join("|", inputM2TsPaths);
         }
 
-        private void SetFFmpegLogLevel()
+        /// <summary>
+        /// `-loglevel [repeat+]loglevel | -v [repeat+]loglevel`
+        /// 
+        /// Set the logging level used by the library. Adding "repeat+" indicates that repeated log output should not be compressed
+        /// to the first line and the "Last message repeated n times" line will be omitted. "repeat" can also be used alone.
+        /// If "repeat" is used alone, and with no prior loglevel set, the default loglevel will be used. If multiple loglevel parameters
+        /// are given, using `repeat` will not change the loglevel. `repeat` is only available in ffmpeg builds after 2013/04/01.
+        /// 
+        /// loglevel is a number or a string containing one of the following values:
+        /// 
+        ///     `quiet`
+        ///         Show nothing at all; be silent.
+        /// 
+        ///     `panic`
+        ///         Only show fatal errors which could lead the process to crash, such as and assert failure. This is not currently used for anything.
+        /// 
+        ///     `fatal`
+        ///         Only show fatal errors. These are errors after which the process absolutely cannot continue after.
+        /// 
+        ///     `error`
+        ///         Show all errors, including ones which can be recovered from.
+        /// 
+        ///     `warning`
+        ///         Show all warnings and errors. Any message related to possibly incorrect or unexpected events will be shown.
+        /// 
+        ///     `info`
+        ///         Show informative messages during processing. This is in addition to warnings and errors. This is the default value.
+        /// 
+        ///     `verbose`
+        ///         Same as info, except more verbose.
+        /// 
+        ///     `debug`
+        ///         Show everything, including debugging information.
+        /// 
+        /// By default the program logs to stderr, if coloring is supported by the terminal, colors are used to mark errors and warnings. Log coloring can be disabled setting the environment variable AV_LOG_FORCE_NOCOLOR or NO_COLOR, or can be forced setting the environment variable AV_LOG_FORCE_COLOR. The use of the environment variable NO_COLOR is deprecated and will be dropped in a following FFmpeg version.
+        /// </summary>
+        /// <seealso cref="http://ffmpeg.org/ffmpeg.html#Generic-options"/>
+        private void SetFFmpegLogLevel(bool compressRepeatedLogMessages = true)
         {
-            Arguments.AddAll("-loglevel", "error");
+            const string level = "error";
+            var value = compressRepeatedLogMessages ? level : string.Format("repeat+{0}", level);
+            Arguments.AddAll("-loglevel", value);
         }
 
         private void ReplaceExistingFiles()
