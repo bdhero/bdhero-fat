@@ -40,17 +40,17 @@ namespace BDHeroGUI
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
-            this.splitContainerWithDivider1 = new DotNetUtils.Controls.SplitContainerWithDivider();
+            this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
             this.linkLabelShowFilterWindow = new DotNetUtils.Controls.LinkLabel2();
             this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerWithDivider1)).BeginInit();
-            this.splitContainerWithDivider1.Panel1.SuspendLayout();
-            this.splitContainerWithDivider1.Panel2.SuspendLayout();
-            this.splitContainerWithDivider1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
+            this.splitContainerMain.Panel1.SuspendLayout();
+            this.splitContainerMain.Panel2.SuspendLayout();
+            this.splitContainerMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -161,28 +161,28 @@ namespace BDHeroGUI
             this.checkBoxShowAllPlaylists.UseVisualStyleBackColor = true;
             this.checkBoxShowAllPlaylists.CheckedChanged += new System.EventHandler(this.checkBoxShowAllPlaylists_CheckedChanged);
             // 
-            // splitContainerWithDivider1
+            // splitContainerMain
             // 
-            this.splitContainerWithDivider1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.splitContainerMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainerWithDivider1.Location = new System.Drawing.Point(12, 43);
-            this.splitContainerWithDivider1.Name = "splitContainerWithDivider1";
-            this.splitContainerWithDivider1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainerMain.Location = new System.Drawing.Point(12, 43);
+            this.splitContainerMain.Name = "splitContainerMain";
+            this.splitContainerMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainerWithDivider1.Panel1
+            // splitContainerMain.Panel1
             // 
-            this.splitContainerWithDivider1.Panel1.Controls.Add(this.playlistListView);
-            this.splitContainerWithDivider1.Panel1.Controls.Add(this.checkBoxShowAllPlaylists);
-            this.splitContainerWithDivider1.Panel1.Controls.Add(this.label4);
-            this.splitContainerWithDivider1.Panel1.Controls.Add(this.linkLabelShowFilterWindow);
+            this.splitContainerMain.Panel1.Controls.Add(this.playlistListView);
+            this.splitContainerMain.Panel1.Controls.Add(this.checkBoxShowAllPlaylists);
+            this.splitContainerMain.Panel1.Controls.Add(this.label4);
+            this.splitContainerMain.Panel1.Controls.Add(this.linkLabelShowFilterWindow);
             // 
-            // splitContainerWithDivider1.Panel2
+            // splitContainerMain.Panel2
             // 
-            this.splitContainerWithDivider1.Panel2.Controls.Add(this.tracksPanel);
-            this.splitContainerWithDivider1.Size = new System.Drawing.Size(777, 368);
-            this.splitContainerWithDivider1.SplitterDistance = 108;
-            this.splitContainerWithDivider1.TabIndex = 3;
+            this.splitContainerMain.Panel2.Controls.Add(this.tracksPanel);
+            this.splitContainerMain.Size = new System.Drawing.Size(777, 368);
+            this.splitContainerMain.SplitterDistance = 108;
+            this.splitContainerMain.TabIndex = 3;
             // 
             // textBoxOutput
             // 
@@ -270,7 +270,7 @@ namespace BDHeroGUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancelScan;
             this.ClientSize = new System.Drawing.Size(801, 538);
-            this.Controls.Add(this.splitContainerWithDivider1);
+            this.Controls.Add(this.splitContainerMain);
             this.Controls.Add(this.buttonCancelConvert);
             this.Controls.Add(this.buttonConvert);
             this.Controls.Add(this.textBoxOutput);
@@ -284,11 +284,11 @@ namespace BDHeroGUI
             this.Controls.Add(this.label1);
             this.Name = "FormAsyncControllerTest";
             this.Text = "BDHero Async Controller Test";
-            this.splitContainerWithDivider1.Panel1.ResumeLayout(false);
-            this.splitContainerWithDivider1.Panel1.PerformLayout();
-            this.splitContainerWithDivider1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerWithDivider1)).EndInit();
-            this.splitContainerWithDivider1.ResumeLayout(false);
+            this.splitContainerMain.Panel1.ResumeLayout(false);
+            this.splitContainerMain.Panel1.PerformLayout();
+            this.splitContainerMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
+            this.splitContainerMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -310,7 +310,7 @@ namespace BDHeroGUI
         private System.Windows.Forms.Button buttonCancelConvert;
         private System.Windows.Forms.Button buttonConvert;
         private System.Windows.Forms.CheckBox checkBoxShowAllPlaylists;
-        private DotNetUtils.Controls.SplitContainerWithDivider splitContainerWithDivider1;
+        private DotNetUtils.Controls.SplitContainerWithDivider splitContainerMain;
         private Components.PlaylistListView playlistListView;
         private Components.TracksPanel tracksPanel;
     }
