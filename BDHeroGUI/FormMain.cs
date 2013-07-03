@@ -16,7 +16,7 @@ using WindowsOSUtils.TaskbarUtils;
 namespace BDHeroGUI
 {
     [UsedImplicitly]
-    public partial class FormAsyncControllerTest : Form
+    public partial class FormMain : Form
     {
         private readonly log4net.ILog _logger;
         private readonly IDirectoryLocator _directoryLocator;
@@ -35,7 +35,7 @@ namespace BDHeroGUI
 
         private bool _showAllPlaylists;
 
-        public FormAsyncControllerTest(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
+        public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
             InitializeComponent();
 
@@ -118,12 +118,15 @@ namespace BDHeroGUI
         private void EnableControls(bool enabled)
         {
             textBoxInput.Enabled = enabled;
-            textBoxOutput.Enabled = enabled;
             buttonScan.Enabled = enabled;
             buttonCancelScan.Enabled = !enabled;
+
+            textBoxOutput.Enabled = enabled;
             buttonConvert.Enabled = enabled && playlistListView.SelectedPlaylist != null;
             buttonCancelConvert.Enabled = !enabled && playlistListView.SelectedPlaylist != null;
-            playlistListView.Enabled = enabled;
+
+            splitContainerMain.Enabled = enabled;
+
             _isRunning = !enabled;
         }
 

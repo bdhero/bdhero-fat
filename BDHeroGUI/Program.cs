@@ -23,12 +23,12 @@ namespace BDHeroGUI
             Application.Run(CreateMainForm());
         }
 
-        private static FormAsyncControllerTest CreateMainForm()
+        private static FormMain CreateMainForm()
         {
             var kernel = InjectorFactory.CreateContainer();
             kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
-            kernel.Bind<FormAsyncControllerTest>().ToSelf();
-            return kernel.Get<FormAsyncControllerTest>();
+            kernel.Bind<FormMain>().ToSelf();
+            return kernel.Get<FormMain>();
         }
     }
 }

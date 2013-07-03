@@ -102,11 +102,11 @@
     <Compile Include="Components\VideoTrackListView.Designer.cs">
       <DependentUpon>VideoTrackListView.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAsyncControllerTest.cs">
+    <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAsyncControllerTest.Designer.cs">
-      <DependentUpon>FormAsyncControllerTest.cs</DependentUpon>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPlaylistFilter.cs">
       <SubType>Form</SubType>
@@ -133,8 +133,8 @@
     <EmbeddedResource Include="Components\VideoTrackListView.resx">
       <DependentUpon>VideoTrackListView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAsyncControllerTest.resx">
-      <DependentUpon>FormAsyncControllerTest.cs</DependentUpon>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPlaylistFilter.resx">
       <DependentUpon>FormPlaylistFilter.cs</DependentUpon>
