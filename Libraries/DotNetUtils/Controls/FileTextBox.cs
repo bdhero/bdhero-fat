@@ -140,6 +140,8 @@ namespace DotNetUtils.Controls
         {
             InitializeComponent();
 
+            ShowNewFolderButton = true;
+            OverwritePrompt = true;
             AllowAnyExtension = true;
 
             textBoxPath.TextChanged += (sender, args) => OnTextChanged(args);
