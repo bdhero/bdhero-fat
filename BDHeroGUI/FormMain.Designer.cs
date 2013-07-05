@@ -268,6 +268,7 @@ namespace BDHeroGUI
             // FormMain
             // 
             this.AcceptButton = this.buttonScan;
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancelScan;
@@ -287,6 +288,9 @@ namespace BDHeroGUI
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "BDHero GUI";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormMain_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FormMain_DragEnter);
+            this.DragLeave += new System.EventHandler(this.FormMain_DragLeave);
             this.splitContainerMain.Panel1.ResumeLayout(false);
             this.splitContainerMain.Panel1.PerformLayout();
             this.splitContainerMain.Panel2.ResumeLayout(false);

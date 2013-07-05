@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using BDHero;
 using BDHero.Plugin;
 using BDHero.Startup;
+using BDHero.Utils;
 using BDHeroGUI.Annotations;
 using BDHeroGUI.Forms;
 using DotNetUtils;
@@ -359,6 +360,49 @@ namespace BDHeroGUI
         private void buttonCancelConvert_Click(object sender, EventArgs e)
         {
             _cancellationTokenSource.Cancel();
+        }
+
+        #endregion
+
+        #region Drag and Drop
+
+        private string GetFirstBDROMDirectory(DragEventArgs e)
+        {
+            return DragUtils.GetPaths(e).Select(BDFileUtils.GetBDROMDirectory).FirstOrDefault(s => s != null);
+        }
+
+        private bool AcceptBDROMDrop(DragEventArgs e)
+        {
+            return _state != ProgressProviderState.Running
+                && _state != ProgressProviderState.Paused
+                && GetFirstBDROMDirectory(e) != null
+                ;
+        }
+
+        private void FormMain_DragEnter(object sender, DragEventArgs e)
+        {
+            if (AcceptBDROMDrop(e))
+            {
+                e.Effect = DragDropEffects.All;
+                textBoxInput.Highlight();
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+                textBoxInput.UnHighlight();
+            }
+        }
+
+        private void FormMain_DragLeave(object sender, EventArgs e)
+        {
+            textBoxInput.UnHighlight();
+        }
+
+        private void FormMain_DragDrop(object sender, DragEventArgs e)
+        {
+            if (!AcceptBDROMDrop(e)) return;
+            textBoxInput.Text = GetFirstBDROMDirectory(e);
+            Scan();
         }
 
         #endregion
