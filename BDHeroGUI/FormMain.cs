@@ -10,7 +10,6 @@ using BDHero.Plugin;
 using BDHero.Startup;
 using BDHero.Utils;
 using BDHeroGUI.Annotations;
-using BDHeroGUI.Forms;
 using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
@@ -35,10 +34,6 @@ namespace BDHeroGUI
 
         private ProgressProviderState _state = ProgressProviderState.Ready;
 
-        private readonly PlaylistFilter _filter;
-
-        private bool _showAllPlaylists;
-
         public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
             InitializeComponent();
@@ -50,8 +45,6 @@ namespace BDHeroGUI
             _pluginLoader = pluginLoader;
             _controller = controller;
 
-            _filter = new PlaylistFilter();
-
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
 
@@ -60,7 +53,6 @@ namespace BDHeroGUI
             progressBar.UseCustomColors = true;
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
 
-            playlistListView.Filter = playlist => _filter.Show(playlist) || _showAllPlaylists;
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
         }
 
@@ -344,22 +336,6 @@ namespace BDHeroGUI
         {
             buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
             tracksPanel.Playlist = playlistListView.SelectedPlaylist;
-        }
-
-        private void linkLabelShowFilterWindow_Click(object sender, EventArgs e)
-        {
-            var result = new FormPlaylistFilter(_filter).ShowDialog(this);
-
-            if (result == DialogResult.OK)
-            {
-                RefreshPlaylists();
-            }
-        }
-
-        private void checkBoxShowAllPlaylists_CheckedChanged(object sender, EventArgs e)
-        {
-            _showAllPlaylists = checkBoxShowAllPlaylists.Checked;
-            RefreshPlaylists();
         }
 
         private void buttonConvert_Click(object sender, EventArgs e)

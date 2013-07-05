@@ -48,11 +48,16 @@ namespace BDHeroGUI.Components
             this.columnHeaderCut = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderVideoLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderWarnings = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
+            this.linkLabelShowFilterWindow = new DotNetUtils.Controls.LinkLabel2();
             this.SuspendLayout();
             // 
             // listView
             // 
             this.listView.AllowColumnReorder = true;
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderFileName,
             this.columnHeaderLength,
@@ -62,7 +67,6 @@ namespace BDHeroGUI.Components
             this.columnHeaderCut,
             this.columnHeaderVideoLanguage,
             this.columnHeaderWarnings});
-            this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView.FullRowSelect = true;
             this.listView.GridLines = true;
             this.listView.HideSelection = false;
@@ -72,7 +76,7 @@ namespace BDHeroGUI.Components
             this.listView.MultiSelect = false;
             this.listView.Name = "listView";
             this.listView.ShowItemToolTips = true;
-            this.listView.Size = new System.Drawing.Size(657, 98);
+            this.listView.Size = new System.Drawing.Size(657, 104);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
@@ -120,14 +124,42 @@ namespace BDHeroGUI.Components
             this.columnHeaderWarnings.Text = "Warnings";
             this.columnHeaderWarnings.Width = 128;
             // 
+            // checkBoxShowAllPlaylists
+            // 
+            this.checkBoxShowAllPlaylists.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxShowAllPlaylists.AutoSize = true;
+            this.checkBoxShowAllPlaylists.Location = new System.Drawing.Point(543, 110);
+            this.checkBoxShowAllPlaylists.Name = "checkBoxShowAllPlaylists";
+            this.checkBoxShowAllPlaylists.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxShowAllPlaylists.TabIndex = 3;
+            this.checkBoxShowAllPlaylists.Text = "Show &all";
+            this.checkBoxShowAllPlaylists.UseVisualStyleBackColor = true;
+            this.checkBoxShowAllPlaylists.CheckedChanged += new System.EventHandler(this.checkBoxShowAllPlaylists_CheckedChanged);
+            // 
+            // linkLabelShowFilterWindow
+            // 
+            this.linkLabelShowFilterWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLabelShowFilterWindow.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelShowFilterWindow.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelShowFilterWindow.Location = new System.Drawing.Point(615, 111);
+            this.linkLabelShowFilterWindow.Name = "linkLabelShowFilterWindow";
+            this.linkLabelShowFilterWindow.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelShowFilterWindow.Size = new System.Drawing.Size(39, 14);
+            this.linkLabelShowFilterWindow.TabIndex = 4;
+            this.linkLabelShowFilterWindow.Text = "Filter...";
+            this.linkLabelShowFilterWindow.Click += new System.EventHandler(this.linkLabelShowFilterWindow_Click);
+            // 
             // PlaylistListView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxShowAllPlaylists);
+            this.Controls.Add(this.linkLabelShowFilterWindow);
             this.Controls.Add(this.listView);
             this.Name = "PlaylistListView";
-            this.Size = new System.Drawing.Size(657, 98);
+            this.Size = new System.Drawing.Size(657, 131);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -142,6 +174,8 @@ namespace BDHeroGUI.Components
         private System.Windows.Forms.ColumnHeader columnHeaderCut;
         private System.Windows.Forms.ColumnHeader columnHeaderType;
         private System.Windows.Forms.ColumnHeader columnHeaderWarnings;
+        private System.Windows.Forms.CheckBox checkBoxShowAllPlaylists;
+        private LinkLabel2 linkLabelShowFilterWindow;
 
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
+using BDHeroGUI.Forms;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
 
@@ -67,16 +68,15 @@ namespace BDHeroGUI.Components
         }
 
         /// <summary>
-        /// Function that determines the visibility of playlists within the ListView.
-        /// </summary>
-        public Func<Playlist, bool> Filter;
-
-        /// <summary>
         /// Triggered whenever the user selects a new playlist or deselects the current playlist.
         /// </summary>
         public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged;
 
         private IList<Playlist> _playlists;
+
+        private readonly PlaylistFilter _filter = new PlaylistFilter();
+
+        private bool _showAllPlaylists;
 
         public PlaylistListView()
         {
@@ -102,7 +102,7 @@ namespace BDHeroGUI.Components
 
         private bool ShowPlaylist(Playlist playlist)
         {
-            return Filter == null || Filter(playlist);
+            return _filter.Show(playlist) || _showAllPlaylists;
         }
 
         private static ListViewItem Transform(Playlist playlist)
@@ -142,6 +142,27 @@ namespace BDHeroGUI.Components
             if (!VisiblePlaylistsInSortOrder.Any())
                 return;
             SelectedPlaylist = VisiblePlaylistsInSortOrder.First();
+        }
+
+        private void linkLabelShowFilterWindow_Click(object sender, EventArgs e)
+        {
+            var result = new FormPlaylistFilter(_filter).ShowDialog(this);
+
+            if (result == DialogResult.OK)
+            {
+                RefreshPlaylists();
+            }
+        }
+
+        private void checkBoxShowAllPlaylists_CheckedChanged(object sender, EventArgs e)
+        {
+            _showAllPlaylists = checkBoxShowAllPlaylists.Checked;
+            RefreshPlaylists();
+        }
+
+        private void RefreshPlaylists()
+        {
+            Playlists = Playlists;
         }
     }
 }
