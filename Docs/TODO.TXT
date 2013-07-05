@@ -11,7 +11,6 @@ Bugs
 
 [ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
 [ ] Time Remaining is jumpy, esp. > 80% complete.  Thread queue?
-[ ] GUI repaints but does not respond to user input while scanning disc.  Thread queue?
 
 Features
 ========
@@ -64,6 +63,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] GUI repaints but does not respond to user input while scanning disc.  Thread queue?
 [X] Don't load AppData plugins when *.vhost.exe is present in PluginService.cs
 [X] Drag-n-drop scanning
 [X] Scan automatically after Browse
