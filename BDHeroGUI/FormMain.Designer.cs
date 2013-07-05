@@ -46,12 +46,14 @@ namespace BDHeroGUI
             this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
+            this.mediaPanel = new BDHeroGUI.Components.MediaPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
             this.splitContainerMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTop)).BeginInit();
             this.splitContainerTop.Panel1.SuspendLayout();
+            this.splitContainerTop.Panel2.SuspendLayout();
             this.splitContainerTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -221,6 +223,10 @@ namespace BDHeroGUI
             // splitContainerTop.Panel1
             // 
             this.splitContainerTop.Panel1.Controls.Add(this.playlistListView);
+            // 
+            // splitContainerTop.Panel2
+            // 
+            this.splitContainerTop.Panel2.Controls.Add(this.mediaPanel);
             this.splitContainerTop.Size = new System.Drawing.Size(1068, 124);
             this.splitContainerTop.SplitterDistance = 692;
             this.splitContainerTop.TabIndex = 7;
@@ -243,6 +249,14 @@ namespace BDHeroGUI
             this.tracksPanel.Playlist = null;
             this.tracksPanel.Size = new System.Drawing.Size(1068, 303);
             this.tracksPanel.TabIndex = 0;
+            // 
+            // mediaPanel
+            // 
+            this.mediaPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mediaPanel.Location = new System.Drawing.Point(0, 0);
+            this.mediaPanel.Name = "mediaPanel";
+            this.mediaPanel.Size = new System.Drawing.Size(372, 124);
+            this.mediaPanel.TabIndex = 0;
             // 
             // FormMain
             // 
@@ -275,6 +289,7 @@ namespace BDHeroGUI
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
             this.splitContainerMain.ResumeLayout(false);
             this.splitContainerTop.Panel1.ResumeLayout(false);
+            this.splitContainerTop.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTop)).EndInit();
             this.splitContainerTop.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -299,6 +314,7 @@ namespace BDHeroGUI
         private Components.TracksPanel tracksPanel;
         private SplitContainerWithDivider splitContainerTop;
         private Components.PlaylistListView playlistListView;
+        private Components.MediaPanel mediaPanel;
     }
 }
 

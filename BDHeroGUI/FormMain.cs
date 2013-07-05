@@ -198,6 +198,7 @@ namespace BDHeroGUI
             _taskbarItem.NoProgress();
             RefreshPlaylists();
             playlistListView.SelectFirstPlaylist();
+            mediaPanel.Job = _controller.Job;
         }
 
         private void ControllerOnScanFailed(object sender, EventArgs eventArgs)
