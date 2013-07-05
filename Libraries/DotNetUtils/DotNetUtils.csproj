@@ -63,6 +63,9 @@
     <Compile Include="Controls\ListView2.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\SelectableLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ColumnHeaderExtensions.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
