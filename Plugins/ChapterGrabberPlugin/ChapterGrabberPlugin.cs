@@ -179,8 +179,8 @@ namespace ChapterGrabberPlugin
         private static bool IsValid(JsonChaps jsonChaps)
         {
             List<JsonChapter> jsonChapters = jsonChaps.chapterInfo.chapters.chapter;
-            var isInvalid = jsonChapters.All(IsInvalidChapter);
-            return !isInvalid;
+            var areAllInvalid = jsonChapters.All(IsInvalidChapter);
+            return !areAllInvalid;
         }
 
         private static bool IsInvalidChapter(JsonChapter jsonChapter)
