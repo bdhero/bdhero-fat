@@ -50,6 +50,7 @@ namespace BDHeroGUI.Components
             this.columnHeaderWarnings = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
             this.linkLabelShowFilterWindow = new DotNetUtils.Controls.LinkLabel2();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // listView
@@ -72,11 +73,11 @@ namespace BDHeroGUI.Components
             this.listView.HideSelection = false;
             this.listView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1});
-            this.listView.Location = new System.Drawing.Point(0, 0);
+            this.listView.Location = new System.Drawing.Point(0, 16);
             this.listView.MultiSelect = false;
             this.listView.Name = "listView";
             this.listView.ShowItemToolTips = true;
-            this.listView.Size = new System.Drawing.Size(657, 104);
+            this.listView.Size = new System.Drawing.Size(657, 88);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
@@ -149,10 +150,20 @@ namespace BDHeroGUI.Components
             this.linkLabelShowFilterWindow.Text = "Filter...";
             this.linkLabelShowFilterWindow.Click += new System.EventHandler(this.linkLabelShowFilterWindow_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(47, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Playlists:";
+            // 
             // PlaylistListView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.checkBoxShowAllPlaylists);
             this.Controls.Add(this.linkLabelShowFilterWindow);
             this.Controls.Add(this.listView);
@@ -176,6 +187,7 @@ namespace BDHeroGUI.Components
         private System.Windows.Forms.ColumnHeader columnHeaderWarnings;
         private System.Windows.Forms.CheckBox checkBoxShowAllPlaylists;
         private LinkLabel2 linkLabelShowFilterWindow;
+        private System.Windows.Forms.Label label1;
 
     }
 }
