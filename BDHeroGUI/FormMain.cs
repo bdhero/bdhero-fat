@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,7 @@ using BDHero.Plugin;
 using BDHero.Startup;
 using BDHeroGUI.Annotations;
 using BDHeroGUI.Forms;
+using DotNetUtils;
 using DotNetUtils.Extensions;
 using OSUtils.TaskbarUtils;
 using WindowsOSUtils.TaskbarUtils;
@@ -278,8 +280,12 @@ namespace BDHeroGUI
 
             _controller.SetEventScheduler();
 
+            // TODO: Let File Namer plugin handle this
+            var outputDirectory = FileUtils.ContainsFileName(textBoxOutput.Text)
+                                      ? Path.GetDirectoryName(textBoxOutput.Text)
+                                      : textBoxOutput.Text;
             _controller
-                .CreateScanTask(_cancellationTokenSource.Token, textBoxInput.Text, textBoxOutput.Text)
+                .CreateScanTask(_cancellationTokenSource.Token, textBoxInput.Text, outputDirectory)
                 .Start();
         }
 
