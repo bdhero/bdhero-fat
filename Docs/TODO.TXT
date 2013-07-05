@@ -63,6 +63,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] MIRROR_MIRROR_BD doesn't auto-detect any Main Feature playlists
 [X] GUI repaints but does not respond to user input while scanning disc.  Thread queue?
 [X] Don't load AppData plugins when *.vhost.exe is present in PluginService.cs
 [X] Drag-n-drop scanning
