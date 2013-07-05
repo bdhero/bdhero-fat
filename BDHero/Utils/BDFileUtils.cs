@@ -22,10 +22,5 @@ namespace BDHero.Utils
 
             return null;
         }
-
-        public static bool ContainsBDROMDirectory([CanBeNull] string path)
-        {
-            return GetBDROMDirectory(path) != null;
-        }
     }
 }
