@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Xml;
+using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.JobQueue;
 using DotNetUtils;
@@ -160,7 +161,7 @@ namespace ChapterGrabberPlugin
             return movieSearchResults;
         }
 
-        static private List<JsonChaps> CompareChapters(List<JsonChaps> apiData, IList<BDHero.BDROM.Chapter> discData)
+        static private List<JsonChaps> CompareChapters(List<JsonChaps> apiData, IList<Chapter> discData)
         {
             var apiResultsFilteredByChapter = apiData.Where(chaps => IsMatch(chaps, discData)).ToList();
             
@@ -194,7 +195,7 @@ namespace ChapterGrabberPlugin
             return false;
         }
 
-        private static bool IsMatch(JsonChaps jsonChaps, IList<BDHero.BDROM.Chapter> chapterDisc)
+        private static bool IsMatch(JsonChaps jsonChaps, IList<Chapter> chapterDisc)
         {
             var chapterCountMatches = jsonChaps.chapterInfo.chapters.chapter.Count == chapterDisc.Count ||
                                       jsonChaps.chapterInfo.chapters.chapter.Count == chapterDisc.Count + 1;
@@ -217,7 +218,7 @@ namespace ChapterGrabberPlugin
             return Math.Abs(timeDisc - timeApi) <= 1.0;
         }
 
-        static private void ReplaceChapters(JsonChaps apiData, IList<BDHero.BDROM.Chapter> discData )
+        static private void ReplaceChapters(JsonChaps apiData, IList<Chapter> discData )
         {
             for (var i=0; i<discData.Count; i++)
             {
