@@ -83,6 +83,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DragUtils.cs" />
+    <Compile Include="Extensions\ListViewItemExtensions.cs" />
     <Compile Include="Extensions\NotifyPropertyChangedExtensions.cs" />
     <Compile Include="Extensions\TextBoxUtils.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
