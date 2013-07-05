@@ -133,13 +133,8 @@ namespace BDHeroGUI.Components
 
         private static void MarkBestChoice(ListViewItem item)
         {
-            item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Bold);
-            AppendToolTip(item, "Best choice based on your preferences");
-        }
-
-        private static void AppendToolTip(ListViewItem item, string text)
-        {
-            item.ToolTipText = string.IsNullOrEmpty(item.ToolTipText) ? text : string.Format("{0}; {1}", item.ToolTipText, text);
+            item.MarkBestChoice();
+            item.AppendToolTip("Best choice based on your preferences");
         }
 
         public void SelectFirstPlaylist()

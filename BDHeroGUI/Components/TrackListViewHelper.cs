@@ -88,27 +88,20 @@ namespace BDHeroGUI.Components
 
         private static void MarkBestChoice(ListViewItem item)
         {
-            item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Bold);
-            AppendToolTip(item, "Best choice based on your preferences");
+            item.MarkBestChoice();
+            item.AppendToolTip("Best choice based on your preferences");
         }
 
         private static void VisuallyDisable(ListViewItem item)
         {
-            item.ForeColor = SystemColors.GrayText;
-            item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Strikeout);
-            AppendToolTip(item, "Unsupported codec: cannot be muxed");
+            item.VisuallyDisable();
+            item.AppendToolTip("Unsupported codec: cannot be muxed");
         }
 
         private static void MarkHidden(ListViewItem item)
         {
-            item.Font = new Font(item.Font, item.Font.Style & ~FontStyle.Regular | FontStyle.Italic);
-            item.Text += " *";
-            AppendToolTip(item, "Hidden track");
-        }
-
-        private static void AppendToolTip(ListViewItem item, string text)
-        {
-            item.ToolTipText = string.IsNullOrEmpty(item.ToolTipText) ? text : string.Format("{0}; {1}", item.ToolTipText, text);
+            item.MarkHidden();
+            item.AppendToolTip("Hidden track");
         }
 
         private ListViewItem[] Transform(IEnumerable<Track> tracks)
