@@ -149,6 +149,46 @@ namespace BDHeroGUI
             _logger.Debug(statusLine);
         }
 
+        #region Stages: Scan & Convert
+
+        private void Scan()
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            _controller.SetEventScheduler();
+
+            // TODO: Let File Namer plugin handle this
+            var outputDirectory = FileUtils.ContainsFileName(textBoxOutput.Text)
+                                      ? Path.GetDirectoryName(textBoxOutput.Text)
+                                      : textBoxOutput.Text;
+            _controller
+                .CreateScanTask(_cancellationTokenSource.Token, textBoxInput.Text, outputDirectory)
+                .Start();
+        }
+
+        private void Convert()
+        {
+            var selectedPlaylist = playlistListView.SelectedPlaylist;
+            if (selectedPlaylist == null)
+            {
+                MessageBox.Show(this, "Please select a playlist to mux", "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Stop);
+                return;
+            }
+
+            _controller.Job.SelectedPlaylistIndex = _controller.Job.Disc.Playlists.IndexOf(selectedPlaylist);
+
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            _controller.SetEventScheduler();
+
+            _controller
+                .CreateConvertTask(_cancellationTokenSource.Token, textBoxOutput.Text)
+                .Start();
+        }
+
+        #endregion
+
         #region Scan stage - event handling
 
         private void ControllerOnScanStarted(object sender, EventArgs eventArgs)
@@ -279,46 +319,6 @@ namespace BDHeroGUI
         private void ControllerOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
             MessageBox.Show(this, args.ExceptionObject.ToString(), "BDHero Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-        #endregion
-
-        #region Stages: Scan & Convert
-
-        private void Scan()
-        {
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            _controller.SetEventScheduler();
-
-            // TODO: Let File Namer plugin handle this
-            var outputDirectory = FileUtils.ContainsFileName(textBoxOutput.Text)
-                                      ? Path.GetDirectoryName(textBoxOutput.Text)
-                                      : textBoxOutput.Text;
-            _controller
-                .CreateScanTask(_cancellationTokenSource.Token, textBoxInput.Text, outputDirectory)
-                .Start();
-        }
-
-        private void Convert()
-        {
-            var selectedPlaylist = playlistListView.SelectedPlaylist;
-            if (selectedPlaylist == null)
-            {
-                MessageBox.Show(this, "Please select a playlist to mux", "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Stop);
-                return;
-            }
-
-            _controller.Job.SelectedPlaylistIndex = _controller.Job.Disc.Playlists.IndexOf(selectedPlaylist);
-
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            _controller.SetEventScheduler();
-
-            _controller
-                .CreateConvertTask(_cancellationTokenSource.Token, textBoxOutput.Text)
-                .Start();
         }
 
         #endregion
