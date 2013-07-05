@@ -16,8 +16,6 @@ Bugs
 Features
 ========
 
-[ ] Don't load AppData plugins when *.vhost.exe is present in PluginService.cs
-
 [ ] Update output MKV path when user's selection changes
 [ ] Switch to "Save File" dialog for output MKV path
 [ ] Split output MKV path into directory and file name
@@ -66,6 +64,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Don't load AppData plugins when *.vhost.exe is present in PluginService.cs
 [X] Drag-n-drop scanning
 [X] Scan automatically after Browse
 [X] NPE when scanning CASINO_ROYAL:
