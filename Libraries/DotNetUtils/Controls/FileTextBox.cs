@@ -88,14 +88,24 @@ namespace DotNetUtils.Controls
         [DefaultValue(true)]
         public bool OverwritePrompt { get; set; }
 
+        /// <summary>
+        /// Triggered whenever the value of the TextBox changes.
+        /// </summary>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler TextChanged;
 
+        /// <summary>
+        /// Triggered when the <see cref="SelectedPath"/> changes after the user selects a new path
+        /// from the dialog box and presses "Select" (or "Save").
+        /// </summary>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
         public event EventHandler SelectedPathChanged;
 
+        /// <summary>
+        /// Constructs a new FileTextBox component.
+        /// </summary>
         public FileTextBox()
         {
             InitializeComponent();
