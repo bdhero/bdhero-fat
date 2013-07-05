@@ -103,6 +103,22 @@ namespace DotNetUtils.Controls
             buttonBrowse.Click += ShowDialog;
         }
 
+        /// <summary>
+        /// Highlights the TextBox by changing its <see cref="BorderStyle"/>.
+        /// </summary>
+        public void Highlight()
+        {
+            textBoxPath.Highlight();
+        }
+
+        /// <summary>
+        /// Removes highlighting from the TextBox by reverting its <see cref="BorderStyle"/> back to its original value.
+        /// </summary>
+        public void UnHighlight()
+        {
+            textBoxPath.UnHighlight();
+        }
+
         protected override void OnTextChanged(EventArgs e)
         {
             if (TextChanged != null)
