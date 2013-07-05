@@ -24,6 +24,12 @@ namespace BDHero.Plugin
         /// </summary>
         public const double DefaultIntervalMs = 250;
 
+        /// <summary>
+        /// Shortest amount of time allowed between progress updates when the underlying Plugin
+        /// is generating extremely frequent updates.
+        /// </summary>
+        public const double MinIntervalMs = 100;
+
         #endregion
 
         #region Public getters and setters
@@ -141,14 +147,27 @@ namespace BDHero.Plugin
         /// </summary>
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
+        /// <summary>
+        /// Rate-limits calls to <see cref="Updated"/> event handlers.
+        /// </summary>
+        private readonly Timer _notifyTimer;
+
         #endregion
 
         #region Constructors and initialization
 
         public ProgressProvider()
         {
-            _timer = new Timer(DefaultIntervalMs);
+            _timer = new Timer(DefaultIntervalMs) { AutoReset = true };
             _timer.Elapsed += Tick;
+
+            _notifyTimer = new Timer(MinIntervalMs) { AutoReset = false };
+            _notifyTimer.Elapsed += delegate
+                {
+                    if (Updated != null)
+                        Updated(this);
+                };
+
             Reset();
         }
 
@@ -182,14 +201,19 @@ namespace BDHero.Plugin
             LogMethod(method, MethodEntry.Exiting);
         }
 
+        private void Update()
+        {
+            if (!_notifyTimer.Enabled)
+                _notifyTimer.Start();
+        }
+
         private void Tick(object sender = null, ElapsedEventArgs elapsedEventArgs = null)
         {
             LogMethodEntry();
 
             CalculateTimeRemaining();
 
-            if (Updated != null)
-                Updated(this);
+            Update();
 
             SetLastTick();
 
@@ -203,8 +227,7 @@ namespace BDHero.Plugin
             PercentComplete = percentComplete;
             Status = status;
 
-            if (Updated != null)
-                Updated(this);
+            Update();
 
             LogMethodExit();
         }
@@ -252,8 +275,7 @@ namespace BDHero.Plugin
             if (Started != null)
                 Started(this);
 
-            if (Updated != null)
-                Updated(this);
+            Update();
 
             LogMethodExit();
         }
@@ -280,8 +302,7 @@ namespace BDHero.Plugin
             if (Resumed != null)
                 Resumed(this);
 
-            if (Updated != null)
-                Updated(this);
+            Update();
 
             LogMethodExit();
         }
@@ -306,8 +327,7 @@ namespace BDHero.Plugin
             if (Paused != null)
                 Paused(this);
 
-            if (Updated != null)
-                Updated(this);
+            Update();
 
             LogMethodExit();
         }
@@ -335,8 +355,7 @@ namespace BDHero.Plugin
             if (Completed != null)
                 Completed(this);
 
-            if (Updated != null)
-                Updated(this);
+            Update();
 
             LogMethodExit();
         }
@@ -366,8 +385,7 @@ namespace BDHero.Plugin
             if (Completed != null)
                 Completed(this);
 
-            if (Updated != null)
-                Updated(this);
+            Update();
 
             LogMethodExit();
         }
@@ -396,8 +414,7 @@ namespace BDHero.Plugin
             if (Completed != null)
                 Completed(this);
 
-            if (Updated != null)
-                Updated(this);
+            Update();
 
             LogMethodExit();
         }
