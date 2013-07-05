@@ -53,29 +53,23 @@ namespace BDHero.Plugin
             // First empty the collection, we're reloading them all
             UnloadPlugins();
 
-            AddPluginsRecursive(path);
-
-#if false
-            var programDataRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            var programDataPluginDir = GetPluginDir(programDataRoot);
-
-            var appDataRoot = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var appDataPluginDir = GetPluginDir(appDataRoot);
-
-            AddPluginsRecursive(AppDomain.CurrentDomain.BaseDirectory);
-            AddPluginsRecursive(programDataPluginDir);
-            AddPluginsRecursive(appDataPluginDir);
-#endif
+            var load = true;
 
 #if DEBUG
-            // Only load plugins from other project if running in bin\Debug directory
+            // If running in Visual Studio, load plugins from project bin dirs
             var installDir = AssemblyUtils.GetInstallDir();
             var vhostFiles = Directory.GetFiles(installDir, "*.vshost.exe", SearchOption.TopDirectoryOnly);
             if (vhostFiles.Any())
             {
                 LoadDevPlugins();
+                load = false;
             }
 #endif
+
+            if (load)
+            {
+                AddPluginsRecursive(path);
+            }
         }
 
 #if DEBUG
@@ -85,8 +79,8 @@ namespace BDHero.Plugin
             var solutionDir = GetSolutionDirPath();
             var projects = new[]
                 {
-                    "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin", "FFmpegMuxerPlugin",
-                    "FileNamerPlugin", "MKVMergeMuxerPlugin", "TmdbPlugin"
+                    "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin",
+                    "FFmpegMuxerPlugin", "FileNamerPlugin", "MKVMergeMuxerPlugin", "TmdbPlugin"
                 };
             foreach (var projectName in projects)
             {
@@ -95,7 +89,7 @@ namespace BDHero.Plugin
                     var pluginDir = Path.Combine(solutionDir, "Plugins", projectName, "bin", "Debug");
                     AddPluginsRecursive(pluginDir);
                 }
-                catch (Exception ex)
+                catch
                 {
                 }
             }
