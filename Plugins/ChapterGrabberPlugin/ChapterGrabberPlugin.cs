@@ -191,7 +191,7 @@ namespace ChapterGrabberPlugin
             TimeSpan parsed;
             if (TimeSpan.TryParse(trimmed, out parsed))
                 return true;
-            if (Regex.IsMatch(trimmed, @"^(Chapter\s*)?[0-9]+$", RegexOptions.IgnoreCase))
+            if (Regex.IsMatch(trimmed, @"^(?:Chapter|Kapitel)?\s*[0-9]+\s*$", RegexOptions.IgnoreCase))
                 return true;
             return false;
         }
