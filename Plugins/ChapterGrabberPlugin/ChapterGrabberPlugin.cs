@@ -40,7 +40,6 @@ namespace ChapterGrabberPlugin
         {
         }
 
-
         public void GetMetadata(CancellationToken cancellationToken, Job job)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -69,6 +68,8 @@ namespace ChapterGrabberPlugin
                     var apiValues = CompareChapters(apiResults, moviePlaylist.Chapters);
                     if (apiValues != null && apiValues.Count > 0)
                     {
+                        StoreSearchResults(apiValues, moviePlaylist);
+
                         // To Do:  Allow the user to select which chapter list to use when 
                         // defaulted to [0] first chapter list that matches filter criteria
                         ReplaceChapters(apiValues[0], moviePlaylist.Chapters);
@@ -83,6 +84,23 @@ namespace ChapterGrabberPlugin
                 return;
 
             Host.ReportProgress(this, 100.0, "Finished querying ChapterDb.org");
+        }
+
+        private static void StoreSearchResults(IEnumerable<JsonChaps> searchResults, Playlist playlist)
+        {
+            var validResults = searchResults.Where(chaps => IsMatch(chaps, playlist.Chapters)).Where(IsValid).ToArray();
+            playlist.ChapterSearchResults = validResults.Select(searchResult => Transform(searchResult, playlist)).ToList();
+        }
+
+        private static IList<Chapter> Transform(JsonChaps searchResult, Playlist playlist)
+        {
+            var jsonChapters = searchResult.chapterInfo.chapters.chapter;
+            return jsonChapters.Take(playlist.ChapterCount).Select(Transform).ToList();
+        }
+
+        private static Chapter Transform(JsonChapter jsonChapter, int i)
+        {
+            return new Chapter(i, jsonChapter.time.TotalSeconds) {Title = jsonChapter.name};
         }
 
         static private List<JsonChaps> GetChapters(string movieName)
