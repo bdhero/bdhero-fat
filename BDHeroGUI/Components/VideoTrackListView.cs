@@ -31,7 +31,7 @@ namespace BDHeroGUI.Components
         {
             return new[]
                 {
-                    new ListViewCell { Text = track.Codec.CommonName },
+                    new ListViewCell { Text = track.Codec.DisplayName },
                     new ListViewCell { Text = track.VideoFormatDisplayable },
                     new ListViewCell { Text = track.FrameRateDisplayable },
                     new ListViewCell { Text = track.AspectRatioDisplayable },
