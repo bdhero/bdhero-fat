@@ -36,13 +36,13 @@ namespace BDHeroGUI
             this.textBoxStatus = new System.Windows.Forms.TextBox();
             this.buttonScan = new System.Windows.Forms.Button();
             this.buttonCancelScan = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
-            this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
             this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
+            this.checkBoxShowAllPlaylists = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.linkLabelShowFilterWindow = new DotNetUtils.Controls.LinkLabel2();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
             this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
@@ -108,24 +108,15 @@ namespace BDHeroGUI
             this.buttonCancelScan.UseVisualStyleBackColor = true;
             this.buttonCancelScan.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(0, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Playlists:";
-            // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(14, 422);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(71, 13);
+            this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 12;
-            this.label2.Text = "Output folder:";
+            this.label2.Text = "Output MKV file:";
             // 
             // buttonCancelConvert
             // 
@@ -149,18 +140,6 @@ namespace BDHeroGUI
             this.buttonConvert.Text = "Convert";
             this.buttonConvert.UseVisualStyleBackColor = true;
             this.buttonConvert.Click += new System.EventHandler(this.buttonConvert_Click);
-            // 
-            // checkBoxShowAllPlaylists
-            // 
-            this.checkBoxShowAllPlaylists.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxShowAllPlaylists.AutoSize = true;
-            this.checkBoxShowAllPlaylists.Location = new System.Drawing.Point(663, 86);
-            this.checkBoxShowAllPlaylists.Name = "checkBoxShowAllPlaylists";
-            this.checkBoxShowAllPlaylists.Size = new System.Drawing.Size(66, 17);
-            this.checkBoxShowAllPlaylists.TabIndex = 1;
-            this.checkBoxShowAllPlaylists.Text = "Show &all";
-            this.checkBoxShowAllPlaylists.UseVisualStyleBackColor = true;
-            this.checkBoxShowAllPlaylists.CheckedChanged += new System.EventHandler(this.checkBoxShowAllPlaylists_CheckedChanged);
             // 
             // splitContainerMain
             // 
@@ -197,6 +176,27 @@ namespace BDHeroGUI
             this.playlistListView.Size = new System.Drawing.Size(771, 66);
             this.playlistListView.TabIndex = 0;
             // 
+            // checkBoxShowAllPlaylists
+            // 
+            this.checkBoxShowAllPlaylists.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxShowAllPlaylists.AutoSize = true;
+            this.checkBoxShowAllPlaylists.Location = new System.Drawing.Point(663, 86);
+            this.checkBoxShowAllPlaylists.Name = "checkBoxShowAllPlaylists";
+            this.checkBoxShowAllPlaylists.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxShowAllPlaylists.TabIndex = 1;
+            this.checkBoxShowAllPlaylists.Text = "Show &all";
+            this.checkBoxShowAllPlaylists.UseVisualStyleBackColor = true;
+            this.checkBoxShowAllPlaylists.CheckedChanged += new System.EventHandler(this.checkBoxShowAllPlaylists_CheckedChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(0, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(47, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Playlists:";
+            // 
             // linkLabelShowFilterWindow
             // 
             this.linkLabelShowFilterWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -223,14 +223,14 @@ namespace BDHeroGUI
             // 
             this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutput.DialogTitle = "Save MKV file to folder:";
-            this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
-            this.textBoxOutput.Location = new System.Drawing.Point(100, 417);
+            this.textBoxOutput.DialogTitle = "Save MKV file:";
+            this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.SaveFile;
+            this.textBoxOutput.Location = new System.Drawing.Point(104, 417);
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.OverwritePrompt = false;
-            this.textBoxOutput.SelectedPath = "X:\\BDHero\\";
+            this.textBoxOutput.SelectedPath = "W:\\BDHero\\test.mkv";
             this.textBoxOutput.ShowNewFolderButton = false;
-            this.textBoxOutput.Size = new System.Drawing.Size(527, 24);
+            this.textBoxOutput.Size = new System.Drawing.Size(523, 24);
             this.textBoxOutput.TabIndex = 4;
             // 
             // progressBar
@@ -256,12 +256,12 @@ namespace BDHeroGUI
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxInput.DialogTitle = "Select a BD-ROM folder:";
             this.textBoxInput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
-            this.textBoxInput.Location = new System.Drawing.Point(100, 13);
+            this.textBoxInput.Location = new System.Drawing.Point(104, 13);
             this.textBoxInput.Name = "textBoxInput";
             this.textBoxInput.OverwritePrompt = false;
-            this.textBoxInput.SelectedPath = "X:\\BD\\49123204_BLACK_HAWK_DOWN";
+            this.textBoxInput.SelectedPath = "W:\\BD\\49123204_BLACK_HAWK_DOWN";
             this.textBoxInput.ShowNewFolderButton = false;
-            this.textBoxInput.Size = new System.Drawing.Size(527, 24);
+            this.textBoxInput.Size = new System.Drawing.Size(523, 24);
             this.textBoxInput.TabIndex = 0;
             // 
             // FormMain
