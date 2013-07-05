@@ -147,12 +147,19 @@ namespace BDHero.Plugin
         /// </summary>
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
-        private DateTime _lastUpdate;
+        /// <summary>
+        /// The last time <see cref="Updated"/> event handlers were notified of a progress update.
+        /// </summary>
+        private DateTime _lastNotified;
+
+        /// <summary>
+        /// The previous state of the provider
+        /// </summary>
         private ProgressProviderState _lastState;
 
         #endregion
 
-        #region Constructors and initialization
+        #region Constructor
 
         public ProgressProvider()
         {
@@ -163,6 +170,8 @@ namespace BDHero.Plugin
         }
 
         #endregion
+
+        #region Logging
 
         private enum MethodEntry
         {
@@ -192,7 +201,9 @@ namespace BDHero.Plugin
             LogMethod(method, MethodEntry.Exiting);
         }
 
-        #region Update event notification
+        #endregion
+
+        #region Update notification
 
         private void NotifyObservers()
         {
@@ -201,7 +212,7 @@ namespace BDHero.Plugin
             if (Updated != null)
                 Updated(this);
 
-            _lastUpdate = DateTime.Now;
+            _lastNotified = DateTime.Now;
             _lastState = State;
         }
 
@@ -222,36 +233,110 @@ namespace BDHero.Plugin
 
         private bool HasMinIntervalElapsed
         {
-            get { return (DateTime.Now - _lastUpdate).TotalMilliseconds >= MinIntervalMs; }
+            get { return (DateTime.Now - _lastNotified).TotalMilliseconds >= MinIntervalMs; }
         }
 
         #endregion
 
+        #region Timer methods
+
+        /// <summary>
+        /// Called by <see cref="_timer"/> whenever its interval elapses.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="elapsedEventArgs"></param>
         private void Tick(object sender = null, ElapsedEventArgs elapsedEventArgs = null)
         {
             LogMethodEntry();
 
             CalculateTimeRemaining();
-
             NotifyObservers();
-
             SetLastTick();
 
             LogMethodExit();
         }
 
-        public void Update(double percentComplete, string status)
+        private void SetLastTick()
         {
-            LogMethodEntry();
-
-            PercentComplete = percentComplete;
-            Status = status;
-
-            NotifyObservers();
-
-            LogMethodExit();
+            lock (_lock)
+            {
+                _lastTick = DateTime.Now;
+            }
         }
 
+        private void CalculateTimeRemaining()
+        {
+            lock (_lock)
+            {
+                var lastTick = _lastTick;
+
+                if (_lastCalculationTick == lastTick)
+                    return;
+
+                LogMethodEntry();
+
+                var ticks = RunTime.Ticks;
+
+                // Thread safety :-)
+                var percentComplete = PercentComplete;
+
+                // 0.0 to 1.0
+                var pct = percentComplete / 100;
+
+                // Previously calculated estimate from the last tick
+                var oldEstimate = TimeRemaining;
+
+                // Fresh estimate (might be jerky)
+                var newEstimate = TimeSpan.Zero;
+
+                // The final estimate value that will actually be used
+                var finalEstimate = oldEstimate;
+
+                // Make sure progress percentage is within legal bounds (0%, 100%)
+                if (pct > 0 && pct < 1)
+                    newEstimate = new TimeSpan((long)(ticks / pct) - ticks);
+
+                // Make sure the user gets fresh calculations when the process is first started and when it's nearly finished.
+                var criticalThreshold = TimeSpan.FromMinutes(1.25);
+                var isCriticalPeriod = percentComplete < .5 || percentComplete > 95 || oldEstimate < criticalThreshold || newEstimate < criticalThreshold;
+
+                // If the new estimate differs from the previous estimate by more than 2 minutes, use the new estimate.
+                var changeThreshold = pct < 0.2 ? TimeSpan.FromMinutes(2) : TimeSpan.FromSeconds(20);
+                var isLargeChange = Math.Abs(newEstimate.TotalSeconds - oldEstimate.TotalSeconds) > changeThreshold.TotalSeconds;
+
+                // If the previous estimate was less than 1 second remaining, use the new estimate.
+                var lowPreviousEstimate = oldEstimate.TotalMilliseconds < 1000;
+
+                // Use the new estimate
+                if (isCriticalPeriod || isLargeChange || lowPreviousEstimate)
+                {
+                    finalEstimate = newEstimate;
+                }
+                // Decrement the previous estimate by roughly 1 second
+                else
+                {
+                    finalEstimate -= (DateTime.Now - lastTick);
+                }
+
+                // If the estimate dips below 0, set it to 30 seconds
+                if (finalEstimate.TotalMilliseconds < 0)
+                    finalEstimate = TimeSpan.FromSeconds(30);
+
+                TimeRemaining = finalEstimate;
+
+                _lastCalculationTick = lastTick;
+
+                LogMethodExit();
+            }
+        }
+
+        #endregion
+
+        #region State change methods (start, stop, reset, etc.)
+
+        /// <summary>
+        /// Resets the provider's state to its initial values.
+        /// </summary>
         public void Reset()
         {
             LogMethodEntry();
@@ -439,78 +524,23 @@ namespace BDHero.Plugin
             LogMethodExit();
         }
 
-        private void SetLastTick()
+        #endregion
+
+        /// <summary>
+        /// Called by <see cref="IPluginHost"/> whenever an <see cref="IPlugin"/> reports a progress update.
+        /// </summary>
+        /// <param name="percentComplete">0.0 to 100.0</param>
+        /// <param name="status">Description of what the plugin is currently doing</param>
+        public void Update(double percentComplete, string status)
         {
-            lock (_lock)
-            {
-                _lastTick = DateTime.Now;
-            }
-        }
+            LogMethodEntry();
 
-        private void CalculateTimeRemaining()
-        {
-            lock (_lock)
-            {
-                var lastTick = _lastTick;
+            PercentComplete = percentComplete;
+            Status = status;
 
-                if (_lastCalculationTick == lastTick)
-                    return;
+            NotifyObservers();
 
-                LogMethodEntry();
-
-                var ticks = RunTime.Ticks;
-
-                // Thread safety :-)
-                var percentComplete = PercentComplete;
-
-                // 0.0 to 1.0
-                var pct = percentComplete / 100;
-
-                // Previously calculated estimate from the last tick
-                var oldEstimate = TimeRemaining;
-
-                // Fresh estimate (might be jerky)
-                var newEstimate = TimeSpan.Zero;
-
-                // The final estimate value that will actually be used
-                var finalEstimate = oldEstimate;
-
-                // Make sure progress percentage is within legal bounds (0%, 100%)
-                if (pct > 0 && pct < 1)
-                    newEstimate = new TimeSpan((long)(ticks / pct) - ticks);
-
-                // Make sure the user gets fresh calculations when the process is first started and when it's nearly finished.
-                var criticalThreshold = TimeSpan.FromMinutes(1.25);
-                var isCriticalPeriod = percentComplete < .5 || percentComplete > 95 || oldEstimate < criticalThreshold || newEstimate < criticalThreshold;
-
-                // If the new estimate differs from the previous estimate by more than 2 minutes, use the new estimate.
-                var changeThreshold = pct < 0.2 ? TimeSpan.FromMinutes(2) : TimeSpan.FromSeconds(20);
-                var isLargeChange = Math.Abs(newEstimate.TotalSeconds - oldEstimate.TotalSeconds) > changeThreshold.TotalSeconds;
-
-                // If the previous estimate was less than 1 second remaining, use the new estimate.
-                var lowPreviousEstimate = oldEstimate.TotalMilliseconds < 1000;
-
-                // Use the new estimate
-                if (isCriticalPeriod || isLargeChange || lowPreviousEstimate)
-                {
-                    finalEstimate = newEstimate;
-                }
-                // Decrement the previous estimate by roughly 1 second
-                else
-                {
-                    finalEstimate -= (DateTime.Now - lastTick);
-                }
-
-                // If the estimate dips below 0, set it to 30 seconds
-                if (finalEstimate.TotalMilliseconds < 0)
-                    finalEstimate = TimeSpan.FromSeconds(30);
-
-                TimeRemaining = finalEstimate;
-
-                _lastCalculationTick = lastTick;
-
-                LogMethodExit();
-            }
+            LogMethodExit();
         }
 
         public override int GetHashCode()
