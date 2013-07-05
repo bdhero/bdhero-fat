@@ -96,6 +96,11 @@ namespace BDHero.BDROM
 
         public IList<Chapter> Chapters = new List<Chapter>();
 
+        /// <summary>
+        /// List of possible chapter matches that the user can choose from.
+        /// </summary>
+        public IList<IList<Chapter>> ChapterSearchResults = new List<IList<Chapter>>();
+
         #endregion
 
         #region Non-DB Flags (max quality, duplicate, loops, hidden first tracks, bogus)
