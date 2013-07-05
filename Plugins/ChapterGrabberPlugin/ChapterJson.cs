@@ -5,6 +5,9 @@ using System.Text;
 
 namespace ChapterGrabberPlugin
 {
+    /// <summary>
+    /// Represents a single search result (i.e., a user submission) from ChapterDb.org.
+    /// </summary>
     public class JsonChaps
     {
         public ChapterInfo chapterInfo { get; set; }
