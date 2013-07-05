@@ -16,7 +16,6 @@ Features
 ========
 
 [ ] Update output MKV path when user's selection changes
-[ ] Switch to "Save File" dialog for output MKV path
 [ ] Split output MKV path into directory and file name
 [ ] File Namer placeholders
     [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
@@ -57,12 +56,14 @@ Chris' Plugins
     Scene 2
     Scene 3
 [ ] URI encoding (e.g., http://chapterdb.org/chapters/search?title=BLACK HAWK DOWN&chapterCount=0)
+[ ] Unescape XML/HTML entities (e.g., "&amp;" -> "&")
 [ ] Search ALL media types in Chapter Grabber plugin (not just Blu-ray)
 [ ] Use chapter grabber plugin to auto-detect main movie by comparing playlists to ChapterDb search results
 
 Complete
 ========
 
+[X] Switch to "Save File" dialog for output MKV path
 [X] MIRROR_MIRROR_BD doesn't auto-detect any Main Feature playlists
 [X] GUI repaints but does not respond to user input while scanning disc.  Thread queue?
 [X] Don't load AppData plugins when *.vhost.exe is present in PluginService.cs
