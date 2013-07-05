@@ -147,10 +147,8 @@ namespace BDHero.Plugin
         /// </summary>
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
-        /// <summary>
-        /// Rate-limits calls to <see cref="Updated"/> event handlers.
-        /// </summary>
-        private readonly Timer _notifyTimer;
+        private DateTime _lastUpdate;
+        private ProgressProviderState _lastState;
 
         #endregion
 
@@ -160,13 +158,6 @@ namespace BDHero.Plugin
         {
             _timer = new Timer(DefaultIntervalMs) { AutoReset = true };
             _timer.Elapsed += Tick;
-
-            _notifyTimer = new Timer(MinIntervalMs) { AutoReset = false };
-            _notifyTimer.Elapsed += delegate
-                {
-                    if (Updated != null)
-                        Updated(this);
-                };
 
             Reset();
         }
@@ -203,8 +194,15 @@ namespace BDHero.Plugin
 
         private void Update()
         {
-            if (!_notifyTimer.Enabled)
-                _notifyTimer.Start();
+            if (State != _lastState ||
+                PercentComplete > 95 ||
+                (DateTime.Now - _lastUpdate).TotalMilliseconds >= MinIntervalMs)
+            {
+                if (Updated != null)
+                    Updated(this);
+                _lastUpdate = DateTime.Now;
+                _lastState = State;
+            }
         }
 
         private void Tick(object sender = null, ElapsedEventArgs elapsedEventArgs = null)
