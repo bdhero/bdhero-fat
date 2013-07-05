@@ -314,20 +314,9 @@ namespace BDHeroGUI
 
         #region UI controls - event handling
 
-        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
-        {
-            buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
-            tracksPanel.Playlist = playlistListView.SelectedPlaylist;
-        }
-
         private void buttonScan_Click(object sender, EventArgs e)
         {
             Scan();
-        }
-
-        private void buttonConvert_Click(object sender, EventArgs e)
-        {
-            Convert();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -335,9 +324,10 @@ namespace BDHeroGUI
             _cancellationTokenSource.Cancel();
         }
 
-        private void buttonCancelConvert_Click(object sender, EventArgs e)
+        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
         {
-            _cancellationTokenSource.Cancel();
+            buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
+            tracksPanel.Playlist = playlistListView.SelectedPlaylist;
         }
 
         private void linkLabelShowFilterWindow_Click(object sender, EventArgs e)
@@ -354,6 +344,16 @@ namespace BDHeroGUI
         {
             _showAllPlaylists = checkBoxShowAllPlaylists.Checked;
             RefreshPlaylists();
+        }
+
+        private void buttonConvert_Click(object sender, EventArgs e)
+        {
+            Convert();
+        }
+
+        private void buttonCancelConvert_Click(object sender, EventArgs e)
+        {
+            _cancellationTokenSource.Cancel();
         }
 
         #endregion
