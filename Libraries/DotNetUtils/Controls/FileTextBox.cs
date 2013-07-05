@@ -11,6 +11,10 @@ using DotNetUtils.Extensions;
 
 namespace DotNetUtils.Controls
 {
+    /// <summary>
+    /// Simple wrapper control that contains a <see cref="TextBox"/> and a "Browse" <see cref="Button"/>
+    /// to let users select files or folders from standard system dialogs.
+    /// </summary>
     public partial class FileTextBox : UserControl
     {
         /// <summary>
