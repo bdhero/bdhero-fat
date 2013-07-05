@@ -263,6 +263,7 @@ namespace BDHeroGUI
             this.textBoxInput.ShowNewFolderButton = false;
             this.textBoxInput.Size = new System.Drawing.Size(523, 24);
             this.textBoxInput.TabIndex = 0;
+            this.textBoxInput.SelectedPathChanged += new System.EventHandler(this.textBoxInput_SelectedPathChanged);
             // 
             // FormMain
             // 

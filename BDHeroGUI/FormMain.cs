@@ -314,6 +314,11 @@ namespace BDHeroGUI
 
         #region UI controls - event handling
 
+        private void textBoxInput_SelectedPathChanged(object sender, EventArgs e)
+        {
+            Scan();
+        }
+
         private void buttonScan_Click(object sender, EventArgs e)
         {
             Scan();
