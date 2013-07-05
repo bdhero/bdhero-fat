@@ -90,6 +90,15 @@ namespace DotNetUtils.Controls
         public bool OverwritePrompt { get; set; }
 
         /// <summary>
+        /// Gets or sets the BorderStyle of the TextBox.
+        /// </summary>
+        public new BorderStyle BorderStyle
+        {
+            get { return textBoxPath.BorderStyle; }
+            set { textBoxPath.BorderStyle = value; }
+        }
+
+        /// <summary>
         /// Triggered whenever the value of the TextBox changes.
         /// </summary>
         [Browsable(true)]
