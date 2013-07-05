@@ -17,7 +17,6 @@ Features
 ========
 
 [ ] Drag-n-drop scanning
-[ ] Scan automatically after Browse
 
 [ ] Don't load AppData plugins when *.vhost.exe is present in PluginService.cs
 
@@ -69,6 +68,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Scan automatically after Browse
 [X] NPE when scanning CASINO_ROYAL:
     2013-07-01 00:59:14,967 [1176][1] ERROR BDHero.Controller - Unhandled exception was thrown by plugin
     System.NullReferenceException: Object reference not set to an instance of an object.
