@@ -74,7 +74,7 @@ namespace DotNetUtils.Controls
 
         /// <summary>
         /// Gets or sets whether the user can select multiple files or directories.
-        /// Only applies when <see cref="DialogType"/> is set to <see cref="Controls.DialogType.OpenFile"/> or <see cref="Controls.DialogType.OpenFileOrDirectory"/>.
+        /// Only applies when <see cref="DialogType"/> is set to <see cref="Controls.DialogType.OpenFile"/> or <see cref="Controls.DialogType.OpenDirectory"/>.
         /// </summary>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
