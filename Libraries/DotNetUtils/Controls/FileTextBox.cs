@@ -88,6 +88,14 @@ namespace DotNetUtils.Controls
         [DefaultValue(true)]
         public bool OverwritePrompt { get; set; }
 
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public new event EventHandler TextChanged;
+
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public event EventHandler SelectedPathChanged;
+
         public FileTextBox()
         {
             InitializeComponent();
@@ -95,17 +103,34 @@ namespace DotNetUtils.Controls
             buttonBrowse.Click += ShowDialog;
         }
 
+        protected override void OnTextChanged(EventArgs e)
+        {
+            if (TextChanged != null)
+                TextChanged(this, e);
+        }
+
+        private void OnSelectedPathChanged(EventArgs e)
+        {
+            if (SelectedPathChanged != null)
+                SelectedPathChanged(this, e);
+        }
+
         private void ShowDialog(object sender, EventArgs e)
         {
             var dialog = CreateDialog();
+
             if (!string.IsNullOrEmpty(SelectedPath))
             {
                 dialog.SelectedPath = SelectedPath;
             }
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                SelectedPath = dialog.SelectedPath;
-            }
+
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+
+            var prevPath = SelectedPath;
+            SelectedPath = dialog.SelectedPath;
+
+            if (prevPath != SelectedPath)
+                OnSelectedPathChanged(EventArgs.Empty);
         }
 
         private IDialog CreateDialog()
