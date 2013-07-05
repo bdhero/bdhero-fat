@@ -12,6 +12,7 @@ using BDHero.Utils;
 using BDHeroGUI.Annotations;
 using BDHeroGUI.Forms;
 using DotNetUtils;
+using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
 using OSUtils.TaskbarUtils;
 using WindowsOSUtils.TaskbarUtils;
@@ -71,6 +72,15 @@ namespace BDHeroGUI
             InitController();
             EnableControls(true);
             this.EnableSelectAll();
+
+            textBoxOutput.FileExtensions = new[]
+                {
+                    new FileExtension
+                        {
+                            Description = "Matroska video file",
+                            Extensions = new[] {".mkv"}
+                        }
+                };
         }
 
         #region Initialization
