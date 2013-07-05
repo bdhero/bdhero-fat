@@ -186,6 +186,8 @@ namespace ChapterGrabberPlugin
         private static bool IsInvalidChapter(JsonChapter jsonChapter)
         {
             var trimmed = jsonChapter.name.Trim();
+            if (string.IsNullOrWhiteSpace(trimmed))
+                return true;
             TimeSpan parsed;
             var timespan = TimeSpan.TryParse(trimmed, out parsed);
             if (timespan)
