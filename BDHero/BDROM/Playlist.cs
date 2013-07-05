@@ -343,7 +343,7 @@ namespace BDHero.BDROM
                 IsMaxQuality &&
                 IsFeatureLength(maxPlaylistLength) &&
                 VideoTracks.Count >= 1 &&
-                AudioTracks.Count >= 2 /* or >= 1? */ &&
+                AudioTracks.Count >= 1 &&
                 SubtitleTracks.Count >= 1 &&
                 Chapters.Count >= 2 &&
                 Length > MinLength;
