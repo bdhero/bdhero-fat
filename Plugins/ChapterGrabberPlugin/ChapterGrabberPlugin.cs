@@ -14,7 +14,7 @@ using System.IO;
 
 namespace ChapterGrabberPlugin
 {
-    public class ChapterGrabberPlugin : INameProviderPlugin
+    public class ChapterGrabberPlugin : IMetadataProviderPlugin
     {
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -40,7 +40,7 @@ namespace ChapterGrabberPlugin
         }
 
 
-        public void Rename(CancellationToken cancellationToken, Job job)
+        public void GetMetadata(CancellationToken cancellationToken, Job job)
         {
             if (cancellationToken.IsCancellationRequested)
                 return;
