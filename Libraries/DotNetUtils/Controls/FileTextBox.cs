@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -90,6 +91,21 @@ namespace DotNetUtils.Controls
         public bool OverwritePrompt { get; set; }
 
         /// <summary>
+        /// Gets or sets a list of file extensions to allow the user to open/save.
+        /// </summary>
+        public FileExtension[] FileExtensions { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the "Browse" file dialog should allow the user to open/save files with any file extension (*.*),
+        /// even if the extension is not in the list of <see cref="FileExtensions"/>.
+        /// Only applies when <see cref="DialogType"/> is set to <see cref="Controls.DialogType.OpenFile"/> or <see cref="Controls.DialogType.SaveFile"/>.
+        /// </summary>
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DefaultValue(true)]
+        public bool AllowAnyExtension { get; set; }
+
+        /// <summary>
         /// Gets or sets the BorderStyle of the TextBox.
         /// </summary>
         public new BorderStyle BorderStyle
@@ -119,6 +135,9 @@ namespace DotNetUtils.Controls
         public FileTextBox()
         {
             InitializeComponent();
+
+            AllowAnyExtension = true;
+
             textBoxPath.TextChanged += (sender, args) => OnTextChanged(args);
             buttonBrowse.Click += ShowDialog;
         }
@@ -176,11 +195,15 @@ namespace DotNetUtils.Controls
                 case DialogType.OpenFile:
                     return new OpenFileDialog2
                         {
+                            AllowAnyExtension = AllowAnyExtension,
+                            FileExtensions = FileExtensions,
                             Title = DialogTitle
                         };
                 case DialogType.SaveFile:
                     return new SaveFileDialog2
                         {
+                            AllowAnyExtension = AllowAnyExtension,
+                            FileExtensions = FileExtensions,
                             OverwritePrompt = OverwritePrompt,
                             Title = DialogTitle
                         };
@@ -205,6 +228,7 @@ namespace DotNetUtils.Controls
     class OpenFileDialog2 : IDialog
     {
         private readonly OpenFileDialog _dialog = new OpenFileDialog();
+        private FileExtension[] _fileExtensions;
 
         public OpenFileDialog2()
         {
@@ -212,6 +236,32 @@ namespace DotNetUtils.Controls
             _dialog.CheckPathExists = true;
             _dialog.DereferenceLinks = true;
             _dialog.Multiselect = false;
+        }
+
+        public FileExtension[] FileExtensions
+        {
+            get { return _fileExtensions; }
+            set
+            {
+                _fileExtensions = value;
+                SetFilter();
+            }
+        }
+
+        public bool AllowAnyExtension { get; set; }
+
+        private void SetFilter()
+        {
+            var exts = FileExtensions.ToList();
+            if (AllowAnyExtension)
+            {
+                exts.Add(new FileExtension
+                    {
+                        Description = "Any file",
+                        Extensions = new[] {".*"}
+                    });
+            }
+            _dialog.Filter = string.Join("|", exts);
         }
 
         public string Title
@@ -240,6 +290,7 @@ namespace DotNetUtils.Controls
     class SaveFileDialog2 : IDialog
     {
         private readonly SaveFileDialog _dialog = new SaveFileDialog();
+        private FileExtension[] _fileExtensions;
 
         public SaveFileDialog2()
         {
@@ -247,12 +298,39 @@ namespace DotNetUtils.Controls
             _dialog.CheckPathExists = true;
             _dialog.DereferenceLinks = true;
             _dialog.Title = Title;
+//            _dialog.Filter = "Image Files (*.BMP; *.JPG; *.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
         }
 
         public bool OverwritePrompt
         {
             get { return _dialog.OverwritePrompt; }
             set { _dialog.OverwritePrompt = value; }
+        }
+
+        public FileExtension[] FileExtensions
+        {
+            get { return _fileExtensions; }
+            set
+            {
+                _fileExtensions = value;
+                SetFilter();
+            }
+        }
+
+        public bool AllowAnyExtension { get; set; }
+
+        private void SetFilter()
+        {
+            var exts = FileExtensions.ToList();
+            if (AllowAnyExtension)
+            {
+                exts.Add(new FileExtension
+                {
+                    Description = "Any file",
+                    Extensions = new[] { ".*" }
+                });
+            }
+            _dialog.Filter = string.Join("|", exts);
         }
 
         public string Title
@@ -320,5 +398,21 @@ namespace DotNetUtils.Controls
         OpenFile,
         SaveFile,
         OpenDirectory
+    }
+
+    public struct FileExtension
+    {
+        public string[] Extensions;
+        public string Description;
+        public bool IsDefault;
+
+        public override string ToString()
+        {
+            var exts =
+                FileUtils.NormalizeFileExtensions(Extensions)
+                         .Select(ext => string.Format("*{0}", ext))
+                         .ToArray();
+            return string.Format("{0} ({1})|{2}", Description, string.Join("; ", exts), string.Join(";", exts));
+        }
     }
 }
