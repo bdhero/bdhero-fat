@@ -264,7 +264,11 @@ namespace DotNetUtils.Controls
         public string SelectedPath
         {
             get { return _dialog.FileName; }
-            set { _dialog.FileName = value; }
+            set
+            {
+                _dialog.InitialDirectory = Path.GetDirectoryName(value);
+                _dialog.FileName = Path.GetFileName(value);
+            }
         }
 
         public DialogResult ShowDialog()
