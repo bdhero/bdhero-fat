@@ -194,6 +194,8 @@ namespace BDHero.BDROM
 
         public virtual string CommonName { get { return ShortName; } }
 
+        public virtual string DisplayName { get { return ShortName; } }
+
         public virtual IEnumerable<string> AltDisplayNames
         {
             get
@@ -376,6 +378,11 @@ namespace BDHero.BDROM
         }
 
         public override string CommonName
+        {
+            get { return MicroName; }
+        }
+
+        public override string DisplayName
         {
             get { return MicroName; }
         }
@@ -738,6 +745,11 @@ namespace BDHero.BDROM
             get { return string.Format("{0} ({1})", base.FullNameDisambig, ShortName); }
         }
 
+        public override string DisplayName
+        {
+            get { return FullName; }
+        }
+
         public override IEnumerable<string> AltDisplayNames
         {
             get { return new[] { MicroName }; }
@@ -814,6 +826,11 @@ namespace BDHero.BDROM
             get { return FullName; }
         }
 
+        public override string DisplayName
+        {
+            get { return FullName; }
+        }
+
         public override IEnumerable<string> AltDisplayNames
         {
             get { return new[] { MicroName }; }
@@ -885,6 +902,11 @@ namespace BDHero.BDROM
             get { return string.Format("{0} ({1} / {2})", base.FullNameDisambig, AltMicroName, ShortName); }
         }
 
+        public override string DisplayName
+        {
+            get { return FullName; }
+        }
+
         public override bool Lossless
         {
             get { return false; }
@@ -939,6 +961,11 @@ namespace BDHero.BDROM
         public override string MicroName
         {
             get { return "TrueHD"; }
+        }
+
+        public override string DisplayName
+        {
+            get { return FullName; }
         }
 
         public override bool Lossless
@@ -1273,6 +1300,11 @@ namespace BDHero.BDROM
         public override string CommonName
         {
             get { return MicroName; }
+        }
+
+        public override string DisplayName
+        {
+            get { return FullName; }
         }
 
         public override bool Lossless
