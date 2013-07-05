@@ -189,8 +189,7 @@ namespace ChapterGrabberPlugin
             if (string.IsNullOrWhiteSpace(trimmed))
                 return true;
             TimeSpan parsed;
-            var timespan = TimeSpan.TryParse(trimmed, out parsed);
-            if (timespan)
+            if (TimeSpan.TryParse(trimmed, out parsed))
                 return true;
             if (Regex.IsMatch(trimmed, @"^(Chapter\s*)?[0-9]+$", RegexOptions.IgnoreCase))
                 return true;
