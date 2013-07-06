@@ -21,6 +21,11 @@ namespace BDHero.JobQueue
         public string Title;
 
         /// <summary>
+        /// URL of a website with more detailed information about this ReleaseMedium.
+        /// </summary>
+        public string Url;
+
+        /// <summary>
         /// Gets or sets whether the BD-ROM contains this movie or TV show.
         /// </summary>
         public bool IsSelected;
