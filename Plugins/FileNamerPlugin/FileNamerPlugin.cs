@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using BDHero.JobQueue;
 using DotNetUtils;
+using DotNetUtils.Annotations;
 
 namespace BDHero.Plugin.FileNamer
 {
@@ -48,14 +49,14 @@ namespace BDHero.Plugin.FileNamer
             var directory = pathSpecified ? path : Environment.CurrentDirectory;
             var filename = string.Format(@"{0} [{1}].mkv", job.Disc.SanitizedTitle, firstVideoHeight);
 
-            var movie = job.SelectedReleaseMedium as Movie;
-            var tvShow = job.SelectedReleaseMedium as TVShow;
+            var medium = job.SelectedReleaseMedium;
+            var movie = medium as Movie;
+            var tvShow = medium as TVShow;
 
             if (movie != null)
             {
-                filename = string.Format("{0} ({1}) [{2}].mkv",
-                                         FileUtils.SanitizeFileName(movie.Title),
-                                         movie.ReleaseYear,
+                filename = string.Format("{0} [{1}].mkv",
+                                         FileUtils.SanitizeFileName(movie.ToString()),
                                          job.SelectedPlaylist.MaxVideoResolution);
             }
             else if (tvShow != null)
@@ -63,7 +64,7 @@ namespace BDHero.Plugin.FileNamer
                 filename = string.Format("s{0}e{1} - {2} [{3}].mkv",
                                          tvShow.SelectedEpisode.SeasonNumber.ToString("00"),
                                          tvShow.SelectedEpisode.EpisodeNumber.ToString("00"),
-                                         FileUtils.SanitizeFileName(tvShow.Title),
+                                         FileUtils.SanitizeFileName(tvShow.ToString()),
                                          job.SelectedPlaylist.MaxVideoResolution);
             }
 

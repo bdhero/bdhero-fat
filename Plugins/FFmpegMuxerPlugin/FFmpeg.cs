@@ -186,7 +186,7 @@ namespace BDHero.Plugin.FFmpegMuxer
                 var tvShow = releaseMedium as TVShow;
                 if (movie != null)
                 {
-                    title = string.Format("{0} ({1})", movie.Title, movie.ReleaseYear);
+                    title = movie.ToString();
                 }
                 else if (tvShow != null)
                 {

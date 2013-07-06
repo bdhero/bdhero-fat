@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -64,7 +65,6 @@ namespace BDHeroGUI.Components
             Resize += (sender, args) => AutoResize();
             comboBoxMedia.SelectedIndexChanged += (sender, args) => OnSelectedMediaChanged();
             LoadSearchResults();
-            SelectedCoverArt = null;
         }
 
         private void AutoResize()
@@ -79,29 +79,28 @@ namespace BDHeroGUI.Components
             splitContainer.SplitterDistance = (int) Math.Ceiling(width);
         }
 
-        private void LoadSearchResults()
+        private void PopulateComboBox(ICollection<ReleaseMedium> releaseMedia)
         {
             comboBoxMedia.Items.Clear();
-            comboBoxMedia.Enabled = false;
-            SelectedCoverArt = null;
 
-            OnSelectedMediaChanged();
+            releaseMedia.ForEach(item => comboBoxMedia.Items.Add(item));
 
-            if (_job == null) return;
-
-            var movies = _job.Movies;
-            var movie = movies.FirstOrDefault();
-            if (movie == null) return;
-
-            movies.Select(curMovie => string.Format("{0} ({1})", curMovie.Title, curMovie.ReleaseYear))
-                  .ForEach(s => comboBoxMedia.Items.Add(s));
-
-            var hasItems = comboBoxMedia.Items.Count > 0;
+            var hasItems = releaseMedia.Any();
 
             if (hasItems)
                 comboBoxMedia.SelectedIndex = 0;
 
             comboBoxMedia.Enabled = hasItems;
+        }
+
+        private void LoadSearchResults()
+        {
+            var media = _job != null
+                            ? _job.Movies.OfType<ReleaseMedium>().ToArray()
+                            : new Collection<ReleaseMedium>().ToArray();
+
+            PopulateComboBox(media);
+            OnSelectedMediaChanged();
         }
 
         private void OnSelectedMediaChanged()

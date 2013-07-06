@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -23,10 +24,11 @@ namespace TmdbPlugin
 
         private Tmdb _tmdbApi;
         private TmdbMovieSearch _tmdbMovieSearch;
-        private string _tmdbRootUrl;
-        private string _iso6391;
-        private int? year = null;
-        private string _tmdbApiKey;
+        private string _rootImageUrl;
+        private string _searchISO_639_1;
+        private int? _searchYear = null;
+        private string _apiKey;
+        private TmdbConfiguration _configuration;
 
         #endregion
         
@@ -135,8 +137,39 @@ namespace TmdbPlugin
                 settings.settings.defaultLanguage = newSettings.settings.defaultLanguage;
             }
 
-            _iso6391 = settings.settings.defaultLanguage;
-            _tmdbApiKey = settings.settings.apiKey;
+            _searchISO_639_1 = settings.settings.defaultLanguage;
+            _apiKey = settings.settings.apiKey;
+        }
+
+        #endregion
+
+        #region TMDb Configuration
+
+        private TmdbConfiguration GetConfiguration()
+        {
+            if (_configuration == null)
+            {
+                Logger.Debug("Getting TMDb configuration");
+                _configuration = _tmdbApi.GetConfiguration();
+            }
+            return _configuration;
+        }
+
+        private void GetBaseImageUrl()
+        {
+            if (string.IsNullOrEmpty(_rootImageUrl))
+            {
+                _rootImageUrl = GetConfiguration().images.base_url + "w185";
+            }
+
+            if (string.IsNullOrEmpty(_rootImageUrl))
+            {
+                Logger.Warn("Failed to obtain base image URL");
+                return;
+            }
+
+            const string urlMessage = "api.themoviedb.org provided the following base image URL";
+            Logger.InfoFormat("{0}: {1}", urlMessage, _rootImageUrl);
         }
 
         #endregion
@@ -147,26 +180,24 @@ namespace TmdbPlugin
         {
             job.Movies.Clear();
             
-            if (job.Disc.SanitizedTitle != null)
+            if (job.Disc.SanitizedTitle != null && _apiKey != null)
             {
-                var requestParameters = new TmdbApiParameters(job.SearchQuery, year, _iso6391);
+                _tmdbApi = new Tmdb(_apiKey, _searchISO_639_1);
 
-                if (_tmdbApiKey != null)
+                var requestParameters = new TmdbApiParameters(job.SearchQuery, _searchYear, _searchISO_639_1);
+
+                try
                 {
-                    _tmdbApi = new Tmdb(_tmdbApiKey, _iso6391);
-                    try
-                    {
-                        SearchTmdb(requestParameters, job);
-                    }
-                    catch (Exception ex)
-                    {
-                        TmdbErrors(ex);
-                    }
+                    SearchTmdb(requestParameters, job);
+                }
+                catch (Exception ex)
+                {
+                    HandleTmdbError(ex);
                 }
             }
             else
             {
-                const string apiTitleMessage = "Error: The Tmdb plugin did not receive a searchable movie name";
+                const string apiTitleMessage = "ERROR: No searchable movie name found";
                 Logger.Error(apiTitleMessage);
                 throw new Exception(apiTitleMessage);
             }
@@ -174,58 +205,69 @@ namespace TmdbPlugin
 
         private void SearchTmdb(TmdbApiParameters requestParameters, Job job)
         {
+            GetBaseImageUrl();
+
             _tmdbMovieSearch = _tmdbApi.SearchMovie(requestParameters.Query, 1, requestParameters.Iso6391, false,
                                                     requestParameters.Year);
 
-            if (string.IsNullOrEmpty(_tmdbRootUrl))
+            if (_tmdbMovieSearch == null)
             {
-                _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "w185";
-            }
-            if (!string.IsNullOrEmpty(_tmdbRootUrl))
-            {
-                const string urlMessage = "api.themoviedb.org provided the following base url:";
-                Logger.InfoFormat("{0} {1}", urlMessage, _tmdbRootUrl);
+                Logger.Warn("TMDb movie search returned null");
+                return;
             }
 
-            if (_tmdbMovieSearch != null)
-            {
-                job.Movies.AddRange(_tmdbMovieSearch.results.Select(ToMovie));
-            }
+            job.Movies.AddRange(_tmdbMovieSearch.results.Select(ToMovie));
 
-            string results = null;
-            if (_tmdbMovieSearch == null) return;
+            LogSearchResults();
+        }
+
+        private void LogSearchResults()
+        {
+            if (_tmdbMovieSearch == null || !_tmdbMovieSearch.results.Any())
+                return;
+
+            var results = new List<string>();
+
             foreach (var movie in _tmdbMovieSearch.results)
             {
                 DateTime releaseYear;
                 DateTime.TryParse(movie.release_date, out releaseYear);
-                results += String.Format("{0} ({1}),", movie.original_title, releaseYear.Year);
+                results.Add(String.Format("{0} ({1})", movie.original_title, releaseYear.Year));
             }
-            const string bestGuessMessage = "Tmdb top search result:";
-            Logger.InfoFormat("{0} {1} ", bestGuessMessage, _tmdbMovieSearch.results[0].original_title);
-            const string matchesMessage = "The Tmdb plugin returned the following matches:";
-            Logger.InfoFormat("{0} {1} ", matchesMessage, results);
 
+            const string bestGuessMessage = "Top TMDb search result";
+            Logger.InfoFormat("{0}: {1} ", bestGuessMessage, _tmdbMovieSearch.results[0].original_title);
+
+            const string matchesMessage = "TMDb returned the following matches";
+            Logger.InfoFormat("{0}:\n{1} ", matchesMessage, string.Join(Environment.NewLine, results));
         }
 
         private Movie ToMovie(MovieResult movieResult, int i)
         {
-            DateTime releaseYear;
-            if (!DateTime.TryParse(movieResult.release_date, out releaseYear))
-                releaseYear = DateTime.MinValue;
+            var releaseYear = GetReleaseYear(movieResult);
             var movie = new Movie
                 {
                     Id = movieResult.id,
-                    ReleaseYear = releaseYear.Year,
+                    ReleaseYear = releaseYear,
                     Title = movieResult.title,
                     Url = string.Format("http://www.themoviedb.org/movie/{0}", movieResult.id),
                     IsSelected = i == 0
                 };
             movie.CoverArtImages.Add(new CoverArt
                 {
-                    Uri = _tmdbRootUrl + movieResult.poster_path,
+                    Uri = _rootImageUrl + movieResult.poster_path,
                     IsSelected = true
                 });
             return movie;
+        }
+
+        private static int? GetReleaseYear(MovieResult movieResult)
+        {
+            int? releaseYear = null;
+            DateTime releaseDate;
+            if (DateTime.TryParse(movieResult.release_date, out releaseDate))
+                releaseYear = releaseDate.Year;
+            return releaseYear;
         }
 
         #endregion
@@ -237,11 +279,12 @@ namespace TmdbPlugin
             foreach (var movie in job.Movies)
             {
                 var tmdbMovieImages = new TmdbMovieImages();
+
                 try
                 {
-                    if (string.IsNullOrEmpty(_tmdbRootUrl))
+                    if (string.IsNullOrEmpty(_rootImageUrl))
                     {
-                        _tmdbRootUrl = _tmdbApi.GetConfiguration().images.base_url + "original";
+                        _rootImageUrl = GetConfiguration().images.base_url + "original";
                     }
                     tmdbMovieImages = _tmdbApi.GetMovieImages(movie.Id, null);
                     var posterLanguages = (tmdbMovieImages.posters.Select(poster => poster.iso_639_1).ToList());
@@ -254,18 +297,21 @@ namespace TmdbPlugin
                 }
                 catch (Exception ex)
                 {
-                    TmdbErrors(ex);
+                    HandleTmdbError(ex);
                 }
-                if (tmdbMovieImages == null) continue;
+
+                if (tmdbMovieImages == null)
+                    continue;
+
                 foreach (var poster in tmdbMovieImages.posters)
                 {
-                    poster.file_path = _tmdbRootUrl + poster.file_path;
+                    poster.file_path = _rootImageUrl + poster.file_path;
 
                     if (movie.CoverArtImages.All(x => x.Uri != poster.file_path))
                     {
                         movie.CoverArtImages.Add(new CoverArt
                         {
-                            Uri = _tmdbRootUrl + poster.file_path,
+                            Uri = _rootImageUrl + poster.file_path,
                             Language = Language.FromCode(poster.iso_639_1)
                         });
                     }
@@ -277,7 +323,7 @@ namespace TmdbPlugin
 
         #region Error Handling
 
-        private void TmdbErrors(Exception ex)
+        private void HandleTmdbError(Exception ex)
         {
             var tmdbResponse = _tmdbApi.ResponseContent;
             try
