@@ -37,7 +37,7 @@
             // buttonSearch
             // 
             this.buttonSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSearch.Location = new System.Drawing.Point(344, 12);
+            this.buttonSearch.Location = new System.Drawing.Point(266, 12);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(75, 23);
             this.buttonSearch.TabIndex = 2;
@@ -49,7 +49,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(425, 12);
+            this.buttonCancel.Location = new System.Drawing.Point(347, 12);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 3;
@@ -72,7 +72,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxSearchQuery.Location = new System.Drawing.Point(86, 14);
             this.textBoxSearchQuery.Name = "textBoxSearchQuery";
-            this.textBoxSearchQuery.Size = new System.Drawing.Size(252, 20);
+            this.textBoxSearchQuery.Size = new System.Drawing.Size(174, 20);
             this.textBoxSearchQuery.TabIndex = 1;
             // 
             // FormMetadataSearch
@@ -81,7 +81,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(512, 47);
+            this.ClientSize = new System.Drawing.Size(434, 47);
             this.Controls.Add(this.textBoxSearchQuery);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonCancel);
