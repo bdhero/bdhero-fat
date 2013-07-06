@@ -59,6 +59,11 @@ namespace BDHero
                                      : TaskScheduler.Default);
         }
 
+        public void RenameSync(string mkvPath)
+        {
+            CreateRenameAction(CancellationToken.None, mkvPath)();
+        }
+
         #region Stages
 
         public Task<bool> CreateScanTask(CancellationToken cancellationToken, string bdromPath, string mkvPath = null)

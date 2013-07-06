@@ -50,15 +50,54 @@ namespace BDHeroGUI.Components
 
         private Job _job;
 
+        public event EventHandler SelectedMediaChanged;
+
         public MediaPanel()
         {
             InitializeComponent();
             Resize += (sender, args) => AutoResize();
+            comboBoxMedia.SelectedIndexChanged += (sender, args) => OnSelectedMediaChanged();
             LoadSearchResults();
-            comboBoxMedia.SelectedIndexChanged += (sender, args) => ChangeImage();
         }
 
-        private void ChangeImage()
+        private void AutoResize()
+        {
+            var width = Ratio * pictureBox.Height;
+            splitContainer.SplitterDistance = (int)width;
+        }
+
+        private void LoadSearchResults()
+        {
+            comboBoxMedia.Items.Clear();
+
+            if (_job == null) return;
+
+            var movies = _job.Movies;
+            var movie = movies.FirstOrDefault();
+            if (movie == null) return;
+
+            movies.Select(curMovie => string.Format("{0} ({1})", curMovie.Title, curMovie.ReleaseYear))
+                  .ForEach(s => comboBoxMedia.Items.Add(s));
+
+            if (comboBoxMedia.Items.Count > 0)
+                comboBoxMedia.SelectedIndex = 0;
+        }
+
+        private void OnSelectedMediaChanged()
+        {
+            if (comboBoxMedia.Items.Count > 0)
+                _job.Movies.ForEach(AutoSelect);
+            LoadCoverArt();
+            if (SelectedMediaChanged != null)
+                SelectedMediaChanged(this, EventArgs.Empty);
+        }
+
+        private void AutoSelect(Movie movie, int i)
+        {
+            movie.IsSelected = (i == comboBoxMedia.SelectedIndex);
+        }
+
+        private void LoadCoverArt()
         {
             SelectedCoverArt = null;
 
@@ -93,29 +132,6 @@ namespace BDHeroGUI.Components
                 .Build()
                 .Start()
                 ;
-        }
-
-        private void AutoResize()
-        {
-            var width = Ratio * pictureBox.Height;
-            splitContainer.SplitterDistance = (int)width;
-        }
-
-        private void LoadSearchResults()
-        {
-            comboBoxMedia.Items.Clear();
-
-            if (_job == null) return;
-
-            var movies = _job.Movies;
-            var movie = movies.FirstOrDefault();
-            if (movie == null) return;
-
-            movies.Select(curMovie => string.Format("{0} ({1})", movie.Title, curMovie.ReleaseYear))
-                  .ForEach(s => comboBoxMedia.Items.Add(s));
-
-            if (comboBoxMedia.Items.Count > 0)
-                comboBoxMedia.SelectedIndex = 0;
         }
     }
 }

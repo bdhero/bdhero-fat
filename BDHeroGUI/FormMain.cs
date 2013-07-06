@@ -54,6 +54,13 @@ namespace BDHeroGUI
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
 
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
+            mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
+        }
+
+        private void MediaPanelOnSelectedMediaChanged(object sender, EventArgs eventArgs)
+        {
+            _controller.RenameSync(textBoxOutput.Text);
+            textBoxOutput.Text = _controller.Job.OutputPath;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
