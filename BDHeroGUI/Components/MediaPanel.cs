@@ -59,6 +59,7 @@ namespace BDHeroGUI.Components
             Resize += (sender, args) => AutoResize();
             comboBoxMedia.SelectedIndexChanged += (sender, args) => OnSelectedMediaChanged();
             LoadSearchResults();
+            SelectedCoverArt = null;
         }
 
         private void AutoResize()

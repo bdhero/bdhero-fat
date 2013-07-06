@@ -31,9 +31,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.linkLabelSearch = new DotNetUtils.Controls.LinkLabel2();
-            this.linkLabelSelectCoverArt = new DotNetUtils.Controls.LinkLabel2();
             this.comboBoxMedia = new System.Windows.Forms.ComboBox();
+            this.linkLabelSearch = new DotNetUtils.Controls.LinkLabel2();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -55,7 +54,7 @@
             this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer.Location = new System.Drawing.Point(3, 16);
+            this.splitContainer.Location = new System.Drawing.Point(0, 16);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -66,8 +65,8 @@
             // 
             this.splitContainer.Panel2.Controls.Add(this.comboBoxMedia);
             this.splitContainer.Panel2.Controls.Add(this.linkLabelSearch);
-            this.splitContainer.Size = new System.Drawing.Size(349, 141);
-            this.splitContainer.SplitterDistance = 116;
+            this.splitContainer.Size = new System.Drawing.Size(360, 161);
+            this.splitContainer.SplitterDistance = 119;
             this.splitContainer.TabIndex = 3;
             // 
             // pictureBox
@@ -76,33 +75,10 @@
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(116, 141);
+            this.pictureBox.Size = new System.Drawing.Size(119, 161);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 2;
             this.pictureBox.TabStop = false;
-            // 
-            // linkLabelSearch
-            // 
-            this.linkLabelSearch.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelSearch.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelSearch.Location = new System.Drawing.Point(2, 31);
-            this.linkLabelSearch.Name = "linkLabelSearch";
-            this.linkLabelSearch.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelSearch.Size = new System.Drawing.Size(80, 14);
-            this.linkLabelSearch.TabIndex = 3;
-            this.linkLabelSearch.Text = "Search again...";
-            // 
-            // linkLabelSelectCoverArt
-            // 
-            this.linkLabelSelectCoverArt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkLabelSelectCoverArt.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabelSelectCoverArt.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelSelectCoverArt.Location = new System.Drawing.Point(3, 163);
-            this.linkLabelSelectCoverArt.Name = "linkLabelSelectCoverArt";
-            this.linkLabelSelectCoverArt.RegularColor = System.Drawing.Color.Empty;
-            this.linkLabelSelectCoverArt.Size = new System.Drawing.Size(79, 14);
-            this.linkLabelSelectCoverArt.TabIndex = 4;
-            this.linkLabelSelectCoverArt.Text = "Select poster...";
             // 
             // comboBoxMedia
             // 
@@ -112,14 +88,24 @@
             this.comboBoxMedia.FormattingEnabled = true;
             this.comboBoxMedia.Location = new System.Drawing.Point(4, 4);
             this.comboBoxMedia.Name = "comboBoxMedia";
-            this.comboBoxMedia.Size = new System.Drawing.Size(222, 21);
+            this.comboBoxMedia.Size = new System.Drawing.Size(230, 21);
             this.comboBoxMedia.TabIndex = 4;
+            // 
+            // linkLabelSearch
+            // 
+            this.linkLabelSearch.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelSearch.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelSearch.Location = new System.Drawing.Point(2, 31);
+            this.linkLabelSearch.Name = "linkLabelSearch";
+            this.linkLabelSearch.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelSearch.Size = new System.Drawing.Size(51, 14);
+            this.linkLabelSearch.TabIndex = 3;
+            this.linkLabelSearch.Text = "Search...";
             // 
             // MediaPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.linkLabelSelectCoverArt);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.label1);
             this.Name = "MediaPanel";
@@ -141,6 +127,5 @@
         private System.Windows.Forms.PictureBox pictureBox;
         private DotNetUtils.Controls.LinkLabel2 linkLabelSearch;
         private System.Windows.Forms.ComboBox comboBoxMedia;
-        private DotNetUtils.Controls.LinkLabel2 linkLabelSelectCoverArt;
     }
 }

@@ -129,7 +129,7 @@ namespace BDHeroGUI.Components
             // 
             this.checkBoxShowAllPlaylists.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxShowAllPlaylists.AutoSize = true;
-            this.checkBoxShowAllPlaylists.Location = new System.Drawing.Point(45, 110);
+            this.checkBoxShowAllPlaylists.Location = new System.Drawing.Point(3, 110);
             this.checkBoxShowAllPlaylists.Name = "checkBoxShowAllPlaylists";
             this.checkBoxShowAllPlaylists.Size = new System.Drawing.Size(66, 17);
             this.checkBoxShowAllPlaylists.TabIndex = 3;
@@ -142,7 +142,7 @@ namespace BDHeroGUI.Components
             this.linkLabelShowFilterWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabelShowFilterWindow.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.linkLabelShowFilterWindow.HoverColor = System.Drawing.Color.Empty;
-            this.linkLabelShowFilterWindow.Location = new System.Drawing.Point(0, 111);
+            this.linkLabelShowFilterWindow.Location = new System.Drawing.Point(75, 111);
             this.linkLabelShowFilterWindow.Name = "linkLabelShowFilterWindow";
             this.linkLabelShowFilterWindow.RegularColor = System.Drawing.Color.Empty;
             this.linkLabelShowFilterWindow.Size = new System.Drawing.Size(39, 14);
