@@ -217,6 +217,7 @@ namespace TmdbPlugin
                     Id = movieResult.id,
                     ReleaseYear = releaseYear.Year,
                     Title = movieResult.title,
+                    Url = string.Format("http://www.themoviedb.org/movie/{0}", movieResult.id),
                     IsSelected = i == 0
                 };
             movie.CoverArtImages.Add(new CoverArt
