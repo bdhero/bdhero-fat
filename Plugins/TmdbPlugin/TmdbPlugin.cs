@@ -149,7 +149,7 @@ namespace TmdbPlugin
             
             if (job.Disc.SanitizedTitle != null)
             {
-                var requestParameters = new TmdbApiParameters(job.Disc.SanitizedTitle, year, _iso6391);
+                var requestParameters = new TmdbApiParameters(job.SearchQuery, year, _iso6391);
 
                 if (_tmdbApiKey != null)
                 {

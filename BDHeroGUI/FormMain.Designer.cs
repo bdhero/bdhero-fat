@@ -40,13 +40,13 @@ namespace BDHeroGUI
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
+            this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
+            this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
+            this.mediaPanel = new BDHeroGUI.Components.MediaPanel();
+            this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
             this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
             this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
-            this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
-            this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
-            this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
-            this.mediaPanel = new BDHeroGUI.Components.MediaPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
@@ -85,13 +85,13 @@ namespace BDHeroGUI
             this.textBoxStatus.Name = "textBoxStatus";
             this.textBoxStatus.ReadOnly = true;
             this.textBoxStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxStatus.Size = new System.Drawing.Size(1063, 37);
+            this.textBoxStatus.Size = new System.Drawing.Size(1055, 37);
             this.textBoxStatus.TabIndex = 7;
             // 
             // buttonScan
             // 
             this.buttonScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonScan.Location = new System.Drawing.Point(924, 13);
+            this.buttonScan.Location = new System.Drawing.Point(916, 13);
             this.buttonScan.Name = "buttonScan";
             this.buttonScan.Size = new System.Drawing.Size(75, 23);
             this.buttonScan.TabIndex = 1;
@@ -103,7 +103,7 @@ namespace BDHeroGUI
             // 
             this.buttonCancelScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancelScan.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancelScan.Location = new System.Drawing.Point(1005, 13);
+            this.buttonCancelScan.Location = new System.Drawing.Point(997, 13);
             this.buttonCancelScan.Name = "buttonCancelScan";
             this.buttonCancelScan.Size = new System.Drawing.Size(75, 23);
             this.buttonCancelScan.TabIndex = 2;
@@ -125,7 +125,7 @@ namespace BDHeroGUI
             // 
             this.buttonCancelConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancelConvert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancelConvert.Location = new System.Drawing.Point(1005, 480);
+            this.buttonCancelConvert.Location = new System.Drawing.Point(997, 480);
             this.buttonCancelConvert.Name = "buttonCancelConvert";
             this.buttonCancelConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonCancelConvert.TabIndex = 6;
@@ -136,7 +136,7 @@ namespace BDHeroGUI
             // buttonConvert
             // 
             this.buttonConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonConvert.Location = new System.Drawing.Point(924, 480);
+            this.buttonConvert.Location = new System.Drawing.Point(916, 480);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonConvert.TabIndex = 5;
@@ -160,9 +160,53 @@ namespace BDHeroGUI
             // splitContainerMain.Panel2
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.tracksPanel);
-            this.splitContainerMain.Size = new System.Drawing.Size(1068, 431);
+            this.splitContainerMain.Size = new System.Drawing.Size(1060, 431);
             this.splitContainerMain.SplitterDistance = 124;
             this.splitContainerMain.TabIndex = 3;
+            // 
+            // splitContainerTop
+            // 
+            this.splitContainerTop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerTop.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerTop.Name = "splitContainerTop";
+            // 
+            // splitContainerTop.Panel1
+            // 
+            this.splitContainerTop.Panel1.Controls.Add(this.playlistListView);
+            // 
+            // splitContainerTop.Panel2
+            // 
+            this.splitContainerTop.Panel2.Controls.Add(this.mediaPanel);
+            this.splitContainerTop.Size = new System.Drawing.Size(1060, 124);
+            this.splitContainerTop.SplitterDistance = 686;
+            this.splitContainerTop.TabIndex = 7;
+            // 
+            // playlistListView
+            // 
+            this.playlistListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playlistListView.Location = new System.Drawing.Point(0, 0);
+            this.playlistListView.Name = "playlistListView";
+            this.playlistListView.Playlists = null;
+            this.playlistListView.SelectedPlaylist = null;
+            this.playlistListView.Size = new System.Drawing.Size(686, 124);
+            this.playlistListView.TabIndex = 1;
+            // 
+            // mediaPanel
+            // 
+            this.mediaPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mediaPanel.Location = new System.Drawing.Point(0, 0);
+            this.mediaPanel.Name = "mediaPanel";
+            this.mediaPanel.Size = new System.Drawing.Size(370, 124);
+            this.mediaPanel.TabIndex = 0;
+            // 
+            // tracksPanel
+            // 
+            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
+            this.tracksPanel.Name = "tracksPanel";
+            this.tracksPanel.Playlist = null;
+            this.tracksPanel.Size = new System.Drawing.Size(1060, 303);
+            this.tracksPanel.TabIndex = 0;
             // 
             // textBoxOutput
             // 
@@ -176,7 +220,7 @@ namespace BDHeroGUI
             this.textBoxOutput.Location = new System.Drawing.Point(104, 480);
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.SelectedPath = "W:\\BDHero\\test.mkv";
-            this.textBoxOutput.Size = new System.Drawing.Size(814, 24);
+            this.textBoxOutput.Size = new System.Drawing.Size(806, 24);
             this.textBoxOutput.TabIndex = 4;
             // 
             // progressBar
@@ -186,7 +230,7 @@ namespace BDHeroGUI
             this.progressBar.Location = new System.Drawing.Point(17, 566);
             this.progressBar.Maximum = 100000;
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(1063, 23);
+            this.progressBar.Size = new System.Drawing.Size(1055, 23);
             this.progressBar.Step = 1;
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 11;
@@ -210,53 +254,9 @@ namespace BDHeroGUI
             this.textBoxInput.OverwritePrompt = false;
             this.textBoxInput.SelectedPath = "W:\\BD\\49123204_BLACK_HAWK_DOWN";
             this.textBoxInput.ShowNewFolderButton = false;
-            this.textBoxInput.Size = new System.Drawing.Size(814, 24);
+            this.textBoxInput.Size = new System.Drawing.Size(806, 24);
             this.textBoxInput.TabIndex = 0;
             this.textBoxInput.SelectedPathChanged += new System.EventHandler(this.textBoxInput_SelectedPathChanged);
-            // 
-            // splitContainerTop
-            // 
-            this.splitContainerTop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerTop.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerTop.Name = "splitContainerTop";
-            // 
-            // splitContainerTop.Panel1
-            // 
-            this.splitContainerTop.Panel1.Controls.Add(this.playlistListView);
-            // 
-            // splitContainerTop.Panel2
-            // 
-            this.splitContainerTop.Panel2.Controls.Add(this.mediaPanel);
-            this.splitContainerTop.Size = new System.Drawing.Size(1068, 124);
-            this.splitContainerTop.SplitterDistance = 692;
-            this.splitContainerTop.TabIndex = 7;
-            // 
-            // playlistListView
-            // 
-            this.playlistListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playlistListView.Location = new System.Drawing.Point(0, 0);
-            this.playlistListView.Name = "playlistListView";
-            this.playlistListView.Playlists = null;
-            this.playlistListView.SelectedPlaylist = null;
-            this.playlistListView.Size = new System.Drawing.Size(692, 124);
-            this.playlistListView.TabIndex = 1;
-            // 
-            // tracksPanel
-            // 
-            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
-            this.tracksPanel.Name = "tracksPanel";
-            this.tracksPanel.Playlist = null;
-            this.tracksPanel.Size = new System.Drawing.Size(1068, 303);
-            this.tracksPanel.TabIndex = 0;
-            // 
-            // mediaPanel
-            // 
-            this.mediaPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mediaPanel.Location = new System.Drawing.Point(0, 0);
-            this.mediaPanel.Name = "mediaPanel";
-            this.mediaPanel.Size = new System.Drawing.Size(372, 124);
-            this.mediaPanel.TabIndex = 0;
             // 
             // FormMain
             // 

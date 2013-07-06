@@ -64,6 +64,20 @@ namespace BDHero
             CreateRenameAction(CancellationToken.None, mkvPath)();
         }
 
+        public Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, Action fail, Action succeed, string mkvPath = null)
+        {
+            var token = cancellationToken;
+            var optionalPhases = new[] { CreateGetMetadataAction(token), CreateAutoDetectAction(token), CreateRenameAction(token, mkvPath) };
+            return CreateStageTask(
+                token,
+                start,
+                () => true,
+                optionalPhases,
+                fail,
+                succeed
+            );
+        }
+
         #region Stages
 
         public Task<bool> CreateScanTask(CancellationToken cancellationToken, string bdromPath, string mkvPath = null)
@@ -241,6 +255,9 @@ namespace BDHero
 
         private void GetMetadata(CancellationToken cancellationToken)
         {
+            Job.Movies.Clear();
+            Job.TVShows.Clear();
+
             foreach (var plugin in _pluginService.MetadataProviderPlugins)
             {
                 if (cancellationToken.IsCancellationRequested) return;
@@ -282,7 +299,8 @@ namespace BDHero
 
         private void Rename(CancellationToken cancellationToken, string mkvPath = null)
         {
-            Job.OutputPath = mkvPath;
+            if (!string.IsNullOrWhiteSpace(mkvPath))
+                Job.OutputPath = mkvPath;
             foreach (var plugin in _pluginService.NameProviderPlugins)
             {
                 if (cancellationToken.IsCancellationRequested) return;

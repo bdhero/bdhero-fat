@@ -22,7 +22,7 @@ namespace BDHeroGUI.Components
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private const double Ratio = 2.0 / 3.0;
+        private const double DefaultRatio = 2.0 / 3.0;
 
         [CanBeNull]
         public CoverArt SelectedCoverArt
@@ -69,13 +69,23 @@ namespace BDHeroGUI.Components
 
         private void AutoResize()
         {
-            var width = Ratio * pictureBox.Height;
-            splitContainer.SplitterDistance = (int)width;
+            var ratio = DefaultRatio;
+            if (SelectedCoverArt != null && SelectedCoverArt.Image != null)
+            {
+                var image = SelectedCoverArt.Image;
+                ratio = ((double) image.Width) / image.Height;
+            }
+            var width = ratio * pictureBox.Height;
+            splitContainer.SplitterDistance = (int) Math.Ceiling(width);
         }
 
         private void LoadSearchResults()
         {
             comboBoxMedia.Items.Clear();
+            comboBoxMedia.Enabled = false;
+            SelectedCoverArt = null;
+
+            OnSelectedMediaChanged();
 
             if (_job == null) return;
 
@@ -86,8 +96,12 @@ namespace BDHeroGUI.Components
             movies.Select(curMovie => string.Format("{0} ({1})", curMovie.Title, curMovie.ReleaseYear))
                   .ForEach(s => comboBoxMedia.Items.Add(s));
 
-            if (comboBoxMedia.Items.Count > 0)
+            var hasItems = comboBoxMedia.Items.Count > 0;
+
+            if (hasItems)
                 comboBoxMedia.SelectedIndex = 0;
+
+            comboBoxMedia.Enabled = hasItems;
         }
 
         private void OnSelectedMediaChanged()
@@ -167,7 +181,12 @@ namespace BDHeroGUI.Components
 
         private string SelectedMovieUrl
         {
-            get { return _job != null ? _job.SelectedReleaseMedium.Url : null; }
+            get
+            {
+                if (_job != null && _job.SelectedReleaseMedium != null)
+                    return _job.SelectedReleaseMedium.Url;
+                return null;
+            }
         }
 
         private void pictureBox_Click(object sender, EventArgs e)

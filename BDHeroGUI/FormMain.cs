@@ -10,6 +10,7 @@ using BDHero.Plugin;
 using BDHero.Startup;
 using BDHero.Utils;
 using BDHeroGUI.Annotations;
+using BDHeroGUI.Forms;
 using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
@@ -34,6 +35,8 @@ namespace BDHeroGUI
 
         private ProgressProviderState _state = ProgressProviderState.Ready;
 
+        #region Constructor and OnLoad
+
         public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
             InitializeComponent();
@@ -54,13 +57,9 @@ namespace BDHeroGUI
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
 
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
-            mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
-        }
 
-        private void MediaPanelOnSelectedMediaChanged(object sender, EventArgs eventArgs)
-        {
-            _controller.RenameSync(textBoxOutput.Text);
-            textBoxOutput.Text = _controller.Job.OutputPath;
+            mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
+            mediaPanel.Search = GetMetadataAsync;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -69,7 +68,11 @@ namespace BDHeroGUI
             LoadPlugins();
             LogPlugins();
             InitController();
+
             EnableControls(true);
+            splitContainerTop.Enabled = false;
+            splitContainerMain.Enabled = false;
+
             this.EnableSelectAll();
 
             textBoxOutput.FileExtensions = new[]
@@ -81,6 +84,8 @@ namespace BDHeroGUI
                         }
                 };
         }
+
+        #endregion
 
         #region Initialization
 
@@ -121,6 +126,92 @@ namespace BDHeroGUI
 
         #endregion
 
+        #region Cancellation
+
+        private CancellationTokenSource CreateCancellationTokenSource()
+        {
+            return _cancellationTokenSource = new CancellationTokenSource();
+        }
+
+        private bool IsCancellationRequested
+        {
+            get { return _cancellationTokenSource != null && _cancellationTokenSource.IsCancellationRequested; }
+        }
+
+        private void Cancel()
+        {
+            _cancellationTokenSource.Cancel();
+        }
+
+        #endregion
+
+        #region Metadata search
+
+        private void GetMetadataAsync()
+        {
+            var job = _controller.Job;
+
+            if (job == null) return;
+
+            var form = new FormMetadataSearch(job.SearchQuery);
+
+            if (DialogResult.OK != form.ShowDialog(this)) return;
+
+            job.SearchQuery = form.SearchQuery;
+
+            _controller
+                .CreateMetadataTask(CreateCancellationTokenSource().Token, GetMetadataStart, GetMetadataFail, GetMetadataSucceed)
+                .Start()
+                ;
+        }
+
+        private void GetMetadataStart()
+        {
+            buttonScan.Text = "Searching...";
+            textBoxStatus.Text = "Searching for metadata...";
+            EnableControls(false);
+            _taskbarItem.SetProgress(0).Indeterminate();
+        }
+
+        private void GetMetadataSucceed()
+        {
+            // TODO: Centralize button text
+            buttonScan.Text = "Scan";
+            textBoxOutput.Text = _controller.Job.OutputPath;
+            AppendStatus("Metadata search completed!");
+            _taskbarItem.NoProgress();
+            RefreshUI();
+            EnableControls(true);
+        }
+
+        private void GetMetadataFail()
+        {
+            // TODO: Centralize button text
+            buttonScan.Text = "Scan";
+            if (IsCancellationRequested)
+            {
+                AppendStatus("Metadata search canceled!");
+                _taskbarItem.NoProgress();
+            }
+            else
+            {
+                AppendStatus("Metadata search failed!");
+                _taskbarItem.Error();
+            }
+            EnableControls(true);
+        }
+
+        #endregion
+
+        #region UI
+
+        private void RefreshUI()
+        {
+            RefreshPlaylists();
+            playlistListView.SelectFirstPlaylist();
+            mediaPanel.Job = _controller.Job;
+        }
+
         private void RefreshPlaylists()
         {
             if (_controller.Job != null)
@@ -137,6 +228,7 @@ namespace BDHeroGUI
             buttonConvert.Enabled = enabled && playlistListView.SelectedPlaylist != null;
             buttonCancelConvert.Enabled = !enabled && playlistListView.SelectedPlaylist != null;
 
+            splitContainerTop.Enabled = enabled;
             splitContainerMain.Enabled = enabled;
 
             _isRunning = !enabled;
@@ -148,12 +240,12 @@ namespace BDHeroGUI
             _logger.Debug(statusLine);
         }
 
+        #endregion
+
         #region Stages: Scan & Convert
 
         private void Scan()
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-
             _controller.SetEventScheduler();
 
             // TODO: Let File Namer plugin handle this
@@ -161,7 +253,7 @@ namespace BDHeroGUI
                                       ? Path.GetDirectoryName(textBoxOutput.Text)
                                       : textBoxOutput.Text;
             _controller
-                .CreateScanTask(_cancellationTokenSource.Token, textBoxInput.Text, outputDirectory)
+                .CreateScanTask(CreateCancellationTokenSource().Token, textBoxInput.Text, outputDirectory)
                 .Start();
         }
 
@@ -177,12 +269,10 @@ namespace BDHeroGUI
 
             _controller.Job.SelectedPlaylistIndex = _controller.Job.Disc.Playlists.IndexOf(selectedPlaylist);
 
-            _cancellationTokenSource = new CancellationTokenSource();
-
             _controller.SetEventScheduler();
 
             _controller
-                .CreateConvertTask(_cancellationTokenSource.Token, textBoxOutput.Text)
+                .CreateConvertTask(CreateCancellationTokenSource().Token, textBoxOutput.Text)
                 .Start();
         }
 
@@ -203,14 +293,12 @@ namespace BDHeroGUI
             textBoxOutput.Text = _controller.Job.OutputPath;
             AppendStatus("Scan succeeded!");
             _taskbarItem.NoProgress();
-            RefreshPlaylists();
-            playlistListView.SelectFirstPlaylist();
-            mediaPanel.Job = _controller.Job;
+            RefreshUI();
         }
 
         private void ControllerOnScanFailed(object sender, EventArgs eventArgs)
         {
-            if (_cancellationTokenSource.IsCancellationRequested)
+            if (IsCancellationRequested)
             {
                 AppendStatus("Scan canceled!");
                 _taskbarItem.NoProgress();
@@ -249,7 +337,7 @@ namespace BDHeroGUI
 
         private void ControllerOnConvertFailed(object sender, EventArgs eventArgs)
         {
-            if (_cancellationTokenSource.IsCancellationRequested)
+            if (IsCancellationRequested)
             {
                 AppendStatus("Convert canceled!");
                 _taskbarItem.NoProgress();
@@ -337,7 +425,13 @@ namespace BDHeroGUI
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            _cancellationTokenSource.Cancel();
+            Cancel();
+        }
+
+        private void MediaPanelOnSelectedMediaChanged(object sender, EventArgs eventArgs)
+        {
+            _controller.RenameSync(textBoxOutput.Text);
+            textBoxOutput.Text = _controller.Job.OutputPath;
         }
 
         private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
@@ -353,7 +447,7 @@ namespace BDHeroGUI
 
         private void buttonCancelConvert_Click(object sender, EventArgs e)
         {
-            _cancellationTokenSource.Cancel();
+            Cancel();
         }
 
         #endregion

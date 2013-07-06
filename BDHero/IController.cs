@@ -90,12 +90,24 @@ namespace BDHero
         void RenameSync(string mkvPath);
 
         /// <summary>
+        /// Retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.
+        /// Same as <see cref="CreateScanTask"/>, except this method doesn't re-scan the BD-ROM, and it accepts custom callbacks.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <param name="start">Callback that will be invoked before the task starts</param>
+        /// <param name="fail">Callback that will be invoked if the task fails</param>
+        /// <param name="succeed">Callback that will be invoked if the task succeeds</param>
+        /// <param name="mkvPath">Optional path to the output directory or MKV file</param>
+        /// <returns>Task that returns <c>true</c> if the task succeeded; otherwise <c>false</c></returns>
+        Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, Action fail, Action succeed, string mkvPath = null);
+
+        /// <summary>
         /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <param name="bdromPath">Path to the BD-ROM directory</param>
         /// <param name="mkvPath">Optional path to the output directory or MKV file</param>
-        /// <returns><c>true</c> if the scan succeeded; otherwise <c>false</c></returns>
+        /// <returns>Task that returns <c>true</c> if the scan succeeded; otherwise <c>false</c></returns>
         Task<bool> CreateScanTask(CancellationToken cancellationToken, string bdromPath, string mkvPath = null);
 
         /// <summary>
@@ -103,7 +115,7 @@ namespace BDHero
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <param name="mkvPath">Optional path to the MKV output file or directory (if overridden by the user)</param>
-        /// <returns><c>true</c> if all muxing plugins succeeded; otherwise <c>false</c></returns>
+        /// <returns>Task that returns <c>true</c> if all muxing plugins succeeded; otherwise <c>false</c></returns>
         Task<bool> CreateConvertTask(CancellationToken cancellationToken, string mkvPath = null);
 
         #endregion
