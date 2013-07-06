@@ -15,7 +15,6 @@ Bugs
 Features
 ========
 
-[ ] Update output MKV path when user's selection changes
 [ ] Split output MKV path into directory and file name
 [ ] File Namer placeholders
     [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
@@ -59,6 +58,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Update output MKV path when user's selection changes
 [X] Chapter Grabber: (IN_TIME)
     Scene 1
     Scene 2
