@@ -59,6 +59,8 @@ namespace BDHero
                                      : TaskScheduler.Default);
         }
 
+        #region User-invokable tasks
+
         public void RenameSync(string mkvPath)
         {
             CreateRenameAction(CancellationToken.None, mkvPath)();
@@ -77,6 +79,8 @@ namespace BDHero
                 succeed
             );
         }
+
+        #endregion
 
         #region Stages
 
