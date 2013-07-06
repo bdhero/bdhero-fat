@@ -83,7 +83,8 @@ namespace BDHeroGUI.Forms
             using (Graphics g = CreateGraphics())
             {
                 var before = textBoxSearchQuery.Width;
-                var size = g.MeasureString(textBoxSearchQuery.Text + "MM", textBoxSearchQuery.Font);
+                var text = textBoxSearchQuery.Text + "MM"; // add 2 letters for padding
+                var size = g.MeasureString(text, textBoxSearchQuery.Font);
                 var after = (int)Math.Ceiling(size.Width);
                 var delta = after - before;
                 var width = Width + delta;
