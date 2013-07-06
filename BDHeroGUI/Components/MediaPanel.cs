@@ -25,6 +25,8 @@ namespace BDHeroGUI.Components
 
         private const double DefaultRatio = 2.0 / 3.0;
 
+        #region Public getter/setter properties
+
         [CanBeNull]
         public CoverArt SelectedCoverArt
         {
@@ -53,11 +55,40 @@ namespace BDHeroGUI.Components
 
         private Job _job;
 
-        private readonly ToolTip _pictureBoxToolTip = new ToolTip();
+        #endregion
+
+        #region Private properties
+
+        private ReleaseMedium SelectedReleaseMedium
+        {
+            get { return _job != null ? _job.SelectedReleaseMedium : null; }
+        }
+
+        private string SelectedUrl
+        {
+            get
+            {
+                var medium = SelectedReleaseMedium;
+                return medium != null ? medium.Url : null;
+            }
+        }
+
+        private bool IsSelectedUrlValid
+        {
+            get { return !string.IsNullOrWhiteSpace(SelectedUrl); }
+        }
+
+        #endregion
+
+        #region Public events
 
         public event EventHandler SelectedMediaChanged;
 
         public Action Search;
+
+        #endregion
+
+        private readonly ToolTip _pictureBoxToolTip = new ToolTip();
 
         public MediaPanel()
         {
@@ -66,6 +97,8 @@ namespace BDHeroGUI.Components
             comboBoxMedia.SelectedIndexChanged += (sender, args) => OnSelectedMediaChanged();
             LoadSearchResults();
         }
+
+        #region Private controller methods
 
         private void AutoResize()
         {
@@ -76,7 +109,17 @@ namespace BDHeroGUI.Components
                 ratio = ((double) image.Width) / image.Height;
             }
             var width = ratio * pictureBox.Height;
-            splitContainer.SplitterDistance = (int) Math.Ceiling(width);
+            splitContainer.SplitterDistance = (int) Math.Round(width);
+        }
+
+        private void LoadSearchResults()
+        {
+            var media = _job != null
+                            ? _job.Movies.OfType<ReleaseMedium>().ToArray()
+                            : new Collection<ReleaseMedium>().ToArray();
+
+            PopulateComboBox(media);
+            OnSelectedMediaChanged();
         }
 
         private void PopulateComboBox(ICollection<ReleaseMedium> releaseMedia)
@@ -93,16 +136,6 @@ namespace BDHeroGUI.Components
             comboBoxMedia.Enabled = hasItems;
         }
 
-        private void LoadSearchResults()
-        {
-            var media = _job != null
-                            ? _job.Movies.OfType<ReleaseMedium>().ToArray()
-                            : new Collection<ReleaseMedium>().ToArray();
-
-            PopulateComboBox(media);
-            OnSelectedMediaChanged();
-        }
-
         private void OnSelectedMediaChanged()
         {
             if (comboBoxMedia.Items.Count > 0)
@@ -110,19 +143,19 @@ namespace BDHeroGUI.Components
 
             LoadCoverArt();
 
-            if (SelectedMediaChanged != null)
-                SelectedMediaChanged(this, EventArgs.Empty);
-
-            if (SelectedMovieHasValidUrl)
+            if (IsSelectedUrlValid)
             {
                 pictureBox.Cursor = Cursors.Hand;
-                _pictureBoxToolTip.SetToolTip(pictureBox, SelectedMovieUrl);
+                _pictureBoxToolTip.SetToolTip(pictureBox, SelectedUrl);
             }
             else
             {
                 pictureBox.Cursor = Cursors.Default;
                 _pictureBoxToolTip.RemoveAll();
             }
+
+            if (SelectedMediaChanged != null)
+                SelectedMediaChanged(this, EventArgs.Empty);
         }
 
         private void AutoSelect(Movie movie, int i)
@@ -134,24 +167,18 @@ namespace BDHeroGUI.Components
         {
             SelectedCoverArt = null;
 
-            if (comboBoxMedia.Items.Count == 0)
-                return;
+            var medium = SelectedReleaseMedium;
+            if (medium == null) return;
 
-            var index = comboBoxMedia.SelectedIndex;
-
-            if (index == -1)
-                return;
-
-            var movie = _job.Movies[index];
-
-            var coverArt = movie.CoverArtImages.FirstOrDefault();
+            var coverArt = medium.CoverArtImages.FirstOrDefault();
             if (coverArt == null) return;
 
             new TaskBuilder()
                 .OnCurrentThread()
-                .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
+                .DoWork(delegate
                 {
                     var image = coverArt.Image;
+                    Logger.DebugFormat("Finished loading poster image: {0}", image);
                 })
                 .Fail(delegate(Exception exception)
                 {
@@ -167,33 +194,24 @@ namespace BDHeroGUI.Components
                 ;
         }
 
+        #endregion
+
+        #region UI event handlers
+
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+            if (IsSelectedUrlValid)
+            {
+                Process.Start(_job.SelectedReleaseMedium.Url);
+            }
+        }
+
         private void linkLabelSearch_Click(object sender, EventArgs e)
         {
             if (Search != null)
                 Search();
         }
 
-        private bool SelectedMovieHasValidUrl
-        {
-            get { return !string.IsNullOrWhiteSpace(SelectedMovieUrl); }
-        }
-
-        private string SelectedMovieUrl
-        {
-            get
-            {
-                if (_job != null && _job.SelectedReleaseMedium != null)
-                    return _job.SelectedReleaseMedium.Url;
-                return null;
-            }
-        }
-
-        private void pictureBox_Click(object sender, EventArgs e)
-        {
-            if (SelectedMovieHasValidUrl)
-            {
-                Process.Start(_job.SelectedReleaseMedium.Url);
-            }
-        }
+        #endregion
     }
 }
