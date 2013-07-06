@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -57,9 +58,10 @@ namespace BDHeroGUI
             progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
 
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
+            playlistListView.ShowAllChanged += PlaylistListViewOnShowAllChanged;
 
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
-            mediaPanel.Search = GetMetadataAsync;
+            mediaPanel.Search = ShowMetadataSearchWindow;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -147,7 +149,7 @@ namespace BDHeroGUI
 
         #region Metadata search
 
-        private void GetMetadataAsync()
+        private void ShowMetadataSearchWindow()
         {
             var job = _controller.Job;
 
@@ -220,13 +222,25 @@ namespace BDHeroGUI
 
         private void EnableControls(bool enabled)
         {
+            var isPlaylistSelected = playlistListView.SelectedPlaylist != null;
+            var hasJob = _controller.Job != null;
+
+            openBDROMFolderToolStripMenuItem.Enabled = enabled;
+            openDiscToolStripMenuItem.Enabled = enabled;
+            searchForMetadataToolStripMenuItem.Enabled = enabled && hasJob;
+
+            playlistsToolStripMenuItem.Enabled = enabled;
+            tracksToolStripMenuItem.Enabled = enabled;
+
+//            optionsToolStripMenuItem.Enabled = enabled;
+
             textBoxInput.Enabled = enabled;
             buttonScan.Enabled = enabled;
             buttonCancelScan.Enabled = !enabled;
 
             textBoxOutput.Enabled = enabled;
-            buttonConvert.Enabled = enabled && playlistListView.SelectedPlaylist != null;
-            buttonCancelConvert.Enabled = !enabled && playlistListView.SelectedPlaylist != null;
+            buttonConvert.Enabled = enabled && isPlaylistSelected;
+            buttonCancelConvert.Enabled = !enabled && isPlaylistSelected;
 
             splitContainerTop.Enabled = enabled;
             splitContainerMain.Enabled = enabled;
@@ -494,5 +508,55 @@ namespace BDHeroGUI
         }
 
         #endregion
+
+        private void openBDROMFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBoxInput.Browse();
+        }
+
+        private void searchForMetadataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowMetadataSearchWindow();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void showAllPlaylistsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            playlistListView.ShowAll = !playlistListView.ShowAll;
+        }
+
+        private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)
+        {
+            showAllPlaylistsToolStripMenuItem.Checked = playlistListView.ShowAll;
+        }
+
+        private void editFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            playlistListView.ShowFilterWindow();
+        }
+
+        private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/bdhero/bdhero");
+        }
+
+        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/bdhero/bdhero/wiki");
+        }
+
+        private void submitABugReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/bdhero/bdhero/issues/new");
+        }
+
+        private void suggestAFeatureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/bdhero/bdhero/issues/new");
+        }
     }
 }

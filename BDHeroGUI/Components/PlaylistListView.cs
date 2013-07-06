@@ -68,9 +68,20 @@ namespace BDHeroGUI.Components
         }
 
         /// <summary>
+        /// Gets or sets whether all playlists are shown, regardless of the user's filter settings.
+        /// </summary>
+        public bool ShowAll
+        {
+            get { return checkBoxShowAllPlaylists.Checked; }
+            set { checkBoxShowAllPlaylists.Checked = value; }
+        }
+
+        /// <summary>
         /// Triggered whenever the user selects a new playlist or deselects the current playlist.
         /// </summary>
         public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged;
+
+        public event EventHandler ShowAllChanged;
 
         private IList<Playlist> _playlists;
 
@@ -137,14 +148,7 @@ namespace BDHeroGUI.Components
             item.AppendToolTip("Best choice based on your preferences");
         }
 
-        public void SelectFirstPlaylist()
-        {
-            if (!VisiblePlaylistsInSortOrder.Any())
-                return;
-            SelectedPlaylist = VisiblePlaylistsInSortOrder.First();
-        }
-
-        private void linkLabelShowFilterWindow_Click(object sender, EventArgs e)
+        public void ShowFilterWindow()
         {
             var result = new FormPlaylistFilter(_filter).ShowDialog(this);
 
@@ -154,10 +158,26 @@ namespace BDHeroGUI.Components
             }
         }
 
+        public void SelectFirstPlaylist()
+        {
+            if (!VisiblePlaylistsInSortOrder.Any())
+                return;
+            SelectedPlaylist = VisiblePlaylistsInSortOrder.First();
+        }
+
+        private void linkLabelShowFilterWindow_Click(object sender, EventArgs e)
+        {
+            ShowFilterWindow();
+        }
+
         private void checkBoxShowAllPlaylists_CheckedChanged(object sender, EventArgs e)
         {
             _showAllPlaylists = checkBoxShowAllPlaylists.Checked;
+
             RefreshPlaylists();
+
+            if (ShowAllChanged != null)
+                ShowAllChanged(this, EventArgs.Empty);
         }
 
         private void RefreshPlaylists()

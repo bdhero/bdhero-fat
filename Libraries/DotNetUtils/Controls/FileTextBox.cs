@@ -164,6 +164,14 @@ namespace DotNetUtils.Controls
             textBoxPath.UnHighlight();
         }
 
+        /// <summary>
+        /// Displays the file/folder dialog specified by <see cref="DialogType"/>.
+        /// </summary>
+        public void Browse()
+        {
+            ShowDialog();
+        }
+
         protected override void OnTextChanged(EventArgs e)
         {
             if (TextChanged != null)
@@ -176,7 +184,7 @@ namespace DotNetUtils.Controls
                 SelectedPathChanged(this, e);
         }
 
-        private void ShowDialog(object sender, EventArgs e)
+        private void ShowDialog(object sender = null, EventArgs e = null)
         {
             var dialog = CreateDialog();
 
