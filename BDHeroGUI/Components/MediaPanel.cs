@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using BDHero.JobQueue;
+using BDHeroGUI.Properties;
 using DotNetUtils;
 using DotNetUtils.Annotations;
 using DotNetUtils.Extensions;
@@ -32,7 +33,7 @@ namespace BDHeroGUI.Components
             private set
             {
                 _selectedCoverArt = value;
-                pictureBox.Image = SelectedCoverArt != null ? SelectedCoverArt.Image : null;
+                pictureBox.Image = SelectedCoverArt != null ? SelectedCoverArt.Image : Resources.no_poster_w185;
                 AutoResize();
             }
         }
