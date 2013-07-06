@@ -67,7 +67,7 @@
             this.splitContainer.Panel2.Controls.Add(this.linkLabelSearch);
             this.splitContainer.Size = new System.Drawing.Size(360, 161);
             this.splitContainer.SplitterDistance = 119;
-            this.splitContainer.TabIndex = 3;
+            this.splitContainer.TabIndex = 0;
             // 
             // pictureBox
             // 
@@ -79,6 +79,7 @@
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 2;
             this.pictureBox.TabStop = false;
+            this.pictureBox.Click += new System.EventHandler(this.pictureBox_Click);
             // 
             // comboBoxMedia
             // 
@@ -89,7 +90,7 @@
             this.comboBoxMedia.Location = new System.Drawing.Point(4, 4);
             this.comboBoxMedia.Name = "comboBoxMedia";
             this.comboBoxMedia.Size = new System.Drawing.Size(230, 21);
-            this.comboBoxMedia.TabIndex = 4;
+            this.comboBoxMedia.TabIndex = 0;
             // 
             // linkLabelSearch
             // 
@@ -99,8 +100,9 @@
             this.linkLabelSearch.Name = "linkLabelSearch";
             this.linkLabelSearch.RegularColor = System.Drawing.Color.Empty;
             this.linkLabelSearch.Size = new System.Drawing.Size(51, 14);
-            this.linkLabelSearch.TabIndex = 3;
+            this.linkLabelSearch.TabIndex = 1;
             this.linkLabelSearch.Text = "Search...";
+            this.linkLabelSearch.Click += new System.EventHandler(this.linkLabelSearch_Click);
             // 
             // MediaPanel
             // 

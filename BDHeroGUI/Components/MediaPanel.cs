@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Linq;
@@ -51,7 +52,11 @@ namespace BDHeroGUI.Components
 
         private Job _job;
 
+        private readonly ToolTip _pictureBoxToolTip = new ToolTip();
+
         public event EventHandler SelectedMediaChanged;
+
+        public Action Search;
 
         public MediaPanel()
         {
@@ -89,9 +94,22 @@ namespace BDHeroGUI.Components
         {
             if (comboBoxMedia.Items.Count > 0)
                 _job.Movies.ForEach(AutoSelect);
+
             LoadCoverArt();
+
             if (SelectedMediaChanged != null)
                 SelectedMediaChanged(this, EventArgs.Empty);
+
+            if (SelectedMovieHasValidUrl)
+            {
+                pictureBox.Cursor = Cursors.Hand;
+                _pictureBoxToolTip.SetToolTip(pictureBox, SelectedMovieUrl);
+            }
+            else
+            {
+                pictureBox.Cursor = Cursors.Default;
+                _pictureBoxToolTip.RemoveAll();
+            }
         }
 
         private void AutoSelect(Movie movie, int i)
@@ -134,6 +152,30 @@ namespace BDHeroGUI.Components
                 .Build()
                 .Start()
                 ;
+        }
+
+        private void linkLabelSearch_Click(object sender, EventArgs e)
+        {
+            if (Search != null)
+                Search();
+        }
+
+        private bool SelectedMovieHasValidUrl
+        {
+            get { return !string.IsNullOrWhiteSpace(SelectedMovieUrl); }
+        }
+
+        private string SelectedMovieUrl
+        {
+            get { return _job != null ? _job.SelectedReleaseMedium.Url : null; }
+        }
+
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+            if (SelectedMovieHasValidUrl)
+            {
+                Process.Start(_job.SelectedReleaseMedium.Url);
+            }
         }
     }
 }
