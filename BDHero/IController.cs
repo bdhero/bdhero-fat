@@ -83,6 +83,10 @@ namespace BDHero
         /// <param name="scheduler">Scheduler to use for event callbacks.  If none is specified, the calling thread's scheduler will be used.</param>
         void SetEventScheduler(TaskScheduler scheduler = null);
 
+        /// <summary>
+        /// Runs all <see cref="INameProviderPlugin"/>s synchronously.
+        /// </summary>
+        /// <param name="mkvPath"></param>
         void RenameSync(string mkvPath);
 
         /// <summary>
