@@ -28,6 +28,8 @@ namespace ChapterGrabberPlugin
 
         public string Name { get { return "ChapterDb"; } }
 
+        public bool Enabled { get; set; }
+
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)

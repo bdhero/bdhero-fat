@@ -27,6 +27,8 @@ namespace BDHero.Plugin
         /// </summary>
         string Name { get; }
 
+        bool Enabled { get; set; }
+
         EditPluginPreferenceHandler EditPreferences { get; }
 
         /// <summary>

@@ -14,6 +14,8 @@ namespace BDHero.Plugin.MkvMergeMuxer
 
         public string Name { get { return "mkvmerge (mkvtoolnix)"; } }
 
+        public bool Enabled { get; set; }
+
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public MatroskaFeatures SupportedFeatures

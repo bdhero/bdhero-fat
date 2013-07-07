@@ -16,6 +16,8 @@ namespace BDHero.Plugin.DiscReader
 
         public string Name { get { return "BDHero Disc Reader"; } }
 
+        public bool Enabled { get; set; }
+
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)

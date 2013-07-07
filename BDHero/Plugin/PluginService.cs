@@ -190,6 +190,9 @@ namespace BDHero.Plugin
                 // For now we'll just make an instance of all the plugins
                 var newPlugin = (IPlugin)Activator.CreateInstance(pluginAssembly.GetType(pluginType.ToString()));
 
+                // TODO: Store this in preferences file
+                newPlugin.Enabled = true;
+
                 var assemblyInfo = new PluginAssemblyInfo(dllPath,
                                                           AssemblyUtils.GetAssemblyVersion(pluginAssembly),
                                                           AssemblyUtils.GetLinkerTimestamp(pluginAssembly),
