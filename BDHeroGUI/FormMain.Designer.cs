@@ -296,7 +296,7 @@ namespace BDHeroGUI
             this.showAllPlaylistsToolStripMenuItem,
             this.editFilterToolStripMenuItem});
             this.playlistsToolStripMenuItem.Name = "playlistsToolStripMenuItem";
-            this.playlistsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.playlistsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.playlistsToolStripMenuItem.Text = "&Playlists";
             // 
             // showAllPlaylistsToolStripMenuItem
@@ -319,7 +319,7 @@ namespace BDHeroGUI
             this.showAllTracksToolStripMenuItem,
             this.filterToolStripMenuItem});
             this.tracksToolStripMenuItem.Name = "tracksToolStripMenuItem";
-            this.tracksToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.tracksToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.tracksToolStripMenuItem.Text = "&Tracks";
             // 
             // showAllTracksToolStripMenuItem
@@ -365,11 +365,11 @@ namespace BDHeroGUI
             // 
             // aboutBDHeroToolStripMenuItem
             // 
-            this.aboutBDHeroToolStripMenuItem.Enabled = false;
             this.aboutBDHeroToolStripMenuItem.Name = "aboutBDHeroToolStripMenuItem";
             this.aboutBDHeroToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.aboutBDHeroToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.aboutBDHeroToolStripMenuItem.Text = "&About BDHero";
+            this.aboutBDHeroToolStripMenuItem.Click += new System.EventHandler(this.aboutBDHeroToolStripMenuItem_Click);
             // 
             // submitABugReportToolStripMenuItem
             // 

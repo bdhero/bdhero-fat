@@ -558,5 +558,10 @@ namespace BDHeroGUI
         {
             Process.Start("https://github.com/bdhero/bdhero/issues/new");
         }
+
+        private void aboutBDHeroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new AboutBox().ShowDialog(this);
+        }
     }
 }
