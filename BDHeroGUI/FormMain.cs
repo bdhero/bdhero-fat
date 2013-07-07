@@ -67,16 +67,48 @@ namespace BDHeroGUI
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
             mediaPanel.Search = ShowMetadataSearchWindow;
 
+            // TODO: Detect all drives on startup
+            // TODO: Do this in background thread
+            // TODO: Handle exceptions
             _driveDetector.DeviceArrived += DriveDetectorOnDeviceArrived;
             _driveDetector.DeviceRemoved += DriveDetectorOnDeviceRemoved;
         }
 
         private void DriveDetectorOnDeviceArrived(object sender, DriveDetectorEventArgs args)
         {
+            var driveInfo = args.DriveInfo;
+
+            // TODO: Move this logic elsewhere
+            if (!File.Exists(Path.Combine(driveInfo.Name, "BDMV", "index.bdmv")))
+                return;
+
+            var text = string.Format("{0} {1}", driveInfo.Name, driveInfo.VolumeLabel);
+            var item = new ToolStripMenuItem(text) { Tag = driveInfo.Name };
+            item.Click += delegate(object o, EventArgs eventArgs)
+                {
+                    textBoxInput.Text = driveInfo.Name;
+                    Scan();
+                };
+            openDiscToolStripMenuItem.DropDownItems.Add(item);
+            noBlurayDiscsFoundToolStripMenuItem.Visible = false;
         }
 
         private void DriveDetectorOnDeviceRemoved(object sender, DriveDetectorEventArgs args)
         {
+            var driveInfo = args.DriveInfo;
+
+            var items = openDiscToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>().ToArray();
+            var item = items.FirstOrDefault(menuItem => driveInfo.Name.Equals(menuItem.Tag));
+
+            if (item != null)
+            {
+                openDiscToolStripMenuItem.DropDownItems.Remove(item);
+            }
+
+            if (!items.Any(menuItem => menuItem.Visible))
+            {
+                noBlurayDiscsFoundToolStripMenuItem.Visible = true;
+            }
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
