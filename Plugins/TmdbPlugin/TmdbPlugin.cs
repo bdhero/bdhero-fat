@@ -37,7 +37,7 @@ namespace TmdbPlugin
 
         public string Name { get { return "TMDb"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {

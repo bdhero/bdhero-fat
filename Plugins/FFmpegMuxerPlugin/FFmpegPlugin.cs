@@ -20,7 +20,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         public string Name { get { return "FFmpeg"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public MatroskaFeatures SupportedFeatures
         {

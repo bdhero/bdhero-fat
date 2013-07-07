@@ -17,7 +17,7 @@ namespace BDHero.Plugin.AutoDetector
 
         public string Name { get { return "BDHero Detective"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {

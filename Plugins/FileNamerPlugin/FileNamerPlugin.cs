@@ -17,7 +17,7 @@ namespace BDHero.Plugin.FileNamer
 
         public string Name { get { return "BDHero File Namer"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {

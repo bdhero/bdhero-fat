@@ -27,7 +27,7 @@ namespace BDHero.Plugin
         /// </summary>
         string Name { get; }
 
-        event EditPluginPreferenceHandler EditPreferences;
+        EditPluginPreferenceHandler EditPreferences { get; }
 
         /// <summary>
         /// Invoked when the application first starts up and loads the plugin assembly.
