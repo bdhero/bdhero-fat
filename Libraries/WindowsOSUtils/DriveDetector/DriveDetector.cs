@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms; // required for Message
 using System.Runtime.InteropServices; // required for Marshal
 using System.IO;
 using Microsoft.Win32.SafeHandles;
+using OSUtils.DriveDetector;
 
 // DriveDetector - rev. 1, Oct. 31 2007
 // http://www.codeproject.com/Articles/18062/Detecting-USB-Drive-Removal-in-a-C-Program
@@ -21,14 +23,9 @@ namespace WindowsOSUtils.DriveDetector
     /// If you do not want to do step 2, just use the DriveDetector constructor without arguments and
     /// it will create its own invisible form to receive messages from Windows.
     /// </summary>
-    public class DriveDetector : IDisposable
+    public class DriveDetector : IDriveDetector, IDisposable
     {
-        /// <summary>
-        /// Events signalized to the client app.
-        /// Add handlers for these events in your form to be notified of removable device events 
-        /// </summary>
         public event DriveDetectorEventHandler DeviceArrived;
-
         public event DriveDetectorEventHandler DeviceRemoved;
         public event DriveDetectorEventHandler QueryRemove;
 
@@ -84,9 +81,6 @@ namespace WindowsOSUtils.DriveDetector
             mCurrentDrive = "";
         }
 
-        /// <summary>
-        /// Gets the value indicating whether the query remove event will be fired.
-        /// </summary>
         public bool IsQueryHooked
         {
             get
@@ -98,36 +92,16 @@ namespace WindowsOSUtils.DriveDetector
             }
         }
 
-        /// <summary>
-        /// Gets letter of drive which is currently hooked. Empty string if none.
-        /// See also IsQueryHooked.
-        /// </summary>
         public string HookedDrive
         {
             get { return mCurrentDrive; }
         }
 
-        /// <summary>
-        /// Gets the file stream for file which this class opened on a drive to be notified
-        /// about it's removal. 
-        /// This will be null unless you specified a file to open (DriveDetector opens root directory of the flash drive) 
-        /// </summary>
         public FileStream OpenedFile
         {
             get { return mFileOnFlash; }
         }
 
-        /// <summary>
-        /// Hooks specified drive to receive a message when it is being removed.  
-        /// This can be achieved also by setting e.HookQueryRemove to true in your 
-        /// DeviceArrived event handler. 
-        /// By default DriveDetector will open the root directory of the flash drive to obtain notification handle
-        /// from Windows (to learn when the drive is about to be removed). 
-        /// </summary>
-        /// <param name="fileOnDrive">Drive letter or relative path to a file on the drive which should be 
-        /// used to get a handle - required for registering to receive query remove messages.
-        /// If only drive letter is specified (e.g. "D:\\", root directory of the drive will be opened.</param>
-        /// <returns>true if hooked ok, false otherwise</returns>
         public bool EnableQueryRemove(string fileOnDrive)
         {
             if (string.IsNullOrEmpty(fileOnDrive))
@@ -154,10 +128,6 @@ namespace WindowsOSUtils.DriveDetector
             return true;
         }
 
-        /// <summary>
-        /// Unhooks any currently hooked drive so that the query remove 
-        /// message is not generated for it.
-        /// </summary>
         public void DisableQueryRemove()
         {
             if (mDeviceNotifyHandle != IntPtr.Zero)
@@ -165,7 +135,6 @@ namespace WindowsOSUtils.DriveDetector
                 RegisterForDeviceChange(false, null);
             }
         }
-
 
         /// <summary>
         /// Unregister and close the file we may have opened on the removable drive. 
@@ -218,7 +187,8 @@ namespace WindowsOSUtils.DriveDetector
                             if (tempDeviceArrived != null)
                             {
                                 DriveDetectorEventArgs e = new DriveDetectorEventArgs();
-                                e.Drive = c + ":\\";
+                                var drivePath = c + @":\";
+                                e.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
                                 tempDeviceArrived(this, e);
 
                                 // Register for query remove if requested
@@ -230,7 +200,7 @@ namespace WindowsOSUtils.DriveDetector
                                         RegisterForDeviceChange(false, null);
                                     }
 
-                                    RegisterQuery(c + ":\\");
+                                    RegisterQuery(c + @":\");
                                 }
                             } // if  has event handler
                         }
@@ -262,7 +232,8 @@ namespace WindowsOSUtils.DriveDetector
                             if (tempQuery != null)
                             {
                                 DriveDetectorEventArgs e = new DriveDetectorEventArgs();
-                                e.Drive = mCurrentDrive; // drive which is hooked
+                                var drivePath = mCurrentDrive; // drive which is hooked
+                                e.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
                                 tempQuery(this, e);
 
                                 // If the client wants to cancel, let Windows know
@@ -306,7 +277,8 @@ namespace WindowsOSUtils.DriveDetector
                                 if (tempDeviceRemoved != null)
                                 {
                                     DriveDetectorEventArgs e = new DriveDetectorEventArgs();
-                                    e.Drive = c + ":\\";
+                                    var drivePath = c + @":\";
+                                    e.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
                                     tempDeviceRemoved(this, e);
                                 }
 
@@ -438,7 +410,7 @@ namespace WindowsOSUtils.DriveDetector
         /// Only for registering! Unregister with the old version of this function...
         /// </summary>
         /// <param name="register"></param>
-        /// <param name="dirPath">e.g. C:\\dir</param>
+        /// <param name="dirPath">e.g. C:\dir</param>
         private void RegisterForDeviceChange(string dirPath)
         {
             IntPtr handle = Native.OpenDirectory(dirPath);
@@ -626,7 +598,7 @@ namespace WindowsOSUtils.DriveDetector
             /// <summary>
             /// Opens a directory, returns it's handle or zero.
             /// </summary>
-            /// <param name="dirPath">path to the directory, e.g. "C:\\dir"</param>
+            /// <param name="dirPath">path to the directory, e.g. "C:\dir"</param>
             /// <returns>handle to the directory. Close it with CloseHandle().</returns>
             public static IntPtr OpenDirectory(string dirPath)
             {

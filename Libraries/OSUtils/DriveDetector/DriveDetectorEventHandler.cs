@@ -1,6 +1,6 @@
 using System;
 
-namespace WindowsOSUtils.DriveDetector
+namespace OSUtils.DriveDetector
 {
     /// <summary>
     /// Delegate for event handler to handle the device events

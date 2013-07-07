@@ -1,19 +1,13 @@
 using System;
+using System.IO;
 
-namespace WindowsOSUtils.DriveDetector
+namespace OSUtils.DriveDetector
 {
     /// <summary>
     /// Our class for passing in custom arguments to our event handlers.
     /// </summary>
     public class DriveDetectorEventArgs : EventArgs
     {
-        public DriveDetectorEventArgs()
-        {
-            Cancel = false;
-            Drive = "";
-            HookQueryRemove = false;
-        }
-
         /// <summary>
         /// Get/Set the value indicating that the event should be cancelled 
         /// Only in QueryRemove handler.
@@ -21,9 +15,9 @@ namespace WindowsOSUtils.DriveDetector
         public bool Cancel;
 
         /// <summary>
-        /// Drive letter for the device which caused this event 
+        /// Information about the drive.
         /// </summary>
-        public string Drive;
+        public DriveInfo DriveInfo;
 
         /// <summary>
         /// Set to true in your DeviceArrived event handler if you wish to receive the 

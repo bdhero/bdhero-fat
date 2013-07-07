@@ -15,6 +15,7 @@ using BDHeroGUI.Forms;
 using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
+using OSUtils.DriveDetector;
 using OSUtils.TaskbarUtils;
 using WindowsOSUtils.TaskbarUtils;
 
@@ -27,6 +28,8 @@ namespace BDHeroGUI
         private readonly IDirectoryLocator _directoryLocator;
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
+        private readonly IDriveDetector _driveDetector;
+
         private readonly ToolTip _progressBarToolTip;
         private readonly ITaskbarItem _taskbarItem;
 
@@ -38,7 +41,7 @@ namespace BDHeroGUI
 
         #region Constructor and OnLoad
 
-        public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
+        public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller, IDriveDetector driveDetector)
         {
             InitializeComponent();
 
@@ -48,6 +51,7 @@ namespace BDHeroGUI
             _directoryLocator = directoryLocator;
             _pluginLoader = pluginLoader;
             _controller = controller;
+            _driveDetector = driveDetector;
 
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
@@ -62,6 +66,17 @@ namespace BDHeroGUI
 
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
             mediaPanel.Search = ShowMetadataSearchWindow;
+
+            _driveDetector.DeviceArrived += DriveDetectorOnDeviceArrived;
+            _driveDetector.DeviceRemoved += DriveDetectorOnDeviceRemoved;
+        }
+
+        private void DriveDetectorOnDeviceArrived(object sender, DriveDetectorEventArgs args)
+        {
+        }
+
+        private void DriveDetectorOnDeviceRemoved(object sender, DriveDetectorEventArgs args)
+        {
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)

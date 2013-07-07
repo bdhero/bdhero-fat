@@ -54,8 +54,6 @@
     <Compile Include="DeviceUtils\VolumeMonitor.cs" />
     <Compile Include="DriveDetector\DetectorForm.cs" />
     <Compile Include="DriveDetector\DriveDetector.cs" />
-    <Compile Include="DriveDetector\DriveDetectorEventArgs.cs" />
-    <Compile Include="DriveDetector\DriveDetectorEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskbarUtils\Windows7TaskbarItem.cs" />
     <Compile Include="TaskbarUtils\WindowsTaskbarItemFactory.cs" />

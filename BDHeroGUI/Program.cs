@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using BDHero.Config;
 using BDHero.Startup;
 using Ninject;
+using OSUtils.DriveDetector;
+using WindowsOSUtils.DriveDetector;
 
 namespace BDHeroGUI
 {
@@ -28,6 +30,7 @@ namespace BDHeroGUI
             var kernel = InjectorFactory.CreateContainer();
             kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
             kernel.Bind<FormMain>().ToSelf();
+            kernel.Bind<IDriveDetector>().To(typeof (DriveDetector));
             return kernel.Get<FormMain>();
         }
     }

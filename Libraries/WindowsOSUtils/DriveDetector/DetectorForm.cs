@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using OSUtils.DriveDetector;
 
 namespace WindowsOSUtils.DriveDetector
 {
@@ -10,13 +11,13 @@ namespace WindowsOSUtils.DriveDetector
     internal class DetectorForm : Form
     {
         private Label label1;
-        private DriveDetector mDetector = null;
+        private IDriveDetector mDetector = null;
 
         /// <summary>
         /// Set up the hidden form. 
         /// </summary>
         /// <param name="detector">DriveDetector object which will receive notification about USB drives, see WndProc</param>
-        public DetectorForm(DriveDetector detector)
+        public DetectorForm(IDriveDetector detector)
         {
             mDetector = detector;
             this.MinimizeBox = false;
@@ -44,7 +45,7 @@ namespace WindowsOSUtils.DriveDetector
 
         /// <summary>
         /// This function receives all the windows messages for this window (form).
-        /// We call the DriveDetector from here so that is can pick up the messages about
+        /// We call the IDriveDetector from here so that is can pick up the messages about
         /// drives arrived and removed.
         /// </summary>
         protected override void WndProc(ref Message m)
