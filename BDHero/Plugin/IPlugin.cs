@@ -11,7 +11,7 @@ using BDHero.JobQueue;
 
 namespace BDHero.Plugin
 {
-    public delegate void EditPluginPreferenceHandler(IWin32Window owner);
+    public delegate void EditPluginPreferenceHandler(Form parent);
 
     public interface IPlugin
     {
