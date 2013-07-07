@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -66,6 +67,7 @@
     <Compile Include="Controls\SelectableLabel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DeviceUtils\VolumeMonitor.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ColumnHeaderExtensions.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
@@ -99,7 +101,20 @@
     <Compile Include="TaskUtils\IThreadInvoker.cs" />
     <Compile Include="TaskUtils\ThreadInvoker.cs" />
     <Compile Include="TaskUtils\TaskBuilder.cs" />
+    <Compile Include="Win32\WMI\Classes\DiskDrive.cs" />
+    <Compile Include="Win32\WMI\Classes\DiskPartition.cs" />
+    <Compile Include="Win32\WMI\Classes\LogicalDisk.cs" />
+    <Compile Include="Win32\WMI\Events\DeviceChangeEvent.cs" />
+    <Compile Include="Win32\WMI\Events\DeviceChangeEventType.cs" />
+    <Compile Include="Win32\WMI\Events\VolumeChangeEventType.cs" />
     <Compile Include="Win32\ExtendedWindowStyles.cs" />
+    <Compile Include="Win32\WMI\Events\VolumeChangeEvent.cs" />
+    <Compile Include="Win32\WMI\WMIClassNameAttribute.cs" />
+    <Compile Include="Win32\WMI\WMIEventHandler.cs" />
+    <Compile Include="Win32\WMI\WMIEventWatcher.cs" />
+    <Compile Include="Win32\WMI\WMIInstanceWatcher.cs" />
+    <Compile Include="Win32\WMI\WMIUtils.cs" />
+    <Compile Include="Win32\WMI\WMIWatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -109,6 +124,7 @@
       <DependentUpon>FileTextBox.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
