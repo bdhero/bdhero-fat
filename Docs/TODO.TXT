@@ -15,6 +15,11 @@ Bugs
 Features
 ========
 
+[ ] Detect drives on startup
+[ ] Background thread for drive detection
+[ ] Centralize drive detection logic
+[ ] Handle exceptions during drive detection
+
 [ ] Add "Rescan" menu item (F5)
 [ ] Add "Convert" menu item
 [ ] Add track filter
