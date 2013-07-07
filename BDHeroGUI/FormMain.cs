@@ -70,6 +70,7 @@ namespace BDHeroGUI
             LoadPlugins();
             LogPlugins();
             InitController();
+            InitPluginMenu();
 
             EnableControls(true);
             splitContainerTop.Enabled = false;
@@ -124,6 +125,41 @@ namespace BDHeroGUI
 
             _controller.PluginProgressUpdated += ControllerOnPluginProgressUpdated;
             _controller.UnhandledException += ControllerOnUnhandledException;
+        }
+
+        private void InitPluginMenu()
+        {
+            Type prevPluginType = null;
+            _controller.PluginsByType.ForEach(delegate(IPlugin plugin)
+                {
+                    var ifaces = plugin.GetType().GetInterfaces().Except(new[] {typeof(IPlugin)});
+                    var curPluginType = ifaces.FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IPlugin)));
+                    if (prevPluginType != null && prevPluginType != curPluginType)
+                    {
+                        pluginsToolStripMenuItem.DropDownItems.Add("-");
+                    }
+
+                    var pluginItem = new ToolStripMenuItem(plugin.Name);
+
+                    pluginItem.DropDownItems.Add(
+                        new ToolStripMenuItem("Enabled") { Enabled = false, Checked = plugin.Enabled });
+                    pluginItem.DropDownItems.Add("-");
+                    pluginItem.DropDownItems.Add(
+                        new ToolStripMenuItem(string.Format("Version {0}", plugin.AssemblyInfo.Version)) { Enabled = false });
+                    pluginItem.DropDownItems.Add(
+                        new ToolStripMenuItem(string.Format("Built on {0}", plugin.AssemblyInfo.BuildDate)) { Enabled = false });
+
+                    if (plugin.EditPreferences != null)
+                    {
+                        pluginItem.DropDownItems.Add(new ToolStripMenuItem("Preferences", null,
+                                                                           (sender, args) =>
+                                                                           plugin.EditPreferences(this)));
+                    }
+
+                    pluginsToolStripMenuItem.DropDownItems.Add(pluginItem);
+
+                    prevPluginType = curPluginType;
+                });
         }
 
         #endregion
