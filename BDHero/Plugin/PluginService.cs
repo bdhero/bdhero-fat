@@ -7,10 +7,12 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using DotNetUtils;
+using DotNetUtils.Annotations;
 
 namespace BDHero.Plugin 
 {
     /// <see cref="http://www.codeproject.com/Articles/6334/Plug-ins-in-C"/>
+    [UsedImplicitly]
     public class PluginService : IPluginHost
     {
         private readonly ConcurrentDictionary<string, ProgressProvider> _progressProviders =
