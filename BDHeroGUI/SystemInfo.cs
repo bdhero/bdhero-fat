@@ -8,16 +8,11 @@ namespace BDHeroGUI
 {
     internal class SystemInfo
     {
-        public static SystemInfo Instance
-        {
-            get { return _instance; }
-        }
+        public static readonly SystemInfo Instance = new SystemInfo();
 
-        private static readonly SystemInfo _instance = new SystemInfo();
+        public readonly Version OSVersionNumber;
 
-        public readonly Version Version;
-
-        public readonly string VersionString;
+        public readonly string OSVersionString;
 
         public readonly bool Is64BitOS;
 
@@ -25,17 +20,14 @@ namespace BDHeroGUI
 
         public readonly int ProcessorCount;
 
-        public readonly long ProcessMemory;
-
-        protected SystemInfo()
+        private SystemInfo()
         {
             var os = Environment.OSVersion;
-            Version = os.Version;
-            VersionString = os.VersionString;
+            OSVersionNumber = os.Version;
+            OSVersionString = os.VersionString;
             Is64BitOS = Environment.Is64BitOperatingSystem;
             Is64BitProcess = Environment.Is64BitProcess;
             ProcessorCount = Environment.ProcessorCount;
-            ProcessMemory = Environment.WorkingSet;
         }
 
         public override string ToString()

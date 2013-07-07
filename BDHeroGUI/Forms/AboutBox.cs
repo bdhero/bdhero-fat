@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using DotNetUtils;
 
 namespace BDHeroGUI.Forms
 {
@@ -19,9 +20,9 @@ namespace BDHeroGUI.Forms
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
+            this.labelBuildDate.Text = String.Format("Built on {0}", AssemblyUtils.GetLinkerTimestamp());
             this.labelCopyright.Text = AssemblyCopyright;
-            this.textBoxDescription.Text = AssemblyDescription;
-            this.richTextBoxSystemInfo.Text = SystemInfo.Instance.ToString();
+            this.textBoxSystemInfo.Text = string.Format("{0} {1}\n{2}", AssemblyTitle, AssemblyVersion, SystemInfo.Instance);
             new ToolTip().SetToolTip(linkLabelSourceCode, GitHubProjectUrl);
         }
 
