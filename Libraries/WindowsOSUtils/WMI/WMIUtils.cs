@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace DotNetUtils.Win32.WMI
+namespace WindowsOSUtils.WMI
 {
     /// <summary>
     /// Utility methods for interacting with WMI objects.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DotNetUtils.Win32.WMI.Classes
+namespace WindowsOSUtils.WMI.Classes
 {
     [WMIClassName("Win32_DiskPartition")]
     public class DiskPartition /* : CIM_DiskPartition */

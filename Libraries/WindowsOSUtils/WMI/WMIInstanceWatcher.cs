@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Management;
 
-namespace DotNetUtils.Win32.WMI
+namespace WindowsOSUtils.WMI
 {
     public class WMIInstanceWatcher<T> : WMIWatcher<T>
     {

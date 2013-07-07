@@ -1,6 +1,6 @@
 ﻿using System.Management;
 
-namespace DotNetUtils.Win32.WMI
+namespace WindowsOSUtils.WMI
 {
     public class WMIEventWatcher<T> : WMIWatcher<T>
     {

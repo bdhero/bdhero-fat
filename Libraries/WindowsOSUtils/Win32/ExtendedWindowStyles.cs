@@ -5,7 +5,7 @@ using System.Text;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
-namespace DotNetUtils.Win32
+namespace WindowsOSUtils.Win32
 {
     /// <seealso cref="http://msdn.microsoft.com/en-us/library/windows/desktop/ff700543(v=vs.85).aspx"/>
     public static class ExtendedWindowStyles

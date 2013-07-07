@@ -1,4 +1,4 @@
-﻿namespace DotNetUtils.Win32.WMI.Events
+﻿namespace WindowsOSUtils.WMI.Events
 {
     /// <summary>
     /// The Win32_VolumeChangeEvent WMI class represents a local drive event that results from the addition of a drive letter or mounted drive on the computer system. Network drives are not currently supported.

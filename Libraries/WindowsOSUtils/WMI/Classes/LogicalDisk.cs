@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DotNetUtils.Win32.WMI.Classes
+namespace WindowsOSUtils.WMI.Classes
 {
     /// <summary>
     /// The Win32_LogicalDisk WMI class represents a data source that resolves to

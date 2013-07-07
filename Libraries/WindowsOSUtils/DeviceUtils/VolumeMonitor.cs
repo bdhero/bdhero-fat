@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Text;
-using DotNetUtils.Win32;
-using DotNetUtils.Win32.WMI;
-using DotNetUtils.Win32.WMI.Classes;
-using DotNetUtils.Win32.WMI.Events;
+using WindowsOSUtils.WMI;
+using WindowsOSUtils.WMI.Classes;
+using WindowsOSUtils.WMI.Events;
 
-namespace DotNetUtils.DeviceUtils
+namespace WindowsOSUtils.DeviceUtils
 {
     public class VolumeMonitor
     {

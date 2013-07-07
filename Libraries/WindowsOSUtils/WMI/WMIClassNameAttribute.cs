@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotNetUtils.Win32.WMI
+namespace WindowsOSUtils.WMI
 {
     /// <summary>
     /// Declares the Win32 WMI class name of the .NET class.

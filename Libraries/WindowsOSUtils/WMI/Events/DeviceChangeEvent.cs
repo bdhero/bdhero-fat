@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DotNetUtils.Win32.WMI.Events
+namespace WindowsOSUtils.WMI.Events
 {
     /// <summary>
     /// The Win32_DeviceChangeEvent abstract WMI class represents device change events that result

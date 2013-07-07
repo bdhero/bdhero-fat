@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using DotNetUtils.Extensions;
 
-namespace DotNetUtils.Win32.WMI
+namespace WindowsOSUtils.WMI
 {
     /// <summary>
     /// Watches for WMI events related to the WMI class specified by <typeparamref name="T"/>
