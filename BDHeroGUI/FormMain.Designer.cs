@@ -40,15 +40,21 @@ namespace BDHeroGUI
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.panelRoot = new System.Windows.Forms.Panel();
+            this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
+            this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
+            this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
+            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
+            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.menuStripTop = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBDROMFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDiscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.noBlurayDiscsFoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.searchForMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playlistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,30 +62,23 @@ namespace BDHeroGUI
             this.showAllTracksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pluginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.remuxerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.aboutBDHeroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.homepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.submitABugReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suggestAFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.homepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
-            this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
-            this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
-            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
-            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-            this.searchForMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutBDHeroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.mediaPanel = new BDHeroGUI.Components.MediaPanel();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
             this.panelRoot.SuspendLayout();
-            this.menuStripTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
@@ -88,6 +87,7 @@ namespace BDHeroGUI
             this.splitContainerTop.Panel1.SuspendLayout();
             this.splitContainerTop.Panel2.SuspendLayout();
             this.splitContainerTop.SuspendLayout();
+            this.menuStripTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -199,223 +199,6 @@ namespace BDHeroGUI
             this.panelRoot.Size = new System.Drawing.Size(1060, 562);
             this.panelRoot.TabIndex = 13;
             // 
-            // menuStripTop
-            // 
-            this.menuStripTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem,
-            this.pluginsToolStripMenuItem,
-            this.toolsToolStripMenuItem,
-            this.helpToolStripMenuItem});
-            this.menuStripTop.Location = new System.Drawing.Point(0, 0);
-            this.menuStripTop.Name = "menuStripTop";
-            this.menuStripTop.Size = new System.Drawing.Size(1084, 24);
-            this.menuStripTop.TabIndex = 14;
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openBDROMFolderToolStripMenuItem,
-            this.openDiscToolStripMenuItem,
-            this.toolStripMenuItem5,
-            this.searchForMetadataToolStripMenuItem,
-            this.toolStripMenuItem4,
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.playlistsToolStripMenuItem,
-            this.tracksToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.remuxerToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.optionsToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.homepageToolStripMenuItem,
-            this.documentationToolStripMenuItem,
-            this.submitABugReportToolStripMenuItem,
-            this.suggestAFeatureToolStripMenuItem,
-            this.toolStripMenuItem3,
-            this.checkForUpdatesToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.aboutBDHeroToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // openBDROMFolderToolStripMenuItem
-            // 
-            this.openBDROMFolderToolStripMenuItem.Name = "openBDROMFolderToolStripMenuItem";
-            this.openBDROMFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openBDROMFolderToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.openBDROMFolderToolStripMenuItem.Text = "Open BD-ROM Folder...";
-            this.openBDROMFolderToolStripMenuItem.Click += new System.EventHandler(this.openBDROMFolderToolStripMenuItem_Click);
-            // 
-            // openDiscToolStripMenuItem
-            // 
-            this.openDiscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.noBlurayDiscsFoundToolStripMenuItem});
-            this.openDiscToolStripMenuItem.Name = "openDiscToolStripMenuItem";
-            this.openDiscToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.openDiscToolStripMenuItem.Text = "Open Disc";
-            // 
-            // noBlurayDiscsFoundToolStripMenuItem
-            // 
-            this.noBlurayDiscsFoundToolStripMenuItem.Enabled = false;
-            this.noBlurayDiscsFoundToolStripMenuItem.Name = "noBlurayDiscsFoundToolStripMenuItem";
-            this.noBlurayDiscsFoundToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.noBlurayDiscsFoundToolStripMenuItem.Text = "No Blu-ray Discs found";
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // playlistsToolStripMenuItem
-            // 
-            this.playlistsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showAllPlaylistsToolStripMenuItem,
-            this.editFilterToolStripMenuItem});
-            this.playlistsToolStripMenuItem.Name = "playlistsToolStripMenuItem";
-            this.playlistsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.playlistsToolStripMenuItem.Text = "&Playlists";
-            // 
-            // showAllPlaylistsToolStripMenuItem
-            // 
-            this.showAllPlaylistsToolStripMenuItem.Name = "showAllPlaylistsToolStripMenuItem";
-            this.showAllPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.showAllPlaylistsToolStripMenuItem.Text = "Show &All Playlists";
-            this.showAllPlaylistsToolStripMenuItem.Click += new System.EventHandler(this.showAllPlaylistsToolStripMenuItem_Click);
-            // 
-            // editFilterToolStripMenuItem
-            // 
-            this.editFilterToolStripMenuItem.Name = "editFilterToolStripMenuItem";
-            this.editFilterToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.editFilterToolStripMenuItem.Text = "&Filter...";
-            this.editFilterToolStripMenuItem.Click += new System.EventHandler(this.editFilterToolStripMenuItem_Click);
-            // 
-            // tracksToolStripMenuItem
-            // 
-            this.tracksToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showAllTracksToolStripMenuItem,
-            this.filterToolStripMenuItem});
-            this.tracksToolStripMenuItem.Name = "tracksToolStripMenuItem";
-            this.tracksToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.tracksToolStripMenuItem.Text = "&Tracks";
-            // 
-            // showAllTracksToolStripMenuItem
-            // 
-            this.showAllTracksToolStripMenuItem.CheckOnClick = true;
-            this.showAllTracksToolStripMenuItem.Enabled = false;
-            this.showAllTracksToolStripMenuItem.Name = "showAllTracksToolStripMenuItem";
-            this.showAllTracksToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.showAllTracksToolStripMenuItem.Text = "Show &All Tracks";
-            // 
-            // filterToolStripMenuItem
-            // 
-            this.filterToolStripMenuItem.Enabled = false;
-            this.filterToolStripMenuItem.Name = "filterToolStripMenuItem";
-            this.filterToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.filterToolStripMenuItem.Text = "&Filter...";
-            // 
-            // pluginsToolStripMenuItem
-            // 
-            this.pluginsToolStripMenuItem.Name = "pluginsToolStripMenuItem";
-            this.pluginsToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
-            this.pluginsToolStripMenuItem.Text = "Plugins";
-            // 
-            // optionsToolStripMenuItem
-            // 
-            this.optionsToolStripMenuItem.Enabled = false;
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.optionsToolStripMenuItem.Text = "&Options...";
-            // 
-            // remuxerToolStripMenuItem
-            // 
-            this.remuxerToolStripMenuItem.Enabled = false;
-            this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
-            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.remuxerToolStripMenuItem.Text = "&Remuxer";
-            this.remuxerToolStripMenuItem.ToolTipText = "Launches the Remuxer in a separate window";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
-            // 
-            // aboutBDHeroToolStripMenuItem
-            // 
-            this.aboutBDHeroToolStripMenuItem.Name = "aboutBDHeroToolStripMenuItem";
-            this.aboutBDHeroToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.aboutBDHeroToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.aboutBDHeroToolStripMenuItem.Text = "&About BDHero";
-            this.aboutBDHeroToolStripMenuItem.Click += new System.EventHandler(this.aboutBDHeroToolStripMenuItem_Click);
-            // 
-            // submitABugReportToolStripMenuItem
-            // 
-            this.submitABugReportToolStripMenuItem.Name = "submitABugReportToolStripMenuItem";
-            this.submitABugReportToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.submitABugReportToolStripMenuItem.Text = "Report a &Bug...";
-            this.submitABugReportToolStripMenuItem.Click += new System.EventHandler(this.submitABugReportToolStripMenuItem_Click);
-            // 
-            // suggestAFeatureToolStripMenuItem
-            // 
-            this.suggestAFeatureToolStripMenuItem.Name = "suggestAFeatureToolStripMenuItem";
-            this.suggestAFeatureToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.suggestAFeatureToolStripMenuItem.Text = "Suggest a &Feature...";
-            this.suggestAFeatureToolStripMenuItem.Click += new System.EventHandler(this.suggestAFeatureToolStripMenuItem_Click);
-            // 
-            // documentationToolStripMenuItem
-            // 
-            this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.documentationToolStripMenuItem.Text = "&Documentation";
-            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.documentationToolStripMenuItem_Click);
-            // 
-            // homepageToolStripMenuItem
-            // 
-            this.homepageToolStripMenuItem.Name = "homepageToolStripMenuItem";
-            this.homepageToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.homepageToolStripMenuItem.Text = "&Homepage";
-            this.homepageToolStripMenuItem.Click += new System.EventHandler(this.homepageToolStripMenuItem_Click);
-            // 
-            // checkForUpdatesToolStripMenuItem
-            // 
-            this.checkForUpdatesToolStripMenuItem.Enabled = false;
-            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(173, 6);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(173, 6);
-            // 
             // textBoxInput
             // 
             this.textBoxInput.AllowAnyExtension = false;
@@ -503,10 +286,54 @@ namespace BDHeroGUI
             this.progressBar.UseCustomColors = false;
             this.progressBar.ValuePercent = 0D;
             // 
-            // toolStripMenuItem4
+            // menuStripTop
             // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(238, 6);
+            this.menuStripTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.viewToolStripMenuItem,
+            this.pluginsToolStripMenuItem,
+            this.toolsToolStripMenuItem,
+            this.helpToolStripMenuItem});
+            this.menuStripTop.Location = new System.Drawing.Point(0, 0);
+            this.menuStripTop.Name = "menuStripTop";
+            this.menuStripTop.Size = new System.Drawing.Size(1084, 24);
+            this.menuStripTop.TabIndex = 14;
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openBDROMFolderToolStripMenuItem,
+            this.openDiscToolStripMenuItem,
+            this.toolStripMenuItem5,
+            this.searchForMetadataToolStripMenuItem,
+            this.toolStripMenuItem4,
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // openBDROMFolderToolStripMenuItem
+            // 
+            this.openBDROMFolderToolStripMenuItem.Name = "openBDROMFolderToolStripMenuItem";
+            this.openBDROMFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openBDROMFolderToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.openBDROMFolderToolStripMenuItem.Text = "Open BD-ROM Folder...";
+            this.openBDROMFolderToolStripMenuItem.Click += new System.EventHandler(this.openBDROMFolderToolStripMenuItem_Click);
+            // 
+            // openDiscToolStripMenuItem
+            // 
+            this.openDiscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.noBlurayDiscsFoundToolStripMenuItem});
+            this.openDiscToolStripMenuItem.Name = "openDiscToolStripMenuItem";
+            this.openDiscToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.openDiscToolStripMenuItem.Text = "Open Disc";
+            // 
+            // noBlurayDiscsFoundToolStripMenuItem
+            // 
+            this.noBlurayDiscsFoundToolStripMenuItem.Enabled = false;
+            this.noBlurayDiscsFoundToolStripMenuItem.Name = "noBlurayDiscsFoundToolStripMenuItem";
+            this.noBlurayDiscsFoundToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.noBlurayDiscsFoundToolStripMenuItem.Text = "No Blu-ray Discs found";
             // 
             // toolStripMenuItem5
             // 
@@ -520,6 +347,179 @@ namespace BDHeroGUI
             this.searchForMetadataToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.searchForMetadataToolStripMenuItem.Text = "Search for Metadata...";
             this.searchForMetadataToolStripMenuItem.Click += new System.EventHandler(this.searchForMetadataToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(238, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.playlistsToolStripMenuItem,
+            this.tracksToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // playlistsToolStripMenuItem
+            // 
+            this.playlistsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAllPlaylistsToolStripMenuItem,
+            this.editFilterToolStripMenuItem});
+            this.playlistsToolStripMenuItem.Name = "playlistsToolStripMenuItem";
+            this.playlistsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.playlistsToolStripMenuItem.Text = "&Playlists";
+            // 
+            // showAllPlaylistsToolStripMenuItem
+            // 
+            this.showAllPlaylistsToolStripMenuItem.Name = "showAllPlaylistsToolStripMenuItem";
+            this.showAllPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.showAllPlaylistsToolStripMenuItem.Text = "Show &All Playlists";
+            this.showAllPlaylistsToolStripMenuItem.Click += new System.EventHandler(this.showAllPlaylistsToolStripMenuItem_Click);
+            // 
+            // editFilterToolStripMenuItem
+            // 
+            this.editFilterToolStripMenuItem.Name = "editFilterToolStripMenuItem";
+            this.editFilterToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.editFilterToolStripMenuItem.Text = "&Filter...";
+            this.editFilterToolStripMenuItem.Click += new System.EventHandler(this.editFilterToolStripMenuItem_Click);
+            // 
+            // tracksToolStripMenuItem
+            // 
+            this.tracksToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAllTracksToolStripMenuItem,
+            this.filterToolStripMenuItem});
+            this.tracksToolStripMenuItem.Name = "tracksToolStripMenuItem";
+            this.tracksToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tracksToolStripMenuItem.Text = "&Tracks";
+            // 
+            // showAllTracksToolStripMenuItem
+            // 
+            this.showAllTracksToolStripMenuItem.CheckOnClick = true;
+            this.showAllTracksToolStripMenuItem.Enabled = false;
+            this.showAllTracksToolStripMenuItem.Name = "showAllTracksToolStripMenuItem";
+            this.showAllTracksToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.showAllTracksToolStripMenuItem.Text = "Show &All Tracks";
+            // 
+            // filterToolStripMenuItem
+            // 
+            this.filterToolStripMenuItem.Enabled = false;
+            this.filterToolStripMenuItem.Name = "filterToolStripMenuItem";
+            this.filterToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.filterToolStripMenuItem.Text = "&Filter...";
+            // 
+            // pluginsToolStripMenuItem
+            // 
+            this.pluginsToolStripMenuItem.Name = "pluginsToolStripMenuItem";
+            this.pluginsToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.pluginsToolStripMenuItem.Text = "Plugins";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.remuxerToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.optionsToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // remuxerToolStripMenuItem
+            // 
+            this.remuxerToolStripMenuItem.Enabled = false;
+            this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
+            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.remuxerToolStripMenuItem.Text = "&Remuxer";
+            this.remuxerToolStripMenuItem.ToolTipText = "Launches the Remuxer in a separate window";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Enabled = false;
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Text = "&Options...";
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.homepageToolStripMenuItem,
+            this.documentationToolStripMenuItem,
+            this.submitABugReportToolStripMenuItem,
+            this.suggestAFeatureToolStripMenuItem,
+            this.toolStripMenuItem3,
+            this.checkForUpdatesToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.aboutBDHeroToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // homepageToolStripMenuItem
+            // 
+            this.homepageToolStripMenuItem.Name = "homepageToolStripMenuItem";
+            this.homepageToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.homepageToolStripMenuItem.Text = "&Homepage";
+            this.homepageToolStripMenuItem.Click += new System.EventHandler(this.homepageToolStripMenuItem_Click);
+            // 
+            // documentationToolStripMenuItem
+            // 
+            this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.documentationToolStripMenuItem.Text = "Online &Documentation";
+            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.documentationToolStripMenuItem_Click);
+            // 
+            // submitABugReportToolStripMenuItem
+            // 
+            this.submitABugReportToolStripMenuItem.Name = "submitABugReportToolStripMenuItem";
+            this.submitABugReportToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.submitABugReportToolStripMenuItem.Text = "Report a &Bug...";
+            this.submitABugReportToolStripMenuItem.Click += new System.EventHandler(this.submitABugReportToolStripMenuItem_Click);
+            // 
+            // suggestAFeatureToolStripMenuItem
+            // 
+            this.suggestAFeatureToolStripMenuItem.Name = "suggestAFeatureToolStripMenuItem";
+            this.suggestAFeatureToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.suggestAFeatureToolStripMenuItem.Text = "Suggest a &Feature...";
+            this.suggestAFeatureToolStripMenuItem.Click += new System.EventHandler(this.suggestAFeatureToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(192, 6);
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Enabled = false;
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(192, 6);
+            // 
+            // aboutBDHeroToolStripMenuItem
+            // 
+            this.aboutBDHeroToolStripMenuItem.Name = "aboutBDHeroToolStripMenuItem";
+            this.aboutBDHeroToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.aboutBDHeroToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.aboutBDHeroToolStripMenuItem.Text = "&About BDHero";
+            this.aboutBDHeroToolStripMenuItem.Click += new System.EventHandler(this.aboutBDHeroToolStripMenuItem_Click);
             // 
             // playlistListView
             // 
@@ -568,8 +568,6 @@ namespace BDHeroGUI
             this.DragLeave += new System.EventHandler(this.FormMain_DragLeave);
             this.panelRoot.ResumeLayout(false);
             this.panelRoot.PerformLayout();
-            this.menuStripTop.ResumeLayout(false);
-            this.menuStripTop.PerformLayout();
             this.splitContainerMain.Panel1.ResumeLayout(false);
             this.splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
@@ -578,6 +576,8 @@ namespace BDHeroGUI
             this.splitContainerTop.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTop)).EndInit();
             this.splitContainerTop.ResumeLayout(false);
+            this.menuStripTop.ResumeLayout(false);
+            this.menuStripTop.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
