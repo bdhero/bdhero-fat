@@ -22,7 +22,7 @@ namespace BDHeroGUI.Forms
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             this.labelBuildDate.Text = String.Format("Built on {0}", AssemblyUtils.GetLinkerTimestamp());
             this.labelCopyright.Text = AssemblyCopyright;
-            this.textBoxSystemInfo.Text = string.Format("{0} {1}\n{2}", AssemblyTitle, AssemblyVersion, SystemInfo.Instance);
+            this.textBoxSystemInfo.Text = string.Format("{0} {1}{2}{3}", AssemblyTitle, AssemblyVersion, Environment.NewLine, SystemInfo.Instance);
             new ToolTip().SetToolTip(linkLabelSourceCode, GitHubProjectUrl);
         }
 
