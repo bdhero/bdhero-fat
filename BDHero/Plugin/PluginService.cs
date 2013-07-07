@@ -18,6 +18,21 @@ namespace BDHero.Plugin
 
         public readonly IList<IPlugin> Plugins = new List<IPlugin>();
 
+        public IList<IPlugin> PluginsByType
+        {
+            get
+            {
+                var plugins = new List<IPlugin>();
+                plugins.AddRange(DiscReaderPlugins);
+                plugins.AddRange(MetadataProviderPlugins);
+                plugins.AddRange(AutoDetectorPlugins);
+                plugins.AddRange(NameProviderPlugins);
+                plugins.AddRange(MuxerPlugins);
+                plugins.AddRange(PostProcessorPlugins);
+                return plugins;
+            }
+        }
+
         public IList<IDiscReaderPlugin>       DiscReaderPlugins       { get { return Plugins.OfType<IDiscReaderPlugin>().ToList(); } }
         public IList<IMetadataProviderPlugin> MetadataProviderPlugins { get { return Plugins.OfType<IMetadataProviderPlugin>().ToList(); } }
         public IList<IAutoDetectorPlugin>     AutoDetectorPlugins     { get { return Plugins.OfType<IAutoDetectorPlugin>().ToList(); } }

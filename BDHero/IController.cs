@@ -15,6 +15,8 @@ namespace BDHero
 
         Job Job { get; }
 
+        IList<IPlugin> PluginsByType { get; }
+
         #endregion
 
         #region Events

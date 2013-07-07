@@ -28,6 +28,11 @@ namespace BDHero
 
         public Job Job { get; private set; }
 
+        public IList<IPlugin> PluginsByType
+        {
+            get { return _pluginService.PluginsByType; }
+        }
+
         #region Events
 
         public event EventHandler ScanStarted;
