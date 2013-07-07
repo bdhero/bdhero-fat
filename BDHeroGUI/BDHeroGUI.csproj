@@ -133,6 +133,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Resources\bdhero_gui_128.png" />
     <None Include="Resources\no-poster-w185.png" />
     <EmbeddedResource Include="Components\AudioTrackListView.resx">
       <DependentUpon>AudioTrackListView.cs</DependentUpon>
