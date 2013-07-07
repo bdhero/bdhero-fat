@@ -192,6 +192,7 @@ namespace BDHero.Plugin
 
                 var assemblyInfo = new PluginAssemblyInfo(dllPath,
                                                           AssemblyUtils.GetAssemblyVersion(pluginAssembly),
+                                                          AssemblyUtils.GetLinkerTimestamp(pluginAssembly),
                                                           guid);
 
                 // Initialize the plugin

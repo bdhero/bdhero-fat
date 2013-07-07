@@ -100,6 +100,8 @@ namespace BDHero.Plugin
         /// </summary>
         public Version Version { get; private set; }
 
+        public DateTime BuildDate { get; private set; }
+
         /// <summary>
         /// Gets the GUID of the plugin assembly DLL.
         /// </summary>
@@ -111,10 +113,11 @@ namespace BDHero.Plugin
         /// <remarks>The path to the config file is the same as that of the DLL, except with a ".config.json" extension instead of ".dll".</remarks>
         public string SettingsFile { get { return new Regex(@"\.dll$", RegexOptions.IgnoreCase).Replace(Location, ".config.json"); } }
 
-        public PluginAssemblyInfo(string location, Version version, string guid)
+        public PluginAssemblyInfo(string location, Version version, DateTime buildDate, string guid)
         {
             Location = location;
             Version = version;
+            BuildDate = buildDate;
             Guid = guid;
         }
     }
