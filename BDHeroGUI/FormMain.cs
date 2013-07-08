@@ -552,88 +552,7 @@ namespace BDHeroGUI
 
         #endregion
 
-        #region UI controls - event handling
-
-        private void textBoxInput_SelectedPathChanged(object sender, EventArgs e)
-        {
-            Scan();
-        }
-
-        private void buttonScan_Click(object sender, EventArgs e)
-        {
-            Scan();
-        }
-
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            Cancel();
-        }
-
-        private void MediaPanelOnSelectedMediaChanged(object sender, EventArgs eventArgs)
-        {
-            _controller.RenameSync(textBoxOutput.Text);
-            textBoxOutput.Text = _controller.Job.OutputPath;
-        }
-
-        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
-        {
-            buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
-            tracksPanel.Playlist = playlistListView.SelectedPlaylist;
-        }
-
-        private void buttonConvert_Click(object sender, EventArgs e)
-        {
-            Convert();
-        }
-
-        private void buttonCancelConvert_Click(object sender, EventArgs e)
-        {
-            Cancel();
-        }
-
-        #endregion
-
-        #region Drag and Drop
-
-        private static string GetFirstBDROMDirectory(DragEventArgs e)
-        {
-            return DragUtils.GetPaths(e).Select(BDFileUtils.GetBDROMDirectory).FirstOrDefault(s => s != null);
-        }
-
-        private bool AcceptBDROMDrop(DragEventArgs e)
-        {
-            return _state != ProgressProviderState.Running
-                && _state != ProgressProviderState.Paused
-                && GetFirstBDROMDirectory(e) != null
-                ;
-        }
-
-        private void FormMain_DragEnter(object sender, DragEventArgs e)
-        {
-            if (AcceptBDROMDrop(e))
-            {
-                e.Effect = DragDropEffects.All;
-                textBoxInput.Highlight();
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-                textBoxInput.UnHighlight();
-            }
-        }
-
-        private void FormMain_DragLeave(object sender, EventArgs e)
-        {
-            textBoxInput.UnHighlight();
-        }
-
-        private void FormMain_DragDrop(object sender, DragEventArgs e)
-        {
-            if (!AcceptBDROMDrop(e)) return;
-            Scan(GetFirstBDROMDirectory(e));
-        }
-
-        #endregion
+        #region UI events - ToolStrip MenuItems
 
         private void openBDROMFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -689,5 +608,94 @@ namespace BDHeroGUI
         {
             new AboutBox().ShowDialog(this);
         }
+
+        #endregion
+
+        #region UI events - button clicks
+
+        private void buttonScan_Click(object sender, EventArgs e)
+        {
+            Scan();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            Cancel();
+        }
+
+        private void buttonConvert_Click(object sender, EventArgs e)
+        {
+            Convert();
+        }
+
+        private void buttonCancelConvert_Click(object sender, EventArgs e)
+        {
+            Cancel();
+        }
+
+        #endregion
+
+        #region UI events - selection change
+
+        private void textBoxInput_SelectedPathChanged(object sender, EventArgs e)
+        {
+            Scan();
+        }
+
+        private void MediaPanelOnSelectedMediaChanged(object sender, EventArgs eventArgs)
+        {
+            _controller.RenameSync(textBoxOutput.Text);
+            textBoxOutput.Text = _controller.Job.OutputPath;
+        }
+
+        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
+        {
+            buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
+            tracksPanel.Playlist = playlistListView.SelectedPlaylist;
+        }
+
+        #endregion
+
+        #region Drag and Drop
+
+        private static string GetFirstBDROMDirectory(DragEventArgs e)
+        {
+            return DragUtils.GetPaths(e).Select(BDFileUtils.GetBDROMDirectory).FirstOrDefault(s => s != null);
+        }
+
+        private bool AcceptBDROMDrop(DragEventArgs e)
+        {
+            return _state != ProgressProviderState.Running
+                && _state != ProgressProviderState.Paused
+                && GetFirstBDROMDirectory(e) != null
+                ;
+        }
+
+        private void FormMain_DragEnter(object sender, DragEventArgs e)
+        {
+            if (AcceptBDROMDrop(e))
+            {
+                e.Effect = DragDropEffects.All;
+                textBoxInput.Highlight();
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+                textBoxInput.UnHighlight();
+            }
+        }
+
+        private void FormMain_DragLeave(object sender, EventArgs e)
+        {
+            textBoxInput.UnHighlight();
+        }
+
+        private void FormMain_DragDrop(object sender, DragEventArgs e)
+        {
+            if (!AcceptBDROMDrop(e)) return;
+            Scan(GetFirstBDROMDirectory(e));
+        }
+
+        #endregion
     }
 }
