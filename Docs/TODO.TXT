@@ -15,8 +15,6 @@ Bugs
 Features
 ========
 
-[ ] Add track filter
-
 [ ] Display drives above input textbox (like VidCoder)
 [ ] Background thread for drive detection
 [ ] Centralize drive detection logic
@@ -66,6 +64,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Add track filter
 [X] Add plugin icons
 [X] Add "Rescan" menu item (F5)
 [N] Add "Convert" menu item
