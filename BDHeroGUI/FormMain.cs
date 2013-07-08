@@ -557,7 +557,7 @@ namespace BDHeroGUI
 
         #region Drag and Drop
 
-        private string GetFirstBDROMDirectory(DragEventArgs e)
+        private static string GetFirstBDROMDirectory(DragEventArgs e)
         {
             return DragUtils.GetPaths(e).Select(BDFileUtils.GetBDROMDirectory).FirstOrDefault(s => s != null);
         }
