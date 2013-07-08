@@ -25,6 +25,8 @@ namespace BDHeroGUI
     [UsedImplicitly]
     public partial class FormMain : Form
     {
+        private const string PluginEnabledMenuItemName = "enabled";
+
         private readonly log4net.ILog _logger;
         private readonly IDirectoryLocator _directoryLocator;
         private readonly PluginLoader _pluginLoader;
@@ -96,6 +98,7 @@ namespace BDHeroGUI
                         }
                 };
 
+            // TODO:
             // DriveDetector creates a NativeWindow in order to receive WM_DEVICECHANGE events from Windows.
             // Unfortunately that steals focus away from this window and causes it to appear in the background.
             // We need to explicitly activate this window to give it focus.
@@ -145,40 +148,98 @@ namespace BDHeroGUI
 
         #region Plugins menu
 
+        // TODO: Move logic to Controller
         private void InitPluginMenu()
         {
             Type prevPluginType = null;
-            _controller.PluginsByType.ForEach(delegate(IPlugin plugin)
+
+            foreach (var plugin in _controller.PluginsByType)
+            {
+                IPlugin plugin1 = plugin;
+
+                var ifaces = plugin.GetType().GetInterfaces().Except(new[] {typeof(IPlugin)});
+                var curPluginType = ifaces.FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IPlugin)));
+                if (prevPluginType != null && prevPluginType != curPluginType)
                 {
-                    var ifaces = plugin.GetType().GetInterfaces().Except(new[] {typeof(IPlugin)});
-                    var curPluginType = ifaces.FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IPlugin)));
-                    if (prevPluginType != null && prevPluginType != curPluginType)
+                    pluginsToolStripMenuItem.DropDownItems.Add("-");
+                }
+
+                var iconImage16 = plugin.Icon != null ? new Icon(plugin.Icon, new Size(16, 16)).ToBitmap() : null;
+                var pluginItem = new ToolStripMenuItem(plugin.Name) { Image = iconImage16, Tag = plugin };
+
+                var enabledItem = new ToolStripMenuItem("Enabled") { CheckOnClick = true, Name = PluginEnabledMenuItemName };
+                enabledItem.Click += delegate(object sender, EventArgs args)
                     {
-                        pluginsToolStripMenuItem.DropDownItems.Add("-");
-                    }
+                        if (plugin1 is IDiscReaderPlugin)
+                        {
+                            _controller.PluginsByType.OfType<IDiscReaderPlugin>()
+                                       .ForEach(readerPlugin => readerPlugin.Enabled = readerPlugin == plugin1);
+                        }
+                        else
+                        {
+                            plugin1.Enabled = enabledItem.Checked;
+                        }
+                        AutoCheckPluginMenu();
+                    };
 
-                    var iconImage16 = plugin.Icon != null ? new Icon(plugin.Icon, new Size(16, 16)).ToBitmap() : null;
-                    var pluginItem = new ToolStripMenuItem(plugin.Name) { Image = iconImage16 };
+                pluginItem.DropDownItems.Add(enabledItem);
+                pluginItem.DropDownItems.Add("-");
+                pluginItem.DropDownItems.Add(
+                    new ToolStripMenuItem(string.Format("Version {0}", plugin.AssemblyInfo.Version)) { Enabled = false });
+                pluginItem.DropDownItems.Add(
+                    new ToolStripMenuItem(string.Format("Built on {0}", plugin.AssemblyInfo.BuildDate)) { Enabled = false });
 
-                    pluginItem.DropDownItems.Add(
-                        new ToolStripMenuItem("Enabled") { Enabled = false, Checked = plugin.Enabled });
-                    pluginItem.DropDownItems.Add("-");
-                    pluginItem.DropDownItems.Add(
-                        new ToolStripMenuItem(string.Format("Version {0}", plugin.AssemblyInfo.Version)) { Enabled = false });
-                    pluginItem.DropDownItems.Add(
-                        new ToolStripMenuItem(string.Format("Built on {0}", plugin.AssemblyInfo.BuildDate)) { Enabled = false });
+                if (plugin.EditPreferences != null)
+                {
+                    pluginItem.DropDownItems.Add(new ToolStripMenuItem("Preferences", null,
+                                                                        (sender, args) =>
+                                                                        plugin.EditPreferences(this)));
+                }
 
-                    if (plugin.EditPreferences != null)
-                    {
-                        pluginItem.DropDownItems.Add(new ToolStripMenuItem("Preferences", null,
-                                                                           (sender, args) =>
-                                                                           plugin.EditPreferences(this)));
-                    }
+                pluginsToolStripMenuItem.DropDownItems.Add(pluginItem);
 
-                    pluginsToolStripMenuItem.DropDownItems.Add(pluginItem);
+                prevPluginType = curPluginType;
+            }
 
-                    prevPluginType = curPluginType;
-                });
+            AutoCheckPluginMenu();
+        }
+
+        // TODO: Move logic to Controller
+        private void AutoCheckPluginMenu()
+        {
+            var allItems = pluginsToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>().ToArray();
+            var allDiscReaderPlugins = allItems.Select(item => item.Tag as IDiscReaderPlugin).Where(plugin => plugin != null).ToArray();
+            var enabledDiscReaderPlugins = allDiscReaderPlugins.Where(plugin => plugin.Enabled).ToArray();
+
+            if (enabledDiscReaderPlugins.Any())
+            {
+                // Only allow one Disc Reader plugin to be enabled at a time
+                enabledDiscReaderPlugins.Skip(1).ForEach(plugin => plugin.Enabled = false);
+            }
+            else
+            {
+                // Require one Disc Reader to always be enabled
+                allDiscReaderPlugins.First().Enabled = true;
+            }
+
+            foreach (var item in allItems.Where(item => item.Tag is IPlugin))
+            {
+                var plugin = item.Tag as IPlugin;
+                var enabledItem = item.DropDownItems[PluginEnabledMenuItemName] as ToolStripMenuItem;
+
+                if (plugin == null || enabledItem == null)
+                    continue;
+
+                enabledItem.Checked = plugin.Enabled;
+
+                if (plugin is IDiscReaderPlugin)
+                {
+                    // Exactly one Disc Reader plugin must be enabled at any time; no more, no less.
+                    // Don't allow users to disable a Disc Reader plugin -- only allow them to enable other ones
+                    // (which will disable the previously enabled one).
+                    enabledItem.Enabled = !plugin.Enabled;
+                }
+            }
         }
 
         #endregion
