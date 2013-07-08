@@ -15,6 +15,7 @@ using BDHeroGUI.Forms;
 using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
+using DotNetUtils.TaskUtils;
 using OSUtils.DriveDetector;
 using OSUtils.TaskbarUtils;
 using WindowsOSUtils.TaskbarUtils;
@@ -67,32 +68,58 @@ namespace BDHeroGUI
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
             mediaPanel.Search = ShowMetadataSearchWindow;
 
+            InitDriveDetector();
+        }
+
+        private void InitDriveDetector()
+        {
             // TODO: Detect all drives on startup
             // TODO: Do this in background thread
             // TODO: Handle exceptions
             _driveDetector.DeviceArrived += DriveDetectorOnDeviceArrived;
             _driveDetector.DeviceRemoved += DriveDetectorOnDeviceRemoved;
+
+            var bdromDrives = new DriveInfo[0];
+
+            new TaskBuilder()
+                .OnCurrentThread()
+                .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
+                    {
+                        bdromDrives = DriveInfo.GetDrives().Where(BDFileUtils.IsBDROM).ToArray();
+                    })
+                .Succeed(delegate
+                    {
+                        bdromDrives.ForEach(AddBDROMMenuItem);
+                    })
+                .Build()
+                .Start();
         }
 
         private void DriveDetectorOnDeviceArrived(object sender, DriveDetectorEventArgs args)
         {
-            var driveInfo = args.DriveInfo;
+            if (BDFileUtils.IsBDROM(args.DriveInfo))
+            {
+                AddBDROMMenuItem(args.DriveInfo);
+            }
+        }
 
-            if (!BDFileUtils.IsBDROM(driveInfo.Name))
-                return;
+        private void DriveDetectorOnDeviceRemoved(object sender, DriveDetectorEventArgs args)
+        {
+            RemoveBDROMMenuItem(args.DriveInfo);
+        }
 
+        private void AddBDROMMenuItem(DriveInfo driveInfo)
+        {
             var text = string.Format("{0} {1}", driveInfo.Name, driveInfo.VolumeLabel);
-            var item = new ToolStripMenuItem(text) { Tag = driveInfo.Name };
+            var item = new ToolStripMenuItem(text) {Tag = driveInfo.Name};
             item.Click += (o, e) => Scan(driveInfo.Name);
 
             openDiscToolStripMenuItem.DropDownItems.Add(item);
             noBlurayDiscsFoundToolStripMenuItem.Visible = false;
         }
 
-        private void DriveDetectorOnDeviceRemoved(object sender, DriveDetectorEventArgs args)
+        private void RemoveBDROMMenuItem(DriveInfo driveInfo)
         {
-            var driveInfo = args.DriveInfo;
-
             var items = openDiscToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>().ToArray();
             var item = items.FirstOrDefault(menuItem => driveInfo.Name.Equals(menuItem.Tag));
 
@@ -129,6 +156,11 @@ namespace BDHeroGUI
                             Extensions = new[] {".mkv"}
                         }
                 };
+
+            // DriveDetector creates a NativeWindow in order to receive WM_DEVICECHANGE events from Windows.
+            // Unfortunately that steals focus away from this window and causes it to appear in the background.
+            // We need to explicitly activate this window to give it focus.
+            Activate();
         }
 
         #endregion
