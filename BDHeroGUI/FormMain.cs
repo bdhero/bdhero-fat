@@ -59,7 +59,7 @@ namespace BDHeroGUI
             _taskbarItem = new WindowsTaskbarItemFactory().GetInstance(Handle);
 
             progressBar.UseCustomColors = true;
-            progressBar.GenerateText = d => string.Format("{0}: {1:0.00}%", _state, d);
+            progressBar.GenerateText = percentComplete => string.Format("{0}: {1:0.00}%", _state, percentComplete);
 
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
             playlistListView.ShowAllChanged += PlaylistListViewOnShowAllChanged;
