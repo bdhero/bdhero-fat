@@ -17,6 +17,8 @@ Bugs
 Features
 ========
 
+[ ] Add Disc Info class and window
+
 [ ] Split output MKV path into directory and file name
     [ ] Move output file name settings out into Preferences dialog (similar to mmg)
     [ ] Separate file namer preferences for movies and TV shows
