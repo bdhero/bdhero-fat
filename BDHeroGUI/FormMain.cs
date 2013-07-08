@@ -347,6 +347,9 @@ namespace BDHeroGUI
         /// <param name="path">Optional path to the root BD-ROM folder.  If specified, the "Source BD-ROM" textbox will be populated with this path.</param>
         private void Scan(string path = null)
         {
+            if (path != null)
+                textBoxInput.Text = path;
+
             _controller.SetEventScheduler();
 
             // TODO: Let File Namer plugin handle this
