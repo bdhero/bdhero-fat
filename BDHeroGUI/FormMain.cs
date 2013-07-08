@@ -47,8 +47,6 @@ namespace BDHeroGUI
 
             Load += OnLoad;
 
-            Text += " v" + AppUtils.AppVersion;
-
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _directoryLocator = directoryLocator;
             _pluginLoader = pluginLoader;
@@ -138,6 +136,8 @@ namespace BDHeroGUI
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
+            Text += " v" + AppUtils.AppVersion;
+
             LogDirectoryPaths();
             LoadPlugins();
             LogPlugins();
