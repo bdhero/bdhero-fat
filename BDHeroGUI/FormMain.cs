@@ -341,7 +341,11 @@ namespace BDHeroGUI
 
         #region Stages: Scan & Convert
 
-        private void Scan()
+        /// <summary>
+        /// Asynchronously scans the selected BD-ROM folder.
+        /// </summary>
+        /// <param name="path">Optional path to the root BD-ROM folder.  If specified, the "Source BD-ROM" textbox will be populated with this path.</param>
+        private void Scan(string path = null)
         {
             _controller.SetEventScheduler();
 
