@@ -84,11 +84,8 @@ namespace BDHeroGUI
 
             var text = string.Format("{0} {1}", driveInfo.Name, driveInfo.VolumeLabel);
             var item = new ToolStripMenuItem(text) { Tag = driveInfo.Name };
-            item.Click += delegate(object o, EventArgs eventArgs)
-                {
-                    textBoxInput.Text = driveInfo.Name;
-                    Scan();
-                };
+            item.Click += (o, e) => Scan(driveInfo.Name);
+
             openDiscToolStripMenuItem.DropDownItems.Add(item);
             noBlurayDiscsFoundToolStripMenuItem.Visible = false;
         }
@@ -596,8 +593,7 @@ namespace BDHeroGUI
         private void FormMain_DragDrop(object sender, DragEventArgs e)
         {
             if (!AcceptBDROMDrop(e)) return;
-            textBoxInput.Text = GetFirstBDROMDirectory(e);
-            Scan();
+            Scan(GetFirstBDROMDirectory(e));
         }
 
         #endregion
