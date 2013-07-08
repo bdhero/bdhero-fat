@@ -129,10 +129,11 @@ namespace BDHeroGUI
                 openDiscToolStripMenuItem.DropDownItems.Remove(item);
             }
 
-            if (!items.Any(menuItem => menuItem.Visible))
-            {
-                noBlurayDiscsFoundToolStripMenuItem.Visible = true;
-            }
+            var hasVisibleItems = items
+                .Except(new[] {noBlurayDiscsFoundToolStripMenuItem})
+                .Any(menuItem => menuItem.Visible);
+
+            noBlurayDiscsFoundToolStripMenuItem.Visible = !hasVisibleItems;
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
