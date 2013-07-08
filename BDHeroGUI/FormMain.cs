@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -663,22 +662,22 @@ namespace BDHeroGUI
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/bdhero/bdhero");
+            AppUtils.OpenUrl(AppUtils.ProjectHomepage);
         }
 
         private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/bdhero/bdhero/wiki");
+            AppUtils.OpenUrl(AppUtils.DocumentationUrl);
         }
 
         private void submitABugReportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/bdhero/bdhero/issues/new");
+            AppUtils.OpenUrl(AppUtils.BugReportUrl);
         }
 
         private void suggestAFeatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/bdhero/bdhero/issues/new");
+            AppUtils.OpenUrl(AppUtils.SuggestFeatureUrl);
         }
 
         private void aboutBDHeroToolStripMenuItem_Click(object sender, EventArgs e)
