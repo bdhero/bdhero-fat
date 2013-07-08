@@ -10,8 +10,6 @@ namespace BDHeroGUI.Forms
 {
     partial class AboutBox : Form
     {
-        private const string GitHubProjectUrl = "https://github.com/bdhero/bdhero";
-
         public AboutBox()
         {
             InitializeComponent();
@@ -21,12 +19,12 @@ namespace BDHeroGUI.Forms
             this.labelBuildDate.Text = String.Format("Built on {0}", AppUtils.BuildDate);
             this.labelCopyright.Text = AppUtils.Copyright;
             this.textBoxSystemInfo.Text = string.Format("{0} {1}{2}{3}", AppUtils.AppName, AppUtils.AppVersion, Environment.NewLine, SystemInfo.Instance);
-            new ToolTip().SetToolTip(linkLabelSourceCode, GitHubProjectUrl);
+            new ToolTip().SetToolTip(linkLabelSourceCode, AppUtils.SourceCodeUrl);
         }
 
         private void linkLabelSourceCode_Click(object sender, EventArgs e)
         {
-            Process.Start(GitHubProjectUrl);
+            AppUtils.OpenUrl(AppUtils.SourceCodeUrl);
         }
     }
 }
