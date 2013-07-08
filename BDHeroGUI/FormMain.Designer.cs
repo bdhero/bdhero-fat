@@ -446,6 +446,7 @@ namespace BDHeroGUI
             this.optionsToolStripMenuItem.Enabled = false;
             this.optionsToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.settings;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.optionsToolStripMenuItem.Text = "&Options...";
             // 
