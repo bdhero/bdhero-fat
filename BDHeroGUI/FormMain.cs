@@ -141,6 +141,10 @@ namespace BDHeroGUI
             _controller.UnhandledException += ControllerOnUnhandledException;
         }
 
+        #endregion
+
+        #region Plugins menu
+
         private void InitPluginMenu()
         {
             Type prevPluginType = null;
