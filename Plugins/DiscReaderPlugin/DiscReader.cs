@@ -19,7 +19,7 @@ namespace BDHero.Plugin.DiscReader
 
         public bool Enabled { get; set; }
 
-        public Icon Icon { get { return null; } }
+        public Icon Icon { get { return Resources.cinemasquid_icon; } }
 
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
