@@ -233,6 +233,8 @@ namespace BDHeroGUI
             var items = openDiscToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>().ToArray();
             var item = items.FirstOrDefault(menuItem => driveInfo.Name.Equals(menuItem.Tag));
 
+            noBlurayDiscsFoundToolStripMenuItem.Visible = true;
+
             if (item != null)
             {
                 openDiscToolStripMenuItem.DropDownItems.Remove(item);
