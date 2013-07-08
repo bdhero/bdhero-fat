@@ -354,6 +354,7 @@ namespace BDHeroGUI
             textBoxInput.Enabled = enabled;
             buttonScan.Enabled = enabled;
             buttonCancelScan.Enabled = !enabled;
+            rescanToolStripMenuItem.Enabled = enabled;
 
             textBoxOutput.Enabled = enabled;
             buttonConvert.Enabled = enabled && isPlaylistSelected;
@@ -558,6 +559,11 @@ namespace BDHeroGUI
         private void openBDROMFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             textBoxInput.Browse();
+        }
+
+        private void rescanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Scan();
         }
 
         private void searchForMetadataToolStripMenuItem_Click(object sender, EventArgs e)

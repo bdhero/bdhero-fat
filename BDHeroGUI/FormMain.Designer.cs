@@ -74,11 +74,12 @@ namespace BDHeroGUI
             this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
             this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
+            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
+            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
+            this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.mediaPanel = new BDHeroGUI.Components.MediaPanel();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
-            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
-            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.panelRoot.SuspendLayout();
             this.menuStripTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -218,6 +219,7 @@ namespace BDHeroGUI
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openBDROMFolderToolStripMenuItem,
             this.openDiscToolStripMenuItem,
+            this.rescanToolStripMenuItem,
             this.toolStripMenuItem5,
             this.searchForMetadataToolStripMenuItem,
             this.toolStripMenuItem4,
@@ -287,10 +289,10 @@ namespace BDHeroGUI
             // playlistsToolStripMenuItem
             // 
             this.playlistsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showAllPlaylistsToolStripMenuItem,
-            this.editFilterToolStripMenuItem});
+            this.editFilterToolStripMenuItem,
+            this.showAllPlaylistsToolStripMenuItem});
             this.playlistsToolStripMenuItem.Name = "playlistsToolStripMenuItem";
-            this.playlistsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.playlistsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.playlistsToolStripMenuItem.Text = "&Playlists";
             // 
             // showAllPlaylistsToolStripMenuItem
@@ -310,10 +312,10 @@ namespace BDHeroGUI
             // tracksToolStripMenuItem
             // 
             this.tracksToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showAllTracksToolStripMenuItem,
-            this.filterToolStripMenuItem});
+            this.filterToolStripMenuItem,
+            this.showAllTracksToolStripMenuItem});
             this.tracksToolStripMenuItem.Name = "tracksToolStripMenuItem";
-            this.tracksToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.tracksToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.tracksToolStripMenuItem.Text = "&Tracks";
             // 
             // showAllTracksToolStripMenuItem
@@ -351,20 +353,20 @@ namespace BDHeroGUI
             // 
             this.remuxerToolStripMenuItem.Enabled = false;
             this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
-            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.remuxerToolStripMenuItem.Text = "&Remuxer";
             this.remuxerToolStripMenuItem.ToolTipText = "Launches the Remuxer in a separate window";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(122, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Enabled = false;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.optionsToolStripMenuItem.Text = "&Options...";
             // 
             // helpToolStripMenuItem
@@ -498,34 +500,6 @@ namespace BDHeroGUI
             this.splitContainerTop.SplitterDistance = 704;
             this.splitContainerTop.TabIndex = 7;
             // 
-            // playlistListView
-            // 
-            this.playlistListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playlistListView.Location = new System.Drawing.Point(0, 0);
-            this.playlistListView.Name = "playlistListView";
-            this.playlistListView.Playlists = null;
-            this.playlistListView.SelectedPlaylist = null;
-            this.playlistListView.ShowAll = false;
-            this.playlistListView.Size = new System.Drawing.Size(704, 118);
-            this.playlistListView.TabIndex = 1;
-            // 
-            // mediaPanel
-            // 
-            this.mediaPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mediaPanel.Location = new System.Drawing.Point(0, 0);
-            this.mediaPanel.Name = "mediaPanel";
-            this.mediaPanel.Size = new System.Drawing.Size(380, 118);
-            this.mediaPanel.TabIndex = 0;
-            // 
-            // tracksPanel
-            // 
-            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
-            this.tracksPanel.Name = "tracksPanel";
-            this.tracksPanel.Playlist = null;
-            this.tracksPanel.Size = new System.Drawing.Size(1088, 290);
-            this.tracksPanel.TabIndex = 0;
-            // 
             // textBoxOutput
             // 
             this.textBoxOutput.AllowAnyExtension = false;
@@ -557,6 +531,42 @@ namespace BDHeroGUI
             this.progressBar.TextOutlineWidth = 2;
             this.progressBar.UseCustomColors = false;
             this.progressBar.ValuePercent = 0D;
+            // 
+            // rescanToolStripMenuItem
+            // 
+            this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
+            this.rescanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.rescanToolStripMenuItem.Text = "Rescan";
+            this.rescanToolStripMenuItem.Click += new System.EventHandler(this.rescanToolStripMenuItem_Click);
+            // 
+            // playlistListView
+            // 
+            this.playlistListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playlistListView.Location = new System.Drawing.Point(0, 0);
+            this.playlistListView.Name = "playlistListView";
+            this.playlistListView.Playlists = null;
+            this.playlistListView.SelectedPlaylist = null;
+            this.playlistListView.ShowAll = false;
+            this.playlistListView.Size = new System.Drawing.Size(704, 118);
+            this.playlistListView.TabIndex = 1;
+            // 
+            // mediaPanel
+            // 
+            this.mediaPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mediaPanel.Location = new System.Drawing.Point(0, 0);
+            this.mediaPanel.Name = "mediaPanel";
+            this.mediaPanel.Size = new System.Drawing.Size(380, 118);
+            this.mediaPanel.TabIndex = 0;
+            // 
+            // tracksPanel
+            // 
+            this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tracksPanel.Location = new System.Drawing.Point(0, 0);
+            this.tracksPanel.Name = "tracksPanel";
+            this.tracksPanel.Playlist = null;
+            this.tracksPanel.Size = new System.Drawing.Size(1088, 290);
+            this.tracksPanel.TabIndex = 0;
             // 
             // FormMain
             // 
@@ -642,6 +652,7 @@ namespace BDHeroGUI
         private System.Windows.Forms.ToolStripMenuItem searchForMetadataToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem showLogFileInWindowsExplorerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rescanToolStripMenuItem;
     }
 }
 
