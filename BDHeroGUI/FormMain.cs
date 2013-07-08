@@ -48,6 +48,8 @@ namespace BDHeroGUI
 
             Load += OnLoad;
 
+            Text += " v" + AppUtils.AppVersion;
+
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _directoryLocator = directoryLocator;
             _pluginLoader = pluginLoader;
