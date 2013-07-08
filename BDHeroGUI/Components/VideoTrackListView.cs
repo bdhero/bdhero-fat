@@ -20,10 +20,12 @@ namespace BDHeroGUI.Components
 
         private readonly TrackListViewHelper _helper;
 
+        public Func<Track, bool> Filter = track => true;
+
         public VideoTrackListView()
         {
             InitializeComponent();
-            _helper = new TrackListViewHelper(listViewVideoTracks, track => track.IsVideo, GetListItem);
+            _helper = new TrackListViewHelper(listViewVideoTracks, track => track.IsVideo && Filter(track), GetListItem);
             Load += _helper.OnLoad;
         }
 

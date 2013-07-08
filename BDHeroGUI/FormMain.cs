@@ -585,14 +585,24 @@ namespace BDHeroGUI
             playlistListView.ShowAll = !playlistListView.ShowAll;
         }
 
+        private void editFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            playlistListView.ShowFilterWindow();
+        }
+
         private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)
         {
             showAllPlaylistsToolStripMenuItem.Checked = playlistListView.ShowAll;
         }
 
-        private void editFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        private void filterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            playlistListView.ShowFilterWindow();
+            tracksPanel.ShowFilterWindow();
+        }
+
+        private void showAllTracksToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            tracksPanel.ShowAll = showAllTracksToolStripMenuItem.Checked;
         }
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
