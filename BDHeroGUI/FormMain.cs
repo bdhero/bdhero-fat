@@ -350,8 +350,10 @@ namespace BDHeroGUI
             openDiscToolStripMenuItem.Enabled = enabled;
             searchForMetadataToolStripMenuItem.Enabled = enabled && hasJob;
 
-            playlistsToolStripMenuItem.Enabled = enabled;
-            tracksToolStripMenuItem.Enabled = enabled;
+            filterPlaylistsToolStripMenuItem.Enabled = enabled;
+            showAllPlaylistsToolStripMenuItem.Enabled = enabled;
+            filterTracksToolStripMenuItem.Enabled = enabled;
+            showAllTracksToolStripMenuItem.Enabled = enabled;
 
 //            optionsToolStripMenuItem.Enabled = enabled;
 
@@ -585,17 +587,12 @@ namespace BDHeroGUI
             playlistListView.ShowAll = !playlistListView.ShowAll;
         }
 
-        private void editFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        private void filterPlaylistsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             playlistListView.ShowFilterWindow();
         }
 
-        private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)
-        {
-            showAllPlaylistsToolStripMenuItem.Checked = playlistListView.ShowAll;
-        }
-
-        private void filterToolStripMenuItem_Click(object sender, EventArgs e)
+        private void filterTracksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tracksPanel.ShowFilterWindow();
         }
@@ -678,6 +675,11 @@ namespace BDHeroGUI
         {
             buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
             tracksPanel.Playlist = playlistListView.SelectedPlaylist;
+        }
+
+        private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)
+        {
+            showAllPlaylistsToolStripMenuItem.Checked = playlistListView.ShowAll;
         }
 
         #endregion
