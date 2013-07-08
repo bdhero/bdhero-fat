@@ -71,6 +71,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Show BDHero version number in FormMain title
 [X] Detect drives on startup
 [X] Menu bar
 [X] Basic about box
