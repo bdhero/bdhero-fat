@@ -15,11 +15,6 @@ Bugs
 Features
 ========
 
-[ ] Display drives above input textbox (like VidCoder)
-[ ] Background thread for drive detection
-[ ] Centralize drive detection logic
-[ ] Handle exceptions during drive detection
-
 [ ] Split output MKV path into directory and file name
     [ ] Move output file name settings out into Preferences dialog (similar to mmg)
     [ ] Separate file namer preferences for movies and TV shows
@@ -42,6 +37,11 @@ Backlog
 [ ] Allow pausing of tasks
 
 [ ] Validate filter window inputs
+
+[ ] Display drives above input textbox (like VidCoder)
+[ ] Background thread for drive detection
+[ ] Centralize drive detection logic
+[ ] Handle exceptions during drive detection
 
 [ ] CLI arg to dump list of main movie playlist files
 [ ] Asynchronous TMDb poster/cover art getter thread (use futures?)
