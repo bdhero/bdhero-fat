@@ -253,7 +253,7 @@ namespace BDHero
 
         private bool ReadBDROM(CancellationToken cancellationToken, string bdromPath)
         {
-            IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
+            IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First(plugin => plugin.Enabled);
             var pluginTask = RunPluginSync(cancellationToken, discReader, token => Job = new Job(discReader.ReadBDROM(token, bdromPath)));
             return pluginTask.IsCompleted && pluginTask.Result;
         }
@@ -267,7 +267,7 @@ namespace BDHero
             Job.Movies.Clear();
             Job.TVShows.Clear();
 
-            foreach (var plugin in _pluginService.MetadataProviderPlugins)
+            foreach (var plugin in _pluginService.MetadataProviderPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 GetMetadata(cancellationToken, plugin);
@@ -285,7 +285,7 @@ namespace BDHero
 
         private void AutoDetect(CancellationToken cancellationToken)
         {
-            foreach (var plugin in _pluginService.AutoDetectorPlugins)
+            foreach (var plugin in _pluginService.AutoDetectorPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 AutoDetect(cancellationToken, plugin);
@@ -310,7 +310,7 @@ namespace BDHero
         {
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
-            foreach (var plugin in _pluginService.NameProviderPlugins)
+            foreach (var plugin in _pluginService.NameProviderPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 Rename(cancellationToken, plugin);
@@ -336,12 +336,14 @@ namespace BDHero
 
         private bool Mux(CancellationToken cancellationToken)
         {
-            if (!_pluginService.MuxerPlugins.Any())
+            var enabledMuxerPlugins = _pluginService.MuxerPlugins.Where(plugin => plugin.Enabled).ToArray();
+
+            if (!enabledMuxerPlugins.Any())
                 return false;
 
             EnsureOutputDirExists();
 
-            return _pluginService.MuxerPlugins.All(muxer => Mux(cancellationToken, muxer));
+            return enabledMuxerPlugins.All(muxer => Mux(cancellationToken, muxer));
         }
 
         private bool Mux(CancellationToken cancellationToken, IMuxerPlugin plugin)
@@ -356,7 +358,7 @@ namespace BDHero
 
         private void PostProcess(CancellationToken cancellationToken)
         {
-            foreach (var plugin in _pluginService.PostProcessorPlugins)
+            foreach (var plugin in _pluginService.PostProcessorPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 PostProcess(cancellationToken, plugin);
