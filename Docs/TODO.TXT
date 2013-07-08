@@ -41,6 +41,8 @@ Backlog
 
 [ ] Allow pausing of tasks
 
+[ ] Validate filter window inputs
+
 [ ] CLI arg to dump list of main movie playlist files
 [ ] Asynchronous TMDb poster/cover art getter thread (use futures?)
 
