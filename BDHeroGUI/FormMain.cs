@@ -358,6 +358,9 @@ namespace BDHeroGUI
                 .Start();
         }
 
+        /// <summary>
+        /// Asynchronously converts the BD-ROM to an MKV file according to the user's settings and selections.
+        /// </summary>
         private void Convert()
         {
             var selectedPlaylist = playlistListView.SelectedPlaylist;
