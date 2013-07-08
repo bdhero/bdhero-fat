@@ -15,10 +15,12 @@ Bugs
 Features
 ========
 
-[ ] Detect drives on startup
+[ ] Display drives above input textbox (like VidCoder)
 [ ] Background thread for drive detection
 [ ] Centralize drive detection logic
 [ ] Handle exceptions during drive detection
+
+[ ] Add separate class for project URLs and to launch them
 
 [ ] Add "Rescan" menu item (F5)
 [ ] Add "Convert" menu item
@@ -69,6 +71,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Detect drives on startup
 [X] Menu bar
 [X] Basic about box
 [X] Update output MKV path when user's selection changes
