@@ -78,8 +78,7 @@ namespace BDHeroGUI
         {
             var driveInfo = args.DriveInfo;
 
-            // TODO: Move this logic elsewhere
-            if (!File.Exists(Path.Combine(driveInfo.Name, "BDMV", "index.bdmv")))
+            if (!BDFileUtils.IsBDROM(driveInfo.Name))
                 return;
 
             var text = string.Format("{0} {1}", driveInfo.Name, driveInfo.VolumeLabel);
