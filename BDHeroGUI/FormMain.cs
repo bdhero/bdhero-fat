@@ -547,7 +547,8 @@ namespace BDHeroGUI
 
         private void ControllerOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
-            MessageBox.Show(this, args.ExceptionObject.ToString(), "BDHero Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            var caption = string.Format("{0} Error", AppUtils.AppName);
+            MessageBox.Show(this, args.ExceptionObject.ToString(), caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         #endregion
