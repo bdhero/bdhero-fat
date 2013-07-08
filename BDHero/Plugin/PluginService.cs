@@ -178,7 +178,7 @@ namespace BDHero.Plugin
             // Create a new assembly from the plugin file we're adding..
             Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
 
-            var guid = ((GuidAttribute)pluginAssembly.GetCustomAttributes(typeof(GuidAttribute), true)[0]).Value;
+            var guid = AssemblyUtils.Guid(pluginAssembly);
 
             // Next we'll loop through all the Types found in the assembly
             foreach (Type pluginType in pluginAssembly.GetTypes().Where(IsValidPlugin))
