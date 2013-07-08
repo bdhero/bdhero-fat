@@ -40,11 +40,6 @@ namespace BDHeroGUI
             this.buttonCancelConvert = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.panelRoot = new System.Windows.Forms.Panel();
-            this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
-            this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
-            this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
-            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
-            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.menuStripTop = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBDROMFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,10 +70,17 @@ namespace BDHeroGUI
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutBDHeroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showLogFileInWindowsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
+            this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
+            this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.mediaPanel = new BDHeroGUI.Components.MediaPanel();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
+            this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
+            this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.panelRoot.SuspendLayout();
+            this.menuStripTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
@@ -87,7 +89,6 @@ namespace BDHeroGUI
             this.splitContainerTop.Panel1.SuspendLayout();
             this.splitContainerTop.Panel2.SuspendLayout();
             this.splitContainerTop.SuspendLayout();
-            this.menuStripTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -198,93 +199,6 @@ namespace BDHeroGUI
             this.panelRoot.Name = "panelRoot";
             this.panelRoot.Size = new System.Drawing.Size(1094, 562);
             this.panelRoot.TabIndex = 13;
-            // 
-            // textBoxInput
-            // 
-            this.textBoxInput.AllowAnyExtension = false;
-            this.textBoxInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxInput.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.textBoxInput.DialogTitle = "Select a BD-ROM folder:";
-            this.textBoxInput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
-            this.textBoxInput.FileExtensions = null;
-            this.textBoxInput.Location = new System.Drawing.Point(93, 3);
-            this.textBoxInput.Name = "textBoxInput";
-            this.textBoxInput.OverwritePrompt = false;
-            this.textBoxInput.SelectedPath = "W:\\BD\\49123204_BLACK_HAWK_DOWN";
-            this.textBoxInput.ShowNewFolderButton = false;
-            this.textBoxInput.Size = new System.Drawing.Size(836, 24);
-            this.textBoxInput.TabIndex = 0;
-            this.textBoxInput.SelectedPathChanged += new System.EventHandler(this.textBoxInput_SelectedPathChanged);
-            // 
-            // splitContainerMain
-            // 
-            this.splitContainerMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainerMain.Location = new System.Drawing.Point(3, 32);
-            this.splitContainerMain.Name = "splitContainerMain";
-            this.splitContainerMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainerMain.Panel1
-            // 
-            this.splitContainerMain.Panel1.Controls.Add(this.splitContainerTop);
-            // 
-            // splitContainerMain.Panel2
-            // 
-            this.splitContainerMain.Panel2.Controls.Add(this.tracksPanel);
-            this.splitContainerMain.Size = new System.Drawing.Size(1088, 412);
-            this.splitContainerMain.SplitterDistance = 118;
-            this.splitContainerMain.TabIndex = 3;
-            // 
-            // splitContainerTop
-            // 
-            this.splitContainerTop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerTop.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerTop.Name = "splitContainerTop";
-            // 
-            // splitContainerTop.Panel1
-            // 
-            this.splitContainerTop.Panel1.Controls.Add(this.playlistListView);
-            // 
-            // splitContainerTop.Panel2
-            // 
-            this.splitContainerTop.Panel2.Controls.Add(this.mediaPanel);
-            this.splitContainerTop.Size = new System.Drawing.Size(1088, 118);
-            this.splitContainerTop.SplitterDistance = 704;
-            this.splitContainerTop.TabIndex = 7;
-            // 
-            // textBoxOutput
-            // 
-            this.textBoxOutput.AllowAnyExtension = false;
-            this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutput.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.textBoxOutput.DialogTitle = "Save MKV file:";
-            this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.SaveFile;
-            this.textBoxOutput.FileExtensions = null;
-            this.textBoxOutput.Location = new System.Drawing.Point(93, 450);
-            this.textBoxOutput.Name = "textBoxOutput";
-            this.textBoxOutput.SelectedPath = "W:\\BDHero\\test.mkv";
-            this.textBoxOutput.Size = new System.Drawing.Size(836, 24);
-            this.textBoxOutput.TabIndex = 4;
-            // 
-            // progressBar
-            // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(3, 536);
-            this.progressBar.Maximum = 100000;
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(1088, 23);
-            this.progressBar.Step = 1;
-            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBar.TabIndex = 11;
-            this.progressBar.TextOutline = true;
-            this.progressBar.TextOutlineColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.progressBar.TextOutlineWidth = 2;
-            this.progressBar.UseCustomColors = false;
-            this.progressBar.ValuePercent = 0D;
             // 
             // menuStripTop
             // 
@@ -460,6 +374,7 @@ namespace BDHeroGUI
             this.documentationToolStripMenuItem,
             this.submitABugReportToolStripMenuItem,
             this.suggestAFeatureToolStripMenuItem,
+            this.showLogFileInWindowsExplorerToolStripMenuItem,
             this.toolStripMenuItem3,
             this.checkForUpdatesToolStripMenuItem,
             this.toolStripMenuItem2,
@@ -486,14 +401,14 @@ namespace BDHeroGUI
             // 
             this.submitABugReportToolStripMenuItem.Name = "submitABugReportToolStripMenuItem";
             this.submitABugReportToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.submitABugReportToolStripMenuItem.Text = "Report a &Bug...";
+            this.submitABugReportToolStripMenuItem.Text = "Report a &Bug";
             this.submitABugReportToolStripMenuItem.Click += new System.EventHandler(this.submitABugReportToolStripMenuItem_Click);
             // 
             // suggestAFeatureToolStripMenuItem
             // 
             this.suggestAFeatureToolStripMenuItem.Name = "suggestAFeatureToolStripMenuItem";
             this.suggestAFeatureToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.suggestAFeatureToolStripMenuItem.Text = "Suggest a &Feature...";
+            this.suggestAFeatureToolStripMenuItem.Text = "Suggest a &Feature";
             this.suggestAFeatureToolStripMenuItem.Click += new System.EventHandler(this.suggestAFeatureToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
@@ -520,6 +435,68 @@ namespace BDHeroGUI
             this.aboutBDHeroToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.aboutBDHeroToolStripMenuItem.Text = "&About BDHero";
             this.aboutBDHeroToolStripMenuItem.Click += new System.EventHandler(this.aboutBDHeroToolStripMenuItem_Click);
+            // 
+            // showLogFileInWindowsExplorerToolStripMenuItem
+            // 
+            this.showLogFileInWindowsExplorerToolStripMenuItem.Name = "showLogFileInWindowsExplorerToolStripMenuItem";
+            this.showLogFileInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.showLogFileInWindowsExplorerToolStripMenuItem.Text = "Show &Log Files";
+            this.showLogFileInWindowsExplorerToolStripMenuItem.Click += new System.EventHandler(this.showLogFileInWindowsExplorerToolStripMenuItem_Click);
+            // 
+            // textBoxInput
+            // 
+            this.textBoxInput.AllowAnyExtension = false;
+            this.textBoxInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxInput.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.textBoxInput.DialogTitle = "Select a BD-ROM folder:";
+            this.textBoxInput.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
+            this.textBoxInput.FileExtensions = null;
+            this.textBoxInput.Location = new System.Drawing.Point(93, 3);
+            this.textBoxInput.Name = "textBoxInput";
+            this.textBoxInput.OverwritePrompt = false;
+            this.textBoxInput.SelectedPath = "W:\\BD\\49123204_BLACK_HAWK_DOWN";
+            this.textBoxInput.ShowNewFolderButton = false;
+            this.textBoxInput.Size = new System.Drawing.Size(836, 24);
+            this.textBoxInput.TabIndex = 0;
+            this.textBoxInput.SelectedPathChanged += new System.EventHandler(this.textBoxInput_SelectedPathChanged);
+            // 
+            // splitContainerMain
+            // 
+            this.splitContainerMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainerMain.Location = new System.Drawing.Point(3, 32);
+            this.splitContainerMain.Name = "splitContainerMain";
+            this.splitContainerMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainerMain.Panel1
+            // 
+            this.splitContainerMain.Panel1.Controls.Add(this.splitContainerTop);
+            // 
+            // splitContainerMain.Panel2
+            // 
+            this.splitContainerMain.Panel2.Controls.Add(this.tracksPanel);
+            this.splitContainerMain.Size = new System.Drawing.Size(1088, 412);
+            this.splitContainerMain.SplitterDistance = 118;
+            this.splitContainerMain.TabIndex = 3;
+            // 
+            // splitContainerTop
+            // 
+            this.splitContainerTop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerTop.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerTop.Name = "splitContainerTop";
+            // 
+            // splitContainerTop.Panel1
+            // 
+            this.splitContainerTop.Panel1.Controls.Add(this.playlistListView);
+            // 
+            // splitContainerTop.Panel2
+            // 
+            this.splitContainerTop.Panel2.Controls.Add(this.mediaPanel);
+            this.splitContainerTop.Size = new System.Drawing.Size(1088, 118);
+            this.splitContainerTop.SplitterDistance = 704;
+            this.splitContainerTop.TabIndex = 7;
             // 
             // playlistListView
             // 
@@ -549,6 +526,38 @@ namespace BDHeroGUI
             this.tracksPanel.Size = new System.Drawing.Size(1088, 290);
             this.tracksPanel.TabIndex = 0;
             // 
+            // textBoxOutput
+            // 
+            this.textBoxOutput.AllowAnyExtension = false;
+            this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxOutput.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.textBoxOutput.DialogTitle = "Save MKV file:";
+            this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.SaveFile;
+            this.textBoxOutput.FileExtensions = null;
+            this.textBoxOutput.Location = new System.Drawing.Point(93, 450);
+            this.textBoxOutput.Name = "textBoxOutput";
+            this.textBoxOutput.SelectedPath = "W:\\BDHero\\test.mkv";
+            this.textBoxOutput.Size = new System.Drawing.Size(836, 24);
+            this.textBoxOutput.TabIndex = 4;
+            // 
+            // progressBar
+            // 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.Location = new System.Drawing.Point(3, 536);
+            this.progressBar.Maximum = 100000;
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(1088, 23);
+            this.progressBar.Step = 1;
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBar.TabIndex = 11;
+            this.progressBar.TextOutline = true;
+            this.progressBar.TextOutlineColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.progressBar.TextOutlineWidth = 2;
+            this.progressBar.UseCustomColors = false;
+            this.progressBar.ValuePercent = 0D;
+            // 
             // FormMain
             // 
             this.AcceptButton = this.buttonScan;
@@ -568,6 +577,8 @@ namespace BDHeroGUI
             this.DragLeave += new System.EventHandler(this.FormMain_DragLeave);
             this.panelRoot.ResumeLayout(false);
             this.panelRoot.PerformLayout();
+            this.menuStripTop.ResumeLayout(false);
+            this.menuStripTop.PerformLayout();
             this.splitContainerMain.Panel1.ResumeLayout(false);
             this.splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
@@ -576,8 +587,6 @@ namespace BDHeroGUI
             this.splitContainerTop.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTop)).EndInit();
             this.splitContainerTop.ResumeLayout(false);
-            this.menuStripTop.ResumeLayout(false);
-            this.menuStripTop.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -632,6 +641,7 @@ namespace BDHeroGUI
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem searchForMetadataToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem showLogFileInWindowsExplorerToolStripMenuItem;
     }
 }
 

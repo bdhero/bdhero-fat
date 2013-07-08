@@ -605,6 +605,11 @@ namespace BDHeroGUI
             FileUtils.OpenUrl(AppUtils.SuggestFeatureUrl);
         }
 
+        private void showLogFileInWindowsExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FileUtils.OpenFolder(_directoryLocator.LogDir);
+        }
+
         private void aboutBDHeroToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new AboutBox().ShowDialog(this);
