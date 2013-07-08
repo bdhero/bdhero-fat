@@ -221,6 +221,14 @@ namespace DotNetUtils
             Process.Start("explorer.exe", argument);
         }
 
+        public static void OpenFolder(string folderPath)
+        {
+            if (!Directory.Exists(folderPath))
+                return;
+
+            Process.Start(folderPath);
+        }
+
         public static void OpenUrl(string url)
         {
             Process.Start(url);
