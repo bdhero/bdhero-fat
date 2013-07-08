@@ -23,6 +23,11 @@ namespace BDHero.Utils
             return null;
         }
 
+        public static bool IsBDROM(DriveInfo drive)
+        {
+            return IsBDROM(drive.Name);
+        }
+
         public static bool IsBDROM([CanBeNull] string path)
         {
             return GetBDROMDirectory(path) != null;
