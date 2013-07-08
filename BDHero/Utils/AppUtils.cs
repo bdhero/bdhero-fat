@@ -20,15 +20,6 @@ namespace BDHero.Utils
 
         #endregion
 
-        #region URL methods
-
-        public static void OpenUrl(string url)
-        {
-            Process.Start(url);
-        }
-
-        #endregion
-
         #region Assembly Attribute Accessors
 
         /// <summary>

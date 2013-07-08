@@ -587,22 +587,22 @@ namespace BDHeroGUI
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppUtils.OpenUrl(AppUtils.ProjectHomepage);
+            FileUtils.OpenUrl(AppUtils.ProjectHomepage);
         }
 
         private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppUtils.OpenUrl(AppUtils.DocumentationUrl);
+            FileUtils.OpenUrl(AppUtils.DocumentationUrl);
         }
 
         private void submitABugReportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppUtils.OpenUrl(AppUtils.BugReportUrl);
+            FileUtils.OpenUrl(AppUtils.BugReportUrl);
         }
 
         private void suggestAFeatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppUtils.OpenUrl(AppUtils.SuggestFeatureUrl);
+            FileUtils.OpenUrl(AppUtils.SuggestFeatureUrl);
         }
 
         private void aboutBDHeroToolStripMenuItem_Click(object sender, EventArgs e)

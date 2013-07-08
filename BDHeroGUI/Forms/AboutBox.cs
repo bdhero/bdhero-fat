@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using BDHero.Utils;
+using DotNetUtils;
 
 namespace BDHeroGUI.Forms
 {
@@ -24,7 +25,7 @@ namespace BDHeroGUI.Forms
 
         private void linkLabelSourceCode_Click(object sender, EventArgs e)
         {
-            AppUtils.OpenUrl(AppUtils.SourceCodeUrl);
+            FileUtils.OpenUrl(AppUtils.SourceCodeUrl);
         }
     }
 }

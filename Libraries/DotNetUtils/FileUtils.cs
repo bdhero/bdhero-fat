@@ -221,6 +221,11 @@ namespace DotNetUtils
             Process.Start("explorer.exe", argument);
         }
 
+        public static void OpenUrl(string url)
+        {
+            Process.Start(url);
+        }
+
         public static bool HasProgramAssociation(string filePath)
         {
             var hasAssoc = false;
