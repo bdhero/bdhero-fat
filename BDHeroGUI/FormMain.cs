@@ -373,7 +373,7 @@ namespace BDHeroGUI
 
         #endregion
 
-        #region Stages: Scan & Convert
+        #region Scan & Convert stages
 
         /// <summary>
         /// Asynchronously scans the selected BD-ROM folder.
@@ -419,7 +419,7 @@ namespace BDHeroGUI
 
         #endregion
 
-        #region Scan stage - event handling
+        #region Scan events
 
         private void ControllerOnScanStarted(object sender, EventArgs eventArgs)
         {
@@ -460,7 +460,7 @@ namespace BDHeroGUI
 
         #endregion
 
-        #region Convert stage - event handling
+        #region Convert events
 
         private void ControllerOnConvertStarted(object sender, EventArgs eventArgs)
         {
@@ -499,7 +499,7 @@ namespace BDHeroGUI
 
         #endregion
 
-        #region Progress event handling
+        #region Progress events
 
         private void ControllerOnPluginProgressUpdated(IPlugin plugin, ProgressProvider progressProvider)
         {
