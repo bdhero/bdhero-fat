@@ -20,7 +20,7 @@ namespace BDHeroGUI.Forms
         public FormTrackFilter(TrackFilter filter)
         {
             _filter = filter;
-            _languages = Language.AllLanguages.ToArray();
+            _languages = Language.AllLanguages.OrderBy(language => language.ISO_639_2).ToArray();
 
             InitializeComponent();
 
@@ -37,7 +37,7 @@ namespace BDHeroGUI.Forms
 
         private void OnShown(object sender, EventArgs eventArgs)
         {
-            comboBoxPreferredLanguage.Items.AddRange(_languages.OrderBy(language => language.ISO_639_2).Select(language => language.UIDisplayName as object).ToArray());
+            comboBoxPreferredLanguage.Items.AddRange(_languages.Select(language => language.UIDisplayName as object).ToArray());
             var curLangIndex = Array.IndexOf(_languages, _filter.PreferredLanguage);
             if (curLangIndex > -1)
             {
