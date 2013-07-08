@@ -15,18 +15,16 @@ Bugs
 Features
 ========
 
+[ ] Add track filter
+
 [ ] Display drives above input textbox (like VidCoder)
 [ ] Background thread for drive detection
 [ ] Centralize drive detection logic
 [ ] Handle exceptions during drive detection
 
-[ ] Add separate class for project URLs and to launch them
-
-[ ] Add "Rescan" menu item (F5)
-[ ] Add "Convert" menu item
-[ ] Add track filter
-
 [ ] Split output MKV path into directory and file name
+    [ ] Move output file name settings out into Preferences dialog (similar to mmg)
+    [ ] Separate file namer preferences for movies and TV shows
 [ ] File Namer placeholders
     [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
 
@@ -46,10 +44,7 @@ Backlog
 [ ] Allow pausing of tasks
 
 [ ] CLI arg to dump list of main movie playlist files
-[ ] Separate file namer preferences for movies and TV shows
 [ ] Asynchronous TMDb poster/cover art getter thread (use futures?)
-
-[ ] Move output file name settings out into Preferences dialog (similar to mmg)
 
 [ ] Add Windows 7 Taskbar buttons for pause/resume and cancel
 [ ] Add Windows 7 Taskbar jump lists?
@@ -71,6 +66,10 @@ Chris' Plugins
 Complete
 ========
 
+[X] Add "Rescan" menu item (F5)
+[N] Add "Convert" menu item
+[X] Add "Show log file in Windows Explorer"
+[X] Add separate class for project URLs and to launch them
 [X] Show BDHero version number in FormMain title
 [X] Detect drives on startup
 [X] Menu bar
