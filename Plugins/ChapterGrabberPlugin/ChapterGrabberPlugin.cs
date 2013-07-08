@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Xml;
@@ -29,6 +30,8 @@ namespace ChapterGrabberPlugin
         public string Name { get { return "ChapterDb"; } }
 
         public bool Enabled { get; set; }
+
+        public Icon Icon { get { return Resources.chapterdb_icon; } }
 
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 

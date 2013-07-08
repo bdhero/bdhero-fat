@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using BDHero.BDROM;
@@ -18,6 +19,8 @@ namespace BDHero.Plugin.AutoDetector
         public string Name { get { return "BDHero Detective"; } }
 
         public bool Enabled { get; set; }
+
+        public Icon Icon { get { return null; } }
 
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 

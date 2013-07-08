@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,6 +16,8 @@ namespace BDHero.Plugin.MkvMergeMuxer
         public string Name { get { return "mkvmerge (mkvtoolnix)"; } }
 
         public bool Enabled { get; set; }
+
+        public Icon Icon { get { return Resources.mkvmerge_icon; } }
 
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 

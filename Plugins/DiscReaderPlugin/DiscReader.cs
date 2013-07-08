@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,6 +18,8 @@ namespace BDHero.Plugin.DiscReader
         public string Name { get { return "BDHero Disc Reader"; } }
 
         public bool Enabled { get; set; }
+
+        public Icon Icon { get { return null; } }
 
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -152,7 +153,8 @@ namespace BDHeroGUI
                         pluginsToolStripMenuItem.DropDownItems.Add("-");
                     }
 
-                    var pluginItem = new ToolStripMenuItem(plugin.Name);
+                    var iconImage16 = plugin.Icon != null ? new Icon(plugin.Icon, new Size(16, 16)).ToBitmap() : null;
+                    var pluginItem = new ToolStripMenuItem(plugin.Name) { Image = iconImage16 };
 
                     pluginItem.DropDownItems.Add(
                         new ToolStripMenuItem("Enabled") { Enabled = false, Checked = plugin.Enabled });

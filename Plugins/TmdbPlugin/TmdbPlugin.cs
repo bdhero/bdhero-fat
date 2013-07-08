@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -38,6 +39,8 @@ namespace TmdbPlugin
         public string Name { get { return "TMDb"; } }
 
         public bool Enabled { get; set; }
+
+        public Icon Icon { get { return Resources.tmdb_icon; } }
 
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 

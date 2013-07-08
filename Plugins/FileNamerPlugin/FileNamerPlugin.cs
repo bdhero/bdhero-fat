@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using BDHero.JobQueue;
 using DotNetUtils;
-using DotNetUtils.Annotations;
 
 namespace BDHero.Plugin.FileNamer
 {
@@ -18,6 +18,8 @@ namespace BDHero.Plugin.FileNamer
         public string Name { get { return "BDHero File Namer"; } }
 
         public bool Enabled { get; set; }
+
+        public Icon Icon { get { return null; } }
 
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
