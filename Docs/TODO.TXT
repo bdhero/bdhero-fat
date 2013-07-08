@@ -66,6 +66,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Add plugin icons
 [X] Add "Rescan" menu item (F5)
 [N] Add "Convert" menu item
 [X] Add "Show log file in Windows Explorer"
