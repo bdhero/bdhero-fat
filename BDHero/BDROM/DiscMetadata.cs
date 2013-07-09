@@ -27,10 +27,11 @@ namespace BDHero.BDROM
         public string AnyDVDVolumeLabel;
 
         /// <summary>
-        /// Map of <c>BDMV/META/DL/bdmt_xxx.xml</c> languages (where <c>xxx</c> is the 3-letter
+        /// Map of ALL <c>BDMV/META/DL/bdmt_xxx.xml</c> languages (where <c>xxx</c> is the 3-letter
         /// ISO-639-2 language code in lowercase) to the titles (movie names) contained therein.
+        /// May contain blank or useless titles.
         /// </summary>
-        public IDictionary<Language, string> BdmtTitles;
+        public IDictionary<Language, string> AllBdmtTitles;
 
         /// <summary>
         /// Title of the movie extracted from the D-BOX XML file <c>FilmIndex.xml</c> (if it exists) in the BD-ROM root directory.
