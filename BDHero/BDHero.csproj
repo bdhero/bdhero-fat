@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BDROM\AnyDVDDiscInf.cs" />
     <Compile Include="BDROM\Chapter.cs" />
     <Compile Include="BDROM\Codec.cs" />
     <Compile Include="BDROM\Disc.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="BDROM\DiscMetadata.cs" />
     <Compile Include="BDROM\ISAN.cs" />
     <Compile Include="BDROM\Playlist.cs" />
+    <Compile Include="BDROM\RegionCode.cs" />
     <Compile Include="BDROM\StreamClip.cs" />
     <Compile Include="BDROM\Track.cs" />
     <Compile Include="Config\InjectorFactory.cs" />
