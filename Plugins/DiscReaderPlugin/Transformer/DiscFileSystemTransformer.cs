@@ -13,23 +13,32 @@ namespace BDHero.Plugin.DiscReader.Transformer
         {
             var fs = new DiscFileSystem
                 {
-                    DirectoryRoot = bdrom.DirectoryRoot,
-                    DirectoryBDMV = bdrom.DirectoryBDMV,
-                    DirectoryBDJO = bdrom.DirectoryBDJO,
-                    DirectoryCLIPINF = bdrom.DirectoryCLIPINF,
-                    DirectoryPLAYLIST = bdrom.DirectoryPLAYLIST,
-                    DirectorySTREAM = bdrom.DirectorySTREAM,
-                    DirectorySSIF = bdrom.DirectorySSIF,
-                    DirectoryBDMT = GetBDMTDirectory(bdrom.DirectoryBDMV),
-                    DirectorySNP = bdrom.DirectorySNP,
-                    DirectoryANY = GetDirectory("ANY!", bdrom.DirectoryRoot),
-                    DirectoryMAKEMKV = GetDirectory("MAKEMKV", bdrom.DirectoryRoot)
+                    Directories = new DiscFileSystem.DiscDirectories
+                        {
+                            Root = bdrom.DirectoryRoot,
+                            BDMV = bdrom.DirectoryBDMV,
+                            BDJO = bdrom.DirectoryBDJO,
+                            CLIPINF = bdrom.DirectoryCLIPINF,
+                            PLAYLIST = bdrom.DirectoryPLAYLIST,
+                            STREAM = bdrom.DirectorySTREAM,
+                            SSIF = bdrom.DirectorySSIF,
+                            BDMT = GetBDMTDirectory(bdrom.DirectoryBDMV),
+                            SNP = bdrom.DirectorySNP,
+                            ANY = GetDirectory("ANY!", bdrom.DirectoryRoot),
+                            MAKEMKV = GetDirectory("MAKEMKV", bdrom.DirectoryRoot),
+                            AACS = null /* assigned below */
+                        },
+                    Files = new DiscFileSystem.DiscFiles
+                        {
+                            DBOX = GetFile("FilmIndex.xml", bdrom.DirectoryRoot),
+                            MCMF = null, /* assigned below */
+                            BDMT = null  /* assigned below */
+                        }
                 };
 
-            fs.DirectoryAACS = GetAACSDirectory(fs);
-            fs.FileMCMF = GetFile("mcmf.xml", fs.DirectoryAACS);
-            fs.FileDBOX = GetFile("FilmIndex.xml", fs.DirectoryRoot);
-            fs.FilesBDMT = GetFilesByPattern("bdmt_???.xml", fs.DirectoryBDMT);
+            fs.Directories.AACS = GetAACSDirectory(fs);
+            fs.Files.MCMF = GetFile("mcmf.xml", fs.Directories.AACS);
+            fs.Files.BDMT = GetFilesByPattern("bdmt_???.xml", fs.Directories.BDMT);
 
             disc.FileSystem = fs;
         }
@@ -42,9 +51,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static DirectoryInfo GetAACSDirectory(DiscFileSystem fs)
         {
-            return fs.DirectoryANY ??
-                   GetDirectory("AACS", fs.DirectoryMAKEMKV) ??
-                   GetDirectory("AACS", fs.DirectoryRoot);
+            return fs.Directories.ANY ??
+                   GetDirectory("AACS", fs.Directories.MAKEMKV) ??
+                   GetDirectory("AACS", fs.Directories.Root);
         }
 
         private static DirectoryInfo GetDirectory(string name, DirectoryInfo dir)

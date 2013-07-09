@@ -12,7 +12,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
         public static void Transform(Disc disc)
         {
             var fs = disc.FileSystem;
-            var root = fs.DirectoryRoot;
+            var root = fs.Directories.Root;
             var features = new DiscFeatures
                 {
                     IsBDPlus = IsBDPlus(root),
@@ -34,17 +34,17 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static bool IsBDJava(DiscFileSystem fs)
         {
-            return HasFiles(fs.DirectoryBDJO);
+            return HasFiles(fs.Directories.BDJO);
         }
 
         private static bool Is3D(DiscFileSystem fs)
         {
-            return HasFiles(fs.DirectorySSIF);
+            return HasFiles(fs.Directories.SSIF);
         }
 
         private static bool IsDBOX(DiscFileSystem fs)
         {
-            return File.Exists(Path.Combine(fs.DirectoryRoot.FullName, "FilmIndex.xml"));
+            return File.Exists(Path.Combine(fs.Directories.Root.FullName, "FilmIndex.xml"));
         }
 
         private static bool IsDCopy(DiscFileSystem fs)
@@ -55,8 +55,8 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static bool IsPSP(DiscFileSystem fs)
         {
-            return fs.DirectorySNP != null &&
-                  (HasFiles(fs.DirectorySNP, "*.mnv") || HasFiles(fs.DirectorySNP, "*.MNV"));
+            return fs.Directories.SNP != null &&
+                  (HasFiles(fs.Directories.SNP, "*.mnv") || HasFiles(fs.Directories.SNP, "*.MNV"));
         }
 
         private static bool HasFiles(DirectoryInfo directory)
