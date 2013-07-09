@@ -9,7 +9,7 @@ namespace DotNetUtils.Extensions
     /// <summary>
     /// Extension methods for <see cref="TextBox"/> controls.
     /// </summary>
-    public static class TextBoxUtils
+    public static class TextBoxExtensions
     {
         /// <summary>
         /// Highlights the TextBox by changing its <see cref="TextBox.BorderStyle"/>.
