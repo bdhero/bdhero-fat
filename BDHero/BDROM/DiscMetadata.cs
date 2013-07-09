@@ -74,11 +74,13 @@ namespace BDHero.BDROM
             /// The value of <see cref="AnyDVDDiscInf.VolumeLabel"/> if it is not <c>null</c>,
             /// otherwise the value of <see cref="RawMetadata.HardwareVolumeLabel"/>.
             /// </summary>
+            [NotNull]
             public string VolumeLabel;
 
             /// <summary>
             /// Same as <see cref="VolumeLabel"/>, but with leading numbers and trailing region markers removed and underscores converted to spaces.
             /// </summary>
+            [NotNull]
             public string VolumeLabelSanitized;
 
             /// <summary>
