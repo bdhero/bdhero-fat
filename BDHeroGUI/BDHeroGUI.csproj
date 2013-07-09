@@ -79,6 +79,18 @@
     <Compile Include="Components\AudioTrackListView.Designer.cs">
       <DependentUpon>AudioTrackListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\DiscInfoFeaturesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\DiscInfoFeaturesPanel.Designer.cs">
+      <DependentUpon>DiscInfoFeaturesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\DiscInfoMetadataPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\DiscInfoMetadataPanel.Designer.cs">
+      <DependentUpon>DiscInfoMetadataPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\MediaPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -110,6 +122,12 @@
     </Compile>
     <Compile Include="Components\VideoTrackListView.Designer.cs">
       <DependentUpon>VideoTrackListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDiscInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDiscInfo.Designer.cs">
+      <DependentUpon>FormDiscInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="TrackFilter.cs" />
     <Compile Include="FormMain.cs">
@@ -171,6 +189,12 @@
     <EmbeddedResource Include="Components\AudioTrackListView.resx">
       <DependentUpon>AudioTrackListView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Components\DiscInfoFeaturesPanel.resx">
+      <DependentUpon>DiscInfoFeaturesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\DiscInfoMetadataPanel.resx">
+      <DependentUpon>DiscInfoMetadataPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Components\MediaPanel.resx">
       <DependentUpon>MediaPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -191,6 +215,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDiscInfo.resx">
+      <DependentUpon>FormDiscInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormMetadataSearch.resx">
       <DependentUpon>FormMetadataSearch.cs</DependentUpon>

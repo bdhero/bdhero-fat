@@ -42,20 +42,20 @@ namespace BDHeroGUI
             this.panelRoot = new System.Windows.Forms.Panel();
             this.menuStripTop = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openBDROMFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openDiscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.noBlurayDiscsFoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.searchForMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.discInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+            this.showAllPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+            this.showAllTracksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pluginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.remuxerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,18 +66,18 @@ namespace BDHeroGUI
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutBDHeroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openBDROMFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openDiscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.noBlurayDiscsFoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterTracksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxInput = new DotNetUtils.Controls.FileTextBox();
             this.splitContainerMain = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.splitContainerTop = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
             this.progressBar = new DotNetUtils.Controls.ProgressBar2();
-            this.filterPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAllPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filterTracksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAllTracksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
-            this.discInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playlistListView = new BDHeroGUI.Components.PlaylistListView();
             this.mediaPanel = new BDHeroGUI.Components.MediaPanel();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
@@ -229,40 +229,6 @@ namespace BDHeroGUI
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // openBDROMFolderToolStripMenuItem
-            // 
-            this.openBDROMFolderToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.folder_open;
-            this.openBDROMFolderToolStripMenuItem.Name = "openBDROMFolderToolStripMenuItem";
-            this.openBDROMFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openBDROMFolderToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.openBDROMFolderToolStripMenuItem.Text = "Open BD-ROM Folder...";
-            this.openBDROMFolderToolStripMenuItem.Click += new System.EventHandler(this.openBDROMFolderToolStripMenuItem_Click);
-            // 
-            // openDiscToolStripMenuItem
-            // 
-            this.openDiscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.noBlurayDiscsFoundToolStripMenuItem});
-            this.openDiscToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.cd;
-            this.openDiscToolStripMenuItem.Name = "openDiscToolStripMenuItem";
-            this.openDiscToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.openDiscToolStripMenuItem.Text = "Open Disc";
-            // 
-            // noBlurayDiscsFoundToolStripMenuItem
-            // 
-            this.noBlurayDiscsFoundToolStripMenuItem.Enabled = false;
-            this.noBlurayDiscsFoundToolStripMenuItem.Name = "noBlurayDiscsFoundToolStripMenuItem";
-            this.noBlurayDiscsFoundToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.noBlurayDiscsFoundToolStripMenuItem.Text = "No Blu-ray Discs found";
-            // 
-            // rescanToolStripMenuItem
-            // 
-            this.rescanToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.refresh_green;
-            this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
-            this.rescanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.rescanToolStripMenuItem.Text = "Rescan";
-            this.rescanToolStripMenuItem.Click += new System.EventHandler(this.rescanToolStripMenuItem_Click);
-            // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
@@ -303,6 +269,43 @@ namespace BDHeroGUI
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
             // 
+            // discInfoToolStripMenuItem
+            // 
+            this.discInfoToolStripMenuItem.Name = "discInfoToolStripMenuItem";
+            this.discInfoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+            this.discInfoToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.discInfoToolStripMenuItem.Text = "Disc &Info...";
+            this.discInfoToolStripMenuItem.Click += new System.EventHandler(this.discInfoToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(235, 6);
+            // 
+            // showAllPlaylistsToolStripMenuItem
+            // 
+            this.showAllPlaylistsToolStripMenuItem.Name = "showAllPlaylistsToolStripMenuItem";
+            this.showAllPlaylistsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.P)));
+            this.showAllPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.showAllPlaylistsToolStripMenuItem.Text = "Show All Playlists";
+            this.showAllPlaylistsToolStripMenuItem.Click += new System.EventHandler(this.showAllPlaylistsToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(235, 6);
+            // 
+            // showAllTracksToolStripMenuItem
+            // 
+            this.showAllTracksToolStripMenuItem.CheckOnClick = true;
+            this.showAllTracksToolStripMenuItem.Name = "showAllTracksToolStripMenuItem";
+            this.showAllTracksToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.T)));
+            this.showAllTracksToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.showAllTracksToolStripMenuItem.Text = "Show All Tracks";
+            this.showAllTracksToolStripMenuItem.Click += new System.EventHandler(this.showAllTracksToolStripMenuItem_CheckedChanged);
+            // 
             // pluginsToolStripMenuItem
             // 
             this.pluginsToolStripMenuItem.Name = "pluginsToolStripMenuItem";
@@ -331,15 +334,6 @@ namespace BDHeroGUI
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(147, 6);
-            // 
-            // optionsToolStripMenuItem
-            // 
-            this.optionsToolStripMenuItem.Enabled = false;
-            this.optionsToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.settings;
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
-            this.optionsToolStripMenuItem.Text = "&Options...";
             // 
             // helpToolStripMenuItem
             // 
@@ -416,6 +410,65 @@ namespace BDHeroGUI
             this.aboutBDHeroToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.aboutBDHeroToolStripMenuItem.Text = "&About BDHero";
             this.aboutBDHeroToolStripMenuItem.Click += new System.EventHandler(this.aboutBDHeroToolStripMenuItem_Click);
+            // 
+            // openBDROMFolderToolStripMenuItem
+            // 
+            this.openBDROMFolderToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.folder_open;
+            this.openBDROMFolderToolStripMenuItem.Name = "openBDROMFolderToolStripMenuItem";
+            this.openBDROMFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openBDROMFolderToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.openBDROMFolderToolStripMenuItem.Text = "Open BD-ROM Folder...";
+            this.openBDROMFolderToolStripMenuItem.Click += new System.EventHandler(this.openBDROMFolderToolStripMenuItem_Click);
+            // 
+            // openDiscToolStripMenuItem
+            // 
+            this.openDiscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.noBlurayDiscsFoundToolStripMenuItem});
+            this.openDiscToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.cd;
+            this.openDiscToolStripMenuItem.Name = "openDiscToolStripMenuItem";
+            this.openDiscToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.openDiscToolStripMenuItem.Text = "Open Disc";
+            // 
+            // noBlurayDiscsFoundToolStripMenuItem
+            // 
+            this.noBlurayDiscsFoundToolStripMenuItem.Enabled = false;
+            this.noBlurayDiscsFoundToolStripMenuItem.Name = "noBlurayDiscsFoundToolStripMenuItem";
+            this.noBlurayDiscsFoundToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.noBlurayDiscsFoundToolStripMenuItem.Text = "No Blu-ray Discs found";
+            // 
+            // rescanToolStripMenuItem
+            // 
+            this.rescanToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.refresh_green;
+            this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
+            this.rescanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.rescanToolStripMenuItem.Text = "Rescan";
+            this.rescanToolStripMenuItem.Click += new System.EventHandler(this.rescanToolStripMenuItem_Click);
+            // 
+            // filterPlaylistsToolStripMenuItem
+            // 
+            this.filterPlaylistsToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.filter;
+            this.filterPlaylistsToolStripMenuItem.Name = "filterPlaylistsToolStripMenuItem";
+            this.filterPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.filterPlaylistsToolStripMenuItem.Text = "Filter &Playlists...";
+            this.filterPlaylistsToolStripMenuItem.Click += new System.EventHandler(this.filterPlaylistsToolStripMenuItem_Click);
+            // 
+            // filterTracksToolStripMenuItem
+            // 
+            this.filterTracksToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.filter;
+            this.filterTracksToolStripMenuItem.Name = "filterTracksToolStripMenuItem";
+            this.filterTracksToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.filterTracksToolStripMenuItem.Text = "Filter &Tracks...";
+            this.filterTracksToolStripMenuItem.Click += new System.EventHandler(this.filterTracksToolStripMenuItem_Click);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Enabled = false;
+            this.optionsToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.settings;
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.optionsToolStripMenuItem.Text = "&Options...";
             // 
             // textBoxInput
             // 
@@ -503,58 +556,6 @@ namespace BDHeroGUI
             this.progressBar.TextOutlineWidth = 2;
             this.progressBar.UseCustomColors = false;
             this.progressBar.ValuePercent = 0D;
-            // 
-            // filterPlaylistsToolStripMenuItem
-            // 
-            this.filterPlaylistsToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.filter;
-            this.filterPlaylistsToolStripMenuItem.Name = "filterPlaylistsToolStripMenuItem";
-            this.filterPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.filterPlaylistsToolStripMenuItem.Text = "Filter &Playlists...";
-            this.filterPlaylistsToolStripMenuItem.Click += new System.EventHandler(this.filterPlaylistsToolStripMenuItem_Click);
-            // 
-            // showAllPlaylistsToolStripMenuItem
-            // 
-            this.showAllPlaylistsToolStripMenuItem.Name = "showAllPlaylistsToolStripMenuItem";
-            this.showAllPlaylistsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.P)));
-            this.showAllPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.showAllPlaylistsToolStripMenuItem.Text = "Show All Playlists";
-            this.showAllPlaylistsToolStripMenuItem.Click += new System.EventHandler(this.showAllPlaylistsToolStripMenuItem_Click);
-            // 
-            // filterTracksToolStripMenuItem
-            // 
-            this.filterTracksToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.filter;
-            this.filterTracksToolStripMenuItem.Name = "filterTracksToolStripMenuItem";
-            this.filterTracksToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.filterTracksToolStripMenuItem.Text = "Filter &Tracks...";
-            this.filterTracksToolStripMenuItem.Click += new System.EventHandler(this.filterTracksToolStripMenuItem_Click);
-            // 
-            // showAllTracksToolStripMenuItem
-            // 
-            this.showAllTracksToolStripMenuItem.CheckOnClick = true;
-            this.showAllTracksToolStripMenuItem.Name = "showAllTracksToolStripMenuItem";
-            this.showAllTracksToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.T)));
-            this.showAllTracksToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.showAllTracksToolStripMenuItem.Text = "Show All Tracks";
-            this.showAllTracksToolStripMenuItem.Click += new System.EventHandler(this.showAllTracksToolStripMenuItem_CheckedChanged);
-            // 
-            // toolStripMenuItem6
-            // 
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(235, 6);
-            // 
-            // toolStripMenuItem7
-            // 
-            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(235, 6);
-            // 
-            // discInfoToolStripMenuItem
-            // 
-            this.discInfoToolStripMenuItem.Enabled = false;
-            this.discInfoToolStripMenuItem.Name = "discInfoToolStripMenuItem";
-            this.discInfoToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.discInfoToolStripMenuItem.Text = "Disc &Info...";
             // 
             // playlistListView
             // 

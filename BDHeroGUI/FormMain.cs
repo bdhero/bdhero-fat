@@ -415,6 +415,7 @@ namespace BDHeroGUI
             openDiscToolStripMenuItem.Enabled = enabled;
             searchForMetadataToolStripMenuItem.Enabled = enabled && hasJob;
 
+            discInfoToolStripMenuItem.Enabled = enabled && hasJob;
             filterPlaylistsToolStripMenuItem.Enabled = enabled;
             showAllPlaylistsToolStripMenuItem.Enabled = enabled;
             filterTracksToolStripMenuItem.Enabled = enabled;
@@ -647,14 +648,22 @@ namespace BDHeroGUI
             Close();
         }
 
-        private void showAllPlaylistsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void discInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            playlistListView.ShowAll = !playlistListView.ShowAll;
+            if (_controller.Job != null)
+            {
+                new FormDiscInfo(_controller.Job.Disc).ShowDialog(this);
+            }
         }
 
         private void filterPlaylistsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             playlistListView.ShowFilterWindow();
+        }
+
+        private void showAllPlaylistsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            playlistListView.ShowAll = !playlistListView.ShowAll;
         }
 
         private void filterTracksToolStripMenuItem_Click(object sender, EventArgs e)
