@@ -112,6 +112,12 @@ namespace BDHero.BDROM
             /// </summary>
             [CanBeNull]
             public ISAN ISAN;
+
+            /// <summary>
+            /// Auto-detected movie name to use for initial database searches (e.g., TMDb).
+            /// Derived from <see cref="ValidBdmtTitles"/>, <see cref="DBOXTitleSanitized"/>, and <see cref="VolumeLabelSanitized"/>.
+            /// </summary>
+            public string SearchableTitle;
         }
     }
 

@@ -184,8 +184,8 @@ namespace TmdbPlugin
         private void ApiRequest(Job job)
         {
             job.Movies.Clear();
-            
-            if (job.Disc.SanitizedTitle != null && _apiKey != null)
+
+            if (job.SearchQuery != null && _apiKey != null)
             {
                 _tmdbApi = new Tmdb(_apiKey, _searchISO_639_1);
 

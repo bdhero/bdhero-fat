@@ -53,9 +53,9 @@ namespace ChapterGrabberPlugin
             Host.ReportProgress(this, 0.0, "Querying ChapterDb.org...");
 
             //var playlist = job.Disc.Playlists[job.SelectedPlaylistIndex];
-            if (job.Disc.SanitizedTitle != null)
-            {  
-                var apiResults = GetChapters(job.Disc.SanitizedTitle);
+            if (job.SearchQuery != null)
+            {
+                var apiResults = GetChapters(job.SearchQuery);
                 /*
                 var apiValues = CompareChapters(apiResults, playlist.Chapters);
                 if (apiValues != null && apiValues.Count > 0)

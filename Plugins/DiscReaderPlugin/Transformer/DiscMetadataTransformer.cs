@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using BDHero.BDROM;
 using DotNetUtils;
+using DotNetUtils.Annotations;
 using I18N;
 using IniParser;
 
@@ -45,8 +46,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
                     VolumeLabel = GetVolumeLabel(raw),
                     VolumeLabelSanitized = GetVolumeLabelSanitized(raw),
                     ValidBdmtTitles = GetValidBdmtTitles(raw.AllBdmtTitles),
-                    DBOXTitleSanitized = SanitizeBdmtTitle(raw.DBOXTitle),
+                    DBOXTitleSanitized = GetDBOXTitleSanitized(raw),
                     ISAN = null /* populated by another plugin */,
+                    SearchableTitle = null /* populated by another plugin */,
                 };
 
             var metadata = new DiscMetadata
@@ -57,6 +59,8 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
             disc.Metadata = metadata;
         }
+
+        #region Derived methods
 
         private static string GetVolumeLabel(DiscMetadata.RawMetadata raw)
         {
@@ -95,6 +99,12 @@ namespace BDHero.Plugin.DiscReader.Transformer
             return new KeyValuePair<Language, string>(pair.Key, SanitizeBdmtTitle(pair.Value));
         }
 
+        /// <summary>
+        /// Sanitizes a title by removing useless garbage.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns>Sanitized version of the title if it is not empty, otherwise <c>null</c></returns>
+        [CanBeNull]
         private static string SanitizeBdmtTitle(string title)
         {
             var sanitizedTitle = (title ?? "").Trim();
@@ -115,7 +125,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
             // TMDb chokes on dashes
             sanitizedTitle = Regex.Replace(sanitizedTitle, @"-+", " ");
 
-            return sanitizedTitle;
+            return string.IsNullOrWhiteSpace(sanitizedTitle) ? null : sanitizedTitle;
         }
 
         private static bool IsBdmtTitleValid(KeyValuePair<Language, string> keyValuePair)
@@ -123,6 +133,15 @@ namespace BDHero.Plugin.DiscReader.Transformer
             var title = (keyValuePair.Value ?? "").Trim();
             return !string.IsNullOrWhiteSpace(title);
         }
+
+        private static string GetDBOXTitleSanitized(DiscMetadata.RawMetadata raw)
+        {
+            return SanitizeBdmtTitle(raw.DBOXTitle);
+        }
+
+        #endregion
+
+        #region Raw methods
 
         private static string GetHardwareVolumeLabel(Disc disc)
         {
@@ -216,5 +235,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
             return ISAN.TryParse(contentId);
         }
+
+        #endregion
     }
 }

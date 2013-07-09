@@ -16,8 +16,6 @@ namespace BDHero.Plugin.DiscReader.Transformer
             var disc =
                 new Disc
                     {
-                        VolumeLabel = bdrom.VolumeLabel,
-                        MetaTitle = bdrom.DiscName,
                         PrimaryLanguage = bdrom.DiscLanguage,
                         Playlists = PlaylistTransformer.Transform(tsPlaylistFiles)
                     };
@@ -84,39 +82,16 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static void TransformTitle(Disc disc)
         {
-            var metaTitle = disc.MetaTitle;
-            var volumeLabel = disc.VolumeLabel;
-
-            var sanitizedTitle = (metaTitle ?? "").Trim();
-
-            if (!string.IsNullOrWhiteSpace(sanitizedTitle))
+            var derived = disc.Metadata.Derived;
+            var validBdmtTitles = derived.ValidBdmtTitles;
+            if (validBdmtTitles.ContainsKey(disc.PrimaryLanguage))
             {
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
-                sanitizedTitle = sanitizedTitle.Trim();
+                derived.SearchableTitle = validBdmtTitles[disc.PrimaryLanguage];
             }
-
-            if (Regex.Replace(sanitizedTitle, @"\W", "").ToLowerInvariant() == "bluray")
+            else
             {
-                sanitizedTitle = "";
+                derived.SearchableTitle = derived.DBOXTitleSanitized ?? derived.VolumeLabelSanitized;
             }
-
-            // TMDb chokes on dashes
-            sanitizedTitle = Regex.Replace(sanitizedTitle, @"-+", " ");
-
-            // No valid bdmt_<lang>.xml value found; use volume label as fallback
-            if (string.IsNullOrWhiteSpace(sanitizedTitle))
-            {
-                sanitizedTitle = volumeLabel;
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @"^\d{6,}_", ""); // e.g., "01611720_GOODFELLAS" => "GOODFELLAS"
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @"_NA$", ""); // remove trailing region codes (NA = North America)
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @"_+", " ");
-            }
-
-            sanitizedTitle = Regex.Replace(sanitizedTitle, @"^(.*), (A|An|The)$", "$2 $1", RegexOptions.IgnoreCase);
-
-            disc.SanitizedTitle = sanitizedTitle;
         }
 
         #endregion

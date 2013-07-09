@@ -178,7 +178,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private void SetMovieTitle(Job job)
         {
-            var title = job.Disc.SanitizedTitle;
+            var title = job.SearchQuery;
             var releaseMedium = job.SelectedReleaseMedium;
             if (releaseMedium != null)
             {

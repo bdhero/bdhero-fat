@@ -12,18 +12,7 @@ namespace BDHero.BDROM
     {
         #region DB Fields
 
-        /// <summary>
-        /// E.G., "TOY_STORY_2_USA"
-        /// </summary>
-        [JsonProperty(PropertyName = "volume_label")]
-        public string VolumeLabel;
-
-        /// <summary>
-        /// Name of the movie taken from bdmt_eng.xml if present (e.g., "Toy Story 2 - Blu-ray™").
-        /// Most discs released after 2009 have this value.
-        /// </summary>
-        [JsonProperty(PropertyName = "meta_title")]
-        public string MetaTitle;
+        public DiscMetadata Metadata;
 
         /// <summary>
         /// Primary release language of the disc.
@@ -36,17 +25,6 @@ namespace BDHero.BDROM
         /// </summary>
         [JsonProperty(PropertyName = "playlists")]
         public List<Playlist> Playlists = new List<Playlist>();
-
-        #endregion
-
-        #region Non-DB metadata
-
-        /// <summary>
-        /// Sanitized version of <see cref="MetaTitle"/> with junk characters removed and underscores replaced with spaces.
-        /// Useful for searching movie/TV databases.
-        /// </summary>
-        [JsonIgnore]
-        public string SanitizedTitle;
 
         #endregion
 
@@ -64,8 +42,6 @@ namespace BDHero.BDROM
         public DiscFileSystem FileSystem;
 
         public DiscFeatures Features;
-
-        public DiscMetadata Metadata;
 
         /// <summary>
         /// Returns a list of all languages found on the disc, with the primary disc language first if it can be automatically detected.
