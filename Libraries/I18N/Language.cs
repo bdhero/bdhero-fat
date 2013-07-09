@@ -6,25 +6,80 @@ using System.Globalization;
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 namespace I18N
 {
+    /// <summary>
+    /// Represents an international language used by Blu-ray Discs.
+    /// </summary>
     public class Language
     {
+        #region Static properties (private)
+
         private static readonly List<Language> Languages = new List<Language>();
         private static readonly Dictionary<string, Language> ISO_639_1_Map = new Dictionary<string, Language>();
         private static readonly Dictionary<string, Language> ISO_639_2_Map = new Dictionary<string, Language>();
 
+        #endregion
+
+        #region Static properties (public)
+
+        /// <summary>
+        /// Gets a readonly collection (in no particular order) of all known Blu-ray <see cref="Language"/>s.
+        /// </summary>
+        public static ICollection<Language> AllLanguages
+        {
+            get { return Languages.AsReadOnly(); }
+        }
+
+        /// <summary>
+        /// Gets the language of the operating system's UI culture for the logged in user.
+        /// </summary>
+        public static Language CurrentUILanguage
+        {
+            get { return FromCode(CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName); }
+        }
+
+        /// <summary>
+        /// Gets a readonly collection (in no particular order) of all known Blu-ray ISO 639-2 language codes.
+        /// </summary>
+        public static ICollection<string> ISO6392Codes
+        {
+            get { return new List<string>(ISO_639_2_Map.Keys).AsReadOnly(); }
+        }
+
+        /// <summary>
+        /// Gets the Language object for the "und" language code.
+        /// </summary>
+        /// <remarks>Shortcut for <c>FromCode("und")</c>.</remarks>
         public static Language Undetermined { get { return FromCode("und"); } }
+
+        /// <summary>
+        /// Gets the Language object for the "eng" language code.
+        /// </summary>
+        /// <remarks>Shortcut for <c>FromCode("eng")</c>.</remarks>
         public static Language English { get { return FromCode("eng"); } }
 
-        /// <summary>2 digits (e.g., "en", "fr", "es")</summary>
+        #endregion
+
+        #region Instance methods and properties
+
+        /// <summary>2-digit ISO 639-1 code (e.g., "en", "fr", "es")</summary>
         public string ISO_639_1 { get; private set; }
 
-        /// <summary>3 digits (e.g., "eng", "fra", "spa")</summary>
+        /// <summary>3-digit ISO 639-2 code (e.g., "eng", "fra", "spa")</summary>
         public string ISO_639_2 { get; private set; }
 
         /// <summary>Human-friendly English name of the language (e.g., "English", "French", "Spanish")</summary>
         public string Name { get; private set; }
 
-        public Language(string ISO_639_1, string ISO_639_2, string Name)
+        /// <summary>
+        /// Gets a string containing the <see cref="ISO_639_2"/> and <see cref="Name"/> of the language,
+        /// suitable for displaying in UIs.
+        /// </summary>
+        public string UIDisplayName
+        {
+            get { return string.Format("{0} - {1}", ISO_639_2, Name); }
+        }
+
+        private Language(string ISO_639_1, string ISO_639_2, string Name)
         {
             this.ISO_639_1 = ISO_639_1;
             this.ISO_639_2 = ISO_639_2;
@@ -36,15 +91,27 @@ namespace I18N
             return Name;
         }
 
-        public string UIDisplayName
+        protected bool Equals(Language other)
         {
-            get { return string.Format("{0} - {1}", ISO_639_2, Name); }
+            return string.Equals(ISO_639_2, other.ISO_639_2);
         }
 
-        public static ICollection<Language> AllLanguages
+        public override bool Equals(object obj)
         {
-            get { return Languages.AsReadOnly(); }
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Language) obj);
         }
+
+        public override int GetHashCode()
+        {
+            return (ISO_639_2 != null ? ISO_639_2.GetHashCode() : 0);
+        }
+
+        #endregion
+
+        #region Static methods
 
         static Language()
         {
@@ -547,14 +614,6 @@ namespace I18N
             return lang;
         }
 
-        public static List<string> GetISO6392Codes()
-        {
-            return new List<string>(ISO_639_2_Map.Keys);
-        }
-
-        public static Language CurrentUILanguage
-        {
-            get { return FromCode(CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName); }
-        }
+        #endregion
     }
 }
