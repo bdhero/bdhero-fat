@@ -31,9 +31,10 @@ namespace BDHero.Plugin.DiscReader.Transformer
                         },
                     Files = new DiscFileSystem.DiscFiles
                         {
-                            DBOX = GetFile("FilmIndex.xml", bdrom.DirectoryRoot),
+                            AnyDVDDiscInf = GetFile("disc.inf", bdrom.DirectoryRoot),
                             MCMF = null, /* assigned below */
-                            BDMT = null  /* assigned below */
+                            BDMT = null, /* assigned below */
+                            DBOX = GetFile("FilmIndex.xml", bdrom.DirectoryRoot)
                         }
                 };
 

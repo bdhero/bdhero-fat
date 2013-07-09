@@ -120,22 +120,28 @@ namespace BDHero.BDROM
         public class DiscFiles
         {
             /// <summary>
+            /// AnyDVD HD <c>disc.inf</c> file.
+            /// </summary>
+            [CanBeNull]
+            public FileInfo AnyDVDDiscInf;
+
+            /// <summary>
             /// AACS <c>mcmf.xml</c> file containing the BD's <see cref="ISAN"/>.
             /// </summary>
             [CanBeNull]
             public FileInfo MCMF;
 
             /// <summary>
-            /// D-BOX <c>FilmIndex.xml</c> file.
-            /// </summary>
-            [CanBeNull]
-            public FileInfo DBOX;
-
-            /// <summary>
             /// <c>bdmt_xxx.xml</c> files from the <c>BDMV/META/DL</c> directory (<see cref="DiscDirectories.BDMT"/>).
             /// </summary>
             [NotNull]
             public FileInfo[] BDMT = new FileInfo[0];
+
+            /// <summary>
+            /// D-BOX <c>FilmIndex.xml</c> file.
+            /// </summary>
+            [CanBeNull]
+            public FileInfo DBOX;
         }
     }
 }
