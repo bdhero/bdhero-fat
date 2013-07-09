@@ -31,31 +31,90 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         public static void Transform(Disc disc)
         {
-            var metadata = new DiscMetadata
+            var raw = new DiscMetadata.RawMetadata
                 {
                     HardwareVolumeLabel = GetHardwareVolumeLabel(disc),
                     DiscInf = GetAnyDVDDiscInf(disc),
                     AllBdmtTitles = GetAllBdmtTitles(disc),
-                    ValidBdmtTitles = null, /* assigned below */
                     DBOXTitle = GetDBOXTitle(disc),
-                    V_ISAN = GetVISAN(disc),
-                    ISAN = null /* populated by another plugin */
+                    V_ISAN = GetVISAN(disc)
                 };
 
-            metadata.ValidBdmtTitles = GetValidBdmtTitles(metadata.AllBdmtTitles);
+            var derived = new DiscMetadata.DerivedMetadata
+                {
+                    VolumeLabel = GetVolumeLabel(raw),
+                    VolumeLabelSanitized = GetVolumeLabelSanitized(raw),
+                    ValidBdmtTitles = GetValidBdmtTitles(raw.AllBdmtTitles),
+                    ISAN = null /* populated by another plugin */,
+                };
+
+            var metadata = new DiscMetadata
+                {
+                    Raw = raw,
+                    Derived = derived
+                };
 
             disc.Metadata = metadata;
+        }
+
+        private static string GetVolumeLabel(DiscMetadata.RawMetadata raw)
+        {
+            return raw.DiscInf != null ? raw.DiscInf.VolumeLabel : raw.HardwareVolumeLabel;
+        }
+
+        private static string GetVolumeLabelSanitized(DiscMetadata.RawMetadata raw)
+        {
+            return SanitizeVolumeLabel(GetVolumeLabel(raw));
+        }
+
+        private static string SanitizeVolumeLabel(string volumeLabel)
+        {
+            var sanitizedTitle = volumeLabel;
+
+            sanitizedTitle = Regex.Replace(sanitizedTitle, @"^\d{6,}_", ""); // e.g., "01611720_GOODFELLAS" => "GOODFELLAS"
+            sanitizedTitle = Regex.Replace(sanitizedTitle, @"_NA$", ""); // remove trailing region codes (NA = North America)
+            sanitizedTitle = Regex.Replace(sanitizedTitle, @"_+", " ");
+
+            return sanitizedTitle;
         }
 
         private static IDictionary<Language, string> GetValidBdmtTitles(IDictionary<Language, string> allBdmtTitles)
         {
             var valid = new Dictionary<Language, string>();
-            var filtered = allBdmtTitles.Where(IsBdmtTitleValid);
+            var filtered = allBdmtTitles.Select(SanitizeBdmtTitle).Where(IsBdmtTitleValid);
             foreach (var kvp in filtered)
             {
                 valid[kvp.Key] = kvp.Value;
             }
             return valid;
+        }
+
+        private static KeyValuePair<Language, string> SanitizeBdmtTitle(KeyValuePair<Language, string> pair)
+        {
+            return new KeyValuePair<Language, string>(pair.Key, SanitizeBdmtTitle(pair.Value));
+        }
+
+        private static string SanitizeBdmtTitle(string title)
+        {
+            var sanitizedTitle = (title ?? "").Trim();
+
+            if (!string.IsNullOrWhiteSpace(sanitizedTitle))
+            {
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
+                sanitizedTitle = Regex.Replace(sanitizedTitle, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
+                sanitizedTitle = sanitizedTitle.Trim();
+            }
+
+            if (Regex.Replace(sanitizedTitle, @"\W", "").ToLowerInvariant() == "bluray")
+            {
+                sanitizedTitle = "";
+            }
+
+            // TMDb chokes on dashes
+            sanitizedTitle = Regex.Replace(sanitizedTitle, @"-+", " ");
+
+            return sanitizedTitle;
         }
 
         private static bool IsBdmtTitleValid(KeyValuePair<Language, string> keyValuePair)
