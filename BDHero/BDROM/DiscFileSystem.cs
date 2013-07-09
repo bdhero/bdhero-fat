@@ -83,7 +83,7 @@ namespace BDHero.BDROM
         public DirectoryInfo DirectoryMAKEMKV;
 
         /// <summary>
-        /// AACS <c>mcmf.xml</c> file containing the BD's ISAN.
+        /// AACS <c>mcmf.xml</c> file containing the BD's <see cref="ISAN"/>.
         /// </summary>
         public FileInfo FileMCMF;
 
