@@ -209,7 +209,10 @@ namespace BDHero.BDROM
 
         public override string ToString()
         {
-            return NumberFormatted;
+            return string.Format("{0} ({1})",
+                                 NumberFormatted,
+                                 IsValid ? "valid" : "invalid!"
+                );
         }
 
         /// <summary>
