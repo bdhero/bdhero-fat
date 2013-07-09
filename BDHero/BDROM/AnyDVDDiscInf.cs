@@ -33,5 +33,13 @@ namespace BDHero.BDROM
         /// Blu-ray region code.
         /// </summary>
         public RegionCode Region;
+
+        public override string ToString()
+        {
+            return string.Format("Region {0}: {1}",
+                                 Region,
+                                 VolumeLabel
+                );
+        }
     }
 }
