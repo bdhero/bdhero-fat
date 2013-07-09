@@ -59,7 +59,7 @@
     <Compile Include="BDROM\Disc.cs" />
     <Compile Include="BDROM\DiscFileSystem.cs" />
     <Compile Include="BDROM\DiscFeatures.cs" />
-    <Compile Include="BDROM\DiscProperties.cs" />
+    <Compile Include="BDROM\DiscMetadata.cs" />
     <Compile Include="BDROM\ISAN.cs" />
     <Compile Include="BDROM\Playlist.cs" />
     <Compile Include="BDROM\StreamClip.cs" />

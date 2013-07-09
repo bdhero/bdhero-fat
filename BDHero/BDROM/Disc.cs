@@ -65,7 +65,7 @@ namespace BDHero.BDROM
 
         public DiscFeatures Features;
 
-        public DiscProperties Properties;
+        public DiscMetadata Metadata;
 
         /// <summary>
         /// Returns a list of all languages found on the disc, with the primary disc language first if it can be automatically detected.

@@ -9,7 +9,7 @@ namespace BDHero.BDROM
     /// <summary>
     /// Contains useful identifying information gathered from across the BD-ROM filesystem.
     /// </summary>
-    public class DiscProperties
+    public class DiscMetadata
     {
         /// <summary>
         /// The BD-ROM volume label obtained from the BD-ROM drive, or from the name of the root BD-ROM folder
