@@ -57,6 +57,7 @@
     <Compile Include="BDROM\Chapter.cs" />
     <Compile Include="BDROM\Codec.cs" />
     <Compile Include="BDROM\Disc.cs" />
+    <Compile Include="BDROM\DiscFileSystem.cs" />
     <Compile Include="BDROM\DiscFeatures.cs" />
     <Compile Include="BDROM\DiscProperties.cs" />
     <Compile Include="BDROM\ISAN.cs" />
