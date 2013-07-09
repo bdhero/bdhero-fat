@@ -1,4 +1,6 @@
-﻿namespace BDHero.BDROM
+﻿using System;
+
+namespace BDHero.BDROM
 {
     /// <summary>
     /// Represents a Blu-ray region code.
@@ -34,5 +36,15 @@
         /// Central Asia, East Asia (mainland China and Mongolia only), South Asia, Eastern Europe (Belarus, Russia, Ukraine and Kazakhstan only), and their dependencies.
         /// </remarks>
         C = 3
+    }
+
+    public static class RegionCodeParser
+    {
+        public static RegionCode Parse(string str)
+        {
+            RegionCode code;
+            Enum.TryParse<RegionCode>(str, out code);
+            return code;
+        }
     }
 }
