@@ -61,6 +61,12 @@ namespace BDHero.BDROM
 
         #region Non-DB Properties
 
+        public DiscFileSystem FileSystem;
+
+        public DiscFeatures Features;
+
+        public DiscProperties Properties;
+
         /// <summary>
         /// Returns a list of all languages found on the disc, with the primary disc language first if it can be automatically detected.
         /// </summary>
