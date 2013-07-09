@@ -36,9 +36,9 @@ namespace BDHero.BDROM
 
         public override string ToString()
         {
-            return string.Format("Region {0}: {1}",
-                                 Region,
-                                 VolumeLabel
+            return string.Format("{0} (region {1})",
+                                 VolumeLabel,
+                                 Region
                 );
         }
     }
