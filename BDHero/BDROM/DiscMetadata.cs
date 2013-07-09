@@ -102,6 +102,12 @@ namespace BDHero.BDROM
             }
 
             /// <summary>
+            /// Same as <see cref="RawMetadata.DBOXTitle"/>, but cleaned to remove useless trailing junk.
+            /// </summary>
+            [CanBeNull]
+            public string DBOXTitleSanitized;
+
+            /// <summary>
             /// The parent ISAN number that identifies the original work (i.e., the original movie first released in theaters), if present on the disc.
             /// </summary>
             [CanBeNull]

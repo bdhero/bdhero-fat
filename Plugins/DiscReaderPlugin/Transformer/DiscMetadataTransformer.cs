@@ -45,6 +45,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                     VolumeLabel = GetVolumeLabel(raw),
                     VolumeLabelSanitized = GetVolumeLabelSanitized(raw),
                     ValidBdmtTitles = GetValidBdmtTitles(raw.AllBdmtTitles),
+                    DBOXTitleSanitized = SanitizeBdmtTitle(raw.DBOXTitle),
                     ISAN = null /* populated by another plugin */,
                 };
 
