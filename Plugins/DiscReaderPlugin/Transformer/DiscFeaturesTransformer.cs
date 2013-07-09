@@ -18,7 +18,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                     IsBDPlus = IsBDPlus(root),
                     IsBDJava = IsBDJava(fs),
                     Is3D = Is3D(fs),
-                    IsDBOX = IsDBOX(fs),
+                    IsDbox = IsDbox(fs),
                     IsDCopy = IsDCopy(fs),
                     IsPSP = IsPSP(fs)
                 };
@@ -42,7 +42,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
             return HasFiles(fs.Directories.SSIF);
         }
 
-        private static bool IsDBOX(DiscFileSystem fs)
+        private static bool IsDbox(DiscFileSystem fs)
         {
             return File.Exists(Path.Combine(fs.Directories.Root.FullName, "FilmIndex.xml"));
         }

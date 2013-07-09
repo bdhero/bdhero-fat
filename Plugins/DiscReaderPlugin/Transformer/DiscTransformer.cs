@@ -90,7 +90,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
             }
             else
             {
-                derived.SearchableTitle = derived.DBOXTitleSanitized ?? derived.VolumeLabelSanitized;
+                derived.SearchableTitle = derived.DboxTitleSanitized ?? derived.VolumeLabelSanitized;
             }
         }
 

@@ -22,7 +22,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
             "<di:name>(.*?)</di:name>",
             RegexOptions.IgnoreCase);
 
-        private static readonly Regex DBOXTitleRegex = new Regex(
+        private static readonly Regex DboxTitleRegex = new Regex(
             "<Title>(.*?)</Title>",
             RegexOptions.IgnoreCase);
 
@@ -37,7 +37,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                     HardwareVolumeLabel = GetHardwareVolumeLabel(disc),
                     DiscInf = GetAnyDVDDiscInf(disc),
                     AllBdmtTitles = GetAllBdmtTitles(disc),
-                    DBOXTitle = GetDBOXTitle(disc),
+                    DboxTitle = GetDboxTitle(disc),
                     V_ISAN = GetVISAN(disc)
                 };
 
@@ -46,7 +46,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                     VolumeLabel = GetVolumeLabel(raw),
                     VolumeLabelSanitized = GetVolumeLabelSanitized(raw),
                     ValidBdmtTitles = GetValidBdmtTitles(raw.AllBdmtTitles),
-                    DBOXTitleSanitized = GetDBOXTitleSanitized(raw),
+                    DboxTitleSanitized = GetDboxTitleSanitized(raw),
                     ISAN = null /* populated by another plugin */,
                     SearchableTitle = null /* populated by another plugin */,
                 };
@@ -134,9 +134,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
             return !string.IsNullOrWhiteSpace(title);
         }
 
-        private static string GetDBOXTitleSanitized(DiscMetadata.RawMetadata raw)
+        private static string GetDboxTitleSanitized(DiscMetadata.RawMetadata raw)
         {
-            return SanitizeBdmtTitle(raw.DBOXTitle);
+            return SanitizeBdmtTitle(raw.DboxTitle);
         }
 
         #endregion
@@ -200,9 +200,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
             return titles;
         }
 
-        private static string GetDBOXTitle(Disc disc)
+        private static string GetDboxTitle(Disc disc)
         {
-            var dbox = disc.FileSystem.Files.DBOX;
+            var dbox = disc.FileSystem.Files.Dbox;
             if (dbox == null)
                 return null;
 
@@ -212,10 +212,10 @@ namespace BDHero.Plugin.DiscReader.Transformer
             // Replace newlines with spaces
             xml = Regex.Replace(xml, @"[\n\r\f]+", " ");
 
-            if (!DBOXTitleRegex.IsMatch(xml))
+            if (!DboxTitleRegex.IsMatch(xml))
                 return null;
 
-            var match = DBOXTitleRegex.Match(xml);
+            var match = DboxTitleRegex.Match(xml);
             var title = match.Groups[1].Value.Trim();
             return title;
         }

@@ -56,7 +56,7 @@ namespace BDHero.BDROM
             /// Title of the movie extracted from the D-BOX XML file <c>FilmIndex.xml</c> (if it exists) in the BD-ROM root directory.
             /// </summary>
             [CanBeNull]
-            public string DBOXTitle;
+            public string DboxTitle;
 
             /// <summary>
             /// The child V-ISAN (ISAN Version) number that identifies the particular version (release) of the movie on Blu-ray, if present on the disc.
@@ -102,10 +102,10 @@ namespace BDHero.BDROM
             }
 
             /// <summary>
-            /// Same as <see cref="RawMetadata.DBOXTitle"/>, but cleaned to remove useless trailing junk.
+            /// Same as <see cref="RawMetadata.DboxTitle"/>, but cleaned to remove useless trailing junk.
             /// </summary>
             [CanBeNull]
-            public string DBOXTitleSanitized;
+            public string DboxTitleSanitized;
 
             /// <summary>
             /// The parent ISAN number that identifies the original work (i.e., the original movie first released in theaters), if present on the disc.
@@ -115,7 +115,7 @@ namespace BDHero.BDROM
 
             /// <summary>
             /// Auto-detected movie name to use for initial database searches (e.g., TMDb).
-            /// Derived from <see cref="ValidBdmtTitles"/>, <see cref="DBOXTitleSanitized"/>, and <see cref="VolumeLabelSanitized"/>.
+            /// Derived from <see cref="ValidBdmtTitles"/>, <see cref="DboxTitleSanitized"/>, and <see cref="VolumeLabelSanitized"/>.
             /// </summary>
             public string SearchableTitle;
         }

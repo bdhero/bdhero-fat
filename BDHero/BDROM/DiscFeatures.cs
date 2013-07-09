@@ -28,7 +28,7 @@ namespace BDHero.BDROM
         /// <summary>
         /// Disc contains D-BOX motion code.
         /// </summary>
-        public bool IsDBOX;
+        public bool IsDbox;
 
         /// <summary>
         /// Disc contains a copy-protected "Digital Copy" of the film that users can download
