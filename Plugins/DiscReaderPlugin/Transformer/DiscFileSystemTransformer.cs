@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using BDHero.BDROM;
+using DotNetUtils.Annotations;
 
 namespace BDHero.Plugin.DiscReader.Transformer
 {
@@ -17,12 +18,12 @@ namespace BDHero.Plugin.DiscReader.Transformer
                         {
                             Root = bdrom.DirectoryRoot,
                             BDMV = bdrom.DirectoryBDMV,
-                            BDJO = bdrom.DirectoryBDJO,
                             CLIPINF = bdrom.DirectoryCLIPINF,
                             PLAYLIST = bdrom.DirectoryPLAYLIST,
                             STREAM = bdrom.DirectorySTREAM,
                             SSIF = bdrom.DirectorySSIF,
                             BDMT = GetBDMTDirectory(bdrom.DirectoryBDMV),
+                            BDJO = bdrom.DirectoryBDJO,
                             SNP = bdrom.DirectorySNP,
                             ANY = GetDirectory("ANY!", bdrom.DirectoryRoot),
                             MAKEMKV = GetDirectory("MAKEMKV", bdrom.DirectoryRoot),
@@ -43,6 +44,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
             disc.FileSystem = fs;
         }
 
+        [CanBeNull]
         private static DirectoryInfo GetBDMTDirectory(DirectoryInfo bdmv)
         {
             var path = Path.Combine(bdmv.FullName, "META", "DL");
@@ -56,19 +58,22 @@ namespace BDHero.Plugin.DiscReader.Transformer
                    GetDirectory("AACS", fs.Directories.Root);
         }
 
+        [CanBeNull]
         private static DirectoryInfo GetDirectory(string name, DirectoryInfo dir)
         {
             return dir != null ? dir.GetDirectories().FirstOrDefault(info => info.Name == name) : null;
         }
 
+        [CanBeNull]
         private static FileInfo GetFile(string name, DirectoryInfo dir)
         {
             return dir != null ? dir.GetFiles().FirstOrDefault(info => info.Name == name) : null;
         }
 
+        [NotNull]
         private static FileInfo[] GetFilesByPattern(string pattern, DirectoryInfo dir)
         {
-            return dir != null ? dir.GetFiles(pattern) : null;
+            return dir != null ? dir.GetFiles(pattern) : new FileInfo[0];
         }
     }
 }
