@@ -501,7 +501,7 @@ namespace BDInfo
         private string GetBdmtPath()
         {
             var paths = new Dictionary<string, string>();
-            foreach (string code in Language.GetISO6392Codes())
+            foreach (string code in Language.ISO6392Codes)
             {
                 string path = Path.Combine(DirectoryBDMV.FullName, @"META\DL\bdmt_" + code + @".xml");
                 if (File.Exists(path))
