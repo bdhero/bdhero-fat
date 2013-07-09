@@ -34,6 +34,12 @@ namespace BDHero.BDROM
         public IDictionary<Language, string> AllBdmtTitles;
 
         /// <summary>
+        /// Same as <see cref="AllBdmtTitles"/>, but with blank/useless titles removed.
+        /// Should only contain valid, useful titles.
+        /// </summary>
+        public IDictionary<Language, string> ValidBdmtTitles;
+
+        /// <summary>
         /// Title of the movie extracted from the D-BOX XML file <c>FilmIndex.xml</c> (if it exists) in the BD-ROM root directory.
         /// </summary>
         public string DBOXTitle;
