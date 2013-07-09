@@ -60,6 +60,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Transformer\ChapterTransformer.cs" />
+    <Compile Include="Transformer\DiscFeaturesTransformer.cs" />
+    <Compile Include="Transformer\DiscFileSystemTransformer.cs" />
     <Compile Include="Transformer\DiscTransformer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transformer\CodecTransformer.cs" />

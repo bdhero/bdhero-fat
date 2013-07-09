@@ -22,6 +22,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
                         Playlists = PlaylistTransformer.Transform(tsPlaylistFiles)
                     };
 
+            DiscFileSystemTransformer.Transform(bdrom, disc);
+            DiscFeaturesTransformer.Transform(disc);
+
             // Data gathering
             TransformPrimaryLanguage(disc);
             TransformVideoLanguages(disc);
