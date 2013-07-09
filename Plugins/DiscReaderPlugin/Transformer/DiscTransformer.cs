@@ -24,6 +24,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
             DiscFileSystemTransformer.Transform(bdrom, disc);
             DiscFeaturesTransformer.Transform(disc);
+            DiscMetadataTransformer.Transform(disc);
 
             // Data gathering
             TransformPrimaryLanguage(disc);

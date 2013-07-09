@@ -22,12 +22,10 @@ namespace BDHero.BDROM
         public string HardwareVolumeLabel;
 
         /// <summary>
-        /// Volume label reported by AnyDVD HD in <c>disc.inf</c> (if the file is present).
+        /// AnyDVD HD <c>disc.inf</c> file (if present).
         /// </summary>
-        /// <example><code>49123204_BLACK_HAWK_DOWN</code></example>
-        /// <example><code>THE_PHANTOM_MENACE</code></example>
         [CanBeNull]
-        public string AnyDVDVolumeLabel;
+        public AnyDVDDiscInf DiscInf;
 
         /// <summary>
         /// Map of ALL <c>BDMV/META/DL/bdmt_xxx.xml</c> languages (where <c>xxx</c> is the 3-letter
