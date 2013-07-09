@@ -52,7 +52,7 @@ namespace BDHero.BDROM
                 get { return AllBdmtTitles.Keys.ToList(); }
             }
 
-                /// <summary>
+            /// <summary>
             /// Title of the movie extracted from the D-BOX XML file <c>FilmIndex.xml</c> (if it exists) in the BD-ROM root directory.
             /// </summary>
             [CanBeNull]
