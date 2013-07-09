@@ -17,7 +17,7 @@ Bugs
 Features
 ========
 
-[ ] Add Disc Info class and window
+[ ] Add "Files" tab to Disc Info window
 
 [ ] Split output MKV path into directory and file name
     [ ] Move output file name settings out into Preferences dialog (similar to mmg)
@@ -70,6 +70,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Add Disc Info class
 [X] Allow users to enable/disable plugins from GUI
 [X] Add track filter
 [X] Add plugin icons
