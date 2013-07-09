@@ -147,6 +147,10 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemInfo.cs" />
+    <None Include="Resources\slash.png" />
+    <None Include="Resources\cross_red.png" />
+    <None Include="Resources\cross.png" />
+    <None Include="Resources\cancel.png" />
     <None Include="Resources\cd.png" />
     <None Include="Resources\tick.png" />
     <None Include="Resources\stop.png" />
