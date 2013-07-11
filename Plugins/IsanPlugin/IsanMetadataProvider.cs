@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -28,11 +27,9 @@ namespace IsanPlugin
 
         private static readonly Regex TitleYearLengthRegex = new Regex(@"(.*)\s+\(\s*(\d{4})[\s\-]*(\d+)\s*min\s*\)", RegexOptions.IgnoreCase);
 
-        public void Populate([NotNull] VIsan vIsan)
+        public void Populate([CanBeNull] VIsan vIsan)
         {
-            Debug.Assert(vIsan != null);
-
-            if (!vIsan.IsSearchable)
+            if (vIsan == null || !vIsan.IsSearchable)
                 return;
 
             var dom = GetDom(vIsan);
