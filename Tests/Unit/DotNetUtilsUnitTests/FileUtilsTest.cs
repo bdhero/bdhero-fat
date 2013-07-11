@@ -9,9 +9,9 @@ using System.Collections.Generic;
 namespace DotNetUtilsUnitTests
 {
     /// <summary>
-    ///This is a test class for FileUtilsTest and is intended
-    ///to contain all FileUtilsTest Unit Tests
-    ///</summary>
+    /// This is a test class for FileUtilsTest and is intended
+    /// to contain all FileUtilsTest Unit Tests
+    /// </summary>
     [TestFixture]
     public class FileUtilsTest
     {
