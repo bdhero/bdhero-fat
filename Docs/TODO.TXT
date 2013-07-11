@@ -11,13 +11,17 @@ Chores
 Bugs
 ====
 
+[ ] 00000000E0660000300000000S: Die Another Day: test parsing
 [ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
 [ ] Time Remaining is jumpy, esp. > 80% complete.  Thread queue?
 
 Features
 ========
 
-[ ] Add "Files" tab to Disc Info window
+[ ] Add progress reporting to IsanPlugin
+[ ] Add checkmark/cross icons to DiscInfoMetadataPanel fields
+[ ] Add "Files" tab to Disc Info window?
+[ ] Add buttons to view metadata files/folders in Explorer
 
 [ ] Split output MKV path into directory and file name
     [ ] Move output file name settings out into Preferences dialog (similar to mmg)
@@ -70,6 +74,8 @@ Chris' Plugins
 Complete
 ========
 
+[X] HTML unescape ISAN text
+[X] Add "Order" property to IPlugin
 [X] Add Disc Info class
 [X] Allow users to enable/disable plugins from GUI
 [X] Add track filter
