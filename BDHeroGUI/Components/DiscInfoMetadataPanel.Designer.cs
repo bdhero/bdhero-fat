@@ -115,29 +115,31 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(437, 352);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // textBoxAllBdmtTitles
             // 
             this.textBoxAllBdmtTitles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxAllBdmtTitles.Location = new System.Drawing.Point(133, 83);
+            this.textBoxAllBdmtTitles.Location = new System.Drawing.Point(133, 209);
             this.textBoxAllBdmtTitles.Multiline = true;
             this.textBoxAllBdmtTitles.Name = "textBoxAllBdmtTitles";
             this.textBoxAllBdmtTitles.ReadOnly = true;
             this.textBoxAllBdmtTitles.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxAllBdmtTitles.Size = new System.Drawing.Size(301, 266);
+            this.textBoxAllBdmtTitles.Size = new System.Drawing.Size(301, 140);
             this.textBoxAllBdmtTitles.TabIndex = 4;
             // 
             // textBoxVISAN
             // 
             this.textBoxVISAN.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxVISAN.Location = new System.Drawing.Point(133, 63);
+            this.textBoxVISAN.Multiline = true;
             this.textBoxVISAN.Name = "textBoxVISAN";
             this.textBoxVISAN.ReadOnly = true;
-            this.textBoxVISAN.Size = new System.Drawing.Size(301, 20);
+            this.textBoxVISAN.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxVISAN.Size = new System.Drawing.Size(301, 140);
             this.textBoxVISAN.TabIndex = 3;
             // 
             // textBoxDboxTitle
@@ -188,7 +190,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 80);
+            this.label6.Location = new System.Drawing.Point(3, 206);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(96, 13);
             this.label6.TabIndex = 3;
@@ -247,29 +249,31 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(440, 352);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // textBoxValidBdmtTitles
             // 
             this.textBoxValidBdmtTitles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxValidBdmtTitles.Location = new System.Drawing.Point(167, 83);
+            this.textBoxValidBdmtTitles.Location = new System.Drawing.Point(167, 209);
             this.textBoxValidBdmtTitles.Multiline = true;
             this.textBoxValidBdmtTitles.Name = "textBoxValidBdmtTitles";
             this.textBoxValidBdmtTitles.ReadOnly = true;
             this.textBoxValidBdmtTitles.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxValidBdmtTitles.Size = new System.Drawing.Size(270, 266);
+            this.textBoxValidBdmtTitles.Size = new System.Drawing.Size(270, 140);
             this.textBoxValidBdmtTitles.TabIndex = 4;
             // 
             // textBoxIsan
             // 
             this.textBoxIsan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxIsan.Location = new System.Drawing.Point(167, 63);
+            this.textBoxIsan.Multiline = true;
             this.textBoxIsan.Name = "textBoxIsan";
             this.textBoxIsan.ReadOnly = true;
-            this.textBoxIsan.Size = new System.Drawing.Size(270, 20);
+            this.textBoxIsan.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxIsan.Size = new System.Drawing.Size(270, 140);
             this.textBoxIsan.TabIndex = 3;
             // 
             // textBoxDboxTitleSanitized
@@ -320,7 +324,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 80);
+            this.label9.Location = new System.Drawing.Point(3, 206);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(146, 13);
             this.label9.TabIndex = 3;

@@ -27,14 +27,26 @@ namespace BDHeroGUI.Components
             textBoxHardwareVolumeLabel.Text = raw.HardwareVolumeLabel;
             textBoxAnyDVDDiscInf.Text = raw.DiscInf != null ? raw.DiscInf.ToString() : NotFound;
             textBoxDboxTitle.Text = raw.DboxTitle ?? NotFound;
-            textBoxVISAN.Text = raw.V_ISAN != null ? raw.V_ISAN.ToString() : NotFound;
-            textBoxAllBdmtTitles.Text = string.Join(Environment.NewLine, raw.AllBdmtTitles.Select(pair => string.Format("{0}: {1}", pair.Key, pair.Value)));
+            textBoxVISAN.Text = GetIsanText(raw.V_ISAN);
+            textBoxAllBdmtTitles.Text = string.Join(Environment.NewLine, raw.AllBdmtTitles.Select(pair => string.Format("{0}: {1}", pair.Key.ISO_639_2, pair.Value)));
 
             textBoxVolumeLabel.Text = der.VolumeLabel;
             textBoxVolumeLabelSanitized.Text = der.VolumeLabelSanitized;
             textBoxDboxTitleSanitized.Text = der.DboxTitleSanitized ?? NotFound;
-            textBoxIsan.Text = raw.ISAN != null ? raw.ISAN.ToString() : NotFound;
-            textBoxValidBdmtTitles.Text = string.Join(Environment.NewLine, der.ValidBdmtTitles.Select(pair => string.Format("{0}: {1}", pair.Key, pair.Value)));
+            textBoxIsan.Text = GetIsanText(raw.ISAN);
+            textBoxValidBdmtTitles.Text = string.Join(Environment.NewLine, der.ValidBdmtTitles.Select(pair => string.Format("{0}: {1}", pair.Key.ISO_639_2, pair.Value)));
+        }
+
+        private static string GetIsanText(Isan isan)
+        {
+            if (isan == null)
+                return NotFound;
+            var lines = new List<string>();
+            lines.Add(isan.IsSearchable ? "Valid:" : "Invalid:");
+            lines.Add(isan.NumberFormatted);
+            if (!string.IsNullOrWhiteSpace(isan.Title))
+                lines.Add(string.Format("{0} ({1} - {2} min)", isan.Title, isan.Year, isan.LengthMin));
+            return string.Join(Environment.NewLine, lines);
         }
     }
 }
