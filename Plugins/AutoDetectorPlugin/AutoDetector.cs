@@ -116,13 +116,13 @@ namespace BDHero.Plugin.AutoDetector
             var bestAudioPlaylist = disc.Playlists.OrderByDescending(p => p.MaxAudioChannels).FirstOrDefault();
             if (bestAudioPlaylist == null) return;
 
-            var bestVideoPlaylist = disc.Playlists.OrderByDescending(p => p.MaxVideoResolution).FirstOrDefault();
+            var bestVideoPlaylist = disc.Playlists.OrderByDescending(p => p.MaxAvailableVideoResolution).FirstOrDefault();
             if (bestVideoPlaylist == null) return;
 
             var maxChannels = bestAudioPlaylist.MaxAudioChannels;
-            var maxHeight = bestVideoPlaylist.MaxVideoResolution;
+            var maxHeight = bestVideoPlaylist.MaxAvailableVideoResolution;
 
-            var maxQualityPlaylists = disc.Playlists.Where(playlist => playlist.MaxAudioChannels == maxChannels && playlist.MaxVideoResolution == maxHeight);
+            var maxQualityPlaylists = disc.Playlists.Where(playlist => playlist.MaxAudioChannels == maxChannels && playlist.MaxAvailableVideoResolution == maxHeight);
 
             foreach (var playlist in maxQualityPlaylists)
             {
@@ -362,13 +362,13 @@ namespace BDHero.Plugin.AutoDetector
             var bestAudioPlaylist = Playlists.OrderByDescending(p => p.MaxAudioChannels).FirstOrDefault();
             if (bestAudioPlaylist == null) return;
 
-            var bestVideoPlaylist = Playlists.OrderByDescending(p => p.MaxVideoResolution).FirstOrDefault();
+            var bestVideoPlaylist = Playlists.OrderByDescending(p => p.MaxAvailableVideoResolution).FirstOrDefault();
             if (bestVideoPlaylist == null) return;
 
             var maxChannels = bestAudioPlaylist.MaxAudioChannels;
-            var maxHeight = bestVideoPlaylist.MaxVideoResolution;
+            var maxHeight = bestVideoPlaylist.MaxAvailableVideoResolution;
 
-            var maxQualityPlaylists = Playlists.Where(playlist => playlist.MaxAudioChannels == maxChannels && playlist.MaxVideoResolution == maxHeight);
+            var maxQualityPlaylists = Playlists.Where(playlist => playlist.MaxAudioChannels == maxChannels && playlist.MaxAvailableVideoResolution == maxHeight);
 
             foreach (var playlist in maxQualityPlaylists)
             {

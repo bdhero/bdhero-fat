@@ -61,7 +61,7 @@ namespace BDHero.Plugin.FileNamer
             {
                 filename = string.Format("{0} [{1}].mkv",
                                          FileUtils.SanitizeFileName(movie.ToString()),
-                                         job.SelectedPlaylist.MaxVideoResolution);
+                                         job.SelectedPlaylist.MaxSelectedVideoResolutionDisplayable);
             }
             else if (tvShow != null)
             {
@@ -69,7 +69,7 @@ namespace BDHero.Plugin.FileNamer
                                          tvShow.SelectedEpisode.SeasonNumber.ToString("00"),
                                          tvShow.SelectedEpisode.EpisodeNumber.ToString("00"),
                                          FileUtils.SanitizeFileName(tvShow.ToString()),
-                                         job.SelectedPlaylist.MaxVideoResolution);
+                                         job.SelectedPlaylist.MaxSelectedVideoResolutionDisplayable);
             }
 
             job.OutputPath = Path.Combine(directory, filename);

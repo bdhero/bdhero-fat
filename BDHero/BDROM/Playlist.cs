@@ -315,14 +315,50 @@ namespace BDHero.BDROM
         }
 
         /// <summary>
-        /// The maximum height (in pixels) of this playlist's video tracks (e.g., 1080 or 720).
+        /// Gets the maximum height (in pixels) of the playlist's video tracks (e.g., 1080 or 720).
         /// </summary>
         [JsonIgnore]
-        public int MaxVideoResolution
+        public int MaxAvailableVideoResolution
         {
             get
             {
                 return VideoTracks.OrderByDescending(v => v.VideoHeight).Select(track => track.VideoHeight).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets the maximum height (in pixels) of the playlist's selected video tracks (e.g., 1080 or 720).
+        /// </summary>
+        [JsonIgnore]
+        public int MaxSelectedVideoResolution
+        {
+            get
+            {
+                return VideoTracks.Where(track => track.Keep).OrderByDescending(v => v.VideoHeight).Select(track => track.VideoHeight).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets the maximum height (in pixels) and type (progressive/interlaced) of the playlist's video tracks in a human friendly format (e.g., 1080p or 720i).
+        /// </summary>
+        [JsonIgnore]
+        public string MaxAvailableVideoResolutionDisplayable
+        {
+            get
+            {
+                return VideoTracks.OrderByDescending(v => v.VideoHeight).Select(track => track.VideoFormatDisplayable).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets the maximum height (in pixels) and type (progressive/interlaced) of the playlist's selected video tracks in a human friendly format (e.g., 1080p or 720i).
+        /// </summary>
+        [JsonIgnore]
+        public string MaxSelectedVideoResolutionDisplayable
+        {
+            get
+            {
+                return VideoTracks.Where(track => track.Keep).OrderByDescending(v => v.VideoHeight).Select(track => track.VideoFormatDisplayable).FirstOrDefault();
             }
         }
 

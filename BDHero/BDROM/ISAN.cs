@@ -82,7 +82,7 @@ namespace BDHero.BDROM
         /// <summary>
         /// Matches any valid ISAN number <em>without dashes</em> at word boundaries.
         /// </summary>
-        private static readonly Regex IsanRegex = new Regex(@"\b([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})[a-z]?([0-9a-f]{4})([0-9a-f]{4})[a-z]?\b", RegexOptions.IgnoreCase);
+        private static readonly Regex IsanRegex = new Regex(@"\b([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})[a-z0-9]?([0-9a-f]{4})([0-9a-f]{4})[a-z0-9]?\b", RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Unformatted ISAN without dashes or check digits.

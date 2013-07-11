@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using BDHero.BDROM;
 using CsQuery;
 using CsQuery.Web;
+using DotNetUtils.Annotations;
 using DotNetUtils.Extensions;
 
 namespace IsanPlugin
@@ -26,16 +28,18 @@ namespace IsanPlugin
 
         private static readonly Regex TitleYearLengthRegex = new Regex(@"(.*)\s+\(\s*(\d{4})[\s\-]*(\d+)\s*min\s*\)", RegexOptions.IgnoreCase);
 
-        public void Populate(VIsan vIsan)
+        public void Populate([NotNull] VIsan vIsan)
         {
+            Debug.Assert(vIsan != null);
+
             if (!vIsan.IsSearchable)
                 return;
 
             var dom = GetDom(vIsan);
 
-            SetTitle(vIsan, dom);
+            Populate(vIsan, dom);
             SetParent(vIsan, dom);
-            SetParentTitle(vIsan);
+            PopulateParent(vIsan);
         }
 
         private CQ GetDom(Isan isan)
@@ -46,26 +50,27 @@ namespace IsanPlugin
             return dom;
         }
 
-        private static void SetTitle(Isan isan, CQ dom)
+        private static void Populate(Isan isan, CQ dom)
         {
             var titles = dom[".title"];
             titles.ForEach(delegate(IDomObject o)
                 {
                     var innerText = (o.InnerText ?? "").Trim();
-                    var fullText = o.Render().StripHtml().TrimLeadingIsan().Trim();
-                    TrySetTitle(isan, innerText);
-                    TrySetTitle(isan, fullText);
+                    var fullText = o.Render().StripHtml().Trim();
+                    TryPopulate(isan, innerText);
+                    TryPopulate(isan, fullText);
                 });
         }
 
-        private static void TrySetTitle(Isan isan, string text)
+        private static void TryPopulate(Isan isan, string text)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return;
+            var title = text.StripLeadingIsan().Trim();
             if (Isan.IsIsan(text))
                 Logger.DebugFormat("Full V-ISAN: {0}", text);
-            else if (IsTitleYearLength(text))
-                SetTitleYearLength(isan, text);
+            if (IsTitleYearLength(title))
+                SetTitleYearLength(isan, title);
         }
 
         private static bool IsTitleYearLength(string text)
@@ -76,9 +81,9 @@ namespace IsanPlugin
         private static void SetTitleYearLength(Isan isan, string text)
         {
             var match = TitleYearLengthRegex.Match(text);
-            isan.Title = match.Groups[1].Value;
-            isan.Year = Int32.Parse(match.Groups[2].Value);
-            isan.LengthMin = Int32.Parse(match.Groups[3].Value);
+            isan.Title = match.Groups[1].Value.Trim();
+            isan.Year = Int32.Parse(match.Groups[2].Value.Trim());
+            isan.LengthMin = Int32.Parse(match.Groups[3].Value.Trim());
         }
 
         private static void SetParent(VIsan vIsan, CQ dom)
@@ -94,23 +99,23 @@ namespace IsanPlugin
                 });
         }
 
-        private void SetParentTitle(VIsan vIsan)
+        private void PopulateParent(VIsan vIsan)
         {
             if (vIsan.Parent == null)
                 return;
 
             var dom = GetDom(vIsan.Parent);
 
-            SetTitle(vIsan.Parent, dom);
+            Populate(vIsan.Parent, dom);
         }
     }
 
     internal static class StringExtensions
     {
-        private static readonly Regex LeadingIsanRegex = new Regex(@"\b(?:(?:V-)?ISAN\s*)?([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-?[a-z]?-?([0-9a-f]{4})-?([0-9a-f]{4})-?[a-z]?\b", RegexOptions.IgnoreCase);
+        private static readonly Regex LeadingIsanRegex = new Regex(@"\b(?:(?:V-)?ISAN\s*)?([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-?[a-z0-9]?-?([0-9a-f]{4})-?([0-9a-f]{4})-?[a-z0-9]?\b", RegexOptions.IgnoreCase);
 
         // TODO: Write unit tests
-        public static string TrimLeadingIsan(this string str)
+        public static string StripLeadingIsan(this string str)
         {
             return LeadingIsanRegex.Replace(str, "");
         }
