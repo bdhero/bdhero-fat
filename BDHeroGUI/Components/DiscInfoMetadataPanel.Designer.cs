@@ -68,7 +68,6 @@
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
@@ -77,8 +76,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
-            this.splitContainer1.Size = new System.Drawing.Size(491, 317);
-            this.splitContainer1.SplitterDistance = 156;
+            this.splitContainer1.Size = new System.Drawing.Size(899, 374);
+            this.splitContainer1.SplitterDistance = 446;
             this.splitContainer1.TabIndex = 0;
             // 
             // groupBox1
@@ -87,16 +86,19 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(491, 156);
-            this.groupBox1.TabIndex = 2;
+            this.groupBox1.Size = new System.Drawing.Size(446, 374);
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Raw Metadata";
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.textBoxAllBdmtTitles, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.textBoxVISAN, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.textBoxDboxTitle, 1, 2);
@@ -107,7 +109,6 @@
             this.tableLayoutPanel1.Controls.Add(this.label6, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.label7, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.textBoxHardwareVolumeLabel, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
@@ -116,7 +117,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(485, 137);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(437, 352);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // textBoxAllBdmtTitles
@@ -127,8 +128,8 @@
             this.textBoxAllBdmtTitles.Name = "textBoxAllBdmtTitles";
             this.textBoxAllBdmtTitles.ReadOnly = true;
             this.textBoxAllBdmtTitles.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxAllBdmtTitles.Size = new System.Drawing.Size(349, 51);
-            this.textBoxAllBdmtTitles.TabIndex = 9;
+            this.textBoxAllBdmtTitles.Size = new System.Drawing.Size(301, 266);
+            this.textBoxAllBdmtTitles.TabIndex = 4;
             // 
             // textBoxVISAN
             // 
@@ -136,8 +137,8 @@
             this.textBoxVISAN.Location = new System.Drawing.Point(133, 63);
             this.textBoxVISAN.Name = "textBoxVISAN";
             this.textBoxVISAN.ReadOnly = true;
-            this.textBoxVISAN.Size = new System.Drawing.Size(349, 20);
-            this.textBoxVISAN.TabIndex = 8;
+            this.textBoxVISAN.Size = new System.Drawing.Size(301, 20);
+            this.textBoxVISAN.TabIndex = 3;
             // 
             // textBoxDboxTitle
             // 
@@ -145,8 +146,8 @@
             this.textBoxDboxTitle.Location = new System.Drawing.Point(133, 43);
             this.textBoxDboxTitle.Name = "textBoxDboxTitle";
             this.textBoxDboxTitle.ReadOnly = true;
-            this.textBoxDboxTitle.Size = new System.Drawing.Size(349, 20);
-            this.textBoxDboxTitle.TabIndex = 7;
+            this.textBoxDboxTitle.Size = new System.Drawing.Size(301, 20);
+            this.textBoxDboxTitle.TabIndex = 2;
             // 
             // textBoxAnyDVDDiscInf
             // 
@@ -154,8 +155,8 @@
             this.textBoxAnyDVDDiscInf.Location = new System.Drawing.Point(133, 23);
             this.textBoxAnyDVDDiscInf.Name = "textBoxAnyDVDDiscInf";
             this.textBoxAnyDVDDiscInf.ReadOnly = true;
-            this.textBoxAnyDVDDiscInf.Size = new System.Drawing.Size(349, 20);
-            this.textBoxAnyDVDDiscInf.TabIndex = 6;
+            this.textBoxAnyDVDDiscInf.Size = new System.Drawing.Size(301, 20);
+            this.textBoxAnyDVDDiscInf.TabIndex = 1;
             // 
             // label3
             // 
@@ -208,8 +209,8 @@
             this.textBoxHardwareVolumeLabel.Location = new System.Drawing.Point(133, 3);
             this.textBoxHardwareVolumeLabel.Name = "textBoxHardwareVolumeLabel";
             this.textBoxHardwareVolumeLabel.ReadOnly = true;
-            this.textBoxHardwareVolumeLabel.Size = new System.Drawing.Size(349, 20);
-            this.textBoxHardwareVolumeLabel.TabIndex = 5;
+            this.textBoxHardwareVolumeLabel.Size = new System.Drawing.Size(301, 20);
+            this.textBoxHardwareVolumeLabel.TabIndex = 0;
             // 
             // groupBox2
             // 
@@ -217,16 +218,19 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(491, 157);
-            this.groupBox2.TabIndex = 3;
+            this.groupBox2.Size = new System.Drawing.Size(449, 374);
+            this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Derived Metadata";
             // 
             // tableLayoutPanel2
             // 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.textBoxValidBdmtTitles, 1, 4);
             this.tableLayoutPanel2.Controls.Add(this.textBoxIsan, 1, 3);
             this.tableLayoutPanel2.Controls.Add(this.textBoxDboxTitleSanitized, 1, 2);
@@ -237,7 +241,6 @@
             this.tableLayoutPanel2.Controls.Add(this.label9, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.label10, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.textBoxVolumeLabel, 1, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 5;
@@ -246,7 +249,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(485, 138);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(440, 352);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // textBoxValidBdmtTitles
@@ -257,8 +260,8 @@
             this.textBoxValidBdmtTitles.Name = "textBoxValidBdmtTitles";
             this.textBoxValidBdmtTitles.ReadOnly = true;
             this.textBoxValidBdmtTitles.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxValidBdmtTitles.Size = new System.Drawing.Size(315, 52);
-            this.textBoxValidBdmtTitles.TabIndex = 9;
+            this.textBoxValidBdmtTitles.Size = new System.Drawing.Size(270, 266);
+            this.textBoxValidBdmtTitles.TabIndex = 4;
             // 
             // textBoxIsan
             // 
@@ -266,8 +269,8 @@
             this.textBoxIsan.Location = new System.Drawing.Point(167, 63);
             this.textBoxIsan.Name = "textBoxIsan";
             this.textBoxIsan.ReadOnly = true;
-            this.textBoxIsan.Size = new System.Drawing.Size(315, 20);
-            this.textBoxIsan.TabIndex = 8;
+            this.textBoxIsan.Size = new System.Drawing.Size(270, 20);
+            this.textBoxIsan.TabIndex = 3;
             // 
             // textBoxDboxTitleSanitized
             // 
@@ -275,8 +278,8 @@
             this.textBoxDboxTitleSanitized.Location = new System.Drawing.Point(167, 43);
             this.textBoxDboxTitleSanitized.Name = "textBoxDboxTitleSanitized";
             this.textBoxDboxTitleSanitized.ReadOnly = true;
-            this.textBoxDboxTitleSanitized.Size = new System.Drawing.Size(315, 20);
-            this.textBoxDboxTitleSanitized.TabIndex = 7;
+            this.textBoxDboxTitleSanitized.Size = new System.Drawing.Size(270, 20);
+            this.textBoxDboxTitleSanitized.TabIndex = 2;
             // 
             // textBoxVolumeLabelSanitized
             // 
@@ -284,8 +287,8 @@
             this.textBoxVolumeLabelSanitized.Location = new System.Drawing.Point(167, 23);
             this.textBoxVolumeLabelSanitized.Name = "textBoxVolumeLabelSanitized";
             this.textBoxVolumeLabelSanitized.ReadOnly = true;
-            this.textBoxVolumeLabelSanitized.Size = new System.Drawing.Size(315, 20);
-            this.textBoxVolumeLabelSanitized.TabIndex = 6;
+            this.textBoxVolumeLabelSanitized.Size = new System.Drawing.Size(270, 20);
+            this.textBoxVolumeLabelSanitized.TabIndex = 1;
             // 
             // labelVolumeLabel
             // 
@@ -338,8 +341,8 @@
             this.textBoxVolumeLabel.Location = new System.Drawing.Point(167, 3);
             this.textBoxVolumeLabel.Name = "textBoxVolumeLabel";
             this.textBoxVolumeLabel.ReadOnly = true;
-            this.textBoxVolumeLabel.Size = new System.Drawing.Size(315, 20);
-            this.textBoxVolumeLabel.TabIndex = 5;
+            this.textBoxVolumeLabel.Size = new System.Drawing.Size(270, 20);
+            this.textBoxVolumeLabel.TabIndex = 0;
             // 
             // DiscInfoMetadataPanel
             // 
@@ -347,7 +350,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Name = "DiscInfoMetadataPanel";
-            this.Size = new System.Drawing.Size(491, 317);
+            this.Size = new System.Drawing.Size(899, 374);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
