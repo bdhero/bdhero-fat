@@ -30,7 +30,6 @@ namespace BDHeroGUI
             var kernel = InjectorFactory.CreateContainer();
             kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
             kernel.Bind<FormMain>().ToSelf();
-            kernel.Bind<IDriveDetector>().To(typeof (DriveDetector));
             return kernel.Get<FormMain>();
         }
     }
