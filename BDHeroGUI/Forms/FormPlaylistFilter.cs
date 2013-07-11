@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
-using DotNetUtils;
+using DotNetUtils.Extensions;
 
 namespace BDHeroGUI.Forms
 {
@@ -27,6 +27,7 @@ namespace BDHeroGUI.Forms
         {
             var values = Enum.GetValues(typeof (TrackType)).OfType<object>().ToArray();
             checkedListBoxTypes.Items.AddRange(values);
+            this.EnableSelectAll();
         }
 
         private void OnShown(object sender, EventArgs eventArgs)

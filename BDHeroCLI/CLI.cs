@@ -8,6 +8,7 @@ using BDHero;
 using BDHero.Plugin;
 using BDHero.Startup;
 using DotNetUtils;
+using DotNetUtils.Extensions;
 using Mono.Options;
 using ProcessUtils;
 

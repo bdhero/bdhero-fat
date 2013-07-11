@@ -1,6 +1,8 @@
 Chores
 ======
 
+[ ] Move plugin enabling/disabling code to Controller
+
 [ ] Add logging
     [ ] ProcessUtils and DotNetUtils?
 [ ] Unit tests
@@ -9,7 +11,86 @@ Chores
 Bugs
 ====
 
-[ ] NPE when scanning CASINO_ROYAL:
+[ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
+[ ] Time Remaining is jumpy, esp. > 80% complete.  Thread queue?
+
+Features
+========
+
+[ ] Split output MKV path into directory and file name
+    [ ] Move output file name settings out into Preferences dialog (similar to mmg)
+    [ ] Separate file namer preferences for movies and TV shows
+[ ] File Namer placeholders
+    [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
+
+[ ] Angle support
+[ ] Fix or remove "low quality" playlist detection
+[ ] Consider chapter count and timestamps when looking for duplicate playlists (playlists w/ identical streams but different chapters are not dups)
+
+[ ] CLI prompt to select TMDb search result, playlist, angle, overwrite existing file
+[ ] Plugin hooks for UI events:
+    [ ] Select a movie/TV show
+    [ ] Re-configure playlist (change Cut, Language, selected tracks) -- (for updating output file name, MKV title, track title)
+[ ] Allow any BD-ROM file/subdirectory to be scanned
+
+Backlog
+=======
+
+[ ] Allow pausing of tasks
+
+[ ] Validate filter window inputs
+
+[ ] Display drives above input textbox (like VidCoder)
+[ ] Background thread for drive detection
+[ ] Centralize drive detection logic
+[ ] Handle exceptions during drive detection
+
+[ ] CLI arg to dump list of main movie playlist files
+[ ] Asynchronous TMDb poster/cover art getter thread (use futures?)
+
+[ ] Add Windows 7 Taskbar buttons for pause/resume and cancel
+[ ] Add Windows 7 Taskbar jump lists?
+
+Chris' Plugins
+==============
+
+[ ] TMDb: Parse year out of Job.SearchQuery
+[ ] TMDb: Report more detailed, fine-grained progress when loading lots of search results and poster images
+[ ] Chapter Grabber: (THE MATRIX REVOLUTIONS):
+    01:57:31.210: Freedom and Sunlight
+    02:00:12.371: End Credits
+    02:09:13.745: 
+[ ] URI encoding (e.g., http://chapterdb.org/chapters/search?title=BLACK HAWK DOWN&chapterCount=0)
+[ ] Unescape XML/HTML entities (e.g., "&amp;" -> "&")
+[ ] Search ALL media types in Chapter Grabber plugin (not just Blu-ray)
+[ ] Use chapter grabber plugin to auto-detect main movie by comparing playlists to ChapterDb search results
+
+Complete
+========
+
+[X] Allow users to enable/disable plugins from GUI
+[X] Add track filter
+[X] Add plugin icons
+[X] Add "Rescan" menu item (F5)
+[N] Add "Convert" menu item
+[X] Add "Show log file in Windows Explorer"
+[X] Add separate class for project URLs and to launch them
+[X] Show BDHero version number in FormMain title
+[X] Detect drives on startup
+[X] Menu bar
+[X] Basic about box
+[X] Update output MKV path when user's selection changes
+[X] Chapter Grabber: (IN_TIME)
+    Scene 1
+    Scene 2
+    Scene 3
+[X] Switch to "Save File" dialog for output MKV path
+[X] MIRROR_MIRROR_BD doesn't auto-detect any Main Feature playlists
+[X] GUI repaints but does not respond to user input while scanning disc.  Thread queue?
+[X] Don't load AppData plugins when *.vhost.exe is present in PluginService.cs
+[X] Drag-n-drop scanning
+[X] Scan automatically after Browse
+[X] NPE when scanning CASINO_ROYAL:
     2013-07-01 00:59:14,967 [1176][1] ERROR BDHero.Controller - Unhandled exception was thrown by plugin
     System.NullReferenceException: Object reference not set to an instance of an object.
        at BDHero.Plugin.DiscReader.Transformer.StreamClipTransformer.Transform(TSStreamClip tsStreamClip, Int32 index)
@@ -28,57 +109,7 @@ Bugs
        at BDHero.Controller.<>c__DisplayClass22.<RunPluginSync>b__20(IThreadInvoker invoker, CancellationToken token)
        at DotNetUtils.TaskUtils.TaskBuilder.<InvokeDoWork>b__2()
        at DotNetUtils.TaskUtils.TaskBuilder.Try(Action action)
-[ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
-[ ] Time Remaining is jumpy, esp. > 80% complete.  Thread queue?
-[ ] GUI repaints but does not respond to user input while scanning disc.  Thread queue?
-
-Features
-========
-
-[ ] Angle support
-[ ] Fix or remove "low quality" playlist detection
-[ ] Consider chapter count and timestamps when looking for duplicate playlists (playlists w/ identical streams but different chapters are not dups)
-
-[ ] CLI prompt to select TMDb search result, playlist, angle, overwrite existing file
-[ ] Plugin hooks for UI events:
-    [ ] Select a movie/TV show
-    [ ] Re-configure playlist (change Cut, Language, selected tracks) -- (for updating output file name, MKV title, track title)
-[ ] File Namer placeholders
-    [ ] Add fields to Job class for DirectoryPathTemplate and FileNameTemplate, which File Namer will combine and expand into OutputMkvPath
-[ ] Allow any BD-ROM file/subdirectory to be scanned
-
-Backlog
-=======
-
-[ ] Allow pausing of tasks
-
-[ ] CLI arg to dump list of main movie playlist files
-[ ] Separate file namer preferences for movies and TV shows
-[ ] Asynchronous TMDb poster/cover art getter thread (use futures?)
-
-[ ] Move output file name settings out into Preferences dialog (similar to mmg)
-
-[ ] Add Windows 7 Taskbar buttons for pause/resume and cancel
-[ ] Add Windows 7 Taskbar jump lists?
-
-Chris' Plugins
-==============
-
-[ ] Chapter Grabber: (THE MATRIX REVOLUTIONS):
-    01:57:31.210: Freedom and Sunlight
-    02:00:12.371: End Credits
-    02:09:13.745: 
-[ ] Chapter Grabber: (IN_TIME)
-    Scene 1
-    Scene 2
-    Scene 3
-[ ] URI encoding (e.g., http://chapterdb.org/chapters/search?title=BLACK HAWK DOWN&chapterCount=0)
-[ ] Search ALL media types in Chapter Grabber plugin (not just Blu-ray)
-[ ] Use chapter grabber plugin to auto-detect main movie by comparing playlists to ChapterDb search results
-
-Complete
-========
-
+[X] Don't skip unknown codecs - ffmpeg includes ALL codecs when counting streams (even IGS and DTS Express), which means BDHero's track indexes won't match
 [X] Estimated time left -- double decrement bug
 [X] Exception not propagated to UI and doesn't stop UI:
     2013-06-27 16:57:24,043 [6620][7] ERROR ProcessUtils.NonInteractiveProcess - Error occurred while starting/running NonInteractiveProcess

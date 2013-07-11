@@ -6,12 +6,13 @@ using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DotNetUtils.Extensions;
 
 namespace DotNetUtils.Controls
 {
     /// <summary>
     /// A more sensible extension of the standard <see cref="ProgressBar"/> class that adds
-    /// a getter/setter for <see cref="ProgressBar.Value"/> that accepts a <code>double</code>
+    /// a getter/setter for <see cref="ProgressBar.Value"/> that accepts a <c>double</c>
     /// in the range 0.0 to 100.0.  It also supports custom colors to denote state.
     /// </summary>
     public class ProgressBar2 : ProgressBar
@@ -45,19 +46,16 @@ namespace DotNetUtils.Controls
         /// </summary>
         public bool UseCustomColors
         {
-            get { return GetStyle(ControlStyles.UserPaint); }
-            set
-            {
-//                SetStyle(ControlStyles.UserPaint, value);
-                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, value);
-            }
+            get { return this.GetUserPaint(); }
+            set { this.SetUserPaint(value); }
         }
 
         public ProgressBar2()
         {
             Maximum = 100 * 1000;
 
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+//            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetDoubleBuffered(true);
 
             GenerateText = d => string.Format("{0:0.00}%", d);
 
@@ -97,11 +95,11 @@ namespace DotNetUtils.Controls
             BackColor = Color.Gray;
         }
 
-        protected override void OnPaintBackground(PaintEventArgs pevent)
+        protected override void OnPaintBackground(PaintEventArgs e)
         {
             if (!UseCustomColors)
             {
-                base.OnPaintBackground(pevent);
+                base.OnPaintBackground(e);
             }
             // None... Helps control the flicker.
         }

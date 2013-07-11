@@ -56,7 +56,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                 case TSStreamType.PRESENTATION_GRAPHICS:
                     return Codec.PGS;
                 case TSStreamType.INTERACTIVE_GRAPHICS:
-                    return Codec.UnknownSubtitle;
+                    return Codec.IGS;
                 case TSStreamType.SUBTITLE:
                     return Codec.UnknownSubtitle;
                 default:

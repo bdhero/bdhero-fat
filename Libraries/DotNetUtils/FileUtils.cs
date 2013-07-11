@@ -115,7 +115,7 @@ namespace DotNetUtils
         /// Determines whether the given path <em>likely</em> contains (ends with) a standard Windows filename (i.e., one that has an extension).
         /// </summary>
         /// <param name="path">Relative or absolute path to a file or directory</param>
-        /// <returns><code>true</code> if the path ends in a period followed by at least one letter; otherwise <code>false</code></returns>
+        /// <returns><c>true</c> if the path ends in a period followed by at least one letter; otherwise <c>false</c></returns>
         /// <example>"C:\some\dir\a.out" => true</example>
         /// <example>"a.out" => true</example>
         /// <example>"file.c" => true</example>
@@ -152,6 +152,15 @@ namespace DotNetUtils
             return sanitizedFileName;
         }
 
+        /// <summary>
+        /// Converts the extension to lowercase and ensures that it starts with a period.
+        /// </summary>
+        /// <example><c>"ext" => ".ext"</c></example>
+        /// <example><c>"EXT" => ".ext"</c></example>
+        /// <example><c>".ext" => ".ext"</c></example>
+        /// <example><c>".EXT" => ".ext"</c></example>
+        /// <param name="ext">File extension, with or without a leading period, in any mix of upper or lower case</param>
+        /// <returns><paramref name="ext"/> normalized to lowercase with a leading period</returns>
         public static string NormalizeFileExtension([NotNull] string ext)
         {
             // Make sure every extension starts with a period (e.g., ".ext")
@@ -161,6 +170,15 @@ namespace DotNetUtils
             return extNorm;
         }
 
+        /// <summary>
+        /// Converts the extensions to lowercase and ensures that they start with a period.
+        /// </summary>
+        /// <example><code>"ext" => ".ext"</code></example>
+        /// <example><code>"EXT" => ".ext"</code></example>
+        /// <example><code>".ext" => ".ext"</code></example>
+        /// <example><code>".EXT" => ".ext"</code></example>
+        /// <param name="extensions">File extensions, with or without leading periods, in any mix of upper or lower case</param>
+        /// <returns><paramref name="extensions"/> normalized to lowercase with leading periods</returns>
         public static ICollection<string> NormalizeFileExtensions(IEnumerable<string> extensions)
         {
             return extensions.Select(NormalizeFileExtension).ToList();
@@ -201,6 +219,19 @@ namespace DotNetUtils
             string argument = "/select, \"" + filePath + "\"";
 
             Process.Start("explorer.exe", argument);
+        }
+
+        public static void OpenFolder(string folderPath)
+        {
+            if (!Directory.Exists(folderPath))
+                return;
+
+            Process.Start(folderPath);
+        }
+
+        public static void OpenUrl(string url)
+        {
+            Process.Start(url);
         }
 
         public static bool HasProgramAssociation(string filePath)

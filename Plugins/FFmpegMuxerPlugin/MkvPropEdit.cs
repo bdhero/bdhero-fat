@@ -65,8 +65,8 @@ namespace BDHero.Plugin.FFmpegMuxer
         }
 
         /// <summary>
-        /// Automatically sets the "default track" flag to <code>true</code> for the first track of each type (video, audio, and subtitle),
-        /// and the remaining tracks to <code>false</code>.
+        /// Automatically sets the "default track" flag to <c>true</c> for the first track of each type (video, audio, and subtitle),
+        /// and the remaining tracks to <c>false</c>.
         /// </summary>
         public MkvPropEdit SetDefaultTracksAuto(List<Track> selectedTracks)
         {

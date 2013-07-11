@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -16,8 +17,8 @@ namespace DotNetUtils
     {
         /// <summary>
         /// Returns
-        /// <paramref name="assembly"/> if it is not <code>null</code>, otherwise
-        /// <see cref="Assembly.GetEntryAssembly()"/> if it is not <code>null</code>, or
+        /// <paramref name="assembly"/> if it is not <c>null</c>, otherwise
+        /// <see cref="Assembly.GetEntryAssembly()"/> if it is not <c>null</c>, or
         /// <see cref="Assembly.GetCallingAssembly()"/> as a last resort.
         /// This method is guaranteed not to return null.
         /// </summary>
@@ -97,6 +98,15 @@ namespace DotNetUtils
 
         #endregion
 
+        /// <summary>
+        /// Gets the .NET GuidAttribute value for the given assembly.
+        /// </summary>
+        public static string Guid(Assembly assembly = null)
+        {
+            assembly = AssemblyOrDefault(assembly);
+            return ((GuidAttribute) assembly.GetCustomAttributes(typeof (GuidAttribute), true)[0]).Value;
+        }
+
         #region Dates
 
         /// <summary>
@@ -107,6 +117,7 @@ namespace DotNetUtils
         public static DateTime GetLinkerTimestamp(Assembly assembly = null)
         {
             assembly = AssemblyOrDefault(assembly);
+
             string filePath = assembly.Location;
             const int c_PeHeaderOffset = 60;
             const int c_LinkerTimestampOffset = 8;

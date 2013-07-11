@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using BDHero.BDROM;
 using BDHero.JobQueue;
 using DotNetUtils;
+using DotNetUtils.Extensions;
 using I18N;
 
 namespace BDHero.Plugin.AutoDetector
@@ -16,7 +18,11 @@ namespace BDHero.Plugin.AutoDetector
 
         public string Name { get { return "BDHero Detective"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public bool Enabled { get; set; }
+
+        public Icon Icon { get { return null; } }
+
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
@@ -64,64 +70,6 @@ namespace BDHero.Plugin.AutoDetector
                 return;
 
             Host.ReportProgress(this, 100.0, "Finished auto detecting");
-        }
-
-        private static void SelectBestPlaylist(Job job)
-        {
-            var bestPlaylist = job.Disc.ValidMainFeaturePlaylists.FirstOrDefault();
-            if (bestPlaylist != null)
-            {
-                job.SelectedPlaylistIndex = job.Disc.Playlists.IndexOf(bestPlaylist);
-            }
-        }
-
-        private static void SelectBestTracks(Disc disc)
-        {
-            foreach (var playlist in disc.Playlists)
-            {
-                // Video
-
-                playlist.VideoTracks.First().Keep = true;
-
-                // Audio
-
-                var mainFeatureAudioTracks = playlist.AudioTracks.Where(track => track.IsMainFeature).ToList();
-                var primaryLanguageAudioTracks = mainFeatureAudioTracks.Where(track => track.Language == disc.PrimaryLanguage).ToList();
-                var firstAudioTrack = playlist.AudioTracks.FirstOrDefault();
-
-                if (primaryLanguageAudioTracks.Any())
-                    SelectTracks(primaryLanguageAudioTracks);
-                else if (mainFeatureAudioTracks.Any())
-                    SelectTrack(primaryLanguageAudioTracks.First());
-                else if (firstAudioTrack != null)
-                    SelectTrack(firstAudioTrack);
-
-                // Subtitles
-
-                var mainFeatureSubtitleTracks = playlist.SubtitleTracks.Where(track => track.IsMainFeature).ToList();
-                var primaryLanguageSubtitleTracks = mainFeatureSubtitleTracks.Where(track => track.Language == disc.PrimaryLanguage).ToList();
-                var firstSubtitleTrack = playlist.SubtitleTracks.FirstOrDefault();
-
-                if (primaryLanguageSubtitleTracks.Any())
-                    SelectTracks(primaryLanguageSubtitleTracks);
-                else if (mainFeatureSubtitleTracks.Any())
-                    SelectTrack(mainFeatureSubtitleTracks.First());
-                else if (firstSubtitleTrack != null)
-                    SelectTrack(firstSubtitleTrack);
-            }
-        }
-
-        private static void SelectTracks(IEnumerable<Track> tracks)
-        {
-            foreach (var track in tracks)
-            {
-                SelectTrack(track);
-            }
-        }
-
-        private static void SelectTrack(Track track)
-        {
-            track.Keep = true;
         }
 
         #region Data Gathering (round 1)
@@ -282,6 +230,72 @@ namespace BDHero.Plugin.AutoDetector
             {
                 track.Type = TrackType.SpecialFeature;
             }
+        }
+
+        #endregion
+
+        #region Auto Selection
+
+        private static void SelectBestPlaylist(Job job)
+        {
+            var bestPlaylists = job.Disc.ValidMainFeaturePlaylists;
+            var bestPlaylist = bestPlaylists.FirstOrDefault();
+
+            if (bestPlaylist == null) return;
+
+            bestPlaylists.ForEach(playlist => playlist.IsBestGuess = true);
+            job.SelectedPlaylistIndex = job.Disc.Playlists.IndexOf(bestPlaylist);
+        }
+
+        private static void SelectBestTracks(Disc disc)
+        {
+            foreach (var playlist in disc.Playlists)
+            {
+                // Video
+
+                playlist.VideoTracks.First().IsBestGuess = true;
+                playlist.VideoTracks.First().Keep = true;
+
+                // Audio
+
+                var mainFeatureAudioTracks = playlist.AudioTracks.Where(track => track.IsMainFeature).ToList();
+                var primaryLanguageAudioTracks = mainFeatureAudioTracks.Where(track => track.Language == disc.PrimaryLanguage).ToList();
+                var firstAudioTrack = playlist.AudioTracks.FirstOrDefault();
+
+                if (primaryLanguageAudioTracks.Any())
+                    SelectTracks(primaryLanguageAudioTracks);
+                else if (mainFeatureAudioTracks.Any())
+                    SelectTrack(primaryLanguageAudioTracks.First());
+                else if (firstAudioTrack != null)
+                    SelectTrack(firstAudioTrack);
+
+                // Subtitles
+
+                var mainFeatureSubtitleTracks = playlist.SubtitleTracks.Where(track => track.IsMainFeature).ToList();
+                var primaryLanguageSubtitleTracks = mainFeatureSubtitleTracks.Where(track => track.Language == disc.PrimaryLanguage).ToList();
+                var firstSubtitleTrack = playlist.SubtitleTracks.FirstOrDefault();
+
+                if (primaryLanguageSubtitleTracks.Any())
+                    SelectTracks(primaryLanguageSubtitleTracks);
+                else if (mainFeatureSubtitleTracks.Any())
+                    SelectTrack(mainFeatureSubtitleTracks.First());
+                else if (firstSubtitleTrack != null)
+                    SelectTrack(firstSubtitleTrack);
+            }
+        }
+
+        private static void SelectTracks(IEnumerable<Track> tracks)
+        {
+            foreach (var track in tracks)
+            {
+                SelectTrack(track);
+            }
+        }
+
+        private static void SelectTrack(Track track)
+        {
+            track.IsBestGuess = true;
+            track.Keep = true;
         }
 
         #endregion

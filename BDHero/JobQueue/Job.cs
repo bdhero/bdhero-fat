@@ -70,6 +70,15 @@ namespace BDHero.JobQueue
             get { return ReleaseMediumType == ReleaseMediumType.TVShow ? (ReleaseMedium) SelectedTVShow : SelectedMovie; }
         }
 
+        [JsonIgnore]
+        public string SearchQuery
+        {
+            get { return _searchQuery ?? (Disc != null ? Disc.SanitizedTitle : null); }
+            set { _searchQuery = value; }
+        }
+
+        private string _searchQuery;
+
         public Job(Disc disc)
         {
             Disc = disc;

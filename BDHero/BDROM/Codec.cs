@@ -53,6 +53,7 @@ namespace BDHero.BDROM
         public static readonly CodecPGS PGS = new CodecPGS();
         public static readonly CodecVobSub VobSub = new CodecVobSub();
         public static readonly CodecSRT SRT = new CodecSRT();
+        public static readonly CodecIGS IGS = new CodecIGS();
 
         public static readonly CodecUnknownSubtitle UnknownSubtitle = new CodecUnknownSubtitle();
 
@@ -122,7 +123,8 @@ namespace BDHero.BDROM
                 {
                     PGS,
                     VobSub,
-                    SRT
+                    SRT,
+                    IGS
                 };
 
         public static readonly List<Codec> AllCodecs =
@@ -147,7 +149,8 @@ namespace BDHero.BDROM
                     Vorbis,
                     FLAC,
                     LPCM,
-                    PGS
+                    PGS,
+                    IGS
                 };
 
         #endregion
@@ -190,6 +193,8 @@ namespace BDHero.BDROM
         public abstract string Description { get; }
 
         public virtual string CommonName { get { return ShortName; } }
+
+        public virtual string DisplayName { get { return ShortName; } }
 
         public virtual IEnumerable<string> AltDisplayNames
         {
@@ -373,6 +378,11 @@ namespace BDHero.BDROM
         }
 
         public override string CommonName
+        {
+            get { return MicroName; }
+        }
+
+        public override string DisplayName
         {
             get { return MicroName; }
         }
@@ -735,6 +745,11 @@ namespace BDHero.BDROM
             get { return string.Format("{0} ({1})", base.FullNameDisambig, ShortName); }
         }
 
+        public override string DisplayName
+        {
+            get { return FullName; }
+        }
+
         public override IEnumerable<string> AltDisplayNames
         {
             get { return new[] { MicroName }; }
@@ -811,6 +826,11 @@ namespace BDHero.BDROM
             get { return FullName; }
         }
 
+        public override string DisplayName
+        {
+            get { return FullName; }
+        }
+
         public override IEnumerable<string> AltDisplayNames
         {
             get { return new[] { MicroName }; }
@@ -882,6 +902,11 @@ namespace BDHero.BDROM
             get { return string.Format("{0} ({1} / {2})", base.FullNameDisambig, AltMicroName, ShortName); }
         }
 
+        public override string DisplayName
+        {
+            get { return FullName; }
+        }
+
         public override bool Lossless
         {
             get { return false; }
@@ -936,6 +961,11 @@ namespace BDHero.BDROM
         public override string MicroName
         {
             get { return "TrueHD"; }
+        }
+
+        public override string DisplayName
+        {
+            get { return FullName; }
         }
 
         public override bool Lossless
@@ -1270,6 +1300,11 @@ namespace BDHero.BDROM
         public override string CommonName
         {
             get { return MicroName; }
+        }
+
+        public override string DisplayName
+        {
+            get { return FullName; }
         }
 
         public override bool Lossless
@@ -1803,6 +1838,64 @@ namespace BDHero.BDROM
 //        public static bool Matches(Format format)
 //        {
 //            return format.Id == "UTF-8";
+//        }
+    }
+
+    public class CodecIGS : SubtitleCodec
+    {
+        public override bool IsMuxable
+        {
+            get { return false; }
+        }
+
+        public override string SerializableName
+        {
+            get { return "M_IGS"; }
+        }
+
+        public override string CodecId
+        {
+            get { return "M_HDMV/IGS"; }
+        }
+
+        public override string FullName
+        {
+            get { return "Interactive Graphics Stream"; }
+        }
+
+        public override string ShortName
+        {
+            get { return "IGS"; }
+        }
+
+        public override string MicroName
+        {
+            get { return "IGS"; }
+        }
+
+        public override bool IsRequiredBlurayCodec
+        {
+            get { return true; }
+        }
+
+        public override string Description
+        {
+            get { return "Pop-up menu displayed during playback on some Blu-ray Discs."; }
+        }
+
+//        public override Image Logo
+//        {
+//            get { return Logos.logo_igs; }
+//        }
+//
+//        public static bool Matches(string filename)
+//        {
+//            return new Regex(@"(^|\.)sup$", RegexOptions.IgnoreCase).IsMatch(filename);
+//        }
+//
+//        public static bool Matches(Format format)
+//        {
+//            return format.Id == "PGS";
 //        }
     }
 

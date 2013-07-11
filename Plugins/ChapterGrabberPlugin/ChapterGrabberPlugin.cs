@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Xml;
+using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.JobQueue;
 using DotNetUtils;
@@ -14,7 +16,7 @@ using System.IO;
 
 namespace ChapterGrabberPlugin
 {
-    public class ChapterGrabberPlugin : INameProviderPlugin
+    public class ChapterGrabberPlugin : IMetadataProviderPlugin
     {
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -25,9 +27,13 @@ namespace ChapterGrabberPlugin
         public IPluginHost Host { get; private set; }
         public PluginAssemblyInfo AssemblyInfo { get; private set; }
 
-        public string Name { get { return "ChapterDB"; } }
+        public string Name { get { return "ChapterDb"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public bool Enabled { get; set; }
+
+        public Icon Icon { get { return Resources.chapterdb_icon; } }
+
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
@@ -39,8 +45,7 @@ namespace ChapterGrabberPlugin
         {
         }
 
-
-        public void Rename(CancellationToken cancellationToken, Job job)
+        public void GetMetadata(CancellationToken cancellationToken, Job job)
         {
             if (cancellationToken.IsCancellationRequested)
                 return;
@@ -68,6 +73,8 @@ namespace ChapterGrabberPlugin
                     var apiValues = CompareChapters(apiResults, moviePlaylist.Chapters);
                     if (apiValues != null && apiValues.Count > 0)
                     {
+                        StoreSearchResults(apiValues, moviePlaylist);
+
                         // To Do:  Allow the user to select which chapter list to use when 
                         // defaulted to [0] first chapter list that matches filter criteria
                         ReplaceChapters(apiValues[0], moviePlaylist.Chapters);
@@ -82,6 +89,23 @@ namespace ChapterGrabberPlugin
                 return;
 
             Host.ReportProgress(this, 100.0, "Finished querying ChapterDb.org");
+        }
+
+        private static void StoreSearchResults(IEnumerable<JsonChaps> searchResults, Playlist playlist)
+        {
+            var validResults = searchResults.Where(chaps => IsMatch(chaps, playlist.Chapters)).Where(IsValid).ToArray();
+            playlist.ChapterSearchResults = validResults.Select(searchResult => Transform(searchResult, playlist)).ToList();
+        }
+
+        private static IList<Chapter> Transform(JsonChaps searchResult, Playlist playlist)
+        {
+            var jsonChapters = searchResult.chapterInfo.chapters.chapter;
+            return jsonChapters.Take(playlist.ChapterCount).Select(Transform).ToList();
+        }
+
+        private static Chapter Transform(JsonChapter jsonChapter, int i)
+        {
+            return new Chapter(i, jsonChapter.time.TotalSeconds) {Title = jsonChapter.name};
         }
 
         static private List<JsonChaps> GetChapters(string movieName)
@@ -160,7 +184,7 @@ namespace ChapterGrabberPlugin
             return movieSearchResults;
         }
 
-        static private List<JsonChaps> CompareChapters(List<JsonChaps> apiData, IList<BDHero.BDROM.Chapter> discData)
+        static private List<JsonChaps> CompareChapters(List<JsonChaps> apiData, IList<Chapter> discData)
         {
             var apiResultsFilteredByChapter = apiData.Where(chaps => IsMatch(chaps, discData)).ToList();
             
@@ -178,23 +202,24 @@ namespace ChapterGrabberPlugin
         private static bool IsValid(JsonChaps jsonChaps)
         {
             List<JsonChapter> jsonChapters = jsonChaps.chapterInfo.chapters.chapter;
-            var isInvalid = jsonChapters.All(IsInvalidChapter);
-            return !isInvalid;
+            var areAllInvalid = jsonChapters.All(IsInvalidChapter);
+            return !areAllInvalid;
         }
 
         private static bool IsInvalidChapter(JsonChapter jsonChapter)
         {
             var trimmed = jsonChapter.name.Trim();
-            TimeSpan parsed;
-            var timespan = TimeSpan.TryParse(trimmed, out parsed);
-            if (timespan)
+            if (string.IsNullOrWhiteSpace(trimmed))
                 return true;
-            if (Regex.IsMatch(trimmed, @"^(Chapter\s*)?[0-9]+$", RegexOptions.IgnoreCase))
+            TimeSpan parsed;
+            if (TimeSpan.TryParse(trimmed, out parsed))
+                return true;
+            if (Regex.IsMatch(trimmed, @"^(?:Chapter|Scene|Kapitel)?\s*[0-9]+\s*$", RegexOptions.IgnoreCase))
                 return true;
             return false;
         }
 
-        private static bool IsMatch(JsonChaps jsonChaps, IList<BDHero.BDROM.Chapter> chapterDisc)
+        private static bool IsMatch(JsonChaps jsonChaps, IList<Chapter> chapterDisc)
         {
             var chapterCountMatches = jsonChaps.chapterInfo.chapters.chapter.Count == chapterDisc.Count ||
                                       jsonChaps.chapterInfo.chapters.chapter.Count == chapterDisc.Count + 1;
@@ -217,7 +242,7 @@ namespace ChapterGrabberPlugin
             return Math.Abs(timeDisc - timeApi) <= 1.0;
         }
 
-        static private void ReplaceChapters(JsonChaps apiData, IList<BDHero.BDROM.Chapter> discData )
+        static private void ReplaceChapters(JsonChaps apiData, IList<Chapter> discData )
         {
             for (var i=0; i<discData.Count; i++)
             {

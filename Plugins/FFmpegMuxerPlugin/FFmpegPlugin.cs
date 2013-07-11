@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using BDHero.JobQueue;
 using DotNetUtils;
+using DotNetUtils.Extensions;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
@@ -19,7 +21,11 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         public string Name { get { return "FFmpeg"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public bool Enabled { get; set; }
+
+        public Icon Icon { get { return Resources.ffmpeg_icon; } }
+
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public MatroskaFeatures SupportedFeatures
         {

@@ -8,6 +8,13 @@ Projects without which BDHero would not be possible:
 *  [MKVToolNix](http://www.bunkus.org/videotools/mkvtoolnix/): Cross-platform tool suite for the [Matroska](http://matroska.org/) media container format (MKV)
 *  [AnyDVD HD](http://www.slysoft.com/en/anydvdhd.html): Removes restrictions from Blu-ray media (Windows only)
 
+Inspiration
+===========
+
+*  VidCoder
+*  tsMuxeR
+*  MakeMKV
+
 Databases
 =========
 

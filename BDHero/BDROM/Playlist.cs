@@ -96,6 +96,11 @@ namespace BDHero.BDROM
 
         public IList<Chapter> Chapters = new List<Chapter>();
 
+        /// <summary>
+        /// List of possible chapter matches that the user can choose from.
+        /// </summary>
+        public IList<IList<Chapter>> ChapterSearchResults = new List<IList<Chapter>>();
+
         #endregion
 
         #region Non-DB Flags (max quality, duplicate, loops, hidden first tracks, bogus)
@@ -150,6 +155,12 @@ namespace BDHero.BDROM
         {
             get { return IsDuplicate || HasDuplicateStreamClips || HasLoops || HasHiddenFirstTracks; }
         }
+
+        /// <summary>
+        /// Gets or sets whether this playlist represents BDHero's "best guess" based on the user's preferences.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsBestGuess { get; set; }
 
         #endregion
 
@@ -337,7 +348,7 @@ namespace BDHero.BDROM
                 IsMaxQuality &&
                 IsFeatureLength(maxPlaylistLength) &&
                 VideoTracks.Count >= 1 &&
-                AudioTracks.Count >= 2 /* or >= 1? */ &&
+                AudioTracks.Count >= 1 &&
                 SubtitleTracks.Count >= 1 &&
                 Chapters.Count >= 2 &&
                 Length > MinLength;

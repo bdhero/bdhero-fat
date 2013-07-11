@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DotNetUtils.Annotations;
 
 namespace BDHero.JobQueue
 {
@@ -21,6 +22,11 @@ namespace BDHero.JobQueue
         public string Title;
 
         /// <summary>
+        /// URL of a website with more detailed information about this ReleaseMedium.
+        /// </summary>
+        public string Url;
+
+        /// <summary>
         /// Gets or sets whether the BD-ROM contains this movie or TV show.
         /// </summary>
         public bool IsSelected;
@@ -36,7 +42,18 @@ namespace BDHero.JobQueue
         /// <summary>
         /// Year the movie was released.
         /// </summary>
-        public int ReleaseYear;
+        public int? ReleaseYear;
+
+        public string ReleaseYearDisplayable
+        {
+            [CanBeNull]
+            get { return ReleaseYear.HasValue && ReleaseYear.Value >= 1800 ? ReleaseYear.Value.ToString("D") : null; }
+        }
+
+        public override string ToString()
+        {
+            return ReleaseYearDisplayable == null ? Title : string.Format("{0} ({1})", Title, ReleaseYearDisplayable);
+        }
     }
 
     public class TVShow : ReleaseMedium
@@ -66,6 +83,11 @@ namespace BDHero.JobQueue
             public int SeasonNumber;
             public int EpisodeNumber;
             public DateTime ReleaseDate;
+        }
+
+        public override string ToString()
+        {
+            return Title;
         }
     }
 

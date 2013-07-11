@@ -54,9 +54,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyUtils.cs" />
-    <Compile Include="Controls\DoubleBufferedListView.cs">
+    <Compile Include="Controls\FileTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FileTextBox.Designer.cs">
+      <DependentUpon>FileTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ListView2.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\SelectableLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\ColumnHeaderExtensions.cs" />
+    <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Controls\LinkLabel2.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -71,13 +83,19 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DragUtils.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Extensions\ListViewItemExtensions.cs" />
+    <Compile Include="Extensions\NotifyPropertyChangedExtensions.cs" />
+    <Compile Include="Extensions\TextBoxUtils.cs" />
+    <Compile Include="Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="MultiValueDictionary.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FileUtils.cs" />
-    <Compile Include="FormUtils.cs" />
     <Compile Include="HttpRequest.cs" />
+    <Compile Include="Extensions\ListViewExtensions.cs" />
     <Compile Include="Mono.Options.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extensions\TabPageExtensions.cs" />
     <Compile Include="TaskUtils\IThreadInvoker.cs" />
     <Compile Include="TaskUtils\ThreadInvoker.cs" />
     <Compile Include="TaskUtils\TaskBuilder.cs" />
@@ -85,6 +103,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\FileTextBox.resx">
+      <DependentUpon>FileTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

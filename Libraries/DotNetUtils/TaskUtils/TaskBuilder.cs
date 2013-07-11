@@ -42,7 +42,7 @@ namespace DotNetUtils.TaskUtils
         /// Runs the specified action in the UI thread before invoking the main <see cref="DoWork"/> action.
         /// </summary>
         /// <param name="beforeStart"></param>
-        /// <returns>Reference to this <code>TaskBuilder</code></returns>
+        /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder BeforeStart(Action<CancellationToken> beforeStart)
         {
             _beforeStart = beforeStart;
@@ -53,7 +53,7 @@ namespace DotNetUtils.TaskUtils
         /// Runs in background (non-UI) thread, but may execute an action on the UI thread by calling the passed thread invoker.
         /// </summary>
         /// <param name="work">Action to invoke on the background thread</param>
-        /// <returns>Reference to this <code>TaskBuilder</code></returns>
+        /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder DoWork(Action<IThreadInvoker, CancellationToken> work)
         {
             _work = work;
@@ -65,7 +65,7 @@ namespace DotNetUtils.TaskUtils
         /// and completes successfully.
         /// </summary>
         /// <param name="succeed">Action to invoke on the UI thread when the main DoWork action completes successfully</param>
-        /// <returns>Reference to this <code>TaskBuilder</code></returns>
+        /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder Succeed(Action succeed)
         {
             _succeed = succeed;
@@ -77,7 +77,7 @@ namespace DotNetUtils.TaskUtils
         /// and fails (due to an exception, etc.).
         /// </summary>
         /// <param name="fail">Action to invoke on the UI thread when the main DoWork action fails</param>
-        /// <returns>Reference to this <code>TaskBuilder</code></returns>
+        /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder Fail(Action<Exception> fail)
         {
             _fail = fail;
@@ -89,7 +89,7 @@ namespace DotNetUtils.TaskUtils
         /// and after the Success or Failure callbacks have ran, regardless of whether the main DoWork action failed or succeeded.
         /// </summary>
         /// <param name="finally"></param>
-        /// <returns>Reference to this <code>TaskBuilder</code></returns>
+        /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder Finally(Action @finally)
         {
             _finally = @finally;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,11 @@ namespace BDHero.Plugin.FileNamer
 
         public string Name { get { return "BDHero File Namer"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public bool Enabled { get; set; }
+
+        public Icon Icon { get { return null; } }
+
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
@@ -33,27 +38,29 @@ namespace BDHero.Plugin.FileNamer
         {
             Host.ReportProgress(this, 0.0, "Auto-renaming output file...");
 
+            var path = job.OutputPath;
+
             // User already specified filename
-            var pathSpecified = !string.IsNullOrWhiteSpace(job.OutputPath);
-            if (pathSpecified && job.OutputPath.EndsWith(".mkv", StringComparison.InvariantCultureIgnoreCase))
-                return;
+            var pathSpecified = !string.IsNullOrWhiteSpace(path);
+            if (pathSpecified && FileUtils.ContainsFileName(path))
+                path = Path.GetDirectoryName(path);
 
             string firstVideoHeight = null;
             var firstVideoTrack = job.SelectedPlaylist.VideoTracks.FirstOrDefault(track => track.Keep);
             if (firstVideoTrack != null)
                 firstVideoHeight = firstVideoTrack.VideoFormatDisplayable;
 
-            var directory = pathSpecified ? job.OutputPath : Environment.CurrentDirectory;
+            var directory = pathSpecified ? path : Environment.CurrentDirectory;
             var filename = string.Format(@"{0} [{1}].mkv", job.Disc.SanitizedTitle, firstVideoHeight);
 
-            var movie = job.SelectedReleaseMedium as Movie;
-            var tvShow = job.SelectedReleaseMedium as TVShow;
+            var medium = job.SelectedReleaseMedium;
+            var movie = medium as Movie;
+            var tvShow = medium as TVShow;
 
             if (movie != null)
             {
-                filename = string.Format("{0} ({1}) [{2}].mkv",
-                                         FileUtils.SanitizeFileName(movie.Title),
-                                         movie.ReleaseYear,
+                filename = string.Format("{0} [{1}].mkv",
+                                         FileUtils.SanitizeFileName(movie.ToString()),
                                          job.SelectedPlaylist.MaxVideoResolution);
             }
             else if (tvShow != null)
@@ -61,7 +68,7 @@ namespace BDHero.Plugin.FileNamer
                 filename = string.Format("s{0}e{1} - {2} [{3}].mkv",
                                          tvShow.SelectedEpisode.SeasonNumber.ToString("00"),
                                          tvShow.SelectedEpisode.EpisodeNumber.ToString("00"),
-                                         FileUtils.SanitizeFileName(tvShow.Title),
+                                         FileUtils.SanitizeFileName(tvShow.ToString()),
                                          job.SelectedPlaylist.MaxVideoResolution);
             }
 

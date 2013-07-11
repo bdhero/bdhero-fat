@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,9 +15,13 @@ namespace BDHero.Plugin.DiscReader
         public IPluginHost Host { get; private set; }
         public PluginAssemblyInfo AssemblyInfo { get; private set; }
 
-        public string Name { get { return "BDHero Disc Reader"; } }
+        public string Name { get { return "BDInfo Disc Reader"; } }
 
-        public event EditPluginPreferenceHandler EditPreferences;
+        public bool Enabled { get; set; }
+
+        public Icon Icon { get { return Resources.cinemasquid_icon; } }
+
+        public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {

@@ -37,11 +37,7 @@ namespace BDHero.BDROM
 
         #endregion
 
-        #region Constructors
-
-        public Chapter()
-        {
-        }
+        #region Constructor
 
         public Chapter(int number, double seconds)
         {
@@ -68,6 +64,15 @@ namespace BDHero.BDROM
                         StartTime.Milliseconds.ToString("000")
                     );
             }
+        }
+
+        #endregion
+
+        #region Method overrides
+
+        public override string ToString()
+        {
+            return string.Format("{0:D2} - {1:G}: {2}", Number, StartTime, Title);
         }
 
         #endregion

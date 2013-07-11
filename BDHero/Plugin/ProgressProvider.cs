@@ -24,6 +24,12 @@ namespace BDHero.Plugin
         /// </summary>
         public const double DefaultIntervalMs = 250;
 
+        /// <summary>
+        /// Shortest amount of time allowed between progress updates when the underlying Plugin
+        /// is generating extremely frequent updates.
+        /// </summary>
+        public const double MinIntervalMs = 100;
+
         #endregion
 
         #region Public getters and setters
@@ -34,7 +40,7 @@ namespace BDHero.Plugin
         public IPlugin Plugin;
 
         /// <summary>
-        /// Gets or sets the percentage of the provider's work that has been completed, from <code>0.0</code> to <code>100.0</code>.
+        /// Gets or sets the percentage of the provider's work that has been completed, from <c>0.0</c> to <c>100.0</c>.
         /// </summary>
         public double PercentComplete { get; private set; }
 
@@ -64,7 +70,7 @@ namespace BDHero.Plugin
         public TimeSpan TimeRemaining { get; protected set; }
 
         /// <summary>
-        /// Gets the last exception that was thrown or <code>null</code> if no exceptions have been thrown.
+        /// Gets the last exception that was thrown or <c>null</c> if no exceptions have been thrown.
         /// </summary>
         public Exception Exception { get; protected set; }
 
@@ -141,18 +147,31 @@ namespace BDHero.Plugin
         /// </summary>
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
+        /// <summary>
+        /// The last time <see cref="Updated"/> event handlers were notified of a progress update.
+        /// </summary>
+        private DateTime _lastNotified;
+
+        /// <summary>
+        /// The previous state of the provider
+        /// </summary>
+        private ProgressProviderState _lastState;
+
         #endregion
 
-        #region Constructors and initialization
+        #region Constructor
 
         public ProgressProvider()
         {
-            _timer = new Timer(DefaultIntervalMs);
+            _timer = new Timer(DefaultIntervalMs) { AutoReset = true };
             _timer.Elapsed += Tick;
+
             Reset();
         }
 
         #endregion
+
+        #region Logging
 
         private enum MethodEntry
         {
@@ -182,222 +201,57 @@ namespace BDHero.Plugin
             LogMethod(method, MethodEntry.Exiting);
         }
 
+        #endregion
+
+        #region Update notification
+
+        private void NotifyObservers()
+        {
+            if (!CanUpdate) return;
+
+            if (Updated != null)
+                Updated(this);
+
+            _lastNotified = DateTime.Now;
+            _lastState = State;
+        }
+
+        private bool CanUpdate
+        {
+            get { return HasStateChanged || IsNearCompletion || HasMinIntervalElapsed; }
+        }
+
+        private bool HasStateChanged
+        {
+            get { return State != _lastState; }
+        }
+
+        private bool IsNearCompletion
+        {
+            get { return PercentComplete > 95; }
+        }
+
+        private bool HasMinIntervalElapsed
+        {
+            get { return (DateTime.Now - _lastNotified).TotalMilliseconds >= MinIntervalMs; }
+        }
+
+        #endregion
+
+        #region Timer methods
+
+        /// <summary>
+        /// Called by <see cref="_timer"/> whenever its interval elapses.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="elapsedEventArgs"></param>
         private void Tick(object sender = null, ElapsedEventArgs elapsedEventArgs = null)
         {
             LogMethodEntry();
 
             CalculateTimeRemaining();
-
-            if (Updated != null)
-                Updated(this);
-
+            NotifyObservers();
             SetLastTick();
-
-            LogMethodExit();
-        }
-
-        public void Update(double percentComplete, string status)
-        {
-            LogMethodEntry();
-
-            PercentComplete = percentComplete;
-            Status = status;
-
-            if (Updated != null)
-                Updated(this);
-
-            LogMethodExit();
-        }
-
-        public void Reset()
-        {
-            LogMethodEntry();
-
-            if (State == ProgressProviderState.Running)
-            {
-                throw new InvalidOperationException(
-                    string.Format("Unable to reset: object is in {0} state", State));
-            }
-
-            _timer.Stop();
-            _stopwatch.Reset();
-
-            State = ProgressProviderState.Ready;
-            TimeRemaining = TimeSpan.Zero;
-            PercentComplete = 0.0;
-            Exception = null;
-
-            LogMethodExit();
-        }
-
-        public void Start()
-        {
-            LogMethodEntry();
-
-            if (State != ProgressProviderState.Ready)
-            {
-                throw new InvalidOperationException(
-                    string.Format("Unable to start: must be in {0}, but object is in {1} state",
-                                  ProgressProviderState.Ready, State));
-            }
-
-            SetLastTick();
-
-            State = ProgressProviderState.Running;
-            Tick();
-
-            _timer.Start();
-            _stopwatch.Start();
-
-            if (Started != null)
-                Started(this);
-
-            if (Updated != null)
-                Updated(this);
-
-            LogMethodExit();
-        }
-
-        public void Resume()
-        {
-            LogMethodEntry();
-
-            if (State != ProgressProviderState.Paused)
-            {
-                throw new InvalidOperationException(
-                    string.Format("Unable to resume: must be in {0} state, but object is in {1} state",
-                                  ProgressProviderState.Paused, State));
-            }
-
-            SetLastTick();
-
-            State = ProgressProviderState.Running;
-            Tick();
-
-            _timer.Start();
-            _stopwatch.Start();
-
-            if (Resumed != null)
-                Resumed(this);
-
-            if (Updated != null)
-                Updated(this);
-
-            LogMethodExit();
-        }
-
-        public void Pause()
-        {
-            LogMethodEntry();
-
-            if (State != ProgressProviderState.Running)
-            {
-                throw new InvalidOperationException(
-                    string.Format("Unable to pause: must be in {0} state, but object is in {1} state",
-                                  ProgressProviderState.Running, State));
-            }
-
-            _timer.Stop();
-            _stopwatch.Stop();
-
-            State = ProgressProviderState.Paused;
-            Tick();
-
-            if (Paused != null)
-                Paused(this);
-
-            if (Updated != null)
-                Updated(this);
-
-            LogMethodExit();
-        }
-
-        public void Cancel()
-        {
-            LogMethodEntry();
-
-            if (State != ProgressProviderState.Running)
-            {
-                throw new InvalidOperationException(
-                    string.Format("Unable to cancel: must be in {0} state, but object is in {1} state",
-                                  ProgressProviderState.Running, State));
-            }
-
-            _timer.Stop();
-            _stopwatch.Stop();
-
-            State = ProgressProviderState.Canceled;
-            Tick();
-
-            if (Canceled != null)
-                Canceled(this);
-
-            if (Completed != null)
-                Completed(this);
-
-            if (Updated != null)
-                Updated(this);
-
-            LogMethodExit();
-        }
-
-        public void Error(Exception exception)
-        {
-            LogMethodEntry();
-
-            if (State != ProgressProviderState.Ready && State != ProgressProviderState.Running)
-            {
-                throw new InvalidOperationException(
-                    string.Format("Unable to switch to {0} state: must be in {1} or {2} state, but object is in {3} state",
-                                  ProgressProviderState.Error, ProgressProviderState.Ready,
-                                  ProgressProviderState.Running, State));
-            }
-
-            _timer.Stop();
-            _stopwatch.Stop();
-
-            State = ProgressProviderState.Error;
-            Exception = exception;
-            Tick();
-
-            if (Errored != null)
-                Errored(this);
-
-            if (Completed != null)
-                Completed(this);
-
-            if (Updated != null)
-                Updated(this);
-
-            LogMethodExit();
-        }
-
-        public void Succeed()
-        {
-            LogMethodEntry();
-
-            if (State != ProgressProviderState.Running)
-            {
-                throw new InvalidOperationException(
-                    string.Format("Unable to switch to {0} state: must be in {1} state, but object is in {2} state",
-                                  ProgressProviderState.Success, ProgressProviderState.Running, State));
-            }
-
-            _timer.Stop();
-            _stopwatch.Stop();
-
-            State = ProgressProviderState.Success;
-            PercentComplete = 100.0;
-            TimeRemaining = TimeSpan.Zero;
-
-            if (Successful != null)
-                Successful(this);
-
-            if (Completed != null)
-                Completed(this);
-
-            if (Updated != null)
-                Updated(this);
 
             LogMethodExit();
         }
@@ -474,6 +328,219 @@ namespace BDHero.Plugin
 
                 LogMethodExit();
             }
+        }
+
+        #endregion
+
+        #region State change methods (start, stop, reset, etc.)
+
+        /// <summary>
+        /// Resets the provider's state to its initial values.
+        /// </summary>
+        public void Reset()
+        {
+            LogMethodEntry();
+
+            if (State == ProgressProviderState.Running)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to reset: object is in {0} state", State));
+            }
+
+            _timer.Stop();
+            _stopwatch.Reset();
+
+            State = ProgressProviderState.Ready;
+            TimeRemaining = TimeSpan.Zero;
+            PercentComplete = 0.0;
+            Exception = null;
+
+            LogMethodExit();
+        }
+
+        public void Start()
+        {
+            LogMethodEntry();
+
+            if (State != ProgressProviderState.Ready)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to start: must be in {0}, but object is in {1} state",
+                                  ProgressProviderState.Ready, State));
+            }
+
+            SetLastTick();
+
+            State = ProgressProviderState.Running;
+            Tick();
+
+            _timer.Start();
+            _stopwatch.Start();
+
+            if (Started != null)
+                Started(this);
+
+            NotifyObservers();
+
+            LogMethodExit();
+        }
+
+        public void Resume()
+        {
+            LogMethodEntry();
+
+            if (State != ProgressProviderState.Paused)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to resume: must be in {0} state, but object is in {1} state",
+                                  ProgressProviderState.Paused, State));
+            }
+
+            SetLastTick();
+
+            State = ProgressProviderState.Running;
+            Tick();
+
+            _timer.Start();
+            _stopwatch.Start();
+
+            if (Resumed != null)
+                Resumed(this);
+
+            NotifyObservers();
+
+            LogMethodExit();
+        }
+
+        public void Pause()
+        {
+            LogMethodEntry();
+
+            if (State != ProgressProviderState.Running)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to pause: must be in {0} state, but object is in {1} state",
+                                  ProgressProviderState.Running, State));
+            }
+
+            _timer.Stop();
+            _stopwatch.Stop();
+
+            State = ProgressProviderState.Paused;
+            Tick();
+
+            if (Paused != null)
+                Paused(this);
+
+            NotifyObservers();
+
+            LogMethodExit();
+        }
+
+        public void Cancel()
+        {
+            LogMethodEntry();
+
+            if (State != ProgressProviderState.Running)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to cancel: must be in {0} state, but object is in {1} state",
+                                  ProgressProviderState.Running, State));
+            }
+
+            _timer.Stop();
+            _stopwatch.Stop();
+
+            State = ProgressProviderState.Canceled;
+            Tick();
+
+            if (Canceled != null)
+                Canceled(this);
+
+            if (Completed != null)
+                Completed(this);
+
+            NotifyObservers();
+
+            LogMethodExit();
+        }
+
+        public void Error(Exception exception)
+        {
+            LogMethodEntry();
+
+            if (State != ProgressProviderState.Ready && State != ProgressProviderState.Running)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to switch to {0} state: must be in {1} or {2} state, but object is in {3} state",
+                                  ProgressProviderState.Error, ProgressProviderState.Ready,
+                                  ProgressProviderState.Running, State));
+            }
+
+            _timer.Stop();
+            _stopwatch.Stop();
+
+            State = ProgressProviderState.Error;
+            Exception = exception;
+            Tick();
+
+            if (Errored != null)
+                Errored(this);
+
+            if (Completed != null)
+                Completed(this);
+
+            NotifyObservers();
+
+            LogMethodExit();
+        }
+
+        public void Succeed()
+        {
+            LogMethodEntry();
+
+            if (State != ProgressProviderState.Running)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to switch to {0} state: must be in {1} state, but object is in {2} state",
+                                  ProgressProviderState.Success, ProgressProviderState.Running, State));
+            }
+
+            _timer.Stop();
+            _stopwatch.Stop();
+
+            State = ProgressProviderState.Success;
+            PercentComplete = 100.0;
+            TimeRemaining = TimeSpan.Zero;
+
+            if (Successful != null)
+                Successful(this);
+
+            if (Completed != null)
+                Completed(this);
+
+            NotifyObservers();
+
+            LogMethodExit();
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Called by <see cref="IPluginHost"/> whenever an <see cref="IPlugin"/> reports a progress update.
+        /// </summary>
+        /// <param name="percentComplete">0.0 to 100.0</param>
+        /// <param name="status">Description of what the plugin is currently doing</param>
+        public void Update(double percentComplete, string status)
+        {
+            LogMethodEntry();
+
+            PercentComplete = percentComplete;
+            Status = status;
+
+            NotifyObservers();
+
+            LogMethodExit();
         }
 
         public override int GetHashCode()

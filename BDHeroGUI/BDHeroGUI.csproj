@@ -48,6 +48,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>bdhero_gui.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -70,17 +73,62 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\PlaylistGridControl.cs">
+    <Compile Include="Components\AudioTrackListView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Components\PlaylistGridControl.Designer.cs">
-      <DependentUpon>PlaylistGridControl.cs</DependentUpon>
+    <Compile Include="Components\AudioTrackListView.Designer.cs">
+      <DependentUpon>AudioTrackListView.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAsyncControllerTest.cs">
+    <Compile Include="Components\MediaPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\MediaPanel.Designer.cs">
+      <DependentUpon>MediaPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\SubtitleTrackListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\SubtitleTrackListView.Designer.cs">
+      <DependentUpon>SubtitleTrackListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\ListViewCell.cs" />
+    <Compile Include="Components\PlaylistListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\PlaylistListView.Designer.cs">
+      <DependentUpon>PlaylistListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\TrackListViewHelper.cs" />
+    <Compile Include="Components\TracksPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\TracksPanel.Designer.cs">
+      <DependentUpon>TracksPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\VideoTrackListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\VideoTrackListView.Designer.cs">
+      <DependentUpon>VideoTrackListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TrackFilter.cs" />
+    <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAsyncControllerTest.Designer.cs">
-      <DependentUpon>FormAsyncControllerTest.cs</DependentUpon>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormMetadataSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMetadataSearch.Designer.cs">
+      <DependentUpon>FormMetadataSearch.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPlaylistFilter.cs">
       <SubType>Form</SubType>
@@ -88,18 +136,66 @@
     <Compile Include="Forms\FormPlaylistFilter.Designer.cs">
       <DependentUpon>FormPlaylistFilter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormTrackFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormTrackFilter.Designer.cs">
+      <DependentUpon>FormTrackFilter.cs</DependentUpon>
+    </Compile>
     <Compile Include="PlaylistFilter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Components\PlaylistGridControl.resx">
-      <DependentUpon>PlaylistGridControl.cs</DependentUpon>
+    <Compile Include="SystemInfo.cs" />
+    <None Include="Resources\cd.png" />
+    <None Include="Resources\tick.png" />
+    <None Include="Resources\stop.png" />
+    <None Include="Resources\settings.png" />
+    <None Include="Resources\refresh_green.png" />
+    <None Include="Resources\info.png" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\folder_open.png" />
+    <None Include="Resources\filter.png" />
+    <None Include="Resources\exclamation.png" />
+    <None Include="Resources\error.png" />
+    <None Include="Resources\edit.png" />
+    <None Include="Resources\copy.png" />
+    <None Include="Resources\asterisk_yellow.png" />
+    <None Include="Resources\asterisk_orange.png" />
+    <None Include="Resources\bdhero_gui_128.png" />
+    <None Include="Resources\no-poster-w185.png" />
+    <EmbeddedResource Include="Components\AudioTrackListView.resx">
+      <DependentUpon>AudioTrackListView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAsyncControllerTest.resx">
-      <DependentUpon>FormAsyncControllerTest.cs</DependentUpon>
+    <EmbeddedResource Include="Components\MediaPanel.resx">
+      <DependentUpon>MediaPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\SubtitleTrackListView.resx">
+      <DependentUpon>SubtitleTrackListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\PlaylistListView.resx">
+      <DependentUpon>PlaylistListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\TracksPanel.resx">
+      <DependentUpon>TracksPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\VideoTrackListView.resx">
+      <DependentUpon>VideoTrackListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormMetadataSearch.resx">
+      <DependentUpon>FormMetadataSearch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPlaylistFilter.resx">
       <DependentUpon>FormPlaylistFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormTrackFilter.resx">
+      <DependentUpon>FormTrackFilter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -109,7 +205,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <Content Include="bdhero_gui.ico" />
     <Content Include="Config\bdhero-gui.log.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

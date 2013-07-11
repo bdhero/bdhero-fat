@@ -187,8 +187,8 @@ namespace ProcessUtils
         public bool IsError { get; private set; }
 
         /// <summary>
-        /// <code>true</code> if this tool finished executing and completed successfully;
-        /// <code>false</code> if an error occurred or the process was cancelled.
+        /// <c>true</c> if this tool finished executing and completed successfully;
+        /// <c>false</c> if an error occurred or the process was cancelled.
         /// </summary>
         public bool IsSuccess { get; private set; }
 
@@ -212,7 +212,7 @@ namespace ProcessUtils
         }
 
         /// <summary>
-        /// <code>ErrorMessages</code> joined by newlines (\n)
+        /// <c>ErrorMessages</c> joined by newlines (\n)
         /// </summary>
         public string ErrorMessage { get { return String.Join("\n", ErrorMessages); } }
 
@@ -533,19 +533,19 @@ namespace ProcessUtils
         /// <para>Attempts to find the full path to an EXE by searching (in order):</para>
         /// <list type="number">
         ///     <item><description>The HKLM "App Paths" registry key</description></item>
-        ///     <item><description>All <code>%PATH%</code> directories</description></item>
+        ///     <item><description>All <c>%PATH%</c> directories</description></item>
         ///     <item><description>If siblingFilename is specified and can be found via 1) or 2), the same directory as siblingFilename</description></item>
         /// </list>
         /// <para></para>
         /// </summary>
         /// <param name="filename">
-        /// The name of the EXE file to find (e.g., <code>"cmd.exe"</code>, <code>"mmg.exe"</code>)
+        /// The name of the EXE file to find (e.g., <c>"cmd.exe"</c>, <c>"mmg.exe"</c>)
         /// </param>
         /// <param name="siblingFilename">
-        /// The name of a sibling EXE file that exists in the same directory as <code>filename</code>
+        /// The name of a sibling EXE file that exists in the same directory as <c>filename</c>
         /// and which may or may not be registered with the OS via the HKLM "App Paths" registry key
         /// </param>
-        /// <returns>The absolute path to <code>filename</code> if it can be found; otherwise <code>null</code></returns>
+        /// <returns>The absolute path to <c>filename</c> if it can be found; otherwise <c>null</c></returns>
         public static string FindExe(string filename, string siblingFilename = null)
         {
             string result;

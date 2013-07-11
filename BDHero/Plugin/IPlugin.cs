@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,10 +8,11 @@ using System.Threading;
 using System.Windows.Forms;
 using BDHero.BDROM;
 using BDHero.JobQueue;
+using DotNetUtils.Annotations;
 
 namespace BDHero.Plugin
 {
-    public delegate void EditPluginPreferenceHandler(IWin32Window owner);
+    public delegate void EditPluginPreferenceHandler(Form parent);
 
     public interface IPlugin
     {
@@ -27,7 +28,12 @@ namespace BDHero.Plugin
         /// </summary>
         string Name { get; }
 
-        event EditPluginPreferenceHandler EditPreferences;
+        bool Enabled { get; set; }
+
+        [CanBeNull]
+        Icon Icon { get; }
+
+        EditPluginPreferenceHandler EditPreferences { get; }
 
         /// <summary>
         /// Invoked when the application first starts up and loads the plugin assembly.
@@ -100,6 +106,8 @@ namespace BDHero.Plugin
         /// </summary>
         public Version Version { get; private set; }
 
+        public DateTime BuildDate { get; private set; }
+
         /// <summary>
         /// Gets the GUID of the plugin assembly DLL.
         /// </summary>
@@ -111,10 +119,11 @@ namespace BDHero.Plugin
         /// <remarks>The path to the config file is the same as that of the DLL, except with a ".config.json" extension instead of ".dll".</remarks>
         public string SettingsFile { get { return new Regex(@"\.dll$", RegexOptions.IgnoreCase).Replace(Location, ".config.json"); } }
 
-        public PluginAssemblyInfo(string location, Version version, string guid)
+        public PluginAssemblyInfo(string location, Version version, DateTime buildDate, string guid)
         {
             Location = location;
             Version = version;
+            BuildDate = buildDate;
             Guid = guid;
         }
     }

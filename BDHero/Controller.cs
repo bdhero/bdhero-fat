@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using BDHero.Plugin;
@@ -28,6 +27,11 @@ namespace BDHero
         private readonly ConcurrentDictionary<string, int> _progressMap = new ConcurrentDictionary<string, int>();
 
         public Job Job { get; private set; }
+
+        public IList<IPlugin> PluginsByType
+        {
+            get { return _pluginService.PluginsByType; }
+        }
 
         #region Events
 
@@ -59,6 +63,29 @@ namespace BDHero
                                      ? TaskScheduler.FromCurrentSynchronizationContext()
                                      : TaskScheduler.Default);
         }
+
+        #region User-invokable tasks
+
+        public void RenameSync(string mkvPath)
+        {
+            CreateRenameAction(CancellationToken.None, mkvPath)();
+        }
+
+        public Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, Action fail, Action succeed, string mkvPath = null)
+        {
+            var token = cancellationToken;
+            var optionalPhases = new[] { CreateGetMetadataAction(token), CreateAutoDetectAction(token), CreateRenameAction(token, mkvPath) };
+            return CreateStageTask(
+                token,
+                start,
+                () => true,
+                optionalPhases,
+                fail,
+                succeed
+            );
+        }
+
+        #endregion
 
         #region Stages
 
@@ -116,13 +143,13 @@ namespace BDHero
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <param name="beforeStart">Invoked on UI thread</param>
-        /// <param name="criticalPhase">First phase to run.  Must succeed (by returning <code>true</code> and not throwing an exception) for the optional phases to run.  Invoked on the background thread.</param>
+        /// <param name="criticalPhase">First phase to run.  Must succeed (by returning <c>true</c> and not throwing an exception) for the optional phases to run.  Invoked on the background thread.</param>
         /// <param name="optionalPhases">Collection of phases that can fail (by throwing an exception) without preventing subsequent phases from running.  Invoked on the background thread.</param>
         /// <param name="fail">Called if the operation is canceled or the critical phase throws an exception.  Invoked on the UI thread.</param>
         /// <param name="succeed">Called if the operation completes successfully without being canceled.  Invoked on the UI thread.</param>
         /// <returns>
-        /// Task object that returns <code>false</code> if the operation was canceled by the user or
-        /// the critical phase threw an exception; otherwise <code>true</code>.
+        /// Task object that returns <c>false</c> if the operation was canceled by the user or
+        /// the critical phase threw an exception; otherwise <c>true</c>.
         /// </returns>
         private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalPhases, Action fail, Action succeed)
         {
@@ -226,7 +253,7 @@ namespace BDHero
 
         private bool ReadBDROM(CancellationToken cancellationToken, string bdromPath)
         {
-            IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First();
+            IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First(plugin => plugin.Enabled);
             var pluginTask = RunPluginSync(cancellationToken, discReader, token => Job = new Job(discReader.ReadBDROM(token, bdromPath)));
             return pluginTask.IsCompleted && pluginTask.Result;
         }
@@ -237,7 +264,10 @@ namespace BDHero
 
         private void GetMetadata(CancellationToken cancellationToken)
         {
-            foreach (var plugin in _pluginService.MetadataProviderPlugins)
+            Job.Movies.Clear();
+            Job.TVShows.Clear();
+
+            foreach (var plugin in _pluginService.MetadataProviderPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 GetMetadata(cancellationToken, plugin);
@@ -255,7 +285,7 @@ namespace BDHero
 
         private void AutoDetect(CancellationToken cancellationToken)
         {
-            foreach (var plugin in _pluginService.AutoDetectorPlugins)
+            foreach (var plugin in _pluginService.AutoDetectorPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 AutoDetect(cancellationToken, plugin);
@@ -278,8 +308,9 @@ namespace BDHero
 
         private void Rename(CancellationToken cancellationToken, string mkvPath = null)
         {
-            Job.OutputPath = mkvPath;
-            foreach (var plugin in _pluginService.NameProviderPlugins)
+            if (!string.IsNullOrWhiteSpace(mkvPath))
+                Job.OutputPath = mkvPath;
+            foreach (var plugin in _pluginService.NameProviderPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 Rename(cancellationToken, plugin);
@@ -305,12 +336,14 @@ namespace BDHero
 
         private bool Mux(CancellationToken cancellationToken)
         {
-            if (!_pluginService.MuxerPlugins.Any())
+            var enabledMuxerPlugins = _pluginService.MuxerPlugins.Where(plugin => plugin.Enabled).ToArray();
+
+            if (!enabledMuxerPlugins.Any())
                 return false;
 
             EnsureOutputDirExists();
 
-            return _pluginService.MuxerPlugins.All(muxer => Mux(cancellationToken, muxer));
+            return enabledMuxerPlugins.All(muxer => Mux(cancellationToken, muxer));
         }
 
         private bool Mux(CancellationToken cancellationToken, IMuxerPlugin plugin)
@@ -325,7 +358,7 @@ namespace BDHero
 
         private void PostProcess(CancellationToken cancellationToken)
         {
-            foreach (var plugin in _pluginService.PostProcessorPlugins)
+            foreach (var plugin in _pluginService.PostProcessorPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 PostProcess(cancellationToken, plugin);
