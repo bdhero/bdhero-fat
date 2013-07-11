@@ -52,8 +52,8 @@ namespace IsanPlugin
             var titles = dom[".title"];
             titles.ForEach(delegate(IDomObject o)
                 {
-                    var innerText = (o.InnerText ?? "").Trim();
-                    var fullText = o.Render().StripHtml().Trim();
+                    var innerText = (o.InnerText ?? "").UnescapeHtml().Trim();
+                    var fullText = o.Render().StripHtml().UnescapeHtml().Trim();
                     TryPopulate(isan, innerText);
                     TryPopulate(isan, fullText);
                 });
