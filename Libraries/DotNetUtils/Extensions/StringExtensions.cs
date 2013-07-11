@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -34,6 +35,12 @@ namespace DotNetUtils.Extensions
                 .RegexReplace(@"<!--.*?-->", "")
                 .RegexReplace(@"[\s\n\r\f]+", " ")
                 .Trim();
+        }
+
+        /// TODO: Write unit tests
+        public static string UnescapeHtml(this string str)
+        {
+            return WebUtility.HtmlDecode(str);
         }
 
         #region CsQuery.ExtensionMethods
