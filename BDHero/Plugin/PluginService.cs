@@ -35,12 +35,17 @@ namespace BDHero.Plugin
             }
         }
 
-        public IList<IDiscReaderPlugin>       DiscReaderPlugins       { get { return Plugins.OfType<IDiscReaderPlugin>().ToList(); } }
-        public IList<IMetadataProviderPlugin> MetadataProviderPlugins { get { return Plugins.OfType<IMetadataProviderPlugin>().ToList(); } }
-        public IList<IAutoDetectorPlugin>     AutoDetectorPlugins     { get { return Plugins.OfType<IAutoDetectorPlugin>().ToList(); } }
-        public IList<INameProviderPlugin>     NameProviderPlugins     { get { return Plugins.OfType<INameProviderPlugin>().ToList(); } }
-        public IList<IMuxerPlugin>            MuxerPlugins            { get { return Plugins.OfType<IMuxerPlugin>().ToList(); } }
-        public IList<IPostProcessorPlugin>    PostProcessorPlugins    { get { return Plugins.OfType<IPostProcessorPlugin>().ToList(); } }
+        public IList<IDiscReaderPlugin>       DiscReaderPlugins       { get { return PluginsOfType<IDiscReaderPlugin>(); } }
+        public IList<IMetadataProviderPlugin> MetadataProviderPlugins { get { return PluginsOfType<IMetadataProviderPlugin>(); } }
+        public IList<IAutoDetectorPlugin>     AutoDetectorPlugins     { get { return PluginsOfType<IAutoDetectorPlugin>(); } }
+        public IList<INameProviderPlugin>     NameProviderPlugins     { get { return PluginsOfType<INameProviderPlugin>(); } }
+        public IList<IMuxerPlugin>            MuxerPlugins            { get { return PluginsOfType<IMuxerPlugin>(); } }
+        public IList<IPostProcessorPlugin>    PostProcessorPlugins    { get { return PluginsOfType<IPostProcessorPlugin>(); } }
+
+        private IList<T> PluginsOfType<T>() where T : IPlugin
+        {
+            return Plugins.OfType<T>().OrderBy(plugin => plugin.RunOrder).ToList();
+        }
 
         public event PluginProgressHandler PluginProgressChanged;
 

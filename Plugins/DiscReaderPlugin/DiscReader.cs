@@ -21,6 +21,8 @@ namespace BDHero.Plugin.DiscReader
 
         public Icon Icon { get { return Resources.cinemasquid_icon; } }
 
+        public int RunOrder { get { return 0; } }
+
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)

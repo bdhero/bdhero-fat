@@ -22,6 +22,8 @@ namespace BDHero.Plugin.AutoDetector
 
         public Icon Icon { get { return null; } }
 
+        public int RunOrder { get { return 0; } }
+
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)

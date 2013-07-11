@@ -20,6 +20,8 @@ namespace IsanPlugin
 
         public Icon Icon { get; private set; }
 
+        public int RunOrder { get { return 0; } }
+
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         private readonly IsanMetadataProvider _provider = new IsanMetadataProvider();

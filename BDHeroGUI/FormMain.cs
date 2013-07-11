@@ -178,11 +178,6 @@ namespace BDHeroGUI
                     };
 
                 pluginItem.DropDownItems.Add(enabledItem);
-                pluginItem.DropDownItems.Add("-");
-                pluginItem.DropDownItems.Add(
-                    new ToolStripMenuItem(string.Format("Version {0}", plugin.AssemblyInfo.Version)) { Enabled = false });
-                pluginItem.DropDownItems.Add(
-                    new ToolStripMenuItem(string.Format("Built on {0}", plugin.AssemblyInfo.BuildDate)) { Enabled = false });
 
                 if (plugin.EditPreferences != null)
                 {
@@ -190,6 +185,15 @@ namespace BDHeroGUI
                                                                         (sender, args) =>
                                                                         plugin.EditPreferences(this)));
                 }
+
+                pluginItem.DropDownItems.Add("-");
+
+                pluginItem.DropDownItems.Add(
+                    new ToolStripMenuItem(string.Format("Run order: {0}", plugin.RunOrder)) { Enabled = false });
+                pluginItem.DropDownItems.Add(
+                    new ToolStripMenuItem(string.Format("Version {0}", plugin.AssemblyInfo.Version)) { Enabled = false });
+                pluginItem.DropDownItems.Add(
+                    new ToolStripMenuItem(string.Format("Built on {0}", plugin.AssemblyInfo.BuildDate)) { Enabled = false });
 
                 pluginsToolStripMenuItem.DropDownItems.Add(pluginItem);
 

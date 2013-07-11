@@ -42,6 +42,8 @@ namespace TmdbPlugin
 
         public Icon Icon { get { return Resources.tmdb_icon; } }
 
+        public int RunOrder { get { return 1; } }
+
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)

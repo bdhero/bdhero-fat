@@ -19,6 +19,8 @@ namespace BDHero.Plugin.MkvMergeMuxer
 
         public Icon Icon { get { return Resources.mkvmerge_icon; } }
 
+        public int RunOrder { get { return 1; } }
+
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
         public MatroskaFeatures SupportedFeatures

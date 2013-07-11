@@ -33,6 +33,12 @@ namespace BDHero.Plugin
         [CanBeNull]
         Icon Icon { get; }
 
+        /// <summary>
+        /// Gets the order in which to run the plugin relative to other plugins of the same type.
+        /// Lower numbers run first; ties are resolved alphabetically by the name of the plugin.
+        /// </summary>
+        int RunOrder { get; }
+
         EditPluginPreferenceHandler EditPreferences { get; }
 
         /// <summary>
