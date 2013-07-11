@@ -27,11 +27,13 @@ xcopy /Y Plugins\TmdbPlugin\bin\%ConfigurationName%\TmdbPlugin.dll Setup\Program
 xcopy /Y Plugins\TmdbPlugin\bin\%ConfigurationName%\RestSharp.dll Setup\ProgramFiles\Plugins\Required\Tmdb\
 xcopy /Y Plugins\TmdbPlugin\bin\%ConfigurationName%\WatTmdb.dll Setup\ProgramFiles\Plugins\Required\Tmdb\
 
+xcopy /Y Plugins\ChapterGrabberPlugin\bin\%ConfigurationName%\ChapterGrabberPlugin.dll Setup\ProgramFiles\Plugins\Required\ChapterGrabber\
+
+xcopy /Y Plugins\IsanPlugin\bin\%ConfigurationName%\IsanPlugin.dll Setup\ProgramFiles\Plugins\Required\Isan\
+
 xcopy /Y Plugins\AutoDetectorPlugin\bin\%ConfigurationName%\AutoDetectorPlugin.dll Setup\ProgramFiles\Plugins\Required\AutoDetector\
 
 xcopy /Y Plugins\FileNamerPlugin\bin\%ConfigurationName%\FileNamerPlugin.dll Setup\ProgramFiles\Plugins\Required\FileNamer\
-
-xcopy /Y Plugins\ChapterGrabberPlugin\bin\%ConfigurationName%\ChapterGrabberPlugin.dll Setup\ProgramFiles\Plugins\Required\ChapterGrabber\
 
 xcopy /Y Plugins\FFmpegMuxerPlugin\bin\%ConfigurationName%\FFmpegMuxerPlugin.dll Setup\ProgramFiles\Plugins\Required\FFmpegMuxer\
 xcopy /Y Plugins\FFmpegMuxerPlugin\bin\%ConfigurationName%\*.exe Setup\ProgramFiles\Plugins\Required\FFmpegMuxer\

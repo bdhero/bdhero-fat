@@ -97,7 +97,7 @@ namespace BDHero.Plugin
             var projects = new[]
                 {
                     "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin",
-                    "FFmpegMuxerPlugin", "FileNamerPlugin", "MKVMergeMuxerPlugin", "TmdbPlugin"
+                    "FFmpegMuxerPlugin", "FileNamerPlugin", "MKVMergeMuxerPlugin", "IsanPlugin", "TmdbPlugin"
                 };
             foreach (var projectName in projects)
             {

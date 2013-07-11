@@ -50,11 +50,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BDHero\BDHero.csproj">
+    <ProjectReference Include="..\..\..\BDHero\BDHero.csproj">
       <Project>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</Project>
       <Name>BDHero</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IsanPlugin\IsanPlugin.csproj">
+    <ProjectReference Include="..\..\..\Plugins\IsanPlugin\IsanPlugin.csproj">
       <Project>{5CA591E9-4CA6-44F2-88AB-0ABEA0667F1B}</Project>
       <Name>IsanPlugin</Name>
     </ProjectReference>
