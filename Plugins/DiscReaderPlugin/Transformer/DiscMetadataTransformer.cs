@@ -47,8 +47,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                     VolumeLabelSanitized = GetVolumeLabelSanitized(raw),
                     ValidBdmtTitles = GetValidBdmtTitles(raw.AllBdmtTitles),
                     DboxTitleSanitized = GetDboxTitleSanitized(raw),
-                    ISAN = null /* populated by another plugin */,
-                    SearchableTitle = null /* populated by another plugin */,
+                    SearchableTitle = null /* populated by another plugin */
                 };
 
             var metadata = new DiscMetadata
@@ -220,7 +219,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
             return title;
         }
 
-        private static ISAN GetVISAN(Disc disc)
+        private static VIsan GetVISAN(Disc disc)
         {
             var file = disc.FileSystem.Files.MCMF;
             if (file == null)
@@ -233,7 +232,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
             var match = ISANContentIdRegex.Match(xml);
             var contentId = match.Groups[1].Value;
 
-            return ISAN.TryParse(contentId);
+            return VIsan.TryParse(contentId);
         }
 
         #endregion

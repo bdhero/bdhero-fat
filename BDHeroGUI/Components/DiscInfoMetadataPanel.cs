@@ -33,7 +33,7 @@ namespace BDHeroGUI.Components
             textBoxVolumeLabel.Text = der.VolumeLabel;
             textBoxVolumeLabelSanitized.Text = der.VolumeLabelSanitized;
             textBoxDboxTitleSanitized.Text = der.DboxTitleSanitized ?? NotFound;
-            textBoxIsan.Text = der.ISAN != null ? der.ISAN.ToString() : NotFound;
+            textBoxIsan.Text = raw.ISAN != null ? raw.ISAN.ToString() : NotFound;
             textBoxValidBdmtTitles.Text = string.Join(Environment.NewLine, der.ValidBdmtTitles.Select(pair => string.Format("{0}: {1}", pair.Key, pair.Value)));
         }
     }

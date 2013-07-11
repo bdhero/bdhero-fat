@@ -8,6 +8,9 @@ using DotNetUtils.Annotations;
 namespace BDHero.BDROM
 {
     /// <summary>
+    /// Immutable.
+    /// </summary>
+    /// <summary>
     /// ISAN (or ISAN number): International Standard Audiovisual Number.
     /// A globally unique number allocated for the exclusive identification of an AV Work,
     /// in accordance with the ISO 15706-1 standard.
@@ -70,17 +73,16 @@ namespace BDHero.BDROM
     ///     |- V-ISAN 0000-0000-14A9-0000-K-0000-0004-6: Blade Runner (2007 - 118 min): NA/Japan BD Final Cut
     /// </code>
     /// </remarks>
-    public class ISAN
+    /// TODO: Write unit tests
+    /// TODO: Add language(s), alternate title(s), and additional information
+    public class Isan
     {
-        /// <summary>
-        /// Matches a string that ENDS with a valid ISAN (leading characters that don't match are ignored).
-        /// </summary>
-        private static readonly Regex IsanRegex =
-            new Regex(
-                "([a-f0-9]{4})-?([a-f0-9]{4})-?([a-f0-9]{4})-?([a-f0-9]{4})-?(?:[a-z0-9]-?)?([a-f0-9]{4})-?([a-f0-9]{4})(?:-?[a-z0-9])?$",
-                RegexOptions.IgnoreCase);
-
         private const string ZeroRoot = "000000000000";
+
+        /// <summary>
+        /// Matches any valid ISAN number <em>without dashes</em> at word boundaries.
+        /// </summary>
+        private static readonly Regex IsanRegex = new Regex(@"\b([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})[a-z]?([0-9a-f]{4})([0-9a-f]{4})[a-z]?\b", RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Unformatted ISAN without dashes or check digits.
@@ -94,7 +96,7 @@ namespace BDHero.BDROM
         ///  0000000014A9000000000000 = ISAN for BLADE_RUNNER_BRANCH
         /// </code>
         /// </example>
-        public string Number;
+        public readonly string Number;
 
         /// <summary>
         /// Formatted ISAN with dashes but without check digits.
@@ -108,26 +110,32 @@ namespace BDHero.BDROM
         ///  0000-0000-14A9-0000-0000-0000 = ISAN for BLADE_RUNNER_BRANCH
         /// </code>
         /// </example>
-        public string NumberFormatted
-        {
-            get
-            {
-                if (IsanRegex.IsMatch(Number))
-                {
-                    var match = IsanRegex.Match(Number);
-                    var groups = match.Groups;
-                    return string.Format("{0}-{1}-{2}-{3}-{4}-{5}",
-                                         groups[1].Value,
-                                         groups[2].Value,
-                                         groups[3].Value,
-                                         groups[4].Value,
-                                         groups[5].Value,
-                                         groups[6].Value
-                        );
-                }
-                return null;
-            }
-        }
+        public readonly string NumberFormatted;
+
+        /// <summary>
+        /// Gets the first 3 groups of 4 hex characters without dashes.
+        /// </summary>
+        public readonly string Root;
+
+        /// <summary>
+        /// Gets the first 3 groups of 4 hex characters with dashes between each group.
+        /// </summary>
+        public readonly string RootFormatted;
+
+        /// <summary>
+        /// Gets the 4th group of 4 hex characters.
+        /// </summary>
+        public readonly string Episode;
+
+        /// <summary>
+        /// Gets the last 2 groups of 4 hex characters without dashes.
+        /// </summary>
+        public readonly string Version;
+
+        /// <summary>
+        /// Gets the last 2 groups of 4 characters with dashes between each group.
+        /// </summary>
+        public readonly string VersionFormatted;
 
         /// <summary>
         /// Name of the audiovisual work (i.e., movie title).
@@ -140,99 +148,33 @@ namespace BDHero.BDROM
         public int? Year;
 
         /// <summary>
-        /// Gets the first 3 groups of 4 hex characters without dashes.
+        /// Length (duration) of the film in minutes.
         /// </summary>
-        public string Root
-        {
-            get
-            {
-                var groups = Parse(Number);
-                return string.Join("", groups.Take(3));
-            }
-        }
-
-        /// <summary>
-        /// Gets the first 3 groups of 4 hex characters with dashes between each group.
-        /// </summary>
-        public string RootFormatted
-        {
-            get
-            {
-                var groups = Parse(Number);
-                return string.Join("-", groups.Take(3));
-            }
-        }
-
-        /// <summary>
-        /// Gets the 4th group of 4 hex characters.
-        /// </summary>
-        public string Episode
-        {
-            get
-            {
-                var groups = Parse(Number);
-                return string.Join("", groups.Skip(1).Take(1));
-            }
-        }
-
-        /// <summary>
-        /// Gets the last 2 groups of 4 hex characters without dashes.
-        /// </summary>
-        public string Version
-        {
-            get
-            {
-                var groups = Parse(Number);
-                return string.Join("", groups.Skip(4).Take(2));
-            }
-        }
-
-        /// <summary>
-        /// Gets the last 2 groups of 4 characters with dashes between each group.
-        /// </summary>
-        public string VersionFormatted
-        {
-            get
-            {
-                var groups = Parse(Number);
-                return string.Join("-", groups.Skip(4).Take(2));
-            }
-        }
+        public int? LengthMin;
 
         /// <summary>
         /// Gets a value indicating whether the ISAN's <see cref="Root"/> is valid and searchable (i.e., is not all zeros).
         /// </summary>
-        public bool IsValid
+        public bool IsSearchable { get { return Root != ZeroRoot; } }
+
+        protected Isan(string n1, string n2, string n3, string n4, string n5, string n6)
         {
-            get { return Root != ZeroRoot; }
+            Root = string.Format("{0}{1}{2}", n1, n2, n3);
+            RootFormatted = string.Format("{0}-{1}-{2}", n1, n2, n3);
+
+            Episode = n4;
+
+            Version = string.Format("{0}{1}", n5, n6);
+            VersionFormatted = string.Format("{0}-{1}", n5, n6);
+
+            Number = string.Format("{0}{1}{2}", Root, Episode, Version);
+            NumberFormatted = string.Format("{0}-{1}-{2}", RootFormatted, Episode, VersionFormatted);
         }
 
-        public override string ToString()
+        public static bool IsIsan(string number)
         {
-            return string.Format("{0} ({1})",
-                                 NumberFormatted,
-                                 IsValid ? "valid" : "invalid!"
-                );
-        }
-
-        /// <summary>
-        /// Parses any valid ISAN number into 6 individual groups of 4 hex characters each.
-        /// </summary>
-        /// <param name="number">Any valid ISAN number</param>
-        /// <returns>Enumerable containing 6 groups of 4 characters each</returns>
-        private static string[] Parse([NotNull] string number)
-        {
-            var match = IsanRegex.Match(number);
-            var groups = match.Groups;
-            return new []
-                {
-                    groups[1].Value,
-                    groups[2].Value,
-                    groups[3].Value,
-                    groups[4].Value,
-                    groups[5].Value,
-                    groups[6].Value
-                };
+            number = number.Replace("-", "");
+            return IsanRegex.IsMatch(number);
         }
 
         /// <summary>
@@ -241,17 +183,55 @@ namespace BDHero.BDROM
         /// <param name="number">Any valid ISAN number</param>
         /// <returns>A new ISAN object if the given number is a valid ISAN number; otherwise <c>null</c></returns>
         [CanBeNull]
-        public static ISAN TryParse([CanBeNull] string number)
+        public static Isan TryParse(string number)
         {
-            if (string.IsNullOrWhiteSpace(number))
+            if (!IsIsan(number))
                 return null;
 
-            if (!IsanRegex.IsMatch(number))
+            var n = Parse(number);
+            
+            return new Isan(n[0], n[1], n[2], n[3], n[4], n[5]);
+        }
+
+        /// <summary>
+        /// Parses any valid ISAN number into 6 individual groups of 4 hex characters each.
+        /// </summary>
+        /// <param name="number">Any valid ISAN number</param>
+        /// <returns>Enumerable containing 6 groups of 4 characters each</returns>
+        protected static string[] Parse(string number)
+        {
+            number = number.Replace("-", "");
+            return !IsIsan(number) ? null : IsanRegex.Match(number).Groups.OfType<Group>().Skip(1).Select(@group => @group.Value).ToArray();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: \"{1}\" ({2}) ({3})",
+                                 NumberFormatted,
+                                 Title,
+                                 Year,
+                                 IsSearchable ? "valid" : "invalid!"
+                );
+        }
+    }
+
+    public class VIsan : Isan
+    {
+        public Isan Parent;
+
+        protected VIsan(string n1, string n2, string n3, string n4, string n5, string n6)
+            : base(n1, n2, n3, n4, n5, n6)
+        {
+        }
+
+        public new static VIsan TryParse(string number)
+        {
+            if (!IsIsan(number))
                 return null;
 
-            var parsed = string.Join("", Parse(number));
+            var n = Parse(number);
 
-            return new ISAN { Number = parsed };
+            return new VIsan(n[0], n[1], n[2], n[3], n[4], n[5]);
         }
     }
 }

@@ -126,7 +126,7 @@ namespace BDHero.BDROM
             public FileInfo AnyDVDDiscInf;
 
             /// <summary>
-            /// AACS <c>mcmf.xml</c> file containing the BD's <see cref="ISAN"/>.
+            /// AACS <c>mcmf.xml</c> file containing the BD's <see cref="VIsan"/>.
             /// </summary>
             [CanBeNull]
             public FileInfo MCMF;

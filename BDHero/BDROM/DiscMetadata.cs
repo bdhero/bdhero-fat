@@ -62,7 +62,13 @@ namespace BDHero.BDROM
             /// The child V-ISAN (ISAN Version) number that identifies the particular version (release) of the movie on Blu-ray, if present on the disc.
             /// </summary>
             [CanBeNull]
-            public ISAN V_ISAN;
+            public VIsan V_ISAN;
+
+            /// <summary>
+            /// The parent ISAN number that identifies the original work (i.e., the original movie first released in theaters), if present on the disc.
+            /// </summary>
+            [CanBeNull]
+            public Isan ISAN { get { return V_ISAN != null ? V_ISAN.Parent : null; } }
         }
 
         /// <summary>
@@ -106,12 +112,6 @@ namespace BDHero.BDROM
             /// </summary>
             [CanBeNull]
             public string DboxTitleSanitized;
-
-            /// <summary>
-            /// The parent ISAN number that identifies the original work (i.e., the original movie first released in theaters), if present on the disc.
-            /// </summary>
-            [CanBeNull]
-            public ISAN ISAN;
 
             /// <summary>
             /// Auto-detected movie name to use for initial database searches (e.g., TMDb).
