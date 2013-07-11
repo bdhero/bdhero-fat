@@ -18,6 +18,7 @@ using DotNetUtils.Extensions;
 using DotNetUtils.TaskUtils;
 using OSUtils.DriveDetector;
 using OSUtils.TaskbarUtils;
+using WindowsOSUtils.DriveDetector;
 using WindowsOSUtils.TaskbarUtils;
 
 namespace BDHeroGUI
@@ -31,10 +32,11 @@ namespace BDHeroGUI
         private readonly IDirectoryLocator _directoryLocator;
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
-        private readonly IDriveDetector _driveDetector;
 
         private readonly ToolTip _progressBarToolTip;
         private readonly ITaskbarItem _taskbarItem;
+
+        private IDriveDetector _driveDetector;
 
         private bool _isRunning;
 
@@ -44,7 +46,7 @@ namespace BDHeroGUI
 
         #region Constructor and OnLoad
 
-        public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller, IDriveDetector driveDetector)
+        public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
         {
             InitializeComponent();
 
@@ -54,7 +56,6 @@ namespace BDHeroGUI
             _directoryLocator = directoryLocator;
             _pluginLoader = pluginLoader;
             _controller = controller;
-            _driveDetector = driveDetector;
 
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
@@ -69,8 +70,6 @@ namespace BDHeroGUI
 
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
             mediaPanel.Search = ShowMetadataSearchWindow;
-
-            InitDriveDetector();
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -98,11 +97,7 @@ namespace BDHeroGUI
                         }
                 };
 
-            // TODO:
-            // DriveDetector creates a NativeWindow in order to receive WM_DEVICECHANGE events from Windows.
-            // Unfortunately that steals focus away from this window and causes it to appear in the background.
-            // We need to explicitly activate this window to give it focus.
-            Activate();
+            InitDriveDetector();
         }
 
         #endregion
@@ -248,7 +243,8 @@ namespace BDHeroGUI
 
         private void InitDriveDetector()
         {
-            // TODO: Detect all drives on startup
+            _driveDetector = new DriveDetector(this);
+
             // TODO: Do this in background thread
             // TODO: Handle exceptions
             _driveDetector.DeviceArrived += DriveDetectorOnDeviceArrived;
