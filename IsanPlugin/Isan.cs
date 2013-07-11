@@ -11,6 +11,7 @@ namespace IsanPlugin
     /// Immutable.
     /// </summary>
     /// TODO: Write unit tests
+    /// TODO: Add language(s), alternate title(s), and additional information
     public class Isan
     {
         private const string ZeroRoot = "000000000000";
