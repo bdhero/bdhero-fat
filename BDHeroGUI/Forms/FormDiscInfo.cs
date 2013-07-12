@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
+using DotNetUtils.Extensions;
 
 namespace BDHeroGUI.Forms
 {
@@ -26,6 +27,8 @@ namespace BDHeroGUI.Forms
 
             discInfoMetadataPanel.SetDisc(disc);
             discInfoFeaturesPanel.SetDisc(disc);
+
+            this.EnableSelectAll();
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
