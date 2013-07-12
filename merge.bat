@@ -22,6 +22,7 @@ xcopy /Y Packager\bin\%ConfigurationName%\Config Setup\ProgramFiles\Config\
 REM Copy required plugins
 
 xcopy /Y Plugins\DiscReaderPlugin\bin\%ConfigurationName%\DiscReaderPlugin.dll Setup\ProgramFiles\Plugins\Required\DiscReader\
+xcopy /Y Plugins\DiscReaderPlugin\bin\%ConfigurationName%\INIFileParser.dll Setup\ProgramFiles\Plugins\Required\DiscReader\
 
 xcopy /Y Plugins\TmdbPlugin\bin\%ConfigurationName%\TmdbPlugin.dll Setup\ProgramFiles\Plugins\Required\Tmdb\
 xcopy /Y Plugins\TmdbPlugin\bin\%ConfigurationName%\RestSharp.dll Setup\ProgramFiles\Plugins\Required\Tmdb\
