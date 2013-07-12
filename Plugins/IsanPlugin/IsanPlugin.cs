@@ -46,6 +46,7 @@ namespace IsanPlugin
             var isan = raw.ISAN;
             if (isan != null && !string.IsNullOrWhiteSpace(isan.Title))
             {
+                // TODO: Scrape language from isan.org
                 derived.SearchableTitles.Insert(0, new SearchQuery { Title = isan.Title, Year = isan.Year });
             }
         }
