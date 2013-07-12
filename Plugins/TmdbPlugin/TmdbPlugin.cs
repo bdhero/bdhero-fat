@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using BDHero.Plugin;
 using BDHero.JobQueue;
@@ -187,11 +188,17 @@ namespace TmdbPlugin
         {
             job.Movies.Clear();
 
-            if (job.SearchQuery != null && _apiKey != null)
+            var searchQuery = job.SearchQuery;
+
+            if (searchQuery != null && _apiKey != null)
             {
                 _tmdbApi = new Tmdb(_apiKey, _searchISO_639_1);
 
-                var requestParameters = new TmdbApiParameters(job.SearchQuery, _searchYear, _searchISO_639_1);
+                // TMDb (previously) choked on dashes - not sure if it still does or not...
+                // E.G.: "The Amazing Spider-Man" --> "The Amazing Spider Man"
+                searchQuery = Regex.Replace(searchQuery, @"-+", " ");
+
+                var requestParameters = new TmdbApiParameters(searchQuery, _searchYear, _searchISO_639_1);
 
                 try
                 {
