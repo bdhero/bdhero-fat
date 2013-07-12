@@ -188,7 +188,7 @@ namespace TmdbPlugin
         {
             job.Movies.Clear();
 
-            var searchQuery = job.SearchQuery;
+            var searchQuery = job.SearchQuery.Title;
 
             if (searchQuery != null && _apiKey != null)
             {

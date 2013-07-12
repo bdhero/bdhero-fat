@@ -6,19 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BDHero.JobQueue;
 
 namespace BDHeroGUI.Forms
 {
     public partial class FormMetadataSearch : Form
     {
         /// <summary>
-        /// Gets or sets the text of the search query TextBox.
+        /// Gets the user's input.
         /// </summary>
-        public string SearchQuery
-        {
-            get { return textBoxSearchQuery.Text; }
-            set { textBoxSearchQuery.Text = value; }
-        }
+        public readonly SearchQuery SearchQuery = new SearchQuery();
 
         /// <summary>
         /// Maximum width to auto-resize.
@@ -35,14 +32,24 @@ namespace BDHeroGUI.Forms
         /// </summary>
         private bool _ignoreResize;
 
-        public FormMetadataSearch(string searchQuery)
+        /// <summary>
+        /// Constructs a new metadata search form window and copies the specified search query into a new SearchQuery object.
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        public FormMetadataSearch(SearchQuery searchQuery)
         {
             InitializeComponent();
 
-            SearchQuery = searchQuery;
+            textBoxSearchQuery.Text = searchQuery.Title;
+
+            // TODO: Introduce SearchQuery.CopyFrom()?
+            SearchQuery.Title = searchQuery.Title;
+            SearchQuery.Year = searchQuery.Year;
+            SearchQuery.Language = searchQuery.Language;
 
             Load += OnLoad;
             Resize += OnResize;
+            textBoxSearchQuery.TextChanged += (sender, args) => SearchQuery.Title = textBoxSearchQuery.Text;
             textBoxSearchQuery.TextChanged += (sender, args) => AutoResize();
         }
 
