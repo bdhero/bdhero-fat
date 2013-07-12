@@ -213,7 +213,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                 return null;
 
             var match = DboxTitleRegex.Match(xml);
-            var title = match.Groups[1].Value.Trim();
+            var title = SanitizeTitle(match.Groups[1].Value);
             return title;
         }
 
