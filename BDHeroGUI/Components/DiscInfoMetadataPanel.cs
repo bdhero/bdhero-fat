@@ -26,27 +26,26 @@ namespace BDHeroGUI.Components
 
         public void SetDisc(Disc disc)
         {
+            var fs = disc.FileSystem;
             var metadata = disc.Metadata;
             var raw = metadata.Raw;
             var der = metadata.Derived;
 
             // textboxes
 
-            textBoxHardwareVolumeLabel.Text = raw.HardwareVolumeLabel;
-            textBoxAnyDVDDiscInf.Text = raw.DiscInf != null ? raw.DiscInf.ToString() : NotFound;
-            textBoxDboxTitle.Text = raw.DboxTitle ?? NotFound;
-            textBoxVISAN.Text = GetIsanText(raw.V_ISAN);
-            textBoxAllBdmtTitles.Text = GetBdmtTitles(raw.AllBdmtTitles);
+            InitTextAndIcon(iconHardwareVolumeLabel, textBoxHardwareVolumeLabel, raw.HardwareVolumeLabel);
+            InitTextAndIcon(iconAnyDVDDiscInf, textBoxAnyDVDDiscInf, raw.DiscInf != null ? raw.DiscInf.ToString() : null);
+            InitTextAndIcon(iconDboxTitle, textBoxDboxTitle, raw.DboxTitle);
+            InitTextAndIcon(iconVISAN, textBoxVISAN, GetIsanText(raw.V_ISAN));
+            InitTextAndIcon(iconAllBdmtTitles, textBoxAllBdmtTitles, GetBdmtTitles(raw.AllBdmtTitles));
 
-            textBoxVolumeLabel.Text = der.VolumeLabel;
-            textBoxVolumeLabelSanitized.Text = der.VolumeLabelSanitized;
-            textBoxDboxTitleSanitized.Text = der.DboxTitleSanitized ?? NotFound;
-            textBoxIsan.Text = GetIsanText(raw.ISAN);
-            textBoxValidBdmtTitles.Text = GetBdmtTitles(der.ValidBdmtTitles);
+            InitTextAndIcon(iconVolumeLabel, textBoxVolumeLabel, der.VolumeLabel);
+            InitTextAndIcon(iconVolumeLabelSanitized, textBoxVolumeLabelSanitized, der.VolumeLabelSanitized);
+            InitTextAndIcon(iconDboxTitleSanitized, textBoxDboxTitleSanitized, der.DboxTitleSanitized);
+            InitTextAndIcon(iconIsan, textBoxIsan, GetIsanText(raw.ISAN));
+            InitTextAndIcon(iconValidBdmtTitles, textBoxValidBdmtTitles, GetBdmtTitles(der.ValidBdmtTitles));
 
             // buttons
-
-            var fs = disc.FileSystem;
 
             InitButton(buttonHardwareVolumeLabel, fs.Directories.Root);
             InitButton(buttonAnyDVDDiscInf, fs.Files.AnyDVDDiscInf);
@@ -59,6 +58,13 @@ namespace BDHeroGUI.Components
             InitButton(buttonDboxTitleSanitized, fs.Files.Dbox);
             InitButton(buttonIsan, fs.Files.MCMF);
             InitButton(buttonValidBdmtTitles, fs.Directories.BDMT);
+        }
+
+        private static void InitTextAndIcon(PictureBox icon, TextBox textBox, string text)
+        {
+            var hasText = !string.IsNullOrWhiteSpace(text);
+            icon.Image = hasText ? Resources.tick : Resources.cross_red;
+            textBox.Text = hasText ? text : NotFound;
         }
 
         private static void InitButton(Button button, FileSystemInfo info)
@@ -101,21 +107,24 @@ namespace BDHeroGUI.Components
         private static string GetIsanText(Isan isan)
         {
             if (isan == null)
-                return NotFound;
+                return null;
+
             var lines = new List<string>();
+
             lines.Add(isan.IsSearchable ? "Valid:" : "Invalid:");
             lines.Add(isan.NumberFormatted);
             if (!string.IsNullOrWhiteSpace(isan.Title))
                 lines.Add(string.Format("{0} ({1} - {2} min)", isan.Title, isan.Year, isan.LengthMin));
             else
                 lines.Add("(no title/year/runtime found)");
+
             return string.Join(Environment.NewLine, lines);
         }
 
         private static string GetBdmtTitles(IDictionary<Language, string> bdmtTitles)
         {
             return !bdmtTitles.Any()
-                       ? NotFound
+                       ? null
                        : string.Join(Environment.NewLine,
                                      bdmtTitles.Select(pair => string.Format("{0}: {1}", pair.Key.ISO_639_2, pair.Value)));
         }
