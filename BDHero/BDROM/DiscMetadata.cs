@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BDHero.JobQueue;
 using DotNetUtils.Annotations;
 using I18N;
 
@@ -114,10 +115,16 @@ namespace BDHero.BDROM
             public string DboxTitleSanitized;
 
             /// <summary>
-            /// Auto-detected movie name to use for initial database searches (e.g., TMDb).
-            /// Derived from <see cref="ValidBdmtTitles"/>, <see cref="DboxTitleSanitized"/>, and <see cref="VolumeLabelSanitized"/>.
+            /// Gets the best guess auto-detected movie name to use for database searches (e.g., TMDb).
+            /// Derived from various raw metadata sources.
             /// </summary>
-            public string SearchableTitle;
+            public SearchQuery SearchableTitle { get { return SearchableTitles != null ? SearchableTitles.FirstOrDefault() : null; } }
+
+            /// <summary>
+            /// Gets or sets a list of searchable movie names to use for database searches (e.g., TMDb)
+            /// with the highest quality names first (e.g., BDMT XML) and the lowest quality names last (e.g., volume name).
+            /// </summary>
+            public IList<SearchQuery> SearchableTitles;
         }
     }
 

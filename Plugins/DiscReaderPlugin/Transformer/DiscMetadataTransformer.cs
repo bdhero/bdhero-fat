@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using BDHero.BDROM;
+using BDHero.JobQueue;
 using DotNetUtils;
 using DotNetUtils.Annotations;
 using I18N;
@@ -47,7 +48,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                     VolumeLabelSanitized = GetVolumeLabelSanitized(raw),
                     ValidBdmtTitles = GetValidBdmtTitles(raw.AllBdmtTitles),
                     DboxTitleSanitized = GetDboxTitleSanitized(raw),
-                    SearchableTitle = null /* populated by another plugin */
+                    SearchableTitles = new List<SearchQuery>() /* populated by DiscTransformer */
                 };
 
             var metadata = new DiscMetadata

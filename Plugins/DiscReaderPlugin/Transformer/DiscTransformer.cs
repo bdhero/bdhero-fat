@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using BDHero.BDROM;
+using BDHero.JobQueue;
+using DotNetUtils.Annotations;
 using DotNetUtils.Extensions;
 using I18N;
 
@@ -82,16 +84,23 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static void TransformTitle(Disc disc)
         {
+            var raw = disc.Metadata.Raw;
             var derived = disc.Metadata.Derived;
+
             var validBdmtTitles = derived.ValidBdmtTitles;
             if (validBdmtTitles.ContainsKey(disc.PrimaryLanguage))
             {
-                derived.SearchableTitle = validBdmtTitles[disc.PrimaryLanguage];
+                AddSearchableTitleIfNotEmpty(disc, validBdmtTitles[disc.PrimaryLanguage]);
             }
-            else
-            {
-                derived.SearchableTitle = derived.DboxTitleSanitized ?? derived.VolumeLabelSanitized;
-            }
+
+            AddSearchableTitleIfNotEmpty(disc, derived.DboxTitleSanitized);
+            AddSearchableTitleIfNotEmpty(disc, derived.VolumeLabelSanitized);
+        }
+
+        private static void AddSearchableTitleIfNotEmpty(Disc disc, [CanBeNull] string query)
+        {
+            if (!string.IsNullOrWhiteSpace(query))
+                disc.Metadata.Derived.SearchableTitles.Add(new SearchQuery { Title = query });
         }
 
         #endregion
