@@ -22,6 +22,10 @@ namespace DotNetUtils
         private const string METHOD_PUT = "PUT";
         private const string METHOD_POST = "POST";
 
+        /// <summary>
+        /// Gets or sets the User-Agent HTTP request header sent to the web server when making requests.
+        /// Defaults to <c>"ENTRY_ASSEMBLY_NAME/ENTRY_ASSEMBLY_VERSION"</c>.
+        /// </summary>
         public static string UserAgent;
 
         private static readonly MemoryCache ImageCache = new MemoryCache("http_image_cache");
@@ -31,6 +35,12 @@ namespace DotNetUtils
             UserAgent = AssemblyUtils.GetAssemblyName() + "/" + AssemblyUtils.GetAssemblyVersion();
         }
 
+        /// <summary>
+        /// Performs a synchronous HTTP GET request and returns the full response as a string.
+        /// </summary>
+        /// <param name="uri">URI of the web resource to GET</param>
+        /// <param name="headers">Optional list of fully-formatted headers of the form <c>Header-Name: Header-Value</c></param>
+        /// <returns></returns>
         public static string Get(string uri, List<string> headers = null)
         {
             var request = BuildRequest(METHOD_GET, uri, false, headers);
@@ -45,6 +55,12 @@ namespace DotNetUtils
 
         #region Images
 
+        /// <summary>
+        /// Performs a synchronous HTTP GET request and returns the full response as an Image.
+        /// </summary>
+        /// <param name="uri">URI of the web resource to GET</param>
+        /// <param name="cache">Determines whether a successful response should be cached to speed up future requests for the same <paramref name="uri"/></param>
+        /// <returns></returns>
         [CanBeNull]
         public static Image GetImage(string uri, bool cache = true)
         {
@@ -80,11 +96,23 @@ namespace DotNetUtils
 
         #endregion
 
+        /// <summary>
+        /// Performs a synchronous HTTP POST request and returns the full response as a string.
+        /// </summary>
+        /// <param name="uri">URI of the web resource to POST to</param>
+        /// <param name="formData">Optional form data to send to the server in the request body</param>
+        /// <returns></returns>
         public static string Post(string uri, IDictionary<string, string> formData = null)
         {
             return PutOrPost(METHOD_POST, uri, formData);
         }
 
+        /// <summary>
+        /// Performs a synchronous HTTP PUT request and returns the full response as a string.
+        /// </summary>
+        /// <param name="uri">URI of the web resource to POST to</param>
+        /// <param name="formData">Optional form data to send to the server in the request body</param>
+        /// <returns></returns>
         public static string Put(string uri, IDictionary<string, string> formData = null)
         {
             return PutOrPost(METHOD_PUT, uri, formData);
