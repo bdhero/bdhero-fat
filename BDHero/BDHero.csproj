@@ -70,6 +70,7 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Exceptions\RequiredPluginNotFoundException.cs" />
     <Compile Include="IController.cs" />
+    <Compile Include="JobQueue\SearchQuery.cs" />
     <Compile Include="Plugin\ProgressProvider.cs" />
     <Compile Include="Plugin\IPlugin.cs" />
     <Compile Include="Plugin\IPluginHost.cs" />
