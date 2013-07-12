@@ -19,5 +19,12 @@ namespace BDHero.JobQueue
                        ? string.Format("{0}{1} ({2})", iso639_2, Title, Year)
                        : string.Format("{0}{1}", iso639_2, Title);
         }
+
+        public void CopyFrom(SearchQuery other)
+        {
+            Title = other.Title;
+            Year = other.Year;
+            Language = other.Language;
+        }
     }
 }
