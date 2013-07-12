@@ -18,7 +18,6 @@ namespace BDHeroGUI.Forms
 
             var fs = disc.FileSystem;
             var metadata = disc.Metadata;
-            var features = disc.Features;
 
             labelQuickSummary.Text = string.Format("{0} {1}",
                                                    metadata.Derived.VolumeLabel,
