@@ -115,17 +115,16 @@ namespace BDHero.BDROM
             public string DboxTitleSanitized;
 
             /// <summary>
-            /// Gets the best guess auto-detected movie name to use for database searches (e.g., TMDb).
-            /// Derived from various raw metadata sources.
-            /// </summary>
-            public SearchQuery SearchableTitle { get { return SearchableTitles != null ? SearchableTitles.FirstOrDefault() : null; } }
-
-            /// <summary>
             /// Gets or sets a list of searchable movie names to use for database searches (e.g., TMDb)
             /// with the highest quality names first (e.g., BDMT XML) and the lowest quality names last (e.g., volume name).
             /// </summary>
-            public IList<SearchQuery> SearchableTitles;
+            public IList<SearchQuery> SearchQueries;
+
+            /// <summary>
+            /// Gets the best guess auto-detected movie name to use for database searches (e.g., TMDb).
+            /// Derived from various raw metadata sources.
+            /// </summary>
+            public SearchQuery BestSearchQuery { get { return SearchQueries != null ? SearchQueries.FirstOrDefault() : null; } }
         }
     }
-
 }

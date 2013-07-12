@@ -48,7 +48,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                     VolumeLabelSanitized = GetVolumeLabelSanitized(raw),
                     ValidBdmtTitles = GetValidBdmtTitles(raw.AllBdmtTitles),
                     DboxTitleSanitized = GetDboxTitleSanitized(raw),
-                    SearchableTitles = new List<SearchQuery>() /* populated by DiscTransformer */
+                    SearchQueries = new List<SearchQuery>() /* populated by DiscTransformer */
                 };
 
             var metadata = new DiscMetadata

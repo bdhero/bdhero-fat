@@ -73,7 +73,7 @@ namespace BDHero.JobQueue
         [JsonIgnore]
         public SearchQuery SearchQuery
         {
-            get { return _searchQuery ?? (Disc != null ? Disc.Metadata.Derived.SearchableTitle : null); }
+            get { return _searchQuery ?? (Disc != null ? Disc.Metadata.Derived.BestSearchQuery : null); }
             set { _searchQuery = value; }
         }
 

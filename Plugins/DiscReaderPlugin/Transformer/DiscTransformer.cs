@@ -99,7 +99,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
         private static void AddSearchableTitleIfNotEmpty(Disc disc, [CanBeNull] string query)
         {
             if (!string.IsNullOrWhiteSpace(query))
-                disc.Metadata.Derived.SearchableTitles.Add(new SearchQuery { Title = query, Language = disc.PrimaryLanguage });
+                disc.Metadata.Derived.SearchQueries.Add(new SearchQuery { Title = query, Language = disc.PrimaryLanguage });
         }
 
         #endregion

@@ -48,8 +48,8 @@ namespace IsanPlugin
             {
                 // TODO: Scrape language from isan.org
                 // Don't insert twice
-                if (!derived.SearchableTitles.Any(query => query.Title == isan.Title && query.Year == isan.Year))
-                    derived.SearchableTitles.Insert(0, new SearchQuery { Title = isan.Title, Year = isan.Year });
+                if (!derived.SearchQueries.Any(query => query.Title == isan.Title && query.Year == isan.Year))
+                    derived.SearchQueries.Insert(0, new SearchQuery { Title = isan.Title, Year = isan.Year });
             }
         }
     }
