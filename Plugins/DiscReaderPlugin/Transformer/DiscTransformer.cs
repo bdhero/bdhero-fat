@@ -84,7 +84,6 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static void TransformTitle(Disc disc)
         {
-            var raw = disc.Metadata.Raw;
             var derived = disc.Metadata.Derived;
 
             var validBdmtTitles = derived.ValidBdmtTitles;
