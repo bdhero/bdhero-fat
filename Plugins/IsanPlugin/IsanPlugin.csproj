@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="IsanMetadataProvider.cs" />
     <Compile Include="IsanPlugin.cs" />
+    <Compile Include="IsanProgressToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

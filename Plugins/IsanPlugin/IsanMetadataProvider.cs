@@ -18,6 +18,8 @@ namespace IsanPlugin
 
         public TimeSpan Timeout = ServerConfig.Default.Timeout;
 
+        private const double TotalRequests = 2;
+
         /// <summary>
         /// Spoof IE6 on XP.
         /// </summary>
@@ -26,6 +28,28 @@ namespace IsanPlugin
         private const string IsanLookupUrl = "http://web.isan.org/template/1.2/publicSearch.do?code={0}";
 
         private static readonly Regex TitleYearLengthRegex = new Regex(@"(.*)\s+\(\s*(\d{4})[\s\-]*(\d+)\s*min\s*\)", RegexOptions.IgnoreCase);
+
+        private readonly IsanProgressToken _token;
+
+        private double _numRequests;
+
+        /// <summary>
+        /// Constructs a new IsanMetadataProvider that does <strong>not</strong> report its progress and
+        /// does <strong>not</strong> allow the user to cancel requests.
+        /// </summary>
+        public IsanMetadataProvider() : this(new IsanProgressToken())
+        {
+        }
+
+        /// <summary>
+        /// Constructs a new IsanMetadataProvider that reports its progress and allows the user to cancel requests
+        /// via the given <paramref name="token"/>.
+        /// </summary>
+        /// <param name="token"></param>
+        public IsanMetadataProvider(IsanProgressToken token)
+        {
+            _token = token;
+        }
 
         public void Populate([CanBeNull] VIsan vIsan)
         {
@@ -37,18 +61,36 @@ namespace IsanPlugin
             Populate(vIsan, dom);
             SetParent(vIsan, dom);
             PopulateParent(vIsan);
+
+            _token.ReportProgress(100.0, "Finished querying isan.org");
         }
 
         private CQ GetDom(Isan isan)
         {
+            if (_token.IsCancelled)
+                return null;
+
+            string status;
+
+            status = string.Format("Querying isan.org for {0} {1}...", isan is VIsan ? "V-ISAN" : "ISAN", isan.NumberFormatted);
+            _token.ReportProgress(100.0 * _numRequests / TotalRequests, status);
+
             var numberEscaped = Uri.EscapeUriString(isan.Number);
             var url = string.Format(IsanLookupUrl, numberEscaped);
+
             CQ dom = CQ.CreateFromUrl(url, new ServerConfig { UserAgent = UserAgent, Timeout = Timeout });
+
+            status = string.Format("Got response from isan.org for {0} {1}...", isan is VIsan ? "V-ISAN" : "ISAN", isan.NumberFormatted);
+            _token.ReportProgress(100.0 * (++_numRequests) / TotalRequests, status);
+
             return dom;
         }
 
-        private static void Populate(Isan isan, CQ dom)
+        private void Populate(Isan isan, [CanBeNull] CQ dom)
         {
+            if (_token.IsCancelled || dom == null)
+                return;
+
             var titles = dom[".title"];
             titles.ForEach(delegate(IDomObject o)
                 {
@@ -83,8 +125,11 @@ namespace IsanPlugin
             isan.LengthMin = Int32.Parse(match.Groups[3].Value.Trim());
         }
 
-        private static void SetParent(VIsan vIsan, CQ dom)
+        private void SetParent(VIsan vIsan, CQ dom)
         {
+            if (_token.IsCancelled || dom == null)
+                return;
+
             var titles = dom["a[href*=\"javascript:publicDisplayWork\"]"];
             titles.ForEach(delegate(IDomObject o)
                 {
@@ -98,7 +143,7 @@ namespace IsanPlugin
 
         private void PopulateParent(VIsan vIsan)
         {
-            if (vIsan.Parent == null)
+            if (_token.IsCancelled || vIsan.Parent == null)
                 return;
 
             var dom = GetDom(vIsan.Parent);

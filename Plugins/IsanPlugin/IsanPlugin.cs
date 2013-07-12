@@ -24,8 +24,6 @@ namespace IsanPlugin
 
         public EditPluginPreferenceHandler EditPreferences { get; private set; }
 
-        private readonly IsanMetadataProvider _provider = new IsanMetadataProvider();
-
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
             Host = host;
@@ -41,7 +39,10 @@ namespace IsanPlugin
             var raw = job.Disc.Metadata.Raw;
             var derived = job.Disc.Metadata.Derived;
 
-            _provider.Populate(raw.V_ISAN);
+            var token = new IsanProgressToken(Host, this, cancellationToken);
+            var provider = new IsanMetadataProvider(token);
+
+            provider.Populate(raw.V_ISAN);
 
             var isan = raw.ISAN;
             if (isan != null && !string.IsNullOrWhiteSpace(isan.Title))
