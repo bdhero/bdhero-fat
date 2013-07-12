@@ -28,7 +28,6 @@ namespace TmdbPlugin
         private TmdbMovieSearch _tmdbMovieSearch;
         private string _rootImageUrl;
         private string _searchISO_639_1;
-        private int? _searchYear = null;
         private string _apiKey;
         private TmdbConfiguration _configuration;
 
@@ -186,9 +185,25 @@ namespace TmdbPlugin
 
         private void ApiRequest(Job job)
         {
+            var searchYear = job.SearchQuery.Year;
+
+            ApiRequest(job, searchYear);
+
+            // TODO: Update progress during second request
+            // isan.org has the wrong year for some movies...
+            // so search again w/o sending a year if there are zero results for isan.org's year
+            if (searchYear.HasValue && !job.Movies.Any())
+            {
+                ApiRequest(job, null);
+            }
+        }
+
+        private void ApiRequest(Job job, int? searchYear)
+        {
             job.Movies.Clear();
 
-            var searchQuery = job.SearchQuery.Title;
+            var searchQuery = job.SearchQuery;
+            var searchTitle = searchQuery.Title;
 
             if (searchQuery != null && _apiKey != null)
             {
@@ -196,9 +211,9 @@ namespace TmdbPlugin
 
                 // TMDb (previously) choked on dashes - not sure if it still does or not...
                 // E.G.: "The Amazing Spider-Man" --> "The Amazing Spider Man"
-                searchQuery = Regex.Replace(searchQuery, @"-+", " ");
+                searchTitle = Regex.Replace(searchTitle, @"-+", " ");
 
-                var requestParameters = new TmdbApiParameters(searchQuery, _searchYear, _searchISO_639_1);
+                var requestParameters = new TmdbApiParameters(searchTitle, searchYear, _searchISO_639_1);
 
                 try
                 {
