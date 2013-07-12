@@ -22,7 +22,7 @@ namespace DotNetUtils
         private const string METHOD_PUT = "PUT";
         private const string METHOD_POST = "POST";
 
-        private static readonly string UserAgent;
+        public static string UserAgent;
 
         private static readonly MemoryCache ImageCache = new MemoryCache("http_image_cache");
 
