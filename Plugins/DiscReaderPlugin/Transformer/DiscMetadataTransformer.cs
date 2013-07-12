@@ -77,6 +77,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
             sanitizedTitle = Regex.Replace(sanitizedTitle, @"^\d{6,}_", ""); // e.g., "01611720_GOODFELLAS" => "GOODFELLAS"
             sanitizedTitle = Regex.Replace(sanitizedTitle, @"_NA$", ""); // remove trailing region codes (NA = North America)
+            sanitizedTitle = Regex.Replace(sanitizedTitle, @"_BD$", ""); // remove redundant trailing "BD" (we already know it's a Blu-ray Disc...)
             sanitizedTitle = Regex.Replace(sanitizedTitle, @"_+", " ");
 
             return sanitizedTitle;
