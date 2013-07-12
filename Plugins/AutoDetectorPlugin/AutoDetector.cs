@@ -56,7 +56,6 @@ namespace BDHero.Plugin.AutoDetector
 
             // Auto-configuration
             DetectPlaylistTypes(disc);
-            DetectPlaylistCuts(disc);
             DetectMainFeaturePlaylistTrackTypes(disc);
             DetectCommentaryPlaylistTrackTypes(disc);
             DetectSpecialFeaturePlaylistTrackTypes(disc);
@@ -153,25 +152,6 @@ namespace BDHero.Plugin.AutoDetector
 
                 if (playlist.IsSpecialFeaturePlaylist(maxLength))
                     playlist.Type = TrackType.SpecialFeature;
-            }
-        }
-
-        private static void DetectPlaylistCuts(Disc disc)
-        {
-            var vIsan = disc.Metadata.Raw.V_ISAN;
-            if (vIsan == null || !vIsan.LengthMin.HasValue)
-                return;
-
-            var vIsanLengthMin = vIsan.LengthMin.Value;
-            const int threshold = 5;
-
-            foreach (var playlist in disc.Playlists.Where(playlist => playlist.IsMainFeature))
-            {
-                var playlistLengthMin = (int) Math.Floor(playlist.Length.TotalMinutes);
-                if (playlistLengthMin > vIsanLengthMin + threshold)
-                    playlist.Cut = PlaylistCut.Extended;
-                if (playlistLengthMin < vIsanLengthMin - threshold)
-                    playlist.Cut = PlaylistCut.Special;
             }
         }
 
