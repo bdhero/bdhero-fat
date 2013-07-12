@@ -107,15 +107,16 @@ namespace BDHero.Plugin.DiscReader.Transformer
         [CanBeNull]
         private static string SanitizeTitle(string title)
         {
-            var sanitized = (title ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(title))
+                return null;
 
-            if (!string.IsNullOrWhiteSpace(sanitized))
-            {
-                sanitized = Regex.Replace(sanitized, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
-                sanitized = Regex.Replace(sanitized, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
-                sanitized = Regex.Replace(sanitized, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
-                sanitized = sanitized.Trim();
-            }
+            var sanitized = title.Trim();
+
+            // TODO: Handle "(500) Days of Summer"
+            sanitized = Regex.Replace(sanitized, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
+            sanitized = Regex.Replace(sanitized, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
+            sanitized = Regex.Replace(sanitized, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
+            sanitized = sanitized.Trim();
 
             if (Regex.Replace(sanitized, @"\W", "").ToLowerInvariant() == "bluray")
             {
