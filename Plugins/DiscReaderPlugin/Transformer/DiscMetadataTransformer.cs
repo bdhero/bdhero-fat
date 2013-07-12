@@ -73,20 +73,20 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static string SanitizeVolumeLabel(string volumeLabel)
         {
-            var sanitizedTitle = volumeLabel;
+            var sanitized = volumeLabel;
 
-            sanitizedTitle = Regex.Replace(sanitizedTitle, @"^\d{6,}_", ""); // e.g., "01611720_GOODFELLAS" => "GOODFELLAS"
-            sanitizedTitle = Regex.Replace(sanitizedTitle, @"_NA$", ""); // remove trailing region codes (NA = North America)
-            sanitizedTitle = Regex.Replace(sanitizedTitle, @"_BD$", ""); // remove redundant trailing "BD" (we already know it's a Blu-ray Disc...)
-            sanitizedTitle = Regex.Replace(sanitizedTitle, @"_+", " ");
+            sanitized = Regex.Replace(sanitized, @"^\d{6,}_", ""); // e.g., "01611720_GOODFELLAS" => "GOODFELLAS"
+            sanitized = Regex.Replace(sanitized, @"_NA$", ""); // remove trailing region codes (NA = North America)
+            sanitized = Regex.Replace(sanitized, @"_BD$", ""); // remove redundant trailing "BD" (we already know it's a Blu-ray Disc...)
+            sanitized = Regex.Replace(sanitized, @"_+", " ");
 
-            return sanitizedTitle;
+            return sanitized;
         }
 
         private static IDictionary<Language, string> GetValidBdmtTitles(IDictionary<Language, string> allBdmtTitles)
         {
             var valid = new Dictionary<Language, string>();
-            var filtered = allBdmtTitles.Select(SanitizeBdmtTitle).Where(IsBdmtTitleValid);
+            var filtered = allBdmtTitles.Select(SanitizeTitle).Where(IsBdmtTitleValid);
             foreach (var kvp in filtered)
             {
                 valid[kvp.Key] = kvp.Value;
@@ -94,9 +94,9 @@ namespace BDHero.Plugin.DiscReader.Transformer
             return valid;
         }
 
-        private static KeyValuePair<Language, string> SanitizeBdmtTitle(KeyValuePair<Language, string> pair)
+        private static KeyValuePair<Language, string> SanitizeTitle(KeyValuePair<Language, string> pair)
         {
-            return new KeyValuePair<Language, string>(pair.Key, SanitizeBdmtTitle(pair.Value));
+            return new KeyValuePair<Language, string>(pair.Key, SanitizeTitle(pair.Value));
         }
 
         /// <summary>
@@ -105,24 +105,24 @@ namespace BDHero.Plugin.DiscReader.Transformer
         /// <param name="title"></param>
         /// <returns>Sanitized version of the title if it is not empty, otherwise <c>null</c></returns>
         [CanBeNull]
-        private static string SanitizeBdmtTitle(string title)
+        private static string SanitizeTitle(string title)
         {
-            var sanitizedTitle = (title ?? "").Trim();
+            var sanitized = (title ?? "").Trim();
 
-            if (!string.IsNullOrWhiteSpace(sanitizedTitle))
+            if (!string.IsNullOrWhiteSpace(sanitized))
             {
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
-                sanitizedTitle = Regex.Replace(sanitizedTitle, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
-                sanitizedTitle = sanitizedTitle.Trim();
+                sanitized = Regex.Replace(sanitized, @" - Blu-ray.*", "", RegexOptions.IgnoreCase);
+                sanitized = Regex.Replace(sanitized, @" \(?Disc \w+(?: of \w+)?\)?", "", RegexOptions.IgnoreCase);
+                sanitized = Regex.Replace(sanitized, @"\s*[[(].*", "", RegexOptions.IgnoreCase);
+                sanitized = sanitized.Trim();
             }
 
-            if (Regex.Replace(sanitizedTitle, @"\W", "").ToLowerInvariant() == "bluray")
+            if (Regex.Replace(sanitized, @"\W", "").ToLowerInvariant() == "bluray")
             {
-                sanitizedTitle = "";
+                sanitized = "";
             }
 
-            return string.IsNullOrWhiteSpace(sanitizedTitle) ? null : sanitizedTitle;
+            return string.IsNullOrWhiteSpace(sanitized) ? null : sanitized;
         }
 
         private static bool IsBdmtTitleValid(KeyValuePair<Language, string> keyValuePair)
@@ -133,7 +133,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
 
         private static string GetDboxTitleSanitized(DiscMetadata.RawMetadata raw)
         {
-            return SanitizeBdmtTitle(raw.DboxTitle);
+            return SanitizeTitle(raw.DboxTitle);
         }
 
         #endregion
