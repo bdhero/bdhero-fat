@@ -41,27 +41,16 @@ namespace BDHeroGUI.Forms
         {
             InitializeComponent();
 
-            textBoxSearchQuery.Text = searchQuery.Title;
-            textBoxYear.Text = searchQuery.Year.HasValue ? searchQuery.Year.ToString() : "";
+            SearchQuery.CopyFrom(searchQuery);
 
-            // TODO: Introduce SearchQuery.CopyFrom()?
-            SearchQuery.Title = searchQuery.Title;
-            SearchQuery.Year = searchQuery.Year;
-            SearchQuery.Language = searchQuery.Language;
+            textBoxSearchQuery.Text = searchQuery.Title;
+            textBoxSearchQuery.TextChanged += TextBoxSearchQueryOnTextChanged;
+
+            textBoxYear.Text = searchQuery.Year.HasValue ? searchQuery.Year.ToString() : "";
+            textBoxYear.TextChanged += TextBoxYearOnTextChanged;
 
             Load += OnLoad;
             Resize += OnResize;
-
-            textBoxSearchQuery.TextChanged += (sender, args) => SearchQuery.Title = textBoxSearchQuery.Text;
-            textBoxSearchQuery.TextChanged += (sender, args) => AutoResize();
-
-            textBoxYear.TextChanged += TextBoxYearOnTextChanged;
-        }
-
-        private void TextBoxYearOnTextChanged(object sender, EventArgs eventArgs)
-        {
-            if (Regex.IsMatch(textBoxYear.Text, @"\d{4}"))
-                SearchQuery.Year = int.Parse(textBoxYear.Text);
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -108,6 +97,18 @@ namespace BDHeroGUI.Forms
                 var width = Width + delta;
                 Width = Math.Min(width, _maxAutoResizeWidth);
             }
+        }
+
+        private void TextBoxSearchQueryOnTextChanged(object sender, EventArgs eventArgs)
+        {
+            SearchQuery.Title = textBoxSearchQuery.Text;
+            AutoResize();
+        }
+
+        private void TextBoxYearOnTextChanged(object sender, EventArgs eventArgs)
+        {
+            if (Regex.IsMatch(textBoxYear.Text, @"\d{4}"))
+                SearchQuery.Year = int.Parse(textBoxYear.Text);
         }
 
         private void buttonSearch_Click(object sender, EventArgs e)
