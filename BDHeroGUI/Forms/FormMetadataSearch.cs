@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BDHero.JobQueue;
 
@@ -41,6 +42,7 @@ namespace BDHeroGUI.Forms
             InitializeComponent();
 
             textBoxSearchQuery.Text = searchQuery.Title;
+            textBoxYear.Text = searchQuery.Year.HasValue ? searchQuery.Year.ToString() : "";
 
             // TODO: Introduce SearchQuery.CopyFrom()?
             SearchQuery.Title = searchQuery.Title;
@@ -49,8 +51,17 @@ namespace BDHeroGUI.Forms
 
             Load += OnLoad;
             Resize += OnResize;
+
             textBoxSearchQuery.TextChanged += (sender, args) => SearchQuery.Title = textBoxSearchQuery.Text;
             textBoxSearchQuery.TextChanged += (sender, args) => AutoResize();
+
+            textBoxYear.TextChanged += TextBoxYearOnTextChanged;
+        }
+
+        private void TextBoxYearOnTextChanged(object sender, EventArgs eventArgs)
+        {
+            if (Regex.IsMatch(textBoxYear.Text, @"\d{4}"))
+                SearchQuery.Year = int.Parse(textBoxYear.Text);
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
