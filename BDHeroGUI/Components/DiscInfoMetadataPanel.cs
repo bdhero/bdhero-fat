@@ -47,6 +47,8 @@ namespace BDHeroGUI.Components
             lines.Add(isan.NumberFormatted);
             if (!string.IsNullOrWhiteSpace(isan.Title))
                 lines.Add(string.Format("{0} ({1} - {2} min)", isan.Title, isan.Year, isan.LengthMin));
+            else
+                lines.Add("(no title/year/runtime found)");
             return string.Join(Environment.NewLine, lines);
         }
 
