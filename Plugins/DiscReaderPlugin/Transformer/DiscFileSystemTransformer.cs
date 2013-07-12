@@ -39,7 +39,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
                 };
 
             fs.Directories.AACS = GetAACSDirectory(fs);
-            fs.Files.MCMF = GetFile("mcmf.xml", fs.Directories.AACS);
+            fs.Files.MCMF = GetFileOrBackup("mcmf.xml", fs.Directories.AACS);
             fs.Files.BDMT = GetFilesByPattern("bdmt_???.xml", fs.Directories.BDMT);
 
             disc.FileSystem = fs;
@@ -69,6 +69,18 @@ namespace BDHero.Plugin.DiscReader.Transformer
         private static FileInfo GetFile(string name, DirectoryInfo dir)
         {
             return dir != null ? dir.GetFiles().FirstOrDefault(info => info.Name == name) : null;
+        }
+
+        [CanBeNull]
+        private static FileInfo GetFileOrBackup(string name, DirectoryInfo dir)
+        {
+            if (dir == null)
+                return null;
+            var file = dir.GetFiles().FirstOrDefault(info => info.Name == name);
+            if (file != null)
+                return file;
+            var duplicateDir = dir.GetDirectories().FirstOrDefault(info => "DUPLICATE" == info.Name.ToUpperInvariant());
+            return GetFile(name, duplicateDir);
         }
 
         [NotNull]
