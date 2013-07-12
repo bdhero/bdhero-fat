@@ -28,7 +28,7 @@ namespace DotNetUtils
 
         static HttpRequest()
         {
-            UserAgent = AssemblyUtils.GetAssemblyName(typeof(HttpRequest)) + "/" + AssemblyUtils.GetAssemblyVersion(typeof(HttpRequest));
+            UserAgent = AssemblyUtils.GetAssemblyName() + "/" + AssemblyUtils.GetAssemblyVersion();
         }
 
         public static string Get(string uri, List<string> headers = null)
