@@ -30,6 +30,7 @@ xcopy /Y Plugins\TmdbPlugin\bin\%ConfigurationName%\WatTmdb.dll Setup\ProgramFil
 xcopy /Y Plugins\ChapterGrabberPlugin\bin\%ConfigurationName%\ChapterGrabberPlugin.dll Setup\ProgramFiles\Plugins\Required\ChapterGrabber\
 
 xcopy /Y Plugins\IsanPlugin\bin\%ConfigurationName%\IsanPlugin.dll Setup\ProgramFiles\Plugins\Required\Isan\
+xcopy /Y Plugins\IsanPlugin\bin\%ConfigurationName%\CsQuery.dll Setup\ProgramFiles\Plugins\Required\Isan\
 
 xcopy /Y Plugins\AutoDetectorPlugin\bin\%ConfigurationName%\AutoDetectorPlugin.dll Setup\ProgramFiles\Plugins\Required\AutoDetector\
 
