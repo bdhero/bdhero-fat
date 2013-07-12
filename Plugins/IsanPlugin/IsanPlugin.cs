@@ -39,7 +39,7 @@ namespace IsanPlugin
             var raw = job.Disc.Metadata.Raw;
             var derived = job.Disc.Metadata.Derived;
 
-            var token = new IsanProgressToken(Host, this, cancellationToken);
+            var token = new ProgressToken(Host, this, cancellationToken);
             var provider = new IsanMetadataProvider(token);
 
             provider.Populate(raw.V_ISAN);

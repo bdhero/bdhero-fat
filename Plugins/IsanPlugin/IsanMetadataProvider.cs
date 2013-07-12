@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using BDHero.BDROM;
+using BDHero.Plugin;
 using CsQuery;
 using CsQuery.Web;
 using DotNetUtils.Annotations;
@@ -29,7 +30,7 @@ namespace IsanPlugin
 
         private static readonly Regex TitleYearLengthRegex = new Regex(@"(.*)\s+\(\s*(\d{4})[\s\-]*(\d+)\s*min\s*\)", RegexOptions.IgnoreCase);
 
-        private readonly IsanProgressToken _token;
+        private readonly ProgressToken _token;
 
         private double _numRequests;
 
@@ -37,7 +38,7 @@ namespace IsanPlugin
         /// Constructs a new IsanMetadataProvider that does <strong>not</strong> report its progress and
         /// does <strong>not</strong> allow the user to cancel requests.
         /// </summary>
-        public IsanMetadataProvider() : this(new IsanProgressToken())
+        public IsanMetadataProvider() : this(new ProgressToken())
         {
         }
 
@@ -46,7 +47,7 @@ namespace IsanPlugin
         /// via the given <paramref name="token"/>.
         /// </summary>
         /// <param name="token"></param>
-        public IsanMetadataProvider(IsanProgressToken token)
+        public IsanMetadataProvider(ProgressToken token)
         {
             _token = token;
         }
