@@ -121,9 +121,6 @@ namespace BDHero.Plugin.DiscReader.Transformer
                 sanitizedTitle = "";
             }
 
-            // TMDb chokes on dashes
-            sanitizedTitle = Regex.Replace(sanitizedTitle, @"-+", " ");
-
             return string.IsNullOrWhiteSpace(sanitizedTitle) ? null : sanitizedTitle;
         }
 
