@@ -38,7 +38,16 @@ namespace IsanPlugin
 
         public void GetMetadata(CancellationToken cancellationToken, Job job)
         {
-            _provider.Populate(job.Disc.Metadata.Raw.V_ISAN);
+            var raw = job.Disc.Metadata.Raw;
+            var derived = job.Disc.Metadata.Derived;
+
+            _provider.Populate(raw.V_ISAN);
+
+            var isan = raw.ISAN;
+            if (isan != null && !string.IsNullOrWhiteSpace(isan.Title))
+            {
+                derived.SearchableTitles.Insert(0, new SearchQuery { Title = isan.Title, Year = isan.Year });
+            }
         }
     }
 }
