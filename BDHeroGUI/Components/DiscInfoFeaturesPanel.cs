@@ -18,8 +18,10 @@ namespace BDHeroGUI.Components
             InitializeComponent();
         }
 
-        public void SetFeatures(DiscFeatures features)
+        public void SetDisc(Disc disc)
         {
+            var features = disc.Features;
+
             SetFeature(iconBDPlus, labelBDPlus, features.IsBDPlus);
             SetFeature(iconBDJava, labelBDJava, features.IsBDJava);
             SetFeature(icon3D, label3D, features.Is3D);

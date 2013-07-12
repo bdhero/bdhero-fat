@@ -25,8 +25,8 @@ namespace BDHeroGUI.Forms
                                                    fs.Directories.Root.FullName
                 );
 
-            discInfoMetadataPanel.SetMetadata(metadata);
-            discInfoFeaturesPanel.SetFeatures(features);
+            discInfoMetadataPanel.SetDisc(disc);
+            discInfoFeaturesPanel.SetDisc(disc);
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
