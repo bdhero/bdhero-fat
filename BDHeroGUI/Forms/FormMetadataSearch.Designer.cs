@@ -133,6 +133,8 @@
             this.Controls.Add(this.buttonSearch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "FormMetadataSearch";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Metadata search";
             this.ResumeLayout(false);

@@ -96,6 +96,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FormDiscInfo";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Disc Info";
             this.ResumeLayout(false);
