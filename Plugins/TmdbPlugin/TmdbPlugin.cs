@@ -61,7 +61,7 @@ namespace TmdbPlugin
             if (cancellationToken.IsCancellationRequested)
                 return;
 
-            Host.ReportProgress(this, 0.0, "Loading config file...");
+            StartProgress("Loading config file...");
 
             var pluginSettings = CheckConfigFile();
             
@@ -70,19 +70,38 @@ namespace TmdbPlugin
             if (cancellationToken.IsCancellationRequested)
                 return;
 
-            Host.ReportProgress(this, 100.0 * 1.0 / 3.0, "Querying TMDb...");
-
             ApiRequest(job);
 
             if (cancellationToken.IsCancellationRequested)
                 return;
 
-            Host.ReportProgress(this, 100.0 * 2.0 / 3.0, "Getting poster images...");
-
             GetPosters(job);
 
-            Host.ReportProgress(this, 100.0, "Finished querying TMDb");
+            FinishProgress("Finished querying TMDb");
         }
+
+        #region Progress reporting
+
+        private const double TotalSteps = 5;
+        private double _stepsCompleted;
+
+        private void StartProgress(string status)
+        {
+            _stepsCompleted = 0;
+            Host.ReportProgress(this, 100.0 * (_stepsCompleted / TotalSteps), status);
+        }
+
+        private void MakeProgress(string status)
+        {
+            Host.ReportProgress(this, 100.0 * (++_stepsCompleted / TotalSteps), status);
+        }
+
+        private void FinishProgress(string status)
+        {
+            Host.ReportProgress(this, 100.0, status);
+        }
+
+        #endregion
 
         #region Load Settings
 
@@ -187,15 +206,24 @@ namespace TmdbPlugin
         {
             var searchYear = job.SearchQuery.Year;
 
-            ApiRequest(job, searchYear);
+            QueryTmdb(job, 1, searchYear);
 
-            // TODO: Update progress during second request
+            if (!searchYear.HasValue || job.Movies.Any()) return;
+
             // isan.org has the wrong year for some movies...
-            // so search again w/o sending a year if there are zero results for isan.org's year
-            if (searchYear.HasValue && !job.Movies.Any())
-            {
-                ApiRequest(job, null);
-            }
+            // Search again w/ year + 1 if there are zero results for isan.org's year value
+            QueryTmdb(job, 2, searchYear + 1);
+
+            if (job.Movies.Any()) return;
+
+            // Search again w/o sending a year if there are still zero results
+            QueryTmdb(job, 3);
+        }
+
+        private void QueryTmdb(Job job, int attempt, int? searchYear = null)
+        {
+            MakeProgress(string.Format("Querying TMDb w/ year = {0} (attempt {1})...", searchYear, attempt));
+            ApiRequest(job, searchYear);
         }
 
         private void ApiRequest(Job job, int? searchYear)
@@ -305,6 +333,8 @@ namespace TmdbPlugin
 
         private void GetPosters(Job job)
         {
+            MakeProgress("Getting poster images...");
+
             foreach (var movie in job.Movies)
             {
                 var tmdbMovieImages = new TmdbMovieImages();
