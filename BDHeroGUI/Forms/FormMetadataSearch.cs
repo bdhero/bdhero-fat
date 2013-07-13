@@ -109,6 +109,8 @@ namespace BDHeroGUI.Forms
         {
             if (Regex.IsMatch(textBoxYear.Text, @"\d{4}"))
                 SearchQuery.Year = int.Parse(textBoxYear.Text);
+            else
+                SearchQuery.Year = null;
         }
 
         private void buttonSearch_Click(object sender, EventArgs e)
