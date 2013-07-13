@@ -12,7 +12,7 @@ Bugs
 ====
 
 [ ] 500_DAYS_OF_SUMMER: bdmt_eng.xml title sanitized is blank: sanitization removes (... and everything after it, and BDMT title is (500) Days of Summer
-[ ] DREDD: Virtual CloneDrive mount doesn't trigger Disc Detector update (but manually restarting BDHero picks up virtual drive)
+[?] DREDD: Virtual CloneDrive mount doesn't trigger Disc Detector update (but manually restarting BDHero picks up virtual drive)
 
 [ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
 [ ] Time Remaining is jumpy, esp. > 80% complete.  Thread queue?
@@ -62,7 +62,6 @@ Backlog
 Chris' Plugins
 ==============
 
-[ ] TMDb: Parse year out of Job.SearchQuery
 [ ] TMDb: Report more detailed, fine-grained progress when loading lots of search results and poster images
 [ ] Chapter Grabber: (THE MATRIX REVOLUTIONS):
     01:57:31.210: Freedom and Sunlight
@@ -76,6 +75,11 @@ Chris' Plugins
 Complete
 ========
 
+[X] Clearing "year" field in metadata search doesn't work - value gets repopulated with previous value
+[X] TMDb: search year + 1 if no results found (Avatar, Black Hawk Down)
+[X] TMDb: Parse year out of Job.SearchQuery
+[X] Hide modal dialogs from taskbar
+[X] Disc Detector doesn't work - not receiving WM_ events
 [N] Add "Files" tab to Disc Info window? (not needed; "Open..." buttons already accomplish this)
 [X] Add checkmark/cross icons to DiscInfoMetadataPanel fields
 [X] Add buttons to view metadata files/folders in Explorer
