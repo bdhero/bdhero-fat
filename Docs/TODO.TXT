@@ -21,6 +21,9 @@ Features
 ========
 
 [ ] Group input FileTextBox and buttons into panel; do same w/ output FileTextBox and buttons
+[ ] Context menu and double click to play for playlists
+[ ] Context menu and double click to view codec info for tracks?
+[ ] Add stream files listview
 
 [ ] Split output MKV path into directory and file name
     [ ] Move output file name settings out into Preferences dialog (similar to mmg)
