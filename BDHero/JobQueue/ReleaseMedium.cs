@@ -35,6 +35,8 @@ namespace BDHero.JobQueue
         /// Poster image URLs from TMDb / TVDB.
         /// </summary>
         public readonly IList<CoverArt> CoverArtImages = new List<CoverArt>();
+
+        public abstract void Accept(IReleaseMediumVisitor visitor);
     }
 
     public class Movie : ReleaseMedium
@@ -48,6 +50,11 @@ namespace BDHero.JobQueue
         {
             [CanBeNull]
             get { return ReleaseYear.HasValue && ReleaseYear.Value >= 1800 ? ReleaseYear.Value.ToString("D") : null; }
+        }
+
+        public override void Accept(IReleaseMediumVisitor visitor)
+        {
+            visitor.Visit(this);
         }
 
         public override string ToString()
@@ -85,6 +92,11 @@ namespace BDHero.JobQueue
             public DateTime ReleaseDate;
         }
 
+        public override void Accept(IReleaseMediumVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+
         public override string ToString()
         {
             return Title;
@@ -98,5 +110,11 @@ namespace BDHero.JobQueue
     {
         Movie = 1,
         TVShow = 2
+    }
+
+    public interface IReleaseMediumVisitor
+    {
+        void Visit(Movie movie);
+        void Visit(TVShow tvShow);
     }
 }
