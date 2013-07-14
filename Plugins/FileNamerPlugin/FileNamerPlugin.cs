@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using BDHero.JobQueue;
-using DotNetUtils;
 
 namespace BDHero.Plugin.FileNamer
 {
