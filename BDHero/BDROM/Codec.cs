@@ -103,6 +103,31 @@ namespace BDHero.BDROM
                     Vorbis
                 };
 
+        public static readonly List<Codec> MuxableBDCodecs =
+            new List<Codec>
+                {
+                    // Video
+                    MPEG1Video,
+                    MPEG2Video,
+                    AVC,
+                    VC1,
+
+                    // Audio
+                    LPCM,
+                    DTSHDMA,
+                    DTSHDHRA,
+                    DTSES,
+                    DTS,
+                    TrueHD,
+                    EAC3,
+                    AC3EX,
+                    AC3,
+                    ProLogic,
+
+                    // Subtitles
+                    PGS
+                };
+
         public static readonly List<AudioCodec> MuxableBDAudioCodecs =
             new List<AudioCodec>
                 {
