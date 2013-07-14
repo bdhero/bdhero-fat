@@ -107,7 +107,7 @@ namespace ChapterGrabberPlugin
 
         private static Chapter Transform(JsonChapter jsonChapter, int i)
         {
-            return new Chapter(i, jsonChapter.time.TotalSeconds) {Title = jsonChapter.name};
+            return new Chapter(i + 1, jsonChapter.time.TotalSeconds) {Title = jsonChapter.name};
         }
 
         static private List<JsonChaps> GetChapters(string movieName)
