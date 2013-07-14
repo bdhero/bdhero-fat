@@ -44,10 +44,14 @@ namespace BDHero.JobQueue
         public ReleaseMediumType ReleaseMediumType;
 
         /// <summary>
-        /// Gets the playlist selected by the user.
+        /// Gets or sets the playlist selected by the user.
         /// </summary>
         [JsonIgnore]
-        public Playlist SelectedPlaylist { get { return Disc.Playlists[SelectedPlaylistIndex]; } }
+        public Playlist SelectedPlaylist
+        {
+            get { return SelectedPlaylistIndex > -1 ? Disc.Playlists[SelectedPlaylistIndex] : null; }
+            set { SelectedPlaylistIndex = value != null ? Disc.Playlists.IndexOf(value) : -1; }
+        }
 
         /// <summary>
         /// Gets the movie selected by the user.
