@@ -47,6 +47,7 @@ namespace BDHeroGUI
             this.mediaPanel = new BDHeroGUI.Components.MediaPanel();
             this.splitContainerWithDivider1 = new DotNetUtils.Controls.SplitContainerWithDivider();
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
+            this.chaptersPanel = new BDHeroGUI.Components.ChaptersPanel();
             this.textBoxOutput = new DotNetUtils.Controls.FileTextBox();
             this.progressBar = new DotNetUtils.Controls.ProgressBar2();
             this.menuStripTop = new System.Windows.Forms.MenuStrip();
@@ -82,7 +83,6 @@ namespace BDHeroGUI
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutBDHeroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chaptersPanel = new BDHeroGUI.Components.ChaptersPanel();
             this.panelRoot.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -296,7 +296,7 @@ namespace BDHeroGUI
             // 
             this.splitContainerWithDivider1.Panel2.Controls.Add(this.chaptersPanel);
             this.splitContainerWithDivider1.Size = new System.Drawing.Size(1148, 290);
-            this.splitContainerWithDivider1.SplitterDistance = 811;
+            this.splitContainerWithDivider1.SplitterDistance = 791;
             this.splitContainerWithDivider1.TabIndex = 1;
             // 
             // tracksPanel
@@ -306,8 +306,17 @@ namespace BDHeroGUI
             this.tracksPanel.Name = "tracksPanel";
             this.tracksPanel.Playlist = null;
             this.tracksPanel.ShowAll = false;
-            this.tracksPanel.Size = new System.Drawing.Size(811, 290);
+            this.tracksPanel.Size = new System.Drawing.Size(791, 290);
             this.tracksPanel.TabIndex = 0;
+            // 
+            // chaptersPanel
+            // 
+            this.chaptersPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chaptersPanel.Location = new System.Drawing.Point(0, 0);
+            this.chaptersPanel.Name = "chaptersPanel";
+            this.chaptersPanel.Playlist = null;
+            this.chaptersPanel.Size = new System.Drawing.Size(353, 290);
+            this.chaptersPanel.TabIndex = 0;
             // 
             // textBoxOutput
             // 
@@ -608,15 +617,6 @@ namespace BDHeroGUI
             this.aboutBDHeroToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.aboutBDHeroToolStripMenuItem.Text = "&About BDHero";
             this.aboutBDHeroToolStripMenuItem.Click += new System.EventHandler(this.aboutBDHeroToolStripMenuItem_Click);
-            // 
-            // chaptersPanel
-            // 
-            this.chaptersPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chaptersPanel.Location = new System.Drawing.Point(0, 0);
-            this.chaptersPanel.Name = "chaptersPanel";
-            this.chaptersPanel.Playlist = null;
-            this.chaptersPanel.Size = new System.Drawing.Size(333, 290);
-            this.chaptersPanel.TabIndex = 0;
             // 
             // FormMain
             // 
