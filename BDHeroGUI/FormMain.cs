@@ -766,9 +766,17 @@ namespace BDHeroGUI
 
         private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
         {
-            buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
-            tracksPanel.Playlist = playlistListView.SelectedPlaylist;
-            chaptersPanel.Playlist = playlistListView.SelectedPlaylist;
+            var playlist = playlistListView.SelectedPlaylist;
+
+            _controller.Job.SelectedPlaylist = playlist;
+            buttonConvert.Enabled = playlist != null;
+            tracksPanel.Playlist = playlist;
+            chaptersPanel.Playlist = playlist;
+
+            _controller.RenameSync(null);
+
+            // TODO: Use an event for this?
+            textBoxOutput.Text = _controller.Job.OutputPath;
         }
 
         private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)

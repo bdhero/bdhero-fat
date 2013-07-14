@@ -40,41 +40,10 @@ namespace BDHero.Plugin.FileNamer
         {
             Host.ReportProgress(this, 0.0, "Auto-renaming output file...");
 
-            var path = job.OutputPath;
+            var prefs = new Preferences();
+            var namer = new FileNamer(job, prefs);
 
-            // User already specified filename
-            var pathSpecified = !string.IsNullOrWhiteSpace(path);
-            if (pathSpecified && FileUtils.ContainsFileName(path))
-                path = Path.GetDirectoryName(path);
-
-            string firstVideoHeight = null;
-            var firstVideoTrack = job.SelectedPlaylist.VideoTracks.FirstOrDefault(track => track.Keep);
-            if (firstVideoTrack != null)
-                firstVideoHeight = firstVideoTrack.VideoFormatDisplayable;
-
-            var directory = pathSpecified ? path : Environment.CurrentDirectory;
-            var filename = string.Format(@"{0} [{1}].mkv", job.SearchQuery, firstVideoHeight);
-
-            var medium = job.SelectedReleaseMedium;
-            var movie = medium as Movie;
-            var tvShow = medium as TVShow;
-
-            if (movie != null)
-            {
-                filename = string.Format("{0} [{1}].mkv",
-                                         FileUtils.SanitizeFileName(movie.ToString()),
-                                         job.SelectedPlaylist.MaxSelectedVideoResolutionDisplayable);
-            }
-            else if (tvShow != null)
-            {
-                filename = string.Format("s{0}e{1} - {2} [{3}].mkv",
-                                         tvShow.SelectedEpisode.SeasonNumber.ToString("00"),
-                                         tvShow.SelectedEpisode.EpisodeNumber.ToString("00"),
-                                         FileUtils.SanitizeFileName(tvShow.ToString()),
-                                         job.SelectedPlaylist.MaxSelectedVideoResolutionDisplayable);
-            }
-
-            job.OutputPath = Path.Combine(directory, filename);
+            job.OutputPath = namer.GetPath();
 
             Host.ReportProgress(this, 100.0, "Finished auto-renaming output file");
         }

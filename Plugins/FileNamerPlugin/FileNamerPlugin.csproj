@@ -50,7 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileNamer.cs" />
     <Compile Include="FileNamerPlugin.cs" />
+    <Compile Include="Preferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +63,10 @@
     <ProjectReference Include="..\..\Libraries\DotNetUtils\DotNetUtils.csproj">
       <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
       <Name>DotNetUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\I18N\I18N.csproj">
+      <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
+      <Name>I18N</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
