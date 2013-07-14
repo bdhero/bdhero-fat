@@ -99,10 +99,16 @@ namespace ChapterGrabberPlugin
             playlist.ChapterSearchResults = validResults.Select(searchResult => Transform(searchResult, playlist)).ToList();
         }
 
-        private static IList<Chapter> Transform(JsonChaps searchResult, Playlist playlist)
+        private static ChapterSearchResult Transform(JsonChaps searchResult, Playlist playlist)
         {
             var jsonChapters = searchResult.chapterInfo.chapters.chapter;
-            return jsonChapters.Take(playlist.ChapterCount).Select(Transform).ToList();
+            return new ChapterSearchResult
+                {
+                    Title =
+                        string.Format("+{0}: {1}", searchResult.chapterInfo.confirmations,
+                                      searchResult.chapterInfo.title),
+                    Chapters = jsonChapters.Take(playlist.ChapterCount).Select(Transform).ToList()
+                };
         }
 
         private static Chapter Transform(JsonChapter jsonChapter, int i)

@@ -79,6 +79,12 @@
     <Compile Include="Components\AudioTrackListView.Designer.cs">
       <DependentUpon>AudioTrackListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\ChaptersPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\ChaptersPanel.Designer.cs">
+      <DependentUpon>ChaptersPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\DiscInfoFeaturesPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -188,6 +194,9 @@
     <None Include="Resources\no-poster-w185.png" />
     <EmbeddedResource Include="Components\AudioTrackListView.resx">
       <DependentUpon>AudioTrackListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\ChaptersPanel.resx">
+      <DependentUpon>ChaptersPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Components\DiscInfoFeaturesPanel.resx">
       <DependentUpon>DiscInfoFeaturesPanel.cs</DependentUpon>

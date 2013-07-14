@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="BDROM\AnyDVDDiscInf.cs" />
     <Compile Include="BDROM\Chapter.cs" />
+    <Compile Include="BDROM\ChapterSearchResult.cs" />
     <Compile Include="BDROM\Codec.cs" />
     <Compile Include="BDROM\Disc.cs" />
     <Compile Include="BDROM\DiscFileSystem.cs" />

@@ -768,6 +768,7 @@ namespace BDHeroGUI
         {
             buttonConvert.Enabled = playlistListView.SelectedPlaylist != null;
             tracksPanel.Playlist = playlistListView.SelectedPlaylist;
+            chaptersPanel.Playlist = playlistListView.SelectedPlaylist;
         }
 
         private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)

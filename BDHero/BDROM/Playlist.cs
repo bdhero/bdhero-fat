@@ -99,7 +99,7 @@ namespace BDHero.BDROM
         /// <summary>
         /// List of possible chapter matches that the user can choose from.
         /// </summary>
-        public IList<IList<Chapter>> ChapterSearchResults = new List<IList<Chapter>>();
+        public IList<ChapterSearchResult> ChapterSearchResults = new List<ChapterSearchResult>();
 
         #endregion
 
