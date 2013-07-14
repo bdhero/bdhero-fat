@@ -1365,7 +1365,7 @@ namespace BDHero.BDROM
 
     #endregion
 
-    #region sc Audio
+    #region Misc Audio
 
     public class CodecVorbis : AudioCodec
     {
