@@ -266,6 +266,7 @@ namespace BDHero
         {
             Job.Movies.Clear();
             Job.TVShows.Clear();
+            Job.Disc.Playlists.ForEach(playlist => playlist.ChapterSearchResults.Clear());
 
             foreach (var plugin in _pluginService.MetadataProviderPlugins.Where(plugin => plugin.Enabled))
             {
