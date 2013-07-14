@@ -6,11 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using BDHero.JobQueue;
+using Newtonsoft.Json;
 
 namespace BDHero.Plugin.FileNamer
 {
     public class FileNamerPlugin : INameProviderPlugin
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public IPluginHost Host { get; private set; }
         public PluginAssemblyInfo AssemblyInfo { get; private set; }
 
@@ -39,12 +43,35 @@ namespace BDHero.Plugin.FileNamer
         {
             Host.ReportProgress(this, 0.0, "Auto-renaming output file...");
 
-            var prefs = new Preferences();
+            var prefs = GetPreferences();
             var namer = new FileNamer(job, prefs);
 
             job.OutputPath = namer.GetPath();
 
             Host.ReportProgress(this, 100.0, "Finished auto-renaming output file");
+        }
+
+        private Preferences GetPreferences()
+        {
+            if (File.Exists(AssemblyInfo.SettingsFile))
+            {
+                try
+                {
+                    var json = File.ReadAllText(AssemblyInfo.SettingsFile);
+                    return JsonConvert.DeserializeObject<Preferences>(json);
+                }
+                catch (Exception e)
+                {
+                    Logger.WarnFormat("Unable to deserialize settings file: {0}", e);
+                }
+            }
+            return new Preferences();
+        }
+
+        private void SavePreferences(Preferences prefs)
+        {
+            var json = JsonConvert.SerializeObject(prefs);
+            File.WriteAllText(AssemblyInfo.SettingsFile, json);
         }
     }
 }
