@@ -32,10 +32,11 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxSearchQuery = new System.Windows.Forms.TextBox();
-            this.textBoxYear = new System.Windows.Forms.TextBox();
+            this.textBoxYear = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.textBoxYear)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonSearch
@@ -82,11 +83,24 @@
             // textBoxYear
             // 
             this.textBoxYear.Location = new System.Drawing.Point(86, 40);
-            this.textBoxYear.MaxLength = 4;
+            this.textBoxYear.Maximum = new decimal(new int[] {
+            3000,
+            0,
+            0,
+            0});
+            this.textBoxYear.Minimum = new decimal(new int[] {
+            1800,
+            0,
+            0,
+            0});
             this.textBoxYear.Name = "textBoxYear";
-            this.textBoxYear.Size = new System.Drawing.Size(41, 20);
+            this.textBoxYear.Size = new System.Drawing.Size(49, 20);
             this.textBoxYear.TabIndex = 1;
-            this.textBoxYear.Text = "1999";
+            this.textBoxYear.Value = new decimal(new int[] {
+            1999,
+            0,
+            0,
+            0});
             // 
             // label2
             // 
@@ -100,7 +114,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(133, 43);
+            this.label3.Location = new System.Drawing.Point(141, 42);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(50, 13);
             this.label3.TabIndex = 6;
@@ -137,6 +151,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Metadata search";
+            ((System.ComponentModel.ISupportInitialize)(this.textBoxYear)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -148,7 +163,7 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxSearchQuery;
-        private System.Windows.Forms.TextBox textBoxYear;
+        private System.Windows.Forms.NumericUpDown textBoxYear;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
