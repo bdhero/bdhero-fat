@@ -77,6 +77,8 @@ namespace BDHeroGUI.Components
             }
 
             comboBoxSearchResults.Enabled = true;
+
+            // TODO: Move this elsewhere so we don't erase the user's custom titles when they re-select "Default"
             comboBoxSearchResults.Items.Add(new ChapterSearchResult { Title = "Default", Chapters = CopyChapters(playlist.Chapters) });
 
             foreach (var result in playlist.ChapterSearchResults)
