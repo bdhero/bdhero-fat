@@ -41,7 +41,7 @@ namespace BDHero.JobQueue
         /// <summary>
         /// Auto-detected or user-selected release medium (movie or TV).
         /// </summary>
-        public ReleaseMediumType ReleaseMediumType = ReleaseMediumType.Movie;
+        public ReleaseMediumType ReleaseMediumType;
 
         /// <summary>
         /// Gets the playlist selected by the user.
