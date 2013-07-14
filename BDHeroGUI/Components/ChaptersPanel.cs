@@ -71,10 +71,12 @@ namespace BDHeroGUI.Components
 
             if (playlist == null)
             {
+                comboBoxSearchResults.Enabled = false;
                 ComboBoxSearchResultsOnSelectedIndexChanged();
                 return;
             }
 
+            comboBoxSearchResults.Enabled = true;
             comboBoxSearchResults.Items.Add(new ChapterSearchResult { Title = "Default", Chapters = CopyChapters(playlist.Chapters) });
 
             foreach (var result in playlist.ChapterSearchResults)
