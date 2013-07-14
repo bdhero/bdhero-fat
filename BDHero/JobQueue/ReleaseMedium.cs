@@ -96,7 +96,6 @@ namespace BDHero.JobQueue
     /// </summary>
     public enum ReleaseMediumType
     {
-        Unknown = 0,
         Movie = 1,
         TVShow = 2
     }
