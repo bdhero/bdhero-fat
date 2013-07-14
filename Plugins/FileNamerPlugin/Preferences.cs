@@ -10,7 +10,11 @@ namespace BDHero.Plugin.FileNamer
     {
         public MoviePreferences Movies = new MoviePreferences();
         public TVShowPreferences TVShows = new TVShowPreferences();
+
         public IDictionary<string, string> Codecs = new Dictionary<string, string>();
+
+        public bool ReplaceSpaces = false;
+        public string ReplaceSpacesWith = ".";
 
         public Preferences()
         {

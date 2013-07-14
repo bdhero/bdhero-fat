@@ -36,7 +36,22 @@ namespace BDHero.Plugin.FileNamer
             _directory = ReplaceCommonPlaceholders(_directory, medium);
             _fileName = ReplaceCommonPlaceholders(_fileName, medium);
 
+            ReplaceSpaces();
+
             return Path.Combine(_directory, _fileName + ".mkv");
+        }
+
+        private void ReplaceSpaces()
+        {
+            if (!_prefs.ReplaceSpaces)
+                return;
+
+            var replaceWith = FileUtils.SanitizeFileName(_prefs.ReplaceSpacesWith ?? "");
+
+            if (string.IsNullOrWhiteSpace(replaceWith))
+                return;
+
+            _fileName = _fileName.Replace(" ", replaceWith);
         }
 
         private ReleaseMedium GetOrCreateReleaseMedium()
