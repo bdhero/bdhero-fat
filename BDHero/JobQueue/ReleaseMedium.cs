@@ -92,7 +92,7 @@ namespace BDHero.JobQueue
     }
 
     /// <summary>
-    /// Enumeration of available <see cref="ReleaseMedium"/>s.
+    /// Enumeration of available <see cref="ReleaseMedium"/> sub-classes.
     /// </summary>
     public enum ReleaseMediumType
     {
