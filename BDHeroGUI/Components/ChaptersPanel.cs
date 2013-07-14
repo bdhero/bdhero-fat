@@ -70,7 +70,10 @@ namespace BDHeroGUI.Components
             comboBoxSearchResults.Items.Clear();
 
             if (playlist == null)
+            {
+                ComboBoxSearchResultsOnSelectedIndexChanged();
                 return;
+            }
 
             comboBoxSearchResults.Items.Add(new ChapterSearchResult { Title = "Default", Chapters = CopyChapters(playlist.Chapters) });
 
@@ -127,18 +130,21 @@ namespace BDHeroGUI.Components
             }
         }
 
-        private void ComboBoxSearchResultsOnSelectedIndexChanged(object sender, EventArgs args)
+        private void ComboBoxSearchResultsOnSelectedIndexChanged(object sender = null, EventArgs args = null)
         {
+            listViewChapters.SuspendDrawing();
             listViewChapters.Items.Clear();
 
-            if (SelectedSearchResult == null)
-                return;
+            if (SelectedSearchResult != null)
+            {
+                // Mark selected search result as such
+                Playlist.ChapterSearchResults.ForEach(result => result.IsSelected = (result == SelectedSearchResult));
 
-            // Mark selected search result as such
-            Playlist.ChapterSearchResults.ForEach(result => result.IsSelected = (result == SelectedSearchResult));
+                // If "Default" is selected, reset chapter titles to null, which sets them to "Chapter 1", "Chapter 2", etc.
+                ReplaceChapters(Playlist.Chapters, SelectedSearchResultIndex > 0 ? SelectedSearchResult.Chapters : null);
+            }
 
-            // If "Default" is selected, reset chapter titles to null, which sets them to "Chapter 1", "Chapter 2", etc.
-            ReplaceChapters(Playlist.Chapters, SelectedSearchResultIndex > 0 ? SelectedSearchResult.Chapters : null);
+            listViewChapters.ResumeDrawing();
         }
 
         #endregion
