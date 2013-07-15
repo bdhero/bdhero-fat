@@ -221,6 +221,8 @@ namespace BDHero.BDROM
 
         public virtual string DisplayName { get { return ShortName; } }
 
+        public abstract string FileName { get; }
+
         public virtual IEnumerable<string> AltDisplayNames
         {
             get
@@ -412,6 +414,11 @@ namespace BDHero.BDROM
             get { return MicroName; }
         }
 
+        public override string FileName
+        {
+            get { return "H.264"; }
+        }
+
         public override IEnumerable<string> AltDisplayNames
         {
             get { return new[] { AltMicroName, ShortName, AltFullName }; }
@@ -465,6 +472,11 @@ namespace BDHero.BDROM
         }
 
         public override string MicroName
+        {
+            get { return "VC-1"; }
+        }
+
+        public override string FileName
         {
             get { return "VC-1"; }
         }
@@ -530,6 +542,11 @@ namespace BDHero.BDROM
             get { return "MPEG"; }
         }
 
+        public override string FileName
+        {
+            get { return "MPEG-1"; }
+        }
+
         public override bool IsRequiredDVDCodec
         {
             get { return true; }
@@ -591,6 +608,11 @@ namespace BDHero.BDROM
             get { return "H.262"; }
         }
 
+        public override string FileName
+        {
+            get { return "MPEG-2"; }
+        }
+
         public override IEnumerable<string> AltDisplayNames
         {
             get { return new[] { AltMicroName, AltShortName }; }
@@ -647,6 +669,11 @@ namespace BDHero.BDROM
         public override string MicroName
         {
             get { return "Unknown Video"; }
+        }
+
+        public override string FileName
+        {
+            get { return "UNKNOWN"; }
         }
 
         public override string Description
@@ -707,6 +734,11 @@ namespace BDHero.BDROM
         public override string AltFullName
         {
             get { return "Dolby Surround"; }
+        }
+
+        public override string FileName
+        {
+            get { return "Pro Logic"; }
         }
 
         public override bool Lossless
@@ -773,6 +805,11 @@ namespace BDHero.BDROM
         public override string DisplayName
         {
             get { return FullName; }
+        }
+
+        public override string FileName
+        {
+            get { return "AC3"; }
         }
 
         public override IEnumerable<string> AltDisplayNames
@@ -856,6 +893,11 @@ namespace BDHero.BDROM
             get { return FullName; }
         }
 
+        public override string FileName
+        {
+            get { return "AC3-EX"; }
+        }
+
         public override IEnumerable<string> AltDisplayNames
         {
             get { return new[] { MicroName }; }
@@ -932,6 +974,11 @@ namespace BDHero.BDROM
             get { return FullName; }
         }
 
+        public override string FileName
+        {
+            get { return "EAC3"; }
+        }
+
         public override bool Lossless
         {
             get { return false; }
@@ -991,6 +1038,11 @@ namespace BDHero.BDROM
         public override string DisplayName
         {
             get { return FullName; }
+        }
+
+        public override string FileName
+        {
+            get { return "TrueHD"; }
         }
 
         public override bool Lossless
@@ -1063,6 +1115,11 @@ namespace BDHero.BDROM
             get { return string.Format("{0} ({1})", base.FullNameDisambig, ShortName); }
         }
 
+        public override string FileName
+        {
+            get { return "DTS"; }
+        }
+
         public override bool Lossless
         {
             get { return false; }
@@ -1129,6 +1186,11 @@ namespace BDHero.BDROM
             get { return string.Format("{0} ({1})", base.FullNameDisambig, ShortName); }
         }
 
+        public override string FileName
+        {
+            get { return "DTS-ES"; }
+        }
+
         public override bool Lossless
         {
             get { return false; }
@@ -1188,6 +1250,11 @@ namespace BDHero.BDROM
         public override string MicroName
         {
             get { return "DTS Express"; }
+        }
+
+        public override string FileName
+        {
+            get { return "DTS-Express"; }
         }
 
         public override string Description
@@ -1254,6 +1321,11 @@ namespace BDHero.BDROM
         public override string CommonName
         {
             get { return MicroName; }
+        }
+
+        public override string FileName
+        {
+            get { return "DTS-HD HR"; }
         }
 
         public override IEnumerable<string> AltDisplayNames
@@ -1332,6 +1404,11 @@ namespace BDHero.BDROM
             get { return FullName; }
         }
 
+        public override string FileName
+        {
+            get { return "DTS-HD MA"; }
+        }
+
         public override bool Lossless
         {
             get { return true; }
@@ -1394,6 +1471,11 @@ namespace BDHero.BDROM
             get { return "OGA"; }
         }
 
+        public override string FileName
+        {
+            get { return "Vorbis"; }
+        }
+
         public override bool Lossless
         {
             get { return false; }
@@ -1438,6 +1520,11 @@ namespace BDHero.BDROM
         }
 
         public override string MicroName
+        {
+            get { return "FLAC"; }
+        }
+
+        public override string FileName
         {
             get { return "FLAC"; }
         }
@@ -1506,6 +1593,11 @@ namespace BDHero.BDROM
             get { return MicroName; }
         }
 
+        public override string FileName
+        {
+            get { return "MP3"; }
+        }
+
         public override bool Lossless
         {
             get { return false; }
@@ -1557,6 +1649,11 @@ namespace BDHero.BDROM
         public override string AltFullName
         {
             get { return "MPEG-2 Part 7"; }
+        }
+
+        public override string FileName
+        {
+            get { return "AAC"; }
         }
 
         public override string Description
@@ -1622,6 +1719,11 @@ namespace BDHero.BDROM
             get { return string.Format("{0} (uncompressed)", base.FullNameDisambig); }
         }
 
+        public override string FileName
+        {
+            get { return "LPCM"; }
+        }
+
         public override bool IsRequiredBlurayCodec
         {
             get { return true; }
@@ -1684,6 +1786,11 @@ namespace BDHero.BDROM
             get { return "Unknown Audio"; }
         }
 
+        public override string FileName
+        {
+            get { return "UNKNOWN"; }
+        }
+
         public override string Description
         {
             get { return "Unknown audio format."; }
@@ -1735,6 +1842,11 @@ namespace BDHero.BDROM
         }
 
         public override string MicroName
+        {
+            get { return "PGS"; }
+        }
+
+        public override string FileName
         {
             get { return "PGS"; }
         }
@@ -1792,6 +1904,11 @@ namespace BDHero.BDROM
             get { return "VobSub"; }
         }
 
+        public override string FileName
+        {
+            get { return "VobSub"; }
+        }
+
         public override bool IsRequiredDVDCodec
         {
             get { return true; }
@@ -1841,6 +1958,11 @@ namespace BDHero.BDROM
         }
 
         public override string MicroName
+        {
+            get { return "SRT"; }
+        }
+
+        public override string FileName
         {
             get { return "SRT"; }
         }
@@ -1898,6 +2020,11 @@ namespace BDHero.BDROM
             get { return "IGS"; }
         }
 
+        public override string FileName
+        {
+            get { return "IGS"; }
+        }
+
         public override bool IsRequiredBlurayCodec
         {
             get { return true; }
@@ -1949,6 +2076,11 @@ namespace BDHero.BDROM
         public override string MicroName
         {
             get { return "Unknown Sub"; }
+        }
+
+        public override string FileName
+        {
+            get { return "UNKNOWN"; }
         }
 
         public override string Description
@@ -2021,6 +2153,11 @@ namespace BDHero.BDROM
         public override string MicroName
         {
             get { return "Unknown"; }
+        }
+
+        public override string FileName
+        {
+            get { return "UNKNOWN"; }
         }
 
         public override string Description
