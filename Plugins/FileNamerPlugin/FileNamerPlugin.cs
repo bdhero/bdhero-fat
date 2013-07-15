@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using BDHero.JobQueue;
 using Newtonsoft.Json;
 
@@ -14,6 +15,13 @@ namespace BDHero.Plugin.FileNamer
     {
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        private Preferences _prefs;
+
+        internal Preferences Preferences
+        {
+            get { return _prefs ?? (_prefs = GetPreferences()); }
+        }
 
         public IPluginHost Host { get; private set; }
         public PluginAssemblyInfo AssemblyInfo { get; private set; }
@@ -26,7 +34,10 @@ namespace BDHero.Plugin.FileNamer
 
         public int RunOrder { get { return 0; } }
 
-        public EditPluginPreferenceHandler EditPreferences { get; private set; }
+        public EditPluginPreferenceHandler EditPreferences
+        {
+            get { return EditPluginPreferenceHandler; }
+        }
 
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
@@ -43,8 +54,7 @@ namespace BDHero.Plugin.FileNamer
         {
             Host.ReportProgress(this, 0.0, "Auto-renaming output file...");
 
-            var prefs = GetPreferences();
-            var namer = new FileNamer(job, prefs);
+            var namer = new FileNamer(job, Preferences);
 
             job.OutputPath = namer.GetPath();
 
@@ -72,6 +82,11 @@ namespace BDHero.Plugin.FileNamer
         {
             var json = JsonConvert.SerializeObject(prefs);
             File.WriteAllText(AssemblyInfo.SettingsFile, json);
+        }
+
+        private void EditPluginPreferenceHandler(Form parent)
+        {
+            new FormFileNamerPreferences(Preferences).ShowDialog(parent);
         }
     }
 }
