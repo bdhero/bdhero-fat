@@ -418,6 +418,7 @@
             // textBoxReplaceSpacesWith
             // 
             this.textBoxReplaceSpacesWith.Location = new System.Drawing.Point(199, 18);
+            this.textBoxReplaceSpacesWith.MaxLength = 3;
             this.textBoxReplaceSpacesWith.Name = "textBoxReplaceSpacesWith";
             this.textBoxReplaceSpacesWith.Size = new System.Drawing.Size(40, 20);
             this.textBoxReplaceSpacesWith.TabIndex = 1;
@@ -471,11 +472,13 @@
             // listViewCodecNames
             // 
             this.listViewCodecNames.AllowColumnReorder = true;
+            this.listViewCodecNames.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewCodecNames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderLabel,
             this.columnHeaderCodec,
             this.columnHeaderNumber});
-            this.listViewCodecNames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewCodecNames.FullRowSelect = true;
             this.listViewCodecNames.GridLines = true;
             listViewGroup1.Header = "Video";
@@ -490,11 +493,11 @@
             listViewGroup3});
             this.listViewCodecNames.HideSelection = false;
             this.listViewCodecNames.LabelEdit = true;
-            this.listViewCodecNames.Location = new System.Drawing.Point(3, 16);
+            this.listViewCodecNames.Location = new System.Drawing.Point(6, 19);
             this.listViewCodecNames.MultiSelect = false;
             this.listViewCodecNames.Name = "listViewCodecNames";
             this.listViewCodecNames.ShowItemToolTips = true;
-            this.listViewCodecNames.Size = new System.Drawing.Size(763, 238);
+            this.listViewCodecNames.Size = new System.Drawing.Size(757, 232);
             this.listViewCodecNames.TabIndex = 0;
             this.listViewCodecNames.UseCompatibleStateImageBehavior = false;
             this.listViewCodecNames.View = System.Windows.Forms.View.Details;

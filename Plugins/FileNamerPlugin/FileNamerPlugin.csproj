@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileNamer.cs" />
+    <Compile Include="FileNamerPath.cs" />
     <Compile Include="FileNamerPlugin.cs" />
     <Compile Include="FormFileNamerPreferences.cs">
       <SubType>Form</SubType>

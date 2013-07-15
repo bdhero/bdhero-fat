@@ -81,8 +81,8 @@ namespace BDHero.Plugin.FileNamer
 
             var moviePath = movieNamer.GetPath();
 
-            textBoxMovieDirectoryExample.Text = Path.GetDirectoryName(moviePath);
-            textBoxMovieFileNameExample.Text = Path.GetFileName(moviePath);
+            textBoxMovieDirectoryExample.Text = moviePath.Directory;
+            textBoxMovieFileNameExample.Text = moviePath.FileName;
 
             // TV Shows
 
@@ -220,6 +220,9 @@ namespace BDHero.Plugin.FileNamer
 
         private void ListViewCodecNamesOnAfterLabelEdit(object sender, LabelEditEventArgs args)
         {
+            if (args.CancelEdit || args.Label == null)
+                return;
+
             var index = args.Item;
             var label = args.Label;
 
@@ -227,6 +230,8 @@ namespace BDHero.Plugin.FileNamer
             {
                 _prefs.Codecs[SelectedCodec.SerializableName] = label;
             }
+
+            Rename();
         }
 
         #endregion

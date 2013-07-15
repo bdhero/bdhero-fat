@@ -25,7 +25,7 @@ namespace BDHero.Plugin.FileNamer
             _prefs = prefs;
         }
 
-        public string GetPath()
+        public FileNamerPath GetPath()
         {
             Debug.Assert(_job != null);
 
@@ -38,7 +38,7 @@ namespace BDHero.Plugin.FileNamer
 
             ReplaceSpaces();
 
-            return Path.Combine(_directory, _fileName + ".mkv");
+            return new FileNamerPath(_directory, _fileName + ".mkv");
         }
 
         private void ReplaceSpaces()
@@ -47,9 +47,6 @@ namespace BDHero.Plugin.FileNamer
                 return;
 
             var replaceWith = FileUtils.SanitizeFileName(_prefs.ReplaceSpacesWith ?? "");
-
-            if (string.IsNullOrWhiteSpace(replaceWith))
-                return;
 
             _fileName = _fileName.Replace(" ", replaceWith);
         }
