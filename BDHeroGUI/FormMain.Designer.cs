@@ -83,6 +83,7 @@ namespace BDHeroGUI
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutBDHeroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.linkLabelNameProviderPreferences = new DotNetUtils.Controls.LinkLabel2();
             this.panelRoot.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -128,7 +129,7 @@ namespace BDHeroGUI
             this.textBoxStatus.ReadOnly = true;
             this.textBoxStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxStatus.Size = new System.Drawing.Size(1148, 37);
-            this.textBoxStatus.TabIndex = 7;
+            this.textBoxStatus.TabIndex = 8;
             // 
             // buttonScan
             // 
@@ -157,7 +158,7 @@ namespace BDHeroGUI
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 455);
+            this.label2.Location = new System.Drawing.Point(3, 435);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 12;
@@ -167,7 +168,7 @@ namespace BDHeroGUI
             // 
             this.buttonCancelConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancelConvert.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancelConvert.Location = new System.Drawing.Point(1076, 450);
+            this.buttonCancelConvert.Location = new System.Drawing.Point(1076, 430);
             this.buttonCancelConvert.Name = "buttonCancelConvert";
             this.buttonCancelConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonCancelConvert.TabIndex = 6;
@@ -178,7 +179,7 @@ namespace BDHeroGUI
             // buttonConvert
             // 
             this.buttonConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonConvert.Location = new System.Drawing.Point(995, 450);
+            this.buttonConvert.Location = new System.Drawing.Point(995, 430);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonConvert.TabIndex = 5;
@@ -191,6 +192,7 @@ namespace BDHeroGUI
             this.panelRoot.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelRoot.Controls.Add(this.linkLabelNameProviderPreferences);
             this.panelRoot.Controls.Add(this.textBoxInput);
             this.panelRoot.Controls.Add(this.splitContainerMain);
             this.panelRoot.Controls.Add(this.label1);
@@ -242,8 +244,8 @@ namespace BDHeroGUI
             // splitContainerMain.Panel2
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.splitContainerWithDivider1);
-            this.splitContainerMain.Size = new System.Drawing.Size(1148, 412);
-            this.splitContainerMain.SplitterDistance = 118;
+            this.splitContainerMain.Size = new System.Drawing.Size(1148, 392);
+            this.splitContainerMain.SplitterDistance = 112;
             this.splitContainerMain.TabIndex = 3;
             // 
             // splitContainerTop
@@ -259,7 +261,7 @@ namespace BDHeroGUI
             // splitContainerTop.Panel2
             // 
             this.splitContainerTop.Panel2.Controls.Add(this.mediaPanel);
-            this.splitContainerTop.Size = new System.Drawing.Size(1148, 118);
+            this.splitContainerTop.Size = new System.Drawing.Size(1148, 112);
             this.splitContainerTop.SplitterDistance = 711;
             this.splitContainerTop.TabIndex = 7;
             // 
@@ -271,7 +273,7 @@ namespace BDHeroGUI
             this.playlistListView.Playlists = null;
             this.playlistListView.SelectedPlaylist = null;
             this.playlistListView.ShowAll = false;
-            this.playlistListView.Size = new System.Drawing.Size(711, 118);
+            this.playlistListView.Size = new System.Drawing.Size(711, 112);
             this.playlistListView.TabIndex = 1;
             // 
             // mediaPanel
@@ -279,7 +281,7 @@ namespace BDHeroGUI
             this.mediaPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mediaPanel.Location = new System.Drawing.Point(0, 0);
             this.mediaPanel.Name = "mediaPanel";
-            this.mediaPanel.Size = new System.Drawing.Size(433, 118);
+            this.mediaPanel.Size = new System.Drawing.Size(433, 112);
             this.mediaPanel.TabIndex = 0;
             // 
             // splitContainerWithDivider1
@@ -295,7 +297,7 @@ namespace BDHeroGUI
             // splitContainerWithDivider1.Panel2
             // 
             this.splitContainerWithDivider1.Panel2.Controls.Add(this.chaptersPanel);
-            this.splitContainerWithDivider1.Size = new System.Drawing.Size(1148, 290);
+            this.splitContainerWithDivider1.Size = new System.Drawing.Size(1148, 276);
             this.splitContainerWithDivider1.SplitterDistance = 791;
             this.splitContainerWithDivider1.TabIndex = 1;
             // 
@@ -306,7 +308,7 @@ namespace BDHeroGUI
             this.tracksPanel.Name = "tracksPanel";
             this.tracksPanel.Playlist = null;
             this.tracksPanel.ShowAll = false;
-            this.tracksPanel.Size = new System.Drawing.Size(791, 290);
+            this.tracksPanel.Size = new System.Drawing.Size(791, 276);
             this.tracksPanel.TabIndex = 0;
             // 
             // chaptersPanel
@@ -315,7 +317,7 @@ namespace BDHeroGUI
             this.chaptersPanel.Location = new System.Drawing.Point(0, 0);
             this.chaptersPanel.Name = "chaptersPanel";
             this.chaptersPanel.Playlist = null;
-            this.chaptersPanel.Size = new System.Drawing.Size(353, 290);
+            this.chaptersPanel.Size = new System.Drawing.Size(353, 276);
             this.chaptersPanel.TabIndex = 0;
             // 
             // textBoxOutput
@@ -327,7 +329,7 @@ namespace BDHeroGUI
             this.textBoxOutput.DialogTitle = "Save MKV file:";
             this.textBoxOutput.DialogType = DotNetUtils.Controls.DialogType.SaveFile;
             this.textBoxOutput.FileExtensions = null;
-            this.textBoxOutput.Location = new System.Drawing.Point(93, 450);
+            this.textBoxOutput.Location = new System.Drawing.Point(93, 430);
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.SelectedPath = "V:\\BDHero\\test.mkv";
             this.textBoxOutput.Size = new System.Drawing.Size(896, 24);
@@ -618,6 +620,19 @@ namespace BDHeroGUI
             this.aboutBDHeroToolStripMenuItem.Text = "&About BDHero";
             this.aboutBDHeroToolStripMenuItem.Click += new System.EventHandler(this.aboutBDHeroToolStripMenuItem_Click);
             // 
+            // linkLabelNameProviderPreferences
+            // 
+            this.linkLabelNameProviderPreferences.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.linkLabelNameProviderPreferences.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelNameProviderPreferences.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelNameProviderPreferences.Location = new System.Drawing.Point(93, 460);
+            this.linkLabelNameProviderPreferences.Name = "linkLabelNameProviderPreferences";
+            this.linkLabelNameProviderPreferences.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelNameProviderPreferences.Size = new System.Drawing.Size(121, 14);
+            this.linkLabelNameProviderPreferences.TabIndex = 7;
+            this.linkLabelNameProviderPreferences.Text = "File name preferences...";
+            this.linkLabelNameProviderPreferences.Click += new System.EventHandler(this.linkLabelNameProviderPreferences_Click);
+            // 
             // FormMain
             // 
             this.AcceptButton = this.buttonScan;
@@ -710,6 +725,7 @@ namespace BDHeroGUI
         private System.Windows.Forms.ToolStripMenuItem showAllTracksToolStripMenuItem;
         private SplitContainerWithDivider splitContainerWithDivider1;
         private Components.ChaptersPanel chaptersPanel;
+        private LinkLabel2 linkLabelNameProviderPreferences;
     }
 }
 

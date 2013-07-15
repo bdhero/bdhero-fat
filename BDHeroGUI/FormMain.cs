@@ -44,6 +44,15 @@ namespace BDHeroGUI
 
         private ProgressProviderState _state = ProgressProviderState.Ready;
 
+        #region Properties
+
+        private IList<INameProviderPlugin> EnabledNameProviderPlugins
+        {
+            get { return _controller.PluginsByType.OfType<INameProviderPlugin>().Where(plugin => plugin.Enabled).ToList(); }
+        }
+
+        #endregion
+
         #region Constructor and OnLoad
 
         public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
@@ -226,7 +235,10 @@ namespace BDHeroGUI
         {
             if (DialogResult.OK == plugin.EditPreferences(this))
             {
-                RenameSync();
+                if (plugin is INameProviderPlugin)
+                {
+                    RenameSync();
+                }
             }
         }
 
@@ -234,6 +246,7 @@ namespace BDHeroGUI
         private void AutoCheckPluginMenu()
         {
             var allItems = pluginsToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>().ToArray();
+
             var allDiscReaderPlugins = allItems.Select(item => item.Tag as IDiscReaderPlugin).Where(plugin => plugin != null).ToArray();
             var enabledDiscReaderPlugins = allDiscReaderPlugins.Where(plugin => plugin.Enabled).ToArray();
 
@@ -266,6 +279,8 @@ namespace BDHeroGUI
                     enabledItem.Enabled = !plugin.Enabled;
                 }
             }
+
+            linkLabelNameProviderPreferences.Enabled = EnabledNameProviderPlugins.Any();
         }
 
         #endregion
@@ -767,6 +782,39 @@ namespace BDHeroGUI
         private void buttonCancelConvert_Click(object sender, EventArgs e)
         {
             Cancel();
+        }
+
+        #endregion
+
+        #region UI events - LinkLabel clicks
+
+        private void linkLabelNameProviderPreferences_Click(object sender, EventArgs e)
+        {
+            var plugins = EnabledNameProviderPlugins;
+
+            if (!plugins.Any())
+                return;
+
+            if (plugins.Count == 1)
+            {
+                EditPreferences(plugins.First());
+            }
+            else
+            {
+                var menu = new ContextMenuStrip();
+                foreach (var plugin in plugins)
+                {
+                    menu.Items.Add(GetNameProviderPluginPreferenceMenuItem(plugin));
+                }
+                menu.Show(linkLabelNameProviderPreferences, 0, linkLabelNameProviderPreferences.Height);
+            }
+        }
+
+        private ToolStripMenuItem GetNameProviderPluginPreferenceMenuItem(INameProviderPlugin plugin)
+        {
+            var image = plugin.Icon != null ? plugin.Icon.ToBitmap() : null;
+            var item = new ToolStripMenuItem(plugin.Name, image, (sender, args) => EditPreferences(plugin));
+            return item;
         }
 
         #endregion
