@@ -61,6 +61,7 @@
     <Compile Include="FormFileNamerPreferences.Designer.cs">
       <DependentUpon>FormFileNamerPreferences.cs</DependentUpon>
     </Compile>
+    <Compile Include="MockJobFactory.cs" />
     <Compile Include="Preferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

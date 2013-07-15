@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using BDHero.BDROM;
 using BDHero.JobQueue;
 using BDInfo;
+using DotNetUtils;
 using DotNetUtils.Extensions;
 using I18N;
 
@@ -17,9 +18,15 @@ namespace BDHero.Plugin.FileNamer
 {
     internal partial class FormFileNamerPreferences : Form
     {
+        private const string DateFormatUrl = "http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.100).aspx";
+
         private readonly Preferences _prefs;
+
         private readonly Job _movieJob;
         private readonly FileNamer _movieNamer;
+
+        private readonly Job _tvShowJob;
+        private readonly FileNamer _tvShowNamer;
 
         #region Properties
 
@@ -45,8 +52,12 @@ namespace BDHero.Plugin.FileNamer
         public FormFileNamerPreferences(Preferences prefs)
         {
             _prefs = prefs;
-            _movieJob = CreateMovieJob();
+
+            _movieJob = MockJobFactory.CreateMovieJob();
             _movieNamer = new FileNamer(_movieJob, _prefs);
+
+            _tvShowJob = MockJobFactory.CreateTVShowJob();
+            _tvShowNamer = new FileNamer(_tvShowJob, _prefs);
 
             InitializeComponent();
             Load += OnLoad;
@@ -55,132 +66,49 @@ namespace BDHero.Plugin.FileNamer
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
+            InitValues();
             InitReplaceSpaces();
             InitCodecListView();
-            InitTextBoxes();
-        }
-
-
-        private void InitTextBoxes()
-        {
-            textBoxMovieDirectory.TextChanged += (s, e) => OnChanged(_movieNamer);
-            textBoxMovieFileName.TextChanged += (s, e) => OnChanged(_movieNamer);
-
-//            textBoxTVShowDirectory.TextChanged += OnChanged;
-//            textBoxTVShowFileName.TextChanged += OnChanged;
-
+            InitTextBoxEvents();
+            InitComboBoxEvents();
+            InitLinks();
             Rename();
-        }
-
-        private void OnChanged(FileNamer movieNamer /* , FileNamer tvShowNamer */)
-        {
-            // Movies
-
-            _prefs.Movies.Directory = textBoxMovieDirectory.Text;
-            _prefs.Movies.FileName = textBoxMovieFileName.Text;
-
-            var moviePath = movieNamer.GetPath();
-
-            textBoxMovieDirectoryExample.Text = moviePath.Directory;
-            textBoxMovieFileNameExample.Text = moviePath.FileName;
-
-            // TV Shows
-
-//            var tvShowPath = tvShowNamer.GetPath();
-//            textBoxTVShowDirectoryExample.Text = Path.GetDirectoryName(tvShowPath);
-//            textBoxTVShowFileNameExample.Text = Path.GetFileName(tvShowPath);
-        }
-
-        private static Job CreateMovieJob()
-        {
-            var metadata = new DiscMetadata
-                {
-                    Derived = new DiscMetadata.DerivedMetadata
-                        {
-                            VolumeLabel = "EMPIRE_STRIKES_BACK"
-                        }
-                };
-            var disc = new Disc
-                {
-                    Metadata = metadata,
-                    Playlists = new List<Playlist>
-                        {
-                            new Playlist
-                                {
-                                    Tracks = new List<Track>
-                                        {
-                                            new Track
-                                                {
-                                                    IsVideo = true,
-                                                    Codec = Codec.AVC,
-                                                    Type = TrackType.MainFeature,
-                                                    VideoFormat = TSVideoFormat.VIDEOFORMAT_1080p,
-                                                    AspectRatio = TSAspectRatio.ASPECT_16_9,
-                                                    Index = 0,
-                                                    IndexOfType = 0,
-                                                    IsBestGuess = true,
-                                                    Keep = true,
-                                                    Language = Language.English
-                                                },
-                                            new Track
-                                                {
-                                                    IsAudio = true,
-                                                    Codec = Codec.DTSHDMA,
-                                                    Type = TrackType.MainFeature,
-                                                    ChannelCount = 6.1,
-                                                    Index = 1,
-                                                    IndexOfType = 0,
-                                                    IsBestGuess = true,
-                                                    Keep = true,
-                                                    Language = Language.English
-                                                },
-                                            new Track
-                                                {
-                                                    IsSubtitle = true,
-                                                    Codec = Codec.PGS,
-                                                    Type = TrackType.MainFeature,
-                                                    Index = 2,
-                                                    IndexOfType = 0,
-                                                    IsBestGuess = true,
-                                                    Keep = true,
-                                                    Language = Language.English
-                                                },
-                                        }
-                                }
-                        }
-                };
-            var job = new Job(disc)
-                {
-                    ReleaseMediumType = ReleaseMediumType.Movie,
-                    SearchQuery = new SearchQuery()
-                        {
-                            Title = "Star Wars: Episode V - The Empire Strikes Back",
-                            Year = 1980,
-                            Language = Language.English
-                        }
-                };
-            job.Movies.Add(new Movie
-                {
-                    IsSelected = true,
-                    Title = "Star Wars: Episode V - The Empire Strikes Back",
-                    ReleaseYear = 1980,
-                    Id = 1891,
-                    Url = "http://www.themoviedb.org/movie/1891-star-wars-episode-v-the-empire-strikes-back"
-                });
-            return job;
         }
 
         #endregion
 
         #region Initialization
 
+        private static string NF2S(string numberFormat)
+        {
+            return numberFormat == "D2" ? "01" : "1";
+        }
+
+        private static string S2NF(string text)
+        {
+            return text == "01" ? "D2" : "D1";
+        }
+
+        private void InitValues()
+        {
+            checkBoxReplaceSpaces.Checked = _prefs.ReplaceSpaces;
+            textBoxReplaceSpacesWith.Enabled = _prefs.ReplaceSpaces;
+            textBoxReplaceSpacesWith.Text = _prefs.ReplaceSpacesWith;
+
+            textBoxMovieDirectory.Text = _prefs.Movies.Directory;
+            textBoxMovieFileName.Text = _prefs.Movies.FileName;
+
+            textBoxTVShowDirectory.Text = _prefs.TVShows.Directory;
+            textBoxTVShowFileName.Text = _prefs.TVShows.FileName;
+            comboBoxSeasonNumberFormat.SelectedItem = NF2S(_prefs.TVShows.SeasonNumberFormat);
+            comboBoxEpisodeNumberFormat.SelectedItem = NF2S(_prefs.TVShows.EpisodeNumberFormat);
+            textBoxTVShowReleaseDateFormat.Text = _prefs.TVShows.ReleaseDateFormat;
+        }
+
         private void InitReplaceSpaces()
         {
             checkBoxReplaceSpaces.CheckedChanged += CheckBoxReplaceSpacesOnCheckedChanged;
             textBoxReplaceSpacesWith.TextChanged += TextBoxReplaceSpacesWithOnTextChanged;
-
-            checkBoxReplaceSpaces.Checked = _prefs.ReplaceSpaces;
-            textBoxReplaceSpacesWith.Text = _prefs.ReplaceSpacesWith;
 
             CheckBoxReplaceSpacesOnCheckedChanged();
             TextBoxReplaceSpacesWithOnTextChanged();
@@ -218,25 +146,62 @@ namespace BDHero.Plugin.FileNamer
             listViewCodecNames.SetSortColumn(columnHeaderNumber.Index);
         }
 
-        private void ListViewCodecNamesOnAfterLabelEdit(object sender, LabelEditEventArgs args)
+        private void InitTextBoxEvents()
         {
-            if (args.CancelEdit || args.Label == null)
-                return;
+            textBoxMovieDirectory.TextChanged += (s, e) => Rename();
+            textBoxMovieFileName.TextChanged += (s, e) => Rename();
 
-            var index = args.Item;
-            var label = args.Label;
+            textBoxTVShowDirectory.TextChanged += (s, e) => Rename();
+            textBoxTVShowFileName.TextChanged += (s, e) => Rename();
 
-            if (SelectedCodec != null)
-            {
-                _prefs.Codecs[SelectedCodec.SerializableName] = label;
-            }
+            textBoxTVShowReleaseDateFormat.TextChanged += textBoxTVShowReleaseDateFormat_TextChanged;
+        }
 
-            Rename();
+        private void InitComboBoxEvents()
+        {
+            comboBoxSeasonNumberFormat.SelectedIndexChanged += (s, e) => Rename();
+            comboBoxEpisodeNumberFormat.SelectedIndexChanged += (s, e) => Rename();
+        }
+
+        private void InitLinks()
+        {
+            new ToolTip().SetToolTip(linkLabelTVShowReleaseDateFormat, DateFormatUrl);
         }
 
         #endregion
 
         #region UI events
+
+        private void Rename()
+        {
+            OnChanged(_movieNamer, _tvShowNamer);
+        }
+
+        private void OnChanged(FileNamer movieNamer, FileNamer tvShowNamer)
+        {
+            // Movies
+
+            _prefs.Movies.Directory = textBoxMovieDirectory.Text;
+            _prefs.Movies.FileName = textBoxMovieFileName.Text;
+
+            var moviePath = movieNamer.GetPath();
+
+            textBoxMovieDirectoryExample.Text = moviePath.Directory;
+            textBoxMovieFileNameExample.Text = moviePath.FileName;
+
+            // TV Shows
+
+            _prefs.TVShows.Directory = textBoxTVShowDirectory.Text;
+            _prefs.TVShows.FileName = textBoxTVShowFileName.Text;
+            _prefs.TVShows.SeasonNumberFormat = S2NF(comboBoxSeasonNumberFormat.SelectedItem as string);
+            _prefs.TVShows.EpisodeNumberFormat = S2NF(comboBoxEpisodeNumberFormat.SelectedItem as string);
+            _prefs.TVShows.ReleaseDateFormat = textBoxTVShowReleaseDateFormat.Text;
+
+            var tvShowPath = tvShowNamer.GetPath();
+
+            textBoxTVShowDirectoryExample.Text = tvShowPath.Directory;
+            textBoxTVShowFileNameExample.Text = tvShowPath.FileName;
+        }
 
         private void CheckBoxReplaceSpacesOnCheckedChanged(object sender = null, EventArgs eventArgs = null)
         {
@@ -260,10 +225,40 @@ namespace BDHero.Plugin.FileNamer
             Rename();
         }
 
-        private void Rename()
+        private void ListViewCodecNamesOnAfterLabelEdit(object sender, LabelEditEventArgs args)
         {
-            OnChanged(_movieNamer);
-//            OnChanged(_tvShowNamer);
+            if (args.CancelEdit || args.Label == null)
+                return;
+
+            var index = args.Item;
+            var label = args.Label;
+
+            if (SelectedCodec != null)
+            {
+                _prefs.Codecs[SelectedCodec.SerializableName] = label;
+            }
+
+            Rename();
+        }
+
+        private void textBoxTVShowReleaseDateFormat_TextChanged(object sender, EventArgs e)
+        {
+            var format = textBoxTVShowReleaseDateFormat.Text;
+            try
+            {
+                var str = DateTime.Now.ToString(format);
+                _prefs.TVShows.ReleaseDateFormat = format;
+                Rename();
+            }
+            catch
+            {
+                // TODO: Tell user the format is wrong
+            }
+        }
+
+        private void linkLabelTVShowReleaseDateFormat_Click(object sender, EventArgs e)
+        {
+            FileUtils.OpenUrl(DateFormatUrl);
         }
 
         private void buttonSave_Click(object sender, EventArgs e)

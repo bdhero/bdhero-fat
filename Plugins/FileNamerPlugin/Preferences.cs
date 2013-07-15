@@ -33,26 +33,32 @@ namespace BDHero.Plugin.FileNamer
     internal abstract class ReleaseMediumPreferences
     {
         public string Directory = @"%temp%\%volume%";
-        public string FileName = "%title% [%res%]";
+        public string FileName = @"%title% [%res%]";
     }
 
     internal class MoviePreferences : ReleaseMediumPreferences
     {
-        public new string FileName = "%title% (%year%) [%res%] [V- %vcodec%] [A- %acodec%] [%cut%] [V- %vlang%] [A- %alang%]";
+        public new string FileName = @"%title% (%year%) [%res%] [V- %vcodec%] [A- %acodec%] [%cut%] [V- %vlang%] [A- %alang%]";
     }
 
     internal class TVShowPreferences : ReleaseMediumPreferences
     {
-        public new string FileName = "s%season%e%episode% - %title% [%res%]";
+        public new string Directory = @"%temp%\%title%\Season %season%";
+        public new string FileName = @"s%season%e%episode% - %episodetitle% [%res%]";
 
         /// <summary>
         /// Format string for <see cref="int.ToString(string)"/>.
         /// </summary>
-        public string SeasonNumberFormat = "DD";
+        public string SeasonNumberFormat = "D2";
 
         /// <summary>
         /// Format string for <see cref="int.ToString(string)"/>.
         /// </summary>
-        public string EpisodeNumberFormat = "DD";
+        public string EpisodeNumberFormat = "D2";
+
+        /// <summary>
+        /// Format string for <see cref="DateTime.ToString(string)"/>.
+        /// </summary>
+        public string ReleaseDateFormat = "yyyy-MM-dd";
     }
 }

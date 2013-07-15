@@ -73,7 +73,7 @@ namespace BDHero.Plugin.FileNamer
 
         private string ReplaceMoviePlaceholders(string fsPart, Movie movie)
         {
-            fsPart = Regex.Replace(fsPart, @"%year%", movie.ReleaseYearDisplayable, RegexOptions.IgnoreCase);
+            Replace(ref fsPart, "year", movie.ReleaseYearDisplayable);
             return fsPart;
         }
 
@@ -96,8 +96,10 @@ namespace BDHero.Plugin.FileNamer
             if (episode == null)
                 return fsPart;
 
-            fsPart = Regex.Replace(fsPart, @"%season%", episode.SeasonNumber.ToString(_prefs.TVShows.SeasonNumberFormat), RegexOptions.IgnoreCase);
-            fsPart = Regex.Replace(fsPart, @"%episode%", episode.EpisodeNumber.ToString(_prefs.TVShows.EpisodeNumberFormat), RegexOptions.IgnoreCase);
+            Replace(ref fsPart, "season", episode.SeasonNumber.ToString(_prefs.TVShows.SeasonNumberFormat));
+            Replace(ref fsPart, "episode", episode.EpisodeNumber.ToString(_prefs.TVShows.EpisodeNumberFormat));
+            Replace(ref fsPart, "date", episode.ReleaseDate.ToString(_prefs.TVShows.ReleaseDateFormat));
+            Replace(ref fsPart, "episodetitle", episode.Title);
 
             return fsPart;
         }

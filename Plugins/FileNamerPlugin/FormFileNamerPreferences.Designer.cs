@@ -44,6 +44,9 @@
             this.textBoxMovieFileName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.linkLabelTVShowReleaseDateFormat = new DotNetUtils.Controls.LinkLabel2();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBoxTVShowReleaseDateFormat = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.comboBoxEpisodeNumberFormat = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -90,7 +93,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.textBoxMovieFileName);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 331);
+            this.groupBox1.Location = new System.Drawing.Point(12, 306);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(769, 140);
             this.groupBox1.TabIndex = 2;
@@ -101,7 +104,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label6.Location = new System.Drawing.Point(57, 113);
+            this.label6.Location = new System.Drawing.Point(61, 113);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(50, 13);
             this.label6.TabIndex = 9;
@@ -110,7 +113,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(36, 19);
+            this.label4.Location = new System.Drawing.Point(40, 19);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 1;
@@ -121,10 +124,10 @@
             this.selectableLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.selectableLabel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.selectableLabel1.Location = new System.Drawing.Point(113, 19);
+            this.selectableLabel1.Location = new System.Drawing.Point(117, 19);
             this.selectableLabel1.Name = "selectableLabel1";
             this.selectableLabel1.ReadOnly = true;
-            this.selectableLabel1.Size = new System.Drawing.Size(650, 13);
+            this.selectableLabel1.Size = new System.Drawing.Size(646, 13);
             this.selectableLabel1.TabIndex = 0;
             this.selectableLabel1.Text = "%volume% %title% %year% %res% %vcodec% %acodec% %channels% %cut% %vlang% %alang%";
             // 
@@ -133,10 +136,10 @@
             this.textBoxMovieFileNameExample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxMovieFileNameExample.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxMovieFileNameExample.Location = new System.Drawing.Point(113, 113);
+            this.textBoxMovieFileNameExample.Location = new System.Drawing.Point(117, 113);
             this.textBoxMovieFileNameExample.Name = "textBoxMovieFileNameExample";
             this.textBoxMovieFileNameExample.ReadOnly = true;
-            this.textBoxMovieFileNameExample.Size = new System.Drawing.Size(650, 13);
+            this.textBoxMovieFileNameExample.Size = new System.Drawing.Size(646, 13);
             this.textBoxMovieFileNameExample.TabIndex = 4;
             this.textBoxMovieFileNameExample.Text = "Contact (1999) [1080p] [TrueHD 7.1].mkv";
             // 
@@ -145,10 +148,10 @@
             this.textBoxMovieDirectoryExample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxMovieDirectoryExample.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxMovieDirectoryExample.Location = new System.Drawing.Point(113, 68);
+            this.textBoxMovieDirectoryExample.Location = new System.Drawing.Point(117, 68);
             this.textBoxMovieDirectoryExample.Name = "textBoxMovieDirectoryExample";
             this.textBoxMovieDirectoryExample.ReadOnly = true;
-            this.textBoxMovieDirectoryExample.Size = new System.Drawing.Size(647, 13);
+            this.textBoxMovieDirectoryExample.Size = new System.Drawing.Size(643, 13);
             this.textBoxMovieDirectoryExample.TabIndex = 2;
             this.textBoxMovieDirectoryExample.Text = "C:\\temp\\CONTACT";
             // 
@@ -156,7 +159,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label5.Location = new System.Drawing.Point(57, 68);
+            this.label5.Location = new System.Drawing.Point(61, 68);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(50, 13);
             this.label5.TabIndex = 6;
@@ -170,11 +173,11 @@
             this.textBoxMovieDirectory.DialogTitle = null;
             this.textBoxMovieDirectory.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
             this.textBoxMovieDirectory.FileExtensions = null;
-            this.textBoxMovieDirectory.Location = new System.Drawing.Point(113, 38);
+            this.textBoxMovieDirectory.Location = new System.Drawing.Point(117, 38);
             this.textBoxMovieDirectory.Name = "textBoxMovieDirectory";
             this.textBoxMovieDirectory.OverwritePrompt = false;
             this.textBoxMovieDirectory.SelectedPath = "%TEMP%\\%volume%";
-            this.textBoxMovieDirectory.Size = new System.Drawing.Size(650, 24);
+            this.textBoxMovieDirectory.Size = new System.Drawing.Size(646, 24);
             this.textBoxMovieDirectory.TabIndex = 1;
             // 
             // label3
@@ -190,7 +193,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 90);
+            this.label2.Location = new System.Drawing.Point(13, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 13);
             this.label2.TabIndex = 3;
@@ -200,16 +203,16 @@
             // 
             this.textBoxMovieFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxMovieFileName.Location = new System.Drawing.Point(113, 87);
+            this.textBoxMovieFileName.Location = new System.Drawing.Point(117, 87);
             this.textBoxMovieFileName.Name = "textBoxMovieFileName";
-            this.textBoxMovieFileName.Size = new System.Drawing.Size(614, 20);
+            this.textBoxMovieFileName.Size = new System.Drawing.Size(610, 20);
             this.textBoxMovieFileName.TabIndex = 3;
             this.textBoxMovieFileName.Text = "%title% (%year%) [%res%] [%acodec% %channels%]";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 45);
+            this.label1.Location = new System.Drawing.Point(16, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 13);
             this.label1.TabIndex = 1;
@@ -219,6 +222,9 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.linkLabelTVShowReleaseDateFormat);
+            this.groupBox2.Controls.Add(this.label15);
+            this.groupBox2.Controls.Add(this.textBoxTVShowReleaseDateFormat);
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.comboBoxEpisodeNumberFormat);
             this.groupBox2.Controls.Add(this.label13);
@@ -234,17 +240,45 @@
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.textBoxTVShowFileName);
             this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Location = new System.Drawing.Point(12, 477);
+            this.groupBox2.Location = new System.Drawing.Point(12, 452);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(769, 193);
+            this.groupBox2.Size = new System.Drawing.Size(769, 218);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "TV Shows";
             // 
+            // linkLabelTVShowReleaseDateFormat
+            // 
+            this.linkLabelTVShowReleaseDateFormat.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabelTVShowReleaseDateFormat.HoverColor = System.Drawing.Color.Empty;
+            this.linkLabelTVShowReleaseDateFormat.Location = new System.Drawing.Point(286, 190);
+            this.linkLabelTVShowReleaseDateFormat.Name = "linkLabelTVShowReleaseDateFormat";
+            this.linkLabelTVShowReleaseDateFormat.RegularColor = System.Drawing.Color.Empty;
+            this.linkLabelTVShowReleaseDateFormat.Size = new System.Drawing.Size(130, 14);
+            this.linkLabelTVShowReleaseDateFormat.TabIndex = 8;
+            this.linkLabelTVShowReleaseDateFormat.Text = "Formatting help on MSDN";
+            this.linkLabelTVShowReleaseDateFormat.Click += new System.EventHandler(this.linkLabelTVShowReleaseDateFormat_Click);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 191);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(105, 13);
+            this.label15.TabIndex = 15;
+            this.label15.Text = "Release date format:";
+            // 
+            // textBoxTVShowReleaseDateFormat
+            // 
+            this.textBoxTVShowReleaseDateFormat.Location = new System.Drawing.Point(117, 188);
+            this.textBoxTVShowReleaseDateFormat.Name = "textBoxTVShowReleaseDateFormat";
+            this.textBoxTVShowReleaseDateFormat.Size = new System.Drawing.Size(163, 20);
+            this.textBoxTVShowReleaseDateFormat.TabIndex = 7;
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(17, 163);
+            this.label14.Location = new System.Drawing.Point(21, 163);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(90, 13);
             this.label14.TabIndex = 13;
@@ -257,7 +291,7 @@
             this.comboBoxEpisodeNumberFormat.Items.AddRange(new object[] {
             "1",
             "01"});
-            this.comboBoxEpisodeNumberFormat.Location = new System.Drawing.Point(113, 160);
+            this.comboBoxEpisodeNumberFormat.Location = new System.Drawing.Point(117, 160);
             this.comboBoxEpisodeNumberFormat.Name = "comboBoxEpisodeNumberFormat";
             this.comboBoxEpisodeNumberFormat.Size = new System.Drawing.Size(43, 21);
             this.comboBoxEpisodeNumberFormat.TabIndex = 6;
@@ -265,7 +299,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(19, 136);
+            this.label13.Location = new System.Drawing.Point(23, 136);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(88, 13);
             this.label13.TabIndex = 11;
@@ -278,7 +312,7 @@
             this.comboBoxSeasonNumberFormat.Items.AddRange(new object[] {
             "1",
             "01"});
-            this.comboBoxSeasonNumberFormat.Location = new System.Drawing.Point(113, 133);
+            this.comboBoxSeasonNumberFormat.Location = new System.Drawing.Point(117, 133);
             this.comboBoxSeasonNumberFormat.Name = "comboBoxSeasonNumberFormat";
             this.comboBoxSeasonNumberFormat.Size = new System.Drawing.Size(43, 21);
             this.comboBoxSeasonNumberFormat.TabIndex = 5;
@@ -287,7 +321,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label7.Location = new System.Drawing.Point(57, 113);
+            this.label7.Location = new System.Drawing.Point(61, 113);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(50, 13);
             this.label7.TabIndex = 9;
@@ -296,7 +330,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(36, 19);
+            this.label8.Location = new System.Drawing.Point(40, 19);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 13);
             this.label8.TabIndex = 1;
@@ -307,23 +341,23 @@
             this.selectableLabel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.selectableLabel4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.selectableLabel4.Location = new System.Drawing.Point(113, 19);
+            this.selectableLabel4.Location = new System.Drawing.Point(117, 19);
             this.selectableLabel4.Name = "selectableLabel4";
             this.selectableLabel4.ReadOnly = true;
-            this.selectableLabel4.Size = new System.Drawing.Size(650, 13);
+            this.selectableLabel4.Size = new System.Drawing.Size(646, 13);
             this.selectableLabel4.TabIndex = 0;
             this.selectableLabel4.Text = "%volume% %title% %date% %res% %vcodec% %acodec% %channels% %cut% %vlang% %alang% " +
-    "%showtitle% %season% %episode%";
+    "%episodetitle% %season% %episode%";
             // 
             // textBoxTVShowFileNameExample
             // 
             this.textBoxTVShowFileNameExample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxTVShowFileNameExample.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTVShowFileNameExample.Location = new System.Drawing.Point(113, 113);
+            this.textBoxTVShowFileNameExample.Location = new System.Drawing.Point(117, 113);
             this.textBoxTVShowFileNameExample.Name = "textBoxTVShowFileNameExample";
             this.textBoxTVShowFileNameExample.ReadOnly = true;
-            this.textBoxTVShowFileNameExample.Size = new System.Drawing.Size(650, 13);
+            this.textBoxTVShowFileNameExample.Size = new System.Drawing.Size(646, 13);
             this.textBoxTVShowFileNameExample.TabIndex = 4;
             this.textBoxTVShowFileNameExample.Text = "s01e01 - \"My First Day\" (2001-10-02) [1080p] [DTS-HD MA 5.1].mkv";
             // 
@@ -332,10 +366,10 @@
             this.textBoxTVShowDirectoryExample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxTVShowDirectoryExample.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTVShowDirectoryExample.Location = new System.Drawing.Point(113, 68);
+            this.textBoxTVShowDirectoryExample.Location = new System.Drawing.Point(117, 68);
             this.textBoxTVShowDirectoryExample.Name = "textBoxTVShowDirectoryExample";
             this.textBoxTVShowDirectoryExample.ReadOnly = true;
-            this.textBoxTVShowDirectoryExample.Size = new System.Drawing.Size(647, 13);
+            this.textBoxTVShowDirectoryExample.Size = new System.Drawing.Size(643, 13);
             this.textBoxTVShowDirectoryExample.TabIndex = 2;
             this.textBoxTVShowDirectoryExample.Text = "C:\\temp\\SCRUBS";
             // 
@@ -343,7 +377,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label9.Location = new System.Drawing.Point(57, 68);
+            this.label9.Location = new System.Drawing.Point(61, 68);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(50, 13);
             this.label9.TabIndex = 6;
@@ -357,11 +391,11 @@
             this.textBoxTVShowDirectory.DialogTitle = null;
             this.textBoxTVShowDirectory.DialogType = DotNetUtils.Controls.DialogType.OpenDirectory;
             this.textBoxTVShowDirectory.FileExtensions = null;
-            this.textBoxTVShowDirectory.Location = new System.Drawing.Point(113, 38);
+            this.textBoxTVShowDirectory.Location = new System.Drawing.Point(117, 38);
             this.textBoxTVShowDirectory.Name = "textBoxTVShowDirectory";
             this.textBoxTVShowDirectory.OverwritePrompt = false;
             this.textBoxTVShowDirectory.SelectedPath = "%TEMP%\\%volume%";
-            this.textBoxTVShowDirectory.Size = new System.Drawing.Size(650, 24);
+            this.textBoxTVShowDirectory.Size = new System.Drawing.Size(646, 24);
             this.textBoxTVShowDirectory.TabIndex = 1;
             // 
             // label10
@@ -377,7 +411,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(9, 90);
+            this.label11.Location = new System.Drawing.Point(13, 90);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(98, 13);
             this.label11.TabIndex = 3;
@@ -387,16 +421,16 @@
             // 
             this.textBoxTVShowFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTVShowFileName.Location = new System.Drawing.Point(113, 87);
+            this.textBoxTVShowFileName.Location = new System.Drawing.Point(117, 87);
             this.textBoxTVShowFileName.Name = "textBoxTVShowFileName";
-            this.textBoxTVShowFileName.Size = new System.Drawing.Size(614, 20);
+            this.textBoxTVShowFileName.Size = new System.Drawing.Size(610, 20);
             this.textBoxTVShowFileName.TabIndex = 3;
             this.textBoxTVShowFileName.Text = "s%season%e%episode% - %title% (%date%) [%res%] [%acodec% %channels%]";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 45);
+            this.label12.Location = new System.Drawing.Point(16, 45);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(95, 13);
             this.label12.TabIndex = 1;
@@ -464,7 +498,7 @@
             this.groupBox4.Controls.Add(this.listViewCodecNames);
             this.groupBox4.Location = new System.Drawing.Point(12, 68);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(769, 257);
+            this.groupBox4.Size = new System.Drawing.Size(769, 232);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Codec names";
@@ -497,7 +531,7 @@
             this.listViewCodecNames.MultiSelect = false;
             this.listViewCodecNames.Name = "listViewCodecNames";
             this.listViewCodecNames.ShowItemToolTips = true;
-            this.listViewCodecNames.Size = new System.Drawing.Size(757, 232);
+            this.listViewCodecNames.Size = new System.Drawing.Size(757, 207);
             this.listViewCodecNames.TabIndex = 0;
             this.listViewCodecNames.UseCompatibleStateImageBehavior = false;
             this.listViewCodecNames.View = System.Windows.Forms.View.Details;
@@ -506,6 +540,7 @@
             // 
             this.columnHeaderLabel.DisplayIndex = 2;
             this.columnHeaderLabel.Text = "Label";
+            this.columnHeaderLabel.Width = 631;
             // 
             // columnHeaderCodec
             // 
@@ -586,5 +621,8 @@
         private System.Windows.Forms.ColumnHeader columnHeaderLabel;
         private System.Windows.Forms.ColumnHeader columnHeaderCodec;
         private System.Windows.Forms.ColumnHeader columnHeaderNumber;
+        private DotNetUtils.Controls.LinkLabel2 linkLabelTVShowReleaseDateFormat;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBoxTVShowReleaseDateFormat;
     }
 }
