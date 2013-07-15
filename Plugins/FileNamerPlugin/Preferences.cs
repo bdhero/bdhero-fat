@@ -20,7 +20,7 @@ namespace BDHero.Plugin.FileNamer
         {
             foreach (var codec in Codec.MuxableBDCodecs)
             {
-                Codecs[codec.SerializableName] = codec.CommonName;
+                Codecs[codec.SerializableName] = codec.FileName;
             }
         }
 
