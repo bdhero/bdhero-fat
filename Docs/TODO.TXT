@@ -19,8 +19,9 @@ Bugs
 Features
 ========
 
-[ ] Don't erase the user's custom chapter titles when they re-select "Default"
-[ ] Add stream files listview?
+[ ] Add "Preferences..." link for file renamer plugins in FormMain near "Output" textbos
+    [ ] Open preferences dialog directly if only one plugin is enabled
+    [ ] Show dropdown menu w/ plugins to choose from if more than one plugin is enabled
 
 [ ] Split output MKV path into directory and file name
     [ ] Move output file name settings out into Preferences dialog (similar to mmg)
@@ -40,6 +41,9 @@ Features
 
 Backlog
 =======
+
+[ ] Don't erase the user's custom chapter titles when they re-select "Default"
+[ ] Add stream files listview?
 
 [ ] Context menu and double click to play for playlists
 [ ] Context menu and double click to view codec info for tracks?
