@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
+using BDHero.JobQueue;
+using BDInfo;
 using DotNetUtils.Extensions;
+using I18N;
 
 namespace BDHero.Plugin.FileNamer
 {
     internal partial class FormFileNamerPreferences : Form
     {
         private readonly Preferences _prefs;
+        private readonly Job _movieJob;
+        private readonly FileNamer _movieNamer;
 
         #region Properties
 
@@ -39,6 +45,9 @@ namespace BDHero.Plugin.FileNamer
         public FormFileNamerPreferences(Preferences prefs)
         {
             _prefs = prefs;
+            _movieJob = CreateMovieJob();
+            _movieNamer = new FileNamer(_movieJob, _prefs);
+
             InitializeComponent();
             Load += OnLoad;
             this.EnableSelectAll();
@@ -48,6 +57,117 @@ namespace BDHero.Plugin.FileNamer
         {
             InitReplaceSpaces();
             InitCodecListView();
+            InitTextBoxes();
+        }
+
+
+        private void InitTextBoxes()
+        {
+            textBoxMovieDirectory.TextChanged += (s, e) => OnChanged(_movieNamer);
+            textBoxMovieFileName.TextChanged += (s, e) => OnChanged(_movieNamer);
+
+//            textBoxTVShowDirectory.TextChanged += OnChanged;
+//            textBoxTVShowFileName.TextChanged += OnChanged;
+
+            Rename();
+        }
+
+        private void OnChanged(FileNamer movieNamer /* , FileNamer tvShowNamer */)
+        {
+            // Movies
+
+            _prefs.Movies.Directory = textBoxMovieDirectory.Text;
+            _prefs.Movies.FileName = textBoxMovieFileName.Text;
+
+            var moviePath = movieNamer.GetPath();
+
+            textBoxMovieDirectoryExample.Text = Path.GetDirectoryName(moviePath);
+            textBoxMovieFileNameExample.Text = Path.GetFileName(moviePath);
+
+            // TV Shows
+
+//            var tvShowPath = tvShowNamer.GetPath();
+//            textBoxTVShowDirectoryExample.Text = Path.GetDirectoryName(tvShowPath);
+//            textBoxTVShowFileNameExample.Text = Path.GetFileName(tvShowPath);
+        }
+
+        private static Job CreateMovieJob()
+        {
+            var metadata = new DiscMetadata
+                {
+                    Derived = new DiscMetadata.DerivedMetadata
+                        {
+                            VolumeLabel = "EMPIRE_STRIKES_BACK"
+                        }
+                };
+            var disc = new Disc
+                {
+                    Metadata = metadata,
+                    Playlists = new List<Playlist>
+                        {
+                            new Playlist
+                                {
+                                    Tracks = new List<Track>
+                                        {
+                                            new Track
+                                                {
+                                                    IsVideo = true,
+                                                    Codec = Codec.AVC,
+                                                    Type = TrackType.MainFeature,
+                                                    VideoFormat = TSVideoFormat.VIDEOFORMAT_1080p,
+                                                    AspectRatio = TSAspectRatio.ASPECT_16_9,
+                                                    Index = 0,
+                                                    IndexOfType = 0,
+                                                    IsBestGuess = true,
+                                                    Keep = true,
+                                                    Language = Language.English
+                                                },
+                                            new Track
+                                                {
+                                                    IsAudio = true,
+                                                    Codec = Codec.DTSHDMA,
+                                                    Type = TrackType.MainFeature,
+                                                    ChannelCount = 6.1,
+                                                    Index = 1,
+                                                    IndexOfType = 0,
+                                                    IsBestGuess = true,
+                                                    Keep = true,
+                                                    Language = Language.English
+                                                },
+                                            new Track
+                                                {
+                                                    IsSubtitle = true,
+                                                    Codec = Codec.PGS,
+                                                    Type = TrackType.MainFeature,
+                                                    Index = 2,
+                                                    IndexOfType = 0,
+                                                    IsBestGuess = true,
+                                                    Keep = true,
+                                                    Language = Language.English
+                                                },
+                                        }
+                                }
+                        }
+                };
+            var job = new Job(disc)
+                {
+                    ReleaseMediumType = ReleaseMediumType.Movie,
+                    SearchQuery = new SearchQuery()
+                        {
+                            Title = "Star Wars: Episode V - The Empire Strikes Back",
+                            Year = 1980,
+                            Language = Language.English
+                        }
+                };
+            job.Movies.Add(new Movie
+                {
+                    IsSelected = true,
+                    Title = "Star Wars: Episode V - The Empire Strikes Back",
+                    ReleaseYear = 1980,
+                    Id = 1891,
+                    Url = "http://www.themoviedb.org/movie/1891-star-wars-episode-v-the-empire-strikes-back"
+                });
+            return job;
         }
 
         #endregion
@@ -116,6 +236,8 @@ namespace BDHero.Plugin.FileNamer
         private void CheckBoxReplaceSpacesOnCheckedChanged(object sender = null, EventArgs eventArgs = null)
         {
             textBoxReplaceSpacesWith.Enabled = checkBoxReplaceSpaces.Checked;
+            _prefs.ReplaceSpaces = checkBoxReplaceSpaces.Checked;
+            Rename();
         }
 
         private void TextBoxReplaceSpacesWithOnTextChanged(object sender = null, EventArgs eventArgs = null)
@@ -129,6 +251,14 @@ namespace BDHero.Plugin.FileNamer
                 var delta = after - before;
                 textBoxReplaceSpacesWith.Width += delta;
             }
+            _prefs.ReplaceSpacesWith = textBoxReplaceSpacesWith.Text;
+            Rename();
+        }
+
+        private void Rename()
+        {
+            OnChanged(_movieNamer);
+//            OnChanged(_tvShowNamer);
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
