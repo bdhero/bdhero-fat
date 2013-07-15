@@ -20,7 +20,8 @@ namespace BDHero.Plugin.FileNamer
     {
         private const string DateFormatUrl = "http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.100).aspx";
 
-        private readonly Preferences _prefs;
+        private readonly Preferences _userPrefs;
+        private readonly Preferences _prefsCopy;
 
         private readonly Job _movieJob;
         private readonly FileNamer _movieNamer;
@@ -51,13 +52,14 @@ namespace BDHero.Plugin.FileNamer
 
         public FormFileNamerPreferences(Preferences prefs)
         {
-            _prefs = prefs;
+            _userPrefs = prefs;
+            _prefsCopy = _userPrefs.Clone();
 
             _movieJob = MockJobFactory.CreateMovieJob();
-            _movieNamer = new FileNamer(_movieJob, _prefs);
+            _movieNamer = new FileNamer(_movieJob, _prefsCopy);
 
             _tvShowJob = MockJobFactory.CreateTVShowJob();
-            _tvShowNamer = new FileNamer(_tvShowJob, _prefs);
+            _tvShowNamer = new FileNamer(_tvShowJob, _prefsCopy);
 
             InitializeComponent();
             Load += OnLoad;
@@ -91,18 +93,18 @@ namespace BDHero.Plugin.FileNamer
 
         private void InitValues()
         {
-            checkBoxReplaceSpaces.Checked = _prefs.ReplaceSpaces;
-            textBoxReplaceSpacesWith.Enabled = _prefs.ReplaceSpaces;
-            textBoxReplaceSpacesWith.Text = _prefs.ReplaceSpacesWith;
+            checkBoxReplaceSpaces.Checked = _prefsCopy.ReplaceSpaces;
+            textBoxReplaceSpacesWith.Enabled = _prefsCopy.ReplaceSpaces;
+            textBoxReplaceSpacesWith.Text = _prefsCopy.ReplaceSpacesWith;
 
-            textBoxMovieDirectory.Text = _prefs.Movies.Directory;
-            textBoxMovieFileName.Text = _prefs.Movies.FileName;
+            textBoxMovieDirectory.Text = _prefsCopy.Movies.Directory;
+            textBoxMovieFileName.Text = _prefsCopy.Movies.FileName;
 
-            textBoxTVShowDirectory.Text = _prefs.TVShows.Directory;
-            textBoxTVShowFileName.Text = _prefs.TVShows.FileName;
-            comboBoxSeasonNumberFormat.SelectedItem = NF2S(_prefs.TVShows.SeasonNumberFormat);
-            comboBoxEpisodeNumberFormat.SelectedItem = NF2S(_prefs.TVShows.EpisodeNumberFormat);
-            textBoxTVShowReleaseDateFormat.Text = _prefs.TVShows.ReleaseDateFormat;
+            textBoxTVShowDirectory.Text = _prefsCopy.TVShows.Directory;
+            textBoxTVShowFileName.Text = _prefsCopy.TVShows.FileName;
+            comboBoxSeasonNumberFormat.SelectedItem = NF2S(_prefsCopy.TVShows.SeasonNumberFormat);
+            comboBoxEpisodeNumberFormat.SelectedItem = NF2S(_prefsCopy.TVShows.EpisodeNumberFormat);
+            textBoxTVShowReleaseDateFormat.Text = _prefsCopy.TVShows.ReleaseDateFormat;
         }
 
         private void InitReplaceSpaces()
@@ -117,24 +119,31 @@ namespace BDHero.Plugin.FileNamer
         private void InitCodecListView()
         {
             listViewCodecNames.AfterLabelEdit += ListViewCodecNamesOnAfterLabelEdit;
-            listViewCodecNames.SuspendDrawing();
+            PopulateCodecListView();
+            listViewCodecNames.SetSortColumn(columnHeaderNumber.Index);
+        }
 
-            var codecs = Codec.MuxableBDCodecs.Where(codec => _prefs.Codecs.ContainsKey(codec.SerializableName)).ToArray();
+        private void PopulateCodecListView()
+        {
+            listViewCodecNames.SuspendDrawing();
+            listViewCodecNames.Items.Clear();
+
+            var codecs = Codec.MuxableBDCodecs.Where(codec => _prefsCopy.Codecs.ContainsKey(codec.SerializableName)).ToArray();
 
             var i = 1;
             foreach (var codec in codecs)
             {
-                var label = _prefs.Codecs[codec.SerializableName];
+                var label = _prefsCopy.Codecs[codec.SerializableName];
                 var group = codec.IsVideo
                                 ? listViewCodecNames.Groups["listViewGroupVideo"]
                                 : codec.IsAudio
                                       ? listViewCodecNames.Groups["listViewGroupAudio"]
                                       : listViewCodecNames.Groups["listViewGroupSubtitles"];
-                var item = new ListViewItem(label, group) { Tag = codec };
+                var item = new ListViewItem(label, @group) {Tag = codec};
                 var subitems = new[]
                     {
                         new ListViewItem.ListViewSubItem(item, codec.FullNameDisambig),
-                        new ListViewItem.ListViewSubItem(item, i.ToString("D")) { Tag = i }
+                        new ListViewItem.ListViewSubItem(item, i.ToString("D")) {Tag = i}
                     };
                 item.SubItems.AddRange(subitems);
                 listViewCodecNames.Items.Add(item);
@@ -143,7 +152,6 @@ namespace BDHero.Plugin.FileNamer
 
             listViewCodecNames.ResumeDrawing();
             listViewCodecNames.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            listViewCodecNames.SetSortColumn(columnHeaderNumber.Index);
         }
 
         private void InitTextBoxEvents()
@@ -181,8 +189,8 @@ namespace BDHero.Plugin.FileNamer
         {
             // Movies
 
-            _prefs.Movies.Directory = textBoxMovieDirectory.Text;
-            _prefs.Movies.FileName = textBoxMovieFileName.Text;
+            _prefsCopy.Movies.Directory = textBoxMovieDirectory.Text;
+            _prefsCopy.Movies.FileName = textBoxMovieFileName.Text;
 
             var moviePath = movieNamer.GetPath();
 
@@ -191,11 +199,11 @@ namespace BDHero.Plugin.FileNamer
 
             // TV Shows
 
-            _prefs.TVShows.Directory = textBoxTVShowDirectory.Text;
-            _prefs.TVShows.FileName = textBoxTVShowFileName.Text;
-            _prefs.TVShows.SeasonNumberFormat = S2NF(comboBoxSeasonNumberFormat.SelectedItem as string);
-            _prefs.TVShows.EpisodeNumberFormat = S2NF(comboBoxEpisodeNumberFormat.SelectedItem as string);
-            _prefs.TVShows.ReleaseDateFormat = textBoxTVShowReleaseDateFormat.Text;
+            _prefsCopy.TVShows.Directory = textBoxTVShowDirectory.Text;
+            _prefsCopy.TVShows.FileName = textBoxTVShowFileName.Text;
+            _prefsCopy.TVShows.SeasonNumberFormat = S2NF(comboBoxSeasonNumberFormat.SelectedItem as string);
+            _prefsCopy.TVShows.EpisodeNumberFormat = S2NF(comboBoxEpisodeNumberFormat.SelectedItem as string);
+            _prefsCopy.TVShows.ReleaseDateFormat = textBoxTVShowReleaseDateFormat.Text;
 
             var tvShowPath = tvShowNamer.GetPath();
 
@@ -206,7 +214,7 @@ namespace BDHero.Plugin.FileNamer
         private void CheckBoxReplaceSpacesOnCheckedChanged(object sender = null, EventArgs eventArgs = null)
         {
             textBoxReplaceSpacesWith.Enabled = checkBoxReplaceSpaces.Checked;
-            _prefs.ReplaceSpaces = checkBoxReplaceSpaces.Checked;
+            _prefsCopy.ReplaceSpaces = checkBoxReplaceSpaces.Checked;
             Rename();
         }
 
@@ -221,7 +229,7 @@ namespace BDHero.Plugin.FileNamer
                 var delta = after - before;
                 textBoxReplaceSpacesWith.Width += delta;
             }
-            _prefs.ReplaceSpacesWith = textBoxReplaceSpacesWith.Text;
+            _prefsCopy.ReplaceSpacesWith = textBoxReplaceSpacesWith.Text;
             Rename();
         }
 
@@ -235,7 +243,7 @@ namespace BDHero.Plugin.FileNamer
 
             if (SelectedCodec != null)
             {
-                _prefs.Codecs[SelectedCodec.SerializableName] = label;
+                _prefsCopy.Codecs[SelectedCodec.SerializableName] = label;
             }
 
             Rename();
@@ -247,7 +255,7 @@ namespace BDHero.Plugin.FileNamer
             try
             {
                 var str = DateTime.Now.ToString(format);
-                _prefs.TVShows.ReleaseDateFormat = format;
+                _prefsCopy.TVShows.ReleaseDateFormat = format;
                 Rename();
             }
             catch
@@ -263,6 +271,8 @@ namespace BDHero.Plugin.FileNamer
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            // TODO: Auto enable/disable this button when settings have changed
+            _userPrefs.CopyFrom(_prefsCopy);
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -271,6 +281,19 @@ namespace BDHero.Plugin.FileNamer
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            _prefsCopy.CopyFrom(new Preferences());
+            Reset();
+        }
+
+        private void Reset()
+        {
+            InitValues();
+            PopulateCodecListView();
+            Rename();
         }
 
         #endregion

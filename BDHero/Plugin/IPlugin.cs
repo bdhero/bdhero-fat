@@ -12,7 +12,7 @@ using DotNetUtils.Annotations;
 
 namespace BDHero.Plugin
 {
-    public delegate void EditPluginPreferenceHandler(Form parent);
+    public delegate DialogResult EditPluginPreferenceHandler(Form parent);
 
     public interface IPlugin
     {

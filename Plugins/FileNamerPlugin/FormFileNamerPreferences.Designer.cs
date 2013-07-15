@@ -72,6 +72,7 @@
             this.columnHeaderLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.buttonReset = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -552,6 +553,16 @@
             this.columnHeaderNumber.Text = "#";
             this.columnHeaderNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
+            // buttonReset
+            // 
+            this.buttonReset.Location = new System.Drawing.Point(12, 676);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(75, 23);
+            this.buttonReset.TabIndex = 6;
+            this.buttonReset.Text = "&Reset";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            // 
             // FormFileNamerPreferences
             // 
             this.AcceptButton = this.buttonSave;
@@ -559,6 +570,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(793, 711);
+            this.Controls.Add(this.buttonReset);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonCancel);
@@ -624,5 +636,6 @@
         private DotNetUtils.Controls.LinkLabel2 linkLabelTVShowReleaseDateFormat;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBoxTVShowReleaseDateFormat;
+        private System.Windows.Forms.Button buttonReset;
     }
 }

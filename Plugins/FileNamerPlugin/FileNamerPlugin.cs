@@ -84,9 +84,18 @@ namespace BDHero.Plugin.FileNamer
             File.WriteAllText(AssemblyInfo.SettingsFile, json);
         }
 
-        private void EditPluginPreferenceHandler(Form parent)
+        private DialogResult EditPluginPreferenceHandler(Form parent)
         {
-            new FormFileNamerPreferences(Preferences).ShowDialog(parent);
+            // FormFileNamerPreferences automatically copies the user's changes to
+            // Preferences if the user hits "Save".
+            var result = new FormFileNamerPreferences(Preferences).ShowDialog(parent);
+
+            if (result == DialogResult.OK)
+            {
+                SavePreferences(Preferences);
+            }
+
+            return result;
         }
     }
 }
