@@ -169,7 +169,7 @@ namespace BDHeroGUI
 
             foreach (var plugin in _controller.PluginsByType)
             {
-                IPlugin plugin1 = plugin;
+                IPlugin pluginCopy1 = plugin;
 
                 var ifaces = plugin.GetType().GetInterfaces().Except(new[] {typeof(IPlugin)});
                 var curPluginType = ifaces.FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IPlugin)));
@@ -184,14 +184,14 @@ namespace BDHeroGUI
                 var enabledItem = new ToolStripMenuItem("Enabled") { CheckOnClick = true, Name = PluginEnabledMenuItemName };
                 enabledItem.Click += delegate(object sender, EventArgs args)
                     {
-                        if (plugin1 is IDiscReaderPlugin)
+                        if (pluginCopy1 is IDiscReaderPlugin)
                         {
                             _controller.PluginsByType.OfType<IDiscReaderPlugin>()
-                                       .ForEach(readerPlugin => readerPlugin.Enabled = readerPlugin == plugin1);
+                                       .ForEach(readerPlugin => readerPlugin.Enabled = readerPlugin == pluginCopy1);
                         }
                         else
                         {
-                            plugin1.Enabled = enabledItem.Checked;
+                            pluginCopy1.Enabled = enabledItem.Checked;
                         }
                         AutoCheckPluginMenu();
                     };
