@@ -25,11 +25,9 @@ Features
 [ ] Fix or remove "low quality" playlist detection
 [ ] Consider chapter count and timestamps when looking for duplicate playlists (playlists w/ identical streams but different chapters are not dups)
 
-[ ] CLI prompt to select TMDb search result, playlist, angle, overwrite existing file
 [ ] Plugin hooks for UI events:
     [ ] Select a movie/TV show
     [ ] Re-configure playlist (change Cut, Language, selected tracks) -- (for updating output file name, MKV title, track title)
-[ ] Allow any BD-ROM file/subdirectory to be scanned
 
 Backlog
 =======
@@ -51,6 +49,7 @@ Backlog
 [ ] Centralize drive detection logic
 [ ] Handle exceptions during drive detection
 
+[ ] CLI prompt to select TMDb search result, playlist, angle, overwrite existing file
 [ ] CLI arg to dump list of main movie playlist files
 [ ] Asynchronous TMDb poster/cover art getter thread (use futures?)
 
@@ -73,6 +72,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Allow any BD-ROM file/subdirectory to be scanned
 [X] Add "Preferences..." link for file renamer plugins in FormMain near "Output" textbos
     [X] Open preferences dialog directly if only one plugin is enabled
     [X] Show dropdown menu w/ plugins to choose from if more than one plugin is enabled
