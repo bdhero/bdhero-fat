@@ -169,7 +169,7 @@ namespace BDHeroGUI
 
             foreach (var plugin in _controller.PluginsByType)
             {
-                IPlugin pluginCopy1 = plugin;
+                IPlugin pluginCopy = plugin;
 
                 var ifaces = plugin.GetType().GetInterfaces().Except(new[] {typeof(IPlugin)});
                 var curPluginType = ifaces.FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IPlugin)));
@@ -184,14 +184,14 @@ namespace BDHeroGUI
                 var enabledItem = new ToolStripMenuItem("Enabled") { CheckOnClick = true, Name = PluginEnabledMenuItemName };
                 enabledItem.Click += delegate(object sender, EventArgs args)
                     {
-                        if (pluginCopy1 is IDiscReaderPlugin)
+                        if (pluginCopy is IDiscReaderPlugin)
                         {
                             _controller.PluginsByType.OfType<IDiscReaderPlugin>()
-                                       .ForEach(readerPlugin => readerPlugin.Enabled = readerPlugin == pluginCopy1);
+                                       .ForEach(readerPlugin => readerPlugin.Enabled = readerPlugin == pluginCopy);
                         }
                         else
                         {
-                            pluginCopy1.Enabled = enabledItem.Checked;
+                            pluginCopy.Enabled = enabledItem.Checked;
                         }
                         AutoCheckPluginMenu();
                     };
@@ -200,10 +200,9 @@ namespace BDHeroGUI
 
                 if (plugin.EditPreferences != null)
                 {
-                    IPlugin pluginCopy2 = plugin;
                     pluginItem.DropDownItems.Add(new ToolStripMenuItem("Preferences...", null,
                                                                         (sender, args) =>
-                                                                        pluginCopy2.EditPreferences(this)));
+                                                                        EditPreferences(pluginCopy)));
                 }
 
                 pluginItem.DropDownItems.Add("-");
@@ -221,6 +220,14 @@ namespace BDHeroGUI
             }
 
             AutoCheckPluginMenu();
+        }
+
+        private void EditPreferences(IPlugin plugin)
+        {
+            if (DialogResult.OK == plugin.EditPreferences(this))
+            {
+                RenameSync();
+            }
         }
 
         // TODO: Move logic to Controller
@@ -407,6 +414,18 @@ namespace BDHeroGUI
                 _taskbarItem.Error();
             }
             EnableControls(true);
+        }
+
+        #endregion
+
+        #region File renamer
+
+        private void RenameSync()
+        {
+            if (_controller.Job == null)
+                return;
+            _controller.RenameSync(null);
+            textBoxOutput.Text = _controller.Job.OutputPath;
         }
 
         #endregion
@@ -761,8 +780,7 @@ namespace BDHeroGUI
 
         private void MediaPanelOnSelectedMediaChanged(object sender, EventArgs eventArgs)
         {
-            _controller.RenameSync(textBoxOutput.Text);
-            textBoxOutput.Text = _controller.Job.OutputPath;
+            RenameSync();
         }
 
         private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
@@ -774,10 +792,7 @@ namespace BDHeroGUI
             tracksPanel.Playlist = playlist;
             chaptersPanel.Playlist = playlist;
 
-            _controller.RenameSync(null);
-
-            // TODO: Use an event for this?
-            textBoxOutput.Text = _controller.Job.OutputPath;
+            RenameSync();
         }
 
         private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)
