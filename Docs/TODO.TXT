@@ -19,9 +19,7 @@ Bugs
 Features
 ========
 
-[ ] Add "Preferences..." link for file renamer plugins in FormMain near "Output" textbos
-    [ ] Open preferences dialog directly if only one plugin is enabled
-    [ ] Show dropdown menu w/ plugins to choose from if more than one plugin is enabled
+[ ] Add "use last folder" option to File Namer preference dialog
 
 [ ] Angle support
 [ ] Fix or remove "low quality" playlist detection
@@ -75,6 +73,9 @@ Chris' Plugins
 Complete
 ========
 
+[X] Add "Preferences..." link for file renamer plugins in FormMain near "Output" textbos
+    [X] Open preferences dialog directly if only one plugin is enabled
+    [X] Show dropdown menu w/ plugins to choose from if more than one plugin is enabled
 [X] Split output MKV path into directory and file name
     [X] Move output file name settings out into Preferences dialog (similar to mmg)
     [X] Separate file namer preferences for movies and TV shows
