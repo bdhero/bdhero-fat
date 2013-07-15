@@ -81,11 +81,21 @@ namespace BDHero.Plugin.FileNamer
 
         #region Initialization
 
+        /// <summary>
+        /// Converts a number format string to its UI text representation.
+        /// </summary>
+        /// <param name="numberFormat"></param>
+        /// <returns></returns>
         private static string NF2S(string numberFormat)
         {
             return numberFormat == "D2" ? "01" : "1";
         }
 
+        /// <summary>
+        /// Converts a UI text representation of a number format string to the number format string.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         private static string S2NF(string text)
         {
             return text == "01" ? "D2" : "D1";
