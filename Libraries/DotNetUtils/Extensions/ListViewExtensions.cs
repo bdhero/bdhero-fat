@@ -36,7 +36,10 @@ namespace DotNetUtils.Extensions
             var maxDisplayIndex = columnHeaders.Max(header => header.DisplayIndex);
             var lastColumn = columnHeaders.LastOrDefault(header => header.DisplayIndex == maxDisplayIndex);
             if (lastColumn != null)
+            {
                 lastColumn.AutoResize();
+                lastColumn.Width -= 2; // TODO: Figure out why this is necessary on some ListViews (e.g., FormFileNamerPreferences)
+            }
 
             listView.ResumeDrawing();
         }
