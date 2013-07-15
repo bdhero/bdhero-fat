@@ -209,6 +209,13 @@ namespace BDHero.Plugin.FileNamer
 
             textBoxTVShowDirectoryExample.Text = tvShowPath.Directory;
             textBoxTVShowFileNameExample.Text = tvShowPath.FileName;
+
+            // Save/reset buttons
+
+            var hasChanged = !_prefsCopy.Equals(_userPrefs);
+
+            buttonReset.Enabled = hasChanged;
+            buttonSave.Enabled = hasChanged;
         }
 
         private void CheckBoxReplaceSpacesOnCheckedChanged(object sender = null, EventArgs eventArgs = null)
@@ -271,7 +278,6 @@ namespace BDHero.Plugin.FileNamer
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            // TODO: Auto enable/disable this button when settings have changed
             _userPrefs.CopyFrom(_prefsCopy);
             DialogResult = DialogResult.OK;
             Close();
