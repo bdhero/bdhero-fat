@@ -222,7 +222,7 @@ namespace BDHeroGUI
             this.textBoxInput.Location = new System.Drawing.Point(93, 3);
             this.textBoxInput.Name = "textBoxInput";
             this.textBoxInput.OverwritePrompt = false;
-            this.textBoxInput.SelectedPath = "V:\\BD\\49123204_BLACK_HAWK_DOWN";
+            this.textBoxInput.SelectedPath = "W:\\BD\\49123204_BLACK_HAWK_DOWN";
             this.textBoxInput.ShowNewFolderButton = false;
             this.textBoxInput.Size = new System.Drawing.Size(896, 24);
             this.textBoxInput.TabIndex = 0;
@@ -331,7 +331,7 @@ namespace BDHeroGUI
             this.textBoxOutput.FileExtensions = null;
             this.textBoxOutput.Location = new System.Drawing.Point(93, 430);
             this.textBoxOutput.Name = "textBoxOutput";
-            this.textBoxOutput.SelectedPath = "V:\\BDHero\\test.mkv";
+            this.textBoxOutput.SelectedPath = "W:\\BDHero\\test.mkv";
             this.textBoxOutput.Size = new System.Drawing.Size(896, 24);
             this.textBoxOutput.TabIndex = 4;
             // 
