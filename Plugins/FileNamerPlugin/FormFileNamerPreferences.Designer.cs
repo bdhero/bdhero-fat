@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Video", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Audio", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Subtitles", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Video", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Audio", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Subtitles", System.Windows.Forms.HorizontalAlignment.Left);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -72,7 +72,8 @@
             this.columnHeaderLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderCodec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.buttonReset = new System.Windows.Forms.Button();
+            this.buttonDefault = new System.Windows.Forms.Button();
+            this.buttonRevert = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -516,16 +517,16 @@
             this.columnHeaderNumber});
             this.listViewCodecNames.FullRowSelect = true;
             this.listViewCodecNames.GridLines = true;
-            listViewGroup1.Header = "Video";
-            listViewGroup1.Name = "listViewGroupVideo";
-            listViewGroup2.Header = "Audio";
-            listViewGroup2.Name = "listViewGroupAudio";
-            listViewGroup3.Header = "Subtitles";
-            listViewGroup3.Name = "listViewGroupSubtitles";
+            listViewGroup4.Header = "Video";
+            listViewGroup4.Name = "listViewGroupVideo";
+            listViewGroup5.Header = "Audio";
+            listViewGroup5.Name = "listViewGroupAudio";
+            listViewGroup6.Header = "Subtitles";
+            listViewGroup6.Name = "listViewGroupSubtitles";
             this.listViewCodecNames.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2,
-            listViewGroup3});
+            listViewGroup4,
+            listViewGroup5,
+            listViewGroup6});
             this.listViewCodecNames.HideSelection = false;
             this.listViewCodecNames.LabelEdit = true;
             this.listViewCodecNames.Location = new System.Drawing.Point(6, 19);
@@ -553,16 +554,27 @@
             this.columnHeaderNumber.Text = "#";
             this.columnHeaderNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // buttonReset
+            // buttonDefault
             // 
-            this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonReset.Location = new System.Drawing.Point(12, 676);
-            this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(75, 23);
-            this.buttonReset.TabIndex = 6;
-            this.buttonReset.Text = "&Reset";
-            this.buttonReset.UseVisualStyleBackColor = true;
-            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            this.buttonDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonDefault.Location = new System.Drawing.Point(93, 676);
+            this.buttonDefault.Name = "buttonDefault";
+            this.buttonDefault.Size = new System.Drawing.Size(75, 23);
+            this.buttonDefault.TabIndex = 7;
+            this.buttonDefault.Text = "&Default";
+            this.buttonDefault.UseVisualStyleBackColor = true;
+            this.buttonDefault.Click += new System.EventHandler(this.buttonDefault_Click);
+            // 
+            // buttonRevert
+            // 
+            this.buttonRevert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonRevert.Location = new System.Drawing.Point(12, 676);
+            this.buttonRevert.Name = "buttonRevert";
+            this.buttonRevert.Size = new System.Drawing.Size(75, 23);
+            this.buttonRevert.TabIndex = 6;
+            this.buttonRevert.Text = "&Revert";
+            this.buttonRevert.UseVisualStyleBackColor = true;
+            this.buttonRevert.Click += new System.EventHandler(this.buttonRevert_Click);
             // 
             // FormFileNamerPreferences
             // 
@@ -571,7 +583,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(793, 711);
-            this.Controls.Add(this.buttonReset);
+            this.Controls.Add(this.buttonRevert);
+            this.Controls.Add(this.buttonDefault);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonCancel);
@@ -637,6 +650,7 @@
         private DotNetUtils.Controls.LinkLabel2 linkLabelTVShowReleaseDateFormat;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBoxTVShowReleaseDateFormat;
-        private System.Windows.Forms.Button buttonReset;
+        private System.Windows.Forms.Button buttonDefault;
+        private System.Windows.Forms.Button buttonRevert;
     }
 }

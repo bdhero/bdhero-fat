@@ -73,7 +73,7 @@ namespace BDHero.Plugin.FileNamer
             InitCodecListView();
             InitTextBoxEvents();
             InitComboBoxEvents();
-            InitLinks();
+            InitToolTips();
             Rename();
         }
 
@@ -161,7 +161,7 @@ namespace BDHero.Plugin.FileNamer
             }
 
             listViewCodecNames.ResumeDrawing();
-            listViewCodecNames.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listViewCodecNames.AutoSizeColumns();
         }
 
         private void InitTextBoxEvents()
@@ -181,9 +181,11 @@ namespace BDHero.Plugin.FileNamer
             comboBoxEpisodeNumberFormat.SelectedIndexChanged += (s, e) => Rename();
         }
 
-        private void InitLinks()
+        private void InitToolTips()
         {
             new ToolTip().SetToolTip(linkLabelTVShowReleaseDateFormat, DateFormatUrl);
+            new ToolTip().SetToolTip(buttonRevert, "Discard unsaved changes");
+            new ToolTip().SetToolTip(buttonDefault, "Use default values");
         }
 
         #endregion
@@ -220,11 +222,13 @@ namespace BDHero.Plugin.FileNamer
             textBoxTVShowDirectoryExample.Text = tvShowPath.Directory;
             textBoxTVShowFileNameExample.Text = tvShowPath.FileName;
 
-            // Save/reset buttons
+            // Save/revert/default buttons
 
             var hasChanged = !_prefsCopy.Equals(_userPrefs);
+            var isDefault = _prefsCopy.Equals(new Preferences());
 
-            buttonReset.Enabled = hasChanged;
+            buttonRevert.Enabled = hasChanged;
+            buttonDefault.Enabled = !isDefault;
             buttonSave.Enabled = hasChanged;
         }
 
@@ -299,14 +303,27 @@ namespace BDHero.Plugin.FileNamer
             Close();
         }
 
-        private void buttonReset_Click(object sender, EventArgs e)
+        private void buttonDefault_Click(object sender, EventArgs e)
         {
-            _prefsCopy.CopyFrom(new Preferences());
-            Reset();
+            Default();
         }
 
-        private void Reset()
+        private void buttonRevert_Click(object sender, EventArgs e)
         {
+            Revert();
+        }
+
+        private void Revert()
+        {
+            _prefsCopy.CopyFrom(_userPrefs);
+            InitValues();
+            PopulateCodecListView();
+            Rename();
+        }
+
+        private void Default()
+        {
+            _prefsCopy.CopyFrom(new Preferences());
             InitValues();
             PopulateCodecListView();
             Rename();
