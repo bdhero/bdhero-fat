@@ -200,9 +200,10 @@ namespace BDHeroGUI
 
                 if (plugin.EditPreferences != null)
                 {
-                    pluginItem.DropDownItems.Add(new ToolStripMenuItem("Preferences", null,
+                    IPlugin pluginCopy2 = plugin;
+                    pluginItem.DropDownItems.Add(new ToolStripMenuItem("Preferences...", null,
                                                                         (sender, args) =>
-                                                                        plugin.EditPreferences(this)));
+                                                                        pluginCopy2.EditPreferences(this)));
                 }
 
                 pluginItem.DropDownItems.Add("-");
