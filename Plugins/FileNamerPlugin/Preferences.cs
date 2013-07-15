@@ -13,7 +13,7 @@ namespace BDHero.Plugin.FileNamer
 
         public IDictionary<string, string> Codecs = new Dictionary<string, string>();
 
-        public bool ReplaceSpaces = false;
+        public bool ReplaceSpaces;
         public string ReplaceSpacesWith = ".";
 
         public Preferences()
