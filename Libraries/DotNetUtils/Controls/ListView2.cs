@@ -27,6 +27,9 @@ namespace DotNetUtils.Controls
             ListViewItemSorter = _columnSorter;
             ColumnClick += (_, e) => SetSortColumn(e.Column);
 
+            KeyDown += OnKeyDown;
+            DoubleClick += OnDoubleClick;
+
             var isResizing = false;
 
             // Automatically resize the last column to take up all remaining free space
@@ -90,5 +93,32 @@ namespace DotNetUtils.Controls
                 return lastColumn;
             }
         }
+
+        #region Label editing
+
+        private void EditSelectedListViewItem()
+        {
+            var items = SelectedItems.OfType<ListViewItem>().ToArray();
+            if (!items.Any())
+                return;
+            items.First().BeginEdit();
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs args)
+        {
+            if (!LabelEdit) return;
+            if (args.KeyCode == Keys.F2)
+            {
+                EditSelectedListViewItem();
+            }
+        }
+
+        private void OnDoubleClick(object sender, EventArgs eventArgs)
+        {
+            if (!LabelEdit) return;
+            EditSelectedListViewItem();
+        }
+
+        #endregion
     }
 }

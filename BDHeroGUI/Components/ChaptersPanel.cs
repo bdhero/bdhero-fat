@@ -51,8 +51,6 @@ namespace BDHeroGUI.Components
             comboBoxSearchResults.DisplayMember = "Title";
             comboBoxSearchResults.SelectedIndexChanged += ComboBoxSearchResultsOnSelectedIndexChanged;
 
-            listViewChapters.KeyDown += ListViewChaptersOnKeyDown;
-            listViewChapters.DoubleClick += ListViewChaptersOnDoubleClick;
             listViewChapters.AfterLabelEdit += ListViewChaptersOnAfterLabelEdit;
 
             Load += OnLoad;
@@ -102,27 +100,6 @@ namespace BDHeroGUI.Components
         }
 
         #region UI event handlers
-
-        private void EditSelectedListViewItem()
-        {
-            var items = listViewChapters.SelectedItems.OfType<ListViewItem>().ToArray();
-            if (!items.Any())
-                return;
-            items.First().BeginEdit();
-        }
-
-        private void ListViewChaptersOnKeyDown(object sender, KeyEventArgs args)
-        {
-            if (args.KeyCode == Keys.F2)
-            {
-                EditSelectedListViewItem();
-            }
-        }
-
-        private void ListViewChaptersOnDoubleClick(object sender, EventArgs eventArgs)
-        {
-            EditSelectedListViewItem();
-        }
 
         private void ListViewChaptersOnAfterLabelEdit(object sender, LabelEditEventArgs args)
         {
