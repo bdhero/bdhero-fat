@@ -50,6 +50,40 @@ namespace BDHero.Plugin.FileNamer
         {
             return new Preferences().CopyFrom(this);
         }
+
+        #region Equality members
+
+        protected bool Equals(Preferences other)
+        {
+            return Equals(Movies, other.Movies) &&
+                   Equals(TVShows, other.TVShows) &&
+                   Codecs.SequenceEqual(other.Codecs) &&
+                   ReplaceSpaces.Equals(other.ReplaceSpaces) &&
+                   string.Equals(ReplaceSpacesWith, other.ReplaceSpacesWith);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Preferences) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (Movies != null ? Movies.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (TVShows != null ? TVShows.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Codecs != null ? Codecs.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ ReplaceSpaces.GetHashCode();
+                hashCode = (hashCode*397) ^ (ReplaceSpacesWith != null ? ReplaceSpacesWith.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
+
+        #endregion
     }
 
     internal abstract class ReleaseMediumPreferences
@@ -62,6 +96,31 @@ namespace BDHero.Plugin.FileNamer
             Directory = other.Directory;
             FileName = other.FileName;
         }
+
+        #region Equality members
+
+        protected bool Equals(ReleaseMediumPreferences other)
+        {
+            return string.Equals(Directory, other.Directory) && string.Equals(FileName, other.FileName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ReleaseMediumPreferences) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((Directory != null ? Directory.GetHashCode() : 0)*397) ^ (FileName != null ? FileName.GetHashCode() : 0);
+            }
+        }
+
+        #endregion
     }
 
     internal class MoviePreferences : ReleaseMediumPreferences
@@ -73,6 +132,31 @@ namespace BDHero.Plugin.FileNamer
             base.CopyFrom(other);
             FileName = other.FileName;
         }
+
+        #region Equality members
+
+        protected bool Equals(MoviePreferences other)
+        {
+            return base.Equals(other) && string.Equals(FileName, other.FileName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((MoviePreferences) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (base.GetHashCode()*397) ^ (FileName != null ? FileName.GetHashCode() : 0);
+            }
+        }
+
+        #endregion
     }
 
     internal class TVShowPreferences : ReleaseMediumPreferences
@@ -104,5 +188,40 @@ namespace BDHero.Plugin.FileNamer
             EpisodeNumberFormat = other.EpisodeNumberFormat;
             ReleaseDateFormat = other.ReleaseDateFormat;
         }
+
+        #region Equality members
+
+        protected bool Equals(TVShowPreferences other)
+        {
+            return base.Equals(other) && string.Equals(Directory, other.Directory) &&
+                   string.Equals(FileName, other.FileName) &&
+                   string.Equals(SeasonNumberFormat, other.SeasonNumberFormat) &&
+                   string.Equals(EpisodeNumberFormat, other.EpisodeNumberFormat) &&
+                   string.Equals(ReleaseDateFormat, other.ReleaseDateFormat);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TVShowPreferences) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = base.GetHashCode();
+                hashCode = (hashCode*397) ^ (Directory != null ? Directory.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (FileName != null ? FileName.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (SeasonNumberFormat != null ? SeasonNumberFormat.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (EpisodeNumberFormat != null ? EpisodeNumberFormat.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (ReleaseDateFormat != null ? ReleaseDateFormat.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
+
+        #endregion
     }
 }
