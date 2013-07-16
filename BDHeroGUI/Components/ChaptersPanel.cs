@@ -84,7 +84,7 @@ namespace BDHeroGUI.Components
                 comboBoxSearchResults.Items.Add(result);
             }
 
-            comboBoxSearchResults.SelectedIndex = playlist.ChapterSearchResults.Count > 1 ? 1 : 0;
+            comboBoxSearchResults.SelectedIndex = playlist.ChapterSearchResults.Any() ? 1 : 0;
         }
 
         private IList<Chapter> CopyChapters(IList<Chapter> chapters)
