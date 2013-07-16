@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -295,71 +296,108 @@ namespace BDHeroGUI
 
         #region Disk Detection
 
+        private ToolStripMenuItem[] BDROMMenuItems
+        {
+            get
+            {
+                return openDiscToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>()
+                                                .Except(new[] {noBlurayDiscsFoundToolStripMenuItem})
+                                                .ToArray();
+            }
+        }
+
+        private static DriveInfo[] BDROMDrives
+        {
+            get
+            {
+                return DriveInfo.GetDrives().Where(BDFileUtils.IsBDROM).ToArray();
+            }
+        }
+
         private void InitDriveDetector()
         {
             _driveDetector = new DriveDetector(this);
 
-            // TODO: Do this in background thread
             // TODO: Handle exceptions
             _driveDetector.DeviceArrived += DriveDetectorOnDeviceArrived;
             _driveDetector.DeviceRemoved += DriveDetectorOnDeviceRemoved;
 
+            openBDROMFolderToolStripMenuItem.DropDownOpening += OpenBDROMMenuOpening;
+
+            ResetBDROMMenuAsync();
+        }
+
+        private void DriveDetectorOnDeviceArrived(object sender, DriveDetectorEventArgs args)
+        {
+            ResetBDROMMenuAsync();
+        }
+
+        private void DriveDetectorOnDeviceRemoved(object sender, DriveDetectorEventArgs args)
+        {
+            ResetBDROMMenuAsync();
+        }
+
+        private void OpenBDROMMenuOpening(object sender, EventArgs eventArgs)
+        {
+            ResetBDROMMenuAsync();
+        }
+
+        private void ResetBDROMMenuAsync()
+        {
             var bdromDrives = new DriveInfo[0];
 
             new TaskBuilder()
                 .OnCurrentThread()
                 .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
                     {
-                        bdromDrives = DriveInfo.GetDrives().Where(BDFileUtils.IsBDROM).ToArray();
+                        bdromDrives = BDROMDrives;
                     })
                 .Succeed(delegate
                     {
+                        PurgeBDROMMenuItems();
                         bdromDrives.ForEach(AddBDROMMenuItem);
                     })
                 .Build()
                 .Start();
         }
 
-        private void DriveDetectorOnDeviceArrived(object sender, DriveDetectorEventArgs args)
-        {
-            if (BDFileUtils.IsBDROM(args.DriveInfo))
-            {
-                AddBDROMMenuItem(args.DriveInfo);
-            }
-        }
-
-        private void DriveDetectorOnDeviceRemoved(object sender, DriveDetectorEventArgs args)
-        {
-            RemoveBDROMMenuItem(args.DriveInfo);
-        }
-
         private void AddBDROMMenuItem(DriveInfo driveInfo)
         {
-            var text = string.Format("{0} {1}", driveInfo.Name, driveInfo.VolumeLabel);
-            var item = new ToolStripMenuItem(text) {Tag = driveInfo.Name};
-            item.Click += (o, e) => Scan(driveInfo.Name);
-
+            var driveLetter = driveInfo.Name;
+            var text = string.Format("{0} {1}", driveLetter, driveInfo.VolumeLabel);
+            var item = new ToolStripMenuItem(text) { Tag = driveLetter };
+            item.Click += (o, e) => Scan(driveLetter);
             openDiscToolStripMenuItem.DropDownItems.Add(item);
             noBlurayDiscsFoundToolStripMenuItem.Visible = false;
         }
 
-        private void RemoveBDROMMenuItem(DriveInfo driveInfo)
+        private void RemoveBDROMMenuItem(string driveLetter)
         {
-            var items = openDiscToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>().ToArray();
-            var item = items.FirstOrDefault(menuItem => driveInfo.Name.Equals(menuItem.Tag));
+            Debug.Assert(driveLetter != null, "driveLetter != null");
 
             noBlurayDiscsFoundToolStripMenuItem.Visible = true;
 
+            var item = BDROMMenuItems.FirstOrDefault(menuItem => driveLetter.Equals(menuItem.Tag));
             if (item != null)
             {
                 openDiscToolStripMenuItem.DropDownItems.Remove(item);
             }
 
-            var hasVisibleItems = items
-                .Except(new[] { noBlurayDiscsFoundToolStripMenuItem })
-                .Any(menuItem => menuItem.Visible);
+            noBlurayDiscsFoundToolStripMenuItem.Visible = !BDROMMenuItems.Any();
+        }
 
-            noBlurayDiscsFoundToolStripMenuItem.Visible = !hasVisibleItems;
+        private void PurgeBDROMMenuItems()
+        {
+            var bdromDriveLetters = BDROMDrives.Select(info => info.Name).ToArray();
+            var invalidItems = openDiscToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>()
+                                                        .Where(item => item != noBlurayDiscsFoundToolStripMenuItem)
+                                                        .Select(item => item.Tag).OfType<string>()
+                                                        .Where(driveLetter => !bdromDriveLetters.Contains(driveLetter))
+                                                        .ToArray();
+            foreach (var driveLetter in invalidItems)
+            {
+                RemoveBDROMMenuItem(driveLetter);
+            }
         }
 
         #endregion
