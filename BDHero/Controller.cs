@@ -26,12 +26,16 @@ namespace BDHero
 
         private readonly ConcurrentDictionary<string, int> _progressMap = new ConcurrentDictionary<string, int>();
 
+        #region Properties
+
         public Job Job { get; private set; }
 
         public IList<IPlugin> PluginsByType
         {
             get { return _pluginService.PluginsByType; }
         }
+
+        #endregion
 
         #region Events
 
