@@ -107,6 +107,14 @@ namespace BDHeroGUI
                 };
 
             InitDriveDetector();
+
+            toolStripStatusLabelOffline.Visible = false;
+            var monitor = new NetworkStatusMonitor(null, SetIsOnline);
+        }
+
+        private void SetIsOnline(bool isOnline)
+        {
+            toolStripStatusLabelOffline.Visible = !isOnline;
         }
 
         #endregion
