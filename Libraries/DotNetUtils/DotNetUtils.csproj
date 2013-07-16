@@ -93,6 +93,7 @@
     <Compile Include="HttpRequest.cs" />
     <Compile Include="Extensions\ListViewExtensions.cs" />
     <Compile Include="Mono.Options.cs" />
+    <Compile Include="NetworkStatusMonitor.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\TabPageExtensions.cs" />
