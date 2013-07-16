@@ -31,23 +31,11 @@ namespace DotNetUtils
         {
             TestIPv4("http://icanhazip.com/");
             TestIPv4("http://api.exip.org/?call=ip");
-            TestHttp("http://www.google.com/");
-            TestHttp("http://www.yahoo.com/");
-        }
-
-        private void TestHttp(string url)
-        {
-            var req = HttpRequest.BuildRequest(HttpRequest.METHOD_GET, url);
-            req.Timeout = 3000;
-            var resp = HttpRequest.Get(req);
-            if (string.IsNullOrWhiteSpace(resp) || !resp.ToLowerInvariant().Contains("html"))
-                throw new HttpListenerException();
         }
 
         private void TestIPv4(string url)
         {
             var req = HttpRequest.BuildRequest(HttpRequest.METHOD_GET, url);
-            req.Timeout = 3000;
             var resp = HttpRequest.Get(req);
             if (!IPRegex.IsMatch(resp))
                 throw new HttpListenerException();
