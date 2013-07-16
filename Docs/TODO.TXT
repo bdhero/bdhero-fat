@@ -21,7 +21,6 @@ Features
 
 [ ] Add "use last folder" option to File Namer preference dialog
 
-[ ] Angle support
 [ ] Fix or remove "low quality" playlist detection
 [ ] Consider chapter count and timestamps when looking for duplicate playlists (playlists w/ identical streams but different chapters are not dups)
 
@@ -41,6 +40,7 @@ Backlog
 [ ] Group input FileTextBox and buttons into panel; do same w/ output FileTextBox and buttons
 
 [ ] Allow pausing of tasks
+[ ] Angle support
 
 [ ] Validate filter window inputs
 
