@@ -18,9 +18,9 @@ namespace DotNetUtils
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private const string METHOD_GET = "GET";
-        private const string METHOD_PUT = "PUT";
-        private const string METHOD_POST = "POST";
+        public const string METHOD_GET = "GET";
+        public const string METHOD_PUT = "PUT";
+        public const string METHOD_POST = "POST";
 
         /// <summary>
         /// Gets or sets the User-Agent HTTP request header sent to the web server when making requests.
@@ -40,10 +40,19 @@ namespace DotNetUtils
         /// </summary>
         /// <param name="uri">URI of the web resource to GET</param>
         /// <param name="headers">Optional list of fully-formatted headers of the form <c>Header-Name: Header-Value</c></param>
-        /// <returns></returns>
+        /// <returns>Response body as a string</returns>
         public static string Get(string uri, List<string> headers = null)
         {
-            var request = BuildRequest(METHOD_GET, uri, false, headers);
+            return Get(BuildRequest(METHOD_GET, uri, false, headers));
+        }
+
+        /// <summary>
+        /// Performs a synchronous HTTP GET request and returns the full response as a string.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Response body as a string</returns>
+        public static string Get(HttpWebRequest request)
+        {
             using (var httpResponse = request.GetResponse())
             {
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -143,7 +152,7 @@ namespace DotNetUtils
             }
         }
 
-        private static HttpWebRequest BuildRequest(string method, string uri, bool cache = false, List<string> headers = null)
+        public static HttpWebRequest BuildRequest(string method, string uri, bool cache = false, List<string> headers = null)
         {
             var strHeaders = (headers != null && headers.Count > 0 ? string.Format(" with headers: {0}", string.Join("; ", headers)) : "");
             Logger.DebugFormat("{0} {1} -- cache = {2}{3}", method, uri, cache, strHeaders);
