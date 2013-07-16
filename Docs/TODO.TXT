@@ -27,6 +27,7 @@ Features
 [ ] Plugin hooks for UI events:
     [ ] Select a movie/TV show
     [ ] Re-configure playlist (change Cut, Language, selected tracks) -- (for updating output file name, MKV title, track title)
+    [ ] Re-configure tracks (change Cut, Language, selected tracks) -- (for updating output file name, MKV title, track title)
 
 Backlog
 =======
@@ -72,6 +73,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Drive Detector doesn't detect when drive is disconnected (i.e., powered off w/o removing disc)
 [X] Allow any BD-ROM file/subdirectory to be scanned
 [X] Add "Preferences..." link for file renamer plugins in FormMain near "Output" textbos
     [X] Open preferences dialog directly if only one plugin is enabled
