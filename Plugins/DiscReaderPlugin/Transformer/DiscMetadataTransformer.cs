@@ -121,7 +121,7 @@ namespace BDHero.Plugin.DiscReader.Transformer
             sanitized = Regex.Replace(sanitized, @" {2,}", " ", RegexOptions.IgnoreCase);
             sanitized = sanitized.Trim();
 
-            if (sanitized.ToLowerInvariant() == "bluray")
+            if (Regex.IsMatch(sanitized, "blu.?ray", RegexOptions.IgnoreCase))
             {
                 sanitized = "";
             }
