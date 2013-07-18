@@ -170,10 +170,22 @@ namespace DotNetUtils
             }
         }
 
-        public static Image ExtractIconAsBitmap(string exePath)
+        public static Image ExtractIconAsBitmap(string exePath, Size size)
         {
             var icon = ExtractIcon(exePath);
-            return icon != null ? icon.ToBitmap() : null;
+            return icon != null ? new Icon(icon, size).ToBitmap() : null;
+        }
+
+        public static Icon GetDefaultProgramIcon(string filePath)
+        {
+            return ExtractIcon(filePath);
+        }
+
+        public static Image GetDefaultProgramIconAsBitmap(string filePath, Size size)
+        {
+            var exePath = GetDefaultProgram(filePath);
+            var icon = ExtractIcon(exePath);
+            return icon != null ? new Icon(icon, size).ToBitmap() : null;
         }
 
         public static bool IsFile(string path)
@@ -356,21 +368,26 @@ namespace DotNetUtils
             Process.Start(url);
         }
 
-        public static bool HasProgramAssociation(string filePath)
+        public static string GetDefaultProgram(string filePath)
         {
-            var hasAssoc = false;
+            string exePath = null;
             if (Path.HasExtension(filePath))
             {
                 try
                 {
                     var defaultProgram = FileExtentionInfo(AssocStr.Executable, Path.GetExtension(filePath));
-                    hasAssoc = !string.IsNullOrEmpty(defaultProgram) && File.Exists(defaultProgram);
+                    exePath = !string.IsNullOrEmpty(defaultProgram) && File.Exists(defaultProgram) ? defaultProgram : null;
                 }
                 catch
                 {
                 }
             }
-            return hasAssoc;
+            return exePath;
+        }
+
+        public static bool HasProgramAssociation(string filePath)
+        {
+            return !string.IsNullOrEmpty(GetDefaultProgram(filePath));
         }
 
         [DllImport("Shlwapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
