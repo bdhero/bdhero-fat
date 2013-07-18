@@ -1,7 +1,7 @@
 <project>
     <shortName>BDHero</shortName>
     <fullName>BDHero</fullName>
-    <version>0.7.5.3</version>
+    <version>0.7.5.4</version>
     <logoImage>Assets/Icons/bdhero_gui_48.png</logoImage>
     <componentList>
         <component>
