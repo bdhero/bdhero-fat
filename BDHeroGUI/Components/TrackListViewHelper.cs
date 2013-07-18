@@ -75,6 +75,20 @@ namespace BDHeroGUI.Components
         private void InitContextMenu()
         {
             _listView.MouseClick += ListViewOnMouseClick;
+            _listView.KeyUp += ListViewOnKeyUp;
+        }
+
+        private void ListViewOnKeyUp(object sender, KeyEventArgs args)
+        {
+            if (args.KeyCode != Keys.Apps)
+                return;
+
+            if (_listView.SelectedIndices.Count == 0)
+                return;
+
+            var firstSelectedItem = _listView.SelectedItems[0];
+
+            ShowContextMenu(firstSelectedItem.Position);
         }
 
         private void ListViewOnMouseClick(object sender, MouseEventArgs args)
@@ -88,6 +102,11 @@ namespace BDHeroGUI.Components
             if (listViewItem == null)
                 return;
 
+            ShowContextMenu(pos);
+        }
+
+        private void ShowContextMenu(Point pos)
+        {
             var selectedListViewItems = _listView.SelectedItems.OfType<ListViewItem>().ToArray();
 
             var menu = new ContextMenuStrip();
@@ -95,7 +114,7 @@ namespace BDHeroGUI.Components
             AddLanguagesMenuItem(menu, selectedListViewItems);
             AddTrackTypesMenuItems(menu, selectedListViewItems);
 
-            menu.Show(_listView, args.Location);
+            menu.Show(_listView, pos);
         }
 
         private void AddLanguagesMenuItem(ContextMenuStrip menu, ListViewItem[] listViewItems)

@@ -106,6 +106,20 @@ namespace BDHeroGUI.Components
 
             listView.MouseClick += ListViewOnMouseClick;
             listView.MouseDoubleClick += ListViewOnMouseDoubleClick;
+            listView.KeyUp += ListViewOnKeyUp;
+        }
+
+        private void ListViewOnKeyUp(object sender, KeyEventArgs args)
+        {
+            if (args.KeyCode != Keys.Apps)
+                return;
+
+            if (SelectedPlaylist == null)
+                return;
+
+            var selectedItem = listView.SelectedItems[0];
+
+            ShowContextMenu(selectedItem.Position, SelectedPlaylist);
         }
 
         private void ListViewOnMouseClick(object sender, MouseEventArgs args)
@@ -121,6 +135,11 @@ namespace BDHeroGUI.Components
             if (playlist == null)
                 return;
 
+            ShowContextMenu(args.Location, playlist);
+        }
+
+        private void ShowContextMenu(Point point, Playlist playlist)
+        {
             var menu = new ContextMenuStrip();
 
             var playItem = new ToolStripMenuItem("&Play", Resources.play_blue);
@@ -139,7 +158,7 @@ namespace BDHeroGUI.Components
             {
                 playItem.Enabled = false;
                 showFileItem.Enabled = false;
-                menu.Items.Add(new ToolStripMenuItem("File not found") { Enabled = false });
+                menu.Items.Add(new ToolStripMenuItem("File not found") {Enabled = false});
             }
 
             menu.Items.Add(playItem);
@@ -150,7 +169,7 @@ namespace BDHeroGUI.Components
 
             AddCutMenuItems(menu, playlist);
 
-            menu.Show(listView, args.Location);
+            menu.Show(listView, point);
         }
 
         private void AddCutMenuItems(ContextMenuStrip menu, Playlist playlist)
