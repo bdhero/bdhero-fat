@@ -73,6 +73,8 @@ Chris' Plugins
 Complete
 ========
 
+[X] Allow user to change detected track type
+[X] Update track/playlist listview items when user changes values
 [X] Drive Detector doesn't detect when drive is disconnected (i.e., powered off w/o removing disc)
 [X] Allow any BD-ROM file/subdirectory to be scanned
 [X] Add "Preferences..." link for file renamer plugins in FormMain near "Output" textbos
