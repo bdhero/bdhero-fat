@@ -35,7 +35,7 @@ namespace BDHeroGUI.Components
                 {
                     new ListViewCell { Text = track.Codec.DisplayName },
                     new ListViewCell { Text = track.ChannelCount.ToString("F1"), Tag = track.ChannelCount },
-                    new ListViewCell { Text = track.Language.Name, Tag = track.Language.Name },
+                    new ListViewCell { Text = track.Language.Name, Tag = track.Language },
                     new ListViewCell { Text = track.Type.ToString(), Tag = track.Type },
                     new ListViewCell { Text = (track.IndexOfType + 1).ToString("D"), Tag = track.IndexOfType }
                 };

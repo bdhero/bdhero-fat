@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
+using I18N;
 
 namespace BDHeroGUI.Components
 {
@@ -77,6 +79,8 @@ namespace BDHeroGUI.Components
 
             var menu = new ContextMenuStrip();
 
+            AddLanguagesMenuItem(listViewItem, track, menu);
+
             foreach (var trackType in Enum.GetValues(typeof (TrackType)).OfType<TrackType>())
             {
                 var type = trackType;
@@ -86,14 +90,59 @@ namespace BDHeroGUI.Components
                     menuItem.Checked = true;
                     menuItem.Enabled = false;
                 }
-                menuItem.Click += (s, e) => MenuItemOnClick(listViewItem, track, type);
+                menuItem.Click += (s, e) => TrackTypeMenuItemOnClick(listViewItem, track, type);
                 menu.Items.Add(menuItem);
             }
 
             menu.Show(_listView, args.Location);
         }
 
-        private void MenuItemOnClick(ListViewItem listViewItem, Track track, TrackType trackType)
+        private void AddLanguagesMenuItem(ListViewItem listViewItem, Track track, ContextMenuStrip menu)
+        {
+            // Only allow users to change the language on video tracks
+            if (!track.IsVideo)
+                return;
+
+            var langs = new HashSet<Language>();
+            foreach (var track2 in Playlist.Tracks)
+            {
+                langs.Add(track2.Language);
+            }
+
+            var languagesMenuItem = new ToolStripMenuItem("Language");
+            foreach (var language in langs.OrderBy(language => language.Name))
+            {
+                var lang = language;
+                var langMenuItem = new ToolStripMenuItem(language.Name);
+
+                langMenuItem.Click += (s, e) => LanguageMenuItemOnClick(listViewItem, track, lang);
+
+                if (track.Language.Equals(language))
+                {
+                    langMenuItem.Checked = true;
+                    langMenuItem.Enabled = false;
+                }
+
+                languagesMenuItem.DropDownItems.Add(langMenuItem);
+            }
+
+            menu.Items.Add(languagesMenuItem);
+            menu.Items.Add("-");
+        }
+
+        private void LanguageMenuItemOnClick(ListViewItem listViewItem, Track track, Language language)
+        {
+            track.Language = language;
+            var listViewSubItems = listViewItem.SubItems.OfType<ListViewItem.ListViewSubItem>().ToArray();
+            var languageSubItems = listViewSubItems.Where(subItem => subItem.Tag is Language).ToArray();
+            foreach (var subItem in languageSubItems)
+            {
+                subItem.Tag = language;
+                subItem.Text = language.Name;
+            }
+        }
+
+        private void TrackTypeMenuItemOnClick(ListViewItem listViewItem, Track track, TrackType trackType)
         {
             track.Type = trackType;
             foreach (var subItem in listViewItem.SubItems.OfType<ListViewItem.ListViewSubItem>().Where(subItem => subItem.Tag is TrackType))
