@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using BDHero;
+using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.Startup;
 using BDHero.Utils;
@@ -77,6 +78,8 @@ namespace BDHeroGUI
 
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
             playlistListView.ShowAllChanged += PlaylistListViewOnShowAllChanged;
+
+            tracksPanel.TrackReconfigured += TracksPanelOnTrackReconfigured;
 
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
             mediaPanel.Search = ShowMetadataSearchWindow;
@@ -878,7 +881,7 @@ namespace BDHeroGUI
             RenameSync();
         }
 
-        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs listViewItemSelectionChangedEventArgs)
+        private void PlaylistListViewOnItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs args)
         {
             var playlist = playlistListView.SelectedPlaylist;
 
@@ -893,6 +896,12 @@ namespace BDHeroGUI
         private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)
         {
             showAllPlaylistsToolStripMenuItem.Checked = playlistListView.ShowAll;
+        }
+
+        private void TracksPanelOnTrackReconfigured(Playlist playlist, Track track)
+        {
+            playlistListView.ReconfigurePlaylist(playlist);
+            RenameSync();
         }
 
         #endregion

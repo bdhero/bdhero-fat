@@ -21,6 +21,8 @@ namespace BDHeroGUI.Components
             {
                 _playlist = value;
 
+                _ignoreCheckedEvent = true;
+
                 _listView.Items.Clear();
 
                 if (_playlist == null) return;
@@ -28,10 +30,16 @@ namespace BDHeroGUI.Components
                 var items = Transform(_playlist.Tracks);
                 _listView.Items.AddRange(items);
                 _listView.AutoSizeColumns();
+
+                _ignoreCheckedEvent = false;
             }
         }
 
         private Playlist _playlist;
+
+        private bool _ignoreCheckedEvent;
+
+        public event TrackReconfiguredEventHandler TrackReconfigured;
 
         private readonly ListView2 _listView;
         private readonly Func<Track, bool> _filter;
@@ -140,6 +148,7 @@ namespace BDHeroGUI.Components
                 subItem.Tag = language;
                 subItem.Text = language.Name;
             }
+            NotifyTrackReconfigured(track);
         }
 
         private void TrackTypeMenuItemOnClick(ListViewItem listViewItem, Track track, TrackType trackType)
@@ -150,6 +159,7 @@ namespace BDHeroGUI.Components
                 subItem.Tag = trackType;
                 subItem.Text = trackType.ToString();
             }
+            NotifyTrackReconfigured(track);
         }
 
         private void ListViewOnItemCheck(object sender, ItemCheckEventArgs e)
@@ -162,13 +172,22 @@ namespace BDHeroGUI.Components
             }
         }
 
-        private static void ListViewOnItemChecked(object sender, ItemCheckedEventArgs args)
+        private void ListViewOnItemChecked(object sender, ItemCheckedEventArgs args)
         {
             var track = args.Item.Tag as Track;
             if (track != null)
             {
                 track.Keep = args.Item.Checked;
+                NotifyTrackReconfigured(track);
             }
+        }
+
+        private void NotifyTrackReconfigured(Track track)
+        {
+            if (_ignoreCheckedEvent)
+                return;
+            if (TrackReconfigured != null)
+                TrackReconfigured(Playlist, track);
         }
 
         private static bool IsBestChoice(Track track)
@@ -239,4 +258,6 @@ namespace BDHeroGUI.Components
             return new ListViewItem.ListViewSubItem(item, cell.Text) {Tag = cell.Tag};
         }
     }
+
+    public delegate void TrackReconfiguredEventHandler(Playlist playlist, Track track);
 }

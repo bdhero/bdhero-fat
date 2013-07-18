@@ -184,5 +184,43 @@ namespace BDHeroGUI.Components
         {
             Playlists = Playlists;
         }
+
+        public void ReconfigurePlaylist(Playlist playlist)
+        {
+            if (!Playlists.Contains(playlist))
+                return;
+
+            var newItem = Transform(playlist);
+
+            var items = listView.Items.OfType<ListViewItem>().Where(curItem => curItem.Tag == newItem.Tag).ToArray();
+            var oldItem = items.FirstOrDefault();
+            if (oldItem == null)
+                return;
+
+            newItem.Selected = oldItem.Selected;
+
+            // Replacing the item by inserting the new one and removing the old one
+            // causes a stack overflow because it triggers a SelectedIndexChanged event, which then
+            // calls this method, etc.  So we must resort to copying the new values into the old subitems.
+
+            oldItem.Text = newItem.Text;
+            oldItem.Tag = newItem.Tag;
+            oldItem.ToolTipText = newItem.ToolTipText;
+            oldItem.Font = newItem.Font;
+            oldItem.BackColor = newItem.BackColor;
+            oldItem.ForeColor = newItem.ForeColor;
+
+            var oldSubItems = oldItem.SubItems.OfType<ListViewItem.ListViewSubItem>().ToArray();
+            var newSubItems = newItem.SubItems.OfType<ListViewItem.ListViewSubItem>().ToArray();
+
+            for (var i = 0; i < oldSubItems.Length; i++)
+            {
+                oldSubItems[i].Text = newSubItems[i].Text;
+                oldSubItems[i].Tag = newSubItems[i].Tag;
+                oldSubItems[i].Font = newSubItems[i].Font;
+                oldSubItems[i].BackColor = newSubItems[i].BackColor;
+                oldSubItems[i].ForeColor = newSubItems[i].ForeColor;
+            }
+        }
     }
 }
