@@ -27,7 +27,7 @@ namespace BDHeroGUI.Components
 
         private Playlist _playlist;
 
-        public event TrackReconfiguredEventHandler TrackReconfigured;
+        public event PlaylistReconfiguredEventHandler PlaylistReconfigured;
 
         /// <summary>
         /// Gets or sets whether all playlists are shown, regardless of the user's filter settings.
@@ -54,9 +54,9 @@ namespace BDHeroGUI.Components
             audioTrackListView.Filter = ShowTrack;
             subtitleTrackListView.Filter = ShowTrack;
 
-            videoTrackListView.TrackReconfigured += HelperOnTrackReconfigured;
-            audioTrackListView.TrackReconfigured += HelperOnTrackReconfigured;
-            subtitleTrackListView.TrackReconfigured += HelperOnTrackReconfigured;
+            videoTrackListView.PlaylistReconfigured += HelperOnPlaylistReconfigured;
+            audioTrackListView.PlaylistReconfigured += HelperOnPlaylistReconfigured;
+            subtitleTrackListView.PlaylistReconfigured += HelperOnPlaylistReconfigured;
         }
 
         public void ShowFilterWindow()
@@ -79,10 +79,10 @@ namespace BDHeroGUI.Components
             Playlist = Playlist;
         }
 
-        private void HelperOnTrackReconfigured(Playlist playlist, Track track)
+        private void HelperOnPlaylistReconfigured(Playlist playlist)
         {
-            if (TrackReconfigured != null)
-                TrackReconfigured(playlist, track);
+            if (PlaylistReconfigured != null)
+                PlaylistReconfigured(playlist);
         }
     }
 }

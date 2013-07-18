@@ -18,7 +18,7 @@ namespace BDHeroGUI.Components
             set { _helper.Playlist = value; }
         }
 
-        public event TrackReconfiguredEventHandler TrackReconfigured;
+        public event PlaylistReconfiguredEventHandler PlaylistReconfigured;
 
         private readonly TrackListViewHelper _helper;
 
@@ -29,13 +29,13 @@ namespace BDHeroGUI.Components
             InitializeComponent();
             _helper = new TrackListViewHelper(listViewAudioTracks, track => track.IsAudio && Filter(track), GetListItem);
             Load += _helper.OnLoad;
-            _helper.TrackReconfigured += HelperOnTrackReconfigured;
+            _helper.PlaylistReconfigured += HelperOnPlaylistReconfigured;
         }
 
-        private void HelperOnTrackReconfigured(Playlist playlist, Track track)
+        private void HelperOnPlaylistReconfigured(Playlist playlist)
         {
-            if (TrackReconfigured != null)
-                TrackReconfigured(playlist, track);
+            if (PlaylistReconfigured != null)
+                PlaylistReconfigured(playlist);
         }
 
         private static ICollection<ListViewCell> GetListItem(Track track)

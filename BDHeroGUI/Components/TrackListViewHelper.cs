@@ -21,7 +21,7 @@ namespace BDHeroGUI.Components
             {
                 _playlist = value;
 
-                _ignoreCheckedEvent = true;
+                _ignoreReconfiguration = true;
 
                 _listView.Items.Clear();
 
@@ -31,15 +31,15 @@ namespace BDHeroGUI.Components
                 _listView.Items.AddRange(items);
                 _listView.AutoSizeColumns();
 
-                _ignoreCheckedEvent = false;
+                _ignoreReconfiguration = false;
             }
         }
 
         private Playlist _playlist;
 
-        private bool _ignoreCheckedEvent;
+        private bool _ignoreReconfiguration;
 
-        public event TrackReconfiguredEventHandler TrackReconfigured;
+        public event PlaylistReconfiguredEventHandler PlaylistReconfigured;
 
         private readonly ListView2 _listView;
         private readonly Func<Track, bool> _filter;
@@ -148,7 +148,7 @@ namespace BDHeroGUI.Components
                 subItem.Tag = language;
                 subItem.Text = language.Name;
             }
-            NotifyTrackReconfigured(track);
+            NotifyPlaylistReconfigured();
         }
 
         private void TrackTypeMenuItemOnClick(ListViewItem listViewItem, Track track, TrackType trackType)
@@ -159,7 +159,7 @@ namespace BDHeroGUI.Components
                 subItem.Tag = trackType;
                 subItem.Text = trackType.ToString();
             }
-            NotifyTrackReconfigured(track);
+            NotifyPlaylistReconfigured();
         }
 
         private void ListViewOnItemCheck(object sender, ItemCheckEventArgs e)
@@ -178,16 +178,16 @@ namespace BDHeroGUI.Components
             if (track != null)
             {
                 track.Keep = args.Item.Checked;
-                NotifyTrackReconfigured(track);
+                NotifyPlaylistReconfigured();
             }
         }
 
-        private void NotifyTrackReconfigured(Track track)
+        private void NotifyPlaylistReconfigured()
         {
-            if (_ignoreCheckedEvent)
+            if (_ignoreReconfiguration)
                 return;
-            if (TrackReconfigured != null)
-                TrackReconfigured(Playlist, track);
+            if (PlaylistReconfigured != null)
+                PlaylistReconfigured(Playlist);
         }
 
         private static bool IsBestChoice(Track track)
@@ -259,5 +259,5 @@ namespace BDHeroGUI.Components
         }
     }
 
-    public delegate void TrackReconfiguredEventHandler(Playlist playlist, Track track);
+    public delegate void PlaylistReconfiguredEventHandler(Playlist playlist);
 }

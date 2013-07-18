@@ -79,7 +79,7 @@ namespace BDHeroGUI
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
             playlistListView.ShowAllChanged += PlaylistListViewOnShowAllChanged;
 
-            tracksPanel.TrackReconfigured += TracksPanelOnTrackReconfigured;
+            tracksPanel.PlaylistReconfigured += TracksPanelOnPlaylistReconfigured;
 
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
             mediaPanel.Search = ShowMetadataSearchWindow;
@@ -898,7 +898,7 @@ namespace BDHeroGUI
             showAllPlaylistsToolStripMenuItem.Checked = playlistListView.ShowAll;
         }
 
-        private void TracksPanelOnTrackReconfigured(Playlist playlist, Track track)
+        private void TracksPanelOnPlaylistReconfigured(Playlist playlist)
         {
             playlistListView.ReconfigurePlaylist(playlist);
             RenameSync();
