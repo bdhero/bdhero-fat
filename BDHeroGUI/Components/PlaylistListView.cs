@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
 using BDHeroGUI.Forms;
-using DotNetUtils.Controls;
+using BDHeroGUI.Properties;
+using DotNetUtils;
 using DotNetUtils.Extensions;
 
 namespace BDHeroGUI.Components
@@ -99,6 +101,67 @@ namespace BDHeroGUI.Components
                     if (ItemSelectionChanged != null)
                         ItemSelectionChanged(sender, args);
                 };
+
+            listView.MouseClick += ListViewOnMouseClick;
+            listView.MouseDoubleClick += ListViewOnMouseDoubleClick;
+        }
+
+        private void ListViewOnMouseClick(object sender, MouseEventArgs args)
+        {
+            if (args.Button != MouseButtons.Right)
+                return;
+
+            var item = listView.GetItemAt(args.Location.X, args.Location.Y);
+            if (item == null)
+                return;
+
+            var playlist = item.Tag as Playlist;
+            if (playlist == null)
+                return;
+
+            var menu = new ContextMenuStrip();
+
+            var playItem = new ToolStripMenuItem("&Play", Resources.play_blue);
+            playItem.Click += (o, eventArgs) => FileUtils.OpenFile(playlist.FullPath);
+            playItem.Font = new Font(playItem.Font, FontStyle.Bold);
+            if (FileUtils.HasProgramAssociation(playlist.FullPath))
+                playItem.Image = FileUtils.GetDefaultProgramIconAsBitmap(playlist.FullPath, new Size(16, 16));
+
+            var copyPathItem = new ToolStripMenuItem("&Copy path to clipboard", Resources.copy);
+            copyPathItem.Click += (o, eventArgs) => Clipboard.SetText(playlist.FullPath);
+
+            var showFileItem = new ToolStripMenuItem("Show in &folder", Resources.folder_open);
+            showFileItem.Click += (o, eventArgs) => FileUtils.ShowInFolder(playlist.FullPath);
+
+            if (!File.Exists(playlist.FullPath))
+            {
+                playItem.Enabled = false;
+                showFileItem.Enabled = false;
+                menu.Items.Add(new ToolStripMenuItem("File not found") { Enabled = false });
+            }
+
+            menu.Items.Add(playItem);
+            menu.Items.Add("-");
+            menu.Items.Add(copyPathItem);
+            menu.Items.Add(showFileItem);
+
+            menu.Show(listView, args.Location);
+        }
+
+        private void ListViewOnMouseDoubleClick(object sender, MouseEventArgs args)
+        {
+            var item = listView.GetItemAt(args.Location.X, args.Location.Y);
+            if (item == null)
+                return;
+
+            var playlist = item.Tag as Playlist;
+            if (playlist == null)
+                return;
+
+            if (File.Exists(playlist.FullPath))
+                FileUtils.OpenFile(playlist.FullPath);
+            else
+                MessageBox.Show(this, string.Format("The file \"{0}\" could not be found.", playlist.FullPath), "File not found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
