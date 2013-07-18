@@ -9,7 +9,7 @@ namespace I18N
     /// <summary>
     /// Represents an international language used by Blu-ray Discs.
     /// </summary>
-    public class Language
+    public class Language : IComparable<Language>, IComparable
     {
         #region Static properties (private)
 
@@ -107,6 +107,19 @@ namespace I18N
         public override int GetHashCode()
         {
             return (ISO_639_2 != null ? ISO_639_2.GetHashCode() : 0);
+        }
+
+        public int CompareTo(object obj)
+        {
+            var other = obj as Language;
+            if (other != null) return CompareTo(other);
+            if (obj == null) return 0;
+            return 1;
+        }
+
+        public int CompareTo(Language other)
+        {
+            return String.Compare(Name, other.Name, StringComparison.Ordinal);
         }
 
         #endregion
