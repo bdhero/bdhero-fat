@@ -45,6 +45,8 @@ namespace BDHeroGUI.Components
         private readonly Func<Track, bool> _filter;
         private readonly Func<Track, ICollection<ListViewCell>> _transform;
 
+        private Language[] _allLanguages = new Language[0];
+
         public TrackListViewHelper(ListView2 listView, Func<Track, bool> filter, Func<Track, ICollection<ListViewCell>> transform)
         {
             _listView = listView;
@@ -64,6 +66,12 @@ namespace BDHeroGUI.Components
             _listView.AutoSizeColumns();
         }
 
+        public void SetPlaylist(Playlist playlist, Language[] allLanguages)
+        {
+            Playlist = playlist;
+            _allLanguages = allLanguages;
+        }
+
         private void InitContextMenu()
         {
             _listView.MouseClick += ListViewOnMouseClick;
@@ -80,52 +88,40 @@ namespace BDHeroGUI.Components
             if (listViewItem == null)
                 return;
 
-            var track = listViewItem.Tag as Track;
-
-            if (track == null)
-                return;
+            var selectedListViewItems = _listView.SelectedItems.OfType<ListViewItem>().ToArray();
 
             var menu = new ContextMenuStrip();
 
-            AddLanguagesMenuItem(listViewItem, track, menu);
-
-            foreach (var trackType in Enum.GetValues(typeof (TrackType)).OfType<TrackType>())
-            {
-                var type = trackType;
-                var menuItem = new ToolStripMenuItem(trackType.ToString());
-                if (track.Type == trackType)
-                {
-                    menuItem.Checked = true;
-                    menuItem.Enabled = false;
-                }
-                menuItem.Click += (s, e) => TrackTypeMenuItemOnClick(listViewItem, track, type);
-                menu.Items.Add(menuItem);
-            }
+            AddLanguagesMenuItem(menu, selectedListViewItems);
+            AddTrackTypesMenuItems(menu, selectedListViewItems);
 
             menu.Show(_listView, args.Location);
         }
 
-        private void AddLanguagesMenuItem(ListViewItem listViewItem, Track track, ContextMenuStrip menu)
+        private void AddLanguagesMenuItem(ContextMenuStrip menu, ListViewItem[] listViewItems)
         {
             // Only allow users to change the language on video tracks
-            if (!track.IsVideo)
+            var tracks = listViewItems.Select(item => item.Tag as Track).ToArray();
+            var isVideo = tracks.All(track => track.IsVideo);
+            if (!isVideo)
                 return;
 
-            var langs = new HashSet<Language>();
-            foreach (var track2 in Playlist.Tracks)
+            var selectedLanguages = new HashSet<Language>();
+            foreach (var track2 in tracks)
             {
-                langs.Add(track2.Language);
+                selectedLanguages.Add(track2.Language);
             }
+            var selectedLanguage = selectedLanguages.Count == 1 ? selectedLanguages.FirstOrDefault() : null;
 
             var languagesMenuItem = new ToolStripMenuItem("Language");
-            foreach (var language in langs.OrderBy(language => language.Name))
+            foreach (var language in _allLanguages.OrderBy(language => language.Name))
             {
                 var lang = language;
                 var langMenuItem = new ToolStripMenuItem(language.Name);
 
-                langMenuItem.Click += (s, e) => LanguageMenuItemOnClick(listViewItem, track, lang);
+                langMenuItem.Click += (s, e) => LanguageMenuItemOnClick(listViewItems, lang);
 
-                if (track.Language.Equals(language))
+                if (language.Equals(selectedLanguage))
                 {
                     langMenuItem.Checked = true;
                     langMenuItem.Enabled = false;
@@ -138,9 +134,19 @@ namespace BDHeroGUI.Components
             menu.Items.Add("-");
         }
 
-        private void LanguageMenuItemOnClick(ListViewItem listViewItem, Track track, Language language)
+        private void LanguageMenuItemOnClick(ListViewItem[] listViewItems, Language language)
         {
-            track.Language = language;
+            foreach (var listViewItem in listViewItems)
+            {
+                LanguageMenuItemOnClick(language, listViewItem);
+            }
+            NotifyPlaylistReconfigured();
+        }
+
+        private static void LanguageMenuItemOnClick(Language language, ListViewItem listViewItem)
+        {
+            var track = listViewItem.Tag as Track;
+            if (track != null) track.Language = language;
             var listViewSubItems = listViewItem.SubItems.OfType<ListViewItem.ListViewSubItem>().ToArray();
             var languageSubItems = listViewSubItems.Where(subItem => subItem.Tag is Language).ToArray();
             foreach (var subItem in languageSubItems)
@@ -148,12 +154,46 @@ namespace BDHeroGUI.Components
                 subItem.Tag = language;
                 subItem.Text = language.Name;
             }
-            NotifyPlaylistReconfigured();
         }
 
-        private void TrackTypeMenuItemOnClick(ListViewItem listViewItem, Track track, TrackType trackType)
+        private void AddTrackTypesMenuItems(ContextMenuStrip menu, ListViewItem[] selectedListViewItems)
         {
-            track.Type = trackType;
+            var tracks = selectedListViewItems.Select(item => item.Tag as Track).ToArray();
+            var allTrackTypes = Enum.GetValues(typeof(TrackType)).OfType<TrackType>().ToArray();
+
+            var selectedTrackTypes = new HashSet<TrackType>();
+            foreach (var track in tracks)
+            {
+                selectedTrackTypes.Add(track.Type);
+            }
+            var selectedTrackType = selectedTrackTypes.Count == 1 ? new TrackType?(selectedTrackTypes.First()) : null;
+
+            foreach (var trackType in allTrackTypes)
+            {
+                var type = trackType;
+                var menuItem = new ToolStripMenuItem(trackType.ToString());
+                if (selectedTrackType.HasValue && selectedTrackType == trackType)
+                {
+                    menuItem.Checked = true;
+                    menuItem.Enabled = false;
+                }
+                menuItem.Click += (s, e) => TrackTypeMenuItemOnClick(selectedListViewItems, type);
+                menu.Items.Add(menuItem);
+            }
+        }
+
+        private void TrackTypeMenuItemOnClick(ListViewItem[] listViewItems, TrackType trackType)
+        {
+            foreach (var listViewItem in listViewItems)
+            {
+                TrackTypeMenuItemOnClick(listViewItem, trackType);
+            }
+        }
+
+        private void TrackTypeMenuItemOnClick(ListViewItem listViewItem, TrackType trackType)
+        {
+            var track = listViewItem.Tag as Track;
+            if (track != null) track.Type = trackType;
             foreach (var subItem in listViewItem.SubItems.OfType<ListViewItem.ListViewSubItem>().Where(subItem => subItem.Tag is TrackType))
             {
                 subItem.Tag = trackType;

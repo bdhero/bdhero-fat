@@ -8,24 +8,14 @@ using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
 using BDHeroGUI.Forms;
+using I18N;
 
 namespace BDHeroGUI.Components
 {
     public partial class TracksPanel : UserControl
     {
-        public Playlist Playlist
-        {
-            get { return _playlist; }
-            set
-            {
-                _playlist = value;
-                videoTrackListView.Playlist = _playlist;
-                audioTrackListView.Playlist = _playlist;
-                subtitleTrackListView.Playlist = _playlist;
-            }
-        }
-
         private Playlist _playlist;
+        private Language[] _allLanguages = new Language[0];
 
         public event PlaylistReconfiguredEventHandler PlaylistReconfigured;
 
@@ -69,6 +59,15 @@ namespace BDHeroGUI.Components
             }
         }
 
+        public void SetPlaylist(Playlist playlist, Language[] allLanguages)
+        {
+            _playlist = playlist;
+            _allLanguages = allLanguages;
+            videoTrackListView.SetPlaylist(playlist, allLanguages);
+            audioTrackListView.SetPlaylist(playlist, allLanguages);
+            subtitleTrackListView.SetPlaylist(playlist, allLanguages);
+        }
+
         private bool ShowTrack(Track track)
         {
             return _filter.Show(track) || _showAllTracks;
@@ -76,7 +75,7 @@ namespace BDHeroGUI.Components
 
         private void RefreshPlaylist()
         {
-            Playlist = Playlist;
+            SetPlaylist(_playlist, _allLanguages);
         }
 
         private void HelperOnPlaylistReconfigured(Playlist playlist)

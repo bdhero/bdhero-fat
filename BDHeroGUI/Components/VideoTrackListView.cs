@@ -7,17 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BDHero.BDROM;
+using I18N;
 
 namespace BDHeroGUI.Components
 {
     public partial class VideoTrackListView : UserControl
     {
-        public Playlist Playlist
-        {
-            get { return _helper.Playlist; }
-            set { _helper.Playlist = value; }
-        }
-
         public event PlaylistReconfiguredEventHandler PlaylistReconfigured;
 
         private readonly TrackListViewHelper _helper;
@@ -30,6 +25,11 @@ namespace BDHeroGUI.Components
             _helper = new TrackListViewHelper(listViewVideoTracks, track => track.IsVideo && Filter(track), GetListItem);
             Load += _helper.OnLoad;
             _helper.PlaylistReconfigured += HelperOnPlaylistReconfigured;
+        }
+
+        public void SetPlaylist(Playlist playlist, Language[] allLanguages)
+        {
+            _helper.SetPlaylist(playlist, allLanguages);
         }
 
         private void HelperOnPlaylistReconfigured(Playlist playlist)

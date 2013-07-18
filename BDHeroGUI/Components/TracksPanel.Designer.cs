@@ -120,7 +120,6 @@ namespace BDHeroGUI.Components
             | System.Windows.Forms.AnchorStyles.Right)));
             this.videoTrackListView.Location = new System.Drawing.Point(3, 16);
             this.videoTrackListView.Name = "videoTrackListView";
-            this.videoTrackListView.Playlist = null;
             this.videoTrackListView.Size = new System.Drawing.Size(356, 77);
             this.videoTrackListView.TabIndex = 5;
             // 
@@ -131,7 +130,6 @@ namespace BDHeroGUI.Components
             | System.Windows.Forms.AnchorStyles.Right)));
             this.audioTrackListView.Location = new System.Drawing.Point(3, 16);
             this.audioTrackListView.Name = "audioTrackListView";
-            this.audioTrackListView.Playlist = null;
             this.audioTrackListView.Size = new System.Drawing.Size(356, 182);
             this.audioTrackListView.TabIndex = 2;
             // 
@@ -142,7 +140,6 @@ namespace BDHeroGUI.Components
             | System.Windows.Forms.AnchorStyles.Right)));
             this.subtitleTrackListView.Location = new System.Drawing.Point(6, 16);
             this.subtitleTrackListView.Name = "subtitleTrackListView";
-            this.subtitleTrackListView.Playlist = null;
             this.subtitleTrackListView.Size = new System.Drawing.Size(214, 282);
             this.subtitleTrackListView.TabIndex = 6;
             // 

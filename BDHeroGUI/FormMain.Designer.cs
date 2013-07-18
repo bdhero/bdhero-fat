@@ -610,7 +610,6 @@ namespace BDHeroGUI
             this.tracksPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tracksPanel.Location = new System.Drawing.Point(0, 0);
             this.tracksPanel.Name = "tracksPanel";
-            this.tracksPanel.Playlist = null;
             this.tracksPanel.ShowAll = false;
             this.tracksPanel.Size = new System.Drawing.Size(791, 260);
             this.tracksPanel.TabIndex = 0;

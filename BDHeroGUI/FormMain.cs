@@ -887,7 +887,7 @@ namespace BDHeroGUI
 
             _controller.Job.SelectedPlaylist = playlist;
             buttonConvert.Enabled = playlist != null;
-            tracksPanel.Playlist = playlist;
+            tracksPanel.SetPlaylist(playlist, _controller.Job.Disc.Languages.ToArray());
             chaptersPanel.Playlist = playlist;
 
             RenameSync();
