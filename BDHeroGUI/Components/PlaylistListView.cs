@@ -85,6 +85,8 @@ namespace BDHeroGUI.Components
 
         public event EventHandler ShowAllChanged;
 
+        public event PlaylistReconfiguredEventHandler PlaylistReconfigured;
+
         private IList<Playlist> _playlists;
 
         private readonly PlaylistFilter _filter = new PlaylistFilter();
@@ -144,8 +146,48 @@ namespace BDHeroGUI.Components
             menu.Items.Add("-");
             menu.Items.Add(copyPathItem);
             menu.Items.Add(showFileItem);
+            menu.Items.Add("-");
+
+            AddCutMenuItems(menu, playlist);
 
             menu.Show(listView, args.Location);
+        }
+
+        private void AddCutMenuItems(ContextMenuStrip menu, Playlist playlist)
+        {
+            var cuts = Enum.GetValues(typeof (PlaylistCut)).OfType<PlaylistCut>().ToArray();
+            foreach (var cut in cuts)
+            {
+                AddCutMenuItem(menu, playlist, cut);
+            }
+        }
+
+        private void AddCutMenuItem(ContextMenuStrip menu, Playlist playlist, PlaylistCut cut)
+        {
+            var item = new ToolStripMenuItem(cut.ToString());
+            item.Tag = cut;
+            if (playlist.Cut == cut)
+            {
+                item.Checked = true;
+                item.Enabled = false;
+            }
+            item.Click += (sender, args) => SetPlaylistCut(playlist, cut);
+            menu.Items.Add(item);
+        }
+
+        private void SetPlaylistCut(Playlist playlist, PlaylistCut cut)
+        {
+            playlist.Cut = cut;
+            var item = listView.Items.OfType<ListViewItem>().FirstOrDefault(viewItem => viewItem.Tag == playlist);
+            if (item == null)
+                return;
+            var subitems = item.SubItems.OfType<ListViewItem.ListViewSubItem>().Where(subitem => subitem.Tag is PlaylistCut).ToArray();
+            foreach (var subitem in subitems)
+            {
+                subitem.Tag = cut;
+                subitem.Text = cut.ToString();
+            }
+            NotifyPlaylistReconfigured();
         }
 
         private void ListViewOnMouseDoubleClick(object sender, MouseEventArgs args)
@@ -284,6 +326,12 @@ namespace BDHeroGUI.Components
                 oldSubItems[i].BackColor = newSubItems[i].BackColor;
                 oldSubItems[i].ForeColor = newSubItems[i].ForeColor;
             }
+        }
+
+        private void NotifyPlaylistReconfigured()
+        {
+            if (PlaylistReconfigured != null)
+                PlaylistReconfigured(SelectedPlaylist);
         }
     }
 }

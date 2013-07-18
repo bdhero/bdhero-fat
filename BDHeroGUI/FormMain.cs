@@ -78,6 +78,7 @@ namespace BDHeroGUI
 
             playlistListView.ItemSelectionChanged += PlaylistListViewOnItemSelectionChanged;
             playlistListView.ShowAllChanged += PlaylistListViewOnShowAllChanged;
+            playlistListView.PlaylistReconfigured += PlaylistListViewOnPlaylistReconfigured;
 
             tracksPanel.PlaylistReconfigured += TracksPanelOnPlaylistReconfigured;
 
@@ -896,6 +897,11 @@ namespace BDHeroGUI
         private void PlaylistListViewOnShowAllChanged(object sender, EventArgs eventArgs)
         {
             showAllPlaylistsToolStripMenuItem.Checked = playlistListView.ShowAll;
+        }
+
+        private void PlaylistListViewOnPlaylistReconfigured(Playlist playlist)
+        {
+            RenameSync();
         }
 
         private void TracksPanelOnPlaylistReconfigured(Playlist playlist)
