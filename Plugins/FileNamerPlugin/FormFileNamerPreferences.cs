@@ -103,6 +103,8 @@ namespace BDHero.Plugin.FileNamer
 
         private void InitValues()
         {
+            _ignoreChange = true;
+
             checkBoxReplaceSpaces.Checked = _prefsCopy.ReplaceSpaces;
             textBoxReplaceSpacesWith.Enabled = _prefsCopy.ReplaceSpaces;
             textBoxReplaceSpacesWith.Text = _prefsCopy.ReplaceSpacesWith;
@@ -115,6 +117,8 @@ namespace BDHero.Plugin.FileNamer
             comboBoxSeasonNumberFormat.SelectedItem = NF2S(_prefsCopy.TVShows.SeasonNumberFormat);
             comboBoxEpisodeNumberFormat.SelectedItem = NF2S(_prefsCopy.TVShows.EpisodeNumberFormat);
             textBoxTVShowReleaseDateFormat.Text = _prefsCopy.TVShows.ReleaseDateFormat;
+
+            _ignoreChange = false;
         }
 
         private void InitReplaceSpaces()
@@ -197,8 +201,14 @@ namespace BDHero.Plugin.FileNamer
             OnChanged(_movieNamer, _tvShowNamer);
         }
 
+        private bool _ignoreChange;
+
         private void OnChanged(FileNamer movieNamer, FileNamer tvShowNamer)
         {
+            if (_ignoreChange) return;
+
+            _ignoreChange = true;
+
             // Movies
 
             _prefsCopy.Movies.Directory = textBoxMovieDirectory.Text;
@@ -230,6 +240,8 @@ namespace BDHero.Plugin.FileNamer
             buttonRevert.Enabled = hasChanged;
             buttonDefault.Enabled = !isDefault;
             buttonSave.Enabled = hasChanged;
+
+            _ignoreChange = false;
         }
 
         private void CheckBoxReplaceSpacesOnCheckedChanged(object sender = null, EventArgs eventArgs = null)
