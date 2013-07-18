@@ -44,12 +44,63 @@ namespace BDHeroGUI.Components
             _listView.MultiSelect = true;
             _listView.ItemCheck += ListViewOnItemCheck;
             _listView.ItemChecked += ListViewOnItemChecked;
+
+            InitContextMenu();
         }
 
         public void OnLoad(object sender = null, EventArgs eventArgs = null)
         {
             _listView.SetSortColumn(_listView.FirstDisplayedColumn.Index);
             _listView.AutoSizeColumns();
+        }
+
+        private void InitContextMenu()
+        {
+            _listView.MouseClick += ListViewOnMouseClick;
+        }
+
+        private void ListViewOnMouseClick(object sender, MouseEventArgs args)
+        {
+            if (args.Button != MouseButtons.Right)
+                return;
+
+            var pos = args.Location;
+            var listViewItem = _listView.GetItemAt(pos.X, pos.Y);
+
+            if (listViewItem == null)
+                return;
+
+            var track = listViewItem.Tag as Track;
+
+            if (track == null)
+                return;
+
+            var menu = new ContextMenuStrip();
+
+            foreach (var trackType in Enum.GetValues(typeof (TrackType)).OfType<TrackType>())
+            {
+                var type = trackType;
+                var menuItem = new ToolStripMenuItem(trackType.ToString());
+                if (track.Type == trackType)
+                {
+                    menuItem.Checked = true;
+                    menuItem.Enabled = false;
+                }
+                menuItem.Click += (s, e) => MenuItemOnClick(listViewItem, track, type);
+                menu.Items.Add(menuItem);
+            }
+
+            menu.Show(_listView, args.Location);
+        }
+
+        private void MenuItemOnClick(ListViewItem listViewItem, Track track, TrackType trackType)
+        {
+            track.Type = trackType;
+            foreach (var subItem in listViewItem.SubItems.OfType<ListViewItem.ListViewSubItem>().Where(subItem => subItem.Tag is TrackType))
+            {
+                subItem.Tag = trackType;
+                subItem.Text = trackType.ToString();
+            }
         }
 
         private void ListViewOnItemCheck(object sender, ItemCheckEventArgs e)
