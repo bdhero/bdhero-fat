@@ -1,7 +1,7 @@
 # BDHero
 
-[![Build Status](http://ci.bdhero.org:8088/buildStatus/icon?job=bdhero-build)](http://ci.bdhero.org:8088/job/bdhero-build/) - Build
-[![Build Status](http://ci.bdhero.org:8088/buildStatus/icon?job=bdhero-release)](http://ci.bdhero.org:8088/job/bdhero-release/) - Release
+*  [![Build Status](http://ci.bdhero.org:8088/buildStatus/icon?job=bdhero-build)](http://ci.bdhero.org:8088/job/bdhero-build/) - Build
+*  [![Build Status](http://ci.bdhero.org:8088/buildStatus/icon?job=bdhero-release)](http://ci.bdhero.org:8088/job/bdhero-release/) - Release
 
 ## What Is BDHero?
 
