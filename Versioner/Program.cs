@@ -101,12 +101,14 @@ namespace Versioner
             {
                 case VersionStrategy.BugFix:
                     return BumpBugFix(version);
+                case VersionStrategy.MinorFeature:
+                    return BumpMinorFeature(version);
                 case VersionStrategy.FullRelease:
                     return BumpFullRelease(version);
                 case VersionStrategy.MajorMilestone:
                     return BumpMajorMilestone(version);
             }
-            return BumpMinorFeature(version);
+            return version;
         }
 
         private static Version BumpBugFix(Version version)
@@ -174,15 +176,15 @@ x.x.x.x - Custom
         {
             arg = (arg ?? "").Trim();
             Console.WriteLine("arg = {0}", arg);
-            if (arg.StartsWith("_._._.x", StringComparison.InvariantCultureIgnoreCase))
-                return VersionStrategy.BugFix;
+            if (arg.StartsWith("_._.x._", StringComparison.InvariantCultureIgnoreCase))
+                return VersionStrategy.MinorFeature;
             if (arg.StartsWith("_.x._._", StringComparison.InvariantCultureIgnoreCase))
                 return VersionStrategy.FullRelease;
             if (arg.StartsWith("x._._._", StringComparison.InvariantCultureIgnoreCase))
                 return VersionStrategy.MajorMilestone;
             if (arg.StartsWith("x.x.x.x", StringComparison.InvariantCultureIgnoreCase))
                 return VersionStrategy.Custom;
-            return VersionStrategy.MinorFeature;
+            return VersionStrategy.BugFix;
         }
     }
 }
