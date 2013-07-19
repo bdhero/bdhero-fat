@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mono.Options;
@@ -42,6 +43,8 @@ namespace Versioner
 
             var optionSet = new OptionSet
                 {
+                    { "h|?|help", s => PrintUsageAndExit() },
+                    { "v|version|p|print", s => PrintCurrentVersionAndExit() },
                     { "strategy=", s => strategy = VersionStrategyParser.Parse(s) },
                     { "custom=", s => custom = s },
                     { "infinite", s => _limit10 = false },
@@ -59,6 +62,56 @@ namespace Versioner
             {
                 SetVersion(filePath, newVersion);
             }
+        }
+
+        private static void PrintUsageAndExit()
+        {
+            var exe = Assembly.GetEntryAssembly().GetName().Name;
+            Console.WriteLine("USAGE:");
+            Console.WriteLine("    {0} [OPTIONS...]", exe);
+            Console.WriteLine();
+            Console.WriteLine("OPTIONS:");
+            Console.WriteLine("    -h, --help, /?");
+            Console.WriteLine("        Display this message and exit.");
+            Console.WriteLine();
+            Console.WriteLine("    --v, --version, -p, --print");
+            Console.WriteLine("        Print the current BDHero version number to stdout and exit.");
+            Console.WriteLine();
+            Console.WriteLine("    --strategy=STRATEGY");
+            Console.WriteLine("        Determines how {0} updates version numbers in the solution.", exe);
+            Console.WriteLine();
+            Console.WriteLine("        STRATEGY must be one of the following:");
+            Console.WriteLine();
+            Console.WriteLine("            \"_._._.x\": Incremental: bug fix                   (a.k.a. Version.Revision)");
+            Console.WriteLine("            \"_._.x._\": Incremental: minor feature/enhancement (a.k.a. Version.Build)");
+            Console.WriteLine("            \"_.x._._\": Incremental: full release              (a.k.a. Version.Minor)");
+            Console.WriteLine("            \"x._._._\": Incremental: major milestone           (a.k.a. Version.Major)");
+            Console.WriteLine("            \"x.x.x.x\": Non-incremental: use custom version number (see --custom)");
+            Console.WriteLine();
+            Console.WriteLine("    --custom=VERSION_NUMBER");
+            Console.WriteLine("        Use a custom version number instead of incrementing the current number.");
+            Console.WriteLine();
+            Console.WriteLine("    --infinite");
+            Console.WriteLine("        Don't limit version number groups (major, minor, build, revision) to 0-9");
+            Console.WriteLine("        when incrementing; if a group's current value is 9, allow it to go to 10");
+            Console.WriteLine("        instead of setting it to zero and incrementing the next most significant group.");
+            Console.WriteLine();
+            Console.WriteLine("        Examples:");
+            Console.WriteLine();
+            Console.WriteLine("            > 6.7.8.9 => 6.7.8.10 (with --infinite flag)");
+            Console.WriteLine("            > 6.7.8.9 => 6.7.9.0  (default behavior)");
+            Console.WriteLine("            > 1.9.9.9 => 2.0.0.0  (default behavior)");
+            Console.WriteLine();
+            Console.WriteLine("    --workspace=SOLUTION_DIR");
+            Console.WriteLine("        Absolute path to the Visual Studio root solution directory.");
+            Console.WriteLine("        If not specified, defaults to the current working directory (%CD%).");
+            Environment.Exit(0);
+        }
+
+        private static void PrintCurrentVersionAndExit()
+        {
+            Console.Write(CurrentVersion);
+            Environment.Exit(0);
         }
 
         static void SetVersion(string filePath, Version newVersion)
