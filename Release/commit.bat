@@ -20,8 +20,22 @@ set Message=Bumped BDHero version to %NewVersion%
 REM TODO: Check if tag already exists
 echo "TODO: Check if tag already exists"
 
+echo.
+echo Committing
+echo.
+
 git commit -m "%Message%"
+
+echo.
+echo Tagging
+echo.
+
 git tag -a v%NewVersion% -m v%NewVersion%
+
+echo.
+echo Pushing
+echo.
+
 git push -u origin master --tags
 
 git status
