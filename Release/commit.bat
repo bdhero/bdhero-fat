@@ -22,6 +22,6 @@ echo "TODO: Check if tag already exists"
 
 git commit -m "%Message%"
 git tag -a v%NewVersion%
-git push origin --tags
+git push -u origin master --tags
 
 git status
