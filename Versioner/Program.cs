@@ -37,7 +37,7 @@ namespace Versioner
 
         static void Main(string[] args)
         {
-            var strategy = VersionStrategy.MinorFeature;
+            var strategy = VersionStrategy.None;
             var custom = "";
             var workspace = Environment.CurrentDirectory;
 
@@ -87,6 +87,7 @@ namespace Versioner
             Console.WriteLine("            \"_.x._._\": Incremental: full release              (a.k.a. Version.Minor)");
             Console.WriteLine("            \"x._._._\": Incremental: major milestone           (a.k.a. Version.Major)");
             Console.WriteLine("            \"x.x.x.x\": Non-incremental: use custom version number (see --custom)");
+            Console.WriteLine("            \"_._._._\": None: don't increment the version number; keep it as is");
             Console.WriteLine();
             Console.WriteLine("    --custom=VERSION_NUMBER");
             Console.WriteLine("        Use a custom version number instead of incrementing the current number.");
@@ -220,7 +221,8 @@ x.x.x.x - Custom
         MinorFeature,
         FullRelease,
         MajorMilestone,
-        Custom
+        Custom,
+        None
     }
 
     static class VersionStrategyParser
@@ -229,6 +231,8 @@ x.x.x.x - Custom
         {
             arg = (arg ?? "").Trim();
             Console.WriteLine("arg = {0}", arg);
+            if (arg.StartsWith("_._._.x", StringComparison.InvariantCultureIgnoreCase))
+                return VersionStrategy.BugFix;
             if (arg.StartsWith("_._.x._", StringComparison.InvariantCultureIgnoreCase))
                 return VersionStrategy.MinorFeature;
             if (arg.StartsWith("_.x._._", StringComparison.InvariantCultureIgnoreCase))
@@ -237,7 +241,7 @@ x.x.x.x - Custom
                 return VersionStrategy.MajorMilestone;
             if (arg.StartsWith("x.x.x.x", StringComparison.InvariantCultureIgnoreCase))
                 return VersionStrategy.Custom;
-            return VersionStrategy.BugFix;
+            return VersionStrategy.None;
         }
     }
 }
