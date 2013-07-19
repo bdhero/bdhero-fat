@@ -2,6 +2,8 @@
 
 cd ..
 
+echo %CD%
+
 git reset --hard HEAD
 
 del /F /Q Setup\*.zip
