@@ -1,8 +1,6 @@
 @ECHO OFF
 
-cd ..
-
-echo %CD%
+REM %CD% = C:\Projects\BDHero
 
 echo git add BDHero.xml
 echo git add BDHero\Properties\AssemblyInfo.cs
