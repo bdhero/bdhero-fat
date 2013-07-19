@@ -1,5 +1,8 @@
 # BDHero
 
+[![Build Status](http://ci.bdhero.org:8088/buildStatus/icon?job=bdhero-build)](http://ci.bdhero.org:8088/job/bdhero-build/) - Build
+[![Build Status](http://ci.bdhero.org:8088/buildStatus/icon?job=bdhero-release)](http://ci.bdhero.org:8088/job/bdhero-release/) - Release
+
 ## What Is BDHero?
 
 BDHero is an intelligent, automatic tool for detecting main movie playlist(s) on Blu-ray Discs™ and muxing them to M2TS / MKV containers.
