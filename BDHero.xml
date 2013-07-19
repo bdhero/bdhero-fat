@@ -135,10 +135,10 @@
     </componentList>
     <postBuildActionList>
         <zip>
-            <baseDirectory>C:/Projects/bdhero/Setup/ProgramFiles</baseDirectory>
+            <baseDirectory>${build_project_directory}/Setup/ProgramFiles</baseDirectory>
             <excludeFiles>*/Logs</excludeFiles>
-            <files>C:/Projects/bdhero/Setup/ProgramFiles/*</files>
-            <zipFile>C:/Projects/bdhero/Setup/${product_shortname}-${product_version}-${platform_name}-portable.zip</zipFile>
+            <files>${build_project_directory}/Setup/ProgramFiles/*</files>
+            <zipFile>${build_project_directory}/Setup/${product_shortname}-${product_version}-${platform_name}-portable.zip</zipFile>
         </zip>
     </postBuildActionList>
     <disableSplashScreen>1</disableSplashScreen>
