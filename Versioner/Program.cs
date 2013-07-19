@@ -53,7 +53,7 @@ namespace Versioner
             Environment.CurrentDirectory = workspace;
 
             var currentVersion = CurrentVersion;
-            var newVersion = Bump(currentVersion, strategy);
+            var newVersion = strategy == VersionStrategy.Custom ? Version.Parse(custom) : Bump(currentVersion, strategy);
 
             foreach (var filePath in Files)
             {
