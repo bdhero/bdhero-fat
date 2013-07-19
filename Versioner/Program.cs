@@ -70,6 +70,15 @@ namespace Versioner
             Console.WriteLine("USAGE:");
             Console.WriteLine("    {0} [OPTIONS...]", exe);
             Console.WriteLine();
+            Console.WriteLine("DESCRIPTION:");
+            Console.WriteLine("    Utility to update BDHero version numbers.  Allows incremental \"bumps\",");
+            Console.WriteLine("    custom version numbers, and normalization (ensuring that the version numbers");
+            Console.WriteLine("    in all files are in sync).");
+            Console.WriteLine();
+            Console.WriteLine("    The \"current\" version number is read from the AssemblyVersion or");
+            Console.WriteLine("    AssemblyFileVersion attributes in BDHero/Properties/AssemblyInfo.cs,");
+            Console.WriteLine("    whichever appears first in the file.");
+            Console.WriteLine();
             Console.WriteLine("OPTIONS:");
             Console.WriteLine("    -h, --help, /?");
             Console.WriteLine("        Display this message and exit.");
