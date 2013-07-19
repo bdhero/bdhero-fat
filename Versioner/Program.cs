@@ -63,10 +63,26 @@ namespace Versioner
 
         static void SetVersion(string filePath, Version newVersion)
         {
-            var contents = File.ReadAllText(filePath);
+            var file = ReadFile(filePath);
+            var contents = file.Key;
+            var encoding = file.Value;
+            Console.WriteLine("File \"{0}\" has encoding {1}", filePath, encoding);
             contents = AssemblyRegex.Replace(contents, "${1}" + newVersion + "${3}");
             contents = InstallBuilderRegex.Replace(contents, "${1}" + newVersion + "${3}");
-            File.WriteAllText(filePath, contents);
+            File.WriteAllText(filePath, contents, encoding);
+        }
+
+        static KeyValuePair<string, Encoding> ReadFile(string filePath)
+        {
+            // open the file with the stream-reader:
+            using (StreamReader reader = new StreamReader(filePath, true))
+            {
+                // read the contents of the file into a string
+                var contents = reader.ReadToEnd();
+
+                // return the encoding.
+                return new KeyValuePair<string, Encoding>(contents, reader.CurrentEncoding);
+            }
         }
 
         static Version CurrentVersion
