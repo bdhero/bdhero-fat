@@ -15,7 +15,7 @@ echo git add BDHeroGUI\Properties\AssemblyInfo.cs
 
 git status
 
-set Message=Bumped BDHero version number to %NewVersion%
+set Message=Bumped BDHero version to %NewVersion%
 
 REM TODO: Check if tag already exists
 echo "TODO: Check if tag already exists"
