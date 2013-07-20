@@ -8,7 +8,8 @@ using System.Timers;
 namespace ProcessUtils
 {
     /// <summary>
-    /// Asynchronous non-interactive background process worker.
+    /// Threaded version of <see cref="NonInteractiveProcess"/>.  Allows a process to run in the background
+    /// on a separate thread while reporting its status and progress information to the UI.
     /// </summary>
     public class BackgroundProcessWorker : NonInteractiveProcess
     {

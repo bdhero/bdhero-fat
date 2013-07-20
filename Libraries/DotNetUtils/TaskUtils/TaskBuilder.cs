@@ -5,6 +5,18 @@ using System.Threading.Tasks;
 
 namespace DotNetUtils.TaskUtils
 {
+    /// <summary>
+    /// Builds a <see cref="Task"/> object that runs an arbitrary <see cref="Action"/> in a background thread.
+    /// Start/stop events and exception handlers are invoked on the UI thread specified by
+    /// <see cref="OnThread"/> or <see cref="OnCurrentThread"/>.
+    /// </summary>
+    /// <remarks>
+    /// One of the most difficult aspects of multi-threaded programming in modern languages is
+    /// safely communicating with the UI thread.  This class makes such communication simple and painless
+    /// by automatically invoking the <see cref="BeforeStart"/>, <see cref="Succeed"/>, <see cref="Fail"/>,
+    /// and <see cref="Finally"/> actions on the UI thread while also providing a mechanism for the background
+    /// <see cref="DoWork"/> action to communicate its status and progress information back to the UI.
+    /// </remarks>
     public class TaskBuilder
     {
         private TaskScheduler _callbackThread;
@@ -17,12 +29,21 @@ namespace DotNetUtils.TaskUtils
         private Action<Exception> _fail;
         private Action _finally;
 
+        /// <summary>
+        /// Sets the task's execution context to that of the specified thread.
+        /// </summary>
+        /// <param name="callbackThread"></param>
+        /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder OnThread(TaskScheduler callbackThread)
         {
             _callbackThread = callbackThread;
             return this;
         }
 
+        /// <summary>
+        /// Sets the task's execution context to that of the calling thread (typically the UI thread).
+        /// </summary>
+        /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder OnCurrentThread()
         {
             // Get the calling thread's context
@@ -32,6 +53,14 @@ namespace DotNetUtils.TaskUtils
             return this;
         }
 
+        /// <summary>
+        /// Sets a CancellationToken that may be used to request the task to cancel is current operation.
+        /// Requires that the actions specified by <see cref="BeforeStart"/> and <see cref="DoWork"/>
+        /// check the value of <see cref="CancellationToken.IsCancellationRequested"/> periodically
+        /// and abort their operation as soon as cancellation is requested.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder CancelWith(CancellationToken cancellationToken)
         {
             _cancellationToken = cancellationToken;
@@ -40,8 +69,9 @@ namespace DotNetUtils.TaskUtils
 
         /// <summary>
         /// Runs the specified action in the UI thread before invoking the main <see cref="DoWork"/> action.
+        /// If the <c>BeforeStart </c>action fails, the <c>DoWork</c> action will not be run.
         /// </summary>
-        /// <param name="beforeStart"></param>
+        /// <param name="beforeStart">Action to run on the UI thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder BeforeStart(Action<CancellationToken> beforeStart)
         {
@@ -52,7 +82,7 @@ namespace DotNetUtils.TaskUtils
         /// <summary>
         /// Runs in background (non-UI) thread, but may execute an action on the UI thread by calling the passed thread invoker.
         /// </summary>
-        /// <param name="work">Action to invoke on the background thread</param>
+        /// <param name="work">Action to run in the background thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder DoWork(Action<IThreadInvoker, CancellationToken> work)
         {
@@ -62,9 +92,9 @@ namespace DotNetUtils.TaskUtils
 
         /// <summary>
         /// Runs the specified action in the UI thread after the main <see cref="DoWork"/> action runs
-        /// and completes successfully.
+        /// and completes successfully (i.e., without throwing an exception).
         /// </summary>
-        /// <param name="succeed">Action to invoke on the UI thread when the main DoWork action completes successfully</param>
+        /// <param name="succeed">Action to run in the UI thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder Succeed(Action succeed)
         {
@@ -73,10 +103,10 @@ namespace DotNetUtils.TaskUtils
         }
 
         /// <summary>
-        /// Runs the specified action in the UI thread after the main <see cref="DoWork"/> action runs
-        /// and fails (due to an exception, etc.).
+        /// Runs the specified action in the UI thread when the main <see cref="DoWork"/> action
+        /// throws an exception.
         /// </summary>
-        /// <param name="fail">Action to invoke on the UI thread when the main DoWork action fails</param>
+        /// <param name="fail">Action to run in the UI thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder Fail(Action<Exception> fail)
         {
@@ -85,10 +115,11 @@ namespace DotNetUtils.TaskUtils
         }
 
         /// <summary>
-        /// Runs the specified action in the UI thread after the main <see cref="DoWork"/> action runs
-        /// and after the Success or Failure callbacks have ran, regardless of whether the main DoWork action failed or succeeded.
+        /// Always runs the specified action in the UI thread after the main <see cref="DoWork"/> action runs
+        /// and after the <see cref="Succeed"/> or <see cref="Fail"/> callbacks have ran, regardless of
+        /// whether the main <c>DoWork</c> action succeeded or failed.
         /// </summary>
-        /// <param name="finally"></param>
+        /// <param name="finally">Action to run in the UI thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
         public TaskBuilder Finally(Action @finally)
         {
@@ -96,6 +127,15 @@ namespace DotNetUtils.TaskUtils
             return this;
         }
 
+        /// <summary>
+        /// Builds a <see cref="Task{TResult}"/> object whose <see cref="Task{TResult}.Result"/> property returns
+        /// <code>true</code> if the task's <see cref="DoWork"/> action completed without throwing an exception or
+        /// <code>false</code> if it threw an exception.
+        /// </summary>
+        /// <returns>
+        /// Task that may be run asynchronously or synchronously on the thread specified by
+        /// <see cref="OnThread"/> or <see cref="OnCurrentThread"/>.
+        /// </returns>
         public Task<bool> Build()
         {
             var scheduler = _callbackThread;

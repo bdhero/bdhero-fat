@@ -10,7 +10,11 @@ using DotNetUtils.Extensions;
 namespace ProcessUtils
 {
     /// <summary>
-    /// Represents a console (CLI) process that runs in the background without any user interaction.
+    /// Represents a child console (CLI) process that runs without any user interaction on the UI thread.
+    /// The process's stdout and stderr streams are captured and passed to the
+    /// <see cref="StdOut"/> and <see cref="StdErr"/> event handlers, respectively.
+    /// Allows for pausing (suspending) and resuming the process, as well as receiving a notification
+    /// when the process exits along with its exit code.
     /// </summary>
     public class NonInteractiveProcess : INotifyPropertyChanged
     {
