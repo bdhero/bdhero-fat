@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using BDHero.BDROM;
 using BDHero.JobQueue;
-using DotNetUtils.Extensions;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
