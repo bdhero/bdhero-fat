@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using BDHero.Config;
 using BDHero.Startup;
 using Ninject;
+using WindowsOSUtils.JobObjects;
 
 namespace BDHeroGUI
 {
@@ -16,8 +17,11 @@ namespace BDHeroGUI
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            if (JobObjectController.BreakCurrentProcessOutOfPCAJobObject(args))
+                return;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(CreateMainForm());
