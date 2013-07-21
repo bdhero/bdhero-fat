@@ -12,6 +12,7 @@ Bugs
 ====
 
 [ ] XP: ProgressBar2 black background
+[ ] Remove unused outputPath args in Controller.cs
 
 [ ] 500_DAYS_OF_SUMMER: bdmt_eng.xml title sanitized is blank: sanitization removes (... and everything after it, and BDMT title is (500) Days of Summer
 
