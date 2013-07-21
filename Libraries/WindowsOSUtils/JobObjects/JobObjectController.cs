@@ -1308,17 +1308,17 @@ namespace WindowsOSUtils.JobObjects
         /// <summary>
         /// This is a pseudo handle to the currently running process.
         /// </summary>
-        static private readonly IntPtr currentProcessHandle = WinAPI.GetCurrentProcess();
+        private static readonly IntPtr currentProcessHandle = WinAPI.GetCurrentProcess();
 
         /// <summary>
         /// This is a pseudo handle to the "any" job object handle.
         /// </summary>
-        static private readonly IntPtr anyJobHandle = IntPtr.Zero;
+        private static readonly IntPtr anyJobHandle = IntPtr.Zero;
 
         /// <summary>
         /// The job created for this process.
         /// </summary>
-        static private IntPtr currentJobHandle = IntPtr.Zero;
+        private static IntPtr currentJobHandle = IntPtr.Zero;
         #endregion
 
         #region Controlling Methods
@@ -1326,7 +1326,7 @@ namespace WindowsOSUtils.JobObjects
         /// Checks to see if the current process is a member of any Windows job.
         /// </summary>
         /// <returns>True if the current process is a member of a job, false otherwise</returns>
-        static public bool IsCurrentProcessMemberOfAnyJob()
+        public static bool IsCurrentProcessMemberOfAnyJob()
         {
             bool isInJob;
             bool result;
@@ -1348,7 +1348,7 @@ namespace WindowsOSUtils.JobObjects
         /// <summary>
         /// Creates a new job object and assigns the current process to that job.
         /// </summary>
-        static public void CreateNewJobForCurrentProcess()
+        public static void CreateNewJobForCurrentProcess()
         {
             IntPtr newJobHandle = WinAPI.CreateJobObject(
               IntPtr.Zero,
@@ -1487,7 +1487,7 @@ namespace WindowsOSUtils.JobObjects
         /// <param name="processMemoryLimit">Out parameter set to the maximum amount of
         /// commit memory a single individual process in the job may consume in bytes.</param>
         /// <returns>True if the limit is enforced, false otherwise.</returns>
-        static public bool GetProcessMemoryLimit(out ulong processMemoryLimit)
+        public static bool GetProcessMemoryLimit(out ulong processMemoryLimit)
         {
             JobObjectInfo jobObjectInfo;
             IntPtr currentJob = IntPtr.Zero;
@@ -1563,7 +1563,7 @@ namespace WindowsOSUtils.JobObjects
         /// </summary>
         /// <param name="processMemoryLimit">The maximum amount of commit memory a
         /// single individual process in the job may consume in bytes.</param>
-        static public void SetProcessMemoryLimit(ulong processMemoryLimit)
+        public static void SetProcessMemoryLimit(ulong processMemoryLimit)
         {
             ChangeJob(ji =>
             {
