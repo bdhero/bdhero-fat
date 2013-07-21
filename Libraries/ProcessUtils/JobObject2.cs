@@ -93,7 +93,7 @@ namespace ProcessUtils
             AssignProcess(process.Handle);
         }
 
-        private void CloseHandleCheckingResult(IntPtr handle)
+        private static void CloseHandleCheckingResult(IntPtr handle)
         {
             bool result = CloseHandle(handle);
             if (!result)
@@ -114,7 +114,7 @@ namespace ProcessUtils
                 throw new Win32Exception();
         }
 
-        private bool IsProcessInJobCheckingResult(IntPtr processHandle, IntPtr jobObjectHandle)
+        private static bool IsProcessInJobCheckingResult(IntPtr processHandle, IntPtr jobObjectHandle)
         {
             bool status;
             bool result = IsProcessInJob(processHandle, jobObjectHandle, out status);
