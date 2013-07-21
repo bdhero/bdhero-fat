@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using DotNetUtils;
 using DotNetUtils.Extensions;
+using WindowsOSUtils.JobObjects;
 
 namespace ProcessUtils
 {
@@ -187,8 +188,15 @@ namespace ProcessUtils
                     Name = process.ProcessName;
                     State = NonInteractiveProcessState.Running;
 
-                    jobObject.AssignProcess(process);
-                    jobObject.SetKillOnClose();
+                    if (JobObjectController.IsProcessMemberOfAnyJob(process))
+                    {
+                        Logger.Warn("WARNING: Child process already belongs to a Job Object.  If the parent process crashes, the child process will continue to run in the background until it finishes executing.");
+                    }
+                    else
+                    {
+                        jobObject.AssignProcess(process);
+                        jobObject.SetKillOnClose();
+                    }
 
                     _stopwatch.Start();
 
