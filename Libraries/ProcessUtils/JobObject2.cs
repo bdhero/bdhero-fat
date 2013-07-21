@@ -133,7 +133,7 @@ namespace ProcessUtils
                                           : processStartInfo.WorkingDirectory;
             bool result = CreateProcess(processStartInfo.FileName, ' ' + processStartInfo.Arguments, IntPtr.Zero,
                                         IntPtr.Zero,
-                                        false, ProcessCreationFlags.CreateSuspended, IntPtr.Zero,
+                                        false, ProcessCreationFlags.CREATE_SUSPENDED, IntPtr.Zero,
                                         workingDirectory, ref startInfo, out processInfo);
             if (!result)
                 throw new Win32Exception();
@@ -235,7 +235,7 @@ namespace ProcessUtils
         [Flags]
         private enum ProcessCreationFlags : uint
         {
-            CreateSuspended = 0x00000004
+            CREATE_SUSPENDED = 0x00000004
         }
 
         #endregion
