@@ -156,7 +156,7 @@ namespace ProcessUtils
                     new JobObjectBasicLimitInformation { LimitFlags = LimitFlags.JobObjectLimitKillOnJobClose }
             };
             bool result = SetInformationJobObject(
-                _jobObjectHandle, JobObjectInfoClass.JobObjectExtendedLimitInformation,
+                _jobObjectHandle, JobObjectInfoClass.ExtendedLimitInformation,
                 ref limit,
                 (uint)Marshal.SizeOf(typeof(JobObjectExtendedLimitInformation)));
             if (!result)
@@ -215,7 +215,7 @@ namespace ProcessUtils
 
         private enum JobObjectInfoClass
         {
-            JobObjectExtendedLimitInformation = 9
+            ExtendedLimitInformation = 9
         }
 
         #endregion
