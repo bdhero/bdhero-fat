@@ -11,6 +11,8 @@ Chores
 Bugs
 ====
 
+[ ] XP: ProgressBar2 black background
+
 [ ] 500_DAYS_OF_SUMMER: bdmt_eng.xml title sanitized is blank: sanitization removes (... and everything after it, and BDMT title is (500) Days of Summer
 
 [ ] Exception thrown in FileUtils.CreateDirectory() when user types in goofy output path
