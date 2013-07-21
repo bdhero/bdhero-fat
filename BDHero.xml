@@ -118,7 +118,7 @@
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
     <outputDirectory>Artifacts</outputDirectory>
-    <productDisplayIcon>${installdir}/bdhero-cli.exe</productDisplayIcon>
+    <productDisplayIcon>${installdir}/bdhero-gui.exe</productDisplayIcon>
     <productUrlHelpLink>https://github.com/bdhero/bdhero</productUrlHelpLink>
     <productUrlInfoAbout>https://github.com/bdhero/bdhero/issues</productUrlInfoAbout>
     <saveRelativePaths>1</saveRelativePaths>
