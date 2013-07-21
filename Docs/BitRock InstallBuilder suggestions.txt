@@ -9,3 +9,4 @@ Suggestions
 *  Input width
 *  Escape/Enter key in forms
 *  Clear recent project list
+*  Delete button doesn't work in "Files" view
