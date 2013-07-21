@@ -1,11 +1,6 @@
 BitRock InstallBuilder 8 Enterprise
 ===================================
 
-Questions
----------
-
-*  Relative paths for <postBuildActionList> <zip>?
-
 Suggestions
 -----------
 
