@@ -231,6 +231,7 @@ namespace ProcessUtils
         [Flags]
         private enum LimitFlags : ushort
         {
+            BreakawayOk = 0x00000800,
             KillOnJobClose = 0x00002000
         }
 
