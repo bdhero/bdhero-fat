@@ -1,10 +1,12 @@
 @ECHO OFF
 
 set nunit_home=%1
+set nunit_cli=%nunit_home%\bin\nunit-console.exe
 
 echo nunit_home=%nunit_home%
 
 set test1=Tests\Unit\DotNetUtilsUnitTests\bin\Debug\DotNetUtilsUnitTests.dll
 set test2=Tests\Unit\IsanPluginTests\bin\Debug\IsanPluginTests.dll
 
-%nunit_home%\bin\nunit-console.exe "%test1%" "%test2%" /xml=nunit-result.xml
+%nunit_cli% "%test1%" /xml=nunit-result-1.xml
+%nunit_cli% "%test2%" /xml=nunit-result-2.xml
