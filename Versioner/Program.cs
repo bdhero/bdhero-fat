@@ -195,7 +195,7 @@ namespace Versioner
                 build = 0;
                 version = BumpFullRelease(version);
             }
-            return new Version(version.Major, version.Minor, build, version.Revision);
+            return new Version(version.Major, version.Minor, build, 0);
         }
 
         private static Version BumpFullRelease(Version version)
@@ -207,13 +207,13 @@ namespace Versioner
                 minor = 0;
                 version = BumpMajorMilestone(version);
             }
-            return new Version(version.Major, minor, version.Build, version.Revision);
+            return new Version(version.Major, minor, 0, 0);
         }
 
         private static Version BumpMajorMilestone(Version version)
         {
             Console.WriteLine("BumpMajorMilestone({0})", version);
-            return new Version(version.Major + 1, version.Minor, version.Build, version.Revision);
+            return new Version(version.Major + 1, 0, 0, 0);
         }
     }
 
