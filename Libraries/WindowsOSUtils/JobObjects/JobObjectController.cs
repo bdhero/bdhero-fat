@@ -1322,17 +1322,38 @@ namespace WindowsOSUtils.JobObjects
         #endregion
 
         #region Controlling Methods
+
         /// <summary>
         /// Checks to see if the current process is a member of any Windows job.
         /// </summary>
         /// <returns>True if the current process is a member of a job, false otherwise</returns>
         public static bool IsCurrentProcessMemberOfAnyJob()
         {
+            return IsProcessMemberOfAnyJob(Process.GetCurrentProcess());
+        }
+
+        /// <summary>
+        /// Checks to see if the given process is a member of any Windows job.
+        /// </summary>
+        /// <param name="process"></param>
+        /// <returns>True if the give process is a member of a job, false otherwise</returns>
+        public static bool IsProcessMemberOfAnyJob(Process process)
+        {
+            return IsProcessMemberOfAnyJob(process.Handle);
+        }
+
+        /// <summary>
+        /// Checks to see if the given process is a member of any Windows job.
+        /// </summary>
+        /// <param name="processHandle"></param>
+        /// <returns>True if the give process is a member of a job, false otherwise</returns>
+        public static bool IsProcessMemberOfAnyJob(IntPtr processHandle)
+        {
             bool isInJob;
             bool result;
 
             result = WinAPI.IsProcessInJob(
-              currentProcessHandle,
+              processHandle,
               anyJobHandle,
               out isInJob);
 
