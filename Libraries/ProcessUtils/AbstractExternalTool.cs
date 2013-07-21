@@ -23,7 +23,7 @@ namespace ProcessUtils
     {
         #region Fields (private)
 
-        private JobObject _jobObject;
+        private JobObject1 _jobObject;
         private BackgroundWorker _worker;
 
         private readonly IList<string> _paths = new List<string>();
@@ -287,7 +287,7 @@ namespace ProcessUtils
             ErrorMessages.Clear();
 
             if (_jobObject == null)
-                _jobObject = new JobObject();
+                _jobObject = new JobObject1();
 
             _process = new Process
                            {

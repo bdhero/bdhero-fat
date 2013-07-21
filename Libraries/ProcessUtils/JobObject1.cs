@@ -10,7 +10,7 @@ namespace ProcessUtils
     /// <seealso cref="http://stackoverflow.com/a/9164742/467582"/>
     /// <seealso cref="http://stackoverflow.com/a/4657392/467582"/>
     /// <seealso cref="http://jobobjectwrapper.codeplex.com/"/> for a (potentially) better solution
-    public class JobObject : IDisposable
+    public class JobObject1 : IDisposable
     {
         /// <summary>
         /// Causes all processes associated with the job to terminate when the last handle to the job is closed.
@@ -22,7 +22,7 @@ namespace ProcessUtils
         private IntPtr _handle;
         private bool _disposed;
 
-        public JobObject()
+        public JobObject1()
         {
             _handle = CreateJobObject(IntPtr.Zero, null);
 
@@ -44,7 +44,7 @@ namespace ProcessUtils
 
         #region IDisposable implementation
 
-        ~JobObject()
+        ~JobObject1()
         {
             Dispose(false);
         }
