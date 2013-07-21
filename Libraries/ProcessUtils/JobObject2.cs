@@ -43,6 +43,8 @@ namespace ProcessUtils
 
         #endregion
 
+        #region Win32 P/Invoke Interop
+
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Auto)]
         private static extern IntPtr CreateJobObject(IntPtr lpJobAttributes, string lpName);
 
@@ -70,6 +72,8 @@ namespace ProcessUtils
                                                  IntPtr lpEnvironment,
                                                  string lpCurrentDirectory, ref StartupInfo lpStartupInfo,
                                                  out ProcessInformation lpProcessInformation);
+
+        #endregion
 
         public static JobObject2 Create()
         {
