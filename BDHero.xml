@@ -96,7 +96,7 @@
                     <description>Plugins</description>
                     <destination>${windows_folder_appdata}/BDHero</destination>
                     <name>pluginsfolder</name>
-                    <platforms>all</platforms>
+                    <platforms>windows</platforms>
                     <distributionFileList>
                         <distributionDirectory>
                             <origin>Artifacts/Installer/Plugins</origin>
