@@ -18,7 +18,8 @@
                     <platforms>all</platforms>
                     <distributionFileList>
                         <distributionDirectory>
-                            <origin>Artifacts/Installer/ProgramFiles</origin>
+                            <allowWildcards>1</allowWildcards>
+                            <origin>Artifacts/Installer/ProgramFiles/*</origin>
                         </distributionDirectory>
                     </distributionFileList>
                 </folder>
