@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace DotNetUtils
+namespace ProcessUtils
 {
     /// <summary>
     /// Helper class for constructing a list of arguments to be passed to a command line application.

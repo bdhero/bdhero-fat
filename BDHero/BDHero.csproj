@@ -102,10 +102,6 @@
       <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
       <Name>I18N</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Libraries\ProcessUtils\ProcessUtils.csproj">
-      <Project>{896F47DD-A9FC-413C-B125-8E999F72E101}</Project>
-      <Name>ProcessUtils</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

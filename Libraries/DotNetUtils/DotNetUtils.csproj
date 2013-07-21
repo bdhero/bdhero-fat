@@ -53,7 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentList.cs" />
     <Compile Include="AssemblyUtils.cs" />
     <Compile Include="Controls\FileTextBox.cs">
       <SubType>UserControl</SubType>
