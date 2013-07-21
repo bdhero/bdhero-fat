@@ -93,6 +93,16 @@ namespace ProcessUtils
             AssignProcess(process.Handle);
         }
 
+        public bool IsProcessInThisJob(Process process)
+        {
+            return IsProcessInJobCheckingResult(process.Handle, _jobObjectHandle);
+        }
+
+        public static bool IsProcessInAnyJob(Process process)
+        {
+            return IsProcessInJobCheckingResult(process.Handle, IntPtr.Zero);
+        }
+
         private static void CloseHandleCheckingResult(IntPtr handle)
         {
             bool result = CloseHandle(handle);
