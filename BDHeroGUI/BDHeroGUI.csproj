@@ -282,6 +282,10 @@
       <Project>{EE69E896-8779-4E3D-A033-75A96F28DE2F}</Project>
       <Name>OSUtils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Libraries\ProcessUtils\ProcessUtils.csproj">
+      <Project>{896F47DD-A9FC-413C-B125-8E999F72E101}</Project>
+      <Name>ProcessUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Libraries\WindowsOSUtils\WindowsOSUtils.csproj">
       <Project>{A673442D-599D-4332-BCFA-8EC02171EFC0}</Project>
       <Name>WindowsOSUtils</Name>
