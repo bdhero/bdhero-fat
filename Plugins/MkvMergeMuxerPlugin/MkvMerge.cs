@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using DotNetUtils;
 using ProcessUtils;
 
 namespace BDHero.Plugin.MkvMergeMuxer

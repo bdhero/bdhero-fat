@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractExternalTool.cs" />
-    <Compile Include="ArgumentList.cs" />
     <Compile Include="BackgroundProcessWorker.cs" />
     <Compile Include="JobObject2.cs" />
     <Compile Include="NonInteractiveProcess.cs" />
