@@ -153,7 +153,7 @@ namespace ProcessUtils
             var limit = new JobObjectExtendedLimitInformation
             {
                 BasicLimitInformation =
-                    new JobObjectBasicLimitInformation { LimitFlags = LimitFlags.JobObjectLimitKillOnJobClose }
+                    new JobObjectBasicLimitInformation { LimitFlags = LimitFlags.KillOnJobClose }
             };
             bool result = SetInformationJobObject(
                 _jobObjectHandle, JobObjectInfoClass.ExtendedLimitInformation,
@@ -225,7 +225,7 @@ namespace ProcessUtils
         [Flags]
         private enum LimitFlags : ushort
         {
-            JobObjectLimitKillOnJobClose = 0x00002000
+            KillOnJobClose = 0x00002000
         }
 
         #endregion
