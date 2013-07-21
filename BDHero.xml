@@ -1,4 +1,4 @@
-﻿<project>
+<project>
     <shortName>BDHero</shortName>
     <fullName>BDHero</fullName>
     <version>0.7.6.3</version>
@@ -17,36 +17,9 @@
                     <name>programfiles</name>
                     <platforms>all</platforms>
                     <distributionFileList>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/BDHero.dll</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/bdhero-cli.exe</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/bdhero-gui.exe</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/BDInfo.dll</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/DotNetUtils.dll</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/I18N.dll</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/log4net.dll</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/Newtonsoft.Json.dll</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/Ninject.dll</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>Setup/ProgramFiles/ProcessUtils.dll</origin>
-                        </distributionFile>
+                        <distributionDirectory>
+                            <origin>Artifacts/Installer/ProgramFiles</origin>
+                        </distributionDirectory>
                     </distributionFileList>
                 </folder>
                 <folder>
@@ -74,7 +47,7 @@
                     <platforms>windows</platforms>
                     <distributionFileList>
                         <distributionDirectory>
-                            <origin>Setup/ProgramFiles/Config</origin>
+                            <origin>Artifacts/Installer/Config</origin>
                         </distributionDirectory>
                     </distributionFileList>
                 </folder>
@@ -126,7 +99,7 @@
                     <platforms>all</platforms>
                     <distributionFileList>
                         <distributionDirectory>
-                            <origin>Setup/ProgramFiles/Plugins</origin>
+                            <origin>Artifacts/Installer/Plugins</origin>
                         </distributionDirectory>
                     </distributionFileList>
                 </folder>
@@ -135,16 +108,16 @@
     </componentList>
     <postBuildActionList>
         <zip>
-            <baseDirectory>${build_project_directory}/Setup/ProgramFiles</baseDirectory>
+            <baseDirectory>${build_project_directory}/Artifacts/Portable</baseDirectory>
             <excludeFiles>*/Logs</excludeFiles>
-            <files>${build_project_directory}/Setup/ProgramFiles/*</files>
-            <zipFile>${build_project_directory}/Setup/${product_shortname}-${product_version}-${platform_name}-portable.zip</zipFile>
+            <files>${build_project_directory}/Artifacts/Portable/*</files>
+            <zipFile>${build_project_directory}/Artifacts/${product_shortname}-${product_version}-${platform_name}-portable.zip</zipFile>
         </zip>
     </postBuildActionList>
     <disableSplashScreen>1</disableSplashScreen>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
-    <outputDirectory>Setup</outputDirectory>
+    <outputDirectory>Artifacts</outputDirectory>
     <productDisplayIcon>${installdir}/bdhero-cli.exe</productDisplayIcon>
     <productUrlHelpLink>https://github.com/bdhero/bdhero</productUrlHelpLink>
     <productUrlInfoAbout>https://github.com/bdhero/bdhero/issues</productUrlInfoAbout>

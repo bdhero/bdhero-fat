@@ -8,4 +8,4 @@ obj
 publish
 /gh-pages
 *.backup
-/Setup
+/Artifacts
