@@ -5,8 +5,6 @@ using System.Windows.Forms;
 using BDHero.Config;
 using BDHero.Startup;
 using Ninject;
-using OSUtils.DriveDetector;
-using WindowsOSUtils.DriveDetector;
 
 namespace BDHeroGUI
 {
