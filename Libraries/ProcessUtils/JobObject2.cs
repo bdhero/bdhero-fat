@@ -100,16 +100,16 @@ namespace ProcessUtils
                 throw new Win32Exception();
         }
 
-        private void AssignProcess(IntPtr handle)
+        private void AssignProcess(IntPtr processHandle)
         {
-            if (IsProcessInJobCheckingResult(handle, _jobObjectHandle))
+            if (IsProcessInJobCheckingResult(processHandle, _jobObjectHandle))
                 return;
 
-            if (IsProcessInJobCheckingResult(handle, IntPtr.Zero))
+            if (IsProcessInJobCheckingResult(processHandle, IntPtr.Zero))
                 throw new InvalidOperationException(
                     "Requested process already belongs to another job group. Check http://stackoverflow.com/a/4232259/3205 for help.");
 
-            bool result = AssignProcessToJobObject(_jobObjectHandle, handle);
+            bool result = AssignProcessToJobObject(_jobObjectHandle, processHandle);
             if (!result)
                 throw new Win32Exception();
         }
