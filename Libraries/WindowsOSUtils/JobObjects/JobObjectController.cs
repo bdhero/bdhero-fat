@@ -11,7 +11,7 @@ namespace WindowsOSUtils.JobObjects
 {
     /// <summary>An interface to the Windows Job Objects API.</summary>
     /// <seealso cref="https://www-auth.cs.wisc.edu/lists/htcondor-users/2009-June/msg00106.shtml"/>
-    public class JobObjectController
+    public static class JobObjectController
     {
         #region Native 32/64 Bit Switching Flag
         /// <summary>
