@@ -22,6 +22,10 @@ Bugs
 Features
 ========
 
+[ ] Context menu for Playlist listitems: add "Language" option
+
+[ ] Change file name of BDHero-<VERSION>-<OS>-<DIST>.<EXT>
+
 [ ] Add "use last folder" option to File Namer preference dialog
 
 [ ] Fix or remove "low quality" playlist detection
