@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<installerInformation>
+   <versionId>80101</versionId>
+   <version>0.8.1.1</version>
+   <platformFileList>
+       <platformFile>
+           <filename>BDHero-0.8.1.1-windows-installer.exe</filename>
+           <platform>windows</platform>
+       </platformFile>
+   </platformFileList>
+   <downloadLocationList>
+       <downloadLocation>
+           <url>http://dl.cdn.bdhero.org/</url>
+       </downloadLocation>
+   </downloadLocationList>
+</installerInformation>
