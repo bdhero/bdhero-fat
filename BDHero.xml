@@ -1,4 +1,4 @@
-﻿<project>
+<project>
     <shortName>BDHero</shortName>
     <fullName>BDHero</fullName>
     <version>0.8.1.1</version>
@@ -106,11 +106,48 @@
                 </folder>
             </folderList>
         </componentGroup>
+        <component>
+            <name>autoupdater</name>
+            <description>Includes tool to perform updates</description>
+            <canBeEdited>0</canBeEdited>
+            <selected>0</selected>
+            <show>0</show>
+            <folderList>
+                <folder>
+                    <description>Install Dir</description>
+                    <destination>${installdir}</destination>
+                    <name>autoupdaterwin</name>
+                    <platforms>windows</platforms>
+                    <distributionFileList>
+                        <distributionFile origin="${installbuilder_install_root}/autoupdate/runtimes/autoupdate-windows.exe"/>
+                    </distributionFileList>
+                </folder>
+            </folderList>
+            <postInstallationActionList>
+                <writeFile>
+                    <path>${installdir}/update.ini</path>
+                    <text>[Update]
+            url = ${update_xml_url}
+            version_id = ${application_version_id}
+            update_download_location = ${system_temp_directory}/bdhero/update
+            check_for_updates = 1
+            </text>
+                </writeFile>
+            </postInstallationActionList>
+        </component>
     </componentList>
     <preBuildActionList>
         <setInstallerVariable>
             <name>projectHomepageUrl</name>
             <value>https://github.com/bdhero/bdhero</value>
+        </setInstallerVariable>
+        <setInstallerVariable>
+            <name>update_xml_url</name>
+            <value>http://update.bdhero.org/update.xml</value>
+        </setInstallerVariable>
+        <setInstallerVariable>
+            <name>application_version_id</name>
+            <value>80101</value>
         </setInstallerVariable>
         <runProgram>
             <explanation>Digitally signing bdhero-cli.exe</explanation>
