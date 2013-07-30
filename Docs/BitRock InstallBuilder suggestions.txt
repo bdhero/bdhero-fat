@@ -10,3 +10,4 @@ Suggestions
 *  Escape/Enter key in forms
 *  Clear recent project list
 *  Delete button doesn't work in "Files" view
+*  Add "human friendly" descriptions for actions in "Advanced" GUI tab
