@@ -2,12 +2,6 @@
 <asmv1:assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <assemblyIdentity version="1.0.0.0" name="MyApplication.app"/>
 
-  <configuration>
-    <runtime>
-      <generatePublisherEvidence enabled="false"/>
-    </runtime>
-  </configuration>
-
   <v3:trustInfo xmlns:v3="urn:schemas-microsoft-com:asm.v3">
     <v3:security>
       <v3:requestedPrivileges>
