@@ -133,7 +133,7 @@
         <runProgram>
             <explanation>Digitally signing installer</explanation>
             <program>${build_project_directory}/Release/sign.bat</program>
-            <programArguments>"${project.fullName} Installer" "${projectHomepageUrl}" "${build_project_directory}"</programArguments>
+            <programArguments>"${project.fullName} Installer" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/${project.installerFilename}"</programArguments>
         </runProgram>
     </postBuildActionList>
     <disableSplashScreen>1</disableSplashScreen>
