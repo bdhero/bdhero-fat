@@ -4,7 +4,7 @@
    <version>0.8.1.2</version>
    <platformFileList>
        <platformFile>
-           <filename>BDHero-0.8.1.2-windows-installer.exe</filename>
+           <filename>bdhero-0.8.1.2-setup.exe</filename>
            <platform>windows</platform>
        </platformFile>
    </platformFileList>
