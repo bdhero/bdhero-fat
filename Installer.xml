@@ -203,7 +203,7 @@ check_for_updates = 1
             <baseDirectory>${build_project_directory}/Artifacts/Portable</baseDirectory>
             <excludeFiles>*/Logs</excludeFiles>
             <files>${build_project_directory}/Artifacts/Portable/*</files>
-            <zipFile>${build_project_directory}/Artifacts/${product_shortname}-${product_version}-${platform_name}-portable.zip</zipFile>
+            <zipFile>${build_project_directory}/Artifacts/${product_shortname}-${product_version}.zip</zipFile>
         </zip>
         <runProgram>
             <explanation>Digitally signing installer</explanation>
