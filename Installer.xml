@@ -153,7 +153,7 @@ url = ${update_xml_url}
 version_id = ${application_version_id}
 update_download_location = ${system_temp_directory}/bdhero/update
 check_for_updates = 1
-                    </text>
+</text>
                 </writeFile>
                 <!-- Make sure update.ini gets uninstalled -->
                 <addDirectoriesToUninstaller>
