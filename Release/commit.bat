@@ -8,7 +8,9 @@ FOR /F "delims=" %%i IN ('Release\Versioner --version') DO set NewVersion=%%i
 
 git status
 
-git add BDHero.xml
+git add Installer.xml
+git add AutoUpdate.xml
+git add update.xml
 git add BDHero\Properties\AssemblyInfo.cs
 git add BDHeroCLI\Properties\AssemblyInfo.cs
 git add BDHeroGUI\Properties\AssemblyInfo.cs
@@ -16,9 +18,6 @@ git add BDHeroGUI\Properties\AssemblyInfo.cs
 git status
 
 set Message=Bumped BDHero version to %NewVersion%
-
-REM TODO: Check if tag already exists
-echo "TODO: Check if tag already exists"
 
 echo.
 echo Committing
