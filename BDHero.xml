@@ -28,6 +28,9 @@
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
     <logoImage>Assets/Icons/bdhero_gui_48.png</logoImage>
+    <windows64bitMode>1</windows64bitMode>
+    <windowsExecutableIcon>Assets/Icons/bdhero_gui.ico</windowsExecutableIcon>
+    <windowsResourceFileVersion>${product_version}</windowsResourceFileVersion>
     <productDisplayIcon>${installdir}/bdhero-gui.exe</productDisplayIcon>
     <productUrlHelpLink>${projectHomepageUrl}</productUrlHelpLink>
     <productUrlInfoAbout>${projectIssueTrackerUrl}</productUrlInfoAbout>
@@ -218,9 +221,6 @@ check_for_updates = 1
             <programArguments>"${project.fullName} Installer" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/${project.installerFilename}"</programArguments>
         </runProgram>
     </postBuildActionList>
-    <windows64bitMode>1</windows64bitMode>
-    <windowsExecutableIcon>Assets/Icons/bdhero_gui.ico</windowsExecutableIcon>
-    <windowsResourceFileVersion>${product_version}</windowsResourceFileVersion>
     <parameterList>
         <directoryParameter>
             <name>installdir</name>
