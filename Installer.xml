@@ -1,6 +1,6 @@
 <project>
     <fullName>BDHero</fullName>
-    <shortName>BDHero</shortName>
+    <shortName>bdhero</shortName>
     <vendor>BDHero</vendor>
     <version>0.8.1.1</version>
     <initializationActionList>
@@ -23,6 +23,7 @@
     </initializationActionList>
     <saveRelativePaths>1</saveRelativePaths>
     <outputDirectory>Artifacts</outputDirectory>
+    <installerFilename>${product_shortname}-${product_version}-setup.${platform_exec_suffix}</installerFilename>
     <singleInstanceCheck>1</singleInstanceCheck>
     <disableSplashScreen>1</disableSplashScreen>
     <enableTimestamp>1</enableTimestamp>
