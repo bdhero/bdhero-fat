@@ -13,7 +13,8 @@ namespace Versioner
     {
         private const bool DefaultLimit10 = true;
 
-        private const string InstallBuilderPath = @"BDHero.xml";
+        private const string InstallBuilderPath = @"Installer.xml";
+        private const string InstallBuilderAutoUpdatePath = @"AutoUpdate.xml";
         private const string InstallBuilderUpdatePath = @"update.xml";
         private const string BDHeroPath = @"BDHero\Properties\AssemblyInfo.cs";
         private const string BDHeroCLIPath = @"BDHeroCLI\Properties\AssemblyInfo.cs";
@@ -22,6 +23,7 @@ namespace Versioner
         static readonly string[] Files = new[]
             {
                 InstallBuilderPath,
+                InstallBuilderAutoUpdatePath,
                 InstallBuilderUpdatePath,
                 BDHeroPath,
                 BDHeroCLIPath,

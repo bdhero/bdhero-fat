@@ -1,6 +1,7 @@
 <autoUpdateProject>
     <fullName>BDHero</fullName>
     <shortName>bdheroautoupdater</shortName>
+    <vendor>BDHero</vendor>
     <version>0.8.1.1</version>
     <singleInstanceCheck>1</singleInstanceCheck>
     <saveRelativePaths>1</saveRelativePaths>

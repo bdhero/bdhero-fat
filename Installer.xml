@@ -25,8 +25,9 @@
     <outputDirectory>Artifacts</outputDirectory>
     <singleInstanceCheck>1</singleInstanceCheck>
     <disableSplashScreen>1</disableSplashScreen>
-    <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
+    <enableRollback>1</enableRollback>
+    <rollbackBackupDirectory>${system_temp_directory}/bdhero/rollback</rollbackBackupDirectory>
     <logoImage>Assets/Icons/bdhero_gui_48.png</logoImage>
     <windows64bitMode>1</windows64bitMode>
     <windowsExecutableIcon>Assets/Icons/bdhero_gui.ico</windowsExecutableIcon>
@@ -139,21 +140,10 @@
         </componentGroup>
         <component>
             <name>autoupdater</name>
-            <description>Includes tool to perform updates</description>
+            <description>Include tool to perform automatic updates</description>
             <canBeEdited>0</canBeEdited>
             <selected>1</selected>
             <show>0</show>
-            <!--folderList>
-                <folder>
-                    <description>Install Dir</description>
-                    <destination>${installdir}</destination>
-                    <name>autoupdaterwin</name>
-                    <platforms>windows</platforms>
-                    <distributionFileList>
-                        <distributionFile origin="${installbuilder_install_root}/autoupdate/runtimes/autoupdate-windows.exe"/>
-                    </distributionFileList>
-                </folder>
-            </folderList-->
             <postInstallationActionList>
                 <writeFile>
                     <path>${installdir}/update.ini</path>
@@ -164,6 +154,7 @@ update_download_location = ${system_temp_directory}/bdhero/update
 check_for_updates = 1
                     </text>
                 </writeFile>
+                <!-- Make sure update.ini gets uninstalled -->
                 <addDirectoriesToUninstaller>
                     <addContents>1</addContents>
                     <files>${installdir}</files>
@@ -176,9 +167,8 @@ check_for_updates = 1
         <runProgram>
             <explanation>Building AutoUpdate</explanation>
             <program>${installbuilder_install_root}/autoupdate/bin/customize.${platform_exec_suffix}</program>
-            <programArguments>build BDHeroUpdater.xml windows</programArguments>
+            <programArguments>build AutoUpdate.xml windows</programArguments>
             <workingDirectory>${build_project_directory}</workingDirectory>
-            <!-- Use long filename -->
             <useMSDOSPath>0</useMSDOSPath>
         </runProgram>
         <runProgram>
@@ -186,7 +176,6 @@ check_for_updates = 1
             <program>${build_project_directory}/Release/sign.bat</program>
             <programArguments>"${project.fullName} AutoUpdate" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/Installer/ProgramFiles/autoupdate.${platform_exec_suffix}"</programArguments>
         </runProgram>
-        <!-- -->
         <runProgram>
             <explanation>Digitally signing bdhero-cli.exe</explanation>
             <program>${build_project_directory}/Release/sign.bat</program>
@@ -221,6 +210,56 @@ check_for_updates = 1
             <programArguments>"${project.fullName} Installer" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/${project.installerFilename}"</programArguments>
         </runProgram>
     </postBuildActionList>
+    <preInstallationActionList>
+        <!-- detect existing installation, then switch to upgrade mode and display a note. -->
+        <actionGroup>
+            <actionList>
+                <showInfo>
+                    <text>An existing installation has been detected in ${installdir}.</text>
+                </showInfo>
+                <setInstallerVariable name="project.installationType" value="upgrade"/>
+                <setInstallerVariable name="project.allowComponentSelection" value="0"/>
+                <setInstallerVariable name="project.parameter(installdir).ask" value="0"/>
+            </actionList>
+            <!-- Assume an existing installation if ${installdir} directory exists -->
+            <ruleList>
+                <fileTest condition="exists" path="${installdir}"/>
+            </ruleList>
+        </actionGroup>
+    </preInstallationActionList>
+    <preUninstallationActionList>
+        <showQuestion text="Delete user preferences?" variable="remove_preferences" />
+        <!-- Must be run twice to delete the empty directory after all files have been removed -->
+        <deleteFile>
+            <path>${windows_folder_appdata}/BDHero</path>
+            <matchHiddenFiles>1</matchHiddenFiles>
+            <ruleList>
+                <compareText text="${remove_preferences}" value="yes" logic="equals" />
+            </ruleList>
+        </deleteFile>
+        <deleteFile>
+            <path>${windows_folder_appdata}/BDHero</path>
+            <matchHiddenFiles>1</matchHiddenFiles>
+            <ruleList>
+                <compareText text="${remove_preferences}" value="yes" logic="equals" />
+            </ruleList>
+        </deleteFile>
+        <!-- Must be run twice to delete the empty directory after all files have been removed -->
+        <deleteFile>
+            <path>${windows_folder_local_appdata}/BDHero</path>
+            <matchHiddenFiles>1</matchHiddenFiles>
+            <ruleList>
+                <compareText text="${remove_preferences}" value="yes" logic="equals" />
+            </ruleList>
+        </deleteFile>
+        <deleteFile>
+            <path>${windows_folder_local_appdata}/BDHero</path>
+            <matchHiddenFiles>1</matchHiddenFiles>
+            <ruleList>
+                <compareText text="${remove_preferences}" value="yes" logic="equals" />
+            </ruleList>
+        </deleteFile>
+    </preUninstallationActionList>
     <parameterList>
         <directoryParameter>
             <name>installdir</name>
