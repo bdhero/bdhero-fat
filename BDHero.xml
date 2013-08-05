@@ -1,8 +1,36 @@
 <project>
-    <shortName>BDHero</shortName>
     <fullName>BDHero</fullName>
+    <shortName>BDHero</shortName>
+    <vendor>BDHero</vendor>
     <version>0.8.1.1</version>
+    <initializationActionList>
+        <setInstallerVariable>
+            <name>projectHomepageUrl</name>
+            <value>https://github.com/bdhero/bdhero</value>
+        </setInstallerVariable>
+        <setInstallerVariable>
+            <name>projectIssueTrackerUrl</name>
+            <value>https://github.com/bdhero/bdhero/issues</value>
+        </setInstallerVariable>
+        <setInstallerVariable>
+            <name>update_xml_url</name>
+            <value>http://update.bdhero.org/update.xml</value>
+        </setInstallerVariable>
+        <setInstallerVariable>
+            <name>application_version_id</name>
+            <value>80101</value>
+        </setInstallerVariable>
+    </initializationActionList>
+    <saveRelativePaths>1</saveRelativePaths>
+    <outputDirectory>Artifacts</outputDirectory>
+    <singleInstanceCheck>1</singleInstanceCheck>
+    <disableSplashScreen>1</disableSplashScreen>
+    <enableRollback>1</enableRollback>
+    <enableTimestamp>1</enableTimestamp>
     <logoImage>Assets/Icons/bdhero_gui_48.png</logoImage>
+    <productDisplayIcon>${installdir}/bdhero-gui.exe</productDisplayIcon>
+    <productUrlHelpLink>${projectHomepageUrl}</productUrlHelpLink>
+    <productUrlInfoAbout>${projectIssueTrackerUrl}</productUrlInfoAbout>
     <componentList>
         <component>
             <name>programfiles</name>
@@ -55,11 +83,11 @@
             </folderList>
             <startMenuShortcutList>
                 <startMenuShortcut>
-                    <comment>Uninstall ${product_fullname}</comment>
-                    <name>Uninstall ${product_fullname}</name>
+                    <comment>BDHero Graphical Interface</comment>
+                    <name>BDHero GUI</name>
                     <runAsAdmin>0</runAsAdmin>
                     <runInTerminal>0</runInTerminal>
-                    <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
+                    <windowsExec>${installdir}/bdhero-gui.exe</windowsExec>
                     <windowsExecArgs></windowsExecArgs>
                     <windowsIcon></windowsIcon>
                     <windowsPath>${installdir}/</windowsPath>
@@ -75,11 +103,11 @@
                     <windowsPath>${installdir}/</windowsPath>
                 </startMenuShortcut>
                 <startMenuShortcut>
-                    <comment>BDHero Graphical Interface</comment>
-                    <name>BDHero GUI</name>
+                    <comment>Uninstall ${product_fullname}</comment>
+                    <name>Uninstall ${product_fullname}</name>
                     <runAsAdmin>0</runAsAdmin>
                     <runInTerminal>0</runInTerminal>
-                    <windowsExec>${installdir}/bdhero-gui.exe</windowsExec>
+                    <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
                     <windowsExecArgs></windowsExecArgs>
                     <windowsIcon></windowsIcon>
                     <windowsPath>${installdir}/</windowsPath>
@@ -110,9 +138,9 @@
             <name>autoupdater</name>
             <description>Includes tool to perform updates</description>
             <canBeEdited>0</canBeEdited>
-            <selected>0</selected>
+            <selected>1</selected>
             <show>0</show>
-            <folderList>
+            <!--folderList>
                 <folder>
                     <description>Install Dir</description>
                     <destination>${installdir}</destination>
@@ -122,33 +150,40 @@
                         <distributionFile origin="${installbuilder_install_root}/autoupdate/runtimes/autoupdate-windows.exe"/>
                     </distributionFileList>
                 </folder>
-            </folderList>
+            </folderList-->
             <postInstallationActionList>
                 <writeFile>
                     <path>${installdir}/update.ini</path>
                     <text>[Update]
-            url = ${update_xml_url}
-            version_id = ${application_version_id}
-            update_download_location = ${system_temp_directory}/bdhero/update
-            check_for_updates = 1
-            </text>
+url = ${update_xml_url}
+version_id = ${application_version_id}
+update_download_location = ${system_temp_directory}/bdhero/update
+check_for_updates = 1
+                    </text>
                 </writeFile>
+                <addDirectoriesToUninstaller>
+                    <addContents>1</addContents>
+                    <files>${installdir}</files>
+                    <matchHiddenFiles>1</matchHiddenFiles>
+                </addDirectoriesToUninstaller>
             </postInstallationActionList>
         </component>
     </componentList>
     <preBuildActionList>
-        <setInstallerVariable>
-            <name>projectHomepageUrl</name>
-            <value>https://github.com/bdhero/bdhero</value>
-        </setInstallerVariable>
-        <setInstallerVariable>
-            <name>update_xml_url</name>
-            <value>http://update.bdhero.org/update.xml</value>
-        </setInstallerVariable>
-        <setInstallerVariable>
-            <name>application_version_id</name>
-            <value>80101</value>
-        </setInstallerVariable>
+        <runProgram>
+            <explanation>Building AutoUpdate</explanation>
+            <program>${installbuilder_install_root}/autoupdate/bin/customize.${platform_exec_suffix}</program>
+            <programArguments>build BDHeroUpdater.xml windows</programArguments>
+            <workingDirectory>${build_project_directory}</workingDirectory>
+            <!-- Use long filename -->
+            <useMSDOSPath>0</useMSDOSPath>
+        </runProgram>
+        <runProgram>
+            <explanation>Digitally signing autoupdate.exe</explanation>
+            <program>${build_project_directory}/Release/sign.bat</program>
+            <programArguments>"${project.fullName} AutoUpdate" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/Installer/ProgramFiles/autoupdate.${platform_exec_suffix}"</programArguments>
+        </runProgram>
+        <!-- -->
         <runProgram>
             <explanation>Digitally signing bdhero-cli.exe</explanation>
             <program>${build_project_directory}/Release/sign.bat</program>
@@ -183,16 +218,6 @@
             <programArguments>"${project.fullName} Installer" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/${project.installerFilename}"</programArguments>
         </runProgram>
     </postBuildActionList>
-    <disableSplashScreen>1</disableSplashScreen>
-    <enableRollback>1</enableRollback>
-    <enableTimestamp>1</enableTimestamp>
-    <outputDirectory>Artifacts</outputDirectory>
-    <productDisplayIcon>${installdir}/bdhero-gui.exe</productDisplayIcon>
-    <productUrlHelpLink>https://github.com/bdhero/bdhero</productUrlHelpLink>
-    <productUrlInfoAbout>https://github.com/bdhero/bdhero/issues</productUrlInfoAbout>
-    <saveRelativePaths>1</saveRelativePaths>
-    <singleInstanceCheck>1</singleInstanceCheck>
-    <vendor>BDHero</vendor>
     <windows64bitMode>1</windows64bitMode>
     <windowsExecutableIcon>Assets/Icons/bdhero_gui.ico</windowsExecutableIcon>
     <windowsResourceFileVersion>${product_version}</windowsResourceFileVersion>

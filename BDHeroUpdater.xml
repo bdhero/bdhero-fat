@@ -1,0 +1,10 @@
+<autoUpdateProject>
+    <fullName>BDHero</fullName>
+    <shortName>bdheroautoupdater</shortName>
+    <version>0.8.1.1</version>
+    <singleInstanceCheck>1</singleInstanceCheck>
+    <saveRelativePaths>1</saveRelativePaths>
+    <logoImage>Assets/Icons/bdhero_gui_48.png</logoImage>
+    <outputDirectory>Artifacts/Installer/ProgramFiles</outputDirectory>
+    <installerFilename>autoupdate.${platform_exec_suffix}</installerFilename>
+</autoUpdateProject>
