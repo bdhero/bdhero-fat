@@ -37,8 +37,6 @@
 #define MyAppPublisher "BDHero"
 #define MyAppURL "http://bdhero.org/"
 #define MyAppExeName "bdhero-gui.exe"
-#define MyDepsFolder "Deps"
-#define MySolutionRootRelative "..\.."
 
 #define CodeSigningCertPK GetEnv('CodeSigningCertPK')
 #define CodeSigningCertPW GetEnv('CodeSigningCertPW')
