@@ -168,7 +168,7 @@ namespace Versioner
         static KeyValuePair<string, Encoding> ReadFile(string filePath)
         {
             // open the file with the stream-reader:
-            using (StreamReader reader = new StreamReader(filePath, true))
+            using (var reader = new StreamReader(filePath, true))
             {
                 // read the contents of the file into a string
                 var contents = reader.ReadToEnd();
