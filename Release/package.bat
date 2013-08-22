@@ -2,6 +2,12 @@
 
 REM %CD% = C:\Projects\BDHero
 
+set ProjectUrl=http://bdhero.org/
+
+call Release\sign.bat "BDHero GUI" "%ProjectUrl%" Artifacts\Installer\ProgramFiles\*.exe
+
+xcopy /Y Artifacts\Installer\ProgramFiles\*.exe Artifacts\Portable\
+
 REM "%ProgramFiles%\BitRock InstallBuilder Enterprise 8.6.0\bin\builder-cli.exe" build "Installer.xml" windows
 
 iscc "/sCustom=signtool.exe $p" Installer\InnoSetup\setup.iss
