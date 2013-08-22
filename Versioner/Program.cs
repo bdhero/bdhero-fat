@@ -45,34 +45,58 @@ namespace Versioner
 
         private static bool _limit10 = DefaultLimit10;
 
+        private static bool _commitChanges = true;
+        private static bool _printCurrentVersion = false;
+        private static bool _printCurrentVersionId = false;
+
+        private static bool IsPrintAndExit { get { return _printCurrentVersion || _printCurrentVersionId; } }
+
         static void Main(string[] args)
         {
+            var workspace = Environment.CurrentDirectory;
             var strategy = VersionStrategy.None;
             var custom = "";
-            var workspace = Environment.CurrentDirectory;
+            var testVersion = "";
 
             var optionSet = new OptionSet
                 {
                     { "h|?|help", s => PrintUsageAndExit() },
-                    { "v|version|p|print", s => PrintCurrentVersionAndExit() },
-                    { "id|version-id", s => PrintCurrentVersionIdAndExit() },
+                    { "workspace=", s => workspace = s },
+                    { "test", s => _commitChanges = false },
+                    { "test-with=|testwith=", s => testVersion = s },
+                    { "v|version|p|print", s => _printCurrentVersion = true },
+                    { "id|version-id", s => _printCurrentVersionId = true },
                     { "strategy=", s => strategy = VersionStrategyParser.Parse(s) },
                     { "custom=", s => custom = s },
-                    { "infinite", s => _limit10 = false },
-                    { "workspace=", s => workspace = s }
+                    { "infinite|no-limit", s => _limit10 = false }
                 };
 
             optionSet.Parse(args);
 
             Environment.CurrentDirectory = workspace;
 
-            var currentVersion = CurrentVersion;
+            var overrideCurrentVersion = !string.IsNullOrWhiteSpace(testVersion);
+            if (overrideCurrentVersion)
+                _commitChanges = false;
+
+            if (!_commitChanges && !IsPrintAndExit)
+                Console.WriteLine("TEST RUN - changes will NOT be written to disk");
+
+            var currentVersion = overrideCurrentVersion ? Version.Parse(testVersion) : CurrentVersion;
             var newVersion = strategy == VersionStrategy.Custom ? Version.Parse(custom) : Bump(currentVersion, strategy);
+
+            if (_printCurrentVersion)
+                PrintCurrentVersionAndExit(currentVersion);
+
+            if (_printCurrentVersionId)
+                PrintCurrentVersionIdAndExit(currentVersion);
 
             foreach (var filePath in Files)
             {
                 SetVersion(filePath, newVersion);
             }
+
+            Console.WriteLine("{0} => {1}", currentVersion, newVersion);
         }
 
         private static void PrintUsageAndExit()
@@ -83,15 +107,15 @@ namespace Versioner
             Environment.Exit(0);
         }
 
-        private static void PrintCurrentVersionAndExit()
+        private static void PrintCurrentVersionAndExit(Version version = null)
         {
-            Console.Write(CurrentVersion);
+            Console.Write(version ?? CurrentVersion);
             Environment.Exit(0);
         }
 
-        private static void PrintCurrentVersionIdAndExit()
+        private static void PrintCurrentVersionIdAndExit(Version version = null)
         {
-            Console.Write(CurrentVersion.GetId());
+            Console.Write((version ?? CurrentVersion).GetId());
             Environment.Exit(0);
         }
 
@@ -101,7 +125,7 @@ namespace Versioner
             var contents = file.Key;
             var encoding = file.Value;
 
-            Console.WriteLine("File \"{0}\" has encoding {1}", filePath, encoding);
+            Console.WriteLine("File \"{0}\" has encoding {1}", filePath, encoding.EncodingName);
 
             contents = AssemblyRegex.Replace(contents, "${1}" + newVersion + "${3}");
             contents = InstallBuilderVersionRegex.Replace(contents, "${1}" + newVersion + "${3}");
@@ -110,7 +134,10 @@ namespace Versioner
             contents = InnoSetupVersionRegex.Replace(contents, "${1}" + newVersion + "${3}");
             contents = ArtifactFileNameRegex.Replace(contents, "${1}" + newVersion + "${3}");
 
-            File.WriteAllText(filePath, contents, encoding);
+            if (_commitChanges)
+            {
+                File.WriteAllText(filePath, contents, encoding);
+            }
         }
 
         static KeyValuePair<string, Encoding> ReadFile(string filePath)
@@ -154,7 +181,8 @@ namespace Versioner
 
         private static Version BumpBugFix(Version version)
         {
-            Console.WriteLine("BumpBugFix({0})", version);
+            if (!IsPrintAndExit)
+                Console.WriteLine("BumpBugFix({0})", version);
             var revision = version.Revision + 1;
             if (_limit10 && revision > 9)
             {
@@ -166,7 +194,8 @@ namespace Versioner
 
         private static Version BumpMinorFeature(Version version)
         {
-            Console.WriteLine("BumpMinorFeature({0})", version);
+            if (!IsPrintAndExit)
+                Console.WriteLine("BumpMinorFeature({0})", version);
             var build = version.Build + 1;
             if (_limit10 && build > 9)
             {
@@ -178,7 +207,8 @@ namespace Versioner
 
         private static Version BumpFullRelease(Version version)
         {
-            Console.WriteLine("BumpFullRelease({0})", version);
+            if (!IsPrintAndExit)
+                Console.WriteLine("BumpFullRelease({0})", version);
             var minor = version.Minor + 1;
             if (_limit10 && minor > 9)
             {
@@ -190,7 +220,8 @@ namespace Versioner
 
         private static Version BumpMajorMilestone(Version version)
         {
-            Console.WriteLine("BumpMajorMilestone({0})", version);
+            if (!IsPrintAndExit)
+                Console.WriteLine("BumpMajorMilestone({0})", version);
             return new Version(version.Major + 1, 0, 0, 0);
         }
     }
@@ -245,7 +276,7 @@ x.x.x.x - Custom
         /// </para>
         /// </summary>
         /// <example><code>new Version(1, 2, 3, 4).GetId() == 1020304</code></example>
-        /// <example><code>new Version(0, 8, 0, 1).GetId() == 80001</code></example>
+        /// <example><code>new Version(0, 8, 0, 1).GetId() ==   80001</code></example>
         /// <param name="version"></param>
         /// <returns>The value of <paramref name="version"/> as a signed <c>Int32</c></returns>
         /// <seealso cref="http://installbuilder.bitrock.com/docs/installbuilder-userguide/ar01s23.html">BitRock InstallBuilder update.xml file</seealso>
