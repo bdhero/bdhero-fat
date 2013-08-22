@@ -2,8 +2,6 @@
 
 REM %CD% = C:\Projects\BDHero
 
-set
-
 echo PATH=%PATH%
 
 set ProjectUrl=http://bdhero.org/
