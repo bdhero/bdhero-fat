@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <installerInformation>
-   <versionId>80104</versionId>
-   <version>0.8.1.4</version>
+   <versionId>80106</versionId>
+   <version>0.8.1.6</version>
    <platformFileList>
        <platformFile>
-           <filename>bdhero-0.8.1.4-setup.exe</filename>
+           <filename>bdhero-0.8.1.6-setup.exe</filename>
            <platform>windows</platform>
        </platformFile>
    </platformFileList>
