@@ -71,6 +71,7 @@ ArchitecturesInstallIn64BitMode=x64
 ShowLanguageDialog=auto
 UninstallDisplayIcon={app}\{#MyAppExeName}
 PrivilegesRequired=admin
+MinVersion=0,5.01sp3
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
