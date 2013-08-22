@@ -2,6 +2,10 @@
 
 REM %CD% = C:\Projects\BDHero
 
+set
+
+echo PATH=%PATH%
+
 set ProjectUrl=http://bdhero.org/
 
 call Release\sign.bat "BDHero GUI" "%ProjectUrl%" Artifacts\Installer\ProgramFiles\*.exe
