@@ -7,7 +7,7 @@ namespace BDHeroCLI
 {
     partial class Usage
     {
-        private string _exeName;
+        private readonly string _exeName;
 
         public Usage(string exeName)
         {

@@ -106,7 +106,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Usage.tt</DependentUpon>
     </Compile>
-    <Compile Include="UsageImpl.cs" />
+    <Compile Include="UsageModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BDHero\BDHero.csproj">
