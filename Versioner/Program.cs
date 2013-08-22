@@ -77,61 +77,9 @@ namespace Versioner
 
         private static void PrintUsageAndExit()
         {
-            var exe = Assembly.GetEntryAssembly().GetName().Name;
-            Console.WriteLine("USAGE:");
-            Console.WriteLine("    {0} [OPTIONS...]", exe);
-            Console.WriteLine();
-            Console.WriteLine("DESCRIPTION:");
-            Console.WriteLine("    Utility to update BDHero version numbers.  Allows incremental \"bumps\",");
-            Console.WriteLine("    custom version numbers, and normalization (ensuring that the version numbers");
-            Console.WriteLine("    in all files are in sync).");
-            Console.WriteLine();
-            Console.WriteLine("    The \"current\" version number is read from the AssemblyVersion or");
-            Console.WriteLine("    AssemblyFileVersion attributes in BDHero/Properties/AssemblyInfo.cs,");
-            Console.WriteLine("    whichever appears first in the file.");
-            Console.WriteLine();
-            Console.WriteLine("OPTIONS:");
-            Console.WriteLine("    -h, --help, /?");
-            Console.WriteLine("        Display this message and exit.");
-            Console.WriteLine();
-            Console.WriteLine("    -v, --version, -p, --print");
-            Console.WriteLine("        Print the current BDHero version number to stdout and exit.");
-            Console.WriteLine();
-            Console.WriteLine("    --id, --version-id");
-            Console.WriteLine("        Print the current BDHero version number ID to stdout and exit.");
-            Console.WriteLine("        The version ID is a signed integer representation of the version");
-            Console.WriteLine("        number suitable for use in the <versionId> tag of a");
-            Console.WriteLine("        BitRock InstallBuilder update.xml file.");
-            Console.WriteLine();
-            Console.WriteLine("    --strategy=STRATEGY");
-            Console.WriteLine("        Determines how {0} updates version numbers in the solution.", exe);
-            Console.WriteLine();
-            Console.WriteLine("        STRATEGY must be one of the following:");
-            Console.WriteLine();
-            Console.WriteLine("            \"_._._.x\": Incremental: bug fix                   (a.k.a. Version.Revision)");
-            Console.WriteLine("            \"_._.x._\": Incremental: minor feature/enhancement (a.k.a. Version.Build)");
-            Console.WriteLine("            \"_.x._._\": Incremental: full release              (a.k.a. Version.Minor)");
-            Console.WriteLine("            \"x._._._\": Incremental: major milestone           (a.k.a. Version.Major)");
-            Console.WriteLine("            \"x.x.x.x\": Non-incremental: use custom version number (see --custom)");
-            Console.WriteLine("            \"_._._._\": None: don't increment the version number; keep it as is");
-            Console.WriteLine();
-            Console.WriteLine("    --custom=VERSION_NUMBER");
-            Console.WriteLine("        Use a custom version number instead of incrementing the current number.");
-            Console.WriteLine();
-            Console.WriteLine("    --infinite");
-            Console.WriteLine("        Don't limit version number groups (major, minor, build, revision) to 0-9");
-            Console.WriteLine("        when incrementing; if a group's current value is 9, allow it to go to 10");
-            Console.WriteLine("        instead of setting it to zero and incrementing the next most significant group.");
-            Console.WriteLine();
-            Console.WriteLine("        Examples:");
-            Console.WriteLine();
-            Console.WriteLine("            > 6.7.8.9 => 6.7.8.10 (with --infinite flag)");
-            Console.WriteLine("            > 6.7.8.9 => 6.7.9.0  (default behavior)");
-            Console.WriteLine("            > 1.9.9.9 => 2.0.0.0  (default behavior)");
-            Console.WriteLine();
-            Console.WriteLine("    --workspace=SOLUTION_DIR");
-            Console.WriteLine("        Absolute path to the Visual Studio root solution directory.");
-            Console.WriteLine("        If not specified, defaults to the current working directory (%CD%).");
+            var exeName = Assembly.GetEntryAssembly().GetName().Name;
+            var usage = new Usage(exeName).TransformText();
+            Console.Error.WriteLine(usage);
             Environment.Exit(0);
         }
 
