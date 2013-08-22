@@ -30,30 +30,31 @@ namespace Versioner
                     "hat the version numbers\r\n    in all files are in sync).\r\n\r\n    The \"current\" ver" +
                     "sion number is read from the AssemblyVersion or\r\n    AssemblyFileVersion attribu" +
                     "tes in BDHero/Properties/AssemblyInfo.cs,\r\n    whichever appears first in the fi" +
-                    "le.\r\n\r\nOPTIONS:\r\n    -h, --help, /?\r\n        Display this message and exit.\r\n\r\n " +
-                    "   -v, --version, -p, --print\r\n        Print the current BDHero version number t" +
-                    "o stdout and exit.\r\n\r\n    --id, --version-id\r\n        Print the current BDHero v" +
-                    "ersion number ID to stdout and exit.\r\n        The version ID is a signed integer" +
-                    " representation of the version\r\n        number suitable for use in the <versionI" +
-                    "d> tag of a\r\n        BitRock InstallBuilder update.xml file.\r\n\r\n    --strategy=S" +
-                    "TRATEGY\r\n        Determines how {0} updates version numbers in the solution.\", e" +
-                    "xe\r\n\r\n        STRATEGY must be one of the following:\r\n\r\n            \"_._._.x\": I" +
-                    "ncremental: bug fix                   (a.k.a. Version.Revision)\r\n            \"_." +
-                    "_.x._\": Incremental: minor feature/enhancement (a.k.a. Version.Build)\r\n         " +
-                    "   \"_.x._._\": Incremental: full release              (a.k.a. Version.Minor)\r\n   " +
-                    "         \"x._._._\": Incremental: major milestone           (a.k.a. Version.Major" +
-                    ")\r\n            \"x.x.x.x\": Non-incremental: use custom version number (see --cust" +
-                    "om)\r\n            \"_._._._\": None: don\'t increment the version number; keep it as" +
-                    " is\r\n\r\n    --custom=VERSION_NUMBER\r\n        Use a custom version number instead " +
-                    "of incrementing the current number.\r\n\r\n    --infinite\r\n        Don\'t limit versi" +
-                    "on number groups (major, minor, build, revision) to 0-9\r\n        when incrementi" +
-                    "ng; if a group\'s current value is 9, allow it to go to 10\r\n        instead of se" +
-                    "tting it to zero and incrementing the next most significant group.\r\n\r\n        Ex" +
-                    "amples:\r\n\r\n            > 6.7.8.9 => 6.7.8.10 (with --infinite flag)\r\n           " +
-                    " > 6.7.8.9 => 6.7.9.0  (default behavior)\r\n            > 1.9.9.9 => 2.0.0.0  (de" +
-                    "fault behavior)\r\n\r\n    --workspace=SOLUTION_DIR\r\n        Absolute path to the Vi" +
-                    "sual Studio root solution directory.\r\n        If not specified, defaults to the " +
-                    "current working directory (%CD%).");
+                    "le.\r\n\r\n    If invoked without any arguments, this utility will synchronize the\r\n" +
+                    "    current version number across all files.\r\n\r\nOPTIONS:\r\n    -h, --help, /?\r\n  " +
+                    "      Display this message and exit.\r\n\r\n    --workspace=SOLUTION_DIR\r\n        Ab" +
+                    "solute path to the Visual Studio root solution directory.\r\n        If not specif" +
+                    "ied, defaults to the current working directory (%CD%).\r\n\r\n    -v, --version\r\n   " +
+                    " -p, --print\r\n        Print the current BDHero version number to stdout and exit" +
+                    ".\r\n\r\n    --id, --version-id\r\n        Print the current BDHero version number ID " +
+                    "to stdout and exit.\r\n        The version ID is a signed integer representation o" +
+                    "f the version\r\n        number suitable for use in the <versionId> tag of a\r\n    " +
+                    "    BitRock InstallBuilder update.xml file.\r\n\r\n    --strategy=STRATEGY\r\n        " +
+                    "Determines how {0} updates version numbers in the solution.\", exe\r\n\r\n        STR" +
+                    "ATEGY must be one of the following:\r\n\r\n            \"_._._.x\": Incremental: bug f" +
+                    "ix                   (Version.Revision)\r\n            \"_._.x._\": Incremental: min" +
+                    "or feature/enhancement (Version.Build)\r\n            \"_.x._._\": Incremental: full" +
+                    " release              (Version.Minor)\r\n            \"x._._._\": Incremental: major" +
+                    " milestone           (Version.Major)\r\n            \"x.x.x.x\": Non-incremental: us" +
+                    "e custom version number (see --custom)\r\n            \"_._._._\": None: don\'t incre" +
+                    "ment the version number; keep it as is\r\n\r\n    --custom=VERSION_NUMBER\r\n        U" +
+                    "se a custom version number instead of incrementing the current number.\r\n\r\n    --" +
+                    "infinite\r\n        Don\'t limit version number groups (major, minor, build, revisi" +
+                    "on) to 0-9\r\n        when incrementing; if a group\'s current value is 9, allow it" +
+                    " to go to 10\r\n        instead of setting it to zero and incrementing the next mo" +
+                    "st significant\r\n        group.\r\n\r\n        Examples:\r\n\r\n            > 6.7.8.9 => " +
+                    "6.7.8.10 (with --infinite flag)\r\n            > 6.7.8.9 => 6.7.9.0  (default beha" +
+                    "vior)\r\n            > 1.9.9.9 => 2.0.0.0  (default behavior)\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

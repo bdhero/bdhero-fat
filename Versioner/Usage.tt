@@ -12,11 +12,19 @@ DESCRIPTION:
     AssemblyFileVersion attributes in BDHero/Properties/AssemblyInfo.cs,
     whichever appears first in the file.
 
+    If invoked without any arguments, this utility will synchronize the
+    current version number across all files.
+
 OPTIONS:
     -h, --help, /?
         Display this message and exit.
 
-    -v, --version, -p, --print
+    --workspace=SOLUTION_DIR
+        Absolute path to the Visual Studio root solution directory.
+        If not specified, defaults to the current working directory (%CD%).
+
+    -v, --version
+    -p, --print
         Print the current BDHero version number to stdout and exit.
 
     --id, --version-id
@@ -30,10 +38,10 @@ OPTIONS:
 
         STRATEGY must be one of the following:
 
-            "_._._.x": Incremental: bug fix                   (a.k.a. Version.Revision)
-            "_._.x._": Incremental: minor feature/enhancement (a.k.a. Version.Build)
-            "_.x._._": Incremental: full release              (a.k.a. Version.Minor)
-            "x._._._": Incremental: major milestone           (a.k.a. Version.Major)
+            "_._._.x": Incremental: bug fix                   (Version.Revision)
+            "_._.x._": Incremental: minor feature/enhancement (Version.Build)
+            "_.x._._": Incremental: full release              (Version.Minor)
+            "x._._._": Incremental: major milestone           (Version.Major)
             "x.x.x.x": Non-incremental: use custom version number (see --custom)
             "_._._._": None: don't increment the version number; keep it as is
 
@@ -43,14 +51,11 @@ OPTIONS:
     --infinite
         Don't limit version number groups (major, minor, build, revision) to 0-9
         when incrementing; if a group's current value is 9, allow it to go to 10
-        instead of setting it to zero and incrementing the next most significant group.
+        instead of setting it to zero and incrementing the next most significant
+        group.
 
         Examples:
 
             > 6.7.8.9 => 6.7.8.10 (with --infinite flag)
             > 6.7.8.9 => 6.7.9.0  (default behavior)
             > 1.9.9.9 => 2.0.0.0  (default behavior)
-
-    --workspace=SOLUTION_DIR
-        Absolute path to the Visual Studio root solution directory.
-        If not specified, defaults to the current working directory (%CD%).
