@@ -2,7 +2,7 @@
     <fullName>BDHero</fullName>
     <shortName>bdhero</shortName>
     <vendor>BDHero</vendor>
-    <version>0.8.1.9</version>
+    <version>0.8.2.0</version>
     <initializationActionList>
         <setInstallerVariable>
             <name>projectHomepageUrl</name>
@@ -18,7 +18,7 @@
         </setInstallerVariable>
         <setInstallerVariable>
             <name>application_version_id</name>
-            <value>80109</value>
+            <value>80200</value>
         </setInstallerVariable>
     </initializationActionList>
     <saveRelativePaths>1</saveRelativePaths>
