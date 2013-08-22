@@ -16,6 +16,7 @@ namespace Versioner
         private const string InstallBuilderPath = @"Installer.xml";
         private const string InstallBuilderAutoUpdatePath = @"AutoUpdate.xml";
         private const string InstallBuilderUpdatePath = @"update.xml";
+        private const string InnoSetupPath = @"Installer\InnoSetup\setup.iss";
         private const string BDHeroPath = @"BDHero\Properties\AssemblyInfo.cs";
         private const string BDHeroCLIPath = @"BDHeroCLI\Properties\AssemblyInfo.cs";
         private const string BDHeroGUIPath = @"BDHeroGUI\Properties\AssemblyInfo.cs";
@@ -25,6 +26,7 @@ namespace Versioner
                 InstallBuilderPath,
                 InstallBuilderAutoUpdatePath,
                 InstallBuilderUpdatePath,
+                InnoSetupPath,
                 BDHeroPath,
                 BDHeroCLIPath,
                 BDHeroGUIPath
@@ -38,6 +40,7 @@ namespace Versioner
         static readonly Regex InstallBuilderVersionRegex = new Regex(@"(<version>)((?:\d+\.){3}\d+)(</version>)", RegexOptions.IgnoreCase);
         static readonly Regex InstallBuilderVersionIdRegex = new Regex(@"(<name>application_version_id</name>\s+<value>)(\d+)(</value>)", RegexOptions.IgnoreCase);
         static readonly Regex InstallBuilderUpdateVersionIdRegex = new Regex(@"(<versionId>)(\d+)(</versionId>)", RegexOptions.IgnoreCase);
+        static readonly Regex InnoSetupVersionRegex = new Regex(@"(#define MyAppVersion .)((?:\d+\.){3}\d+)(.)", RegexOptions.IgnoreCase);
         static readonly Regex ArtifactFileNameRegex = new Regex(@"(<filename>\w+-)([\d.]+)(-(?:(?:windows|mac|linux)-)?(?:installer|setup|portable).(?:exe|zip|run|bin|tgz|dmg)+</filename>)", RegexOptions.IgnoreCase);
 
         private static bool _limit10 = DefaultLimit10;
@@ -156,6 +159,7 @@ namespace Versioner
             contents = InstallBuilderVersionRegex.Replace(contents, "${1}" + newVersion + "${3}");
             contents = InstallBuilderVersionIdRegex.Replace(contents, "${1}" + newVersion.GetId() + "${3}");
             contents = InstallBuilderUpdateVersionIdRegex.Replace(contents, "${1}" + newVersion.GetId() + "${3}");
+            contents = InnoSetupVersionRegex.Replace(contents, "${1}" + newVersion + "${3}");
             contents = ArtifactFileNameRegex.Replace(contents, "${1}" + newVersion + "${3}");
 
             File.WriteAllText(filePath, contents, encoding);
