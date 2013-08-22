@@ -1,7 +1,7 @@
 #include "isxdl\isxdl.iss"
 
 [CustomMessages]
-DependenciesDir=MyProgramDependencies
+DependenciesDir=deps
 
 en.depdownload_msg=The following applications are required before setup can continue:%n%n%1%nDownload and install now?
 de.depdownload_msg=Die folgenden Programme werden benötigt bevor das Setup fortfahren kann:%n%n%1%nJetzt downloaden und installieren?
