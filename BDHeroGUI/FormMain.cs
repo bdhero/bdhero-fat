@@ -149,8 +149,10 @@ namespace BDHeroGUI
         {
             _logger.InfoFormat("IsPortable = {0}", _directoryLocator.IsPortable);
             _logger.InfoFormat("InstallDir = {0}", _directoryLocator.InstallDir);
-            _logger.InfoFormat("ConfigDir = {0}", _directoryLocator.ConfigDir);
-            _logger.InfoFormat("PluginDir = {0}", _directoryLocator.PluginDir);
+            _logger.InfoFormat("AppConfigDir = {0}", _directoryLocator.AppConfigDir);
+            _logger.InfoFormat("PluginConfigDir = {0}", _directoryLocator.PluginConfigDir);
+            _logger.InfoFormat("RequiredPluginDir = {0}", _directoryLocator.RequiredPluginDir);
+            _logger.InfoFormat("CustomPluginDir = {0}", _directoryLocator.CustomPluginDir);
             _logger.InfoFormat("LogDir = {0}", _directoryLocator.LogDir);
         }
 

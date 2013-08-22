@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -13,26 +12,48 @@ namespace BDHero.Startup
     {
         private readonly IDirectoryLocator _directoryLocator;
 
+        private static log4net.ILog Logger
+        {
+            get { return log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType); }
+        }
+
         public LogInitializer(IDirectoryLocator directoryLocator)
         {
             _directoryLocator = directoryLocator;
         }
 
-        public LogInitializer Initialize(string logConfigFileName)
+        public LogInitializer Initialize(string logConfigFileName, string defaultLogConfig)
         {
-            var entryAssembly = Assembly.GetEntryAssembly();
-            var logConfigPath = Path.Combine(_directoryLocator.ConfigDir, logConfigFileName);
+            var assemblyMeta = System.Reflection.Assembly.GetEntryAssembly().GetName();
+            var logConfigPath = Path.Combine(_directoryLocator.AppConfigDir, logConfigFileName);
 
             log4net.GlobalContext.Properties["logdir"] = _directoryLocator.LogDir;
             log4net.GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;
-            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(logConfigPath));
 
-            var logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            var assemblyMeta = entryAssembly.GetName();
+            EnsureLogConfigFileExists(logConfigPath, defaultLogConfig);
 
-            logger.InfoFormat("{0} v{1} starting up", assemblyMeta.Name, assemblyMeta.Version);
+            if (File.Exists(logConfigPath))
+            {
+                log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(logConfigPath));
+            }
+
+            Logger.InfoFormat("{0} v{1} starting up", assemblyMeta.Name, assemblyMeta.Version);
 
             return this;
+        }
+
+        private static void EnsureLogConfigFileExists(string logConfigPath, string defaultLogConfig)
+        {
+            if (File.Exists(logConfigPath)) return;
+            try
+            {
+                File.WriteAllText(logConfigPath, defaultLogConfig);
+            }
+            catch (Exception e)
+            {
+                log4net.Config.XmlConfigurator.Configure(new MemoryStream(Encoding.UTF8.GetBytes(defaultLogConfig), false));
+                Logger.Error("Unable to create log4net config file", e);
+            }
         }
     }
 }

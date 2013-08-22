@@ -107,7 +107,7 @@ namespace TmdbPlugin
 
         private PluginSettings CheckConfigFile()
         {
-            if (!File.Exists(AssemblyInfo.SettingsFile))
+            if (!File.Exists(AssemblyInfo.ConfigFilePath))
             {
                 var settings = new PluginSettings
                                    {
@@ -124,12 +124,12 @@ namespace TmdbPlugin
                 {
                     try
                     {
-                        File.WriteAllText(AssemblyInfo.SettingsFile, settingJson);
+                        File.WriteAllText(AssemblyInfo.ConfigFilePath, settingJson);
                     }
                     catch (Exception)
                     {
                         const string apiMessage = "Error: An error occured trying to create the plugin settings file:";
-                        Logger.ErrorFormat("{0} {1}", apiMessage, AssemblyInfo.SettingsFile);
+                        Logger.ErrorFormat("{0} {1}", apiMessage, AssemblyInfo.ConfigFilePath);
                         throw;
                     }
                 }
@@ -138,13 +138,13 @@ namespace TmdbPlugin
             PluginSettings pluginSettings;
             try
             {
-                var reader = File.ReadAllText(AssemblyInfo.SettingsFile);
+                var reader = File.ReadAllText(AssemblyInfo.ConfigFilePath);
                 pluginSettings = JsonConvert.DeserializeObject<PluginSettings>(reader);
             }
             catch (Exception ex)
             {
                 const string apiMessage = "Error: An error occured trying to load the plugin settings file:";
-                Logger.ErrorFormat("{0} {1}", apiMessage, AssemblyInfo.SettingsFile);
+                Logger.ErrorFormat("{0} {1}", apiMessage, AssemblyInfo.ConfigFilePath);
                 throw;
             }
 

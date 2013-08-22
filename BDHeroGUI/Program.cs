@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using BDHero.Config;
 using BDHero.Startup;
+using BDHeroGUI.Properties;
 using Ninject;
 using WindowsOSUtils.JobObjects;
 
@@ -30,7 +31,7 @@ namespace BDHeroGUI
         private static FormMain CreateMainForm()
         {
             var kernel = InjectorFactory.CreateContainer();
-            kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
+            kernel.Get<LogInitializer>().Initialize(LogConfigFileName, Resources.log4net_config);
             kernel.Bind<FormMain>().ToSelf();
             return kernel.Get<FormMain>();
         }

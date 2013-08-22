@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using BDHero.JobQueue;
-using Newtonsoft.Json;
 
 namespace BDHero.Plugin.FileNamer
 {
@@ -63,25 +62,12 @@ namespace BDHero.Plugin.FileNamer
 
         private Preferences GetPreferences()
         {
-            if (File.Exists(AssemblyInfo.SettingsFile))
-            {
-                try
-                {
-                    var json = File.ReadAllText(AssemblyInfo.SettingsFile);
-                    return JsonConvert.DeserializeObject<Preferences>(json);
-                }
-                catch (Exception e)
-                {
-                    Logger.WarnFormat("Unable to deserialize settings file: {0}", e);
-                }
-            }
-            return new Preferences();
+            return PluginUtils.GetPreferences(AssemblyInfo, () => new Preferences());
         }
 
         private void SavePreferences(Preferences prefs)
         {
-            var json = JsonConvert.SerializeObject(prefs);
-            File.WriteAllText(AssemblyInfo.SettingsFile, json);
+            PluginUtils.SavePreferences(AssemblyInfo, prefs);
         }
 
         private DialogResult EditPluginPreferenceHandler(Form parent)

@@ -211,6 +211,26 @@ namespace BDHeroGUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;configuration&gt;
+        ///  &lt;log4net&gt;
+        ///    &lt;appender name=&quot;RollingFileAppender&quot; type=&quot;log4net.Appender.RollingFileAppender&quot;&gt;
+        ///      &lt;file type=&quot;log4net.Util.PatternString&quot; value=&quot;%property{logdir}\bdhero-gui.log&quot;/&gt;
+        ///      &lt;appendToFile value=&quot;true&quot; /&gt;
+        ///      &lt;rollingStyle value=&quot;Size&quot; /&gt;
+        ///      &lt;maxSizeRollBackups value=&quot;1&quot; /&gt;
+        ///      &lt;maximumFileSize value=&quot;10MB&quot; /&gt;
+        ///      &lt;staticLogFileName value=&quot;true&quot; /&gt;
+        ///      &lt;layout type=&quot;log4net.Layout.PatternLayout&quot;&gt;
+        ///        &lt;convers [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string log4net_config {
+            get {
+                return ResourceManager.GetString("log4net_config", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap no_poster_w185 {

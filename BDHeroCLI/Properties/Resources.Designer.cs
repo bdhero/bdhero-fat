@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BDHeroCLI {
+namespace BDHeroCLI.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace BDHeroCLI {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BDHeroCLI.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BDHeroCLI.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -67,6 +67,27 @@ namespace BDHeroCLI {
             get {
                 object obj = ResourceManager.GetObject("bdhero_cli", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;configuration&gt;
+        ///  &lt;log4net&gt;
+        ///    &lt;appender name=&quot;ConsoleAppender&quot; type=&quot;log4net.Appender.ConsoleAppender&quot; &gt;
+        ///      &lt;layout type=&quot;log4net.Layout.PatternLayout&quot;&gt;
+        ///        &lt;conversionPattern value=&quot;%-5level %logger - %message%newline&quot; /&gt;
+        ///      &lt;/layout&gt;
+        ///    &lt;/appender&gt;
+        ///    &lt;appender name=&quot;ColoredConsoleAppender&quot; type=&quot;log4net.Appender.ColoredConsoleAppender&quot;&gt;
+        ///      &lt;mapping&gt;
+        ///        &lt;level value=&quot;FATAL&quot; /&gt;
+        ///        &lt;forecolor value=&quot;Red, HighIntensity&quot; /&gt;
+        ///      &lt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string log4net_config {
+            get {
+                return ResourceManager.GetString("log4net_config", resourceCulture);
             }
         }
     }

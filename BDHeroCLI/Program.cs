@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using BDHero.Config;
 using BDHero.Startup;
+using BDHeroCLI.Properties;
 using Ninject;
 
 namespace BDHeroCLI
@@ -22,7 +23,7 @@ namespace BDHeroCLI
         private static CLI CreateCLI()
         {
             var kernel = InjectorFactory.CreateContainer();
-            kernel.Get<LogInitializer>().Initialize(LogConfigFileName);
+            kernel.Get<LogInitializer>().Initialize(LogConfigFileName, Resources.log4net_config);
             kernel.Bind<CLI>().ToSelf();
             return kernel.Get<CLI>();
         }
