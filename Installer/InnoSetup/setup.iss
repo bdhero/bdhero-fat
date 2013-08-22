@@ -40,6 +40,9 @@
 #define MyDepsFolder "Deps"
 #define MySolutionRootRelative "..\.."
 
+#define CodeSigningCertPK GetEnv('CodeSigningCertPK')
+#define CodeSigningCertPW GetEnv('CodeSigningCertPW')
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
@@ -72,6 +75,10 @@ ShowLanguageDialog=auto
 UninstallDisplayIcon={app}\{#MyAppExeName}
 PrivilegesRequired=admin
 MinVersion=0,5.01sp3
+#if CodeSigningCertPK != ""
+SignTool=Custom sign /v /f {#CodeSigningCertPK} /p {#CodeSigningCertPW} /d $q{#MyAppName} Setup$q /du $q{#MyAppURL}$q /t http://timestamp.comodoca.com/authenticode $f
+SignedUninstaller=True
+#endif
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
