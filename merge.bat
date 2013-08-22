@@ -10,6 +10,7 @@ set PluginDir=Artifacts\Installer\Plugins
 set ConfigDir=Artifacts\Installer\Config
 set ProgramFilesDir=Artifacts\Installer\ProgramFiles
 set PortableDir=Artifacts\Portable
+set PackagerBin=Build\Packager\bin\%ConfigurationName%
 
 echo %ConfigurationName%
 
@@ -17,12 +18,12 @@ REM Clean up old merged files
 rmdir /S /Q Artifacts
 
 REM Delete empty dummy DLL
-del /F Packager\bin\%ConfigurationName%\Packager.dll
+del /F %PackagerBin%\Packager.dll
 
 REM Copy core BDHero EXEs, DLLs, and config files to Artifacts dir
-xcopy /Y Packager\bin\%ConfigurationName%\*.exe %ProgramFilesDir%\
-xcopy /Y Packager\bin\%ConfigurationName%\*.dll %ProgramFilesDir%\
-xcopy /Y /S Packager\bin\%ConfigurationName%\Config %ConfigDir%\
+xcopy /Y %PackagerBin%\*.exe %ProgramFilesDir%\
+xcopy /Y %PackagerBin%\*.dll %ProgramFilesDir%\
+xcopy /Y /S %PackagerBin%\Config %ConfigDir%\
 
 REM Copy required plugins
 

@@ -174,27 +174,27 @@ check_for_updates = 1
         </runProgram>
         <runProgram>
             <explanation>Digitally signing autoupdate.exe</explanation>
-            <program>${build_project_directory}/Release/sign.bat</program>
+            <program>${build_project_directory}/Build/Release/sign.bat</program>
             <programArguments>"${project.fullName} AutoUpdate" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/Installer/ProgramFiles/autoupdate.${platform_exec_suffix}"</programArguments>
         </runProgram>
         <runProgram>
             <explanation>Digitally signing bdhero-cli.exe</explanation>
-            <program>${build_project_directory}/Release/sign.bat</program>
+            <program>${build_project_directory}/Build/Release/sign.bat</program>
             <programArguments>"${project.fullName} CLI" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/Portable/bdhero-cli.exe"</programArguments>
         </runProgram>
         <runProgram>
             <explanation>Digitally signing bdhero-gui.exe</explanation>
-            <program>${build_project_directory}/Release/sign.bat</program>
+            <program>${build_project_directory}/Build/Release/sign.bat</program>
             <programArguments>"${project.fullName} GUI" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/Portable/bdhero-gui.exe"</programArguments>
         </runProgram>
         <runProgram>
             <explanation>Digitally signing bdhero-cli.exe</explanation>
-            <program>${build_project_directory}/Release/sign.bat</program>
+            <program>${build_project_directory}/Build/Release/sign.bat</program>
             <programArguments>"${project.fullName} CLI" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/Installer/ProgramFiles/bdhero-cli.exe"</programArguments>
         </runProgram>
         <runProgram>
             <explanation>Digitally signing bdhero-gui.exe</explanation>
-            <program>${build_project_directory}/Release/sign.bat</program>
+            <program>${build_project_directory}/Build/Release/sign.bat</program>
             <programArguments>"${project.fullName} GUI" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/Installer/ProgramFiles/bdhero-gui.exe"</programArguments>
         </runProgram>
     </preBuildActionList>
@@ -207,7 +207,7 @@ check_for_updates = 1
         </zip>
         <runProgram>
             <explanation>Digitally signing installer</explanation>
-            <program>${build_project_directory}/Release/sign.bat</program>
+            <program>${build_project_directory}/Build/Release/sign.bat</program>
             <programArguments>"${project.fullName} Installer" "${projectHomepageUrl}" "${build_project_directory}/Artifacts/${project.installerFilename}"</programArguments>
         </runProgram>
     </postBuildActionList>

@@ -16,7 +16,7 @@ namespace Versioner
         private const string InstallBuilderPath = @"Installer.xml";
         private const string InstallBuilderAutoUpdatePath = @"AutoUpdate.xml";
         private const string InstallBuilderUpdatePath = @"update.xml";
-        private const string InnoSetupPath = @"Installer\InnoSetup\setup.iss";
+        private const string InnoSetupPath = @"Build\InnoSetup\setup.iss";
         private const string BDHeroPath = @"BDHero\Properties\AssemblyInfo.cs";
         private const string BDHeroCLIPath = @"BDHeroCLI\Properties\AssemblyInfo.cs";
         private const string BDHeroGUIPath = @"BDHeroGUI\Properties\AssemblyInfo.cs";

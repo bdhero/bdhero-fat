@@ -12,7 +12,7 @@ namespace Versioner
     using System;
     
     
-    #line 1 "C:\Projects\bdhero\Versioner\Usage.tt"
+    #line 1 "C:\Projects\bdhero\Build\Versioner\Usage.tt"
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "10.0.0.0")]
     public partial class Usage : UsageBase
     {
@@ -20,7 +20,7 @@ namespace Versioner
         {
             this.Write("USAGE:\r\n    ");
             
-            #line 4 "C:\Projects\bdhero\Versioner\Usage.tt"
+            #line 4 "C:\Projects\bdhero\Build\Versioner\Usage.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_exeName));
             
             #line default
@@ -39,35 +39,38 @@ namespace Versioner
                     " actually write changes to disk.\r\n\r\n    --test-with=CURRENT_VERSION\r\n        Sam" +
                     "e as --test, but uses CURRENT_VERSION for the current version\r\n        number in" +
                     "stead of reading it from disk.\r\n\r\n    -v, --version\r\n    -p, --print\r\n        Pr" +
-                    "int the current BDHero version number to stdout and exit.\r\n\r\n    --id, --version" +
-                    "-id\r\n        Print the current BDHero version number ID to stdout and exit.\r\n   " +
-                    "     The version ID is a signed integer representation of the version\r\n        n" +
-                    "umber suitable for use in the <versionId> tag of a\r\n        BitRock InstallBuild" +
-                    "er update.xml file.\r\n\r\n        The exact format of the ID is the integer value o" +
-                    "f the\r\n        concatenation of each version group in two digit form.\r\n\r\n       " +
-                    " Examples:\r\n\r\n            1.2.3.4   =   1020304\r\n            0.8.0.1   =     800" +
-                    "01\r\n            0.8.0.10  =     80010\r\n           20.8.0.10  =  20080010\r\n\r\n    " +
-                    "--strategy=STRATEGY\r\n        Determines how {0} updates version numbers in the s" +
-                    "olution.\", exe\r\n\r\n        STRATEGY must be one of the following:\r\n\r\n            " +
-                    "\"_._._.x\": Incremental: bug fix\r\n                       (Version.Revision)\r\n    " +
-                    "        \"_._.x._\": Incremental: minor feature/enhancement\r\n                     " +
-                    "  (Version.Build)\r\n            \"_.x._._\": Incremental: full release\r\n           " +
-                    "            (Version.Minor)\r\n            \"x._._._\": Incremental: major milestone" +
-                    "\r\n                       (Version.Major)\r\n            \"x.x.x.x\": Non-incremental" +
-                    ": use custom version number\r\n                       (see --custom)\r\n            " +
-                    "\"_._._._\": None: don\'t increment the version number; leave it as is\r\n           " +
-                    "            and synchronize the value across all files\r\n                       (" +
-                    "default behavior)\r\n\r\n    --custom=VERSION_NUMBER\r\n        Use a custom version n" +
-                    "umber instead of incrementing the current number.\r\n\r\n    --infinite, --no-limit\r" +
-                    "\n        Don\'t limit version number groups (major, minor, build, revision) to\r\n " +
-                    "       0-9 when incrementing; if a group\'s current value is 9, allow it to go\r\n " +
-                    "       to 10 instead of setting it to zero and incrementing the next most\r\n     " +
-                    "   significant group.\r\n\r\n        Examples:\r\n\r\n            > Versioner\r\n         " +
-                    "   6.7.8.9 => 6.7.8.9 (same as --strategy=_._._._)\r\n\r\n            > Versioner --" +
-                    "strategy=_._._.x\r\n            6.7.8.9 => 6.7.9.0\r\n\r\n            > Versioner --st" +
-                    "rategy=_._._.x --infinite\r\n            6.7.8.9 => 6.7.8.10\r\n\r\n            > Vers" +
-                    "ioner --strategy=_._._.x\r\n            1.9.9.9 => 2.0.0.0\r\n\r\n            > Versio" +
-                    "ner --strategy=_._._.x --infinite\r\n            1.9.9.9 => 1.9.9.10");
+                    "int the current BDHero version number to stdout and exit.\r\n\r\n    --hash=FILE1[,F" +
+                    "ILE2[,FILE3[,...]]\r\n        Generates MD5, SHA-1, and SHA-256 hashes of the give" +
+                    "n comma-\r\n        separated list of files and prints them to stdout in JSON form" +
+                    "at\r\n        along with their names and file sizes.\r\n\r\n    --id, --version-id\r\n  " +
+                    "      Print the current BDHero version number ID to stdout and exit.\r\n        Th" +
+                    "e version ID is a signed integer representation of the version\r\n        number s" +
+                    "uitable for use in the <versionId> tag of a\r\n        BitRock InstallBuilder upda" +
+                    "te.xml file.\r\n\r\n        The exact format of the ID is the integer value of the\r\n" +
+                    "        concatenation of each version group in two digit form.\r\n\r\n        Exampl" +
+                    "es:\r\n\r\n            1.2.3.4   =   1020304\r\n            0.8.0.1   =     80001\r\n   " +
+                    "         0.8.0.10  =     80010\r\n           20.8.0.10  =  20080010\r\n\r\n    --strat" +
+                    "egy=STRATEGY\r\n        Determines how {0} updates version numbers in the solution" +
+                    ".\", exe\r\n\r\n        STRATEGY must be one of the following:\r\n\r\n            \"_._._." +
+                    "x\": Incremental: bug fix\r\n                       (Version.Revision)\r\n           " +
+                    " \"_._.x._\": Incremental: minor feature/enhancement\r\n                       (Vers" +
+                    "ion.Build)\r\n            \"_.x._._\": Incremental: full release\r\n                  " +
+                    "     (Version.Minor)\r\n            \"x._._._\": Incremental: major milestone\r\n     " +
+                    "                  (Version.Major)\r\n            \"x.x.x.x\": Non-incremental: use c" +
+                    "ustom version number\r\n                       (see --custom)\r\n            \"_._._." +
+                    "_\": None: don\'t increment the version number; leave it as is\r\n                  " +
+                    "     and synchronize the value across all files\r\n                       (default" +
+                    " behavior)\r\n\r\n    --custom=VERSION_NUMBER\r\n        Use a custom version number i" +
+                    "nstead of incrementing the current number.\r\n\r\n    --infinite, --no-limit\r\n      " +
+                    "  Don\'t limit version number groups (major, minor, build, revision) to\r\n        " +
+                    "0-9 when incrementing; if a group\'s current value is 9, allow it to go\r\n        " +
+                    "to 10 instead of setting it to zero and incrementing the next most\r\n        sign" +
+                    "ificant group.\r\n\r\n        Examples:\r\n\r\n            > Versioner\r\n            6.7." +
+                    "8.9 => 6.7.8.9 (same as --strategy=_._._._)\r\n\r\n            > Versioner --strateg" +
+                    "y=_._._.x\r\n            6.7.8.9 => 6.7.9.0\r\n\r\n            > Versioner --strategy=" +
+                    "_._._.x --infinite\r\n            6.7.8.9 => 6.7.8.10\r\n\r\n            > Versioner -" +
+                    "-strategy=_._._.x\r\n            1.9.9.9 => 2.0.0.0\r\n\r\n            > Versioner --s" +
+                    "trategy=_._._.x --infinite\r\n            1.9.9.9 => 1.9.9.10");
             return this.GenerationEnvironment.ToString();
         }
     }
