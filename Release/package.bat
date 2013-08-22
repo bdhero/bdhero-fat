@@ -20,4 +20,4 @@ del VERSION.tmp
 7za a -r Artifacts\bdhero-%Version%.7z .\Artifacts\Portable\*
 7za a -r Artifacts\bdhero-%Version%.zip .\Artifacts\Portable\*
 
-Release\sign.bat "BDHero Portable (Self Extracting Archive)" "http://bdhero.org/" Artifacts\bdhero-%Version%-sfx.exe
+call Release\sign.bat "BDHero Portable (Self Extracting Archive)" "%ProjectUrl%" Artifacts\bdhero-%Version%-sfx.exe
