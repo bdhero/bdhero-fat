@@ -10,8 +10,8 @@ Release\Versioner.exe -v > VERSION.tmp
 set /p Version= < VERSION.tmp
 del VERSION.tmp
 
-7za a -sfx7z.sfx -r Artifacts\bdhero-%Version%-sfx.exe Artifacts\Portable\*
-7za a -r Artifacts\bdhero-%Version%.7z Artifacts\Portable\*
-7za a -r Artifacts\bdhero-%Version%.zip Artifacts\Portable\*
+7za a -sfx7z.sfx -r Artifacts\bdhero-%Version%-sfx.exe .\Artifacts\Portable\*
+7za a -r Artifacts\bdhero-%Version%.7z .\Artifacts\Portable\*
+7za a -r Artifacts\bdhero-%Version%.zip .\Artifacts\Portable\*
 
 Release\sign.bat "BDHero Portable (Self Extracting Archive)" "http://bdhero.org/" Artifacts\bdhero-%Version%-sfx.exe
