@@ -13,14 +13,19 @@ namespace BDHero.Startup
     {
         private const string AppDataRootDirName = "BDHero";
         private const string ConfigDirName = "Config";
+        private const string ApplicationDirName = "Application";
         private const string PluginDirName = "Plugins";
+        private const string RequiredDirName = "Required";
+        private const string CustomDirName = "Custom";
         private const string LogDirName = "Logs";
 
-        public bool   IsPortable { get; private set; }
-        public string InstallDir { get; private set; }
-        public string ConfigDir  { get; private set; }
-        public string PluginDir  { get; private set; }
-        public string LogDir     { get; private set; }
+        public bool   IsPortable        { get; private set; }
+        public string InstallDir        { get; private set; }
+        public string AppConfigDir      { get; private set; }
+        public string PluginConfigDir   { get; private set; }
+        public string RequiredPluginDir { get; private set; }
+        public string CustomPluginDir   { get; private set; }
+        public string LogDir            { get; private set; }
 
         public DirectoryLocator()
         {
@@ -32,16 +37,20 @@ namespace BDHero.Startup
 
             if (IsPortable)
             {
-                ConfigDir = Path.Combine(InstallDir, ConfigDirName);
-                PluginDir = Path.Combine(InstallDir, PluginDirName);
+                AppConfigDir = Path.Combine(InstallDir, ConfigDirName, ApplicationDirName);
+                PluginConfigDir = Path.Combine(InstallDir, ConfigDirName, PluginDirName);
+                RequiredPluginDir = Path.Combine(InstallDir, PluginDirName, RequiredDirName);
+                CustomPluginDir = Path.Combine(InstallDir, PluginDirName, CustomDirName);
                 LogDir = Path.Combine(InstallDir, LogDirName);
             }
             else
             {
                 var roamingAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppDataRootDirName);
                 var localAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppDataRootDirName);
-                ConfigDir = Path.Combine(roamingAppData, ConfigDirName);
-                PluginDir = Path.Combine(roamingAppData, PluginDirName);
+                AppConfigDir = Path.Combine(roamingAppData, ConfigDirName, ApplicationDirName);
+                PluginConfigDir = Path.Combine(roamingAppData, ConfigDirName, PluginDirName);
+                RequiredPluginDir = Path.Combine(InstallDir, PluginDirName);
+                CustomPluginDir = Path.Combine(roamingAppData, PluginDirName);
                 LogDir = Path.Combine(localAppData, LogDirName);
             }
 

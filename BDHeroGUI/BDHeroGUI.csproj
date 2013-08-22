@@ -249,7 +249,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Content Include="bdhero_gui.ico" />
-    <Content Include="Config\bdhero-gui.log.config">
+    <Content Include="Config\Application\bdhero-gui.log.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

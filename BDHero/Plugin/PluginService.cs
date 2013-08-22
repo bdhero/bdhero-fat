@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
+using BDHero.Startup;
 using DotNetUtils;
 using DotNetUtils.Annotations;
 
@@ -49,6 +50,13 @@ namespace BDHero.Plugin
 
         public event PluginProgressHandler PluginProgressChanged;
 
+        private readonly IDirectoryLocator _directoryLocator;
+
+        public PluginService(IDirectoryLocator directoryLocator)
+        {
+            _directoryLocator = directoryLocator;
+        }
+
         public void ReportProgress(IPlugin plugin, double percentComplete, string status)
         {
             var progressProvider = GetProgressProvider(plugin);
@@ -72,29 +80,27 @@ namespace BDHero.Plugin
         /// <param name="path">Full path to the root Plugins directory</param>
         public void LoadPlugins(string path)
         {
-            // First empty the collection, we're reloading them all
-            UnloadPlugins();
-
-            var load = true;
-
 #if DEBUG
+            if (_devPluginsLoaded)
+                return;
+
             // If running in Visual Studio, load plugins from project bin dirs
             var installDir = AssemblyUtils.GetInstallDir();
             var vhostFiles = Directory.GetFiles(installDir, "*.vshost.exe", SearchOption.TopDirectoryOnly);
             if (vhostFiles.Any())
             {
                 LoadDevPlugins();
-                load = false;
+                _devPluginsLoaded = true;
+                return;
             }
 #endif
 
-            if (load)
-            {
-                AddPluginsRecursive(path);
-            }
+            AddPluginsRecursive(path);
         }
 
 #if DEBUG
+
+        private bool _devPluginsLoaded;
 
         private void LoadDevPlugins()
         {
@@ -175,7 +181,7 @@ namespace BDHero.Plugin
 
         private static bool IsPlugin(FileInfo file)
         {
-            return file.Extension.Equals(".plugin.dll") || file.Name.EndsWith("Plugin.dll", StringComparison.OrdinalIgnoreCase);
+            return file.Name.EndsWith("Plugin.dll", StringComparison.OrdinalIgnoreCase);
         }
 
         private void AddPlugin(string dllPath)
@@ -184,6 +190,11 @@ namespace BDHero.Plugin
             Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
 
             var guid = AssemblyUtils.Guid(pluginAssembly);
+
+            var machineName = Path.GetFileNameWithoutExtension(dllPath) ?? pluginAssembly.GetName().Name ?? "";
+            machineName = Regex.Replace(machineName, "Plugin$", "", RegexOptions.IgnoreCase);
+            var configFileName = machineName + ".config.json";
+            var configFilePath = Path.Combine(_directoryLocator.PluginConfigDir, machineName, configFileName);
 
             // Next we'll loop through all the Types found in the assembly
             foreach (Type pluginType in pluginAssembly.GetTypes().Where(IsValidPlugin))
@@ -201,7 +212,8 @@ namespace BDHero.Plugin
                 var assemblyInfo = new PluginAssemblyInfo(dllPath,
                                                           AssemblyUtils.GetAssemblyVersion(pluginAssembly),
                                                           AssemblyUtils.GetLinkerTimestamp(pluginAssembly),
-                                                          guid);
+                                                          guid,
+                                                          configFilePath);
 
                 // Initialize the plugin
                 newPlugin.LoadPlugin(this, assemblyInfo);

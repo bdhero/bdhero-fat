@@ -30,7 +30,9 @@ namespace BDHero.Startup
 
         private void LoadPluginsFromService()
         {
-            _pluginService.LoadPlugins(_directoryLocator.PluginDir);
+            _pluginService.UnloadPlugins();
+            _pluginService.LoadPlugins(_directoryLocator.RequiredPluginDir);
+            _pluginService.LoadPlugins(_directoryLocator.CustomPluginDir);
         }
 
         /// <summary>Checks that all required plugin types are loaded.</summary>

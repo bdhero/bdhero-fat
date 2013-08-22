@@ -13,6 +13,10 @@ Bugs
 
 [ ] XP: ProgressBar2 black background
 [ ] Remove unused outputPath args in Controller.cs
+[ ] Clean up temp files
+    [ ] FFmpegMuxerPlugin: %TEMP%/FFmpegMuxerPlugin/%PID%/..?
+    [ ] AutoUpdate: %TEMP%/bdhero/update/*.exe
+    [ ] Installer rollback: %TEMP%/bdhero/rollback
 
 [ ] 500_DAYS_OF_SUMMER: bdmt_eng.xml title sanitized is blank: sanitization removes (... and everything after it, and BDMT title is (500) Days of Summer
 
@@ -23,8 +27,6 @@ Features
 ========
 
 [ ] Context menu for Playlist listitems: add "Language" option
-
-[ ] Change file name of BDHero-<VERSION>-<OS>-<DIST>.<EXT>
 
 [ ] Add "use last folder" option to File Namer preference dialog
 
@@ -80,6 +82,7 @@ Chris' Plugins
 Complete
 ========
 
+[X] Change file name of BDHero-<VERSION>-<OS>-<DIST>.<EXT>
 [X] Allow user to change detected track type
 [X] Update track/playlist listview items when user changes values
 [X] Drive Detector doesn't detect when drive is disconnected (i.e., powered off w/o removing disc)
