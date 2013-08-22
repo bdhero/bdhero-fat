@@ -3,54 +3,54 @@
 USAGE:
     <#= _exeName #> [OPTIONS]
 
-DESCRIPTION:"
-    Utility to update BDHero version numbers.  Allows incremental \"bumps\","
-    custom version numbers, and normalization (ensuring that the version numbers"
-    in all files are in sync)."
+DESCRIPTION:
+    Utility to update BDHero version numbers.  Allows incremental "bumps",
+    custom version numbers, and normalization (ensuring that the version numbers
+    in all files are in sync).
 
-    The \"current\" version number is read from the AssemblyVersion or"
-    AssemblyFileVersion attributes in BDHero/Properties/AssemblyInfo.cs,"
-    whichever appears first in the file."
+    The "current" version number is read from the AssemblyVersion or
+    AssemblyFileVersion attributes in BDHero/Properties/AssemblyInfo.cs,
+    whichever appears first in the file.
 
-OPTIONS:"
-    -h, --help, /?"
-        Display this message and exit."
+OPTIONS:
+    -h, --help, /?
+        Display this message and exit.
 
-    -v, --version, -p, --print"
-        Print the current BDHero version number to stdout and exit."
+    -v, --version, -p, --print
+        Print the current BDHero version number to stdout and exit.
 
-    --id, --version-id"
-        Print the current BDHero version number ID to stdout and exit."
-        The version ID is a signed integer representation of the version"
-        number suitable for use in the <versionId> tag of a"
-        BitRock InstallBuilder update.xml file."
+    --id, --version-id
+        Print the current BDHero version number ID to stdout and exit.
+        The version ID is a signed integer representation of the version
+        number suitable for use in the <versionId> tag of a
+        BitRock InstallBuilder update.xml file.
 
-    --strategy=STRATEGY"
+    --strategy=STRATEGY
         Determines how {0} updates version numbers in the solution.", exe
 
-        STRATEGY must be one of the following:"
+        STRATEGY must be one of the following:
 
-            \"_._._.x\": Incremental: bug fix                   (a.k.a. Version.Revision)"
-            \"_._.x._\": Incremental: minor feature/enhancement (a.k.a. Version.Build)"
-            \"_.x._._\": Incremental: full release              (a.k.a. Version.Minor)"
-            \"x._._._\": Incremental: major milestone           (a.k.a. Version.Major)"
-            \"x.x.x.x\": Non-incremental: use custom version number (see --custom)"
-            \"_._._._\": None: don't increment the version number; keep it as is"
+            "_._._.x": Incremental: bug fix                   (a.k.a. Version.Revision)
+            "_._.x._": Incremental: minor feature/enhancement (a.k.a. Version.Build)
+            "_.x._._": Incremental: full release              (a.k.a. Version.Minor)
+            "x._._._": Incremental: major milestone           (a.k.a. Version.Major)
+            "x.x.x.x": Non-incremental: use custom version number (see --custom)
+            "_._._._": None: don't increment the version number; keep it as is
 
-    --custom=VERSION_NUMBER"
-        Use a custom version number instead of incrementing the current number."
+    --custom=VERSION_NUMBER
+        Use a custom version number instead of incrementing the current number.
 
-    --infinite"
-        Don't limit version number groups (major, minor, build, revision) to 0-9"
-        when incrementing; if a group's current value is 9, allow it to go to 10"
-        instead of setting it to zero and incrementing the next most significant group."
+    --infinite
+        Don't limit version number groups (major, minor, build, revision) to 0-9
+        when incrementing; if a group's current value is 9, allow it to go to 10
+        instead of setting it to zero and incrementing the next most significant group.
 
-        Examples:"
+        Examples:
 
-            > 6.7.8.9 => 6.7.8.10 (with --infinite flag)"
-            > 6.7.8.9 => 6.7.9.0  (default behavior)"
-            > 1.9.9.9 => 2.0.0.0  (default behavior)"
+            > 6.7.8.9 => 6.7.8.10 (with --infinite flag)
+            > 6.7.8.9 => 6.7.9.0  (default behavior)
+            > 1.9.9.9 => 2.0.0.0  (default behavior)
 
-    --workspace=SOLUTION_DIR"
-        Absolute path to the Visual Studio root solution directory."
-        If not specified, defaults to the current working directory (%CD%)."
+    --workspace=SOLUTION_DIR
+        Absolute path to the Visual Studio root solution directory.
+        If not specified, defaults to the current working directory (%CD%).
