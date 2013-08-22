@@ -2,6 +2,8 @@
 
 REM %CD% = C:\Projects\BDHero
 
+call Build\Release\tools.bat
+
 echo PATH=%PATH%
 
 set ProjectUrl=http://bdhero.org/
@@ -12,14 +14,14 @@ xcopy /Y Artifacts\Installer\ProgramFiles\*.exe Artifacts\Portable\
 
 REM "%ProgramFiles%\BitRock InstallBuilder Enterprise 8.6.0\bin\builder-cli.exe" build "Installer.xml" windows
 
-iscc "/sCustom=signtool.exe $p" Build\InnoSetup\setup.iss
+call %InnoSetup%\iscc "/sCustom=%SignTool%\signtool.exe $p" Build\InnoSetup\setup.iss
 
-Build\Release\Versioner.exe -v > VERSION.tmp
+Build\Tools\Versioner\Versioner -v > VERSION.tmp
 set /p Version= < VERSION.tmp
 del VERSION.tmp
 
-7za a -sfx7z.sfx -r Artifacts\bdhero-%Version%-sfx.exe .\Artifacts\Portable\*
-7za a -r Artifacts\bdhero-%Version%.7z .\Artifacts\Portable\*
-7za a -r Artifacts\bdhero-%Version%.zip .\Artifacts\Portable\*
+%SevenZip%\7za a -sfx7z.sfx -r Artifacts\bdhero-%Version%-sfx.exe .\Artifacts\Portable\*
+%SevenZip%\7za a -r Artifacts\bdhero-%Version%.7z .\Artifacts\Portable\*
+%SevenZip%\7za a -r Artifacts\bdhero-%Version%.zip .\Artifacts\Portable\*
 
 call Build\Release\sign.bat "BDHero Portable (Self Extracting Archive)" "%ProjectUrl%" Artifacts\bdhero-%Version%-sfx.exe
