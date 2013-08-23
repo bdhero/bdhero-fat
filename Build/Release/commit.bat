@@ -14,7 +14,7 @@ git add update.xml
 git add BDHero\Properties\AssemblyInfo.cs
 git add BDHeroCLI\Properties\AssemblyInfo.cs
 git add BDHeroGUI\Properties\AssemblyInfo.cs
-git add Setup\InnoSetup\setup.iss
+git add Build\InnoSetup\setup.iss
 
 git status
 
