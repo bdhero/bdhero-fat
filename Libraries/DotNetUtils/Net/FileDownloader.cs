@@ -22,6 +22,8 @@ namespace DotNetUtils.Net
         /// </summary>
         public string Path;
 
+        public event DownloadStateChangedHandler StateChanged;
+
         /// <summary>
         /// Streams the remote resource to the local file.
         /// </summary>
@@ -99,6 +101,9 @@ namespace DotNetUtils.Net
 
             var state = new DownloadState(fileSize, contentLength, bytesPerSecond * 8);
 
+            if (StateChanged != null)
+                StateChanged(state);
+
             Console.WriteLine(state);
         }
     }
@@ -149,4 +154,6 @@ namespace DotNetUtils.Net
             );
         }
     }
+
+    public delegate void DownloadStateChangedHandler(DownloadState downloadState);
 }
