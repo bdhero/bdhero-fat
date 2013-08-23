@@ -1,4 +1,4 @@
-; http://www.codeproject.com/Articles/20868/NET-Framework-1-1-2-0-3-5-Installer-for-InnoSetup
+﻿; http://www.codeproject.com/Articles/20868/NET-Framework-1-1-2-0-3-5-Installer-for-InnoSetup
 
 ;#define use_iis
 ;#define use_kb835732
@@ -33,7 +33,7 @@
 
 #define MyAppName "BDHero"
 #define MyAppMachineName "bdhero"
-#define MyAppVersion "0.8.2.0"
+#define MyAppVersion "0.8.2.1"
 #define MyAppPublisher "BDHero"
 #define MyAppURL "http://bdhero.org/"
 #define MyAppExeName "bdhero-gui.exe"
