@@ -4,11 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using DotNetUtils;
 
-namespace Hasher
+namespace DotNetUtils.Crypto
 {
-    public abstract class Algorithm
+    public abstract class CryptoHashAlgorithm
     {
         public static bool LowerCase = false;
 
@@ -70,7 +69,7 @@ namespace Hasher
 
         #region Equality
 
-        protected bool Equals(Algorithm other)
+        protected bool Equals(CryptoHashAlgorithm other)
         {
             return string.Equals(MachineName, other.MachineName);
         }
@@ -80,7 +79,7 @@ namespace Hasher
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Algorithm) obj);
+            return Equals((CryptoHashAlgorithm) obj);
         }
 
         public override int GetHashCode()
@@ -91,7 +90,7 @@ namespace Hasher
         #endregion
     }
 
-    public class MD5Algorithm : Algorithm
+    public class MD5Algorithm : CryptoHashAlgorithm
     {
         protected override byte[] ComputeImpl(byte[] buffer)
         {
@@ -112,7 +111,7 @@ namespace Hasher
         }
     }
 
-    public class SHA1Algorithm : Algorithm
+    public class SHA1Algorithm : CryptoHashAlgorithm
     {
         protected override byte[] ComputeImpl(byte[] buffer)
         {
@@ -133,7 +132,7 @@ namespace Hasher
         }
     }
 
-    public class SHA256Algorithm : Algorithm
+    public class SHA256Algorithm : CryptoHashAlgorithm
     {
         protected override byte[] ComputeImpl(byte[] buffer)
         {
@@ -154,7 +153,7 @@ namespace Hasher
         }
     }
 
-    public class SHA512Algorithm : Algorithm
+    public class SHA512Algorithm : CryptoHashAlgorithm
     {
         protected override byte[] ComputeImpl(byte[] buffer)
         {

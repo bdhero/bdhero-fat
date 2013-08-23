@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
+using DotNetUtils.Crypto;
 using DotNetUtils.Extensions;
 using Mono.Options;
 using Newtonsoft.Json;
@@ -38,8 +38,8 @@ namespace Hasher
 
         static void Main(string[] args)
         {
-            var inputs = new List<Input>();
-            var algorithms = new HashSet<Algorithm>();
+            var inputs = new List<CryptoHashInput>();
+            var algorithms = new HashSet<CryptoHashAlgorithm>();
 
             var optionSet = new OptionSet
                 {
@@ -47,7 +47,7 @@ namespace Hasher
                     { "V|verbose", s => _verbose = true },
                     { "json", s => _json = true },
                     { "map", s => _map = true },
-                    { "lower", s => Algorithm.LowerCase = true },
+                    { "lower", s => CryptoHashAlgorithm.LowerCase = true },
                     { "md5", s => algorithms.Add(new MD5Algorithm()) },
                     { "sha1", s => algorithms.Add(new SHA1Algorithm()) },
                     { "sha256", s => algorithms.Add(new SHA256Algorithm()) },
@@ -67,15 +67,15 @@ namespace Hasher
             var stdin = StdIn;
             if (stdin != null)
             {
-                inputs.Add(new Input("stdin", stdin, algorithms));
+                inputs.Add(new CryptoHashInput("stdin", stdin, algorithms));
             }
 
-            inputs.AddRange(paths.Select(path => new Input(path, algorithms)));
+            inputs.AddRange(paths.Select(path => new CryptoHashInput(path, algorithms)));
 
             Print(inputs);
         }
 
-        private static void Print(List<Input> inputs)
+        private static void Print(List<CryptoHashInput> inputs)
         {
             if (_json)
                 PrintJson(inputs);
@@ -83,19 +83,19 @@ namespace Hasher
                 PrintText(inputs);
         }
 
-        private static void PrintJson(List<Input> inputs)
+        private static void PrintJson(List<CryptoHashInput> inputs)
         {
             Object obj = inputs;
             if (_map)
             {
-                var map = new Dictionary<string, Input>();
-                map.AddRange(inputs.Select(input => new KeyValuePair<string, Input>(input.Name, input)));
+                var map = new Dictionary<string, CryptoHashInput>();
+                map.AddRange(inputs.Select(input => new KeyValuePair<string, CryptoHashInput>(input.Name, input)));
                 obj = map;
             }
             Console.WriteLine(JsonConvert.SerializeObject(obj, Formatting.Indented));
         }
 
-        private static void PrintText(List<Input> inputs)
+        private static void PrintText(List<CryptoHashInput> inputs)
         {
             var i = 0;
             foreach (var input in inputs)

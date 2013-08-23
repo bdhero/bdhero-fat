@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
-using DotNetUtils;
 using Newtonsoft.Json;
 
-namespace Hasher
+namespace DotNetUtils.Crypto
 {
-    class Input
+    public class CryptoHashInput
     {
         [JsonProperty(PropertyName = "name")]
         public readonly string Name;
@@ -23,17 +21,17 @@ namespace Hasher
         [JsonProperty(PropertyName = "algorithms")]
         public readonly IDictionary<string, string> Algorithms;
 
-        public Input(string path, IEnumerable<Algorithm> algorithms) :
+        public CryptoHashInput(string path, IEnumerable<CryptoHashAlgorithm> algorithms) :
             this(Path.GetFileName(path), File.ReadAllBytes(path), algorithms)
         {
         }
 
-        public Input(string name, Stream stream, IEnumerable<Algorithm> algorithms) :
+        public CryptoHashInput(string name, Stream stream, IEnumerable<CryptoHashAlgorithm> algorithms) :
             this(name, FileUtils.ReadStream(stream), algorithms)
         {
         }
 
-        public Input(string name, byte[] buffer, IEnumerable<Algorithm> algorithms)
+        public CryptoHashInput(string name, byte[] buffer, IEnumerable<CryptoHashAlgorithm> algorithms)
         {
             Name = name;
             Size = buffer.Length;
