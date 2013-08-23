@@ -7,7 +7,7 @@ using System.Xml;
 using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.JobQueue;
-using DotNetUtils;
+using DotNetUtils.Net;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 using System.Text.RegularExpressions;

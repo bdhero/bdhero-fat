@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using DotNetUtils;
+using DotNetUtils.Net;
 using I18N;
 
 namespace BDHero.JobQueue

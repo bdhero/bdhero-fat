@@ -8,7 +8,7 @@ using System.Net.Cache;
 using System.Runtime.Caching;
 using DotNetUtils.Annotations;
 
-namespace DotNetUtils
+namespace DotNetUtils.Net
 {
     /// <summary>
     /// Helper utility class for making HTTP requests and parsing/caching the responses.

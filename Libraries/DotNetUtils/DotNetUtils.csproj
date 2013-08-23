@@ -91,9 +91,9 @@
     <Compile Include="MultiValueDictionary.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FileUtils.cs" />
-    <Compile Include="HttpRequest.cs" />
+    <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="Extensions\ListViewExtensions.cs" />
-    <Compile Include="NetworkStatusMonitor.cs" />
+    <Compile Include="Net\NetworkStatusMonitor.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\TabPageExtensions.cs" />

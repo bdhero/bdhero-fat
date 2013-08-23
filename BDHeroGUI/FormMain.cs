@@ -17,6 +17,7 @@ using BDHeroGUI.Forms;
 using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
+using DotNetUtils.Net;
 using DotNetUtils.TaskUtils;
 using OSUtils.DriveDetector;
 using OSUtils.TaskbarUtils;

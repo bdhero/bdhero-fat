@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using DotNetUtils.TaskUtils;
 
-namespace DotNetUtils
+namespace DotNetUtils.Net
 {
     public class NetworkStatusMonitor
     {
