@@ -136,7 +136,7 @@ namespace DotNetUtils
         }
 
         /// <see cref="http://stackoverflow.com/a/4975942/467582"/>
-        public static String BytesToString(long byteCount)
+        public static string HumanFriendlyFileSize(long byteCount)
         {
             string[] suf = { "B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB" }; // Longs run out around EB
             if (byteCount == 0)
