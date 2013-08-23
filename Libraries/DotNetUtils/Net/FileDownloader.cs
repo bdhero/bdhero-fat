@@ -12,6 +12,9 @@ namespace DotNetUtils.Net
     /// </summary>
     public class FileDownloader
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// URI of the remote Web resource to download.
         /// </summary>
@@ -95,7 +98,7 @@ namespace DotNetUtils.Net
 
             if (timeSpan.TotalSeconds == 0)
             {
-                Console.WriteLine("OOPS");
+                Logger.Error("Not enough time between notifications to generate meaningful data");
                 return;
             }
 
