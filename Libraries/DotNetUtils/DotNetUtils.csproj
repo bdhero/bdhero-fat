@@ -87,12 +87,12 @@
     <Compile Include="Extensions\NotifyPropertyChangedExtensions.cs" />
     <Compile Include="Extensions\TextBoxExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="Mono.Options\Options.cs" />
     <Compile Include="MultiValueDictionary.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="HttpRequest.cs" />
     <Compile Include="Extensions\ListViewExtensions.cs" />
-    <Compile Include="Mono.Options.cs" />
     <Compile Include="NetworkStatusMonitor.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
