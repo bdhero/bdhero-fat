@@ -31,7 +31,7 @@ namespace BDHero.Plugin
 
         public static void SavePreferences(PluginAssemblyInfo assemblyInfo, Object prefs)
         {
-            var json = JsonConvert.SerializeObject(prefs);
+            var json = JsonConvert.SerializeObject(prefs, Formatting.Indented);
             var directory = Path.GetDirectoryName(assemblyInfo.ConfigFilePath);
             if (directory != null)
                 Directory.CreateDirectory(directory);
