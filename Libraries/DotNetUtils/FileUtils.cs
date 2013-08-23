@@ -148,6 +148,17 @@ namespace DotNetUtils
             return string.Format("{0} {1}", (Math.Sign(byteCount) * num).ToString(fmt), suf[place]);
         }
 
+        /// <summary>Reads an entire stream into memory and returns it as an array of bytes.</summary>
+        /// <see cref="http://stackoverflow.com/a/6586039/467582"/>
+        public static byte[] ReadStream(Stream input)
+        {
+            using (var ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
         /// <summary>
         /// Creates an <see cref="Image"/> object without locking the source file.
         /// </summary>
