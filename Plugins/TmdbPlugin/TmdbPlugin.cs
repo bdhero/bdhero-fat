@@ -10,10 +10,8 @@ using BDHero.JobQueue;
 using DotNetUtils.Extensions;
 using I18N;
 using WatTmdb.V3;
-using System.IO;
 using Newtonsoft.Json;
 using log4net;
-using Formatting = Newtonsoft.Json.Formatting;
 
 namespace TmdbPlugin
 {
@@ -61,11 +59,9 @@ namespace TmdbPlugin
             if (cancellationToken.IsCancellationRequested)
                 return;
 
-            StartProgress("Loading config file...");
+            StartProgress("Loading plugin preferences...");
 
-            var pluginSettings = CheckConfigFile();
-            
-            LoadConfig(pluginSettings);
+            var prefs = LoadPreferences();
 
             if (cancellationToken.IsCancellationRequested)
                 return;
@@ -103,68 +99,44 @@ namespace TmdbPlugin
 
         #endregion
 
-        #region Load Settings
+        #region Plugin Preferences
 
-        private PluginSettings CheckConfigFile()
+        /// <summary>
+        /// Attempts to load the user's preferences file from disk if it exists,
+        /// otherwise returns the default set of preferences.
+        /// </summary>
+        /// <returns></returns>
+        private TmdbPreferences LoadPreferences()
         {
-            if (!File.Exists(AssemblyInfo.ConfigFilePath))
-            {
-                var settings = new PluginSettings
-                                   {
-                                       settings = new Settings
-                                                      {
-                                                          apiKey = null,
-                                                          defaultLanguage = "en",
-                                                          url = "http://acdvorak.github.io/bdautomuxer/"
-                                                      }
-                                   };
+            var prefs = PluginUtils.GetPreferences(AssemblyInfo, () => new TmdbPreferences());
 
-                var settingJson = JsonConvert.SerializeObject(settings, Formatting.Indented);
-                if (settingJson != null)
-                {
-                    try
-                    {
-                        File.WriteAllText(AssemblyInfo.ConfigFilePath, settingJson);
-                    }
-                    catch (Exception)
-                    {
-                        const string apiMessage = "Error: An error occured trying to create the plugin settings file:";
-                        Logger.ErrorFormat("{0} {1}", apiMessage, AssemblyInfo.ConfigFilePath);
-                        throw;
-                    }
-                }
-            }
+            // Use our default API key if the user has not specified their own
+            if (string.IsNullOrWhiteSpace(prefs.ApiKey))
+                prefs.ApiKey = new TmdbPreferences().ApiKey;
 
-            PluginSettings pluginSettings;
-            try
-            {
-                var reader = File.ReadAllText(AssemblyInfo.ConfigFilePath);
-                pluginSettings = JsonConvert.DeserializeObject<PluginSettings>(reader);
-            }
-            catch (Exception ex)
-            {
-                const string apiMessage = "Error: An error occured trying to load the plugin settings file:";
-                Logger.ErrorFormat("{0} {1}", apiMessage, AssemblyInfo.ConfigFilePath);
-                throw;
-            }
+            _searchISO_639_1 = prefs.DefaultLanguage;
+            _apiKey = prefs.ApiKey;
 
-            return pluginSettings;
+            return prefs;
         }
 
-        private void LoadConfig(PluginSettings settings)
+        /// <summary>
+        /// Persists the user's preferences by serializing <paramref name="prefs"/> as JSON
+        /// and saving it to disk.
+        /// </summary>
+        /// <param name="prefs"></param>
+        private void SavePreferences(TmdbPreferences prefs)
         {
-            var newSettings = new PluginSettings {settings = new Settings()};
-            if (settings.settings.apiKey == null)
-            {
-                settings.settings.apiKey = newSettings.settings.apiKey;
-            }
-            if (settings.settings.defaultLanguage == null)
-            {
-                settings.settings.defaultLanguage = newSettings.settings.defaultLanguage;
-            }
+            var apiKey = prefs.ApiKey;
 
-            _searchISO_639_1 = settings.settings.defaultLanguage;
-            _apiKey = settings.settings.apiKey;
+            // Don't save the default API key to the user's preferences file
+            if (apiKey == new TmdbPreferences().ApiKey)
+                prefs.ApiKey = null;
+
+            PluginUtils.SavePreferences(AssemblyInfo, prefs);
+
+            // Restore the API key if it was nulled out above
+            prefs.ApiKey = apiKey;
         }
 
         #endregion
@@ -233,30 +205,35 @@ namespace TmdbPlugin
             var searchQuery = job.SearchQuery;
             var searchTitle = searchQuery.Title;
 
-            if (searchQuery != null && _apiKey != null)
+            if (searchQuery == null)
             {
-                _tmdbApi = new Tmdb(_apiKey, _searchISO_639_1);
-
-                // TMDb (previously) choked on dashes - not sure if it still does or not...
-                // E.G.: "The Amazing Spider-Man" --> "The Amazing Spider Man"
-                searchTitle = Regex.Replace(searchTitle, @"-+", " ");
-
-                var requestParameters = new TmdbApiParameters(searchTitle, searchYear, _searchISO_639_1);
-
-                try
-                {
-                    SearchTmdb(requestParameters, job);
-                }
-                catch (Exception ex)
-                {
-                    HandleTmdbError(ex);
-                }
+                const string message = "ERROR: No searchable movie name found";
+                Logger.Error(message);
+                throw new Exception(message);
             }
-            else
+
+            if (_apiKey == null)
             {
-                const string apiTitleMessage = "ERROR: No searchable movie name found";
-                Logger.Error(apiTitleMessage);
-                throw new Exception(apiTitleMessage);
+                const string message = "ERROR: No API key found";
+                Logger.Error(message);
+                throw new Exception(message);
+            }
+
+            _tmdbApi = new Tmdb(_apiKey, _searchISO_639_1);
+
+            // TMDb (previously) choked on dashes - not sure if it still does or not...
+            // E.G.: "The Amazing Spider-Man" --> "The Amazing Spider Man"
+            searchTitle = Regex.Replace(searchTitle, @"-+", " ");
+
+            var requestParameters = new TmdbApiParameters(searchTitle, searchYear, _searchISO_639_1);
+
+            try
+            {
+                SearchTmdb(requestParameters, job);
+            }
+            catch (Exception ex)
+            {
+                HandleTmdbError(ex);
             }
         }
 
