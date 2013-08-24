@@ -35,6 +35,9 @@ namespace DotNetUtils.Net
         {
             var request = HttpRequest.BuildRequest("GET", Uri);
 
+            if (proxy != null)
+                request.Proxy = proxy;
+
             using (var response = request.GetResponse())
             using (var responseStream = response.GetResponseStream())
             using (var fileStream = File.Open(Path, FileMode.Create))
