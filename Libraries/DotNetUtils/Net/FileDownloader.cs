@@ -28,6 +28,25 @@ namespace DotNetUtils.Net
         public event DownloadStateChangedHandler StateChanged;
 
         /// <summary>
+        /// Retrieves the value of the HTTP <c>Content-Length</c> response header
+        /// by performing an HTTP <c>HEAD</c> request for <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="proxy">Optional proxy to send requests through.  If none is specified, the default system proxy settings will be used.</param>
+        /// <returns>Size of the download in bytes</returns>
+        public long GetContentLength(WebProxy proxy = null)
+        {
+            var request = HttpRequest.BuildRequest("HEAD", Uri);
+
+            if (proxy != null)
+                request.Proxy = proxy;
+
+            using (var response = request.GetResponse())
+            {
+                return response.ContentLength;
+            }
+        }
+
+        /// <summary>
         /// Streams the remote resource to the local file.
         /// </summary>
         /// <param name="proxy">Optional proxy to send requests through.  If none is specified, the default system proxy settings will be used.</param>
