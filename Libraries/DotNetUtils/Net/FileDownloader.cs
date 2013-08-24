@@ -36,7 +36,7 @@ namespace DotNetUtils.Net
             var request = HttpRequest.BuildRequest("GET", Uri);
 
             using (var response = request.GetResponse())
-            using (var responseStream = response.GetResponseStream()) // This actually sends the request
+            using (var responseStream = response.GetResponseStream())
             using (var fileStream = File.Open(Path, FileMode.Create))
             {
                 // Default buffer size in .NET is 8 KiB.
