@@ -21,7 +21,7 @@ namespace DotNetUtilsUnitTests
         [Test]
         public void Test()
         {
-            var uri = "https://raw.github.com/bdhero/bdhero/master/Assets/Icons/bdhero_gui_512.png";
+            const string uri = "https://raw.github.com/bdhero/bdhero/master/Assets/Icons/bdhero_gui_512.png";
             var path = Environment.ExpandEnvironmentVariables(@"%TEMP%\bdhero_gui_512.png");
             var downloader = new FileDownloader
                 {
