@@ -36,6 +36,20 @@ namespace DotNetUtilsUnitTests
             Assert.AreEqual(expected, actual, "Downloaded file's SHA-1 hash does not match the expected value");
         }
 
+        [Test]
+        public void TestContentLength()
+        {
+            const string uri = "https://raw.github.com/bdhero/bdhero/master/Assets/Icons/bdhero_gui_512.png";
+            var downloader = new FileDownloader
+                {
+                    Uri = uri
+                };
+            var actual = downloader.GetContentLength();
+            const long expected = 89485;
+
+            Assert.AreEqual(expected, actual, "Incorrect Content-Length value");
+        }
+
         /// <summary>
         /// Computes the SHA-1 hash (lowercase) of the specified file.
         /// </summary>
