@@ -84,6 +84,8 @@ namespace DotNetUtils.Net
                         Notify(fileSize, response.ContentLength);
                 } while (bytesRead > 0);
 
+                fileStream.Close();
+
                 if (fileSize != response.ContentLength)
                 {
                     throw new IOException("Number of bytes received does not match expected Content-Length");
