@@ -52,7 +52,7 @@ namespace Updater
             downloader.DownloadSync();
         }
 
-        private void DownloaderOnStateChanged(DownloadState downloadState)
+        private void DownloaderOnStateChanged(FileDownloadState fileDownloadState)
         {
         }
     }

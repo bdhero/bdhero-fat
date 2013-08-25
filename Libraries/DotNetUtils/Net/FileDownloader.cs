@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DotNetUtils.Net
 {
@@ -26,9 +28,15 @@ namespace DotNetUtils.Net
         public string Path;
 
         /// <summary>
+        /// Execution context (a.k.a. thread) to invoke <see cref="StateChanged"/> notifications on.
+        /// Defaults to the current thread's context if none is specified.
+        /// </summary>
+        public TaskScheduler CallbackThread;
+
+        /// <summary>
         /// Invoked on the <c>TaskScheduler</c> specified by <see cref="CallbackThread"/> whenever the state or progress of the download changes.
         /// </summary>
-        public event DownloadStateChangedHandler StateChanged;
+        public event FileDownloadStateChangedHandler StateChanged;
 
         /// <summary>
         /// Retrieves the value of the HTTP <c>Content-Length</c> response header
@@ -129,61 +137,19 @@ namespace DotNetUtils.Net
                 return;
             }
 
-            var state = new DownloadState(fileSize, contentLength, bytesPerSecond * 8);
-
-            if (StateChanged != null)
-                StateChanged(state);
+            var state = new FileDownloadState(fileSize, contentLength, bytesPerSecond * 8);
 
             Console.WriteLine(state);
+
+            if (StateChanged != null)
+            {
+                var thread = CallbackThread
+                                ?? (SynchronizationContext.Current != null
+                                  ? TaskScheduler.FromCurrentSynchronizationContext()
+                                  : TaskScheduler.Default);
+                Task.Factory.StartNew(() => StateChanged(state), CancellationToken.None, TaskCreationOptions.None, thread);
+                StateChanged(state);
+            }
         }
     }
-
-    public class DownloadState
-    {
-        /// <summary>
-        /// Number of bytes downloaded so far.
-        /// </summary>
-        public readonly int BytesDownloaded;
-
-        /// <summary>
-        /// Total expected file size of the download based on the server's Content-Length HTTP response header.
-        /// </summary>
-        public readonly long ContentLength;
-
-        /// <summary>
-        /// 0.0 to 100.0
-        /// </summary>
-        public readonly double PercentComplete;
-
-        /// <summary>
-        /// Download speed measured in bits per second.
-        /// </summary>
-        public readonly double BitsPerSecond;
-
-        /// <summary>
-        /// Human-readable download speed (e.g., "29.8 KiB/s", "2.4 MiB/s").
-        /// </summary>
-        public string HumanSpeed { get { return string.Format("{0}/s", FileUtils.HumanFriendlyFileSize((long)(BitsPerSecond / 8))); } }
-
-        public DownloadState(int bytesDownloaded, long contentLength, double bitsPerSecond)
-        {
-            BytesDownloaded = bytesDownloaded;
-            ContentLength = contentLength;
-            PercentComplete = 100.0 * ((double)BytesDownloaded / ContentLength);
-            BitsPerSecond = bitsPerSecond;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0:N0} of {1:N0} bytes downloaded ({2:P}) @ {3:N0} bits/sec ({4})",
-                BytesDownloaded,
-                ContentLength,
-                PercentComplete / 100.0,
-                BitsPerSecond,
-                HumanSpeed
-            );
-        }
-    }
-
-    public delegate void DownloadStateChangedHandler(DownloadState downloadState);
 }
