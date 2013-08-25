@@ -31,7 +31,7 @@ namespace Updater
             var downloader = new FileDownloader
                 {
                     Uri = update.Uri,
-                    Path = Environment.ExpandEnvironmentVariables(@"%TEMP%\" + update.FileName)
+                    Path = Path.Combine(Path.GetTempPath(), update.FileName)
                 };
 
             downloader.StateChanged += DownloaderOnStateChanged;
