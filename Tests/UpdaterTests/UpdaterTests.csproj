@@ -54,6 +54,10 @@
       <Project>{F39EA837-99DD-4453-AA1A-DE408D47A0A6}</Project>
       <Name>Updater</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\DotNetUtils\DotNetUtils.csproj">
+      <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
+      <Name>DotNetUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
