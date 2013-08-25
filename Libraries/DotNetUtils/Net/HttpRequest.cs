@@ -28,6 +28,19 @@ namespace DotNetUtils.Net
         /// </summary>
         public static string UserAgent;
 
+        /// <summary>
+        /// Invoked before every HTTP request made by <strong>this class only</strong>.
+        /// Applies to requests sent with the following methods:
+        /// <list type=">">
+        /// <item><see cref="Get(string,System.Collections.Generic.List{string})"/></item>
+        /// <item><see cref="Get(System.Net.HttpWebRequest)"/></item>
+        /// <item><see cref="Put"/></item>
+        /// <item><see cref="Post"/></item>
+        /// <item><see cref="GetImage"/></item>
+        /// </list>
+        /// </summary>
+        public static event BeforeRequestEventHandler BeforeRequestGlobal;
+
         private static readonly MemoryCache ImageCache = new MemoryCache("http_image_cache");
 
         static HttpRequest()
@@ -53,6 +66,7 @@ namespace DotNetUtils.Net
         /// <returns>Response body as a string</returns>
         public static string Get(HttpWebRequest request)
         {
+            NotifyBeforeRequest(request);
             using (var httpResponse = request.GetResponse())
             {
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -60,6 +74,12 @@ namespace DotNetUtils.Net
                     return streamReader.ReadToEnd();
                 }
             }
+        }
+
+        private static void NotifyBeforeRequest(HttpWebRequest request)
+        {
+            if (BeforeRequestGlobal != null)
+                BeforeRequestGlobal(request);
         }
 
         #region Images
@@ -80,6 +100,7 @@ namespace DotNetUtils.Net
         private static Image GetImageNoCache(string uri)
         {
             var request = BuildRequest(METHOD_GET, uri, cache: true);
+            NotifyBeforeRequest(request);
             using (var httpResponse = request.GetResponse())
             {
                 using (var stream = httpResponse.GetResponseStream())
@@ -143,7 +164,8 @@ namespace DotNetUtils.Net
                 streamWriter.Close();
             }
 
-            // This actually sends the request
+            NotifyBeforeRequest(request);
+
             var httpResponse = request.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
@@ -184,4 +206,11 @@ namespace DotNetUtils.Net
             return Uri.EscapeUriString(key) + "=" + Uri.EscapeUriString(value);
         }
     }
+
+    /// <summary>
+    /// Invoked just before an HTTP request is made, allowing observers to modify the request before it gets sent.
+    /// This can be useful to override the system's default proxy settings, set timeout values, etc.
+    /// </summary>
+    /// <param name="request"></param>
+    public delegate void BeforeRequestEventHandler(HttpWebRequest request);
 }
