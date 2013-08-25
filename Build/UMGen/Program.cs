@@ -33,7 +33,7 @@ namespace UpdateManifestGenerator
 
                     { "workspace=", s => Environment.CurrentDirectory = s },
 
-                    { "r=|mirror=",  s => update.Mirrors.Add(s)             },
+                    { "r=|mirror=",  s => update.Mirrors.Add(s) },
 
                     { "w|windows", s => _curPlatform = update.Platforms.Windows },
                     { "m|mac",     s => _curPlatform = update.Platforms.Mac     },
