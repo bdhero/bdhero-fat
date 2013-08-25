@@ -88,11 +88,13 @@ namespace DotNetUtils.Net
 
                 if (fileSize != response.ContentLength)
                 {
-                    throw new IOException("Number of bytes received does not match expected Content-Length");
+                    throw new IOException("Number of bytes received (" + fileSize + ") does not match Content-Length (" + response.ContentLength + ")");
                 }
-                if (new FileInfo(Path).Length != response.ContentLength)
+
+                var length = new FileInfo(Path).Length;
+                if (length != response.ContentLength)
                 {
-                    throw new IOException("Number of bytes written to disk does not match Content-Length");
+                    throw new IOException("Number of bytes written to disk (" + length + ") does not match Content-Length (" + response.ContentLength + ")");
                 }
             }
         }
