@@ -4,7 +4,7 @@ REM %CD% = C:\Projects\BDHero
 
 REM Capture stdout from Versioner.exe and store it in a variable
 REM See http://stackoverflow.com/a/108511/467582
-FOR /F "delims=" %%i IN ('Build\Tools\Versioner\Versioner --version') DO set NewVersion=%%i
+FOR /F "delims=" %%i IN ('Build\Tools\Versioner --version') DO set NewVersion=%%i
 
 git status
 
