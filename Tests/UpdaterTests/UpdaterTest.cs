@@ -17,7 +17,7 @@ namespace UpdaterTests
             var currentVersion = new Version(0, 8, 1, 4);
             if (updater.IsUpdateAvailable(currentVersion))
             {
-                updater.DownloadUpdate();
+                updater.DownloadUpdateAsync();
             }
         }
     }

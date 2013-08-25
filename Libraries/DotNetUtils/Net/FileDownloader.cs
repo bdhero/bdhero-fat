@@ -110,6 +110,15 @@ namespace DotNetUtils.Net
             }
         }
 
+        /// <summary>
+        /// Streams the remote resource to the local file.
+        /// </summary>
+        /// <param name="proxy">Optional proxy to send requests through.  If none is specified, the default system proxy settings will be used.</param>
+        public Task DownloadAsync(WebProxy proxy = null)
+        {
+            return Task.Factory.StartNew(() => DownloadSync(proxy));
+        }
+
         private bool HasEnoughTimeElapsed { get { return (DateTime.Now - _lastTick).TotalMilliseconds > 100; } }
 
         private void Tick(int fileSize, bool force = false)

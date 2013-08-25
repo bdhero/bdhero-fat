@@ -39,10 +39,10 @@ namespace UpdateManifestGenerator
                     { "m|mac",     s => _curPlatform = update.Platforms.Mac     },
                     { "l|linux",   s => _curPlatform = update.Platforms.Linux   },
 
-                    { "s=|setup=",              s => _curPlatform.Setup    = CreatePackage(s) },
-                    { "x=|sfx=",                s => _curPlatform.Sfx      = CreatePackage(s) },
-                    { "7=|7z=|7zip=|sevenZip=", s => _curPlatform.SevenZip = CreatePackage(s) },
-                    { "z=|zip=",                s => _curPlatform.Zip      = CreatePackage(s) },
+                    { "s=|setup=",              s => _curPlatform.Packages.Setup    = CreatePackage(s) },
+                    { "x=|sfx=",                s => _curPlatform.Packages.Sfx      = CreatePackage(s) },
+                    { "7=|7z=|7zip=|sevenZip=", s => _curPlatform.Packages.SevenZip = CreatePackage(s) },
+                    { "z=|zip=",                s => _curPlatform.Packages.Zip      = CreatePackage(s) },
 
                     { "o=|output=", s => outputPath = s },
                 };

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using DotNetUtils.Net;
@@ -24,7 +25,7 @@ namespace Updater
             return isUpdateAvailable;
         }
 
-        public void DownloadUpdate()
+        public void DownloadUpdateAsync()
         {
             var update = GetLatestVersion();
 
@@ -35,38 +36,11 @@ namespace Updater
                 };
 
             downloader.StateChanged += DownloaderOnStateChanged;
-            downloader.DownloadSync();
+            downloader.DownloadAsync();
         }
 
         private void DownloaderOnStateChanged(FileDownloadState fileDownloadState)
         {
-        }
-    }
-
-    public class Update
-    {
-        public readonly Version Version;
-        public readonly string FileName;
-        public readonly string Uri;
-
-        public Update(Version version, string fileName, string uri)
-        {
-            Version = version;
-            FileName = fileName;
-            Uri = uri;
-        }
-
-        public static Update FromResponse(UpdateResponse response)
-        {
-            var mirror = response.Mirrors.First();
-            var platform = response.Platforms.Windows;
-            var package = platform.Setup;
-
-            var version = response.Version;
-            var filename = package.FileName;
-            var uri = mirror + filename;
-
-            return new Update(version, uri, filename);
         }
     }
 }

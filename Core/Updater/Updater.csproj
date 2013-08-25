@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Update.cs" />
     <Compile Include="UpdateResponse.cs" />
     <Compile Include="UpdaterClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

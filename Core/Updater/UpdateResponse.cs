@@ -62,6 +62,17 @@ namespace Updater
 
     public class Platform
     {
+        [JsonProperty(PropertyName = "packages")]
+        public PackageList Packages { get; set; }
+
+        public Platform()
+        {
+            Packages = new PackageList();
+        }
+    }
+
+    public class PackageList
+    {
         [JsonProperty(PropertyName = "setup")]
         public Package Setup { get; set; }
 
