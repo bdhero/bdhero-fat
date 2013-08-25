@@ -10,6 +10,7 @@ set SevenZip=%Tools%\7-Zip
 set InnoSetup=%Tools%\InnoSetup
 set SignTool=%Tools%\SignTool
 set ILMerge=%Tools%\ILMerge
+set unxutils=%Tools\unxutils
 
 Build\Tools\Versioner -v > VERSION.tmp
 set /p Version= < VERSION.tmp
