@@ -12,6 +12,7 @@ xcopy /Y Artifacts\Installer\ProgramFiles\*.exe Artifacts\Portable\
 
 REM "%ProgramFiles%\BitRock InstallBuilder Enterprise 8.6.0\bin\builder-cli.exe" build "Installer.xml" windows
 
+REM Use `sed` to redact the path to and password for the private key file used to digitally sign EXEs
 call %InnoSetup%\iscc "/sCustom=%SignTool%\signtool.exe $p" Build\InnoSetup\setup.iss | %unxutils%\sed "s/\/[df] .*/[REDACTED]/gi"
 
 %SevenZip%\7za a -sfx7z.sfx -r "%SfxPath%" .\Artifacts\Portable\*
