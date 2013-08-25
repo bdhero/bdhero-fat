@@ -3,54 +3,95 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Updater
 {
     public class UpdateResponse
     {
-        [JsonProperty(PropertyName = "installerInformation")]
-        public InstallerInformation InstallerInformation { get; set; }
-    }
-
-    public class InstallerInformation
-    {
-        [JsonProperty(PropertyName = "versionId")]
-        public int VersionId { get; set; }
-
         [JsonProperty(PropertyName = "version")]
-        public string Version { get; set; }
+        [JsonConverter(typeof(VersionConverter))]
+        public Version Version { get; set; }
 
-        [JsonProperty(PropertyName = "platformFileList")]
-        public PlatformFileList PlatformFileList { get; set; }
+        /// <summary>
+        /// ISO 8601 date format (e.g. <c>2008-04-12T12:53Z</c>).  See <see cref="IsoDateTimeConverter"/>.
+        /// </summary>
+        [JsonProperty(PropertyName = "date")]
+        [JsonConverter(typeof(IsoDateTimeConverter))]
+        public DateTime Date { get; set; }
 
-        [JsonProperty(PropertyName = "downloadLocationList")]
-        public DownloadLocationList DownloadLocationList { get; set; }
+        [JsonProperty(PropertyName = "mirrors")]
+        public List<string> Mirrors { get; set; }
+
+        [JsonProperty(PropertyName = "platforms")]
+        public PlatformList Platforms { get; set; }
+
+        [JsonProperty(PropertyName = "releaseNotes")]
+        public string ReleaseNotes { get; set; }
+
+        public UpdateResponse()
+        {
+            Version = new Version();
+            Date = DateTime.Now;
+            Mirrors = new List<string>();
+            Platforms = new PlatformList();
+            ReleaseNotes = "";
+        }
     }
 
-    public class PlatformFileList
+    public class PlatformList
     {
-        [JsonProperty(PropertyName = "platformFile")]
-        public PlatformFile PlatformFile { get; set; }
+        [JsonProperty(PropertyName = "windows")]
+        public Platform Windows { get; set; }
+
+        [JsonIgnore]
+        [JsonProperty(PropertyName = "mac")]
+        public Platform Mac { get; set; }
+
+        [JsonIgnore]
+        [JsonProperty(PropertyName = "linux")]
+        public Platform Linux { get; set; }
+
+        public PlatformList()
+        {
+            Windows = new Platform();
+            Mac = new Platform();
+            Linux = new Platform();
+        }
     }
 
-    public class PlatformFile
+    public class Platform
+    {
+        [JsonProperty(PropertyName = "setup")]
+        public Package Setup { get; set; }
+
+        [JsonProperty(PropertyName = "sfx")]
+        public Package Sfx { get; set; }
+
+        [JsonProperty(PropertyName = "sevenZip")]
+        public Package SevenZip { get; set; }
+
+        [JsonProperty(PropertyName = "zip")]
+        public Package Zip { get; set; }
+
+        public Platform()
+        {
+            Setup = new Package();
+            Sfx = new Package();
+            SevenZip = new Package();
+            Zip = new Package();
+        }
+    }
+
+    public class Package
     {
         [JsonProperty(PropertyName = "filename")]
-        public string Filename { get; set; }
+        public string FileName { get; set; }
 
-        [JsonProperty(PropertyName = "platform")]
-        public string Platform { get; set; }
-    }
+        [JsonProperty(PropertyName = "sha1")]
+        public string SHA1 { get; set; }
 
-    public class DownloadLocationList
-    {
-        [JsonProperty(PropertyName = "downloadLocation")]
-        public DownloadLocation DownloadLocation { get; set; }
-    }
-
-    public class DownloadLocation
-    {
-        [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
+        [JsonProperty(PropertyName = "size")]
+        public long Size { get; set; }
     }
 }

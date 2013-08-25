@@ -13,22 +13,10 @@ namespace Updater
     {
         public Update GetLatestVersion()
         {
-            var xml = HttpRequest.Get("http://update.bdhero.org/update.xml");
-            xml = SanitizeXml(xml);
-            var doc = new XmlDocument();
-            doc.LoadXml(xml);
-            var json = JsonConvert.SerializeXmlNode(doc);
+            var json = HttpRequest.Get("http://update.bdhero.org/update.json");
             var response = JsonConvert.DeserializeObject<UpdateResponse>(json);
             var update = Update.FromResponse(response);
             return update;
-        }
-
-        private static string SanitizeXml(string xml)
-        {
-            xml = Regex.Replace(xml, "(?<=\")(@)(?!.*\":\\s )", string.Empty, RegexOptions.IgnoreCase);
-            xml = Regex.Replace(xml, @"<\?xml[^>]*>[\n\r\f]*", string.Empty, RegexOptions.IgnoreCase);
-            xml = xml.Replace("?xml", "xml");
-            return xml;
         }
 
         public bool IsUpdateAvailable(Version currentVersion)
@@ -60,26 +48,25 @@ namespace Updater
     public class Update
     {
         public readonly Version Version;
-        public readonly string Uri;
         public readonly string FileName;
+        public readonly string Uri;
 
-        public Update(Version version, string uri, string fileName)
+        public Update(Version version, string fileName, string uri)
         {
             Version = version;
-            Uri = uri;
             FileName = fileName;
+            Uri = uri;
         }
 
         public static Update FromResponse(UpdateResponse response)
         {
-            var root = response.InstallerInformation.DownloadLocationList.DownloadLocation.Url;
-            var filename = response.InstallerInformation.PlatformFileList.PlatformFile.Filename;
-            var uri = root + filename;
+            var mirror = response.Mirrors.First();
+            var platform = response.Platforms.Windows;
+            var package = platform.Setup;
 
-//            var strVersion = new Regex(@"((?:\d+\.){3}\d+)").Match(filename).Groups[1].Value;
-//            var version = Version.Parse(strVersion);
-
-            var version = Version.Parse(response.InstallerInformation.Version);
+            var version = response.Version;
+            var filename = package.FileName;
+            var uri = mirror + filename;
 
             return new Update(version, uri, filename);
         }
