@@ -6,9 +6,6 @@ call Build\Release\tools.bat
 
 echo PATH=%PATH%
 
-set ProjectUrl=http://bdhero.org/
-set MirrorUrl=http://dl.cdn.bdhero.org/
-
 call Build\Release\sign.bat "BDHero GUI" "%ProjectUrl%" Artifacts\Installer\ProgramFiles\*.exe
 
 xcopy /Y Artifacts\Installer\ProgramFiles\*.exe Artifacts\Portable\
