@@ -27,14 +27,11 @@ namespace UpdaterTests
         [Test]
         public void TestDownloadIntegrity()
         {
-            Assert.DoesNotThrow(delegate
-                {
-                    var updater = new UpdaterClient();
-                    var latest = updater.GetLatestVersionSync();
-                    Console.WriteLine("Downloading v{0}", latest.Version);
-                    var path = updater.DownloadUpdateAsync().Result;
-                    Console.WriteLine("Successfully downloaded update file to \"{0}\"", path);
-                });
+            var updater = new UpdaterClient();
+            var latest = updater.GetLatestVersionSync();
+            Console.WriteLine("Downloading v{0}", latest.Version);
+            var path = updater.DownloadUpdateAsync().Result;
+            Console.WriteLine("Successfully downloaded update file to \"{0}\"", path);
         }
     }
 }
