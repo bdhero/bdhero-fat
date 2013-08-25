@@ -28,6 +28,12 @@ namespace DotNetUtils.Net
         public string Path;
 
         /// <summary>
+        /// Invoked just before all HTTP requests are made, allowing observers to modify requests before they are sent.
+        ///  This can be useful to override the system's default proxy settings, set custom timeout values, etc.
+        /// </summary>
+        public event BeforeRequestEventHandler BeforeRequest;
+
+        /// <summary>
         /// Execution context (a.k.a. thread) to invoke <see cref="StateChanged"/> notifications on.
         /// Defaults to the current thread's context if none is specified.
         /// </summary>
@@ -38,18 +44,22 @@ namespace DotNetUtils.Net
         /// </summary>
         public event FileDownloadStateChangedHandler StateChanged;
 
+        private void NotifyBeforeRequest(HttpWebRequest request)
+        {
+            if (BeforeRequest != null)
+                BeforeRequest(request);
+        }
+
         /// <summary>
         /// Retrieves the value of the HTTP <c>Content-Length</c> response header
         /// by performing an HTTP <c>HEAD</c> request for <see cref="Uri"/>.
         /// </summary>
-        /// <param name="proxy">Optional proxy to send requests through.  If none is specified, the default system proxy settings will be used.</param>
         /// <returns>Size of the download in bytes</returns>
-        public long GetContentLength(WebProxy proxy = null)
+        public long GetContentLength()
         {
             var request = HttpRequest.BuildRequest("HEAD", Uri);
 
-            if (proxy != null)
-                request.Proxy = proxy;
+            NotifyBeforeRequest(request);
 
             using (var response = request.GetResponse())
             {
@@ -60,13 +70,11 @@ namespace DotNetUtils.Net
         /// <summary>
         /// Streams the remote resource to the local file.
         /// </summary>
-        /// <param name="proxy">Optional proxy to send requests through.  If none is specified, the default system proxy settings will be used.</param>
-        public void DownloadSync(WebProxy proxy = null)
+        public void DownloadSync()
         {
             var request = HttpRequest.BuildRequest("GET", Uri);
 
-            if (proxy != null)
-                request.Proxy = proxy;
+            NotifyBeforeRequest(request);
 
             using (var response = request.GetResponse())
             using (var responseStream = response.GetResponseStream())
@@ -92,7 +100,7 @@ namespace DotNetUtils.Net
                     fileStream.Write(buffer, 0, bytesRead);
 
                     if (bytesRead > 0)
-                        Notify(fileSize, response.ContentLength);
+                        NotifyStateChanged(fileSize, response.ContentLength);
                 } while (bytesRead > 0);
 
                 fileStream.Close();
@@ -113,10 +121,9 @@ namespace DotNetUtils.Net
         /// <summary>
         /// Streams the remote resource to the local file.
         /// </summary>
-        /// <param name="proxy">Optional proxy to send requests through.  If none is specified, the default system proxy settings will be used.</param>
-        public Task DownloadAsync(WebProxy proxy = null)
+        public Task DownloadAsync()
         {
-            return Task.Factory.StartNew(() => DownloadSync(proxy));
+            return Task.Factory.StartNew(DownloadSync);
         }
 
         private bool HasEnoughTimeElapsed { get { return (DateTime.Now - _lastTick).TotalMilliseconds > 100; } }
@@ -131,7 +138,7 @@ namespace DotNetUtils.Net
         private DateTime _lastTick;
         private int _lastFileSize;
 
-        private void Notify(int fileSize, long contentLength)
+        private void NotifyStateChanged(int fileSize, long contentLength)
         {
             var @continue = HasEnoughTimeElapsed || _lastFileSize == 0 || fileSize >= contentLength;
             if (!@continue) return;
