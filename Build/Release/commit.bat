@@ -11,7 +11,7 @@ git status
 git add Installer.xml
 git add AutoUpdate.xml
 git add update.xml
-git add update.json
+git add -f update.json
 git add BDHero\Properties\AssemblyInfo.cs
 git add BDHeroCLI\Properties\AssemblyInfo.cs
 git add BDHeroGUI\Properties\AssemblyInfo.cs
