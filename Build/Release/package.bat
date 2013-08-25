@@ -12,7 +12,7 @@ xcopy /Y Artifacts\Installer\ProgramFiles\*.exe Artifacts\Portable\
 
 REM "%ProgramFiles%\BitRock InstallBuilder Enterprise 8.6.0\bin\builder-cli.exe" build "Installer.xml" windows
 
-call %InnoSetup%\iscc "/sCustom=%SignTool%\signtool.exe $p" Build\InnoSetup\setup.iss | %unxutils%\sed "s/\/[df] +.*/[REDACTED]/gi"
+call %InnoSetup%\iscc "/sCustom=%SignTool%\signtool.exe $p" Build\InnoSetup\setup.iss | %unxutils%\sed "s/\/[df] .*/[REDACTED]/gi"
 
 %SevenZip%\7za a -sfx7z.sfx -r "%SfxPath%" .\Artifacts\Portable\*
 %SevenZip%\7za a -r "%SevenZipPath%" .\Artifacts\Portable\*
