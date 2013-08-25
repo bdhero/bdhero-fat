@@ -1,6 +1,10 @@
 Chores
 ======
 
+[-] Hash artifacts
+[ ] Convert batch files to MSBuild
+[ ] Centralize BDHero project URLs
+
 [ ] Move plugin enabling/disabling code to Controller
 
 [ ] Add logging
@@ -26,6 +30,7 @@ Bugs
 Features
 ========
 
+[ ] Highlight placeholders in textbox?  (if it's even possible in winforms...)
 [ ] Context menu for Playlist listitems: add "Language" option
 
 [ ] Add "use last folder" option to File Namer preference dialog
@@ -82,6 +87,11 @@ Chris' Plugins
 Complete
 ========
 
+[X] Reorganize repo's directory structure
+[X] Add all build tools to Git repo
+    [X] +ILMerge
+[X] Use ILMerge w/ Versioner
+[X] Fix Tmdb plugin prefs JSON file
 [X] Change file name of BDHero-<VERSION>-<OS>-<DIST>.<EXT>
 [X] Allow user to change detected track type
 [X] Update track/playlist listview items when user changes values
