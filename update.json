@@ -1,30 +1,30 @@
 {
-  "version": "0.8.2.1",
-  "date": "2013-08-25T11:16:25.854125-05:00",
+  "version": "0.8.2.2",
+  "date": "2013-08-25T11:24:17.7135-05:00",
   "mirrors": [
     "http://dl.cdn.bdhero.org/"
   ],
   "platforms": {
     "windows": {
       "setup": {
-        "filename": "bdhero-0.8.2.1-setup.exe",
-        "sha1": "10855FC1230B504B9FE98EC469ABF677C008ABDF",
-        "size": 10328312
+        "filename": "bdhero-0.8.2.2-setup.exe",
+        "sha1": "8932BF137EE5528278A15B9D7AF1A5CF8BBD03E7",
+        "size": 10329432
       },
       "sfx": {
-        "filename": "bdhero-0.8.2.1-sfx.exe",
-        "sha1": "9518C54AE4429E0EBD76F5CF6098A4E0CCF0CBA2",
-        "size": 9986312
+        "filename": "bdhero-0.8.2.2-sfx.exe",
+        "sha1": "656DBB5351A242B3AE01DAA1B525FFB20E16D227",
+        "size": 9985456
       },
       "sevenZip": {
-        "filename": "bdhero-0.8.2.1.7z",
-        "sha1": "1306255A6A31BE5D87744AF52E688E280F3DDFF3",
-        "size": 9818302
+        "filename": "bdhero-0.8.2.2.7z",
+        "sha1": "80A32BAD8B7AF5A71CF5DC57DD36D0699D0C8B7B",
+        "size": 9817445
       },
       "zip": {
-        "filename": "bdhero-0.8.2.1.zip",
-        "sha1": "C33337F971FDF578CCA1FBE1D03470DD5D8D84B9",
-        "size": 13636277
+        "filename": "bdhero-0.8.2.2.zip",
+        "sha1": "A5FB1F5F374CA8F9EA925391DB34EBE3101C8933",
+        "size": 13636280
       }
     }
   },
