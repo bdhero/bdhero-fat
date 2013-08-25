@@ -25,6 +25,9 @@ namespace DotNetUtils.Net
         /// </summary>
         public string Path;
 
+        /// <summary>
+        /// Invoked on the <c>TaskScheduler</c> specified by <see cref="CallbackThread"/> whenever the state or progress of the download changes.
+        /// </summary>
         public event DownloadStateChangedHandler StateChanged;
 
         /// <summary>
