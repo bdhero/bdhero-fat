@@ -9,4 +9,3 @@ publish
 /gh-pages
 *.backup
 /Artifacts
-/update.json
