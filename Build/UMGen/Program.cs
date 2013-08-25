@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using BuildUtils;
 using DotNetUtils.Crypto;
@@ -28,11 +29,10 @@ namespace UpdateManifestGenerator
 
             var optionSet = new OptionSet
                 {
-//                    { "h|?|help", s => PrintUsageAndExit() },
+                    { "h|?|help", s => PrintUsageAndExit() },
 
-                    { "workspace", s => Environment.CurrentDirectory = s },
+                    { "workspace=", s => Environment.CurrentDirectory = s },
 
-                    { "v=|version=", s => update.Version = Version.Parse(s) },
                     { "r=|mirror=",  s => update.Mirrors.Add(s)             },
 
                     { "w|windows", s => _curPlatform = update.Platforms.Windows },
@@ -56,6 +56,14 @@ namespace UpdateManifestGenerator
 
             var json = JsonConvert.SerializeObject(update, Formatting.Indented);
             File.WriteAllText(outputPath, json);
+        }
+
+        private static void PrintUsageAndExit()
+        {
+            var exeName = Assembly.GetEntryAssembly().GetName().Name;
+            var usage = new Usage(exeName).TransformText();
+            Console.Error.WriteLine(usage);
+            Environment.Exit(0);
         }
 
         private static Package CreatePackage(string path)
