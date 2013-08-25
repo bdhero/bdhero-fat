@@ -73,14 +73,6 @@ namespace Updater
 
         [JsonProperty(PropertyName = "zip")]
         public Package Zip { get; set; }
-
-        public Platform()
-        {
-            Setup = new Package();
-            Sfx = new Package();
-            SevenZip = new Package();
-            Zip = new Package();
-        }
     }
 
     public class Package
