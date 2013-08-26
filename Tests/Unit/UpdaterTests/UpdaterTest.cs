@@ -52,7 +52,7 @@ namespace UpdaterTests
         {
             var latest = _client.GetLatestVersionSync();
             Console.WriteLine("Downloading v{0}", latest.Version);
-            var path = _client.DownloadUpdateAsync().Result;
+            var path = _client.DownloadUpdateSync();
             Console.WriteLine("Successfully downloaded update file to \"{0}\"", path);
         }
     }

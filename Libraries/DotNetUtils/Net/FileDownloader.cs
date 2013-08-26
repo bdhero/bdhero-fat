@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DotNetUtils.Net
 {
     /// <summary>
-    /// Asynchronous HTTP file downloader that runs in a separate thread and reports its progress to observers.
+    /// HTTP file downloader that runs in a separate thread and reports its progress to observers.
     /// </summary>
     public class FileDownloader
     {
@@ -116,14 +116,6 @@ namespace DotNetUtils.Net
                     throw new IOException("Number of bytes written to disk (" + length + ") does not match Content-Length (" + response.ContentLength + ")");
                 }
             }
-        }
-
-        /// <summary>
-        /// Streams the remote resource to the local file.
-        /// </summary>
-        public Task DownloadAsync()
-        {
-            return Task.Factory.StartNew(DownloadSync);
         }
 
         private bool HasEnoughTimeElapsed { get { return (DateTime.Now - _lastTick).TotalMilliseconds > 100; } }
