@@ -50,11 +50,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Updater\Updater.csproj">
+    <ProjectReference Include="..\..\..\Core\Updater\Updater.csproj">
       <Project>{F39EA837-99DD-4453-AA1A-DE408D47A0A6}</Project>
       <Name>Updater</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\DotNetUtils\DotNetUtils.csproj">
+    <ProjectReference Include="..\..\..\Libraries\DotNetUtils\DotNetUtils.csproj">
       <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
       <Name>DotNetUtils</Name>
     </ProjectReference>

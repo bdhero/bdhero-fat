@@ -89,7 +89,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C1A6C1BA-8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Core\Updater\Updater.csproj", "{F39EA837-99DD-4453-AA1A-DE408D47A0A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdaterTests", "Tests\UpdaterTests\UpdaterTests.csproj", "{C28A1DE0-08AA-4E5E-9450-2F86E7F59DB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdaterTests", "Tests\Unit\UpdaterTests\UpdaterTests.csproj", "{C28A1DE0-08AA-4E5E-9450-2F86E7F59DB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UMGen", "Build\UMGen\UMGen.csproj", "{D98FBB34-9674-4CAC-99F1-4B788B78DC77}"
 EndProject
