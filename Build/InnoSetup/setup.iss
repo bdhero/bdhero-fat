@@ -94,6 +94,12 @@ Source: "..\..\Artifacts\Installer\ProgramFiles\*"; DestDir: "{app}"; Flags: ign
 Source: "..\..\Artifacts\Installer\Config\*"; DestDir: "{userappdata}\BDHero\Config"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "..\..\Artifacts\Installer\Plugins\*"; DestDir: "{userappdata}\BDHero\Plugins"; Flags: ignoreversion createallsubdirs recursesubdirs
 
+[UninstallDelete]
+Type: dirifempty;     Name: "{userappdata}\BDHero\Config\Application"
+Type: filesandordirs; Name: "{userappdata}\BDHero\Plugins\Required"
+Type: dirifempty;     Name: "{userappdata}\BDHero\Plugins"
+Type: dirifempty;     Name: "{userappdata}\BDHero"
+
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
