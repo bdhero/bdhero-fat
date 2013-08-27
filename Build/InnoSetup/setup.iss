@@ -53,7 +53,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={code:DefaultInstallDir}
 DefaultGroupName={#MyAppName}
 DisableDirPage=auto
 DisableProgramGroupPage=auto
@@ -73,7 +73,7 @@ ArchitecturesInstallIn64BitMode=x64
 ; since it's capable of running 32-bit code too).
 ShowLanguageDialog=auto
 UninstallDisplayIcon={app}\{#MyAppExeName}
-PrivilegesRequired=admin
+PrivilegesRequired=lowest
 MinVersion=0,5.01sp3
 #if CodeSigningCertPK != ""
 SignTool=Custom sign /v /f {#CodeSigningCertPK} /p {#CodeSigningCertPW} /d $q{#MyAppName} Setup$q /du $q{#MyAppURL}$q /t http://timestamp.comodoca.com/authenticode $f
@@ -195,6 +195,29 @@ win_sp_title=Windows %1 Service Pack %2
 
 
 [Code]
+// http://www.kinook.com/blog/?p=53
+function IsRegularUser(): Boolean;
+begin
+    Result := not (IsAdminLoggedOn or IsPowerUserLoggedOn);
+end;
+
+function DefDirRoot(Param: String): String;
+begin
+    if IsRegularUser then
+        Result := ExpandConstant('{localappdata}')
+    else
+        Result := ExpandConstant('{pf}')
+end;
+
+function DefaultInstallDir(Param: String): String;
+begin
+    if IsRegularUser then
+        Result := ExpandConstant('{localappdata}\{#MyAppName}\Application')
+    else
+        Result := ExpandConstant('{pf}\{#MyAppName}')
+end;
+
+// http://www.codeproject.com/Articles/20868/NET-Framework-1-1-2-0-3-5-Installer-for-InnoSetup
 function InitializeSetup(): boolean;
 begin
 	//init windows version
