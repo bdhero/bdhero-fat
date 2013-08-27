@@ -73,7 +73,7 @@ ArchitecturesInstallIn64BitMode=x64
 ; since it's capable of running 32-bit code too).
 ShowLanguageDialog=auto
 UninstallDisplayIcon={app}\{#MyAppExeName}
-PrivilegesRequired=lowest
+PrivilegesRequired=none
 MinVersion=0,5.01sp3
 #if CodeSigningCertPK != ""
 SignTool=Custom sign /v /f {#CodeSigningCertPK} /p {#CodeSigningCertPW} /d $q{#MyAppName} Setup$q /du $q{#MyAppURL}$q /t http://timestamp.comodoca.com/authenticode $f
