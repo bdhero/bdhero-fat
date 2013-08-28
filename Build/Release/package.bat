@@ -19,4 +19,4 @@ REM %SevenZip%\7za a -sfx7z.sfx -r "%SfxPath%" .\Artifacts\Portable\*
 REM %SevenZip%\7za a -r "%SevenZipPath%" .\Artifacts\Portable\*
 %SevenZip%\7za a -r "%ZipPath%" .\Artifacts\Portable\*
 
-call Build\Release\sign.bat "BDHero Portable (Self Extracting Archive)" "%ProjectUrl%" "%SfxPath%"
+REM call Build\Release\sign.bat "BDHero Portable (Self Extracting Archive)" "%ProjectUrl%" "%SfxPath%"
