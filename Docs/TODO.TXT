@@ -1,7 +1,8 @@
 Chores
 ======
 
-[-] Hash artifacts
+[ ] Remember user's directory selections when switching between Installed and Portable radio buttons
+
 [ ] Convert batch files to MSBuild
 [ ] Centralize BDHero project URLs
 
@@ -87,6 +88,9 @@ Chris' Plugins
 Complete
 ========
 
+[X] Disable Uninstall for portable installations
+[X] Disable "Installation Type" page for upgrades and silent installs
+[X] Hash artifacts
 [X] Reorganize repo's directory structure
 [X] Add all build tools to Git repo
     [X] +ILMerge
