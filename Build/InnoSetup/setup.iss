@@ -93,7 +93,6 @@ Name: "de"; MessagesFile: "compiler:Default.isl"
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\..\Build\RemovableDrives\Debug\Output\RemovableDrives.dll"; Flags: dontcopy
 Source: "..\..\Artifacts\Installer\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}";                       Flags: uninsrestartdelete ignoreversion
 Source: "..\..\Artifacts\Installer\ProgramFiles\*";              DestDir: "{app}";                       Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
 Source: "..\..\Artifacts\Installer\Plugins\Required\*";          DestDir: "{app}\Plugins\Required";      Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
