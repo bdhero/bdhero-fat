@@ -208,7 +208,7 @@ begin
 	Result := s
 end;
 
-function NextButtonClick(CurPageID: Integer): boolean;
+function NextButtonClickCheckPrereq(CurPageID: Integer): boolean;
 begin
 	Result := true;
 

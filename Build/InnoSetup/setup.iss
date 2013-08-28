@@ -41,6 +41,8 @@
 #define CodeSigningCertPK GetEnv('CodeSigningCertPK')
 #define CodeSigningCertPW GetEnv('CodeSigningCertPW')
 
+#include "install-dir.iss"
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
@@ -53,10 +55,13 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={code:DefaultInstallDir}
+;DefaultDirName={code:DefaultInstallDir}
+DefaultDirName={#MyAppName}
+AppendDefaultDirName=no
 DefaultGroupName={#MyAppName}
+DisableWelcomePage=yes
 DisableDirPage=auto
-DisableProgramGroupPage=auto
+DisableProgramGroupPage=yes
 AllowNoIcons=yes
 OutputDir=..\..\Artifacts
 OutputBaseFilename={#MyAppMachineName}-{#MyAppVersion}-setup
@@ -84,15 +89,15 @@ SignedUninstaller=True
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Default.isl"
 
-[Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+;[Tasks]
+;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "..\..\Artifacts\Installer\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\Artifacts\Installer\ProgramFiles\*"; DestDir: "{app}"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "..\..\Artifacts\Installer\Config\*"; DestDir: "{userappdata}\BDHero\Config"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "..\..\Artifacts\Installer\Plugins\*"; DestDir: "{userappdata}\BDHero\Plugins"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Build\RemovableDrives\Debug\Output\RemovableDrives.dll"; Flags: dontcopy
+Source: "..\..\Artifacts\Installer\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}";                       Flags: uninsrestartdelete ignoreversion
+Source: "..\..\Artifacts\Installer\ProgramFiles\*";              DestDir: "{app}";                       Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Artifacts\Installer\Plugins\Required\*";          DestDir: "{app}\Plugins\Required";      Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Artifacts\Installer\Config\*";                    DestDir: "{userappdata}\BDHero\Config"; Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
 
 [UninstallDelete]
 Type: dirifempty;     Name: "{userappdata}\BDHero\Config\Application"
@@ -103,7 +108,7 @@ Type: dirifempty;     Name: "{userappdata}\BDHero"
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+;Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
@@ -215,12 +220,32 @@ begin
         Result := ExpandConstant('{pf}')
 end;
 
-function DefaultInstallDir(Param: String): String;
+// acdvorak
+//function DefaultInstallDir(Param: String): String;
+//begin
+//    if IsRegularUser then
+//        Result := ExpandConstant('{localappdata}\{#MyAppName}\Application')
+//    else
+//        Result := ExpandConstant('{pf}\{#MyAppName}')
+//    Result := ExpandConstant('{userpf}\{#MyAppName}')
+//end;
+
+function NextButtonClick(CurPageID: Integer): boolean;
 begin
-    if IsRegularUser then
-        Result := ExpandConstant('{localappdata}\{#MyAppName}\Application')
+	Result := true;
+
+    if (CurPageID = UsagePage.ID) then
+        begin
+            bIsPortable := not (UsagePage.SelectedValueIndex = 0)
+            WizardForm.DirEdit.Text := DefaultInstallDir('')
+        end
     else
-        Result := ExpandConstant('{pf}\{#MyAppName}')
+        Result := NextButtonClickCheckPrereq(CurPageID);
+end;
+
+procedure InitializeWizard;
+begin
+    InitializeWizardInstallType();
 end;
 
 // http://www.codeproject.com/Articles/20868/NET-Framework-1-1-2-0-3-5-Installer-for-InnoSetup
