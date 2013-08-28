@@ -219,6 +219,15 @@ begin
         Result := NextButtonClickCheckPrereq(CurPageID);
 end;
 
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+    if (PageID = wpSelectDir) and (IsNotPortable()) then
+        Result := true
+    else
+        Result := false
+    ;
+end;
+
 procedure InitializeWizard;
 begin
     InitializeWizardInstallType();
