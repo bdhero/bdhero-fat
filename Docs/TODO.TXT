@@ -3,6 +3,7 @@ Chores
 
 [ ] Remember user's directory selections when switching between Installed and Portable radio buttons
 [ ] Delete {code:AutoConfigDirFn} dirs when uninstalling, not just {userappdata} dirs
+[ ] Update CustomMessages to override title/description to include version number and whether the install is an update or a fresh install
 
 [ ] Convert batch files to MSBuild
 [ ] Centralize BDHero project URLs
