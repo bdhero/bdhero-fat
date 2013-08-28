@@ -94,5 +94,5 @@ begin
   if ( n > 0 ) then
     Result := DrvLetters[n - 1]
   else
-    Result := sd
+    Result := sd + '\'
 end;
