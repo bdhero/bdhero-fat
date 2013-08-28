@@ -6,7 +6,7 @@ set SolutionDir=%2
 IF "%ConfigurationName%"=="" set ConfigurationName=Debug
 IF NOT "%SolutionDir%"=="" cd "%SolutionDir%"
 
-set PluginDir=Artifacts\Installer\Plugins
+set PluginDir=Artifacts\Installer\Plugins\Required
 set ConfigDir=Artifacts\Installer\Config
 set ProgramFilesDir=Artifacts\Installer\ProgramFiles
 set PortableDir=Artifacts\Portable
