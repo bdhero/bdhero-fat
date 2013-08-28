@@ -78,7 +78,8 @@ ArchitecturesInstallIn64BitMode=x64
 ; since it's capable of running 32-bit code too).
 ShowLanguageDialog=auto
 UninstallDisplayIcon={app}\{#MyAppExeName}
-PrivilegesRequired=none
+Uninstallable=IsNotPortable
+PrivilegesRequired=lowest
 MinVersion=0,5.01sp3
 #if CodeSigningCertPK != ""
 SignTool=Custom sign /v /f {#CodeSigningCertPK} /p {#CodeSigningCertPW} /d $q{#MyAppName} Setup$q /du $q{#MyAppURL}$q /t http://timestamp.comodoca.com/authenticode $f
@@ -93,16 +94,16 @@ Name: "de"; MessagesFile: "compiler:Default.isl"
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\..\Artifacts\Installer\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}";                       Flags: uninsrestartdelete ignoreversion
-Source: "..\..\Artifacts\Installer\ProgramFiles\*";              DestDir: "{app}";                       Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
-Source: "..\..\Artifacts\Installer\Plugins\Required\*";          DestDir: "{app}\Plugins\Required";      Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
-Source: "..\..\Artifacts\Installer\Config\*";                    DestDir: "{userappdata}\BDHero\Config"; Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Artifacts\Installer\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}";                  Flags: uninsrestartdelete ignoreversion
+Source: "..\..\Artifacts\Installer\ProgramFiles\*";              DestDir: "{app}";                  Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Artifacts\Installer\Plugins\Required\*";          DestDir: "{app}\Plugins\Required"; Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Artifacts\Installer\Config\*";                    DestDir: "{code:AutoConfigDirFn}"; Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
 
 [UninstallDelete]
-Type: dirifempty;     Name: "{userappdata}\BDHero\Config\Application"
-Type: filesandordirs; Name: "{userappdata}\BDHero\Plugins\Required"
-Type: dirifempty;     Name: "{userappdata}\BDHero\Plugins"
-Type: dirifempty;     Name: "{userappdata}\BDHero"
+Type: dirifempty;     Name: "{userappdata}\{#MyAppName}\Config\Application"
+Type: filesandordirs; Name: "{userappdata}\{#MyAppName}\Plugins\Required"
+Type: dirifempty;     Name: "{userappdata}\{#MyAppName}\Plugins"
+Type: dirifempty;     Name: "{userappdata}\{#MyAppName}"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -203,32 +204,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 [CustomMessages]
 win_sp_title=Windows %1 Service Pack %2
 
-
 [Code]
-// http://www.kinook.com/blog/?p=53
-function IsRegularUser(): Boolean;
-begin
-    Result := not (IsAdminLoggedOn or IsPowerUserLoggedOn);
-end;
-
-function DefDirRoot(Param: String): String;
-begin
-    if IsRegularUser then
-        Result := ExpandConstant('{localappdata}')
-    else
-        Result := ExpandConstant('{pf}')
-end;
-
-// acdvorak
-//function DefaultInstallDir(Param: String): String;
-//begin
-//    if IsRegularUser then
-//        Result := ExpandConstant('{localappdata}\{#MyAppName}\Application')
-//    else
-//        Result := ExpandConstant('{pf}\{#MyAppName}')
-//    Result := ExpandConstant('{userpf}\{#MyAppName}')
-//end;
-
 function NextButtonClick(CurPageID: Integer): boolean;
 begin
 	Result := true;
@@ -236,7 +212,7 @@ begin
     if (CurPageID = UsagePage.ID) then
         begin
             bIsPortable := not (UsagePage.SelectedValueIndex = 0)
-            WizardForm.DirEdit.Text := DefaultInstallDir('')
+            WizardForm.DirEdit.Text := DefaultInstallDir()
         end
     else
         Result := NextButtonClickCheckPrereq(CurPageID);
