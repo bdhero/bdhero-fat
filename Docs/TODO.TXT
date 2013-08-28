@@ -2,6 +2,7 @@ Chores
 ======
 
 [ ] Remember user's directory selections when switching between Installed and Portable radio buttons
+[ ] Delete {code:AutoConfigDirFn} dirs when uninstalling, not just {userappdata} dirs
 
 [ ] Convert batch files to MSBuild
 [ ] Centralize BDHero project URLs
