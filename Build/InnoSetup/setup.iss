@@ -79,6 +79,7 @@ ArchitecturesInstallIn64BitMode=x64
 ShowLanguageDialog=auto
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Uninstallable=IsNotPortable
+AlwaysShowDirOnReadyPage=yes
 PrivilegesRequired=lowest
 MinVersion=0,5.01sp3
 #if CodeSigningCertPK != ""
