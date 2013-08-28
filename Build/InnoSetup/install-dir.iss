@@ -45,5 +45,5 @@ begin
     UsagePage.Add('Portable – USB Thumb Drive');
     //{Set Default – Normal Install}
     UsagePage.SelectedValueIndex := 0;
-    UsagePage.OnShouldSkipPage := @ShouldSkipInstallTypePage;
+    //UsagePage.OnShouldSkipPage := @ShouldSkipInstallTypePage;
 end;
