@@ -33,7 +33,7 @@
 
 #define MyAppName "BDHero"
 #define MyAppMachineName "bdhero"
-#define MyAppVersion "0.8.2.3"
+#define MyAppVersion "0.8.2.4"
 #define MyAppPublisher "BDHero"
 #define MyAppURL "http://bdhero.org/"
 #define MyAppExeName "bdhero-gui.exe"
