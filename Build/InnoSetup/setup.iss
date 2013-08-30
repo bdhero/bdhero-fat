@@ -95,7 +95,7 @@ Name: "de"; MessagesFile: "compiler:Default.isl"
 [Files]
 Source: "{#InstallerArtifactDir}\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}";                  Flags: {#DeleteFileFlags}
 Source: "{#InstallerArtifactDir}\ProgramFiles\*";              DestDir: "{app}";                  Flags: {#DeleteDirFlags}
-Source: "{#InstallerArtifactDir}\Plugins\Required\*";          DestDir: "{#PluginDir}\Required"; Flags: {#DeleteDirFlags}
+Source: "{#InstallerArtifactDir}\Plugins\Required\*";          DestDir: "{#PluginDir}\Required";  Flags: {#DeleteDirFlags}
 Source: "{#InstallerArtifactDir}\Config\*";                    DestDir: "{code:ConfigDirAuto}";   Flags: {#DeleteDirFlags}
 
 [UninstallDelete]
