@@ -62,6 +62,7 @@ begin
 end;
 
 procedure InitializeWizardInstallType;
+var sInstallationTypeNormalMessageKey : String;
 begin
     sDefaultInstallDir := WizardForm.DirEdit.Text;
     sCustomInstallDir := sDefaultInstallDir;
@@ -72,8 +73,14 @@ begin
     // Create the page
     pInstallationTypePage := CreateInputOptionPage(wpWelcome, 'Installation Type', 'Select Installation Option', 'Where would you like to install this program?', True, False);
 
-    pInstallationTypePage.Add('Normal – PC Hard Disk (current user only)');
-    pInstallationTypePage.Add('Portable – USB Thumb Drive');
+    if IsAlreadyInstalled() then
+        sInstallationTypeNormalMessageKey := 'InstallationTypeUpgrade'
+    else
+        sInstallationTypeNormalMessageKey := 'InstallationTypeNormal'
+    ;
+
+    pInstallationTypePage.Add(CustomMessage(sInstallationTypeNormalMessageKey));
+    pInstallationTypePage.Add(CustomMessage('InstallationTypePortable'));
 
     // Set Default – Normal Install
     pInstallationTypePage.SelectedValueIndex := 0;

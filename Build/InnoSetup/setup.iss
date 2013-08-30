@@ -89,6 +89,10 @@ ShowLanguageDialog=auto
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Default.isl"
 
+[CustomMessages]
+en.InstallationTypeNormal=&Normal - PC Hard Disk (current user only)
+en.InstallationTypeUpgrade=&Upgrade - PC Hard Disk (current user only)
+en.InstallationTypePortable=&Portable - USB Thumb Drive
 ;[Tasks]
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
