@@ -9,6 +9,9 @@
 #define MyAppURL "http://bdhero.org/"
 #define MyAppExeName "bdhero-gui.exe"
 
+#define LogDir "{localappdata}\" + MyAppName + "\Logs"
+#define PluginDir "{app}\Plugins"
+
 #define CodeSigningCertPK GetEnv('CodeSigningCertPK')
 #define CodeSigningCertPW GetEnv('CodeSigningCertPW')
 
@@ -91,14 +94,17 @@ Name: "de"; MessagesFile: "compiler:Default.isl"
 [Files]
 Source: "{#InstallerArtifactDir}\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}";                  Flags: {#DeleteFileFlags}
 Source: "{#InstallerArtifactDir}\ProgramFiles\*";              DestDir: "{app}";                  Flags: {#DeleteDirFlags}
-Source: "{#InstallerArtifactDir}\Plugins\Required\*";          DestDir: "{app}\Plugins\Required"; Flags: {#DeleteDirFlags}
+Source: "{#InstallerArtifactDir}\Plugins\Required\*";          DestDir: "{#PluginDir}\Required"; Flags: {#DeleteDirFlags}
 Source: "{#InstallerArtifactDir}\Config\*";                    DestDir: "{code:ConfigDirAuto}";   Flags: {#DeleteDirFlags}
 
 [UninstallDelete]
-Type: dirifempty;     Name: "{userappdata}\{#MyAppName}\Config\Application"
-Type: filesandordirs; Name: "{userappdata}\{#MyAppName}\Plugins\Required"
-Type: dirifempty;     Name: "{userappdata}\{#MyAppName}\Plugins"
+Type: filesandordirs; Name: "{#LogDir}"
+Type: filesandordirs; Name: "{#PluginDir}"
+Type: dirifempty;     Name: "{code:ConfigDirAuto}\Application"
+Type: dirifempty;     Name: "{code:ConfigDirAuto}"
 Type: dirifempty;     Name: "{userappdata}\{#MyAppName}"
+Type: dirifempty;     Name: "{localappdata}\{#MyAppName}"
+Type: dirifempty;     Name: "{app}"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Check: IsNotPortable
