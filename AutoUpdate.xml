@@ -2,7 +2,7 @@
     <fullName>BDHero</fullName>
     <shortName>bdheroautoupdater</shortName>
     <vendor>BDHero</vendor>
-    <version>0.8.2.6</version>
+    <version>0.8.2.7</version>
     <singleInstanceCheck>1</singleInstanceCheck>
     <saveRelativePaths>1</saveRelativePaths>
     <logoImage>Assets/Icons/bdhero_gui_48.png</logoImage>
