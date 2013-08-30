@@ -1,9 +1,5 @@
 ﻿; http://www.codeproject.com/Articles/20868/NET-Framework-1-1-2-0-3-5-Installer-for-InnoSetup
 
-#include "dependencies.iss"
-
-[Setup]
-
 ;#define DebugMode
 
 #define MyAppName "BDHero"
@@ -20,6 +16,7 @@
 #define DeleteFileFlags "uninsrestartdelete ignoreversion"
 #define DeleteDirFlags "uninsrestartdelete ignoreversion createallsubdirs recursesubdirs"
 
+#include "dependencies.iss"
 #include "install-dir.iss"
 
 [Setup]
