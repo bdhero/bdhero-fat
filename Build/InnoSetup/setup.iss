@@ -167,11 +167,9 @@ begin
   case CurUninstallStep of
     usUninstall:
       begin
-        mRes := MsgBox('Keep your preferences?  ' + ConfigDirAuto(''), mbConfirmation, MB_YESNO or MB_DEFBUTTON1)
-        if mRes = IDNO then
-          begin
-            DelTree(ConfigDirAuto(''), True, True, True);
-          end
+        mRes := MsgBox('Remove preferences too?', mbConfirmation, MB_YESNO or MB_DEFBUTTON2)
+        if mRes = IDYES then
+          DelTree(ConfigDirAuto(''), True, True, True);
       end;
   end;
 end;
