@@ -3,47 +3,82 @@
 [Code]
 // http://timesheetsandstuff.wordpress.com/2008/06/27/the-joy-of-part-2/
 
-var
-    bIsPortable : Boolean;
+var pInstallationTypePage: TInputOptionWizardPage;
 
-function IsNotPortable : Boolean;
+// Populated by InitializeWizardInstallType()
+var sDefaultInstallDir : String;
+var sCustomInstallDir : String;
+var sDefaultPortableDir : String;
+var sCustomPortableDir : String;
+
+function IsAlreadyInstalled : Boolean;
 begin
-    Result := not bIsPortable;
+    Result := FileExists(sDefaultInstallDir + '\{#MyAppExeName}');
 end;
 
-function DefaultInstallDir : String;
+function IsPortable : Boolean;
 begin
-    if bIsPortable then
-        Result := GetFirstRemovableDrive() + 'PortableApps\{#MyAppName}'
-    else
-        Result := ExpandConstant('{localappdata}\{#MyAppName}\Application')
-    ;
+    Result := not (pInstallationTypePage.SelectedValueIndex = 0)
 end;
 
 function ConfigDirAuto(Param: String): String;
 begin
-    if bIsPortable then
+    if IsPortable() then
         Result := ExpandConstant('{app}\Config')
     else
         Result := ExpandConstant('{userappdata}\{#MyAppName}\Config')
     ;
 end;
 
-function ShouldSkipInstallTypePage(Sender: TWizardPage): Boolean;
+function GetInstallDirAuto() : String;
 begin
-    Result := FileExists(WizardForm.DirEdit.Text + '\{#MyAppExeName}')
+    if IsPortable() then
+        Result := sCustomPortableDir
+    else
+        Result := sCustomInstallDir
 end;
 
-var
-    UsagePage: TInputOptionWizardPage;
+procedure SaveInstallDirAuto;
+begin
+    if IsPortable() then
+        sCustomPortableDir := WizardForm.DirEdit.Text
+    else
+        sCustomInstallDir := WizardForm.DirEdit.Text
+end;
+
+procedure RestoreInstallDirAuto;
+begin
+    WizardForm.DirEdit.Text := GetInstallDirAuto()
+end;
+
+procedure UserChangedInstallDir(Sender: TObject);
+begin
+    SaveInstallDirAuto()
+end;
+
+function ShouldSkipInstallTypePage(Sender: TWizardPage): Boolean;
+begin
+    Result := IsAlreadyInstalled()
+end;
 
 procedure InitializeWizardInstallType;
 begin
-    //{ Create the pages }
-    UsagePage := CreateInputOptionPage(wpWelcome, 'Installation Type', 'Select Installation Option', 'Where would you like to install this program?', True, False);
-    UsagePage.Add('Normal – PC Hard Disk (current user only)');
-    UsagePage.Add('Portable – USB Thumb Drive');
-    //{Set Default – Normal Install}
-    UsagePage.SelectedValueIndex := 0;
-    //UsagePage.OnShouldSkipPage := @ShouldSkipInstallTypePage;
+    sDefaultInstallDir := WizardForm.DirEdit.Text;
+    sCustomInstallDir := sDefaultInstallDir;
+
+    sDefaultPortableDir := GetFirstRemovableDrive() + 'PortableApps\{#MyAppName}';
+    sCustomPortableDir := sDefaultPortableDir;
+
+    // Create the page
+    pInstallationTypePage := CreateInputOptionPage(wpWelcome, 'Installation Type', 'Select Installation Option', 'Where would you like to install this program?', True, False);
+
+    pInstallationTypePage.Add('Normal – PC Hard Disk (current user only)');
+    pInstallationTypePage.Add('Portable – USB Thumb Drive');
+
+    // Set Default – Normal Install
+    pInstallationTypePage.SelectedValueIndex := 0;
+
+    WizardForm.DirEdit.OnChange := @UserChangedInstallDir;
+
+    //pInstallationTypePage.OnShouldSkipPage := @ShouldSkipInstallTypePage;
 end;

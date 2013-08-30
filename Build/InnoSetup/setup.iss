@@ -9,6 +9,7 @@
 #define MyAppURL "http://bdhero.org/"
 #define MyAppExeName "bdhero-gui.exe"
 
+#define DefaultInstallDir "{localappdata}\" + MyAppName + "\Application"
 #define LogDir "{localappdata}\" + MyAppName + "\Logs"
 #define PluginDir "{app}\Plugins"
 
@@ -45,7 +46,7 @@ WizardSmallImageFile=..\..\Assets\InnoSetup\bdhero_gui_55x58.bmp
 MinVersion=0,5.01sp3
 PrivilegesRequired=lowest
 
-Uninstallable=IsNotPortable
+Uninstallable=not IsPortable
 UninstallDisplayIcon={app}\{#MyAppExeName}
 
 ; "ArchitecturesInstallIn64BitMode=x64" requests that the install be
@@ -57,8 +58,8 @@ ArchitecturesInstallIn64BitMode=x64
 ; installation to run on all architectures (including Itanium,
 ; since it's capable of running 32-bit code too).
 
-;DefaultDirName={code:DefaultInstallDir}
-DefaultDirName={#MyAppName}
+UsePreviousAppDir=yes
+DefaultDirName={#DefaultInstallDir}
 AppendDefaultDirName=no
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
@@ -107,9 +108,9 @@ Type: dirifempty;     Name: "{localappdata}\{#MyAppName}"
 Type: dirifempty;     Name: "{app}"
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Check: IsNotPortable
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; Check: IsNotPortable
-;Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Check: IsNotPortable
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Check: not IsPortable
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; Check: not IsPortable
+;Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Check: not IsPortable
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
@@ -118,29 +119,19 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 ;win_sp_title=Windows %1 Service Pack %2
 
 [Code]
-var bIsAlreadyInstalled : Boolean;
-
-function AlreadyInstalled : boolean;
-begin
-    Result := bIsAlreadyInstalled;
-end;
-
 function NextButtonClick(CurPageID: Integer): boolean;
 begin
 	Result := true;
 
-    if (CurPageID = UsagePage.ID) then
-        begin
-            bIsPortable := not (UsagePage.SelectedValueIndex = 0)
-            WizardForm.DirEdit.Text := DefaultInstallDir()
-        end
+    if (CurPageID = pInstallationTypePage.ID) then
+        RestoreInstallDirAuto()
     else
-        Result := NextButtonClickCheckPrereq(CurPageID);
+        Result := NextButtonClickCheckPrereq(CurPageID)
 end;
 
 function ShouldSkipPage(PageID: Integer): Boolean;
 begin
-    if (PageID = wpSelectDir) and (IsNotPortable()) then
+    if (PageID = wpSelectDir) and (not IsPortable()) and (IsAlreadyInstalled()) then
         Result := true
     else
         Result := false
@@ -155,7 +146,6 @@ end;
 
 procedure InitializeWizard;
 begin
-    bIsAlreadyInstalled := FileExists(WizardForm.DirEdit.Text + '\{#MyAppExeName}');
     InitializeWizardInstallType();
 end;
 
