@@ -158,3 +158,19 @@ begin
 	InitializeSetupDeps();
 	Result := true;
 end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  mRes : integer;
+begin
+  case CurUninstallStep of
+    usUninstall:
+      begin
+        mRes := MsgBox('Keep your preferences?  ' + ConfigDirAuto(''), mbConfirmation, MB_YESNO or MB_DEFBUTTON1)
+        if mRes = IDNO then
+          begin
+            DelTree(ConfigDirAuto(''), True, True, True);
+          end
+      end;
+  end;
+end;
