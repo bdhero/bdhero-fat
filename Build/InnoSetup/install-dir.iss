@@ -23,7 +23,7 @@ end;
 
 function ConfigDirAuto(Param: String): String;
 begin
-    if IsPortable() then
+    if not IsUninstaller() and IsPortable() then
         Result := ExpandConstant('{app}\Config')
     else
         Result := ExpandConstant('{userappdata}\{#MyAppName}\Config')
