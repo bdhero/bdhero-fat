@@ -20,7 +20,7 @@ begin
     ;
 end;
 
-function AutoConfigDirFn(Param: String): String;
+function ConfigDirAuto(Param: String): String;
 begin
     if bIsPortable then
         Result := ExpandConstant('{app}\Config')
