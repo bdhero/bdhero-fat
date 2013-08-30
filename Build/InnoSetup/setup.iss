@@ -31,7 +31,7 @@
 ;#define use_sql2005express
 ;#define use_sql2008express
 
-#define DebugMode
+;#define DebugMode
 
 #define MyAppName "BDHero"
 #define MyAppMachineName "bdhero"
