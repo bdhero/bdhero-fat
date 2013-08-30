@@ -147,16 +147,16 @@ begin
     ;
 end;
 
-procedure InitializeWizard;
-begin
-    bIsAlreadyInstalled := FileExists(WizardForm.DirEdit.Text + '\{#MyAppExeName}');
-    InitializeWizardInstallType();
-end;
-
 function InitializeSetup(): boolean;
 begin
 	InitializeSetupDeps();
 	Result := true;
+end;
+
+procedure InitializeWizard;
+begin
+    bIsAlreadyInstalled := FileExists(WizardForm.DirEdit.Text + '\{#MyAppExeName}');
+    InitializeWizardInstallType();
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
