@@ -31,6 +31,8 @@
 ;#define use_sql2005express
 ;#define use_sql2008express
 
+#define DebugMode
+
 #define MyAppName "BDHero"
 #define MyAppMachineName "bdhero"
 #define MyAppVersion "0.8.2.6"
@@ -40,6 +42,10 @@
 
 #define CodeSigningCertPK GetEnv('CodeSigningCertPK')
 #define CodeSigningCertPW GetEnv('CodeSigningCertPW')
+
+#define InstallerArtifactDir "..\..\Artifacts\Installer"
+#define DeleteFileFlags "uninsrestartdelete ignoreversion"
+#define DeleteDirFlags "uninsrestartdelete ignoreversion createallsubdirs recursesubdirs"
 
 #include "install-dir.iss"
 
@@ -55,19 +61,17 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-;DefaultDirName={code:DefaultInstallDir}
-DefaultDirName={#MyAppName}
-AppendDefaultDirName=no
-DefaultGroupName={#MyAppName}
-DisableWelcomePage=yes
-DisableDirPage=no
-DisableProgramGroupPage=yes
-AllowNoIcons=yes
+
+;SourceDir=..\..\
 OutputDir=..\..\Artifacts
 OutputBaseFilename={#MyAppMachineName}-{#MyAppVersion}-setup
-Compression=lzma/ultra64
-SolidCompression=True
-InternalCompressLevel=ultra
+
+MinVersion=0,5.01sp3
+PrivilegesRequired=lowest
+
+Uninstallable=IsNotPortable
+UninstallDisplayIcon={app}\{#MyAppExeName}
+
 ; "ArchitecturesInstallIn64BitMode=x64" requests that the install be
 ; done in "64-bit mode" on x64, meaning it should use the native
 ; 64-bit Program Files directory and the 64-bit view of the registry.
@@ -76,16 +80,33 @@ ArchitecturesInstallIn64BitMode=x64
 ; Note: We don't set ProcessorsAllowed because we want this
 ; installation to run on all architectures (including Itanium,
 ; since it's capable of running 32-bit code too).
-ShowLanguageDialog=auto
-UninstallDisplayIcon={app}\{#MyAppExeName}
-Uninstallable=IsNotPortable
+
+;DefaultDirName={code:DefaultInstallDir}
+DefaultDirName={#MyAppName}
+AppendDefaultDirName=no
+DefaultGroupName={#MyAppName}
+AllowNoIcons=yes
+
+DisableWelcomePage=yes
+DisableDirPage=no
+DisableProgramGroupPage=yes
 AlwaysShowDirOnReadyPage=yes
-PrivilegesRequired=lowest
-MinVersion=0,5.01sp3
-#if CodeSigningCertPK != ""
-SignTool=Custom sign /v /f {#CodeSigningCertPK} /p {#CodeSigningCertPW} /d $q{#MyAppName} Setup$q /du $q{#MyAppURL}$q /t http://timestamp.comodoca.com/authenticode $f
-SignedUninstaller=True
+AlwaysShowGroupOnReadyPage=no
+
+#ifdef DebugMode
+    Compression=none
+#else
+    Compression=lzma2/ultra64
+    SolidCompression=True
+    InternalCompressLevel=ultra64
+    
+    #if CodeSigningCertPK != ""
+        SignTool=Custom sign /v /f {#CodeSigningCertPK} /p {#CodeSigningCertPW} /d $q{#MyAppName} Setup$q /du $q{#MyAppURL}$q /t http://timestamp.comodoca.com/authenticode $f
+        SignedUninstaller=True
+    #endif
 #endif
+
+ShowLanguageDialog=auto
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
@@ -95,10 +116,10 @@ Name: "de"; MessagesFile: "compiler:Default.isl"
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\..\Artifacts\Installer\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}";                  Flags: uninsrestartdelete ignoreversion
-Source: "..\..\Artifacts\Installer\ProgramFiles\*";              DestDir: "{app}";                  Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
-Source: "..\..\Artifacts\Installer\Plugins\Required\*";          DestDir: "{app}\Plugins\Required"; Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
-Source: "..\..\Artifacts\Installer\Config\*";                    DestDir: "{code:AutoConfigDirFn}"; Flags: uninsrestartdelete ignoreversion createallsubdirs recursesubdirs
+Source: "{#InstallerArtifactDir}\ProgramFiles\bdhero-gui.exe"; DestDir: "{app}";                  Flags: {#DeleteFileFlags}
+Source: "{#InstallerArtifactDir}\ProgramFiles\*";              DestDir: "{app}";                  Flags: {#DeleteDirFlags}
+Source: "{#InstallerArtifactDir}\Plugins\Required\*";          DestDir: "{app}\Plugins\Required"; Flags: {#DeleteDirFlags}
+Source: "{#InstallerArtifactDir}\Config\*";                    DestDir: "{code:AutoConfigDirFn}"; Flags: {#DeleteDirFlags}
 
 [UninstallDelete]
 Type: dirifempty;     Name: "{userappdata}\{#MyAppName}\Config\Application"
@@ -206,6 +227,13 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 win_sp_title=Windows %1 Service Pack %2
 
 [Code]
+var bIsAlreadyInstalled : Boolean;
+
+function AlreadyInstalled : boolean;
+begin
+    Result := bIsAlreadyInstalled;
+end;
+
 function NextButtonClick(CurPageID: Integer): boolean;
 begin
 	Result := true;
@@ -230,6 +258,7 @@ end;
 
 procedure InitializeWizard;
 begin
+    bIsAlreadyInstalled := FileExists(WizardForm.DirEdit.Text + '\{#MyAppExeName}');
     InitializeWizardInstallType();
 end;
 
