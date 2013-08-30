@@ -66,7 +66,7 @@ AppUpdatesURL={#MyAppURL}
 OutputDir=..\..\Artifacts
 OutputBaseFilename={#MyAppMachineName}-{#MyAppVersion}-setup
 
-WizardSmallImageFile=..\..\Assets\Icons\bdhero_gui_55x58.bmp
+WizardSmallImageFile=..\..\Assets\InnoSetup\bdhero_gui_55x58.bmp
 
 MinVersion=0,5.01sp3
 PrivilegesRequired=lowest
