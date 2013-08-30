@@ -147,6 +147,13 @@ end;
 procedure InitializeWizard;
 begin
     InitializeWizardInstallType();
+
+#ifdef DebugMode
+    if IsAlreadyInstalled() then
+        MsgBox('Already installed in "' + WizardForm.DirEdit.Text + '"', mbInformation, MB_OK)
+    else
+        MsgBox('NOT already installed (checked "' + WizardForm.DirEdit.Text + '")', mbInformation, MB_OK)
+#endif
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
