@@ -97,9 +97,10 @@
     <Compile Include="MultiValueDictionary.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FileUtils.cs" />
-    <Compile Include="Net\FileDownloadState.cs" />
+    <Compile Include="Net\FileDownloadProgress.cs" />
     <Compile Include="Net\FileDownloader.cs" />
-    <Compile Include="Net\FileDownloadStateChangedHandler.cs" />
+    <Compile Include="Net\FileDownloadProgressChangedHandler.cs" />
+    <Compile Include="Net\FileDownloadState.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="Extensions\ListViewExtensions.cs" />
     <Compile Include="Net\NetworkStatusMonitor.cs" />

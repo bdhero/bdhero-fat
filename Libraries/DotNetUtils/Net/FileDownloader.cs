@@ -17,6 +17,10 @@ namespace DotNetUtils.Net
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        public FileDownloadState State { get; private set; }
+
+        public Exception Exception { get; private set; }
+
         /// <summary>
         /// URI of the remote Web resource to download.
         /// </summary>
@@ -34,7 +38,7 @@ namespace DotNetUtils.Net
         public event BeforeRequestEventHandler BeforeRequest;
 
         /// <summary>
-        /// Execution context (a.k.a. thread) to invoke <see cref="StateChanged"/> notifications on.
+        /// Execution context (a.k.a. thread) to invoke <see cref="ProgressChanged"/> notifications on.
         /// Defaults to the current thread's context if none is specified.
         /// </summary>
         public TaskScheduler CallbackThread;
@@ -42,7 +46,7 @@ namespace DotNetUtils.Net
         /// <summary>
         /// Invoked on the <c>TaskScheduler</c> specified by <see cref="CallbackThread"/> whenever the state or progress of the download changes.
         /// </summary>
-        public event FileDownloadStateChangedHandler StateChanged;
+        public event FileDownloadProgressChangedHandler ProgressChanged;
 
         private void NotifyBeforeRequest(HttpWebRequest request)
         {
@@ -90,6 +94,11 @@ namespace DotNetUtils.Net
 
                 Tick(fileSize, force: true);
 
+                State = FileDownloadState.Downloading;
+                NotifyProgressChanged(fileSize, response.ContentLength);
+
+                // TODO: Wrap in try/catch and set Exception and State properties
+
                 do
                 {
                     Tick(fileSize);
@@ -100,21 +109,28 @@ namespace DotNetUtils.Net
                     fileStream.Write(buffer, 0, bytesRead);
 
                     if (bytesRead > 0)
-                        NotifyStateChanged(fileSize, response.ContentLength);
+                        NotifyProgressChanged(fileSize, response.ContentLength);
                 } while (bytesRead > 0);
 
                 fileStream.Close();
 
                 if (fileSize != response.ContentLength)
                 {
-                    throw new IOException("Number of bytes received (" + fileSize + ") does not match Content-Length (" + response.ContentLength + ")");
+                    State = FileDownloadState.Error;
+                    Exception = new IOException("Number of bytes received (" + fileSize + ") does not match Content-Length (" + response.ContentLength + ")");
+                    throw Exception;
                 }
 
                 var length = new FileInfo(Path).Length;
                 if (length != response.ContentLength)
                 {
-                    throw new IOException("Number of bytes written to disk (" + length + ") does not match Content-Length (" + response.ContentLength + ")");
+                    State = FileDownloadState.Error;
+                    Exception = new IOException("Number of bytes written to disk (" + length + ") does not match Content-Length (" + response.ContentLength + ")");
+                    throw Exception;
                 }
+
+                State = FileDownloadState.Success;
+                NotifyProgressChanged(fileSize, response.ContentLength);
             }
         }
 
@@ -130,7 +146,7 @@ namespace DotNetUtils.Net
         private DateTime _lastTick;
         private int _lastFileSize;
 
-        private void NotifyStateChanged(int fileSize, long contentLength)
+        private void NotifyProgressChanged(int fileSize, long contentLength)
         {
             var @continue = HasEnoughTimeElapsed || _lastFileSize == 0 || fileSize >= contentLength;
             if (!@continue) return;
@@ -145,18 +161,18 @@ namespace DotNetUtils.Net
                 return;
             }
 
-            var state = new FileDownloadState(fileSize, contentLength, bytesPerSecond * 8);
+            var progress = new FileDownloadProgress(State, fileSize, contentLength, bytesPerSecond * 8);
 
-            Console.WriteLine(state);
+            Console.WriteLine(progress);
 
-            if (StateChanged != null)
+            if (ProgressChanged != null)
             {
                 var thread = CallbackThread
                                 ?? (SynchronizationContext.Current != null
                                   ? TaskScheduler.FromCurrentSynchronizationContext()
                                   : TaskScheduler.Default);
-                Task.Factory.StartNew(() => StateChanged(state), CancellationToken.None, TaskCreationOptions.None, thread);
-                StateChanged(state);
+                Task.Factory.StartNew(() => ProgressChanged(progress), CancellationToken.None, TaskCreationOptions.None, thread);
+                ProgressChanged(progress);
             }
         }
     }
