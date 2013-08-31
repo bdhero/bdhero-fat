@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using DotNetUtils.Annotations;
 using DotNetUtils.Crypto;
 using DotNetUtils.Net;
 using Newtonsoft.Json;
@@ -20,14 +19,81 @@ namespace Updater
         public static UpdaterClient Instance = new UpdaterClient();
 
         private Update _latestUpdate;
+        private string _latestInstallerPath;
 
         private volatile UpdaterClientState _state;
+
+        public Version CurrentVersion;
+
+        public Update LatestUpdate
+        {
+            get
+            {
+                EnsureChecked();
+                return _latestUpdate;
+            }
+        }
+
+        /// <exception cref="InvalidOperationException">Thrown if the caller hasn't checked for updates yet</exception>
+        public bool IsUpdateAvailable
+        {
+            get
+            {
+                EnsureChecked();
+                return _latestUpdate.Version > CurrentVersion;
+            }
+        }
+
+        /// <exception cref="InvalidOperationException">Thrown if the caller hasn't checked for updates yet</exception>
+        public bool ReadyToInstallUpdate
+        {
+            get
+            {
+                EnsureChecked();
+                return _latestInstallerPath != null && File.Exists(_latestInstallerPath);
+            }
+        }
 
         /// <summary>
         /// Invoked just before all HTTP requests are made, allowing observers to modify requests before they are sent.
         ///  This can be useful to override the system's default proxy settings, set custom timeout values, etc.
         /// </summary>
         public event BeforeRequestEventHandler BeforeRequest;
+
+        public void CheckForUpdate(Version currentVersion)
+        {
+            CurrentVersion = currentVersion;
+            GetLatestVersionSync();
+        }
+
+        public void DownloadUpdate()
+        {
+            DownloadUpdateSync(_latestUpdate);
+        }
+
+        /// <summary>
+        /// Downloads the latest update for the current platform synchronously.
+        /// </summary>
+        /// <exception cref="IOException">
+        /// Thrown if a network error occurs or the SHA-1 hash of the downloaded file
+        /// does not match the expected value in the update manifest.
+        /// </exception>
+        public void DownloadUpdateIfAvailableSync(Version currentVersion)
+        {
+            CheckForUpdate(currentVersion);
+            if (IsUpdateAvailable)
+            {
+                DownloadUpdateSync(_latestUpdate);
+            }
+        }
+
+        // TODO: Save state from other methods in this class.
+        // When an update is either found or not, cache the result and save the setup EXE path.
+        // Callers shouldn't have to pass around return values from the other methods.
+        public void InstallUpdate()
+        {
+            Process.Start(_latestInstallerPath, "/VerySilent /CloseApplications /NoIcons");
+        }
 
         private void NotifyBeforeRequest(HttpWebRequest request)
         {
@@ -45,7 +111,16 @@ namespace Updater
                 throw new InvalidOperationException("Already downloading update (paused)");
         }
 
-        public Update GetLatestVersionSync()
+        /// <exception cref="InvalidOperationException">Thrown if the caller hasn't checked for updates yet</exception>
+        private void EnsureChecked()
+        {
+            if (CurrentVersion == null)
+                throw new InvalidOperationException("No current version was specified; unable to tell if there's a new version!");
+            if (_latestUpdate == null)
+                throw new InvalidOperationException("You need to check for updates first!");
+        }
+
+        private void GetLatestVersionSync()
         {
             CheckState();
 
@@ -57,7 +132,6 @@ namespace Updater
                 var response = JsonConvert.DeserializeObject<UpdateResponse>(json);
                 _latestUpdate = Update.FromResponse(response);
                 _state = UpdaterClientState.Ready;
-                return _latestUpdate;
             }
             catch (Exception e)
             {
@@ -70,35 +144,12 @@ namespace Updater
                 HttpRequest.BeforeRequestGlobal -= NotifyBeforeRequest;
             }
         }
-
-        public bool IsUpdateAvailableSync(Version currentVersion)
-        {
-            var update = GetLatestVersionSync();
-            return IsUpdateAvailable(currentVersion, update);
-        }
-
-        private static bool IsUpdateAvailable(Version currentVersion, Update update)
-        {
-            var isUpdateAvailable = update.Version > currentVersion;
-            return isUpdateAvailable;
-        }
-
-        /// <summary>
-        /// Downloads the latest update for the current platform synchronously.
-        /// </summary>
-        /// <returns>Path of the downloaded update file.</returns>
+        
         /// <exception cref="IOException">
         /// Thrown if a network error occurs or the SHA-1 hash of the downloaded file
         /// does not match the expected value in the update manifest.
         /// </exception>
-        [CanBeNull]
-        public string DownloadUpdateSync()
-        {
-            var update = GetLatestVersionSync();
-            return DownloadUpdateSync(update);
-        }
-
-        private string DownloadUpdateSync(Update update)
+        private void DownloadUpdateSync(Update update)
         {
             var path = Path.Combine(Path.GetTempPath(), update.FileName);
 
@@ -109,10 +160,12 @@ namespace Updater
                 };
 
             downloader.BeforeRequest += NotifyBeforeRequest;
-            downloader.StateChanged += DownloaderOnStateChanged;
+            downloader.ProgressChanged += DownloaderOnProgressChanged;
 
             downloader.DownloadSync();
+
             var hash = new SHA1Algorithm().ComputeFile(path);
+
             if (!String.Equals(hash, update.SHA1, StringComparison.OrdinalIgnoreCase))
             {
                 Logger.ErrorFormat(
@@ -120,35 +173,11 @@ namespace Updater
                     path, update.SHA1, hash);
                 throw new IOException("Update file is corrupt or has been tampered with; SHA-1 hash is incorrect");
             }
-            return path;
+
+            _latestInstallerPath = path;
         }
 
-        /// <summary>
-        /// Downloads the latest update for the current platform synchronously
-        /// and returns the path to the downloaded file.
-        /// </summary>
-        /// <returns>Path of the downloaded update file.</returns>
-        /// <exception cref="IOException">
-        /// Thrown if a network error occurs or the SHA-1 hash of the downloaded file
-        /// does not match the expected value in the update manifest.
-        /// </exception>
-        [CanBeNull]
-        public string DownloadUpdateIfAvailableSync(Version currentVersion)
-        {
-            var update = GetLatestVersionSync();
-            return IsUpdateAvailable(currentVersion, update)
-                ? DownloadUpdateSync(update)
-                : null;
-        }
-
-        // TODO: Save state from other methods in this class.
-        // When an update is either found or not, cache the result and save the setup EXE path.
-        // Callers shouldn't have to pass around return values from the other methods.
-        public void InstallUpdate()
-        {
-        }
-
-        private void DownloaderOnStateChanged(FileDownloadState fileDownloadState)
+        private void DownloaderOnProgressChanged(FileDownloadProgress fileDownloadProgress)
         {
         }
     }
