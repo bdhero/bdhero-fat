@@ -89,6 +89,9 @@ ShowLanguageDialog=auto
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Default.isl"
 
+[Messages]
+SetupWindowTitle=Setup - %1 {#MyAppVersion}
+
 [CustomMessages]
 en.InstallationTypeNormal=&Normal - PC Hard Disk (current user only)
 en.InstallationTypeUpgrade=&Upgrade - PC Hard Disk (current user only)
