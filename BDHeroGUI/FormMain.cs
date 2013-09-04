@@ -363,6 +363,9 @@ namespace BDHeroGUI
                                             textItem.Text = message;
                                         });
                                 };
+
+                            token.Register(client.CancelDownload);
+
                             client.DownloadUpdate();
                         })
                     .Fail(delegate(Exception exception)
