@@ -103,7 +103,7 @@ namespace BDHeroGUI
             LogPlugins();
             InitController();
             InitPluginMenu();
-            CheckForUpdates();
+            InstallUpdateOnExit();
 
             EnableControls(true);
             splitContainerTop.Enabled = false;
@@ -311,6 +311,12 @@ namespace BDHeroGUI
 
         #region Updates
 
+        private void InstallUpdateOnExit()
+        {
+            Disposed += (sender, args) => InstallUpdate(true);
+            CheckForUpdates();
+        }
+
         private void CheckForUpdates()
         {
             var textItem = checkForUpdatesToolStripMenuItem;
@@ -398,11 +404,17 @@ namespace BDHeroGUI
 
         private void InstallUpdate()
         {
-            if (!_updater.IsUpdateAvailable || !_updater.IsUpdateReadyToInstall) return;
+            InstallUpdate(false);
+        }
+
+        private void InstallUpdate(bool force)
+        {
+            if (!_updater.HasChecked || !_updater.IsUpdateAvailable || !_updater.IsUpdateReadyToInstall) return;
 
             const string caption = "Application restart required";
             var text = "To install the update, you must first close the application.\n\nClose " + AppUtils.ProductName + " and install update?";
-            if (DialogResult.Yes == MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            var doInstall = force || DialogResult.Yes == MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (doInstall)
             {
                 _updater.InstallUpdate();
             }

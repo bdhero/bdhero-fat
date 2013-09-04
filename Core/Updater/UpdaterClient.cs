@@ -30,6 +30,11 @@ namespace Updater
 
         public Version CurrentVersion;
 
+        public bool HasChecked
+        {
+            get { return CurrentVersion != null && _latestUpdate != null; }
+        }
+
         public Update LatestUpdate
         {
             get
