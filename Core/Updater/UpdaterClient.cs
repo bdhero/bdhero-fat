@@ -50,7 +50,7 @@ namespace Updater
         }
 
         /// <exception cref="InvalidOperationException">Thrown if the caller hasn't checked for updates yet</exception>
-        public bool ReadyToInstallUpdate
+        public bool IsUpdateReadyToInstall
         {
             get
             {
@@ -76,12 +76,43 @@ namespace Updater
             DownloadUpdateSync(_latestUpdate);
         }
 
-        // TODO: Save state from other methods in this class.
-        // When an update is either found or not, cache the result and save the setup EXE path.
-        // Callers shouldn't have to pass around return values from the other methods.
+        // TODO: Move this to WindowsUpdaterClient class and make UpdaterClient an interface, abstract class, or composite class
         public void InstallUpdate()
         {
-            Process.Start(_latestInstallerPath, "/VerySilent /CloseApplications /NoIcons");
+            Logger.Info("Installing update");
+            using (var setup = Process.Start(_latestInstallerPath, "/VerySilent /CloseApplications /NoIcons"))
+            using (var taskkill = CreateTaskKillProcess())
+            {
+                taskkill.Start();
+                Logger.Debug("Waiting for application to exit...");
+            }
+        }
+
+        // TODO: Move this to Windows-specific library
+        private static Process CreateTaskKillProcess()
+        {
+            using (var currentProcess = Process.GetCurrentProcess())
+            {
+                var taskkill = CreateHiddenProcess();
+                taskkill.StartInfo.FileName = "taskkill";
+                taskkill.StartInfo.Arguments = "/PID " + currentProcess.Id + " /F";
+                return taskkill;
+            }
+        }
+
+        private static Process CreateHiddenProcess()
+        {
+            return new Process
+            {
+                StartInfo =
+                {
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                }
+            };
         }
 
         public void CancelDownload()

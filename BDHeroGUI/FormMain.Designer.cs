@@ -621,6 +621,7 @@ namespace BDHeroGUI
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.checkForUpdatesToolStripMenuItem.Text = "Check for &Updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
