@@ -21,6 +21,7 @@ using DotNetUtils.Net;
 using DotNetUtils.TaskUtils;
 using OSUtils.DriveDetector;
 using OSUtils.TaskbarUtils;
+using Updater;
 using WindowsOSUtils.DriveDetector;
 using WindowsOSUtils.TaskbarUtils;
 
@@ -96,6 +97,7 @@ namespace BDHeroGUI
             LogPlugins();
             InitController();
             InitPluginMenu();
+            InitUpdateMenu();
 
             EnableControls(true);
             splitContainerTop.Enabled = false;
@@ -297,6 +299,99 @@ namespace BDHeroGUI
             }
 
             linkLabelNameProviderPreferences.Enabled = EnabledNameProviderPlugins.Any();
+        }
+
+        #endregion
+
+        #region Updates
+
+        private void InitUpdateMenu()
+        {
+            var textItem = checkForUpdatesToolStripMenuItem;
+            textItem.Enabled = false;
+
+            var initialText = textItem.Text;
+
+            var isUpdateAvailable = false;
+//            var currentVersion = AppUtils.AppVersion;
+            var currentVersion = new Version(0, 0, 0, 0);
+            var latestVersion = currentVersion;
+
+            var task =
+                new TaskBuilder()
+                    .OnCurrentThread()
+                    .BeforeStart(delegate(CancellationToken token)
+                        {
+                            var message = "Checking for updates...";
+                            _logger.Info(message);
+                            textItem.Text = message;
+                        })
+                    .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
+                        {
+                            var client = new UpdaterClient();
+
+                            client.CheckForUpdate(currentVersion);
+
+                            isUpdateAvailable = client.IsUpdateAvailable;
+                            latestVersion = client.LatestUpdate.Version;
+
+                            if (!isUpdateAvailable)
+                            {
+                                return;
+                            }
+
+                            invoker.InvokeOnUIThreadSync(delegate
+                                {
+                                    var message = string.Format("Downloading update v{0}...", latestVersion);
+                                    _logger.Info(message);
+                                    textItem.Text = message;
+                                });
+
+                            client.DownloadProgressChanged += delegate(FileDownloadProgress progress)
+                                {
+                                    invoker.InvokeOnUIThreadSync(delegate
+                                        {
+                                            var message =
+                                                string.Format(
+                                                    "Downloading update v{0}: {1:N} of {2:N} bytes downloaded @ {3} ({4:P})...",
+                                                    latestVersion,
+                                                    progress.BytesDownloaded,
+                                                    progress.ContentLength,
+                                                    progress.HumanSpeed,
+                                                    progress.PercentComplete / 100.0);
+                                            _logger.Debug(message);
+                                            textItem.Text = message;
+                                        });
+                                };
+                            client.DownloadUpdate();
+                        })
+                    .Fail(delegate(Exception exception)
+                        {
+                            _logger.Error("Error checking for update", exception);
+                            textItem.Text = "Error: " + exception;
+                        })
+                    .Succeed(delegate
+                        {
+                            if (isUpdateAvailable)
+                            {
+                                var message = "Update is ready to install";
+                                _logger.Info(message);
+                                textItem.Text = message;
+                                textItem.Enabled = true;
+                            }
+                            else
+                            {
+                                var message = string.Format("{0} is up to date", AppUtils.AppName);
+                                _logger.Info(message);
+                                textItem.Text = message;
+                            }
+                        })
+                    .Finally(delegate
+                        {
+                        })
+                    .Build();
+
+            task.Start();
         }
 
         #endregion
