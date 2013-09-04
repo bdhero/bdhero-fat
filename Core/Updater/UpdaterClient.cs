@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using DotNetUtils.Crypto;
 using DotNetUtils.Net;
 using Newtonsoft.Json;
@@ -22,6 +23,10 @@ namespace Updater
         private string _latestInstallerPath;
 
         private volatile UpdaterClientState _state;
+
+        private CancellationTokenSource _cancellationTokenSource;
+
+        public event FileDownloadProgressChangedHandler DownloadProgressChanged;
 
         public Version CurrentVersion;
 
@@ -71,28 +76,18 @@ namespace Updater
             DownloadUpdateSync(_latestUpdate);
         }
 
-        /// <summary>
-        /// Downloads the latest update for the current platform synchronously.
-        /// </summary>
-        /// <exception cref="IOException">
-        /// Thrown if a network error occurs or the SHA-1 hash of the downloaded file
-        /// does not match the expected value in the update manifest.
-        /// </exception>
-        public void DownloadUpdateIfAvailableSync(Version currentVersion)
-        {
-            CheckForUpdate(currentVersion);
-            if (IsUpdateAvailable)
-            {
-                DownloadUpdateSync(_latestUpdate);
-            }
-        }
-
         // TODO: Save state from other methods in this class.
         // When an update is either found or not, cache the result and save the setup EXE path.
         // Callers shouldn't have to pass around return values from the other methods.
         public void InstallUpdate()
         {
             Process.Start(_latestInstallerPath, "/VerySilent /CloseApplications /NoIcons");
+        }
+
+        public void CancelDownload()
+        {
+            if (_cancellationTokenSource != null)
+                _cancellationTokenSource.Cancel();
         }
 
         private void NotifyBeforeRequest(HttpWebRequest request)
@@ -151,18 +146,23 @@ namespace Updater
         /// </exception>
         private void DownloadUpdateSync(Update update)
         {
-            var path = Path.Combine(Path.GetTempPath(), update.FileName);
+            _cancellationTokenSource = new CancellationTokenSource();
 
+            var path = Path.Combine(Path.GetTempPath(), update.FileName);
             var downloader = new FileDownloader
                 {
                     Uri = update.Uri,
-                    Path = path
+                    Path = path,
+                    CancellationToken = _cancellationTokenSource.Token
                 };
 
             downloader.BeforeRequest += NotifyBeforeRequest;
             downloader.ProgressChanged += DownloaderOnProgressChanged;
 
             downloader.DownloadSync();
+
+            if (downloader.State != FileDownloadState.Success)
+                return;
 
             var hash = new SHA1Algorithm().ComputeFile(path);
 
@@ -179,6 +179,8 @@ namespace Updater
 
         private void DownloaderOnProgressChanged(FileDownloadProgress fileDownloadProgress)
         {
+            if (DownloadProgressChanged != null)
+                DownloadProgressChanged(fileDownloadProgress);
         }
     }
 
