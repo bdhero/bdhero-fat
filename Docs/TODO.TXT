@@ -1,9 +1,8 @@
 Chores
 ======
 
-[ ] Remember user's directory selections when switching between Installed and Portable radio buttons
-[ ] Delete {code:AutoConfigDirFn} dirs when uninstalling, not just {userappdata} dirs
-[ ] Update CustomMessages to override title/description to include version number and whether the install is an update or a fresh install
+[ ] Test silent installs and updates
+[ ] Add /portable command line arg
 
 [ ] Convert batch files to MSBuild
 [ ] Centralize BDHero project URLs
@@ -90,6 +89,12 @@ Chris' Plugins
 Complete
 ========
 
+[X] Update CustomMessages to override title/description to include version number and whether the install is an update or a fresh install
+[X] Remember user's directory selections when switching between Installed and Portable radio buttons
+[X] Delete {code:AutoConfigDirFn} dirs when uninstalling, not just {userappdata} dirs
+[X] Prompt user to remove settings/config files when uninstalling
+[X] Custom icon in top right corner
+[X] Don't create start menu entries for portable installs
 [X] Disable Uninstall for portable installations
 [X] Disable "Installation Type" page for upgrades and silent installs
 [X] Hash artifacts
