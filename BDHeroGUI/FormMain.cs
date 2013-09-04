@@ -97,7 +97,7 @@ namespace BDHeroGUI
             LogPlugins();
             InitController();
             InitPluginMenu();
-            InitUpdateMenu();
+            CheckForUpdates();
 
             EnableControls(true);
             splitContainerTop.Enabled = false;
@@ -305,7 +305,7 @@ namespace BDHeroGUI
 
         #region Updates
 
-        private void InitUpdateMenu()
+        private void CheckForUpdates()
         {
             var textItem = checkForUpdatesToolStripMenuItem;
             textItem.Enabled = false;
