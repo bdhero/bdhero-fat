@@ -313,8 +313,8 @@ namespace BDHeroGUI
             var initialText = textItem.Text;
 
             var isUpdateAvailable = false;
-//            var currentVersion = AppUtils.AppVersion;
-            var currentVersion = new Version(0, 0, 0, 0);
+            var currentVersion = AppUtils.AppVersion;
+//            var currentVersion = new Version(0, 0, 0, 0);
             var latestVersion = currentVersion;
 
             var task =
