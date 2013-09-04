@@ -21,6 +21,11 @@
         Paused,
 
         /// <summary>
+        /// Download was canceled by the user.
+        /// </summary>
+        Canceled,
+
+        /// <summary>
         /// An exception occurred while downloading the file.
         /// </summary>
         Error,
