@@ -321,8 +321,7 @@ namespace BDHeroGUI
         {
             var textItem = checkForUpdatesToolStripMenuItem;
 
-//            var currentVersion = AppUtils.AppVersion;
-            var currentVersion = new Version();
+            var currentVersion = AppUtils.AppVersion;
 
             var task =
                 new TaskBuilder()
