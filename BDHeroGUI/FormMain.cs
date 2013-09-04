@@ -314,7 +314,6 @@ namespace BDHeroGUI
 
             var isUpdateAvailable = false;
             var currentVersion = AppUtils.AppVersion;
-//            var currentVersion = new Version(0, 0, 0, 0);
             var latestVersion = currentVersion;
 
             var task =
