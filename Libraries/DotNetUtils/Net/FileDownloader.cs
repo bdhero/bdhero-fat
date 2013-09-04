@@ -43,6 +43,8 @@ namespace DotNetUtils.Net
         /// </summary>
         public TaskScheduler CallbackThread;
 
+        public CancellationToken CancellationToken;
+
         /// <summary>
         /// Invoked on the <c>TaskScheduler</c> specified by <see cref="CallbackThread"/> whenever the state or progress of the download changes.
         /// </summary>
@@ -102,6 +104,13 @@ namespace DotNetUtils.Net
                 do
                 {
                     Tick(fileSize);
+
+                    if (CancellationToken.IsCancellationRequested)
+                    {
+                        State = FileDownloadState.Canceled;
+                        NotifyProgressChanged(fileSize, response.ContentLength);
+                        return;
+                    }
 
                     bytesRead = responseStream.Read(buffer, 0, bufferSize);
                     fileSize += bytesRead;
