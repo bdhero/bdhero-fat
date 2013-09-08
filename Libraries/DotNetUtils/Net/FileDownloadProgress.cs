@@ -43,6 +43,14 @@
         public readonly bool IsComplete;
 
         /// <summary>
+        /// Initializes a new <c>FileDownloadProgress</c> object in the <see cref="FileDownloadState.Ready"/> state
+        /// with all other values initialized to zero (<c>0</c>).
+        /// </summary>
+        public FileDownloadProgress() : this(FileDownloadState.Ready, 0, 0, 0)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new <c>FileDownloadProgress</c> object with the given values.
         /// </summary>
         /// <param name="state"></param>
