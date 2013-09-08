@@ -85,7 +85,7 @@ namespace Updater
         public void InstallUpdate()
         {
             Logger.Info("Installing update");
-            using (var setup = Process.Start(_latestInstallerPath, "/VerySilent /CloseApplications /NoIcons"))
+            using (var setup = Process.Start(_latestInstallerPath, "/VerySilent /CloseApplications"))
             using (var taskkill = CreateTaskKillProcess())
             {
                 taskkill.Start();
