@@ -17,7 +17,7 @@ namespace Updater
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static UpdaterClient Instance = new UpdaterClient();
+        public static readonly UpdaterClient Instance = new UpdaterClient();
 
         private Update _latestUpdate;
         private string _latestInstallerPath;
