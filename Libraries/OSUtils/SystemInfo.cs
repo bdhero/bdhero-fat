@@ -66,14 +66,14 @@ namespace OSUtils
 
         // From Managed.Windows.Forms/XplatUI
         [DllImport("libc")]
-        static extern int uname(IntPtr buf);
+        private static extern int uname(IntPtr buf);
 
         /// <summary>
         /// On Unix-like systems, invokes <c>uname</c> using native interop to detect the operating system.
         /// </summary>
         /// <returns>The specific type of *Nix OS the application is running in</returns>
         /// <seealso cref="https://github.com/jpobst/Pinta/blob/master/Pinta.Core/Managers/SystemManager.cs"/>
-        static OSType GetNixOSType()
+        private static OSType GetNixOSType()
         {
             IntPtr buf = IntPtr.Zero;
             try
