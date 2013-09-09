@@ -4,20 +4,20 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using DotNetUtils.Crypto;
 using DotNetUtils.Net;
 using Newtonsoft.Json;
+using OSUtils;
+using log4net;
 
 namespace Updater
 {
     public class UpdaterClient
     {
-        private static readonly log4net.ILog Logger =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        public static readonly UpdaterClient Instance = new UpdaterClient();
+        private readonly ILog _logger;
 
         private Update _latestUpdate;
         private string _latestInstallerPath;
@@ -29,6 +29,13 @@ namespace Updater
         public event FileDownloadProgressChangedHandler DownloadProgressChanged;
 
         public Version CurrentVersion;
+
+        public bool IsPortable = true;
+
+        public UpdaterClient(ILog logger)
+        {
+            _logger = logger;
+        }
 
         public bool HasChecked
         {
@@ -84,10 +91,10 @@ namespace Updater
         // TODO: Move this to WindowsUpdaterClient class and make UpdaterClient an interface, abstract class, or composite class
         public void InstallUpdate()
         {
-            Logger.Info("Installing update");
+            _logger.Info("Installing update");
             using (var setup = Process.Start(_latestInstallerPath, "/VerySilent /CloseApplications"))
             {
-                Logger.Debug("Waiting for application to exit...");
+                _logger.Debug("Waiting for application to exit...");
             }
         }
 
@@ -159,13 +166,13 @@ namespace Updater
                 HttpRequest.BeforeRequestGlobal += NotifyBeforeRequest;
                 var json = HttpRequest.Get("http://update.bdhero.org/update.json");
                 var response = JsonConvert.DeserializeObject<UpdateResponse>(json);
-                _latestUpdate = Update.FromResponse(response);
+                _latestUpdate = FromResponse(response);
                 _state = UpdaterClientState.Ready;
             }
             catch (Exception e)
             {
                 _state = UpdaterClientState.Error;
-                Logger.Error("Error occurred while checking for application update", e);
+                _logger.Error("Error occurred while checking for application update", e);
                 throw;
             }
             finally
@@ -173,7 +180,36 @@ namespace Updater
                 HttpRequest.BeforeRequestGlobal -= NotifyBeforeRequest;
             }
         }
-        
+
+        private Update FromResponse(UpdateResponse response)
+        {
+            var mirror = response.Mirrors.First();
+            var platform = GetPlatform(response);
+            var package = GetPackage(platform);
+
+            var version = response.Version;
+            var filename = package.FileName;
+            var uri = mirror + filename;
+
+            return new Update(version, filename, uri, package.SHA1, package.Size);
+        }
+
+        private static Platform GetPlatform(UpdateResponse response)
+        {
+            var platforms = response.Platforms;
+            var osType = SystemInfo.Instance.OS.Type;
+            if (OSType.Mac == osType)
+                return platforms.Mac;
+            if (OSType.Linux == osType)
+                return platforms.Linux;
+            return platforms.Windows;
+        }
+
+        private Package GetPackage(Platform platform)
+        {
+            return IsPortable ? platform.Packages.Zip : platform.Packages.Setup;
+        }
+
         /// <exception cref="IOException">
         /// Thrown if a network error occurs or the SHA-1 hash of the downloaded file
         /// does not match the expected value in the update manifest.
@@ -202,7 +238,7 @@ namespace Updater
 
             if (!String.Equals(hash, update.SHA1, StringComparison.OrdinalIgnoreCase))
             {
-                Logger.ErrorFormat(
+                _logger.ErrorFormat(
                     "Unable to verify integrity of \"{0}\" via SHA-1 hash: expected {1}, but found {2}",
                     path, update.SHA1, hash);
                 throw new IOException("Update file is corrupt or has been tampered with; SHA-1 hash is incorrect");

@@ -62,6 +62,10 @@
       <Project>{B95F9FD4-F2BB-44C8-9A3A-F2210670A51C}</Project>
       <Name>DotNetUtils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\OSUtils\OSUtils.csproj">
+      <Project>{EE69E896-8779-4E3D-A033-75A96F28DE2F}</Project>
+      <Name>OSUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

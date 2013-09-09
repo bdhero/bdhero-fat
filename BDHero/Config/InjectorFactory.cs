@@ -5,7 +5,10 @@ using System.Text;
 using BDHero.Plugin;
 using BDHero.Startup;
 using Ninject;
+using Ninject.Activation;
 using Ninject.Modules;
+using Updater;
+using log4net;
 
 namespace BDHero.Config
 {
@@ -34,6 +37,13 @@ namespace BDHero.Config
             Bind<LogInitializer>().ToSelf().InSingletonScope();
             Bind<PluginService>().ToSelf().InSingletonScope();
             Bind<PluginLoader>().ToSelf().InSingletonScope();
+            Bind<UpdaterClient>().ToSelf().InSingletonScope();
+            Bind<ILog>().ToMethod(CreateLogger);
+        }
+
+        private static ILog CreateLogger(IContext context)
+        {
+            return LogManager.GetLogger(context.Request.Target.Type);
         }
 
         private void BindMainDependencies()

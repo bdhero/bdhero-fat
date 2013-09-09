@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using BDHero.Startup;
 using NUnit.Framework;
+using Ninject;
+using Ninject.Activation;
+using Ninject.Modules;
 using Updater;
+using log4net;
 
 namespace UpdaterTests
 {
     [TestFixture]
     public class UpdaterTest
     {
+        private readonly IKernel _kernel = TestInjectorFactory.CreateContainer();
+
         private UpdaterClient _client;
 
         [SetUp]
         public void SetUpClient()
         {
-            _client = new UpdaterClient();
+            _client = _kernel.Get<UpdaterClient>();
+            _client.IsPortable = false;
             _client.BeforeRequest += ClientOnBeforeRequest;
         }
 
@@ -60,5 +68,35 @@ namespace UpdaterTests
         }
 
         // TODO: Test exception throwing
+    }
+
+    static class TestInjectorFactory
+    {
+        public static IKernel CreateContainer()
+        {
+            return new StandardKernel(new TestModule());
+        }
+    }
+
+    /// <summary>
+    /// Module used by unit tests.
+    /// </summary>
+    class TestModule : NinjectModule
+    {
+        public override void Load()
+        {
+            BindStartupDependencies();
+        }
+
+        private void BindStartupDependencies()
+        {
+            Bind<IDirectoryLocator>().To<DirectoryLocator>();
+            Bind<ILog>().ToMethod(CreateLogger);
+        }
+
+        private static ILog CreateLogger(IContext context)
+        {
+            return LogManager.GetLogger(context.Request.Target.Type);
+        }
     }
 }

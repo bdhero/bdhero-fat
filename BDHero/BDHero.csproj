@@ -91,6 +91,10 @@
     <Compile Include="Utils\BDFileUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Updater\Updater.csproj">
+      <Project>{F39EA837-99DD-4453-AA1A-DE408D47A0A6}</Project>
+      <Name>Updater</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Libraries\BDInfo\BDInfo.csproj">
       <Project>{DFF91717-C9EF-4881-9827-81D25F9A71A3}</Project>
       <Name>BDInfo</Name>

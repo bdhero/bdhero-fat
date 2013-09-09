@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL" />
     <Reference Include="Ninject">
       <HintPath>..\..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
@@ -53,6 +54,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BDHero\BDHero.csproj">
+      <Project>{8DB79B29-2598-40EC-B57B-C8FCE7DA0F19}</Project>
+      <Name>BDHero</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Updater\Updater.csproj">
       <Project>{F39EA837-99DD-4453-AA1A-DE408D47A0A6}</Project>
       <Name>Updater</Name>

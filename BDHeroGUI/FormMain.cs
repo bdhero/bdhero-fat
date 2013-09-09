@@ -39,7 +39,7 @@ namespace BDHeroGUI
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
 
-        private readonly UpdaterClient _updater = UpdaterClient.Instance;
+        private readonly UpdaterClient _updater;
         private readonly UpdateHelper _updateHelper;
 
         private readonly ToolTip _progressBarToolTip;
@@ -64,16 +64,17 @@ namespace BDHeroGUI
 
         #region Constructor and OnLoad
 
-        public FormMain(IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller)
+        public FormMain(log4net.ILog logger, IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller, UpdaterClient updater)
         {
             InitializeComponent();
 
             Load += OnLoad;
 
-            _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _logger = logger;
             _directoryLocator = directoryLocator;
             _pluginLoader = pluginLoader;
             _controller = controller;
+            _updater = updater;
 
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
@@ -91,6 +92,8 @@ namespace BDHeroGUI
 
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
             mediaPanel.Search = ShowMetadataSearchWindow;
+
+            _updater.IsPortable = _directoryLocator.IsPortable;
 
             var updateObserver = new FormMainUpdateObserver(this, checkForUpdatesToolStripMenuItem, null);
             updateObserver.BeforeInstallUpdate += update => DisableUpdates();

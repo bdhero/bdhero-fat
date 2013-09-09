@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Updater
 {
@@ -18,19 +17,6 @@ namespace Updater
             Uri = uri;
             SHA1 = sha1;
             Size = size;
-        }
-
-        public static Update FromResponse(UpdateResponse response)
-        {
-            var mirror = response.Mirrors.First();
-            var platform = response.Platforms.Windows;
-            var package = platform.Packages.Setup;
-
-            var version = response.Version;
-            var filename = package.FileName;
-            var uri = mirror + filename;
-
-            return new Update(version, filename, uri, package.SHA1, package.Size);
         }
     }
 }
