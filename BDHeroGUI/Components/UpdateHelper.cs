@@ -42,13 +42,13 @@ namespace BDHeroGUI.Components
 
         public void OnBeforeCheckForUpdate()
         {
-            _menuItem.Text = "Checking for updates...";
+            _menuItem.Text = "Checking for Updates...";
             _menuItem.Enabled = false;
         }
 
         public void OnBeforeDownloadUpdate(Update update)
         {
-            _menuItem.Text = string.Format("Downloading version {0}...", update.Version);
+            _menuItem.Text = string.Format("Downloading Version {0}...", update.Version);
             _menuItem.Enabled = false;
         }
 
@@ -56,7 +56,7 @@ namespace BDHeroGUI.Components
         {
             _menuItem.Text =
                 string.Format(
-                    "Downloading update: {0:P}...",
+                    "Downloading Update: {0:P}...",
                     progress.PercentComplete / 100.0);
         }
 
@@ -68,13 +68,13 @@ namespace BDHeroGUI.Components
 
         public void OnUpdateReadyToInstall(Update update)
         {
-            _menuItem.Text = string.Format("Install version {0}", update.Version);
+            _menuItem.Text = string.Format("Install Version {0}", update.Version);
             _menuItem.Enabled = true;
         }
 
         public void OnNoUpdateAvailable()
         {
-            _menuItem.Text = string.Format("Already up to date");
+            _menuItem.Text = string.Format("No Updates Available");
             _menuItem.Enabled = true;
         }
 
@@ -92,7 +92,7 @@ namespace BDHeroGUI.Components
 
         public void OnBeforeInstallUpdate(Update update)
         {
-            _menuItem.Text = string.Format("Installing version {0}...", update.Version);
+            _menuItem.Text = string.Format("Installing Version {0}...", update.Version);
             _menuItem.Enabled = false;
 
             if (BeforeInstallUpdate != null)
