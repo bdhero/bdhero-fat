@@ -13,12 +13,14 @@ using BDHero.Plugin;
 using BDHero.Startup;
 using BDHero.Utils;
 using BDHeroGUI.Annotations;
+using BDHeroGUI.Components;
 using BDHeroGUI.Forms;
 using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
 using DotNetUtils.Net;
 using DotNetUtils.TaskUtils;
+using Microsoft.Win32;
 using OSUtils.DriveDetector;
 using OSUtils.TaskbarUtils;
 using Updater;
@@ -37,7 +39,8 @@ namespace BDHeroGUI
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
 
-        private readonly UpdaterClient _updater = new UpdaterClient();
+        private readonly UpdaterClient _updater = UpdaterClient.Instance;
+        private readonly UpdateHelper _updateHelper;
 
         private readonly ToolTip _progressBarToolTip;
         private readonly ITaskbarItem _taskbarItem;
@@ -49,8 +52,6 @@ namespace BDHeroGUI
         private CancellationTokenSource _cancellationTokenSource;
 
         private ProgressProviderState _state = ProgressProviderState.Ready;
-
-        private Action _checkForUpdatesMenuItemAction;
 
         #region Properties
 
@@ -74,8 +75,6 @@ namespace BDHeroGUI
             _pluginLoader = pluginLoader;
             _controller = controller;
 
-            _checkForUpdatesMenuItemAction = CheckForUpdates;
-
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
 
@@ -92,6 +91,20 @@ namespace BDHeroGUI
 
             mediaPanel.SelectedMediaChanged += MediaPanelOnSelectedMediaChanged;
             mediaPanel.Search = ShowMetadataSearchWindow;
+
+            var updateObserver = new FormMainUpdateObserver(this, checkForUpdatesToolStripMenuItem, null);
+            updateObserver.BeforeInstallUpdate += update => DisableUpdates();
+            var currentVersion = AppUtils.AppVersion;
+            _updateHelper = new UpdateHelper(_updater, currentVersion);
+            _updateHelper.RegisterObserver(updateObserver);
+
+            SystemEvents.SessionEnded += (sender, args) => DisableUpdates();
+        }
+
+        private void DisableUpdates()
+        {
+            _updateHelper.AllowInstallUpdate = false;
+            _updater.CancelDownload();
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
@@ -103,7 +116,7 @@ namespace BDHeroGUI
             LogPlugins();
             InitController();
             InitPluginMenu();
-            InstallUpdateOnExit();
+            InitUpdateCheck();
 
             EnableControls(true);
             splitContainerTop.Enabled = false;
@@ -311,112 +324,15 @@ namespace BDHeroGUI
 
         #region Updates
 
-        private void InstallUpdateOnExit()
+        private void InitUpdateCheck()
         {
-            Disposed += (sender, args) => InstallUpdate(true);
-            CheckForUpdates();
+            Disposed += (sender, args) => InstallUpdateIfAvailable(true);
+            _updateHelper.CheckForUpdates();
         }
 
-        private void CheckForUpdates()
+        private void InstallUpdateIfAvailable(bool silent)
         {
-            var textItem = checkForUpdatesToolStripMenuItem;
-
-            var currentVersion = AppUtils.AppVersion;
-
-            var task =
-                new TaskBuilder()
-                    .OnCurrentThread()
-                    .BeforeStart(delegate(CancellationToken token)
-                        {
-                            var message = "Checking for updates...";
-                            _logger.Info(message);
-                            textItem.Text = message;
-                            textItem.Enabled = false;
-                            _checkForUpdatesMenuItemAction = null;
-                        })
-                    .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
-                        {
-                            _updater.CheckForUpdate(currentVersion);
-
-                            if (!_updater.IsUpdateAvailable)
-                            {
-                                return;
-                            }
-
-                            invoker.InvokeOnUIThreadSync(delegate
-                                {
-                                    var message = string.Format("Downloading version {0}...", _updater.LatestUpdate.Version);
-                                    _logger.Info(message);
-                                    textItem.Text = message;
-                                });
-
-                            _updater.DownloadProgressChanged += delegate(FileDownloadProgress progress)
-                                {
-                                    invoker.InvokeOnUIThreadSync(delegate
-                                        {
-                                            var message =
-                                                string.Format(
-                                                    "Downloading version {0}: {1:P} of {2} @ {3}...",
-                                                    _updater.LatestUpdate.Version,
-                                                    progress.PercentComplete / 100.0,
-                                                    FileUtils.HumanFriendlyFileSize(progress.ContentLength),
-                                                    progress.HumanSpeed);
-                                            _logger.Debug(message);
-                                            textItem.Text = message;
-                                        });
-                                };
-
-                            token.Register(_updater.CancelDownload);
-
-                            _updater.DownloadUpdate();
-                        })
-                    .Fail(delegate(Exception exception)
-                        {
-                            _logger.Error("Error checking for update", exception);
-                            textItem.Text = "Error: " + exception;
-                        })
-                    .Succeed(delegate
-                        {
-                            if (_updater.IsUpdateAvailable)
-                            {
-                                var message = "Update is ready to install";
-                                _logger.Info(message);
-                                textItem.Text = message;
-                                _checkForUpdatesMenuItemAction = InstallUpdate;
-                            }
-                            else
-                            {
-                                var message = string.Format("{0} is up to date", AppUtils.AppName);
-                                _logger.Info(message);
-                                textItem.Text = message;
-                                _checkForUpdatesMenuItemAction = CheckForUpdates;
-                            }
-                        })
-                    .Finally(delegate
-                        {
-                            textItem.Enabled = true;
-                        })
-                    .Build();
-
-            task.Start();
-        }
-
-        private void InstallUpdate()
-        {
-            InstallUpdate(false);
-        }
-
-        private void InstallUpdate(bool force)
-        {
-            if (!_updater.HasChecked || !_updater.IsUpdateAvailable || !_updater.IsUpdateReadyToInstall) return;
-
-            const string caption = "Application restart required";
-            var text = "To install the update, you must first close the application.\n\nClose " + AppUtils.ProductName + " and install update?";
-            var doInstall = force || DialogResult.Yes == MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (doInstall)
-            {
-                _updater.InstallUpdate();
-            }
+            _updateHelper.InstallUpdateIfAvailable(silent);
         }
 
         #endregion
@@ -931,10 +847,7 @@ namespace BDHeroGUI
 
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_checkForUpdatesMenuItemAction != null)
-            {
-                _checkForUpdatesMenuItemAction();
-            }
+            _updateHelper.CheckForUpdates();
         }
 
         private void aboutBDHeroToolStripMenuItem_Click(object sender, EventArgs e)
