@@ -4,45 +4,65 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using DotNetUtils;
+using DotNetUtils.Annotations;
 
-namespace BDHeroGUI
+namespace OSUtils
 {
+// ReSharper disable MemberCanBePrivate.Global
     public class SystemInfo
     {
         public static readonly SystemInfo Instance = new SystemInfo();
 
+        /// <summary>
+        /// Gets information about the operating system.
+        /// </summary>
+        [UsedImplicitly]
         public readonly OS OS;
 
-        public readonly Version OSVersionNumber;
+        /// <summary>
+        /// Gets the width of memory addresses in bits (e.g., 32, 64).
+        /// </summary>
+        [UsedImplicitly]
+        public readonly int MemoryWidth;
 
-        public readonly string OSVersionString;
-
-        public readonly bool Is64BitOS;
-
+        /// <summary>
+        /// Gets whether the current process is using 64-bit instructions and memory addresses.
+        /// </summary>
+        [UsedImplicitly]
         public readonly bool Is64BitProcess;
 
+        /// <summary>
+        /// Gets the number of logical processors on the CPU.  On Intel processors with hyperthreading,
+        /// this value will be the number of cores multiplied by 2 (e.g., a quad core Intel Core i7
+        /// would return 8).
+        /// </summary>
+        [UsedImplicitly]
         public readonly int ProcessorCount;
 
         private SystemInfo()
         {
-            var os = Environment.OSVersion;
             OS = GetOS();
-            OSVersionNumber = os.Version;
-            OSVersionString = os.VersionString;
-            Is64BitOS = Environment.Is64BitOperatingSystem;
+            MemoryWidth = IntPtr.Size * 8;
             Is64BitProcess = Environment.Is64BitProcess;
             ProcessorCount = Environment.ProcessorCount;
         }
 
         private static OS GetOS()
         {
+            var os = Environment.OSVersion;
+            return new OS(GetOSType(), os.Version, os.VersionString, Environment.Is64BitOperatingSystem);
+        }
+
+        private static OSType GetOSType()
+        {
             var id = Environment.OSVersion.Platform;
             var p = (int)id;
             if (PlatformID.Win32NT == id)
-                return OS.Windows;
+                return OSType.Windows;
             if ((p == 4) || (p == 6) || (p == 128))
-                return GetNixOS();
-            return OS.Other;
+                return GetNixOSType();
+            return OSType.Other;
         }
 
         // From Managed.Windows.Forms/XplatUI
@@ -54,7 +74,7 @@ namespace BDHeroGUI
         /// </summary>
         /// <returns>The specific type of *Nix OS the application is running in</returns>
         /// <seealso cref="https://github.com/jpobst/Pinta/blob/master/Pinta.Core/Managers/SystemManager.cs"/>
-        static OS GetNixOS()
+        static OSType GetNixOSType()
         {
             IntPtr buf = IntPtr.Zero;
             try
@@ -65,9 +85,9 @@ namespace BDHeroGUI
                 {
                     var os = Marshal.PtrToStringAnsi(buf);
                     if (os == "Darwin")
-                        return OS.Mac;
+                        return OSType.Mac;
                     if (os == "Linux")
-                        return OS.Linux;
+                        return OSType.Linux;
                 }
             }
             catch
@@ -78,42 +98,13 @@ namespace BDHeroGUI
                 if (buf != IntPtr.Zero)
                     Marshal.FreeHGlobal(buf);
             }
-            return OS.Unix;
+            return OSType.Unix;
         }
 
         public override string ToString()
         {
-            var fields = typeof(SystemInfo).GetFields(BindingFlags.Instance | BindingFlags.Public);
-            return string.Join(Environment.NewLine,
-                               fields.Select(info => string.Format("{0}: {1}", info.Name, info.GetValue(this))));
+            return ReflectionUtils.ToString(this);
         }
     }
-
-    public enum OS
-    {
-        /// <summary>
-        /// Any version of Windows supported by .NET 4.0, from Windows XP to Windows 8.1 and beyond.
-        /// </summary>
-        Windows,
-
-        /// <summary>
-        /// Any version of Mac OS (a.k.a. Darwin) supported by Mono 3.2.
-        /// </summary>
-        Mac,
-
-        /// <summary>
-        /// Any version of Linux supported by Mono 3.2.
-        /// </summary>
-        Linux,
-
-        /// <summary>
-        /// Any version of UNIX (other than Linux or Mac) supported by Mono 3.2.
-        /// </summary>
-        Unix,
-
-        /// <summary>
-        /// Any other operating system not specified in this enum.
-        /// </summary>
-        Other
-    }
+// ReSharper restore MemberCanBePrivate.Global
 }
