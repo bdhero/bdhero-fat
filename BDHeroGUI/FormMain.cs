@@ -822,22 +822,22 @@ namespace BDHeroGUI
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FileUtils.OpenUrl(AppUtils.ProjectHomepage);
+            FileUtils.OpenUrl(AppConstants.ProjectHomepage);
         }
 
         private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FileUtils.OpenUrl(AppUtils.DocumentationUrl);
+            FileUtils.OpenUrl(AppConstants.DocumentationUrl);
         }
 
         private void submitABugReportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FileUtils.OpenUrl(AppUtils.BugReportUrl);
+            FileUtils.OpenUrl(AppConstants.BugReportUrl);
         }
 
         private void suggestAFeatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FileUtils.OpenUrl(AppUtils.SuggestFeatureUrl);
+            FileUtils.OpenUrl(AppConstants.SuggestFeatureUrl);
         }
 
         private void showLogFileInWindowsExplorerToolStripMenuItem_Click(object sender, EventArgs e)

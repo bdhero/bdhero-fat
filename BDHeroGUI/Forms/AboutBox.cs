@@ -21,12 +21,12 @@ namespace BDHeroGUI.Forms
             this.labelBuildDate.Text = String.Format("Built on {0}", AppUtils.BuildDate);
             this.labelCopyright.Text = AppUtils.Copyright;
             this.textBoxSystemInfo.Text = string.Format("{0} {1}{2}{3}", AppUtils.AppName, AppUtils.AppVersion, Environment.NewLine, SystemInfo.Instance);
-            new ToolTip().SetToolTip(linkLabelSourceCode, AppUtils.SourceCodeUrl);
+            new ToolTip().SetToolTip(linkLabelSourceCode, AppConstants.SourceCodeUrl);
         }
 
         private void linkLabelSourceCode_Click(object sender, EventArgs e)
         {
-            FileUtils.OpenUrl(AppUtils.SourceCodeUrl);
+            FileUtils.OpenUrl(AppConstants.SourceCodeUrl);
         }
     }
 }

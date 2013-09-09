@@ -87,7 +87,7 @@
     <Compile Include="Startup\IDirectoryLocator.cs" />
     <Compile Include="Startup\LogInitializer.cs" />
     <Compile Include="Startup\PluginLoader.cs" />
-    <Compile Include="Utils\AppUtils.cs" />
+    <Compile Include="Utils\AppConstants.cs" />
     <Compile Include="Utils\BDFileUtils.cs" />
   </ItemGroup>
   <ItemGroup>

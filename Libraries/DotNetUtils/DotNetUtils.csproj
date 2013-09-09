@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppUtils.cs" />
     <Compile Include="AssemblyUtils.cs" />
     <Compile Include="Controls\FileTextBox.cs">
       <SubType>UserControl</SubType>
