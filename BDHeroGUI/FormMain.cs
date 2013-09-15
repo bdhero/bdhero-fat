@@ -362,7 +362,7 @@ namespace BDHeroGUI
 
         private void InitDriveDetector()
         {
-            _driveDetector = new DriveDetector(this);
+            _driveDetector = new WindowsDriveDetector();
 
             // TODO: Handle exceptions
             _driveDetector.DeviceArrived += DriveDetectorOnDeviceArrived;

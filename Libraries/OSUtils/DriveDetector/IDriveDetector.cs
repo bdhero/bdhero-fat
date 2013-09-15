@@ -7,53 +7,23 @@ using System.Windows.Forms;
 
 namespace OSUtils.DriveDetector
 {
+    /// <summary>
+    ///     Detects the insertion or removal of a removable logical volume (e.g., USB flash drive, external HDD, CD, DVD, Blu-ray Disc).
+    /// </summary>
+    /// <remarks>
+    ///     Based on the CodeProject article "<a href="http://www.codeproject.com/Articles/18062/Detecting-USB-Drive-Removal-in-a-C-Program">Detecting USB Drive Removal in a C# Program</a>".
+    /// </remarks>
     public interface IDriveDetector
     {
         /// <summary>
-        /// Events signalized to the client app.
-        /// Add handlers for these events in your form to be notified of removable device events 
+        /// Triggered whenever a removable drive of any type (USB flash, external HDD, CD, DVD, Blu-ray) is plugged in.
         /// </summary>
         event DriveDetectorEventHandler DeviceArrived;
 
+        /// <summary>
+        /// Triggered <strong>after</strong> a removable drive of any type (USB flash, external HDD, CD, DVD, Blu-ray) is removed.
+        /// </summary>
         event DriveDetectorEventHandler DeviceRemoved;
-        event DriveDetectorEventHandler QueryRemove;
-
-        /// <summary>
-        /// Gets the value indicating whether the query remove event will be fired.
-        /// </summary>
-        bool IsQueryHooked { get; }
-
-        /// <summary>
-        /// Gets letter of drive which is currently hooked. Empty string if none.
-        /// See also IsQueryHooked.
-        /// </summary>
-        string HookedDrive { get; }
-
-        /// <summary>
-        /// Gets the file stream for file which this class opened on a drive to be notified
-        /// about it's removal. 
-        /// This will be null unless you specified a file to open (DriveDetector opens root directory of the flash drive) 
-        /// </summary>
-        FileStream OpenedFile { get; }
-
-        /// <summary>
-        /// Hooks specified drive to receive a message when it is being removed.  
-        /// This can be achieved also by setting e.HookQueryRemove to true in your 
-        /// DeviceArrived event handler. 
-        /// By default DriveDetector will open the root directory of the flash drive to obtain notification handle
-        /// from Windows (to learn when the drive is about to be removed). 
-        /// </summary>
-        /// <param name="fileOnDrive">Drive letter or relative path to a file on the drive which should be 
-        /// used to get a handle - required for registering to receive query remove messages.
-        /// If only drive letter is specified (e.g. "D:\\", root directory of the drive will be opened.</param>
-        /// <returns>true if hooked ok, false otherwise</returns>
-        bool EnableQueryRemove(string fileOnDrive);
-
-        /// <summary>
-        /// Unhooks any currently hooked drive so that the query remove 
-        /// message is not generated for it.
-        /// </summary>
-        void DisableQueryRemove();
 
         /// <summary>
         /// Message handler which must be called from client form.
