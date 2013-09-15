@@ -35,11 +35,6 @@ OPTIONS:
     -p, --print
         Print the current BDHero version number to stdout and exit.
 
-    --hash=FILE1[,FILE2[,FILE3[,...]]
-        Generates MD5, SHA-1, and SHA-256 hashes of the given comma-
-        separated list of files and prints them to stdout in JSON format
-        along with their names and file sizes.
-
     --id, --version-id
         Print the current BDHero version number ID to stdout and exit.
         The version ID is a signed integer representation of the version
