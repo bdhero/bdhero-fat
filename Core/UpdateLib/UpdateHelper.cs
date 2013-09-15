@@ -18,7 +18,7 @@ namespace UpdateLib
         private readonly ISet<IUpdateObserver> _observerSet = new HashSet<IUpdateObserver>();
         private readonly IList<IUpdateObserver> _observerList = new List<IUpdateObserver>();
 
-        private readonly UpdaterClient _updater;
+        private readonly Updater _updater;
         private readonly Version _currentVersion;
 
         private UpdateButtonClickEventHandler _updatesButtonClickAction;
@@ -35,7 +35,7 @@ namespace UpdateLib
             get { return !_observerList.Any() || _observerList.Last().ShouldInstallUpdate(_updater.LatestUpdate); }
         }
 
-        public UpdateHelper(UpdaterClient updater, Version currentVersion)
+        public UpdateHelper(Updater updater, Version currentVersion)
         {
             _updater = updater;
             _currentVersion = currentVersion;

@@ -53,7 +53,7 @@
     <Compile Include="Update.cs" />
     <Compile Include="UpdateHelper.cs" />
     <Compile Include="UpdateResponse.cs" />
-    <Compile Include="UpdaterClient.cs" />
+    <Compile Include="Updater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

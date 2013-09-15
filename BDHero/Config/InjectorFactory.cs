@@ -37,7 +37,7 @@ namespace BDHero.Config
             Bind<LogInitializer>().ToSelf().InSingletonScope();
             Bind<PluginService>().ToSelf().InSingletonScope();
             Bind<PluginLoader>().ToSelf().InSingletonScope();
-            Bind<UpdaterClient>().ToSelf().InSingletonScope();
+            Bind<Updater>().ToSelf().InSingletonScope();
             Bind<ILog>().ToMethod(CreateLogger);
         }
 

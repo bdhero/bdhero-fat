@@ -40,7 +40,7 @@ namespace BDHeroGUI
         private readonly PluginLoader _pluginLoader;
         private readonly IController _controller;
 
-        private readonly UpdaterClient _updater;
+        private readonly Updater _updater;
         private readonly UpdateHelper _updateHelper;
 
         private readonly ToolTip _progressBarToolTip;
@@ -65,7 +65,7 @@ namespace BDHeroGUI
 
         #region Constructor and OnLoad
 
-        public FormMain(log4net.ILog logger, IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller, UpdaterClient updater)
+        public FormMain(log4net.ILog logger, IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller, Updater updater)
         {
             InitializeComponent();
 

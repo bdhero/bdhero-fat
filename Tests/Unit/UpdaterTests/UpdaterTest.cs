@@ -18,24 +18,24 @@ namespace UpdaterTests
     {
         private readonly IKernel _kernel = TestInjectorFactory.CreateContainer();
 
-        private UpdaterClient _client;
+        private Updater _updater;
 
         [SetUp]
         public void SetUpClient()
         {
-            _client = _kernel.Get<UpdaterClient>();
-            _client.IsPortable = false;
-            _client.BeforeRequest += ClientOnBeforeRequest;
+            _updater = _kernel.Get<Updater>();
+            _updater.IsPortable = false;
+            _updater.BeforeRequest += UpdaterOnBeforeRequest;
         }
 
         [TearDown]
         public void TearDownClient()
         {
-            if (_client != null)
-                _client.BeforeRequest -= ClientOnBeforeRequest;
+            if (_updater != null)
+                _updater.BeforeRequest -= UpdaterOnBeforeRequest;
         }
 
-        private void ClientOnBeforeRequest(HttpWebRequest request)
+        private void UpdaterOnBeforeRequest(HttpWebRequest request)
         {
             var timeout = (int) TimeSpan.FromSeconds(15).TotalMilliseconds;
             request.Timeout = timeout;
@@ -45,25 +45,25 @@ namespace UpdaterTests
         [Test]
         public void TestIsUpdateAvailable()
         {
-            _client.CheckForUpdate(new Version(0, 0, 0, 0));
-            Assert.IsTrue(_client.IsUpdateAvailable,
+            _updater.CheckForUpdate(new Version(0, 0, 0, 0));
+            Assert.IsTrue(_updater.IsUpdateAvailable,
                 "Update SHOULD be available when running an old version");
 
-            _client.CheckForUpdate(_client.LatestUpdate.Version);
-            Assert.IsFalse(_client.IsUpdateAvailable,
+            _updater.CheckForUpdate(_updater.LatestUpdate.Version);
+            Assert.IsFalse(_updater.IsUpdateAvailable,
                 "Update should NOT be available when already running the latest version");
 
-            _client.CheckForUpdate(new Version(99, 99, 99, 99));
-            Assert.IsFalse(_client.IsUpdateAvailable,
+            _updater.CheckForUpdate(new Version(99, 99, 99, 99));
+            Assert.IsFalse(_updater.IsUpdateAvailable,
                 "Update should NOT be available when running a newer version than the latest available");
         }
 
         [Test]
         public void TestDownloadIntegrity()
         {
-            _client.CheckForUpdate(new Version(0, 0, 0, 0));
-            Console.WriteLine("Downloading v{0}", _client.LatestUpdate.Version);
-            _client.DownloadUpdate();
+            _updater.CheckForUpdate(new Version(0, 0, 0, 0));
+            Console.WriteLine("Downloading v{0}", _updater.LatestUpdate.Version);
+            _updater.DownloadUpdate();
             Console.WriteLine("Successfully downloaded update file");
         }
 

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using DotNetUtils.Crypto;
@@ -15,7 +14,7 @@ using log4net;
 
 namespace UpdateLib
 {
-    public class UpdaterClient
+    public class Updater
     {
         private readonly ILog _logger;
 
@@ -32,7 +31,7 @@ namespace UpdateLib
 
         public bool IsPortable = true;
 
-        public UpdaterClient(ILog logger)
+        public Updater(ILog logger)
         {
             _logger = logger;
         }
@@ -88,7 +87,7 @@ namespace UpdateLib
             DownloadUpdateSync(_latestUpdate);
         }
 
-        // TODO: Move this to WindowsUpdaterClient class and make UpdaterClient an interface, abstract class, or composite class
+        // TODO: Move this to WindowsUpdaterClient class and make Updater an interface, abstract class, or composite class
         public void InstallUpdate()
         {
             _logger.Info("Installing update");
