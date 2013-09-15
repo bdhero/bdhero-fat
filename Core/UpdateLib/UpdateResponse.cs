@@ -5,7 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Updater
+namespace UpdateLib
 {
     public class UpdateResponse
     {

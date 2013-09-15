@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using DotNetUtils;
 using DotNetUtils.Net;
-using Updater;
+using UpdateLib;
 
 namespace BDHeroGUI.Helpers
 {

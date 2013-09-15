@@ -8,7 +8,7 @@ using BuildUtils;
 using DotNetUtils.Crypto;
 using Mono.Options;
 using Newtonsoft.Json;
-using Updater;
+using UpdateLib;
 
 namespace UpdateManifestGenerator
 {

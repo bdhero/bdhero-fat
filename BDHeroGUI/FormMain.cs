@@ -24,7 +24,7 @@ using DotNetUtils.TaskUtils;
 using Microsoft.Win32;
 using OSUtils.DriveDetector;
 using OSUtils.TaskbarUtils;
-using Updater;
+using UpdateLib;
 using WindowsOSUtils.DriveDetector;
 using WindowsOSUtils.TaskbarUtils;
 

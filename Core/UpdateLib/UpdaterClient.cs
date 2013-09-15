@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using OSUtils;
 using log4net;
 
-namespace Updater
+namespace UpdateLib
 {
     public class UpdaterClient
     {

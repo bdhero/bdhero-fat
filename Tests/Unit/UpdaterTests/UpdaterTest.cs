@@ -8,7 +8,7 @@ using NUnit.Framework;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
-using Updater;
+using UpdateLib;
 using log4net;
 
 namespace UpdaterTests

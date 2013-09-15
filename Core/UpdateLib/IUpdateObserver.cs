@@ -1,8 +1,7 @@
 using System;
 using DotNetUtils.Net;
-using Updater;
 
-namespace BDHeroGUI.Helpers
+namespace UpdateLib
 {
     public interface IUpdateObserver
     {

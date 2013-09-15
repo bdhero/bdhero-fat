@@ -8,8 +8,8 @@
     <ProjectGuid>{F39EA837-99DD-4453-AA1A-DE408D47A0A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Updater</RootNamespace>
-    <AssemblyName>Updater</AssemblyName>
+    <RootNamespace>UpdateLib</RootNamespace>
+    <AssemblyName>UpdateLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -49,7 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IUpdateObserver.cs" />
     <Compile Include="Update.cs" />
+    <Compile Include="UpdateHelper.cs" />
     <Compile Include="UpdateResponse.cs" />
     <Compile Include="UpdaterClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

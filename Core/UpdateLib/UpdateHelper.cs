@@ -7,9 +7,8 @@ using DotNetUtils;
 using DotNetUtils.Extensions;
 using DotNetUtils.Net;
 using DotNetUtils.TaskUtils;
-using Updater;
 
-namespace BDHeroGUI.Helpers
+namespace UpdateLib
 {
     public class UpdateHelper
     {

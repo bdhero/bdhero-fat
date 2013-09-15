@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Updater")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("UpdateLib")]
+[assembly: AssemblyDescription("Automatic update library for BDHero")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Updater")]
+[assembly: AssemblyProduct("BDHero")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
