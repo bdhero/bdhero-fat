@@ -123,7 +123,9 @@
     <Compile Include="Components\TracksPanel.Designer.cs">
       <DependentUpon>TracksPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\UpdateHelper.cs" />
+    <Compile Include="Helpers\FormMainUpdateObserver.cs" />
+    <Compile Include="Helpers\IUpdateObserver.cs" />
+    <Compile Include="Helpers\UpdateHelper.cs" />
     <Compile Include="Components\VideoTrackListView.cs">
       <SubType>UserControl</SubType>
     </Compile>

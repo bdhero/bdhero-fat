@@ -15,6 +15,7 @@ using BDHero.Utils;
 using BDHeroGUI.Annotations;
 using BDHeroGUI.Components;
 using BDHeroGUI.Forms;
+using BDHeroGUI.Helpers;
 using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
