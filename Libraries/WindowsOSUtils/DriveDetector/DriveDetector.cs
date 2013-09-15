@@ -136,133 +136,134 @@ namespace WindowsOSUtils.DriveDetector
         {
             if (m.Msg != WM_DEVICECHANGE) return;
 
-            int devType;
-            char c;
-
             // WM_DEVICECHANGE can have several meanings depending on the WParam value...
             switch (m.WParam.ToInt32())
             {
-                    //
-                    // New device has just arrived
-                    //
                 case DBT_DEVICEARRIVAL:
-
-                    devType = Marshal.ReadInt32(m.LParam, 4);
-                    if (devType == DBT_DEVTYP_VOLUME)
-                    {
-                        DEV_BROADCAST_VOLUME vol = (DEV_BROADCAST_VOLUME)
-                                                   Marshal.PtrToStructure(m.LParam, typeof (DEV_BROADCAST_VOLUME));
-
-                        // Get the drive letter
-                        c = DriveMaskToLetter(vol.dbcv_unitmask);
-
-                        //
-                        // Call the client event handler
-                        //
-                        // We should create copy of the event before testing it and
-                        // calling the delegate - if any
-                        DriveDetectorEventHandler tempDeviceArrived = DeviceArrived;
-                        if (tempDeviceArrived != null)
-                        {
-                            DriveDetectorEventArgs e = new DriveDetectorEventArgs();
-                            var drivePath = c + @":\";
-                            e.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
-                            tempDeviceArrived(this, e);
-
-                            // Register for query remove if requested
-                            if (e.HookQueryRemove)
-                            {
-                                // If something is already hooked, unhook it now
-                                if (_mDeviceNotifyHandle != IntPtr.Zero)
-                                {
-                                    RegisterForDeviceChange(false, null);
-                                }
-
-                                RegisterQuery(c + @":\");
-                            }
-                        } // if  has event handler
-                    }
+                    HandleDeviceArrival(m);
                     break;
-
-                    //
-                    // Device is about to be removed
-                    // Any application can cancel the removal
-                    //
                 case DBT_DEVICEQUERYREMOVE:
-
-                    devType = Marshal.ReadInt32(m.LParam, 4);
-                    if (devType == DBT_DEVTYP_HANDLE)
-                    {
-                        // TODO: we could get the handle for which this message is sent
-                        // from vol.dbch_handle and compare it against a list of handles for
-                        // which we have registered the query remove message (?)
-                        //DEV_BROADCAST_HANDLE vol;
-                        //vol = (DEV_BROADCAST_HANDLE)
-                        //   Marshal.PtrToStructure(m.LParam, typeof(DEV_BROADCAST_HANDLE));
-                        // if ( vol.dbch_handle ....
-
-                        //
-                        // Call the event handler in client
-                        //
-                        DriveDetectorEventHandler tempQuery = QueryRemove;
-                        if (tempQuery != null)
-                        {
-                            DriveDetectorEventArgs e = new DriveDetectorEventArgs();
-                            var drivePath = _mCurrentDrive; // drive which is hooked
-                            e.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
-                            tempQuery(this, e);
-
-                            // If the client wants to cancel, let Windows know
-                            if (e.Cancel)
-                            {
-                                m.Result = (IntPtr) BROADCAST_QUERY_DENY;
-                            }
-                            else
-                            {
-                                // Change 28.10.2007: Unregister the notification, this will
-                                // close the handle to file or root directory also.
-                                // We have to close it anyway to allow the removal so
-                                // even if some other app cancels the removal we would not know about it...
-                                RegisterForDeviceChange(false, null); // will also close the mFileOnFlash
-                            }
-                        }
-                    }
+                    HandleDeviceBeforeRemove(m);
                     break;
-
-                    //
-                    // Device has been removed
-                    //
                 case DBT_DEVICEREMOVECOMPLETE:
-
-                    devType = Marshal.ReadInt32(m.LParam, 4);
-                    if (devType == DBT_DEVTYP_VOLUME)
-                    {
-                        devType = Marshal.ReadInt32(m.LParam, 4);
-                        if (devType == DBT_DEVTYP_VOLUME)
-                        {
-                            DEV_BROADCAST_VOLUME vol = (DEV_BROADCAST_VOLUME)
-                                                       Marshal.PtrToStructure(m.LParam, typeof (DEV_BROADCAST_VOLUME));
-                            c = DriveMaskToLetter(vol.dbcv_unitmask);
-
-                            //
-                            // Call the client event handler
-                            //
-                            DriveDetectorEventHandler tempDeviceRemoved = DeviceRemoved;
-                            if (tempDeviceRemoved != null)
-                            {
-                                DriveDetectorEventArgs e = new DriveDetectorEventArgs();
-                                var drivePath = c + @":\";
-                                e.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
-                                tempDeviceRemoved(this, e);
-                            }
-
-                            // TODO: we could unregister the notify handle here if we knew it is the
-                            // right drive which has been just removed
-                            //RegisterForDeviceChange(false, null);
-                        }
-                    }
+                    HandleDeviceAfterRemove(m);
                     break;
             }
+        }
+
+        private static int GetDeviceType(Message m)
+        {
+            return Marshal.ReadInt32(m.LParam, 4);
+        }
+
+        /// <summary>
+        /// New device has just arrived.
+        /// </summary>
+        /// <param name="m"></param>
+        private void HandleDeviceArrival(Message m)
+        {
+            if (DBT_DEVTYP_VOLUME != GetDeviceType(m)) return;
+
+            var vol = (DEV_BROADCAST_VOLUME) Marshal.PtrToStructure(m.LParam, typeof (DEV_BROADCAST_VOLUME));
+
+            // Get the drive letter
+            var driveLetter = DriveMaskToLetter(vol.dbcv_unitmask);
+
+            //
+            // Call the client event handler
+            //
+            // We should create copy of the event before testing it and
+            // calling the delegate - if any
+            DriveDetectorEventHandler tempDeviceArrived = DeviceArrived;
+
+            if (tempDeviceArrived == null) return;
+
+            var args = new DriveDetectorEventArgs();
+            var drivePath = driveLetter + @":\";
+            args.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
+            tempDeviceArrived(this, args);
+
+            // Register for query remove if requested
+            if (!args.HookQueryRemove) return;
+
+            // If something is already hooked, unhook it now
+            if (_mDeviceNotifyHandle != IntPtr.Zero)
+            {
+                RegisterForDeviceChange(false, null);
+            }
+
+            RegisterQuery(driveLetter + @":\");
+        }
+
+        /// <summary>
+        /// Device is about to be removed.  Any application can cancel the removal.
+        /// </summary>
+        /// <param name="m"></param>
+        private void HandleDeviceBeforeRemove(Message m)
+        {
+            if (DBT_DEVTYP_HANDLE != GetDeviceType(m)) return;
+
+            // TODO: we could get the handle for which this message is sent
+            // from vol.dbch_handle and compare it against a list of handles for
+            // which we have registered the query remove message (?)
+            //DEV_BROADCAST_HANDLE vol;
+            //vol = (DEV_BROADCAST_HANDLE)
+            //   Marshal.PtrToStructure(m.LParam, typeof(DEV_BROADCAST_HANDLE));
+            // if ( vol.dbch_handle ....
+
+            //
+            // Call the event handler in client
+            //
+            DriveDetectorEventHandler tempQuery = QueryRemove;
+
+            if (tempQuery == null) return;
+
+            var args = new DriveDetectorEventArgs();
+            var drivePath = _mCurrentDrive; // drive which is hooked
+            args.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
+            tempQuery(this, args);
+
+            // If the client wants to cancel, let Windows know
+            if (args.Cancel)
+            {
+                m.Result = (IntPtr) BROADCAST_QUERY_DENY;
+            }
+            else
+            {
+                // Change 28.10.2007: Unregister the notification, this will
+                // close the handle to file or root directory also.
+                // We have to close it anyway to allow the removal so
+                // even if some other app cancels the removal we would not know about it...
+                RegisterForDeviceChange(false, null); // will also close the mFileOnFlash
+            }
+        }
+
+        /// <summary>
+        /// Device has been removed.
+        /// </summary>
+        /// <param name="m"></param>
+        private void HandleDeviceAfterRemove(Message m)
+        {
+            if (DBT_DEVTYP_VOLUME != GetDeviceType(m)) return;
+
+            var vol = (DEV_BROADCAST_VOLUME) Marshal.PtrToStructure(m.LParam, typeof (DEV_BROADCAST_VOLUME));
+            var driveLetter = DriveMaskToLetter(vol.dbcv_unitmask);
+
+            //
+            // Call the client event handler
+            //
+            DriveDetectorEventHandler tempDeviceRemoved = DeviceRemoved;
+
+            if (tempDeviceRemoved == null) return;
+
+            var args = new DriveDetectorEventArgs();
+            var drivePath = driveLetter + @":\";
+            args.DriveInfo = DriveInfo.GetDrives().FirstOrDefault(info => info.Name == drivePath);
+            tempDeviceRemoved(this, args);
+
+            // TODO: we could unregister the notify handle here if we knew it is the
+            // right drive which has been just removed
+            //RegisterForDeviceChange(false, null);
         }
 
         #endregion
@@ -320,7 +321,7 @@ namespace WindowsOSUtils.DriveDetector
         /// <param name="drive">drive for which to register.</param>
         private void RegisterQuery(string drive)
         {
-            bool register = true;
+            var register = true;
 
             if (_mFileToOpen == null)
             {
@@ -362,19 +363,18 @@ namespace WindowsOSUtils.DriveDetector
                 register = false;
             }
 
-            if (register)
-            {
-                //RegisterForDeviceChange(true, mFileOnFlash.SafeFileHandle);
-                //mCurrentDrive = drive;
-                // Change 28.10.2007 - Open the root directory 
-                if (_mFileOnFlash == null)
-                    RegisterForDeviceChange(drive);
-                else
-                    // old version
-                    RegisterForDeviceChange(true, _mFileOnFlash.SafeFileHandle);
+            if (!register) return;
 
-                _mCurrentDrive = drive;
-            }
+            //RegisterForDeviceChange(true, mFileOnFlash.SafeFileHandle);
+            //mCurrentDrive = drive;
+            // Change 28.10.2007 - Open the root directory 
+            if (_mFileOnFlash == null)
+                RegisterForDeviceChange(drive);
+            else
+                // old version
+                RegisterForDeviceChange(true, _mFileOnFlash.SafeFileHandle);
+
+            _mCurrentDrive = drive;
         }
 
         /// <summary>
@@ -393,14 +393,17 @@ namespace WindowsOSUtils.DriveDetector
             _mDirHandle = handle; // save handle for closing it when unregistering
 
             // Register for handle
-            DEV_BROADCAST_HANDLE data = new DEV_BROADCAST_HANDLE();
-            data.dbch_devicetype = DBT_DEVTYP_HANDLE;
-            data.dbch_reserved = 0;
-            data.dbch_nameoffset = 0;
-            //data.dbch_data = null;
-            //data.dbch_eventguid = 0;
-            data.dbch_handle = handle;
-            data.dbch_hdevnotify = (IntPtr) 0;
+            var data = new DEV_BROADCAST_HANDLE
+                {
+                    dbch_devicetype = DBT_DEVTYP_HANDLE,
+                    dbch_reserved = 0,
+                    dbch_nameoffset = 0,
+                    //data.dbch_data = null,
+                    //data.dbch_eventguid = 0,
+                    dbch_handle = handle,
+                    dbch_hdevnotify = (IntPtr) 0
+                };
+
             int size = Marshal.SizeOf(data);
             data.dbch_size = size;
             IntPtr buffer = Marshal.AllocHGlobal(size);
@@ -420,7 +423,7 @@ namespace WindowsOSUtils.DriveDetector
             if (register)
             {
                 // Register for handle
-                DEV_BROADCAST_HANDLE data = new DEV_BROADCAST_HANDLE
+                var data = new DEV_BROADCAST_HANDLE
                     {
                         dbch_devicetype = DBT_DEVTYP_HANDLE,
                         dbch_reserved = 0,
@@ -430,6 +433,7 @@ namespace WindowsOSUtils.DriveDetector
                         dbch_handle = fileHandle.DangerousGetHandle(),
                         dbch_hdevnotify = (IntPtr) 0
                     };
+
                 int size = Marshal.SizeOf(data);
                 data.dbch_size = size;
                 IntPtr buffer = Marshal.AllocHGlobal(size);
