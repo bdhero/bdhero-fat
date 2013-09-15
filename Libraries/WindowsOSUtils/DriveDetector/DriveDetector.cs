@@ -70,7 +70,6 @@ namespace WindowsOSUtils.DriveDetector
         /// <summary>
         /// init the DriveDetector object
         /// </summary>
-        /// <param name="intPtr"></param>
         private void Init(Control control, string fileToOpen)
         {
             mFileToOpen = fileToOpen;
@@ -85,10 +84,7 @@ namespace WindowsOSUtils.DriveDetector
         {
             get
             {
-                if (mDeviceNotifyHandle == IntPtr.Zero)
-                    return false;
-                else
-                    return true;
+                return mDeviceNotifyHandle != IntPtr.Zero;
             }
         }
 
@@ -177,7 +173,6 @@ namespace WindowsOSUtils.DriveDetector
                             // Get the drive letter 
                             c = DriveMaskToLetter(vol.dbcv_unitmask);
 
-
                             //
                             // Call the client event handler
                             //
@@ -206,7 +201,6 @@ namespace WindowsOSUtils.DriveDetector
                         }
                         break;
 
-
                         //
                         // Device is about to be removed
                         // Any application can cancel the removal
@@ -223,7 +217,6 @@ namespace WindowsOSUtils.DriveDetector
                             //vol = (DEV_BROADCAST_HANDLE)
                             //   Marshal.PtrToStructure(m.LParam, typeof(DEV_BROADCAST_HANDLE));
                             // if ( vol.dbch_handle ....
-
 
                             //
                             // Call the event handler in client
@@ -252,7 +245,6 @@ namespace WindowsOSUtils.DriveDetector
                             }
                         }
                         break;
-
 
                         //
                         // Device has been removed
@@ -327,7 +319,6 @@ namespace WindowsOSUtils.DriveDetector
         /// </summary>
         private string mCurrentDrive;
 
-
         // Win32 constants
         private const int DBT_DEVTYP_DEVICEINTERFACE = 5;
         private const int DBT_DEVTYP_HANDLE = 6;
@@ -372,7 +363,6 @@ namespace WindowsOSUtils.DriveDetector
                     mFileToOpen = Path.Combine(drive, mFileToOpen);
             }
 
-
             try
             {
                 //mFileOnFlash = new FileStream(mFileToOpen, FileMode.Open);
@@ -387,7 +377,6 @@ namespace WindowsOSUtils.DriveDetector
                 // just do not register if the file could not be opened
                 register = false;
             }
-
 
             if (register)
             {
@@ -419,8 +408,7 @@ namespace WindowsOSUtils.DriveDetector
                 mDeviceNotifyHandle = IntPtr.Zero;
                 return;
             }
-            else
-                mDirHandle = handle; // save handle for closing it when unregistering
+            mDirHandle = handle; // save handle for closing it when unregistering
 
             // Register for handle
             DEV_BROADCAST_HANDLE data = new DEV_BROADCAST_HANDLE();
@@ -480,7 +468,6 @@ namespace WindowsOSUtils.DriveDetector
                     Native.UnregisterDeviceNotification(mDeviceNotifyHandle);
                 }
 
-
                 mDeviceNotifyHandle = IntPtr.Zero;
                 mDirHandle = IntPtr.Zero;
 
@@ -503,7 +490,8 @@ namespace WindowsOSUtils.DriveDetector
         private static char DriveMaskToLetter(int mask)
         {
             char letter;
-            string drives = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string drives = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
             // 1 = A
             // 2 = B
             // 4 = C...
@@ -525,30 +513,6 @@ namespace WindowsOSUtils.DriveDetector
             return letter;
         }
 
-        /* 28.10.2007 - no longer needed
-        /// <summary>
-        /// Searches for any file in a given path and returns its full path
-        /// </summary>
-        /// <param name="drive">drive to search</param>
-        /// <returns>path of the file or empty string</returns>
-        private string GetAnyFile(string drive)
-        {
-            string file = "";
-            // First try files in the root
-            string[] files = Directory.GetFiles(drive);
-            if (files.Length == 0)
-            {
-                // if no file in the root, search whole drive
-                files = Directory.GetFiles(drive, "*.*", SearchOption.AllDirectories);
-            }
-                
-            if (files.Length > 0)
-                file = files[0];        // get the first file
-
-            // return empty string if no file found
-            return file;
-        }*/
-
         #endregion
 
         #region Native Win32 API
@@ -556,9 +520,9 @@ namespace WindowsOSUtils.DriveDetector
         /// <summary>
         /// WinAPI functions
         /// </summary>        
-        private class Native
+        private static class Native
         {
-            //   HDEVNOTIFY RegisterDeviceNotification(HANDLE hRecipient,LPVOID NotificationFilter,DWORD Flags);
+            // HDEVNOTIFY RegisterDeviceNotification(HANDLE hRecipient,LPVOID NotificationFilter,DWORD Flags);
             [DllImport("user32.dll", CharSet = CharSet.Auto)]
             public static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, IntPtr NotificationFilter,
                                                                    uint Flags);
@@ -566,7 +530,6 @@ namespace WindowsOSUtils.DriveDetector
             [DllImport("user32.dll", CharSet = CharSet.Auto)]
             public static extern uint UnregisterDeviceNotification(IntPtr hHandle);
 
-            //
             // CreateFile  - MSDN
             private const uint GENERIC_READ = 0x80000000;
             private const uint OPEN_EXISTING = 3;
@@ -575,7 +538,6 @@ namespace WindowsOSUtils.DriveDetector
             private const uint FILE_ATTRIBUTE_NORMAL = 128;
             private const uint FILE_FLAG_BACKUP_SEMANTICS = 0x02000000;
             private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
-
 
             // should be "static extern unsafe"
             [DllImport("kernel32", SetLastError = true)]
@@ -588,7 +550,6 @@ namespace WindowsOSUtils.DriveDetector
                 uint FlagsAndAttributes, // file attributes
                 int hTemplateFile // handle to template file
                 );
-
 
             [DllImport("kernel32", SetLastError = true)]
             private static extern bool CloseHandle(
@@ -614,10 +575,8 @@ namespace WindowsOSUtils.DriveDetector
 
                 if (handle == INVALID_HANDLE_VALUE)
                     return IntPtr.Zero;
-                else
-                    return handle;
+                return handle;
             }
-
 
             public static bool CloseDirectoryHandle(IntPtr handle)
             {
