@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BDHero.JobQueue;
 using BDHero.Plugin;
 using DotNetUtils;
+using DotNetUtils.TaskUtils;
 
 namespace BDHero
 {
@@ -25,12 +26,12 @@ namespace BDHero
         /// <summary>
         /// Invoked immediately before the scanning stage starts.
         /// </summary>
-        event EventHandler ScanStarted;
+        event TaskStartedEventHandler ScanStarted;
 
         /// <summary>
         /// Invoked when the scanning stage completes successfully.
         /// </summary>
-        event EventHandler ScanSucceeded;
+        event TaskSucceededEventHandler ScanSucceeded;
 
         /// <summary>
         /// Invoked when the scanning stage aborts because of an error.
@@ -41,17 +42,17 @@ namespace BDHero
         /// Invoked when the scanning stage completes, regardless of whether the it succeeded or failed.
         /// This event always occurs after the <see cref="ScanSucceeded"/> and <see cref="ScanFailed"/> events.
         /// </summary>
-        event EventHandler ScanCompleted;
+        event TaskCompletedEventHandler ScanCompleted;
 
         /// <summary>
         /// Invoked immediately before the conversion stage starts.
         /// </summary>
-        event EventHandler ConvertStarted;
+        event TaskStartedEventHandler ConvertStarted;
 
         /// <summary>
         /// Invoked when the conversion stage completes successfully.
         /// </summary>
-        event EventHandler ConvertSucceeded;
+        event TaskSucceededEventHandler ConvertSucceeded;
 
         /// <summary>
         /// Invoked when the conversion stage aborts because of an error.
@@ -62,7 +63,7 @@ namespace BDHero
         /// Invoked when the conversion stage completes, regardless of whether the it succeeded or failed.
         /// This event always occurs after the <see cref="ConvertSucceeded"/> and <see cref="ConvertFailed"/> events.
         /// </summary>
-        event EventHandler ConvertCompleted;
+        event TaskCompletedEventHandler ConvertCompleted;
 
         /// <summary>
         /// Invoked whenever an <see cref="IPlugin"/>'s state or progress changes.
@@ -101,7 +102,7 @@ namespace BDHero
         /// <param name="succeed">Callback that will be invoked if the task succeeds</param>
         /// <param name="mkvPath">Optional path to the output directory or MKV file</param>
         /// <returns>Task that returns <c>true</c> if the task succeeded; otherwise <c>false</c></returns>
-        Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, ExceptionEventHandler fail, Action succeed, string mkvPath = null);
+        Task<bool> CreateMetadataTask(CancellationToken cancellationToken, TaskStartedEventHandler start, ExceptionEventHandler fail, TaskSucceededEventHandler succeed, string mkvPath = null);
 
         /// <summary>
         /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.

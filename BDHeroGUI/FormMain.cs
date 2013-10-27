@@ -649,7 +649,7 @@ namespace BDHeroGUI
 
         #region Scan events
 
-        private void ControllerOnScanStarted(object sender, EventArgs eventArgs)
+        private void ControllerOnScanStarted()
         {
             buttonScan.Text = "Scanning...";
             textBoxStatus.Text = "Scan started...";
@@ -657,7 +657,7 @@ namespace BDHeroGUI
             _taskbarItem.SetProgress(0).Indeterminate();
         }
 
-        private void ControllerOnScanSucceeded(object sender, EventArgs eventArgs)
+        private void ControllerOnScanSucceeded()
         {
             textBoxOutput.Text = _controller.Job.OutputPath;
             AppendStatus("Scan succeeded!");
@@ -683,7 +683,7 @@ namespace BDHeroGUI
             }
         }
 
-        private void ControllerOnScanCompleted(object sender, EventArgs eventArgs)
+        private void ControllerOnScanCompleted()
         {
             buttonScan.Text = "Scan";
             AppendStatus("Scan completed!");
@@ -694,7 +694,7 @@ namespace BDHeroGUI
 
         #region Convert events
 
-        private void ControllerOnConvertStarted(object sender, EventArgs eventArgs)
+        private void ControllerOnConvertStarted()
         {
             buttonConvert.Text = "Converting...";
             AppendStatus("Convert started...");
@@ -702,7 +702,7 @@ namespace BDHeroGUI
             _taskbarItem.SetProgress(0).Indeterminate();
         }
 
-        private void ControllerOnConvertSucceeded(object sender, EventArgs eventArgs)
+        private void ControllerOnConvertSucceeded()
         {
             AppendStatus("Convert succeeded!");
             _taskbarItem.NoProgress();
@@ -726,7 +726,7 @@ namespace BDHeroGUI
             }
         }
 
-        private void ControllerOnConvertCompleted(object sender, EventArgs eventArgs)
+        private void ControllerOnConvertCompleted()
         {
             buttonConvert.Text = "Convert";
             AppendStatus("Convert completed!");

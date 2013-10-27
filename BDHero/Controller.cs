@@ -39,15 +39,15 @@ namespace BDHero
 
         #region Events
 
-        public event EventHandler ScanStarted;
-        public event EventHandler ScanSucceeded;
+        public event TaskStartedEventHandler ScanStarted;
+        public event TaskSucceededEventHandler ScanSucceeded;
         public event ExceptionEventHandler ScanFailed;
-        public event EventHandler ScanCompleted;
+        public event TaskCompletedEventHandler ScanCompleted;
 
-        public event EventHandler ConvertStarted;
-        public event EventHandler ConvertSucceeded;
+        public event TaskStartedEventHandler ConvertStarted;
+        public event TaskSucceededEventHandler ConvertSucceeded;
         public event ExceptionEventHandler ConvertFailed;
-        public event EventHandler ConvertCompleted;
+        public event TaskCompletedEventHandler ConvertCompleted;
 
         public event PluginProgressHandler PluginProgressUpdated;
         public event UnhandledExceptionEventHandler UnhandledException;
@@ -72,13 +72,13 @@ namespace BDHero
 
         public void RenameSync(string mkvPath)
         {
-            CreateRenameAction(CancellationToken.None, mkvPath)();
+            CreateRenamePhase(CancellationToken.None, mkvPath)();
         }
 
-        public Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, ExceptionEventHandler fail, Action succeed, string mkvPath = null)
+        public Task<bool> CreateMetadataTask(CancellationToken cancellationToken, TaskStartedEventHandler start, ExceptionEventHandler fail, TaskSucceededEventHandler succeed, string mkvPath = null)
         {
             var token = cancellationToken;
-            var optionalPhases = new[] { CreateGetMetadataAction(token), CreateAutoDetectAction(token), CreateRenameAction(token, mkvPath) };
+            var optionalPhases = new[] { CreateGetMetadataPhase(token), CreateAutoDetectPhase(token), CreateRenamePhase(token, mkvPath) };
             return CreateStageTask(
                 token,
                 start,
@@ -96,29 +96,29 @@ namespace BDHero
         public Task<bool> CreateScanTask(CancellationToken cancellationToken, string bdromPath, string mkvPath = null)
         {
             var token = cancellationToken;
-            var readBDROMAction = new Func<bool>(() => ReadBDROM(token, bdromPath));
-            var optionalPhases = new[] { CreateGetMetadataAction(token), CreateAutoDetectAction(token), CreateRenameAction(token, mkvPath) };
+            var readBDROMPhase = new CriticalPhase(() => ReadBDROM(token, bdromPath));
+            var optionalPhases = new[] { CreateGetMetadataPhase(token), CreateAutoDetectPhase(token), CreateRenamePhase(token, mkvPath) };
             return CreateStageTask(
                 token,
                 ScanStart,
-                readBDROMAction,
+                readBDROMPhase,
                 optionalPhases,
                 ScanFail,
                 ScanSucceed
             );
         }
 
-        private Action CreateGetMetadataAction(CancellationToken cancellationToken)
+        private OptionalPhase CreateGetMetadataPhase(CancellationToken cancellationToken)
         {
             return () => GetMetadata(cancellationToken);
         }
 
-        private Action CreateAutoDetectAction(CancellationToken cancellationToken)
+        private OptionalPhase CreateAutoDetectPhase(CancellationToken cancellationToken)
         {
             return () => AutoDetect(cancellationToken);
         }
 
-        private Action CreateRenameAction(CancellationToken cancellationToken, string mkvPath = null)
+        private OptionalPhase CreateRenamePhase(CancellationToken cancellationToken, string mkvPath = null)
         {
             return () => Rename(cancellationToken, mkvPath);
         }
@@ -129,13 +129,13 @@ namespace BDHero
                 Job.OutputPath = mkvPath;
 
             var token = cancellationToken;
-            var muxAction = new Func<bool>(() => Mux(token));
-            var optionalpPhases = new Action[] { () => PostProcess(token) };
+            var muxPhase = new CriticalPhase(() => Mux(token));
+            var optionalPhases = new OptionalPhase[] { () => PostProcess(token) };
             return CreateStageTask(
                 token,
                 ConvertStart,
-                muxAction,
-                optionalpPhases,
+                muxPhase,
+                optionalPhases,
                 ConvertFail,
                 ConvertSucceed
             );
@@ -155,13 +155,13 @@ namespace BDHero
         /// Task object that returns <c>false</c> if the operation was canceled by the user or
         /// the critical phase threw an exception; otherwise <c>true</c>.
         /// </returns>
-        private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalPhases, ExceptionEventHandler fail, Action succeed)
+        private Task<bool> CreateStageTask(CancellationToken cancellationToken, TaskStartedEventHandler beforeStart, CriticalPhase criticalPhase, IEnumerable<OptionalPhase> optionalPhases, ExceptionEventHandler fail, TaskSucceededEventHandler succeed)
         {
             var canContinue = CreateCanContinueFunc(cancellationToken);
             return new TaskBuilder()
                 .OnThread(_callbackScheduler)
                 .CancelWith(cancellationToken)
-                .BeforeStart(_ => beforeStart())
+                .BeforeStart(beforeStart)
                 .Fail(fail)
                 .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
                     {
@@ -206,7 +206,7 @@ namespace BDHero
             var task = new TaskBuilder()
                 .OnThread(_callbackScheduler)
                 .CancelWith(cancellationToken)
-                .BeforeStart(delegate(CancellationToken token)
+                .BeforeStart(delegate
                     {
                         var progressProvider = _pluginService.GetProgressProvider(plugin);
 
@@ -433,7 +433,7 @@ namespace BDHero
         private void ScanStart()
         {
             if (ScanStarted != null)
-                ScanStarted(this, EventArgs.Empty);
+                ScanStarted();
         }
 
         private void ScanFail(ExceptionEventArgs args)
@@ -447,7 +447,7 @@ namespace BDHero
         private void ScanSucceed()
         {
             if (ScanSucceeded != null)
-                ScanSucceeded(this, EventArgs.Empty);
+                ScanSucceeded();
 
             ScanComplete();
         }
@@ -455,13 +455,13 @@ namespace BDHero
         private void ScanComplete()
         {
             if (ScanCompleted != null)
-                ScanCompleted(this, EventArgs.Empty);
+                ScanCompleted();
         }
 
         private void ConvertStart()
         {
             if (ConvertStarted != null)
-                ConvertStarted(this, EventArgs.Empty);
+                ConvertStarted();
         }
 
         private void ConvertFail(ExceptionEventArgs args)
@@ -475,7 +475,7 @@ namespace BDHero
         private void ConvertSucceed()
         {
             if (ConvertSucceeded != null)
-                ConvertSucceeded(this, EventArgs.Empty);
+                ConvertSucceeded();
 
             ConvertComplete();
         }
@@ -483,11 +483,15 @@ namespace BDHero
         private void ConvertComplete()
         {
             if (ConvertCompleted != null)
-                ConvertCompleted(this, EventArgs.Empty);
+                ConvertCompleted();
         }
 
         #endregion
     }
 
     internal delegate void ExecutePluginHandler(CancellationToken token);
+
+    internal delegate bool CriticalPhase();
+
+    internal delegate void OptionalPhase();
 }

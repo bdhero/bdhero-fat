@@ -105,7 +105,7 @@ namespace UpdateLib
             _updater.InstallUpdate();
         }
 
-        private void OnBeforeStart(CancellationToken token)
+        private void OnBeforeStart()
         {
             Logger.Info("Checking for updates");
             Notify(observer => observer.OnBeforeCheckForUpdate());

@@ -23,11 +23,11 @@ namespace DotNetUtils.TaskUtils
         private CancellationToken _cancellationToken;
         private IThreadInvoker _invoker;
 
-        private Action<CancellationToken> _beforeStart;
-        private Action<IThreadInvoker, CancellationToken> _work;
-        private Action _succeed;
+        private TaskStartedEventHandler _beforeStart;
+        private TaskWorkHandler _work;
+        private TaskSucceededEventHandler _succeed;
         private ExceptionEventHandler _fail;
-        private Action _finally;
+        private TaskCompletedEventHandler _finally;
 
         /// <summary>
         /// Sets the task's execution context to that of the specified thread.
@@ -73,7 +73,7 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         /// <param name="beforeStart">Action to run on the UI thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
-        public TaskBuilder BeforeStart(Action<CancellationToken> beforeStart)
+        public TaskBuilder BeforeStart(TaskStartedEventHandler beforeStart)
         {
             _beforeStart = beforeStart;
             return this;
@@ -84,7 +84,7 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         /// <param name="work">Action to run in the background thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
-        public TaskBuilder DoWork(Action<IThreadInvoker, CancellationToken> work)
+        public TaskBuilder DoWork(TaskWorkHandler work)
         {
             _work = work;
             return this;
@@ -96,7 +96,7 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         /// <param name="succeed">Action to run in the UI thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
-        public TaskBuilder Succeed(Action succeed)
+        public TaskBuilder Succeed(TaskSucceededEventHandler succeed)
         {
             _succeed = succeed;
             return this;
@@ -121,7 +121,7 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         /// <param name="finally">Action to run in the UI thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
-        public TaskBuilder Finally(Action @finally)
+        public TaskBuilder Finally(TaskCompletedEventHandler @finally)
         {
             _finally = @finally;
             return this;
@@ -178,7 +178,7 @@ namespace DotNetUtils.TaskUtils
         private bool InvokeBeforeStart()
         {
             if (_beforeStart == null) return true;
-            return Try(() => _invoker.InvokeOnUIThreadSync(_beforeStart));
+            return Try(() => _invoker.InvokeOnUIThreadSync(_ => _beforeStart()));
         }
 
         private bool InvokeDoWork()

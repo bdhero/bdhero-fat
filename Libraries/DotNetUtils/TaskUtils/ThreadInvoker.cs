@@ -27,17 +27,17 @@ namespace DotNetUtils.TaskUtils
             _cancellationToken = cancellationToken;
         }
 
-        public void InvokeOnUIThreadSync(Action<CancellationToken> action)
+        public void InvokeOnUIThreadSync(ThreadAction action)
         {
             StartTask(action, _cancellationToken).Wait();
         }
 
-        public void InvokeOnUIThreadAsync(Action<CancellationToken> action)
+        public void InvokeOnUIThreadAsync(ThreadAction action)
         {
             StartTask(action, _cancellationToken);
         }
 
-        private Task StartTask(Action<CancellationToken> action, CancellationToken cancellationToken)
+        private Task StartTask(ThreadAction action, CancellationToken cancellationToken)
         {
             var token = !cancellationToken.IsCancellationRequested ? cancellationToken : CancellationToken.None;
             return Task.Factory.StartNew(() => action(token), token, TaskCreationOptions.None, _callbackThread);

@@ -172,12 +172,12 @@ namespace BDHeroCLI
             Console.Error.WriteLine("{0} v{1} - compiled {2}", AssemblyUtils.GetAssemblyName(), AssemblyUtils.GetAssemblyVersion(), AssemblyUtils.GetLinkerTimestamp());
         }
 
-        private static void ControllerOnScanStarted(object sender, EventArgs eventArgs)
+        private static void ControllerOnScanStarted()
         {
             Console.WriteLine();
         }
 
-        private static void ControllerOnScanSucceeded(object sender, EventArgs eventArgs)
+        private static void ControllerOnScanSucceeded()
         {
             Console.WriteLine();
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~");

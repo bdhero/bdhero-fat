@@ -17,4 +17,6 @@ namespace DotNetUtils.TaskUtils
     /// Invoked <em>after</em> the <see cref="TaskSucceededEventHandler"/> and <see cref="ExceptionEventHandler"/> events.
     /// </summary>
     public delegate void TaskCompletedEventHandler();
+
+    public delegate void ThreadAction(CancellationToken cancellationToken);
 }
