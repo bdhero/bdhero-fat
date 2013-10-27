@@ -203,7 +203,7 @@ namespace BDHeroCLI
         private void PromptToExit()
         {
             Console.WriteLine();
-            Console.WriteLine("*** BDhero CLI Finished - press <ENTER> to exit ***");
+            Console.WriteLine("*** BDHero CLI Finished - press <ENTER> to exit ***");
             Console.WriteLine();
             Console.Read();
         }
