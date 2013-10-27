@@ -19,6 +19,7 @@ using BDHeroGUI.Helpers;
 using DotNetUtils;
 using DotNetUtils.Controls;
 using DotNetUtils.Extensions;
+using DotNetUtils.Forms;
 using DotNetUtils.Net;
 using DotNetUtils.TaskUtils;
 using Microsoft.Win32;
@@ -525,7 +526,7 @@ namespace BDHeroGUI
 
             if (args.Exception != null)
             {
-                MessageBox.Show(this, args.Exception.ToString(), "Error: Metadata Search Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DetailForm.ShowExceptionDetail(this, "Error: Metadata Search Failed", args.Exception);
             }
 
             EnableControls(true);
@@ -679,7 +680,7 @@ namespace BDHeroGUI
             }
             if (args.Exception != null)
             {
-                MessageBox.Show(this, args.Exception.ToString(), "Error: Scan Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DetailForm.ShowExceptionDetail(this, "Error: Scan Failed", args.Exception);
             }
         }
 
@@ -722,7 +723,7 @@ namespace BDHeroGUI
             }
             if (args.Exception != null)
             {
-                MessageBox.Show(this, args.Exception.ToString(), "Error: Convert Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DetailForm.ShowExceptionDetail(this, "Error: Convert Failed", args.Exception);
             }
         }
 
@@ -784,7 +785,7 @@ namespace BDHeroGUI
         private void ControllerOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
             var caption = string.Format("{0} Error", AppUtils.AppName);
-            MessageBox.Show(this, args.ExceptionObject.ToString(), caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DetailForm.ShowExceptionDetail(this, caption, args.ExceptionObject as Exception);
         }
 
         #endregion
