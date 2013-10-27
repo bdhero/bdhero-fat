@@ -112,6 +112,7 @@
     <Compile Include="Extensions\TabPageExtensions.cs" />
     <Compile Include="ReflectionUtils.cs" />
     <Compile Include="TaskUtils\IThreadInvoker.cs" />
+    <Compile Include="Delegates.cs" />
     <Compile Include="TaskUtils\ThreadInvoker.cs" />
     <Compile Include="TaskUtils\TaskBuilder.cs" />
   </ItemGroup>
