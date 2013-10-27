@@ -502,7 +502,7 @@ namespace BDHeroGUI
             // TODO: Centralize button text
             buttonScan.Text = "Scan";
             textBoxOutput.Text = _controller.Job.OutputPath;
-            AppendStatus("Metadata search completed!");
+            AppendStatus("Metadata search completed successfully!");
             _taskbarItem.NoProgress();
             RefreshUI();
             EnableControls(true);
@@ -687,7 +687,6 @@ namespace BDHeroGUI
         private void ControllerOnScanCompleted()
         {
             buttonScan.Text = "Scan";
-            AppendStatus("Scan completed!");
             EnableControls(true);
         }
 
@@ -730,7 +729,6 @@ namespace BDHeroGUI
         private void ControllerOnConvertCompleted()
         {
             buttonConvert.Text = "Convert";
-            AppendStatus("Convert completed!");
             EnableControls(true);
         }
 
