@@ -41,12 +41,12 @@ namespace BDHero
 
         public event EventHandler ScanStarted;
         public event EventHandler ScanSucceeded;
-        public event EventHandler ScanFailed;
+        public event ExceptionEventHandler ScanFailed;
         public event EventHandler ScanCompleted;
 
         public event EventHandler ConvertStarted;
         public event EventHandler ConvertSucceeded;
-        public event EventHandler ConvertFailed;
+        public event ExceptionEventHandler ConvertFailed;
         public event EventHandler ConvertCompleted;
 
         public event PluginProgressHandler PluginProgressUpdated;
@@ -75,7 +75,7 @@ namespace BDHero
             CreateRenameAction(CancellationToken.None, mkvPath)();
         }
 
-        public Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, Action fail, Action succeed, string mkvPath = null)
+        public Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, ExceptionEventHandler fail, Action succeed, string mkvPath = null)
         {
             var token = cancellationToken;
             var optionalPhases = new[] { CreateGetMetadataAction(token), CreateAutoDetectAction(token), CreateRenameAction(token, mkvPath) };
@@ -155,32 +155,34 @@ namespace BDHero
         /// Task object that returns <c>false</c> if the operation was canceled by the user or
         /// the critical phase threw an exception; otherwise <c>true</c>.
         /// </returns>
-        private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalPhases, Action fail, Action succeed)
+        private Task<bool> CreateStageTask(CancellationToken cancellationToken, Action beforeStart, Func<bool> criticalPhase, IEnumerable<Action> optionalPhases, ExceptionEventHandler fail, Action succeed)
         {
             var canContinue = CreateCanContinueFunc(cancellationToken);
             return new TaskBuilder()
                 .OnThread(_callbackScheduler)
                 .CancelWith(cancellationToken)
                 .BeforeStart(_ => beforeStart())
+                .Fail(fail)
                 .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
                     {
                         cancellationToken.Register(() => Logger.Warn("User canceled current operation"));
 
-                        if (criticalPhase())
+                        if (!criticalPhase())
                         {
-                            foreach (var phase in optionalPhases.TakeWhile(phase => canContinue()))
-                            {
-                                phase();
-                            }
-
-                            if (canContinue())
-                            {
-                                invoker.InvokeOnUIThreadAsync(_ => succeed());
-                                return;
-                            }
+                            // TODO: How should we handle exceptions here?
+                            // The rest of the code assumes exceptions are being handled by the plugin runner.
+                            invoker.InvokeOnUIThreadAsync(_ => fail(new ExceptionEventArgs()));
+                            return;
                         }
 
-                        invoker.InvokeOnUIThreadAsync(_ => fail());
+                        foreach (var phase in optionalPhases.TakeWhile(phase => canContinue()))
+                        {
+                            phase();
+                        }
+
+                        if (!canContinue()) return;
+
+                        invoker.InvokeOnUIThreadAsync(_ => succeed());
                     })
                 .Build()
             ;
@@ -218,17 +220,17 @@ namespace BDHero
                     {
                         pluginRunner(token);
                     })
-                .Fail(delegate(Exception exception)
+                .Fail(delegate(ExceptionEventArgs args)
                     {
                         var progressProvider = _pluginService.GetProgressProvider(plugin);
-                        if (exception is OperationCanceledException)
+                        if (args.Exception is OperationCanceledException)
                         {
                             progressProvider.Cancel();
                         }
                         else
                         {
-                            progressProvider.Error(exception);
-                            HandleUnhandledException(exception);
+                            progressProvider.Error(args.Exception);
+                            HandleUnhandledException(args.Exception);
                         }
                     })
                 .Succeed(delegate
@@ -434,10 +436,10 @@ namespace BDHero
                 ScanStarted(this, EventArgs.Empty);
         }
 
-        private void ScanFail()
+        private void ScanFail(ExceptionEventArgs args)
         {
             if (ScanFailed != null)
-                ScanFailed(this, EventArgs.Empty);
+                ScanFailed(args);
 
             ScanComplete();
         }
@@ -462,10 +464,10 @@ namespace BDHero
                 ConvertStarted(this, EventArgs.Empty);
         }
 
-        private void ConvertFail()
+        private void ConvertFail(ExceptionEventArgs args)
         {
             if (ConvertFailed != null)
-                ConvertFailed(this, EventArgs.Empty);
+                ConvertFailed(args);
 
             ConvertComplete();
         }

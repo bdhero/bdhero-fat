@@ -507,7 +507,7 @@ namespace BDHeroGUI
             EnableControls(true);
         }
 
-        private void GetMetadataFail()
+        private void GetMetadataFail(ExceptionEventArgs args)
         {
             // TODO: Centralize button text
             buttonScan.Text = "Scan";
@@ -658,7 +658,7 @@ namespace BDHeroGUI
             RefreshUI();
         }
 
-        private void ControllerOnScanFailed(object sender, EventArgs eventArgs)
+        private void ControllerOnScanFailed(ExceptionEventArgs args)
         {
             if (IsCancellationRequested)
             {
@@ -697,7 +697,7 @@ namespace BDHeroGUI
             _taskbarItem.NoProgress();
         }
 
-        private void ControllerOnConvertFailed(object sender, EventArgs eventArgs)
+        private void ControllerOnConvertFailed(ExceptionEventArgs args)
         {
             if (IsCancellationRequested)
             {

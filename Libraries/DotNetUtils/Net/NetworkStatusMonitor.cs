@@ -61,7 +61,7 @@ namespace DotNetUtils.Net
             TestIsOnline();
         }
 
-        private void Fail(Exception e)
+        private void Fail(ExceptionEventArgs args)
         {
             IsOnline(false);
         }

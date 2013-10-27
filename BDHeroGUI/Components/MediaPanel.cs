@@ -180,9 +180,9 @@ namespace BDHeroGUI.Components
                     var image = coverArt.Image;
                     Logger.DebugFormat("Finished loading poster image: {0}", image);
                 })
-                .Fail(delegate(Exception exception)
+                .Fail(delegate(ExceptionEventArgs args)
                 {
-                    Logger.Error("Unable to fetch poster image", exception);
+                    Logger.Error("Unable to fetch poster image", args.Exception);
                     SelectedCoverArt = null;
                 })
                 .Succeed(delegate

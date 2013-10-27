@@ -152,11 +152,11 @@ namespace UpdateLib
             Notify(observer => observer.OnUpdateDownloadProgressChanged(_updater.LatestUpdate, progress));
         }
 
-        private void OnFail(Exception exception)
+        private void OnFail(ExceptionEventArgs args)
         {
             _updatesButtonClickAction = CheckForUpdatesAsync;
-            Logger.Error("Error checking for update", exception);
-            Notify(observer => observer.OnUpdateException(exception));
+            Logger.Error("Error checking for update", args.Exception);
+            Notify(observer => observer.OnUpdateException(args.Exception));
         }
 
         private void OnSucceed()

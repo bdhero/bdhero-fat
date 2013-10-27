@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BDHero.JobQueue;
 using BDHero.Plugin;
+using DotNetUtils;
 
 namespace BDHero
 {
@@ -34,7 +35,7 @@ namespace BDHero
         /// <summary>
         /// Invoked when the scanning stage aborts because of an error.
         /// </summary>
-        event EventHandler ScanFailed;
+        event ExceptionEventHandler ScanFailed;
 
         /// <summary>
         /// Invoked when the scanning stage completes, regardless of whether the it succeeded or failed.
@@ -55,7 +56,7 @@ namespace BDHero
         /// <summary>
         /// Invoked when the conversion stage aborts because of an error.
         /// </summary>
-        event EventHandler ConvertFailed;
+        event ExceptionEventHandler ConvertFailed;
 
         /// <summary>
         /// Invoked when the conversion stage completes, regardless of whether the it succeeded or failed.
@@ -100,7 +101,7 @@ namespace BDHero
         /// <param name="succeed">Callback that will be invoked if the task succeeds</param>
         /// <param name="mkvPath">Optional path to the output directory or MKV file</param>
         /// <returns>Task that returns <c>true</c> if the task succeeded; otherwise <c>false</c></returns>
-        Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, Action fail, Action succeed, string mkvPath = null);
+        Task<bool> CreateMetadataTask(CancellationToken cancellationToken, Action start, ExceptionEventHandler fail, Action succeed, string mkvPath = null);
 
         /// <summary>
         /// Scans a BD-ROM, retrieves metadata, auto-detects the type of each playlist and track, and renames tracks and output file names.

@@ -26,7 +26,7 @@ namespace DotNetUtils.TaskUtils
         private Action<CancellationToken> _beforeStart;
         private Action<IThreadInvoker, CancellationToken> _work;
         private Action _succeed;
-        private Action<Exception> _fail;
+        private ExceptionEventHandler _fail;
         private Action _finally;
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         /// <param name="fail">Action to run in the UI thread</param>
         /// <returns>Reference to this <c>TaskBuilder</c></returns>
-        public TaskBuilder Fail(Action<Exception> fail)
+        public TaskBuilder Fail(ExceptionEventHandler fail)
         {
             _fail = fail;
             return this;
@@ -193,10 +193,10 @@ namespace DotNetUtils.TaskUtils
             _invoker.InvokeOnUIThreadSync(token => _succeed());
         }
 
-        private void InvokeFail(Exception exception)
+        private void InvokeFail(ExceptionEventArgs args)
         {
             if (_fail == null) return;
-            _invoker.InvokeOnUIThreadSync(token => _fail(exception));
+            _invoker.InvokeOnUIThreadSync(token => _fail(args));
         }
 
         private void InvokeFinally()
@@ -215,7 +215,7 @@ namespace DotNetUtils.TaskUtils
                 }
                 catch (Exception exception)
                 {
-                    InvokeFail(exception);
+                    InvokeFail(new ExceptionEventArgs(exception));
                     return false;
                 }
             }
