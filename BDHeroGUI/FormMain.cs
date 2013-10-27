@@ -511,6 +511,7 @@ namespace BDHeroGUI
         {
             // TODO: Centralize button text
             buttonScan.Text = "Scan";
+
             if (IsCancellationRequested)
             {
                 AppendStatus("Metadata search canceled!");
@@ -521,6 +522,12 @@ namespace BDHeroGUI
                 AppendStatus("Metadata search failed!");
                 _taskbarItem.Error();
             }
+
+            if (args.Exception != null)
+            {
+                MessageBox.Show(this, args.Exception.ToString(), "Error: Metadata Search Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             EnableControls(true);
         }
 
@@ -670,6 +677,10 @@ namespace BDHeroGUI
                 AppendStatus("Scan failed!");
                 _taskbarItem.Error();
             }
+            if (args.Exception != null)
+            {
+                MessageBox.Show(this, args.Exception.ToString(), "Error: Scan Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ControllerOnScanCompleted(object sender, EventArgs eventArgs)
@@ -708,6 +719,10 @@ namespace BDHeroGUI
             {
                 AppendStatus("Convert failed!");
                 _taskbarItem.Error();
+            }
+            if (args.Exception != null)
+            {
+                MessageBox.Show(this, args.Exception.ToString(), "Error: Convert Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
