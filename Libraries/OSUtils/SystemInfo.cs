@@ -30,7 +30,7 @@ namespace OSUtils
         /// Gets the amount of available system memory in bytes.
         /// </summary>
         [UsedImplicitly]
-        public ulong AvailableMemory { get { return (ulong) _memoryAvailableCounter.NextValue(); } }
+        public ulong AvailableMemory { get { return GetAvailableMemory(); } }
 
         /// <summary>
         /// Gets the width of memory addresses in bits (e.g., 32, 64).
@@ -52,12 +52,8 @@ namespace OSUtils
         [UsedImplicitly]
         public readonly int ProcessorCount;
 
-        private readonly PerformanceCounter _memoryAvailableCounter;
-
         private SystemInfo()
         {
-            _memoryAvailableCounter = new PerformanceCounter("Memory", "Available Bytes");
-
             OS = GetOS();
             MemoryWidth = IntPtr.Size * 8;
             Is64BitProcess = Environment.Is64BitProcess;
@@ -117,33 +113,44 @@ namespace OSUtils
             return OSType.Unix;
         }
 
+        private static ulong GetAvailableMemory()
+        {
+            using (var counter = new PerformanceCounter("Memory", "Available Bytes"))
+            {
+                return (ulong) counter.NextValue();
+            }
+        }
+
         /// <summary>
         /// Gets the total amount of installed physical memory on the system using native Win32 interop,
         /// falling back to a Mono-specific <see cref="PerformanceCounter"/> implementation for *nix OSes.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The total amount of installed physical memory on the system.</returns>
         /// <see cref="http://stackoverflow.com/a/105109"/>
         private static ulong GetTotalPhysicalMemory()
         {
-            try
-            {
-                var memStatus = new MEMORYSTATUSEX();
-                if (GlobalMemoryStatusEx(memStatus))
-                {
-                    return memStatus.ullTotalPhys;
-                }
-            }
-            catch
-            {
-            }
-            try
-            {
-                return (ulong) new PerformanceCounter("Mono Memory", "Total Physical Memory").NextValue();
-            }
-            catch
-            {
-            }
+            try { return GetTotalPhysicalMemoryWin(); } catch {}
+            try { return GetTotalPhysicalMemoryNix(); } catch {}
             return 0;
+        }
+
+        /// <summary>
+        /// On Windows systems running .NET, gets the total amount of installed physical memory.
+        /// </summary>
+        /// <returns>The total amount of installed physical memory on the system.</returns>
+        private static ulong GetTotalPhysicalMemoryWin()
+        {
+            var memStatus = new MEMORYSTATUSEX();
+            return GlobalMemoryStatusEx(memStatus) ? memStatus.ullTotalPhys : 0;
+        }
+
+        /// <summary>
+        /// On systemes running Mono, gets the total amount of installed physical memory.
+        /// </summary>
+        /// <returns>The total amount of installed physical memory on the system.</returns>
+        private static ulong GetTotalPhysicalMemoryNix()
+        {
+            return (ulong) new PerformanceCounter("Mono Memory", "Total Physical Memory").NextValue();
         }
 
         /// <summary>
