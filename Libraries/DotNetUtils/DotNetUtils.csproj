@@ -96,6 +96,12 @@
     <Compile Include="Extensions\TextBoxExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\VersionExtensions.cs" />
+    <Compile Include="Forms\DetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DetailForm.Designer.cs">
+      <DependentUpon>DetailForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Mono.Options\Options.cs" />
     <Compile Include="MultiValueDictionary.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -123,6 +129,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\FileTextBox.resx">
       <DependentUpon>FileTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DetailForm.resx">
+      <DependentUpon>DetailForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
