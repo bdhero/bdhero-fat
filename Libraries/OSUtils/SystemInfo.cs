@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -18,6 +19,18 @@ namespace OSUtils
         /// </summary>
         [UsedImplicitly]
         public readonly OS OS;
+
+        /// <summary>
+        /// Gets the total amount of installed physical memory in bytes.
+        /// </summary>
+        [UsedImplicitly]
+        public ulong TotalPhysicalMemory { get { return GetTotalPhysicalMemory(); } }
+
+        /// <summary>
+        /// Gets the amount of available system memory in bytes.
+        /// </summary>
+        [UsedImplicitly]
+        public ulong AvailableMemory { get { return (ulong) _memoryAvailableCounter.NextValue(); } }
 
         /// <summary>
         /// Gets the width of memory addresses in bits (e.g., 32, 64).
@@ -39,8 +52,12 @@ namespace OSUtils
         [UsedImplicitly]
         public readonly int ProcessorCount;
 
+        private readonly PerformanceCounter _memoryAvailableCounter;
+
         private SystemInfo()
         {
+            _memoryAvailableCounter = new PerformanceCounter("Memory", "Available Bytes");
+
             OS = GetOS();
             MemoryWidth = IntPtr.Size * 8;
             Is64BitProcess = Environment.Is64BitProcess;
@@ -99,6 +116,99 @@ namespace OSUtils
             }
             return OSType.Unix;
         }
+
+        /// <summary>
+        /// Gets the total amount of installed physical memory on the system using native Win32 interop,
+        /// falling back to a Mono-specific <see cref="PerformanceCounter"/> implementation for *nix OSes.
+        /// </summary>
+        /// <returns></returns>
+        /// <see cref="http://stackoverflow.com/a/105109"/>
+        private static ulong GetTotalPhysicalMemory()
+        {
+            try
+            {
+                var memStatus = new MEMORYSTATUSEX();
+                if (GlobalMemoryStatusEx(memStatus))
+                {
+                    return memStatus.ullTotalPhys;
+                }
+            }
+            catch
+            {
+            }
+            try
+            {
+                return (ulong) new PerformanceCounter("Mono Memory", "Total Physical Memory").NextValue();
+            }
+            catch
+            {
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// contains information about the current state of both physical and virtual memory, including extended memory
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        public class MEMORYSTATUSEX
+        {
+            /// <summary>
+            /// Size of the structure, in bytes. You must set this member before calling GlobalMemoryStatusEx.
+            /// </summary>
+            public uint dwLength;
+
+            /// <summary>
+            /// Number between 0 and 100 that specifies the approximate percentage of physical memory that is in use (0 indicates no memory use and 100 indicates full memory use).
+            /// </summary>
+            public uint dwMemoryLoad;
+
+            /// <summary>
+            /// Total size of physical memory, in bytes.
+            /// </summary>
+            public ulong ullTotalPhys;
+
+            /// <summary>
+            /// Size of physical memory available, in bytes.
+            /// </summary>
+            public ulong ullAvailPhys;
+
+            /// <summary>
+            /// Size of the committed memory limit, in bytes. This is physical memory plus the size of the page file, minus a small overhead.
+            /// </summary>
+            public ulong ullTotalPageFile;
+
+            /// <summary>
+            /// Size of available memory to commit, in bytes. The limit is ullTotalPageFile.
+            /// </summary>
+            public ulong ullAvailPageFile;
+
+            /// <summary>
+            /// Total size of the user mode portion of the virtual address space of the calling process, in bytes.
+            /// </summary>
+            public ulong ullTotalVirtual;
+
+            /// <summary>
+            /// Size of unreserved and uncommitted memory in the user mode portion of the virtual address space of the calling process, in bytes.
+            /// </summary>
+            public ulong ullAvailVirtual;
+
+            /// <summary>
+            /// Size of unreserved and uncommitted memory in the extended portion of the virtual address space of the calling process, in bytes.
+            /// </summary>
+            public ulong ullAvailExtendedVirtual;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="MEMORYSTATUSEX"/> class.
+            /// </summary>
+            public MEMORYSTATUSEX()
+            {
+                dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
+            }
+        }
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern bool GlobalMemoryStatusEx([In, Out] MEMORYSTATUSEX lpBuffer);
 
         public override string ToString()
         {
