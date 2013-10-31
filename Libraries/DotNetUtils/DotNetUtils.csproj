@@ -102,6 +102,7 @@
     <Compile Include="Forms\DetailForm.Designer.cs">
       <DependentUpon>DetailForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\IWndProcObservable.cs" />
     <Compile Include="Mono.Options\Options.cs" />
     <Compile Include="MultiValueDictionary.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
