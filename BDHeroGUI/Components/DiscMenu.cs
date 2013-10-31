@@ -137,11 +137,11 @@ namespace BDHeroGUI.Components
 
         private void OnDropDownOpened(object sender, EventArgs eventArgs)
         {
+            ResetMenu();
         }
 
         private void OnDropDownClosed(object sender, EventArgs eventArgs)
         {
-            ResetMenu();
         }
 
         private void WndProc(ref Message m)
