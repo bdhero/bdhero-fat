@@ -28,16 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.buttonOk = new System.Windows.Forms.Button();
             this.systemIcon = new System.Windows.Forms.PictureBox();
             this.panel = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.textBoxDetails = new System.Windows.Forms.RichTextBox();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copySelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.selectallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxShowDetails = new System.Windows.Forms.CheckBox();
             this.labelSummary = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.systemIcon)).BeginInit();
             this.panel.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOk
@@ -87,6 +94,7 @@
             this.textBoxDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDetails.ContextMenuStrip = this.contextMenuStrip;
             this.textBoxDetails.HideSelection = false;
             this.textBoxDetails.Location = new System.Drawing.Point(3, 5);
             this.textBoxDetails.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
@@ -95,6 +103,42 @@
             this.textBoxDetails.Size = new System.Drawing.Size(416, 164);
             this.textBoxDetails.TabIndex = 1;
             this.textBoxDetails.Text = "";
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copySelectedToolStripMenuItem,
+            this.copyAllToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.selectallToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(149, 76);
+            // 
+            // copySelectedToolStripMenuItem
+            // 
+            this.copySelectedToolStripMenuItem.Name = "copySelectedToolStripMenuItem";
+            this.copySelectedToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.copySelectedToolStripMenuItem.Text = "Copy &selected";
+            this.copySelectedToolStripMenuItem.Click += new System.EventHandler(this.copySelectedToolStripMenuItem_Click);
+            // 
+            // copyAllToolStripMenuItem
+            // 
+            this.copyAllToolStripMenuItem.Name = "copyAllToolStripMenuItem";
+            this.copyAllToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.copyAllToolStripMenuItem.Text = "&Copy all";
+            this.copyAllToolStripMenuItem.Click += new System.EventHandler(this.copyAllToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(145, 6);
+            // 
+            // selectallToolStripMenuItem
+            // 
+            this.selectallToolStripMenuItem.Name = "selectallToolStripMenuItem";
+            this.selectallToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.selectallToolStripMenuItem.Text = "Select &all";
+            this.selectallToolStripMenuItem.Click += new System.EventHandler(this.selectallToolStripMenuItem_Click);
             // 
             // checkBoxShowDetails
             // 
@@ -140,6 +184,7 @@
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -153,5 +198,10 @@
         private System.Windows.Forms.RichTextBox textBoxDetails;
         private System.Windows.Forms.Label labelSummary;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem copySelectedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem selectallToolStripMenuItem;
     }
 }

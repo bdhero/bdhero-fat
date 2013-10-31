@@ -49,12 +49,25 @@ namespace DotNetUtils.Forms
             Load += OnLoad;
         }
 
+        #region Initialization
+
         private void OnLoad(object sender, EventArgs eventArgs)
         {
             InitText();
             InitIcon();
             InitAutoSize();
             InitToggle();
+            InitContextMenu();
+        }
+
+        private void InitContextMenu()
+        {
+            contextMenuStrip.Opening += ContextMenuStripOnOpening;
+        }
+
+        private void ContextMenuStripOnOpening(object sender, CancelEventArgs cancelEventArgs)
+        {
+            copySelectedToolStripMenuItem.Visible = !string.IsNullOrEmpty(textBoxDetails.SelectedText);
         }
 
         private void InitText()
@@ -84,6 +97,16 @@ namespace DotNetUtils.Forms
             _minSizeExpanded = new Size(Width, Height);
             _maxSizeExpanded = new Size();
         }
+
+        private void InitToggle()
+        {
+            checkBoxShowDetails.Click += ToggleDetails;
+            ToggleDetails();
+        }
+
+        #endregion
+
+        #region Show/Hide Details
 
         private void HideDetails()
         {
@@ -123,16 +146,7 @@ namespace DotNetUtils.Forms
             }
         }
 
-        private void InitToggle()
-        {
-            checkBoxShowDetails.Click += ToggleDetails;
-            ToggleDetails();
-        }
-
-        private void buttonOk_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        #endregion
 
         public static void ShowExceptionDetail(IWin32Window window, string title, Exception exception)
         {
@@ -143,6 +157,30 @@ namespace DotNetUtils.Forms
             }
             new DetailForm(title, exception.Message, exception.ToString(), MessageBoxIcon.Error).ShowDialog(window);
         }
+
+        #region UI Events
+
+        private void copySelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(textBoxDetails.SelectedText);
+        }
+
+        private void copyAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(textBoxDetails.Text);
+        }
+
+        private void selectallToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBoxDetails.SelectAll();
+        }
+
+        private void buttonOk_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
     }
 
     internal class IconMapping
