@@ -86,7 +86,6 @@ namespace BDHeroGUI
             this.tracksPanel = new BDHeroGUI.Components.TracksPanel();
             this.chaptersPanel = new BDHeroGUI.Components.ChaptersPanel();
             this.openDiscToolStripMenuItem = new BDHeroGUI.Components.DiscMenu(this.components);
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelRoot.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -490,14 +489,14 @@ namespace BDHeroGUI
             // 
             this.remuxerToolStripMenuItem.Enabled = false;
             this.remuxerToolStripMenuItem.Name = "remuxerToolStripMenuItem";
-            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.remuxerToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.remuxerToolStripMenuItem.Text = "&Remuxer";
             this.remuxerToolStripMenuItem.ToolTipText = "Launches the Remuxer in a separate window";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(147, 6);
             // 
             // optionsToolStripMenuItem
             // 
@@ -505,7 +504,7 @@ namespace BDHeroGUI
             this.optionsToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.settings;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.optionsToolStripMenuItem.Text = "&Options...";
             // 
             // helpToolStripMenuItem
@@ -642,18 +641,10 @@ namespace BDHeroGUI
             // 
             // openDiscToolStripMenuItem
             // 
-            this.openDiscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem});
             this.openDiscToolStripMenuItem.Image = global::BDHeroGUI.Properties.Resources.cd;
             this.openDiscToolStripMenuItem.Name = "openDiscToolStripMenuItem";
             this.openDiscToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.openDiscToolStripMenuItem.Text = "Open Disc";
-            // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.testToolStripMenuItem.Text = "Test";
             // 
             // FormMain
             // 
@@ -752,7 +743,6 @@ namespace BDHeroGUI
         private LinkLabel2 linkLabelNameProviderPreferences;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelOffline;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
     }
 }
 
