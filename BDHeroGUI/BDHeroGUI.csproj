@@ -99,6 +99,12 @@
     <Compile Include="Components\DiscInfoMetadataPanel.Designer.cs">
       <DependentUpon>DiscInfoMetadataPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\DiscMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\DiscMenu.Designer.cs">
+      <DependentUpon>DiscMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\MediaPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
