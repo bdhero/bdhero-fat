@@ -27,14 +27,14 @@ namespace DotNetUtils.Forms
 
         private static readonly IconMapping[] Icons =
         {
-            new IconMapping(MessageBoxIcon.Asterisk, SystemIcons.Asterisk, SystemSounds.Asterisk),
-            new IconMapping(MessageBoxIcon.Error, SystemIcons.Error, SystemSounds.Exclamation),
+            new IconMapping(MessageBoxIcon.Asterisk,    SystemIcons.Asterisk,    SystemSounds.Asterisk),
+            new IconMapping(MessageBoxIcon.Error,       SystemIcons.Error,       SystemSounds.Exclamation),
             new IconMapping(MessageBoxIcon.Exclamation, SystemIcons.Exclamation, SystemSounds.Exclamation),
-            new IconMapping(MessageBoxIcon.Hand, SystemIcons.Hand, SystemSounds.Hand),
+            new IconMapping(MessageBoxIcon.Hand,        SystemIcons.Hand,        SystemSounds.Hand),
             new IconMapping(MessageBoxIcon.Information, SystemIcons.Information, SystemSounds.Question),
-            new IconMapping(MessageBoxIcon.Question, SystemIcons.Question, SystemSounds.Question),
-            new IconMapping(MessageBoxIcon.Stop, SystemIcons.Error, SystemSounds.Exclamation),
-            new IconMapping(MessageBoxIcon.Warning, SystemIcons.Warning, SystemSounds.Exclamation)
+            new IconMapping(MessageBoxIcon.Question,    SystemIcons.Question,    SystemSounds.Question),
+            new IconMapping(MessageBoxIcon.Stop,        SystemIcons.Error,       SystemSounds.Exclamation),
+            new IconMapping(MessageBoxIcon.Warning,     SystemIcons.Warning,     SystemSounds.Exclamation)
         };
 
         public DetailForm(string title, string summary, string details, MessageBoxIcon icon)
