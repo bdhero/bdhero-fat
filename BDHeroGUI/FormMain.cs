@@ -347,6 +347,7 @@ namespace BDHeroGUI
         private void InitDriveDetector()
         {
             openDiscToolStripMenuItem.Initialize(this, new WindowsDriveDetector());
+            openDiscToolStripMenuItem.DiscSelected += driveInfo => Scan(driveInfo.Name);
         }
 
         #endregion
