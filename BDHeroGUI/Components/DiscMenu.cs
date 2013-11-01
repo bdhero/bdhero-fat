@@ -207,6 +207,7 @@ namespace BDHeroGUI.Components
         private void PopulateMenuAsync()
         {
             DropDownItems.Add(_scanningItem);
+            DropDownItems.Remove(_dummyItem);
 
             var drives = new DriveInfo[0];
 
