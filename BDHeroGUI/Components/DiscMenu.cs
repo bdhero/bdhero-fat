@@ -83,6 +83,8 @@ namespace BDHeroGUI.Components
         private bool _isScanning;
         private bool _isInitialized;
 
+        #region Constructors
+
         public DiscMenu()
         {
             InitializeComponent();
@@ -94,6 +96,10 @@ namespace BDHeroGUI.Components
 
             InitializeComponent();
         }
+
+        #endregion
+
+        #region Initialization
 
         /// <summary>
         /// Initializes the <see cref="BDHeroGUI.Components.DiscMenu"/> for use.
@@ -121,26 +127,28 @@ namespace BDHeroGUI.Components
             DropDownOpened += OnDropDownOpened;
             DropDownClosed += OnDropDownClosed;
 
-            ResetMenu();
+            Refresh();
 
             _isInitialized = true;
         }
+
+        #endregion
 
         #region Event handlers
 
         private void OnDeviceArrived(object sender, DriveDetectorEventArgs driveDetectorEventArgs)
         {
-            ResetMenu();
+            Refresh();
         }
 
         private void OnDeviceRemoved(object sender, DriveDetectorEventArgs driveDetectorEventArgs)
         {
-            ResetMenu();
+            Refresh();
         }
 
         private void OnDropDownOpened(object sender, EventArgs eventArgs)
         {
-            ResetMenu();
+            Refresh();
         }
 
         private void OnDropDownClosed(object sender, EventArgs eventArgs)
@@ -168,9 +176,38 @@ namespace BDHeroGUI.Components
 
         #endregion
 
-        private void ResetMenu()
+        #region Disc scanning and menu population logic
+
+        private void Refresh()
         {
-            PopulateMenuAsync();
+            ScanAsync();
+        }
+
+        private void ScanAsync()
+        {
+            if (_isScanning)
+            {
+                Logger.Debug("Already scanning for discs; ignoring");
+                return;
+            }
+
+            Logger.Debug("Scanning for discs...");
+
+            _isScanning = true;
+
+            DropDownItems.Add(_dividerItem);
+            DropDownItems.Add(_scanningItem);
+
+            var menuItems = new ToolStripItem[0];
+
+            new TaskBuilder()
+                .OnCurrentThread()
+                .DoWork((invoker, token) => menuItems = CreateToolStripItems(Drives))
+                .Succeed(() => UpdateMenu(menuItems))
+                .Fail(args => Logger.Error("Error occurred while scanning for discs", args.Exception))
+                .Finally(() => _isScanning = false)
+                .Build()
+                .Start();
         }
 
         private void ClearMenu()
@@ -203,7 +240,7 @@ namespace BDHeroGUI.Components
             }
         }
 
-        private void RePopulateMenu(ToolStripItem[] menuItems)
+        private void UpdateMenu(ToolStripItem[] menuItems)
         {
             Logger.DebugFormat("Found {0} discs", menuItems.Length);
 
@@ -227,7 +264,7 @@ namespace BDHeroGUI.Components
             // ALL menu items present in the dropdown list
             var newMenuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
 
-            var itemToSelect = newMenuItems.FirstOrDefault(item => AreDrivesEqual(item, selectedDrive));
+            var itemToSelect = newMenuItems.FirstOrDefault(item => selectedDrive.IsEqualTo(item));
 
             if (itemToSelect != null)
             {
@@ -246,57 +283,6 @@ namespace BDHeroGUI.Components
             }
         }
 
-        private static bool AreDrivesEqual(ToolStripItem item, DriveInfo otherDrive)
-        {
-            if (item == null || otherDrive == null) return false;
-
-            var itemDrive = item.Tag as DriveInfo;
-
-            return AreDrivesEqual(itemDrive, otherDrive);
-        }
-
-        private static bool AreDrivesEqual(DriveInfo drive1, DriveInfo drive2)
-        {
-            if (drive1 == null || drive2 == null) return false;
-
-            var name1 = drive1.Name;
-            var name2 = drive2.Name;
-
-            return string.Equals(name1, name2);
-        }
-
-        private void PopulateMenuAsync()
-        {
-            if (_isScanning)
-            {
-                Logger.Debug("Already scanning for discs; ignoring");
-                return;
-            }
-
-            Logger.Debug("Scanning for discs...");
-
-            _isScanning = true;
-
-            DropDownItems.Add(_dividerItem);
-            DropDownItems.Add(_scanningItem);
-
-            var menuItems = new ToolStripItem[0];
-
-            new TaskBuilder()
-                .OnCurrentThread()
-                .DoWork((invoker, token) => menuItems = CreateToolStripItems(Drives))
-                .Succeed(() => RePopulateMenu(menuItems))
-                .Fail(args => Logger.Error("Error occurred while scanning for discs", args.Exception))
-                .Finally(() => _isScanning = false)
-                .Build()
-                .Start();
-        }
-
-        private ToolStripItem[] CreateToolStripItems(DriveInfo[] drives)
-        {
-            return drives.Select(TryCreateMenuItem).Where(item => item != null).ToArray();
-        }
-
         private void PopulateMenuSync(ToolStripItem[] items)
         {
             DropDownItems.AddRange(items);
@@ -312,6 +298,15 @@ namespace BDHeroGUI.Components
             // to prevent the list from being positioned in the upper-left corner
             // of the screen.
             DropDownItems.Remove(_dummyItem);
+        }
+
+        #endregion
+
+        #region Menu item creation / destruction
+
+        private ToolStripItem[] CreateToolStripItems(DriveInfo[] drives)
+        {
+            return drives.Select(TryCreateMenuItem).Where(item => item != null).ToArray();
         }
 
         [CanBeNull]
@@ -339,6 +334,23 @@ namespace BDHeroGUI.Components
         {
             menuItem.Tag = null;
             menuItem.Click -= MenuItemOnClick;
+        }
+
+        #endregion
+    }
+
+    internal static class DriveInfoExtensions
+    {
+        public static bool IsEqualTo(this DriveInfo thisDrive, ToolStripItem item)
+        {
+            if (item == null || thisDrive == null) return false;
+            return thisDrive.IsEqualTo(item.Tag as DriveInfo);
+        }
+
+        private static bool IsEqualTo(this DriveInfo drive1, DriveInfo drive2)
+        {
+            if (drive1 == null || drive2 == null) return false;
+            return string.Equals(drive1.Name, drive2.Name);
         }
     }
 
