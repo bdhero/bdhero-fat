@@ -202,6 +202,66 @@ namespace BDHeroGUI.Components
             }
         }
 
+        private void RePopulateMenu(ToolStripItem[] menuItems)
+        {
+            // ALL menu items present in the dropdown list
+            var oldMenuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
+
+            var selectedItem = oldMenuItems.FirstOrDefault(item => item.Selected);
+            var selectedIndex = -1;
+
+            DriveInfo selectedDrive = null;
+
+            if (selectedItem != null)
+            {
+                selectedIndex = DropDownItems.IndexOf(selectedItem);
+                selectedDrive = selectedItem.Tag as DriveInfo;
+            }
+
+            ClearMenu();
+            PopulateMenuSync(menuItems);
+
+            // ALL menu items present in the dropdown list
+            var newMenuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
+
+            var itemToSelect = newMenuItems.FirstOrDefault(item => AreDrivesEqual(item, selectedDrive));
+
+            if (itemToSelect != null)
+            {
+                itemToSelect.Select();
+            }
+            else if (selectedIndex >= 0 && newMenuItems.Any())
+            {
+                if (selectedIndex < newMenuItems.Count())
+                {
+                    newMenuItems[selectedIndex].Select();
+                }
+                else
+                {
+                    newMenuItems.Last().Select();
+                }
+            }
+        }
+
+        private static bool AreDrivesEqual(ToolStripItem item, DriveInfo otherDrive)
+        {
+            if (item == null || otherDrive == null) return false;
+
+            var itemDrive = item.Tag as DriveInfo;
+
+            return AreDrivesEqual(itemDrive, otherDrive);
+        }
+
+        private static bool AreDrivesEqual(DriveInfo drive1, DriveInfo drive2)
+        {
+            if (drive1 == null || drive2 == null) return false;
+
+            var name1 = drive1.Name;
+            var name2 = drive2.Name;
+
+            return string.Equals(name1, name2);
+        }
+
         private void PopulateMenuAsync()
         {
             if (_isScanning) return;
@@ -216,11 +276,7 @@ namespace BDHeroGUI.Components
             new TaskBuilder()
                 .OnCurrentThread()
                 .DoWork((invoker, token) => menuItems = CreateToolStripItems(Drives))
-                .Succeed(delegate
-                    {
-                        ClearMenu();
-                        PopulateMenuSync(menuItems);
-                    })
+                .Succeed(() => RePopulateMenu(menuItems))
                 .Finally(() => _isScanning = false)
                 .Build()
                 .Start();
