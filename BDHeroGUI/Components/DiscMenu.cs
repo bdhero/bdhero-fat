@@ -214,7 +214,6 @@ namespace BDHeroGUI.Components
             DropDownItems.Add(_dividerItem);
             DropDownItems.Add(_scanningItem);
 
-            var drives = new DriveInfo[0];
             var menuItems = new ToolStripItem[0];
 
             new TaskBuilder()
