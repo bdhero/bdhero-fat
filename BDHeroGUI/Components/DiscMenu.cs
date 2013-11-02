@@ -66,12 +66,20 @@ namespace BDHeroGUI.Components
 
         #endregion
 
+        /// <summary>
+        /// Gets a collection of all BD-ROM drives connected to the host OS.
+        /// </summary>
         private static DriveInfo[] Drives
         {
-            get
-            {
-                return DriveInfo.GetDrives().Where(BDFileUtils.IsBDROM).ToArray();
-            }
+            get { return DriveInfo.GetDrives().Where(BDFileUtils.IsBDROM).ToArray(); }
+        }
+
+        /// <summary>
+        /// Gets ALL menu items present in the dropdown list.
+        /// </summary>
+        private ToolStripItem[] AllMenuItems
+        {
+            get { return DropDownItems.OfType<ToolStripItem>().ToArray(); }
         }
 
         private readonly ToolStripMenuItem _dummyItem = new ToolStripMenuItem("DUMMY") { Enabled = false };
@@ -217,16 +225,11 @@ namespace BDHeroGUI.Components
             // of the screen.
             DropDownItems.Add(_dummyItem);
 
-            var dummyItems = new[] { _dummyItem };
-
             // Special menu items that should NOT be destroyed
             var specialItems = new ToolStripItem[] { _noDiscItem, _scanningItem, _dividerItem };
 
-            // ALL menu items present in the dropdown list
-            var allMenuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
-
             // Disc Drive menu items
-            var destroyableItems = allMenuItems.Except(specialItems).Except(dummyItems).ToArray();
+            var destroyableItems = AllMenuItems.Except(specialItems).Except(new[] { _dummyItem }).ToArray();
 
             foreach (var menuItem in destroyableItems)
             {
@@ -244,10 +247,7 @@ namespace BDHeroGUI.Components
         {
             Logger.DebugFormat("Found {0} discs", menuItems.Length);
 
-            // ALL menu items present in the dropdown list
-            var oldMenuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
-
-            var selectedItem = oldMenuItems.FirstOrDefault(item => item.Selected);
+            var selectedItem = AllMenuItems.FirstOrDefault(item => item.Selected);
             var selectedIndex = -1;
 
             DriveInfo selectedDrive = null;
@@ -262,7 +262,7 @@ namespace BDHeroGUI.Components
             PopulateMenuSync(menuItems);
 
             // ALL menu items present in the dropdown list
-            var newMenuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
+            var newMenuItems = AllMenuItems;
 
             var itemToSelect = newMenuItems.FirstOrDefault(item => selectedDrive.IsEqualTo(item));
 
@@ -287,7 +287,7 @@ namespace BDHeroGUI.Components
         {
             DropDownItems.AddRange(items);
 
-            var menuItems = DropDownItems.OfType<ToolStripItem>().Except(new[] { _dummyItem }).ToArray();
+            var menuItems = AllMenuItems.Except(new[] { _dummyItem }).ToArray();
 
             if (!menuItems.Any())
             {
