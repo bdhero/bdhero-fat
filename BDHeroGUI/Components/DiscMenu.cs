@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using BDHero.Utils;
+using DotNetUtils.Annotations;
 using DotNetUtils.Forms;
 using DotNetUtils.TaskUtils;
 using OSUtils.DriveDetector;
@@ -75,8 +76,11 @@ namespace BDHeroGUI.Components
         private readonly ToolStripMenuItem _dummyItem = new ToolStripMenuItem("DUMMY") { Enabled = false };
         private readonly ToolStripMenuItem _noDiscItem = new ToolStripMenuItem(DefaultNoDiscText) { Enabled = false };
         private readonly ToolStripMenuItem _scanningItem = new ToolStripMenuItem(DefaultScanningText) { Enabled = false };
+        private readonly ToolStripSeparator _dividerItem = new ToolStripSeparator();
 
         private IDriveDetector _detector;
+
+        private bool _isScanning;
 
         private bool _initialized;
         public DiscMenu()
@@ -167,7 +171,6 @@ namespace BDHeroGUI.Components
 
         private void ResetMenu()
         {
-            ClearMenu();
             PopulateMenuAsync();
         }
 
@@ -181,16 +184,13 @@ namespace BDHeroGUI.Components
             var dummyItems = new[] { _dummyItem };
 
             // Special menu items that should NOT be destroyed
-            var specialItems = new[] { _noDiscItem, _scanningItem };
+            var specialItems = new ToolStripItem[] { _noDiscItem, _scanningItem, _dividerItem };
 
             // ALL menu items present in the dropdown list
-            var menuItems = DropDownItems.OfType<ToolStripMenuItem>().ToArray();
+            var menuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
 
             // Disc Drive menu items
             var destroyableItems = menuItems.Except(specialItems).Except(dummyItems).ToArray();
-
-            // Special menu items (only those actually present in the dropdown list)
-            var removableItems = menuItems.Intersect(specialItems).ToArray();
 
             foreach (var menuItem in destroyableItems)
             {
@@ -198,7 +198,7 @@ namespace BDHeroGUI.Components
                 DropDownItems.Remove(menuItem);
             }
 
-            foreach (var menuItem in removableItems)
+            foreach (var menuItem in specialItems)
             {
                 DropDownItems.Remove(menuItem);
             }
@@ -206,31 +206,39 @@ namespace BDHeroGUI.Components
 
         private void PopulateMenuAsync()
         {
+            if (_isScanning) return;
+
+            _isScanning = true;
+
+            DropDownItems.Add(_dividerItem);
             DropDownItems.Add(_scanningItem);
-            DropDownItems.Remove(_dummyItem);
 
             var drives = new DriveInfo[0];
+            var menuItems = new ToolStripItem[0];
 
             new TaskBuilder()
                 .OnCurrentThread()
-                .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
-                    {
-                        drives = Drives;
-                    })
+                .DoWork((invoker, token) => menuItems = CreateToolStripItems(Drives))
                 .Succeed(delegate
                     {
                         ClearMenu();
-                        PopulateMenuSync(drives);
+                        PopulateMenuSync(menuItems);
                     })
+                .Finally(() => _isScanning = false)
                 .Build()
                 .Start();
         }
 
-        private void PopulateMenuSync(DriveInfo[] drives)
+        private ToolStripItem[] CreateToolStripItems(DriveInfo[] drives)
         {
-            DropDownItems.AddRange(drives.Select(CreateMenuItem).ToArray());
+            return drives.Select(TryCreateMenuItem).Where(item => item != null).ToArray();
+        }
 
-            var menuItems = DropDownItems.OfType<ToolStripMenuItem>().Except(new [] { _dummyItem }).ToArray();
+        private void PopulateMenuSync(ToolStripItem[] items)
+        {
+            DropDownItems.AddRange(items);
+
+            var menuItems = DropDownItems.OfType<ToolStripItem>().Except(new[] { _dummyItem }).ToArray();
 
             if (!menuItems.Any())
             {
@@ -241,6 +249,13 @@ namespace BDHeroGUI.Components
             // to prevent the list from being positioned in the upper-left corner
             // of the screen.
             DropDownItems.Remove(_dummyItem);
+        }
+
+        [CanBeNull]
+        private ToolStripItem TryCreateMenuItem(DriveInfo driveInfo)
+        {
+            try { return CreateMenuItem(driveInfo); }
+            catch { return null; }
         }
 
         private ToolStripItem CreateMenuItem(DriveInfo driveInfo)
