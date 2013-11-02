@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -258,6 +259,10 @@ namespace BDHeroGUI.Components
             catch { return null; }
         }
 
+        /// <exception cref="IOException">An I/O error occurred (for example, a disk error or a drive was not ready).</exception>
+        /// <exception cref="DriveNotFoundException">The drive is not mapped or does not exist.</exception>
+        /// <exception cref="SecurityException">The caller does not have the required permission.</exception>
+        /// <exception cref="UnauthorizedAccessException">The volume label is being set on a network or CD-ROM drive.-or-Access to the drive information is denied.</exception>
         private ToolStripItem CreateMenuItem(DriveInfo driveInfo)
         {
             var driveLetter = driveInfo.Name;
