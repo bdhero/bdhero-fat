@@ -80,9 +80,7 @@ namespace BDHeroGUI.Components
         private readonly ToolStripSeparator _dividerItem = new ToolStripSeparator();
 
         private IDriveDetector _detector;
-
         private bool _isScanning;
-
         private bool _isInitialized;
 
         public DiscMenu()
