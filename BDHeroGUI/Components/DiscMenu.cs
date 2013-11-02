@@ -81,6 +81,7 @@ namespace BDHeroGUI.Components
         private bool _isScanning;
 
         private bool _initialized;
+
         public DiscMenu()
         {
             InitializeComponent();
