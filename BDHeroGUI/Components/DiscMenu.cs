@@ -188,10 +188,10 @@ namespace BDHeroGUI.Components
             var specialItems = new ToolStripItem[] { _noDiscItem, _scanningItem, _dividerItem };
 
             // ALL menu items present in the dropdown list
-            var menuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
+            var allMenuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
 
             // Disc Drive menu items
-            var destroyableItems = menuItems.Except(specialItems).Except(dummyItems).ToArray();
+            var destroyableItems = allMenuItems.Except(specialItems).Except(dummyItems).ToArray();
 
             foreach (var menuItem in destroyableItems)
             {
