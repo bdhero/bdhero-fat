@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using BDHero.Utils;
@@ -14,7 +12,6 @@ using DotNetUtils.Annotations;
 using DotNetUtils.Forms;
 using DotNetUtils.TaskUtils;
 using OSUtils.DriveDetector;
-using Timer = System.Windows.Forms.Timer;
 
 namespace BDHeroGUI.Components
 {
