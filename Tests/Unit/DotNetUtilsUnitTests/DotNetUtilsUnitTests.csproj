@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Concurrency\ConcurrentMultiValueDictionaryTest.cs" />
     <Compile Include="FileDownloaderUnitTest.cs" />
     <Compile Include="FileUtilsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

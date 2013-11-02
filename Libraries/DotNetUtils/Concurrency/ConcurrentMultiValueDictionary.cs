@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DotNetUtils.Annotations;
-using DotNetUtils.Extensions;
 
 namespace DotNetUtils.Concurrency
 {
@@ -14,7 +13,7 @@ namespace DotNetUtils.Concurrency
     /// <typeparam name="TValue">Value type</typeparam>
     public class ConcurrentMultiValueDictionary<TKey, TValue>
     {
-        private readonly MultiValueDictionary<TKey, TValue> _dictionary = new MultiValueDictionary<TKey, TValue>();
+        private readonly Dictionary<TKey, Queue<TValue>> _dictionary = new Dictionary<TKey, Queue<TValue>>();
 
         public bool TryDequeue(TKey key, out TValue value)
         {
@@ -26,9 +25,7 @@ namespace DotNetUtils.Concurrency
                     return false;
                 }
 
-                var queue = _dictionary[key];
-                value = queue.First();
-                queue.RemoveAt(0);
+                value = _dictionary[key].Dequeue();
                 return true;
             }
         }
@@ -37,7 +34,11 @@ namespace DotNetUtils.Concurrency
         {
             lock (_dictionary)
             {
-                _dictionary.Add(key, value);
+                if (!_dictionary.ContainsKey(key))
+                {
+                    _dictionary[key] = new Queue<TValue>();
+                }
+                _dictionary[key].Enqueue(value);
             }
         }
 
@@ -55,9 +56,9 @@ namespace DotNetUtils.Concurrency
         /// Mutating the returned list will not affect the dictionary's queue.
         /// </remarks>
         [NotNull]
-        public IList<TValue> GetValues(TKey key)
+        public List<TValue> GetValues(TKey key)
         {
-            IList<TValue> values = new List<TValue>();
+            var values = new List<TValue>();
 
             lock (_dictionary)
             {
@@ -74,7 +75,7 @@ namespace DotNetUtils.Concurrency
         /// Gets all keys that have at least one value in their queue.
         /// </summary>
         /// <returns>List of keys whose queues are non-empty (i.e., have at least one value).</returns>
-        public IList<TKey> GetKeys()
+        public List<TKey> GetKeys()
         {
             lock (_dictionary)
             {
