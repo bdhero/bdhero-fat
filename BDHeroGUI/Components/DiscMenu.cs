@@ -83,7 +83,7 @@ namespace BDHeroGUI.Components
 
         private bool _isScanning;
 
-        private bool _initialized;
+        private bool _isInitialized;
 
         public DiscMenu()
         {
@@ -109,7 +109,7 @@ namespace BDHeroGUI.Components
         /// <exception cref="InvalidOperationException">Thrown if this method is called more than once.</exception>
         public void Initialize(IWndProcObservable observable, IDriveDetector detector)
         {
-            if (_initialized)
+            if (_isInitialized)
             {
                 throw new InvalidOperationException("DiscMenu has already been initialized");
             }
@@ -125,7 +125,7 @@ namespace BDHeroGUI.Components
 
             ResetMenu();
 
-            _initialized = true;
+            _isInitialized = true;
         }
 
         #region Event handlers
