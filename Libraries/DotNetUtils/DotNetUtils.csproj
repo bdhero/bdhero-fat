@@ -60,6 +60,11 @@
   <ItemGroup>
     <Compile Include="AppUtils.cs" />
     <Compile Include="AssemblyUtils.cs" />
+    <Compile Include="Concurrency\AtomicValue.cs" />
+    <Compile Include="Concurrency\ConcurrentLinkedSet.cs" />
+    <Compile Include="Concurrency\ConcurrentMultiValueDictionary.cs" />
+    <Compile Include="Concurrency\IPromise.cs" />
+    <Compile Include="Concurrency\Promise.cs" />
     <Compile Include="Controls\FileTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
