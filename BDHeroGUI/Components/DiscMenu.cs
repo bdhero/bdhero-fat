@@ -21,6 +21,9 @@ namespace BDHeroGUI.Components
     [ToolboxItem(true)]
     public partial class DiscMenu : ToolStripMenuItem
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         #region Default text values
 
         private const string DefaultNoDiscText = "No discs found";
@@ -113,7 +116,6 @@ namespace BDHeroGUI.Components
 
             observable.WndProcMessage += WndProc;
 
-            // TODO: Handle exceptions
             _detector = detector;
             _detector.DeviceArrived += OnDeviceArrived;
             _detector.DeviceRemoved += OnDeviceRemoved;
@@ -205,6 +207,8 @@ namespace BDHeroGUI.Components
 
         private void RePopulateMenu(ToolStripItem[] menuItems)
         {
+            Logger.DebugFormat("Found {0} discs", menuItems.Length);
+
             // ALL menu items present in the dropdown list
             var oldMenuItems = DropDownItems.OfType<ToolStripItem>().ToArray();
 
@@ -233,7 +237,7 @@ namespace BDHeroGUI.Components
             }
             else if (selectedIndex >= 0 && newMenuItems.Any())
             {
-                if (selectedIndex < newMenuItems.Count())
+                if (selectedIndex < newMenuItems.Length)
                 {
                     newMenuItems[selectedIndex].Select();
                 }
@@ -265,7 +269,13 @@ namespace BDHeroGUI.Components
 
         private void PopulateMenuAsync()
         {
-            if (_isScanning) return;
+            if (_isScanning)
+            {
+                Logger.Debug("Already scanning for discs; ignoring");
+                return;
+            }
+
+            Logger.Debug("Scanning for discs...");
 
             _isScanning = true;
 
@@ -278,6 +288,7 @@ namespace BDHeroGUI.Components
                 .OnCurrentThread()
                 .DoWork((invoker, token) => menuItems = CreateToolStripItems(Drives))
                 .Succeed(() => RePopulateMenu(menuItems))
+                .Fail(args => Logger.Error("Error occurred while scanning for discs", args.Exception))
                 .Finally(() => _isScanning = false)
                 .Build()
                 .Start();
@@ -309,7 +320,8 @@ namespace BDHeroGUI.Components
         private ToolStripItem TryCreateMenuItem(DriveInfo driveInfo)
         {
             try { return CreateMenuItem(driveInfo); }
-            catch { return null; }
+            catch (Exception e) { Logger.InfoFormat("Ignoring exception: {0}", e); }
+            return null;
         }
 
         /// <exception cref="IOException">An I/O error occurred (for example, a disk error or a drive was not ready).</exception>
