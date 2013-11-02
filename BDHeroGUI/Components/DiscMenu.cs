@@ -247,40 +247,12 @@ namespace BDHeroGUI.Components
         {
             Logger.DebugFormat("Found {0} discs", menuItems.Length);
 
-            var selectedItem = AllMenuItems.FirstOrDefault(item => item.Selected);
-            var selectedIndex = -1;
-
-            DriveInfo selectedDrive = null;
-
-            if (selectedItem != null)
-            {
-                selectedIndex = DropDownItems.IndexOf(selectedItem);
-                selectedDrive = selectedItem.Tag as DriveInfo;
-            }
+            var selectionState = new MenuSelectionState(AllMenuItems);
 
             ClearMenu();
             PopulateMenuSync(menuItems);
 
-            // ALL menu items present in the dropdown list
-            var newMenuItems = AllMenuItems;
-
-            var itemToSelect = newMenuItems.FirstOrDefault(item => selectedDrive.IsEqualTo(item));
-
-            if (itemToSelect != null)
-            {
-                itemToSelect.Select();
-            }
-            else if (selectedIndex >= 0 && newMenuItems.Any())
-            {
-                if (selectedIndex < newMenuItems.Length)
-                {
-                    newMenuItems[selectedIndex].Select();
-                }
-                else
-                {
-                    newMenuItems.Last().Select();
-                }
-            }
+            selectionState.Restore(AllMenuItems);
         }
 
         private void PopulateMenuSync(ToolStripItem[] items)
@@ -334,6 +306,75 @@ namespace BDHeroGUI.Components
         {
             menuItem.Tag = null;
             menuItem.Click -= MenuItemOnClick;
+        }
+
+        #endregion
+
+        #region Selection state management
+
+        /// <summary>
+        /// Captures and restores the selection state (i.e., which item is selected) of a dropdown menu.
+        /// </summary>
+        private class MenuSelectionState
+        {
+            private readonly int? _selectedIndex;
+            private readonly DriveInfo _selectedDrive;
+
+            /// <summary>
+            /// Constructs a new <see cref="MenuSelectionState"/> object and captures the selection state
+            /// (i.e., which menu item is selected, if any) from the given menu items.
+            /// </summary>
+            /// <param name="oldMenuItems">Items present in the dropdown menu <b>before</b> being repopulated.</param>
+            public MenuSelectionState(ToolStripItem[] oldMenuItems)
+            {
+                var selectedItem = oldMenuItems.FirstOrDefault(item => item.Selected);
+                if (selectedItem == null) return;
+
+                _selectedIndex = oldMenuItems.ToList().IndexOf(selectedItem);
+                _selectedDrive = selectedItem.Tag as DriveInfo;
+            }
+
+            /// <summary>
+            /// Selects the same menu item that was selected previously.
+            /// If the previously selected item is no longer in the list,
+            /// the item at the same index is selected.
+            /// </summary>
+            /// <param name="newMenuItems">Items present in the dropdown menu <b>after</b> being repopulated.</param>
+            public void Restore(ToolStripItem[] newMenuItems)
+            {
+                if (RestoreSelectedDrive(newMenuItems)) return;
+                if (RestoreSelectedIndex(newMenuItems)) return;
+            }
+
+            private bool RestoreSelectedDrive(ToolStripItem[] newMenuItems)
+            {
+                if (_selectedDrive == null) return false;
+
+                var itemToSelect = newMenuItems.FirstOrDefault(item => _selectedDrive.IsEqualTo(item));
+                if (itemToSelect == null) return false;
+
+                itemToSelect.Select();
+
+                return true;
+            }
+
+            private bool RestoreSelectedIndex(ToolStripItem[] newMenuItems)
+            {
+                if (!_selectedIndex.HasValue) return false;
+                if (!newMenuItems.Any()) return false;
+                if (_selectedIndex < 0) return false;
+
+                if (_selectedIndex < newMenuItems.Length)
+                {
+                    newMenuItems[_selectedIndex.Value].Select();
+                }
+                else
+                {
+                    newMenuItems.Last().Select();
+                }
+
+                return true;
+            }
         }
 
         #endregion
