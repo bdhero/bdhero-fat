@@ -92,7 +92,7 @@ namespace BDHeroGUI.Components
         }
 
         /// <summary>
-        /// Initializes the <see cref="BDHeroGUI.Components.DiscMenuPlain"/> for use.
+        /// Initializes the <see cref="BDHeroGUI.Components.DiscMenu"/> for use.
         /// </summary>
         /// <param name="observable">
         /// Windows Forms control (typically a <see cref="Form"/>) to listen for <see cref="Form.WndProc"/> events on.
