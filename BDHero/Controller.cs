@@ -265,7 +265,14 @@ namespace BDHero
         private bool ReadBDROM(CancellationToken cancellationToken, string bdromPath)
         {
             IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First(plugin => plugin.Enabled);
-            var pluginTask = RunPluginSync(cancellationToken, discReader, token => Job = new Job(discReader.ReadBDROM(token, bdromPath)));
+            var pluginTask = RunPluginSync(cancellationToken, discReader, delegate(CancellationToken token)
+                {
+                    var disc = discReader.ReadBDROM(token, bdromPath);
+                    if (!token.IsCancellationRequested)
+                    {
+                        Job = new Job(disc);
+                    }
+                });
             return pluginTask.IsCompleted && pluginTask.Result;
         }
 

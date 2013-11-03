@@ -486,8 +486,8 @@ namespace BDHeroGUI
             buttonCancelConvert.Enabled = !enabled && isPlaylistSelected;
             linkLabelNameProviderPreferences.Enabled = enabled;
 
-            splitContainerTop.Enabled = enabled;
-            splitContainerMain.Enabled = enabled;
+            splitContainerTop.Enabled = enabled && hasJob;
+            splitContainerMain.Enabled = enabled && hasJob;
 
             _isRunning = !enabled;
         }
