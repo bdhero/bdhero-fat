@@ -64,7 +64,8 @@
     <Compile Include="Concurrency\ConcurrentLinkedSet.cs" />
     <Compile Include="Concurrency\ConcurrentMultiValueDictionary.cs" />
     <Compile Include="Concurrency\IPromise.cs" />
-    <Compile Include="Concurrency\Promise.cs" />
+    <Compile Include="Concurrency\TimerPromise.cs" />
+    <Compile Include="Concurrency\PromiseDelegates.cs" />
     <Compile Include="Controls\FileTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

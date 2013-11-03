@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,22 +11,15 @@ using Timer = System.Timers.Timer;
 
 namespace DotNetUtils.Concurrency
 {
-    public delegate void BeforePromiseHandler(IPromise promise);
-    public delegate void DoWorkPromiseHandler(IPromise promise);
-    public delegate void CancellationRequestedPromiseHandler(IPromise promise);
-    public delegate void CanceledPromiseHandler(IPromise promise);
-    public delegate void SuccessPromiseHandler(IPromise promise);
-    public delegate void FailurePromiseHandler(IPromise promise);
-    public delegate void AlwaysPromiseHandler(IPromise promise);
-    public delegate void ProgressPromiseHandler<TState>(IPromise promise, TState state);
-
-    internal delegate void ProgressPromiseHandler(object state);
-
-    public class Promise : IPromise
+    public class TimerPromise : IPromise
     {
+        private delegate void ProgressPromiseHandler(object state);
+
         private static readonly TimeSpan DefaultInterval = TimeSpan.FromSeconds(1/10);
 
         private readonly AtomicValue<Exception> _lastException = new AtomicValue<Exception>();
+
+        #region Event handlers
 
         private readonly ConcurrentLinkedSet<BeforePromiseHandler> _beforeHandlers =
             new ConcurrentLinkedSet<BeforePromiseHandler>();
@@ -51,6 +45,10 @@ namespace DotNetUtils.Concurrency
         private readonly ConcurrentMultiValueDictionary<Type, ProgressPromiseHandler> _progressHandlers =
             new ConcurrentMultiValueDictionary<Type, ProgressPromiseHandler>();
 
+        #endregion
+
+        #region Event queues
+
         private readonly ConcurrentMultiValueDictionary<Type, object> _progressEventStates =
             new ConcurrentMultiValueDictionary<Type, object>();
 
@@ -58,14 +56,17 @@ namespace DotNetUtils.Concurrency
         private readonly ConcurrentQueue<DateTime> _successQueue = new ConcurrentQueue<DateTime>();
         private readonly ConcurrentQueue<DateTime> _finishedQueue = new ConcurrentQueue<DateTime>();
 
-        private readonly Timer _timer = new Timer(DefaultInterval.TotalMilliseconds);
+        #endregion
 
         private volatile bool _hasStarted;
 
+        private readonly Timer _timer = new Timer(DefaultInterval.TotalMilliseconds) { AutoReset = true };
+
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-        public Promise()
+        public TimerPromise(ISynchronizeInvoke synchronizingObject)
         {
+            _timer.SynchronizingObject = synchronizingObject;
             _timer.Elapsed += OnTimerElapsed;
             _cancellationTokenSource.Token.Register(OnCancellationRequested);
         }
@@ -154,6 +155,8 @@ namespace DotNetUtils.Concurrency
 
         #endregion
 
+        #region Public control methods
+
         public void Start()
         {
             PreventMultipleStarts();
@@ -167,11 +170,15 @@ namespace DotNetUtils.Concurrency
             _cancellationTokenSource.Cancel();
         }
 
+        #endregion
+
+        #region Private methods
+
         private void PreventMultipleStarts()
         {
             if (_hasStarted)
             {
-                throw new InvalidOperationException("Promise.Start() cannot be called more than once");
+                throw new InvalidOperationException("TimerPromise.Start() cannot be called more than once");
             }
 
             _hasStarted = true;
@@ -341,5 +348,7 @@ namespace DotNetUtils.Concurrency
                 handler(this);
             }
         }
+
+        #endregion
     }
 }
