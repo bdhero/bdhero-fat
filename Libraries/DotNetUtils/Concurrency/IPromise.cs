@@ -76,7 +76,7 @@ namespace DotNetUtils.Concurrency
 
         /// <summary>
         /// Registers the specified <paramref name="handler"/> to be notified when the background thread
-        /// terminates abnormally from an exception being thrown.
+        /// terminates abnormally due to an exception being thrown.
         /// </summary>
         /// <param name="handler">Event handler to register.</param>
         /// <returns>Reference to this <see cref="IPromise"/> object.</returns>
