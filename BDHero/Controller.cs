@@ -219,6 +219,11 @@ namespace BDHero
                 .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
                     {
                         pluginRunner(token);
+
+                        if (token.IsCancellationRequested)
+                        {
+                            throw new OperationCanceledException();
+                        }
                     })
                 .Fail(delegate(ExceptionEventArgs args)
                     {
