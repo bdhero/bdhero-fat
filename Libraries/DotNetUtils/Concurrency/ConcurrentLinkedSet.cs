@@ -6,6 +6,11 @@ using System.Threading;
 
 namespace DotNetUtils.Concurrency
 {
+    /// <summary>
+    /// Thread-safe set that maintains the order in which items are added (like a linked list)
+    /// and provides fast reads and only blocks during writes.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ConcurrentLinkedSet<T>
     {
         /// <summary>
@@ -20,6 +25,10 @@ namespace DotNetUtils.Concurrency
         private readonly List<T> _list = new List<T>();
         private readonly ISet<T> _set = new HashSet<T>();
 
+        /// <summary>
+        /// Adds the given <paramref name="value"/> to the set if it is not already present.
+        /// </summary>
+        /// <param name="value"></param>
         public void Add(T value)
         {
             if (!_lock.TryEnterWriteLock(MaxWait)) return;
