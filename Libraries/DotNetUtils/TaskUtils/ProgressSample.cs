@@ -19,13 +19,8 @@ namespace DotNetUtils.TaskUtils
         private int _minSampleSize = 5;
         private int _maxSampleSize = 10;
 
-        public void Reset()
-        {
-            ProgressSampleUnit result;
-            while (_samples.Count > _maxSampleSize && _samples.TryDequeue(out result))
-            {
-            }
-        }
+        private TimeSpan? _lastEstimate;
+        private DateTime _lastEstimateTime;
 
         /// <summary>
         /// Gets or sets the minimum number of samples required to generate a meaningful "time remaining" estimate.
@@ -62,7 +57,19 @@ namespace DotNetUtils.TaskUtils
         /// </summary>
         public TimeSpan? EstimatedTimeRemaining
         {
-            get { return Calculate(); }
+            get
+            {
+                // TODO: Find a single place to do this instead of doing it in 3 different classes
+                if (DateTime.Now - _lastEstimateTime < TimeSpan.FromSeconds(1))
+                {
+                    return _lastEstimate;
+                }
+
+                var newEstimate = Calculate();
+                _lastEstimate = newEstimate;
+                _lastEstimateTime = DateTime.Now;
+                return newEstimate;
+            }
         }
 
         private ProgressSampleState _state;
@@ -91,6 +98,11 @@ namespace DotNetUtils.TaskUtils
         /// <param name="percentComplete">From 0.0 to 100.0.</param>
         public void Add(double percentComplete)
         {
+            if (_state == ProgressSampleState.Paused)
+            {
+                Resume(percentComplete);
+            }
+
             _state = ProgressSampleState.Running;
 
             var duration = TimeSpan.Zero;
@@ -101,10 +113,10 @@ namespace DotNetUtils.TaskUtils
                 duration = DateTime.Now - lastSampleTime.Value;
             }
 
-            Add(percentComplete, duration);
+            Enqueue(percentComplete, duration);
         }
 
-        private void Add(double percentComplete, TimeSpan duration)
+        private void Enqueue(double percentComplete, TimeSpan duration)
         {
             _samples.Enqueue(new ProgressSampleUnit
                              {
@@ -130,6 +142,11 @@ namespace DotNetUtils.TaskUtils
 
         public void Resume()
         {
+            Resume(LastSamplePercent);
+        }
+
+        public void Resume(double percentComplete)
+        {
             if (_state != ProgressSampleState.Paused)
             {
                 throw new InvalidOperationException(
@@ -137,9 +154,26 @@ namespace DotNetUtils.TaskUtils
                                   ProgressSampleState.Paused, _state));
             }
 
-            Add(LastSamplePercent, TimeSpan.Zero);
+            Enqueue(percentComplete, TimeSpan.Zero);
 
             _state = ProgressSampleState.Running;
+        }
+
+        public void Stop()
+        {
+            _state = ProgressSampleState.Stopped;
+        }
+
+        public void Reset()
+        {
+            _state = ProgressSampleState.Stopped;
+            _lastEstimate = null;
+            _lastEstimateTime = DateTime.MinValue;
+
+            ProgressSampleUnit result;
+            while (_samples.TryDequeue(out result))
+            {
+            }
         }
 
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MinSampleSize"/> is greater than <see cref="MaxSampleSize"/>.</exception>
