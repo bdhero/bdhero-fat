@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Timers;
+using DotNetUtils.TaskUtils;
 
 namespace BDHero.Plugin
 {
@@ -42,7 +43,20 @@ namespace BDHero.Plugin
         /// <summary>
         /// Gets or sets the percentage of the provider's work that has been completed, from <c>0.0</c> to <c>100.0</c>.
         /// </summary>
-        public double PercentComplete { get; private set; }
+        public double PercentComplete
+        {
+            get { return _percentComplete; }
+            set
+            {
+                _percentComplete = value;
+                _progressSample.Add(_percentComplete);
+            }
+        }
+
+        /// <summary>
+        /// DO NOT MODIFY DIRECTLY!  Used internally by <see cref="PercentComplete"/>.
+        /// </summary>
+        private double _percentComplete;
 
         /// <summary>
         /// Gets or sets what the provider is currently doing.  E.G., "Parsing 00800.MPLS", "Querying TMDb", "Muxing to MKV".
@@ -157,6 +171,8 @@ namespace BDHero.Plugin
         /// </summary>
         private ProgressProviderState _lastState;
 
+        private readonly ProgressSample _progressSample = new ProgressSample();
+
         #endregion
 
         #region Constructor
@@ -264,7 +280,7 @@ namespace BDHero.Plugin
             }
         }
 
-        private void CalculateTimeRemaining()
+        private void CalculateTimeRemainingV1()
         {
             lock (_lock)
             {
@@ -330,6 +346,27 @@ namespace BDHero.Plugin
             }
         }
 
+        private void CalculateTimeRemaining()
+        {
+            lock (_lock)
+            {
+                var lastTick = _lastTick;
+
+                if (_lastCalculationTick == lastTick)
+                    return;
+
+                LogMethodEntry();
+
+                var estimate = _progressSample.EstimatedTimeRemaining;
+
+                TimeRemaining = estimate.HasValue ? estimate.Value : TimeSpan.Zero;
+
+                _lastCalculationTick = lastTick;
+
+                LogMethodExit();
+            }
+        }
+
         #endregion
 
         #region State change methods (start, stop, reset, etc.)
@@ -349,6 +386,7 @@ namespace BDHero.Plugin
 
             _timer.Stop();
             _stopwatch.Reset();
+            _progressSample.Reset();
 
             State = ProgressProviderState.Ready;
             TimeRemaining = TimeSpan.Zero;
@@ -403,6 +441,7 @@ namespace BDHero.Plugin
 
             _timer.Start();
             _stopwatch.Start();
+            _progressSample.Resume();
 
             if (Resumed != null)
                 Resumed(this);
@@ -425,6 +464,7 @@ namespace BDHero.Plugin
 
             _timer.Stop();
             _stopwatch.Stop();
+            _progressSample.Pause();
 
             State = ProgressProviderState.Paused;
             Tick();
@@ -450,6 +490,7 @@ namespace BDHero.Plugin
 
             _timer.Stop();
             _stopwatch.Stop();
+            _progressSample.Stop();
 
             State = ProgressProviderState.Canceled;
             Tick();
@@ -479,6 +520,7 @@ namespace BDHero.Plugin
 
             _timer.Stop();
             _stopwatch.Stop();
+            _progressSample.Stop();
 
             State = ProgressProviderState.Error;
             Exception = exception;
@@ -508,6 +550,7 @@ namespace BDHero.Plugin
 
             _timer.Stop();
             _stopwatch.Stop();
+            _progressSample.Stop();
 
             State = ProgressProviderState.Success;
             PercentComplete = 100.0;
