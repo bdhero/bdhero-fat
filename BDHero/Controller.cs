@@ -167,22 +167,22 @@ namespace BDHero
                     {
                         cancellationToken.Register(() => Logger.Warn("User canceled current operation"));
 
-                        if (!criticalPhase())
+                        if (criticalPhase())
                         {
-                            // TODO: How should we handle exceptions here?
-                            // The rest of the code assumes exceptions are being handled by the plugin runner.
-                            invoker.InvokeOnUIThreadAsync(_ => fail(new ExceptionEventArgs()));
-                            return;
+                            foreach (var phase in optionalPhases.TakeWhile(phase => canContinue()))
+                            {
+                                phase();
+                            }
+
+                            if (canContinue())
+                            {
+                                invoker.InvokeOnUIThreadAsync(_ => succeed());
+                            }
                         }
 
-                        foreach (var phase in optionalPhases.TakeWhile(phase => canContinue()))
-                        {
-                            phase();
-                        }
-
-                        if (!canContinue()) return;
-
-                        invoker.InvokeOnUIThreadAsync(_ => succeed());
+                        // TODO: How should we handle exceptions here?
+                        // The rest of the code assumes exceptions are being handled by the plugin runner.
+                        invoker.InvokeOnUIThreadAsync(_ => fail(new ExceptionEventArgs()));
                     })
                 .Build()
             ;
@@ -219,11 +219,6 @@ namespace BDHero
                 .DoWork(delegate(IThreadInvoker invoker, CancellationToken token)
                     {
                         pluginRunner(token);
-
-                        if (token.IsCancellationRequested)
-                        {
-                            throw new OperationCanceledException();
-                        }
                     })
                 .Fail(delegate(ExceptionEventArgs args)
                     {
