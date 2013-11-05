@@ -312,6 +312,7 @@ namespace BDInfo
                 }
             }
 
+            // TODO: Report progress
             foreach (TSStreamFile streamFile in StreamFiles.Values)
             {
                 string ssifName = Path.GetFileNameWithoutExtension(streamFile.Name) + ".SSIF";
