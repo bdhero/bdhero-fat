@@ -79,14 +79,11 @@ namespace DotNetUtils.TaskUtils
             if (avgVelocity > 0)
             {
                 var timeRemainingInTicks = percentageRemaining / avgVelocity;
-                timeRemaining = TimeSpan.FromTicks((long)timeRemainingInTicks);
+                var secondsRemaining = TimeSpan.FromTicks((long)timeRemainingInTicks).TotalSeconds;
+                secondsRemaining = Math.Floor(secondsRemaining);
+                secondsRemaining = secondsRemaining < 0 ? 0 : secondsRemaining;
+                timeRemaining = TimeSpan.FromSeconds(secondsRemaining);
             }
-            else
-            {
-//                timeRemaining = lastSample
-            }
-
-            timeRemaining = TimeSpan.FromSeconds(Math.Ceiling(timeRemaining.Value.TotalSeconds));
 
             _lastSample.EstimatedTimeRemaining = timeRemaining;
 
