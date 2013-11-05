@@ -63,6 +63,12 @@ namespace DotNetUtils.TaskUtils
             var avgPercentageDelta = percentageDeltas.Average();
             var avgDurationInTicks = durationsInTicks.Average();
 
+            if (avgDurationInTicks <= 0)
+            {
+                // TODO: Is there a better way to avoid dividing by zero?
+                avgDurationInTicks = 1;
+            }
+
             // PercentageDelta / Duration.Ticks
             var avgVelocity = avgPercentageDelta / avgDurationInTicks;
 
