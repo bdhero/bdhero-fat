@@ -177,6 +177,7 @@ namespace BDHero
                             if (canContinue())
                             {
                                 invoker.InvokeOnUIThreadAsync(_ => succeed());
+                                return;
                             }
                         }
 
