@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -13,12 +14,18 @@ namespace DotNetUtils.TaskUtils
     {
         private const int LowestMinSampleSize = 2;
 
-        private readonly ConcurrentQueue<Sample> _samples = new ConcurrentQueue<Sample>();
-
-        private DateTime? _lastSampleTime;
+        private readonly ConcurrentQueue<ProgressSampleUnit> _samples = new ConcurrentQueue<ProgressSampleUnit>();
 
         private int _minSampleSize = 5;
         private int _maxSampleSize = 10;
+
+        public void Reset()
+        {
+            ProgressSampleUnit result;
+            while (_samples.Count > _maxSampleSize && _samples.TryDequeue(out result))
+            {
+            }
+        }
 
         /// <summary>
         /// Gets or sets the minimum number of samples required to generate a meaningful "time remaining" estimate.
@@ -58,30 +65,105 @@ namespace DotNetUtils.TaskUtils
             get { return Calculate(); }
         }
 
+        private ProgressSampleState _state;
+
+        private DateTime? LastSampleTime
+        {
+            get
+            {
+                var lastSample = _samples.ToArray().LastOrDefault();
+                return lastSample != null ? new DateTime?(lastSample.DateSampled) : null;
+            }
+        }
+
+        private double LastSamplePercent
+        {
+            get
+            {
+                var lastSample = _samples.ToArray().LastOrDefault();
+                return lastSample != null ? lastSample.PercentComplete : 0.0;
+            }
+        }
+
         /// <summary>
         /// Adds a sample to the queue and recalculates the estimated time remaining.
         /// </summary>
         /// <param name="percentComplete">From 0.0 to 100.0.</param>
         public void Add(double percentComplete)
         {
-            TimeSpan duration;
+            _state = ProgressSampleState.Running;
 
-            if (_lastSampleTime.HasValue)
+            var duration = TimeSpan.Zero;
+            var lastSampleTime = LastSampleTime;
+
+            if (lastSampleTime.HasValue)
             {
-                duration = DateTime.Now - _lastSampleTime.Value;
-                _lastSampleTime = DateTime.Now;
-            }
-            else
-            {
-                duration = TimeSpan.Zero;
-                _lastSampleTime = DateTime.Now;
+                duration = DateTime.Now - lastSampleTime.Value;
             }
 
-            _samples.Enqueue(new Sample
+            Add(percentComplete, duration);
+        }
+
+        private void Add(double percentComplete, TimeSpan duration)
+        {
+            _samples.Enqueue(new ProgressSampleUnit
+                             {
+                                 DateSampled = DateTime.Now,
+                                 Duration = duration,
+                                 PercentComplete = percentComplete
+                             });
+        }
+
+        public void Pause()
+        {
+            if (_state != ProgressSampleState.Running)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to Pause: must be in {0} state, but instead found {1} state",
+                                  ProgressSampleState.Running, _state));
+            }
+
+            Add(LastSamplePercent);
+
+            _state = ProgressSampleState.Paused;
+        }
+
+        public void Resume()
+        {
+            if (_state != ProgressSampleState.Paused)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Unable to Resume: must be in {0} state, but instead found {1} state",
+                                  ProgressSampleState.Paused, _state));
+            }
+
+            Add(LastSamplePercent, TimeSpan.Zero);
+
+            _state = ProgressSampleState.Running;
+        }
+
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MinSampleSize"/> is greater than <see cref="MaxSampleSize"/>.</exception>
+        private bool CanCalculate
+        {
+            get
+            {
+                if (MinSampleSize > MaxSampleSize)
                 {
-                    Duration = duration,
-                    PercentComplete = percentComplete
-                });
+                    throw new ArgumentOutOfRangeException("MaxSampleSize must be greater than or equal to MinSampleSize");
+                }
+
+                if (_samples.Count < MinSampleSize)
+                {
+                    return false;
+                }
+
+                if (!LastSampleTime.HasValue)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MinSampleSize"/> is greater than <see cref="MaxSampleSize"/>.</exception>
@@ -89,78 +171,20 @@ namespace DotNetUtils.TaskUtils
         {
             LimitSampleSize();
 
-            if (MinSampleSize > MaxSampleSize)
-            {
-                throw new ArgumentOutOfRangeException("MaxSampleSize must be greater than or equal to MinSampleSize");
-            }
-
-            if (_samples.Count < MinSampleSize)
+            if (!CanCalculate)
             {
                 return null;
             }
 
-            if (!_lastSampleTime.HasValue)
-            {
-                return null;
-            }
-
-            var samples = _samples.ToList();
-            var lastPercentComplete = samples.Last().PercentComplete;
-            samples.Add(new Sample
-                {
-                    Duration = DateTime.Now - _lastSampleTime.Value,
-                    PercentComplete = lastPercentComplete
-                });
-
-            var percentageDeltas = new List<double>();
-            var durationsInTicks = new List<long>();
-
-            for (var i = 1; i < samples.Count; i++)
-            {
-                var prevSample = samples[i - 1];
-                var curSample = samples[i];
-
-                // From 0.0 to 100.0
-                var percentDelta = curSample.PercentComplete - prevSample.PercentComplete;
-
-                percentageDeltas.Add(percentDelta);
-
-                var curVelocity = percentDelta / curSample.Duration.Ticks;
-
-                durationsInTicks.Add(curSample.Duration.Ticks);
-            }
-
-            var avgPercentageDelta = percentageDeltas.Average();
-            var avgDurationInTicks = durationsInTicks.Average();
-
-            // PercentageDelta / Duration.Ticks
-            var avgVelocity = avgPercentageDelta / avgDurationInTicks;
-
-            var percentageRemaining = 100.0 - lastPercentComplete;
-            var timeRemainingInTicks = percentageRemaining / avgVelocity;
-            var timeRemaining = TimeSpan.FromTicks((long)timeRemainingInTicks);
-
-            return timeRemaining;
+            return new ProgressEstimator(_samples, _state).EstimatedTimeRemaining;
         }
 
         private void LimitSampleSize()
         {
-            Sample result;
+            ProgressSampleUnit result;
             while (_samples.Count > _maxSampleSize && _samples.TryDequeue(out result))
             {
             }
-        }
-
-        private class Sample
-        {
-            public TimeSpan Duration;
-
-            /// <summary>
-            /// From 0.0 to 100.0.
-            /// </summary>
-            public double PercentComplete;
-
-            public TimeSpan EstimatedTimeRemaining;
         }
     }
 }
