@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace ProcessUtils
+namespace WindowsOSUtils.JobObjects
 {
     /// <summary>
     /// Represents a Windows Job Object that groups two or more processes together.
@@ -177,7 +174,9 @@ namespace ProcessUtils
                 throw new Win32Exception();
         }
 
-        #region Nested type: IoCounters
+        #region Win32 structs and enums
+
+        #region IoCounters
 
         [StructLayout(LayoutKind.Sequential)]
         private struct IoCounters
@@ -192,7 +191,7 @@ namespace ProcessUtils
 
         #endregion
 
-        #region Nested type: JobObjectBasicLimitInformation
+        #region JobObjectBasicLimitInformation
 
         [StructLayout(LayoutKind.Sequential)]
         private struct JobObjectBasicLimitInformation
@@ -210,7 +209,7 @@ namespace ProcessUtils
 
         #endregion
 
-        #region Nested type: JobObjectExtendedLimitInformation
+        #region JobObjectExtendedLimitInformation
 
         [StructLayout(LayoutKind.Sequential)]
         private struct JobObjectExtendedLimitInformation
@@ -225,7 +224,7 @@ namespace ProcessUtils
 
         #endregion
 
-        #region Nested type: JobObjectInfoClass
+        #region JobObjectInfoClass
 
         private enum JobObjectInfoClass
         {
@@ -240,7 +239,7 @@ namespace ProcessUtils
 
         #endregion
 
-        #region Nested type: LimitFlags
+        #region LimitFlags
 
         [Flags]
         private enum LimitFlags : ushort
@@ -251,7 +250,7 @@ namespace ProcessUtils
 
         #endregion
 
-        #region Nested type: ProcessCreationFlags
+        #region ProcessCreationFlags
 
         [Flags]
         private enum ProcessCreationFlags : uint
@@ -261,7 +260,7 @@ namespace ProcessUtils
 
         #endregion
 
-        #region Nested type: ProcessInformation
+        #region ProcessInformation
 
         [StructLayout(LayoutKind.Sequential)]
         public struct ProcessInformation
@@ -274,7 +273,7 @@ namespace ProcessUtils
 
         #endregion
 
-        #region Nested type: SecurityAttributes
+        #region SecurityAttributes
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SecurityAttributes
@@ -286,7 +285,7 @@ namespace ProcessUtils
 
         #endregion
 
-        #region Nested type: StartupInfo
+        #region StartupInfo
 
         [StructLayout(LayoutKind.Sequential)]
         public struct StartupInfo
@@ -310,6 +309,8 @@ namespace ProcessUtils
             public IntPtr hStdOutput;
             public IntPtr hStdError;
         }
+
+        #endregion
 
         #endregion
     }
