@@ -8,11 +8,10 @@ using System.Runtime.InteropServices;
 
 namespace WindowsOSUtils.JobObjects
 {
-
     #region Win32 API calls (P/Invoke)
 
     /// <summary>
-    ///     Internal class that holds all the Windows API calls made by <see cref="JobObjectController" />.
+    ///     public class that holds all the Windows API calls made by <see cref="JobObjectController" />.
     /// </summary>
     /// <seealso cref="https://www-auth.cs.wisc.edu/lists/htcondor-users/2009-June/msg00106.shtml" />
     internal static class WinAPI
@@ -317,21 +316,26 @@ namespace WindowsOSUtils.JobObjects
         ///     <list>
         ///         <item>The directory from which the application loaded.</item>
         ///         <item>The current directory for the parent process.</item>
-        ///         <item>The 32-bit Windows system directory. Use the GetSystemDirectory function to get the path of this directory.</item>
         ///         <item>
-        ///             The 16-bit Windows system directory. There is no function that obtains the path of this directory, but it is
+        ///             The 32-bit Windows system directory. Use the GetSystemDirectory function to get the path of this
+        ///             directory.
+        ///         </item>
+        ///         <item>
+        ///             The 16-bit Windows system directory. There is no function that obtains the path of this directory, but it
+        ///             is
         ///             searched. The name of this directory is System.
         ///         </item>
         ///         <item>The Windows directory. Use the GetWindowsDirectory function to get the path of this directory.</item>
         ///         <item>
-        ///             The directories that are listed in the PATH environment variable. Note that this function does not search the
+        ///             The directories that are listed in the PATH environment variable. Note that this function does not search
+        ///             the
         ///             per-application path specified by the App Paths registry key. To include this per-application path in the
         ///             search sequence, use the ShellExecute function.
         ///         </item>
         ///     </list>
         ///     <para>
         ///         The system adds a terminating null character to the command-line string to separate the file name from the
-        ///         arguments. This divides the original string into two strings for internal processing.
+        ///         arguments. This divides the original string into two strings for public processing.
         ///     </para>
         /// </param>
         /// <param name="lpProcessAttributes">
@@ -501,9 +505,9 @@ namespace WindowsOSUtils.JobObjects
         ///         "MyApp.exe".
         ///     </para>
         ///     <code>
-        ///     LPTSTR szCmdline = _tcsdup(TEXT("C:\\Program Files\\MyApp -L -S"));
-        /// 	CreateProcess(NULL, szCmdline, /* ... */);
-        /// </code>
+        ///         LPTSTR szCmdline = _tcsdup(TEXT("C:\\Program Files\\MyApp -L -S"));
+        /// 	    CreateProcess(NULL, szCmdline, /* ... */);
+        ///     </code>
         ///     <para>
         ///         If a malicious user were to create an application called "Program.exe" on a system, any program that
         ///         incorrectly calls CreateProcess using the Program Files directory will run this application instead of the
@@ -514,9 +518,9 @@ namespace WindowsOSUtils.JobObjects
         ///         quotation marks around the executable path in lpCommandLine, as shown in the example below.
         ///     </para>
         ///     <code>
-        /// 	LPTSTR szCmdline[] = _tcsdup(TEXT("\"C:\\Program Files\\MyApp\" -L -S"));
-        /// 	CreateProcess(NULL, szCmdline, /*...*/);
-        /// </code>
+        /// 	    LPTSTR szCmdline[] = _tcsdup(TEXT("\"C:\\Program Files\\MyApp\" -L -S"));
+        /// 	    CreateProcess(NULL, szCmdline, /*...*/);
+        ///     </code>
         /// </remarks>
         [DllImport("kernel32.dll")]
         public static extern bool CreateProcess(string lpApplicationName,
@@ -746,32 +750,38 @@ namespace WindowsOSUtils.JobObjects
         /// <summary>
         ///     The number of read operations.
         /// </summary>
-        [FieldOffset(0)] public ulong ReadOperationCount;
+        [FieldOffset(0)]
+        public ulong ReadOperationCount;
 
         /// <summary>
         ///     The number of write operations.
         /// </summary>
-        [FieldOffset(8)] public ulong WriteOperationCount;
+        [FieldOffset(8)]
+        public ulong WriteOperationCount;
 
         /// <summary>
         ///     The number of other operations.
         /// </summary>
-        [FieldOffset(16)] public ulong OtherOperationCount;
+        [FieldOffset(16)]
+        public ulong OtherOperationCount;
 
         /// <summary>
         ///     The number of read transfers.
         /// </summary>
-        [FieldOffset(24)] public ulong ReadTransferCount;
+        [FieldOffset(24)]
+        public ulong ReadTransferCount;
 
         /// <summary>
         ///     The number of write transfers.
         /// </summary>
-        [FieldOffset(32)] public ulong WriteTransferCount;
+        [FieldOffset(32)]
+        public ulong WriteTransferCount;
 
         /// <summary>
         ///     The number of other transfers.
         /// </summary>
-        [FieldOffset(40)] public ulong OtherTransferCount;
+        [FieldOffset(40)]
+        public ulong OtherTransferCount;
     }
 
     /// <summary>
@@ -784,32 +794,38 @@ namespace WindowsOSUtils.JobObjects
         /// <summary>
         ///     The number of read operations.
         /// </summary>
-        [FieldOffset(0)] public ulong ReadOperationCount;
+        [FieldOffset(0)]
+        public ulong ReadOperationCount;
 
         /// <summary>
         ///     The number of write operations.
         /// </summary>
-        [FieldOffset(8)] public ulong WriteOperationCount;
+        [FieldOffset(8)]
+        public ulong WriteOperationCount;
 
         /// <summary>
         ///     The number of other operations.
         /// </summary>
-        [FieldOffset(16)] public ulong OtherOperationCount;
+        [FieldOffset(16)]
+        public ulong OtherOperationCount;
 
         /// <summary>
         ///     The number of read transfers.
         /// </summary>
-        [FieldOffset(24)] public ulong ReadTransferCount;
+        [FieldOffset(24)]
+        public ulong ReadTransferCount;
 
         /// <summary>
         ///     The number of write transfers.
         /// </summary>
-        [FieldOffset(32)] public ulong WriteTransferCount;
+        [FieldOffset(32)]
+        public ulong WriteTransferCount;
 
         /// <summary>
         ///     The number of other transfers.
         /// </summary>
-        [FieldOffset(40)] public ulong OtherTransferCount;
+        [FieldOffset(40)]
+        public ulong OtherTransferCount;
     }
 
     #endregion
@@ -830,7 +846,8 @@ namespace WindowsOSUtils.JobObjects
         ///     determine whether each process associated with the job has accumulated
         ///     more user-mode time than the set limit. If it has, the process is terminated.
         /// </summary>
-        [FieldOffset(0)] public long PerProcessUserTimeLimit;
+        [FieldOffset(0)]
+        public long PerProcessUserTimeLimit;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_JOB_TIME, this member is the
@@ -846,14 +863,16 @@ namespace WindowsOSUtils.JobObjects
         ///     all processes are terminated and the status code is set to
         ///     ERROR_NOT_ENOUGH_QUOTA.
         /// </summary>
-        [FieldOffset(8)] public long PerJobUserTimeLimit;
+        [FieldOffset(8)]
+        public long PerJobUserTimeLimit;
 
         /// <summary>
         ///     Limit flags that are in effect. This member is a bit field that determines
         ///     whether other structure members are used. Any combination LimitFlag values
         ///     can be specified.
         /// </summary>
-        [FieldOffset(16)] public LimitFlags LimitFlags;
+        [FieldOffset(16)]
+        public LimitFlags LimitFlags;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_WORKINGSET, this member is the
@@ -861,7 +880,8 @@ namespace WindowsOSUtils.JobObjects
         ///     this member is ignored.  If MaximumWorkingSetSize is nonzero,
         ///     MinimumWorkingSetSize cannot be zero.
         /// </summary>
-        [FieldOffset(20)] public uint MinimumWorkingSetSize;
+        [FieldOffset(20)]
+        public uint MinimumWorkingSetSize;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_WORKINGSET, this member is the
@@ -869,7 +889,8 @@ namespace WindowsOSUtils.JobObjects
         ///     this member is ignored.  If MinimumWorkingSetSize is nonzero,
         ///     MaximumWorkingSetSize cannot be zero.
         /// </summary>
-        [FieldOffset(24)] public uint MaximumWorkingSetSize;
+        [FieldOffset(24)]
+        public uint MaximumWorkingSetSize;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_ACTIVE_PROCESS, this member is the
@@ -878,7 +899,8 @@ namespace WindowsOSUtils.JobObjects
         ///     count to exceed this limit, the process is terminated and the association
         ///     fails.
         /// </summary>
-        [FieldOffset(28)] public int ActiveProcessLimit;
+        [FieldOffset(28)]
+        public int ActiveProcessLimit;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_AFFINITY, this member is the
@@ -889,7 +911,8 @@ namespace WindowsOSUtils.JobObjects
         ///     subsequently set their affinity, as long as it is a subset of the specified
         ///     affinity mask. Processes cannot set their own affinity mask.
         /// </summary>
-        [FieldOffset(32)] public IntPtr Affinity;
+        [FieldOffset(32)]
+        public IntPtr Affinity;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_PRIORITY_CLASS, this member is the
@@ -897,7 +920,8 @@ namespace WindowsOSUtils.JobObjects
         ///     member is ignored. Processes and threads cannot modify their priority class.
         ///     The calling process must enable the SE_INC_BASE_PRIORITY_NAME privilege.
         /// </summary>
-        [FieldOffset(36)] public int PriorityClass;
+        [FieldOffset(36)]
+        public int PriorityClass;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_SCHEDULING_CLASS, this member is
@@ -908,7 +932,8 @@ namespace WindowsOSUtils.JobObjects
         ///     value is 5. To use a scheduling class greater than 5, the calling process
         ///     must enable the SE_INC_BASE_PRIORITY_NAME privilege.
         /// </summary>
-        [FieldOffset(40)] public int SchedulingClass;
+        [FieldOffset(40)]
+        public int SchedulingClass;
     }
 
     /// <summary>
@@ -925,7 +950,8 @@ namespace WindowsOSUtils.JobObjects
         ///     determine whether each process associated with the job has accumulated
         ///     more user-mode time than the set limit. If it has, the process is terminated.
         /// </summary>
-        [FieldOffset(0)] public long PerProcessUserTimeLimit;
+        [FieldOffset(0)]
+        public long PerProcessUserTimeLimit;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_JOB_TIME, this member is the
@@ -941,14 +967,16 @@ namespace WindowsOSUtils.JobObjects
         ///     all processes are terminated and the status code is set to
         ///     ERROR_NOT_ENOUGH_QUOTA.
         /// </summary>
-        [FieldOffset(8)] public long PerJobUserTimeLimit;
+        [FieldOffset(8)]
+        public long PerJobUserTimeLimit;
 
         /// <summary>
         ///     Limit flags that are in effect. This member is a bit field that determines
         ///     whether other structure members are used. Any combination LimitFlag values
         ///     can be specified.
         /// </summary>
-        [FieldOffset(16)] public LimitFlags LimitFlags;
+        [FieldOffset(16)]
+        public LimitFlags LimitFlags;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_WORKINGSET, this member is the
@@ -956,7 +984,8 @@ namespace WindowsOSUtils.JobObjects
         ///     this member is ignored.  If MaximumWorkingSetSize is nonzero,
         ///     MinimumWorkingSetSize cannot be zero.
         /// </summary>
-        [FieldOffset(24)] public ulong MinimumWorkingSetSize;
+        [FieldOffset(24)]
+        public ulong MinimumWorkingSetSize;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_WORKINGSET, this member is the
@@ -964,7 +993,8 @@ namespace WindowsOSUtils.JobObjects
         ///     this member is ignored.  If MinimumWorkingSetSize is nonzero,
         ///     MaximumWorkingSetSize cannot be zero.
         /// </summary>
-        [FieldOffset(32)] public ulong MaximumWorkingSetSize;
+        [FieldOffset(32)]
+        public ulong MaximumWorkingSetSize;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_ACTIVE_PROCESS, this member is the
@@ -973,7 +1003,8 @@ namespace WindowsOSUtils.JobObjects
         ///     count to exceed this limit, the process is terminated and the association
         ///     fails.
         /// </summary>
-        [FieldOffset(40)] public int ActiveProcessLimit;
+        [FieldOffset(40)]
+        public int ActiveProcessLimit;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_AFFINITY, this member is the
@@ -984,7 +1015,8 @@ namespace WindowsOSUtils.JobObjects
         ///     subsequently set their affinity, as long as it is a subset of the specified
         ///     affinity mask. Processes cannot set their own affinity mask.
         /// </summary>
-        [FieldOffset(48)] public IntPtr Affinity;
+        [FieldOffset(48)]
+        public IntPtr Affinity;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_PRIORITY_CLASS, this member is the
@@ -992,7 +1024,8 @@ namespace WindowsOSUtils.JobObjects
         ///     member is ignored. Processes and threads cannot modify their priority class.
         ///     The calling process must enable the SE_INC_BASE_PRIORITY_NAME privilege.
         /// </summary>
-        [FieldOffset(56)] public int PriorityClass;
+        [FieldOffset(56)]
+        public int PriorityClass;
 
         /// <summary>
         ///     If LimitFlags specifies JOB_OBJECT_LIMIT_SCHEDULING_CLASS, this member is
@@ -1003,7 +1036,8 @@ namespace WindowsOSUtils.JobObjects
         ///     value is 5. To use a scheduling class greater than 5, the calling process
         ///     must enable the SE_INC_BASE_PRIORITY_NAME privilege.
         /// </summary>
-        [FieldOffset(60)] public int SchedulingClass;
+        [FieldOffset(60)]
+        public int SchedulingClass;
     }
 
     #endregion
@@ -1021,12 +1055,14 @@ namespace WindowsOSUtils.JobObjects
         ///     A JOBOBJECT_BASIC_LIMIT_INFORMATION structure that contains
         ///     basic limit information.
         /// </summary>
-        [FieldOffset(0)] public BasicLimits32 BasicLimits;
+        [FieldOffset(0)]
+        public BasicLimits32 BasicLimits;
 
         /// <summary>
         ///     Resereved.
         /// </summary>
-        [FieldOffset(48)] public IoCounters32 IoInfo;
+        [FieldOffset(48)]
+        public IoCounters32 IoInfo;
 
         /// <summary>
         ///     If the LimitFlags member of the JOBOBJECT_BASIC_LIMIT_INFORMATION structure
@@ -1034,7 +1070,8 @@ namespace WindowsOSUtils.JobObjects
         ///     the limit for the virtual memory that can be committed by a process.
         ///     Otherwise, this member is ignored.
         /// </summary>
-        [FieldOffset(96)] public uint ProcessMemoryLimit;
+        [FieldOffset(96)]
+        public uint ProcessMemoryLimit;
 
         /// <summary>
         ///     If the LimitFlags member of the JOBOBJECT_BASIC_LIMIT_INFORMATION structure
@@ -1042,17 +1079,20 @@ namespace WindowsOSUtils.JobObjects
         ///     limit for the virtual memory that can be committed for the job. Otherwise,
         ///     this member is ignored.
         /// </summary>
-        [FieldOffset(100)] public uint JobMemoryLimit;
+        [FieldOffset(100)]
+        public uint JobMemoryLimit;
 
         /// <summary>
         ///     Peak memory used by any process ever associated with the job.
         /// </summary>
-        [FieldOffset(104)] public uint PeakProcessMemoryUsed;
+        [FieldOffset(104)]
+        public uint PeakProcessMemoryUsed;
 
         /// <summary>
         ///     Peak memory usage of all processes currently associated with the job.
         /// </summary>
-        [FieldOffset(108)] public uint PeakJobMemoryUsed;
+        [FieldOffset(108)]
+        public uint PeakJobMemoryUsed;
     }
 
     /// <summary>
@@ -1066,12 +1106,14 @@ namespace WindowsOSUtils.JobObjects
         ///     A JOBOBJECT_BASIC_LIMIT_INFORMATION structure that contains
         ///     basic limit information.
         /// </summary>
-        [FieldOffset(0)] public BasicLimits64 BasicLimits;
+        [FieldOffset(0)]
+        public BasicLimits64 BasicLimits;
 
         /// <summary>
         ///     Resereved.
         /// </summary>
-        [FieldOffset(64)] public IoCounters64 IoInfo;
+        [FieldOffset(64)]
+        public IoCounters64 IoInfo;
 
         /// <summary>
         ///     If the LimitFlags member of the JOBOBJECT_BASIC_LIMIT_INFORMATION structure
@@ -1079,7 +1121,8 @@ namespace WindowsOSUtils.JobObjects
         ///     the limit for the virtual memory that can be committed by a process.
         ///     Otherwise, this member is ignored.
         /// </summary>
-        [FieldOffset(112)] public ulong ProcessMemoryLimit;
+        [FieldOffset(112)]
+        public ulong ProcessMemoryLimit;
 
         /// <summary>
         ///     If the LimitFlags member of the JOBOBJECT_BASIC_LIMIT_INFORMATION structure
@@ -1087,17 +1130,20 @@ namespace WindowsOSUtils.JobObjects
         ///     limit for the virtual memory that can be committed for the job. Otherwise,
         ///     this member is ignored.
         /// </summary>
-        [FieldOffset(120)] public ulong JobMemoryLimit;
+        [FieldOffset(120)]
+        public ulong JobMemoryLimit;
 
         /// <summary>
         ///     Peak memory used by any process ever associated with the job.
         /// </summary>
-        [FieldOffset(128)] public ulong PeakProcessMemoryUsed;
+        [FieldOffset(128)]
+        public ulong PeakProcessMemoryUsed;
 
         /// <summary>
         ///     Peak memory usage of all processes currently associated with the job.
         /// </summary>
-        [FieldOffset(136)] public ulong PeakJobMemoryUsed;
+        [FieldOffset(136)]
+        public ulong PeakJobMemoryUsed;
     }
 
     #endregion
@@ -1119,13 +1165,15 @@ namespace WindowsOSUtils.JobObjects
         ///     The BasicLimits32 structure contains basic limit information
         ///     for a job object on a 32bit platform.
         /// </summary>
-        [FieldOffset(0)] public BasicLimits32 basicLimits32;
+        [FieldOffset(0)]
+        public BasicLimits32 basicLimits32;
 
         /// <summary>
         ///     The ExtendedLimits32 structure contains extended limit information
         ///     for a job object on a 32bit platform.
         /// </summary>
-        [FieldOffset(0)] public ExtendedLimits32 extendedLimits32;
+        [FieldOffset(0)]
+        public ExtendedLimits32 extendedLimits32;
 
         #endregion
 
@@ -1135,13 +1183,15 @@ namespace WindowsOSUtils.JobObjects
         ///     The BasicLimits64 structure contains basic limit information
         ///     for a job object on a 64bit platform.
         /// </summary>
-        [FieldOffset(0)] public BasicLimits64 basicLimits64;
+        [FieldOffset(0)]
+        public BasicLimits64 basicLimits64;
 
         /// <summary>
         ///     The ExtendedLimits64 structure contains extended limit information
         ///     for a job object on a 64bit platform.
         /// </summary>
-        [FieldOffset(0)] public ExtendedLimits64 extendedLimits64;
+        [FieldOffset(0)]
+        public ExtendedLimits64 extendedLimits64;
 
         #endregion
     }
