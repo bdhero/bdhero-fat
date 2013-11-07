@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using OSUtils.JobObjects;
 
 namespace ProcessUtils
 {
@@ -43,7 +44,14 @@ namespace ProcessUtils
         /// </summary>
         public event BackgroundProgressHandler ProgressUpdated;
 
-        public BackgroundProcessWorker()
+        /// <summary>
+        ///     Constructs a new <see cref="BackgroundProcessWorker"/> object that uses the given
+        ///     <paramref name="jobObjectFactory"/> to ensure that child processes are terminated
+        ///     if the parent process exits prematurely.
+        /// </summary>
+        /// <param name="jobObjectFactory">Factory that creates instances of <see cref="IJobObject"/>.</param>
+        public BackgroundProcessWorker(IJobObjectFactory jobObjectFactory)
+            : base(jobObjectFactory)
         {
             PropertyChanged += OnPropertyChanged;
             _timer.Elapsed += TimerOnTick;

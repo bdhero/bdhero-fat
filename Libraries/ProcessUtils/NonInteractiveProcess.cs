@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using DotNetUtils.Extensions;
 using WindowsOSUtils.JobObjects;
+using OSUtils.JobObjects;
 
 namespace ProcessUtils
 {
@@ -19,6 +20,8 @@ namespace ProcessUtils
     /// </summary>
     public class NonInteractiveProcess : INotifyPropertyChanged
     {
+        private readonly IJobObjectFactory _jobObjectFactory;
+
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -127,6 +130,21 @@ namespace ProcessUtils
         /// </summary>
         public Exception Exception { get; protected set; }
 
+        #region Constructor
+
+        /// <summary>
+        ///     Constructs a new <see cref="NonInteractiveProcess"/> object that uses the given
+        ///     <paramref name="jobObjectFactory"/> to ensure that child processes are terminated
+        ///     if the parent process exits prematurely.
+        /// </summary>
+        /// <param name="jobObjectFactory">Factory that creates instances of <see cref="IJobObject"/>.</param>
+        public NonInteractiveProcess(IJobObjectFactory jobObjectFactory)
+        {
+            _jobObjectFactory = jobObjectFactory;
+        }
+
+        #endregion
+
         #region Start / Kill
 
         /// <summary>
@@ -162,7 +180,7 @@ namespace ProcessUtils
             if (!File.Exists(ExePath))
                 throw new FileNotFoundException(string.Format("Unable to Start NonInteractiveProcess: File \"{0}\" does not exist", ExePath));
 
-            using (var jobObject = JobObject2.Create())
+            using (var jobObject = _jobObjectFactory.CreateJobObject())
             {
                 using (var process = CreateProcess())
                 {
@@ -193,8 +211,8 @@ namespace ProcessUtils
                     }
                     else
                     {
-                        jobObject.AssignProcess(process);
-                        jobObject.SetKillOnClose();
+                        jobObject.Assign(process);
+                        jobObject.KillOnClose();
                     }
 
                     _stopwatch.Start();

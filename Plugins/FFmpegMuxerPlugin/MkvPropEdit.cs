@@ -11,12 +11,14 @@ using BDHero.BDROM;
 using DotNetUtils;
 using DotNetUtils.Annotations;
 using I18N;
+using OSUtils.JobObjects;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
 {
     public class MkvPropEdit : BackgroundProcessWorker
     {
+        private readonly IJobObjectFactory _jobObjectFactory;
         private const string MkvPropEditFileName = "mkvpropedit.exe";
 
         /// <summary>
@@ -39,8 +41,9 @@ namespace BDHero.Plugin.FFmpegMuxer
         }
         private string _sourceFilePath;
 
-        public MkvPropEdit()
+        public MkvPropEdit(IJobObjectFactory jobObjectFactory) : base(jobObjectFactory)
         {
+            _jobObjectFactory = jobObjectFactory;
             SetExePath();
         }
 
@@ -235,19 +238,19 @@ namespace BDHero.Plugin.FFmpegMuxer
                                    new Chapter(4, TimeSpan.FromMinutes(20).TotalSeconds),
                                    new Chapter(5, TimeSpan.FromMinutes(25).TotalSeconds)
                                };
-            var mkvPropEdit = new MkvPropEdit { SourceFilePath = mkvFilePath }
-                .SetMovieTitle(movieTitle)
-                .AddCoverArt(coverArt)
-                .SetChapters(chapters)
-                .SetTrackProps(trackProps);
-            mkvPropEdit.Start();
+//            var mkvPropEdit = new MkvPropEdit { SourceFilePath = mkvFilePath }
+//                .SetMovieTitle(movieTitle)
+//                .AddCoverArt(coverArt)
+//                .SetChapters(chapters)
+//                .SetTrackProps(trackProps);
+//            mkvPropEdit.Start();
         }
 
         public static void DeleteAttachements(string mkvFilePath, int? attachmentNumber)
         {
-            var mkvPropEdit = new MkvPropEdit { SourceFilePath = mkvFilePath }
-                .DeleteAttachment(attachmentNumber);
-            mkvPropEdit.Start();
+//            var mkvPropEdit = new MkvPropEdit { SourceFilePath = mkvFilePath }
+//                .DeleteAttachment(attachmentNumber);
+//            mkvPropEdit.Start();
         }
     }
 

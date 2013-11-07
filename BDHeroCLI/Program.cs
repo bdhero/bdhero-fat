@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using BDHero.Config;
+﻿using BDHero.Config;
 using BDHero.Startup;
 using BDHeroCLI.Properties;
 using Ninject;
+using OSUtils.JobObjects;
 
 namespace BDHeroCLI
 {
@@ -17,15 +12,21 @@ namespace BDHeroCLI
 
         static void Main(string[] args)
         {
-            CreateCLI().Run(args);
+            var kernel = CreateInjector();
+            var manager = kernel.Get<IJobObjectManager>();
+
+            if (manager.TryBypassPCA(args))
+                return;
+
+            kernel.Get<CLI>().Run(args);
         }
 
-        private static CLI CreateCLI()
+        private static IKernel CreateInjector()
         {
             var kernel = InjectorFactory.CreateContainer();
             kernel.Get<LogInitializer>().Initialize(LogConfigFileName, Resources.log4net_config);
             kernel.Bind<CLI>().ToSelf();
-            return kernel.Get<CLI>();
+            return kernel;
         }
     }
 }

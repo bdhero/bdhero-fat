@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WindowsOSUtils;
 using BDHero.Plugin;
 using BDHero.Startup;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
+using OSUtils;
 using UpdateLib;
 using log4net;
 
@@ -16,38 +18,39 @@ namespace BDHero.Config
     {
         public static IKernel CreateContainer()
         {
-            return new StandardKernel(new MainModule());
+            var modules = new List<INinjectModule>();
+            modules.Add(new LoggingModule());
+            modules.Add(new BDHeroMainModule());
+            modules.AddRange(CreateOSMainModules());
+            return new StandardKernel(modules.ToArray());
+        }
+
+        private static IEnumerable<INinjectModule> CreateOSMainModules()
+        {
+            var osType = SystemInfo.Instance.OS.Type;
+            return osType == OSType.Windows
+                       ? WindowsInjectorFactory.CreateMainModules()
+                       : MockOSInjectorFactory.CreateMainModules();
         }
     }
 
-    /// <summary>
-    /// Module used by main (non-test) code.
-    /// </summary>
-    class MainModule : NinjectModule
+    internal class LoggingModule : NinjectModule
     {
         public override void Load()
         {
-            BindStartupDependencies();
-            BindMainDependencies();
+            Bind<ILog>().ToMethod(context => LogManager.GetLogger(context.Request.Target.Type));
         }
+    }
 
-        private void BindStartupDependencies()
+    internal class BDHeroMainModule : NinjectModule
+    {
+        public override void Load()
         {
             Bind<IDirectoryLocator>().To<DirectoryLocator>().InSingletonScope();
             Bind<LogInitializer>().ToSelf().InSingletonScope();
             Bind<PluginService>().ToSelf().InSingletonScope();
             Bind<PluginLoader>().ToSelf().InSingletonScope();
             Bind<Updater>().ToSelf().InSingletonScope();
-            Bind<ILog>().ToMethod(CreateLogger);
-        }
-
-        private static ILog CreateLogger(IContext context)
-        {
-            return LogManager.GetLogger(context.Request.Target.Type);
-        }
-
-        private void BindMainDependencies()
-        {
             Bind<IController>().To<Controller>();
         }
     }

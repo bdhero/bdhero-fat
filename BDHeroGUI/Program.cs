@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using BDHero.Config;
 using BDHero.Startup;
 using BDHeroGUI.Properties;
 using Ninject;
-using WindowsOSUtils.JobObjects;
+using OSUtils.JobObjects;
 
 namespace BDHeroGUI
 {
@@ -20,20 +18,23 @@ namespace BDHeroGUI
         [STAThread]
         static void Main(string[] args)
         {
-            if (JobObjectController.BreakCurrentProcessOutOfPCAJobObject(args))
+            var kernel = CreateInjector();
+            var manager = kernel.Get<IJobObjectManager>();
+
+            if (manager.TryBypassPCA(args))
                 return;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(CreateMainForm());
+            Application.Run(kernel.Get<FormMain>());
         }
 
-        private static FormMain CreateMainForm()
+        private static IKernel CreateInjector()
         {
             var kernel = InjectorFactory.CreateContainer();
             kernel.Get<LogInitializer>().Initialize(LogConfigFileName, Resources.log4net_config);
             kernel.Bind<FormMain>().ToSelf();
-            return kernel.Get<FormMain>();
+            return kernel;
         }
     }
 }

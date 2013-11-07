@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using BDHero.BDROM;
 using BDHero.JobQueue;
+using OSUtils.JobObjects;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
@@ -43,7 +44,8 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private readonly FFmpegTrackIndexer _indexer;
 
-        public FFmpeg(Job job, Playlist playlist, string outputMKVPath)
+        public FFmpeg(Job job, Playlist playlist, string outputMKVPath, IJobObjectFactory jobObjectFactory)
+            : base(jobObjectFactory)
         {
             _playlistLength = playlist.Length;
             _inputM2TSPaths = playlist.StreamClips.Select(clip => clip.FileInfo.FullName).ToList();
@@ -343,13 +345,13 @@ namespace BDHero.Plugin.FFmpegMuxer
 
             var coverArt = releaseMedium != null ? releaseMedium.CoverArtImages.FirstOrDefault(image => image.IsSelected) : null;
             var coverArtImage = coverArt != null ? coverArt.Image : null;
-            var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
-                .RemoveAllTags()
-                .AddCoverArt(coverArtImage)
-                .SetChapters(playlist.Chapters)
-//                .SetDefaultTracksAuto(selectedTracks) // Breaks MediaInfo
-            ;
-            mkvPropEdit.Start();
+//            var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
+//                .RemoveAllTags()
+//                .AddCoverArt(coverArtImage)
+//                .SetChapters(playlist.Chapters)
+////                .SetDefaultTracksAuto(selectedTracks) // Breaks MediaInfo
+//            ;
+//            mkvPropEdit.Start();
         }
 
         private static void LogExit(NonInteractiveProcessState processState, int exitCode)

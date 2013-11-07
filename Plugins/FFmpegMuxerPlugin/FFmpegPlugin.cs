@@ -7,12 +7,15 @@ using System.Threading;
 using BDHero.JobQueue;
 using DotNetUtils;
 using DotNetUtils.Extensions;
+using OSUtils.JobObjects;
 using ProcessUtils;
 
 namespace BDHero.Plugin.FFmpegMuxer
 {
     public class FFmpegPlugin : IMuxerPlugin
     {
+        private readonly IJobObjectFactory _jobObjectFactory;
+
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -44,6 +47,11 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private Exception _exception;
 
+        public FFmpegPlugin(IJobObjectFactory jobObjectFactory)
+        {
+            _jobObjectFactory = jobObjectFactory;
+        }
+
         public void LoadPlugin(IPluginHost host, PluginAssemblyInfo assemblyInfo)
         {
             Host = host;
@@ -66,7 +74,7 @@ namespace BDHero.Plugin.FFmpegMuxer
 
             _exception = null;
 
-            var ffmpeg = new FFmpeg(job, job.SelectedPlaylist, job.OutputPath);
+            var ffmpeg = new FFmpeg(job, job.SelectedPlaylist, job.OutputPath, _jobObjectFactory);
             ffmpeg.ProgressUpdated += state => OnProgressUpdated(ffmpeg, state, cancellationToken);
             ffmpeg.Exited += FFmpegOnExited;
             ffmpeg.StartAsync();

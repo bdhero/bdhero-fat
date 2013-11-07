@@ -20,6 +20,7 @@ using DotNetUtils.Extensions;
 using DotNetUtils.Forms;
 using DotNetUtils.Net;
 using Microsoft.Win32;
+using OSUtils.DriveDetector;
 using OSUtils.TaskbarUtils;
 using UpdateLib;
 using WindowsOSUtils.DriveDetector;
@@ -38,6 +39,7 @@ namespace BDHeroGUI
         private readonly IController _controller;
 
         private readonly Updater _updater;
+        private readonly IDriveDetector _driveDetector;
         private readonly UpdateHelper _updateHelper;
 
         private readonly ToolTip _progressBarToolTip;
@@ -62,7 +64,7 @@ namespace BDHeroGUI
 
         #region Constructor and OnLoad
 
-        public FormMain(log4net.ILog logger, IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller, Updater updater)
+        public FormMain(log4net.ILog logger, IDirectoryLocator directoryLocator, PluginLoader pluginLoader, IController controller, Updater updater, IDriveDetector driveDetector)
         {
             InitializeComponent();
 
@@ -73,6 +75,7 @@ namespace BDHeroGUI
             _pluginLoader = pluginLoader;
             _controller = controller;
             _updater = updater;
+            _driveDetector = driveDetector;
 
             _progressBarToolTip = new ToolTip();
             _progressBarToolTip.SetToolTip(progressBar, null);
@@ -342,7 +345,7 @@ namespace BDHeroGUI
 
         private void InitDriveDetector()
         {
-            openDiscToolStripMenuItem.Initialize(this, new WindowsDriveDetector());
+            openDiscToolStripMenuItem.Initialize(this, _driveDetector);
             openDiscToolStripMenuItem.DiscSelected += driveInfo => Scan(driveInfo.Name);
         }
 

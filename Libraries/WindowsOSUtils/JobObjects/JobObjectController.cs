@@ -356,7 +356,7 @@ namespace WindowsOSUtils.JobObjects
                   _currentJobHandle,
                   JobObjectInfoClass.ExtendedLimitInformation,
                   ref jobObjectInfo,
-                  Marshal.SizeOf(typeof(ExtendedLimits32)));
+                  (uint) Marshal.SizeOf(typeof(ExtendedLimits32)));
 
                 if (!result)
                 {
@@ -392,7 +392,7 @@ namespace WindowsOSUtils.JobObjects
                   _currentJobHandle,
                   JobObjectInfoClass.ExtendedLimitInformation,
                   ref jobObjectInfo,
-                  Marshal.SizeOf(typeof(ExtendedLimits64)));
+                  (uint) Marshal.SizeOf(typeof(ExtendedLimits64)));
 
                 if (!result)
                 {

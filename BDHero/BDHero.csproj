@@ -105,6 +105,14 @@
       <Project>{1FBE870D-5664-4B24-A768-8A175A72ADDF}</Project>
       <Name>I18N</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Libraries\OSUtils\OSUtils.csproj">
+      <Project>{ee69e896-8779-4e3d-a033-75a96f28de2f}</Project>
+      <Name>OSUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\WindowsOSUtils\WindowsOSUtils.csproj">
+      <Project>{a673442d-599d-4332-bcfa-8ec02171efc0}</Project>
+      <Name>WindowsOSUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

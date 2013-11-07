@@ -16,6 +16,16 @@ namespace WindowsOSUtils.JobObjects
     /// <seealso cref="https://www-auth.cs.wisc.edu/lists/htcondor-users/2009-June/msg00106.shtml" />
     internal static class WinAPI
     {
+        #region Native 32/64 Bit Switching Flag
+
+        /// <summary>
+        /// The structures returned by Windows are different sizes depending on whether
+        /// the operating system is running in 32bit or 64bit mode.
+        /// </summary>
+        public static readonly bool Is32Bit = (IntPtr.Size == 4);
+
+        #endregion
+
         /// <summary>
         ///     This function returns a pseudohandle for the current process.
         /// </summary>
@@ -181,7 +191,7 @@ namespace WindowsOSUtils.JobObjects
             [In] IntPtr jobHandle,
             [In] JobObjectInfoClass jobObjectInfoClass,
             [In] ref JobObjectInfo jobObjectInfo,
-            [In] int jobObjectInfoLength);
+            [In] uint jobObjectInfoLength);
 
         /// <summary>
         ///     Creates or opens a job object.
@@ -1721,6 +1731,54 @@ namespace WindowsOSUtils.JobObjects
         ///     <para>Windows Server 2008, Windows Vista, Windows Server 2003, and Windows XP:  This value is not supported.</para>
         /// </summary>
         INHERIT_PARENT_AFFINITY = 0x00010000,
+    }
+
+    #endregion
+
+    #region IoCounters Structure
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct IoCounters
+    {
+        public readonly UInt64 ReadOperationCount;
+        public readonly UInt64 WriteOperationCount;
+        public readonly UInt64 OtherOperationCount;
+        public readonly UInt64 ReadTransferCount;
+        public readonly UInt64 WriteTransferCount;
+        public readonly UInt64 OtherTransferCount;
+    }
+
+    #endregion
+
+    #region JobObjectBasicLimitInformation Structure
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct JobObjectBasicLimitInformation
+    {
+        public readonly Int64 PerProcessUserTimeLimit;
+        public readonly Int64 PerJobUserTimeLimit;
+        public LimitFlags LimitFlags;
+        public readonly UIntPtr MinimumWorkingSetSize;
+        public readonly UIntPtr MaximumWorkingSetSize;
+        public readonly Int16 ActiveProcessLimit;
+        public readonly Int64 Affinity;
+        public readonly Int16 PriorityClass;
+        public readonly Int16 SchedulingClass;
+    }
+
+    #endregion
+
+    #region JobObjectExtendedLimitInformation Structure
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct JobObjectExtendedLimitInformation
+    {
+        public JobObjectBasicLimitInformation BasicLimitInformation;
+        public readonly IoCounters IoInfo;
+        public readonly UIntPtr ProcessMemoryLimit;
+        public readonly UIntPtr JobMemoryLimit;
+        public readonly UIntPtr PeakProcessMemoryUsed;
+        public readonly UIntPtr PeakJobMemoryUsed;
     }
 
     #endregion
