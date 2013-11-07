@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-using DotNetUtils;
 using ProcessUtils;
 
 namespace BDHero.Plugin.MkvMergeMuxer
@@ -14,7 +13,7 @@ namespace BDHero.Plugin.MkvMergeMuxer
     [System.ComponentModel.DesignerCategory("Code")]
 // ReSharper restore RedundantNameQualifier
 // ReSharper restore LocalizableElement
-    public class MkvMerge : AbstractExternalTool
+    public class MkvMerge
     {
         private readonly string _inputM2TsPath;
         private readonly string _inputMkvPath;
@@ -22,8 +21,12 @@ namespace BDHero.Plugin.MkvMergeMuxer
         private readonly string _outputMkvPath;
         private readonly bool _keepM2TsAudio;
 
-        protected override string Name { get { return "MkvMerge"; } }
-        protected override string Filename { get { return "mkvmerge.exe"; } }
+        private double _progress;
+        private bool _isError;
+        private readonly List<String> _errorMessages = new List<string>();
+
+        string Name { get { return "MkvMerge"; } }
+        string Filename { get { return "mkvmerge.exe"; } }
 
         public MkvMerge(string inputM2TsPath, string inputMkvPath, string inputChaptersPath, string outputMkvPath, bool keepM2TsAudio = true)
         {
@@ -32,14 +35,10 @@ namespace BDHero.Plugin.MkvMergeMuxer
             _inputChaptersPath = inputChaptersPath;
             _outputMkvPath = outputMkvPath;
             _keepM2TsAudio = keepM2TsAudio;
-
-            DoWork += Mux;
         }
 
-        private void Mux(object sender, DoWorkEventArgs e)
+        public void Mux(object sender, DoWorkEventArgs e)
         {
-            ExtractResources();
-
             var inputM2TsFlags = _keepM2TsAudio ? null : "--no-audio";
             var inputMkvFlags = _keepM2TsAudio ? "--no-audio" : null;
 
@@ -64,12 +63,11 @@ namespace BDHero.Plugin.MkvMergeMuxer
             Execute(args, sender, e);
         }
 
-        protected override void ExtractResources()
+        private void Execute(ArgumentList args, object sender, DoWorkEventArgs e)
         {
-            ExtractResource(Filename);
         }
 
-        protected override void HandleOutputLine(string line, object sender, DoWorkEventArgs e)
+        protected void HandleOutputLine(string line, object sender, DoWorkEventArgs e)
         {
             const string progressRegex = @"^Progress: ([\d\.]+)\%";
             const string errorRegex = @"^Error:";
@@ -77,16 +75,16 @@ namespace BDHero.Plugin.MkvMergeMuxer
             if (Regex.IsMatch(line, progressRegex))
             {
                 var match = Regex.Match(line, progressRegex);
-                Double.TryParse(match.Groups[1].Value, out progress);
+                Double.TryParse(match.Groups[1].Value, out _progress);
             }
             else if (Regex.IsMatch(line, errorRegex))
             {
-                isError = true;
-                ErrorMessages.Add(line);
+                _isError = true;
+                _errorMessages.Add(line);
             }
         }
 
-        protected override ISet<string> GetOutputFilesImpl()
+        protected ISet<string> GetOutputFilesImpl()
         {
             return new HashSet<string> { _outputMkvPath };
         }

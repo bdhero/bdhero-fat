@@ -52,12 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractExternalTool.cs" />
     <Compile Include="ArgumentList.cs" />
     <Compile Include="BackgroundProcessWorker.cs" />
     <Compile Include="JobObject2.cs" />
     <Compile Include="NonInteractiveProcess.cs" />
-    <Compile Include="JobObject1.cs" />
     <Compile Include="ProcessExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
