@@ -155,7 +155,7 @@ namespace WindowsOSUtils.JobObjects
         /// </returns>
         /// <remarks>
         /// This method can be used to break out of the Program Compatibility Assistant (PCA)
-        /// Job Object that is automatically created an application runs on a newer
+        /// Job Object that is automatically created when an application runs on a newer
         /// version of Windows than it was marked as compatible with in its application manifest.
         /// </remarks>
         /// <seealso cref="http://blogs.msdn.com/b/cjacks/archive/2009/07/10/how-to-work-around-program-compatibility-assistant-pca-jobobjects-interfering-with-your-jobobjects.aspx"/>
