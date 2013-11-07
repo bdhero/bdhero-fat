@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaInfoWrapper", "Libraries\MediaInfoWrapper\MediaInfoWrapper.csproj", "{0E38BA29-4A54-4461-9E73-283802161C55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessUtils", "Libraries\ProcessUtils\ProcessUtils.csproj", "{896F47DD-A9FC-413C-B125-8E999F72E101}"
