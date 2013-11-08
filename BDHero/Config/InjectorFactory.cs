@@ -6,7 +6,6 @@ using WindowsOSUtils;
 using BDHero.Plugin;
 using BDHero.Startup;
 using Ninject;
-using Ninject.Activation;
 using Ninject.Modules;
 using OSUtils;
 using UpdateLib;
