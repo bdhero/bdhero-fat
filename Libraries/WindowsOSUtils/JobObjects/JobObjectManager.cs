@@ -17,6 +17,9 @@ namespace WindowsOSUtils.JobObjects
     /// <seealso cref="https://www-auth.cs.wisc.edu/lists/htcondor-users/2009-June/msg00106.shtml" />
     public class JobObjectManager : IJobObjectManager
     {
+        private static readonly log4net.ILog Logger =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         ///     This is a pseudo handle to "any" job object.
         /// </summary>
@@ -34,23 +37,45 @@ namespace WindowsOSUtils.JobObjects
 
         public bool TryBypassPCA(string[] args)
         {
+            Logger.Debug("Checking if current process belongs to a Job Object...");
+
             using (var currentProcess = Process.GetCurrentProcess())
             {
-                if (!IsAssignedToJob(currentProcess)) { return false; }
+                if (!IsAssignedToJob(currentProcess))
+                {
+                    Logger.Debug("Current process does not belong to a Job Object.");
+                    return false;
+                }
 
-                var processStartInfo = new ProcessStartInfo(currentProcess.MainModule.FileName, new ArgumentList(args).ToString());
+                var fileName = currentProcess.MainModule.FileName;
+                var arguments = new ArgumentList(args).ToString();
 
-                var process = CreateProcessInSeparateJob(processStartInfo);
+                Logger.InfoFormat("Spawning new child process outside of current job: \"{0}\" {1}", fileName, arguments);
 
-                if (process == null) { return false; }
+                var startInfo = new ProcessStartInfo(fileName, arguments);
+                var childProcess = CreateProcessInSeparateJob(startInfo);
+
+                if (childProcess == null)
+                {
+                    Logger.Warn("Unable to spawn child process outside of current job.");
+                    return false;
+                }
 
                 try
                 {
-                    var exited = process.WaitForExit(2000);
+                    var exited = childProcess.WaitForExit(2000);
+
+                    if (exited)
+                    {
+                        Logger.Warn("Child process exited immediately after it was started.  " +
+                                    "This may indicate a problem.");
+                    }
+
                     return !exited;
                 }
-                catch
+                catch (Exception e)
                 {
+                    Logger.Error("Failed to wait for child process to exit", e);
                     return false;
                 }
             }
@@ -105,25 +130,22 @@ namespace WindowsOSUtils.JobObjects
                                          bInheritHandle = false
                                      };
 
-            var startupInfo = new STARTUPINFO
-                              {
-                                  cb = Marshal.SizeOf(typeof (STARTUPINFO))
-                              };
+            var environment = IntPtr.Zero;
+            const bool inheritHandles = false;
+            const string currentDirectory = null;
+            const ProcessCreationFlags creationFlags = ProcessCreationFlags.CREATE_BREAKAWAY_FROM_JOB;
 
+            var startupInfo = new STARTUPINFO { cb = Marshal.SizeOf(typeof (STARTUPINFO)) };
             var processInformation = new PROCESS_INFORMATION();
-
-            const bool bInheritHandles = false;
-            var lpEnvironment = IntPtr.Zero;
-            const string lpCurrentDirectory = null;
 
             PInvokeUtils.Try(() => WinAPI.CreateProcess(startInfo.FileName,
                                                         startInfo.Arguments,
                                                         ref securityAttributes,
                                                         ref securityAttributes,
-                                                        bInheritHandles,
-                                                        ProcessCreationFlags.CREATE_BREAKAWAY_FROM_JOB,
-                                                        lpEnvironment,
-                                                        lpCurrentDirectory,
+                                                        inheritHandles,
+                                                        creationFlags,
+                                                        environment,
+                                                        currentDirectory,
                                                         ref startupInfo,
                                                         out processInformation));
 
@@ -131,10 +153,11 @@ namespace WindowsOSUtils.JobObjects
             {
                 return Process.GetProcessById(processInformation.dwProcessId);
             }
-            catch
+            catch (Exception e)
             {
-                // Running in Visual Studio w/ Program Compatibility Assistant (PCA) enabled.
-                // See http://stackoverflow.com/a/4232259/3205
+                Logger.Error("Unable to get child process by ID.  " +
+                             "Are you running in Visual Studio with Program Compatibility Assistant (PCA) enabled?  " +
+                             "See http://stackoverflow.com/a/4232259/3205 for more information.", e);
                 return null;
             }
         }
