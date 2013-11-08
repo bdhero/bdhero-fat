@@ -11,27 +11,16 @@ namespace WindowsOSUtils.JobObjects
     #region Win32 API calls (P/Invoke)
 
     /// <summary>
-    ///     public class that holds all the Windows API calls made by <see cref="JobObjectController" />.
+    ///     Public class that holds all the Windows API calls necessary to manage Windows Job Objects.
     /// </summary>
     /// <seealso cref="https://www-auth.cs.wisc.edu/lists/htcondor-users/2009-June/msg00106.shtml" />
     internal static class WinAPI
     {
-        #region Native 32/64 Bit Switching Flag
-
         /// <summary>
-        /// The structures returned by Windows are different sizes depending on whether
-        /// the operating system is running in 32bit or 64bit mode.
+        ///     The structures returned by Windows are different sizes depending on whether
+        ///     the operating system is running in 32-bit or 64-bit mode.
         /// </summary>
         public static readonly bool Is32Bit = (IntPtr.Size == 4);
-
-        #endregion
-
-        /// <summary>
-        ///     This function returns a pseudohandle for the current process.
-        /// </summary>
-        /// <returns>The return value is a pseudohandle to the current process.</returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern IntPtr GetCurrentProcess();
 
         /// <summary>
         ///     The IsProcessInJob function determines if the process is running in the specified job.
@@ -94,106 +83,6 @@ namespace WindowsOSUtils.JobObjects
             string name);
 
         /// <summary>
-        ///     The AssignProcessToJobObject function assigns a process to an existing job object.
-        /// </summary>
-        /// <param name="jobHandle">
-        ///     Handle to the job object to which the process will be
-        ///     associated.  The CreateJobObject or OpenJobObject function returns this handle.
-        ///     The handle must have the JOB_OBJECT_ASSIGN_PROCESS access right. For more
-        ///     information, see Job Object Security and Access Rights.
-        /// </param>
-        /// <param name="processHandle">
-        ///     Handle to the process to associate with the job object.
-        ///     The process must not already be assigned to a job. The handle must have the
-        ///     PROCESS_SET_QUOTA and PROCESS_TERMINATE access rights. For more information,
-        ///     see Process Security and Access Rights.
-        /// </param>
-        /// <returns>
-        ///     If the function succeeds, the return value is nonzero.  If the function
-        ///     fails, the return value is zero. To get extended error information, call
-        ///     GetLastError.
-        /// </returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool AssignProcessToJobObject(
-            IntPtr jobHandle,
-            IntPtr processHandle);
-
-        /// <summary>
-        ///     The QueryInformationJobObject function retrieves limit and job state information
-        ///     from the job object.
-        /// </summary>
-        /// <param name="jobHandle">
-        ///     Handle to the job whose information is being queried.
-        ///     The CreateJobObject or OpenJobObject function returns this handle. The handle
-        ///     must have the JOB_OBJECT_QUERY access right. For more information, see Job
-        ///     Object Security and Access Rights.  If this value is NULL and the calling
-        ///     process is associated with a job, the job associated with the calling process
-        ///     is used.
-        /// </param>
-        /// <param name="jobObjectInfoClass">
-        ///     Information class for the limits to be set. This
-        ///     parameter can be one of the following values.
-        /// </param>
-        /// <param name="jobObjectInfo">
-        ///     Limit information. The format of this data
-        ///     depends on the value of the JobObjectInfoClass parameter.
-        /// </param>
-        /// <param name="jobObjectInfoLength">
-        ///     Count of the job information being queried, in
-        ///     bytes.
-        /// </param>
-        /// <param name="returnLength">
-        ///     Pointer to a variable that receives the length of data
-        ///     written to the structure pointed to by the lpJobObjectInfo parameter. If you
-        ///     do not want to receive this information, specify NULL.
-        /// </param>
-        /// <returns>
-        ///     If the function succeeds, the return value is nonzero.  If the
-        ///     function fails, the return value is zero. To get extended error information,
-        ///     call GetLastError.
-        /// </returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool QueryInformationJobObject(
-            [In] IntPtr jobHandle,
-            [In] JobObjectInfoClass jobObjectInfoClass,
-            [Out] out JobObjectInfo jobObjectInfo,
-            [In] int jobObjectInfoLength,
-            [Out] out int returnLength);
-
-        /// <summary>
-        ///     The SetInformationJobObject function sets limits for a job object.
-        /// </summary>
-        /// <param name="jobHandle">
-        ///     Handle to the job whose limits are being set.
-        ///     The CreateJobObject or OpenJobObject function returns this handle. The handle must
-        ///     have the JOB_OBJECT_SET_ATTRIBUTES access right. For more information, see Job
-        ///     Object Security and Access Rights.
-        /// </param>
-        /// <param name="jobObjectInfoClass">
-        ///     Information class for the limits to be set. This
-        ///     parameter can be one of the following values.
-        /// </param>
-        /// <param name="jobObjectInfo">
-        ///     Limits to be set for the job. The format of this data
-        ///     depends on the value of JobObjectInfoClass.
-        /// </param>
-        /// <param name="jobObjectInfoLength">
-        ///     Size of the job information being set, in
-        ///     bytes.
-        /// </param>
-        /// <returns>
-        ///     If the function succeeds, the return value is nonzero.  If the function
-        ///     fails, the return value is zero. To get extended error information,
-        ///     call GetLastError.
-        /// </returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool SetInformationJobObject(
-            [In] IntPtr jobHandle,
-            [In] JobObjectInfoClass jobObjectInfoClass,
-            [In] ref JobObjectInfo jobObjectInfo,
-            [In] uint jobObjectInfoLength);
-
-        /// <summary>
         ///     Creates or opens a job object.
         /// </summary>
         /// <param name="lpJobAttributes">
@@ -246,7 +135,67 @@ namespace WindowsOSUtils.JobObjects
         ///     </para>
         /// </remarks>
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern IntPtr CreateJobObject([In] ref SECURITY_ATTRIBUTES lpJobAttributes, string lpName);
+        private static extern IntPtr CreateJobObject(
+            [In] ref SECURITY_ATTRIBUTES lpJobAttributes,
+            string lpName);
+
+        /// <summary>
+        ///     The AssignProcessToJobObject function assigns a process to an existing job object.
+        /// </summary>
+        /// <param name="jobHandle">
+        ///     Handle to the job object to which the process will be
+        ///     associated.  The CreateJobObject or OpenJobObject function returns this handle.
+        ///     The handle must have the JOB_OBJECT_ASSIGN_PROCESS access right. For more
+        ///     information, see Job Object Security and Access Rights.
+        /// </param>
+        /// <param name="processHandle">
+        ///     Handle to the process to associate with the job object.
+        ///     The process must not already be assigned to a job. The handle must have the
+        ///     PROCESS_SET_QUOTA and PROCESS_TERMINATE access rights. For more information,
+        ///     see Process Security and Access Rights.
+        /// </param>
+        /// <returns>
+        ///     If the function succeeds, the return value is nonzero.  If the function
+        ///     fails, the return value is zero. To get extended error information, call
+        ///     GetLastError.
+        /// </returns>
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool AssignProcessToJobObject(
+            IntPtr jobHandle,
+            IntPtr processHandle);
+
+        /// <summary>
+        ///     The SetInformationJobObject function sets limits for a job object.
+        /// </summary>
+        /// <param name="jobHandle">
+        ///     Handle to the job whose limits are being set.
+        ///     The CreateJobObject or OpenJobObject function returns this handle. The handle must
+        ///     have the JOB_OBJECT_SET_ATTRIBUTES access right. For more information, see Job
+        ///     Object Security and Access Rights.
+        /// </param>
+        /// <param name="jobObjectInfoClass">
+        ///     Information class for the limits to be set. This
+        ///     parameter can be one of the following values.
+        /// </param>
+        /// <param name="jobObjectInfo">
+        ///     Limits to be set for the job. The format of this data
+        ///     depends on the value of JobObjectInfoClass.
+        /// </param>
+        /// <param name="jobObjectInfoLength">
+        ///     Size of the job information being set, in
+        ///     bytes.
+        /// </param>
+        /// <returns>
+        ///     If the function succeeds, the return value is nonzero.  If the function
+        ///     fails, the return value is zero. To get extended error information,
+        ///     call GetLastError.
+        /// </returns>
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetInformationJobObject(
+            [In] IntPtr jobHandle,
+            [In] JobObjectInfoClass jobObjectInfoClass,
+            [In] ref JobObjectInfo jobObjectInfo,
+            [In] uint jobObjectInfoLength);
 
         /// <summary>
         ///     <para>
@@ -533,16 +482,17 @@ namespace WindowsOSUtils.JobObjects
         ///     </code>
         /// </remarks>
         [DllImport("kernel32.dll")]
-        public static extern bool CreateProcess(string lpApplicationName,
-                                                string lpCommandLine,
-                                                ref SECURITY_ATTRIBUTES lpProcessAttributes,
-                                                ref SECURITY_ATTRIBUTES lpThreadAttributes,
-                                                bool bInheritHandles,
-                                                ProcessCreationFlags dwCreationFlags,
-                                                IntPtr lpEnvironment,
-                                                string lpCurrentDirectory,
-                                                [In] ref STARTUPINFO lpStartupInfo,
-                                                out PROCESS_INFORMATION lpProcessInformation);
+        public static extern bool CreateProcess(
+            string lpApplicationName,
+            string lpCommandLine,
+            ref SECURITY_ATTRIBUTES lpProcessAttributes,
+            ref SECURITY_ATTRIBUTES lpThreadAttributes,
+            bool bInheritHandles,
+            ProcessCreationFlags dwCreationFlags,
+            IntPtr lpEnvironment,
+            string lpCurrentDirectory,
+            [In] ref STARTUPINFO lpStartupInfo,
+            out PROCESS_INFORMATION lpProcessInformation);
 
         /// <summary>
         ///     The CloseHandle function lets us destroy a JobObject handle.
@@ -554,7 +504,8 @@ namespace WindowsOSUtils.JobObjects
         ///     call GetLastError.
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool CloseHandle([In] IntPtr jobHandle);
+        public static extern bool CloseHandle(
+            [In] IntPtr jobHandle);
     }
 
     #endregion
