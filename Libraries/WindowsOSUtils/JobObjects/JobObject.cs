@@ -20,7 +20,6 @@ namespace WindowsOSUtils.JobObjects
     ///     all processes associated with a job.
     /// </remarks>
     /// <see cref="http://skolima.blogspot.com/2012/09/handling-native-api-in-managed.html" />
-    [UsedImplicitly]
     public sealed class JobObject : IJobObject
     {
         private readonly IntPtr _jobObjectHandle;
@@ -30,6 +29,7 @@ namespace WindowsOSUtils.JobObjects
         /// <exception cref="Win32Exception">
         ///     Thrown if the operating system was unable to create a new Job Object.
         /// </exception>
+        [UsedImplicitly]
         public JobObject()
         {
             _jobObjectHandle = PInvokeUtils.Try(() => WinAPI.CreateJobObject(IntPtr.Zero, null));
