@@ -182,54 +182,54 @@ namespace ProcessUtils
 
             using (var process = CreateProcess())
             {
-                process.StartInfo.FileName = ExePath;
-                process.StartInfo.Arguments = Arguments.ToString();
-                process.EnableRaisingEvents = true;
-                process.Exited += ProcessOnExited;
-
-                if (BeforeStart != null)
-                    BeforeStart(this, EventArgs.Empty);
-
-                process.OutputDataReceived += (sender, args) => HandleStdOut(args.Data);
-                process.ErrorDataReceived += (sender, args) => HandleStdErr(args.Data);
-
-                Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
-
-                process.Start();
-
-                _hasStarted = true;
-
-                Id = process.Id;
-                Name = process.ProcessName;
-                State = NonInteractiveProcessState.Running;
-
-                if (_jobObjectManager.IsAssignedToJob(process))
+                using (var jobObject = _jobObjectManager.CreateJobObject())
                 {
-                    Logger.Warn("WARNING: Child process already belongs to a Job Object.  If the parent process crashes, the child process will continue to run in the background until it finishes executing.");
-                }
-                else
-                {
-                    using (var jobObject = _jobObjectManager.CreateJobObject())
+                    process.StartInfo.FileName = ExePath;
+                    process.StartInfo.Arguments = Arguments.ToString();
+                    process.EnableRaisingEvents = true;
+                    process.Exited += ProcessOnExited;
+
+                    if (BeforeStart != null)
+                        BeforeStart(this, EventArgs.Empty);
+
+                    process.OutputDataReceived += (sender, args) => HandleStdOut(args.Data);
+                    process.ErrorDataReceived += (sender, args) => HandleStdErr(args.Data);
+
+                    Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
+
+                    process.Start();
+
+                    _hasStarted = true;
+
+                    Id = process.Id;
+                    Name = process.ProcessName;
+                    State = NonInteractiveProcessState.Running;
+
+                    if (_jobObjectManager.IsAssignedToJob(process))
+                    {
+                        Logger.Warn("WARNING: Child process already belongs to a Job Object.  If the parent process crashes, the child process will continue to run in the background until it finishes executing.");
+                    }
+                    else
                     {
                         jobObject.Assign(process);
                         jobObject.KillOnClose();
                     }
+
+                    _stopwatch.Start();
+
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+
+                    Logger.DebugFormat("Waiting for process \"{0}\" w/ PID = {1} to exit...", ExePath, Id);
+
+                    process.WaitForExit();
+
+                    _hasExited = true;
+
+                    Logger.DebugFormat("Process \"{0}\" w/ PID = {1} exited", ExePath, Id);
+
+                    ExitCode = process.ExitCode;
                 }
-
-                _stopwatch.Start();
-
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-
-                Logger.DebugFormat("Waiting for process \"{0}\" w/ PID = {1} to exit...", ExePath, Id);
-
-                process.WaitForExit();
-
-                _hasExited = true;
-
-                Logger.DebugFormat("Process \"{0}\" w/ PID = {1} exited", ExePath, Id);
-
-                ExitCode = process.ExitCode;
             }
 
             ProcessOnExited();
