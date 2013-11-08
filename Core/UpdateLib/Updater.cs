@@ -23,6 +23,8 @@ namespace UpdateLib
 
         private volatile UpdaterClientState _state;
 
+        private volatile bool _hasChecked;
+
         private CancellationTokenSource _cancellationTokenSource;
 
         public event FileDownloadProgressChangedHandler DownloadProgressChanged;
@@ -38,7 +40,7 @@ namespace UpdateLib
 
         public bool HasChecked
         {
-            get { return CurrentVersion != null && _latestUpdate != null; }
+            get { return _hasChecked; }
         }
 
         public Update LatestUpdate
@@ -56,7 +58,7 @@ namespace UpdateLib
             get
             {
                 EnsureChecked();
-                return _latestUpdate.Version > CurrentVersion;
+                return _latestUpdate != null && _latestUpdate.Version > CurrentVersion;
             }
         }
 
@@ -151,7 +153,7 @@ namespace UpdateLib
         {
             if (CurrentVersion == null)
                 throw new InvalidOperationException("No current version was specified; unable to tell if there's a new version!");
-            if (_latestUpdate == null)
+            if (!_hasChecked)
                 throw new InvalidOperationException("You need to check for updates first!");
         }
 
@@ -167,6 +169,7 @@ namespace UpdateLib
                 var response = JsonConvert.DeserializeObject<UpdateResponse>(json);
                 _latestUpdate = FromResponse(response);
                 _state = UpdaterClientState.Ready;
+                _hasChecked = true;
             }
             catch (Exception e)
             {
@@ -185,6 +188,12 @@ namespace UpdateLib
             var mirror = response.Mirrors.First();
             var platform = GetPlatform(response);
             var package = GetPackage(platform);
+
+            // No package available for the user's OS
+            if (package == null)
+            {
+                return null;
+            }
 
             var version = response.Version;
             var filename = package.FileName;
