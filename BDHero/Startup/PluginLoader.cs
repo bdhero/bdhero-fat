@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BDHero.Exceptions;
 using BDHero.Plugin;
+using DotNetUtils.Annotations;
 
 namespace BDHero.Startup
 {
@@ -13,6 +14,7 @@ namespace BDHero.Startup
         private readonly PluginService _pluginService;
         private readonly IDirectoryLocator _directoryLocator;
 
+        [UsedImplicitly]
         public PluginLoader(PluginService pluginService, IDirectoryLocator directoryLocator)
         {
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
