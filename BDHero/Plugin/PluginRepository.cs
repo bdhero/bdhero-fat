@@ -16,8 +16,6 @@ namespace BDHero.Plugin
 
         private readonly IList<IPlugin> _plugins = new List<IPlugin>();
 
-        public event PluginProgressHandler PluginProgressChanged;
-
         public int Count
         {
             get { return _plugins.Count; }
@@ -48,11 +46,7 @@ namespace BDHero.Plugin
         public void ReportProgress(IPlugin plugin, double percentComplete, string status)
         {
             var progressProvider = GetProgressProvider(plugin);
-
             progressProvider.Update(percentComplete, status);
-
-            if (PluginProgressChanged != null)
-                PluginProgressChanged(plugin, progressProvider);
         }
 
         public ProgressProvider GetProgressProvider(IPlugin plugin)

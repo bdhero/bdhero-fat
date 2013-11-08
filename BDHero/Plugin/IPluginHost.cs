@@ -11,11 +11,6 @@ namespace BDHero.Plugin
     public interface IPluginHost
     {
         /// <summary>
-        ///     Invoked whenever a plugin's state or progress changes.
-        /// </summary>
-        event PluginProgressHandler PluginProgressChanged;
-
-        /// <summary>
         ///     Allows plugins to report their progress to the host.
         /// </summary>
         /// <param name="plugin">Plugin that is reporting its progress</param>
