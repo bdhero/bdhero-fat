@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using OSUtils;
 using OSUtils.TaskbarUtils;
 
 namespace WindowsOSUtils.TaskbarUtils
@@ -33,7 +34,7 @@ namespace WindowsOSUtils.TaskbarUtils
 
         public static bool IsPlatformSupported
         {
-            get { return TaskbarManager.IsPlatformSupported; }
+            get { return SystemInfo.Instance.OS.Type == OSType.Windows && TaskbarManager.IsPlatformSupported; }
         }
 
         public double Progress
