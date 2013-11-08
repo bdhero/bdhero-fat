@@ -41,7 +41,9 @@ namespace BDHero.Plugin.FFmpegMuxer
         }
         private string _sourceFilePath;
 
-        public MkvPropEdit(IJobObjectFactory jobObjectFactory) : base(jobObjectFactory)
+        [UsedImplicitly]
+        public MkvPropEdit(IJobObjectFactory jobObjectFactory, IJobObjectManager jobObjectManager)
+            : base(jobObjectFactory, jobObjectManager)
         {
             _jobObjectFactory = jobObjectFactory;
             SetExePath();

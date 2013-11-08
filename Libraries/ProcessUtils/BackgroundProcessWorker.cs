@@ -50,8 +50,9 @@ namespace ProcessUtils
         ///     if the parent process exits prematurely.
         /// </summary>
         /// <param name="jobObjectFactory">Factory that creates instances of <see cref="IJobObject"/>.</param>
-        public BackgroundProcessWorker(IJobObjectFactory jobObjectFactory)
-            : base(jobObjectFactory)
+        /// <param name="jobObjectManager"></param>
+        public BackgroundProcessWorker(IJobObjectFactory jobObjectFactory, IJobObjectManager jobObjectManager)
+            : base(jobObjectFactory, jobObjectManager)
         {
             PropertyChanged += OnPropertyChanged;
             _timer.Elapsed += TimerOnTick;

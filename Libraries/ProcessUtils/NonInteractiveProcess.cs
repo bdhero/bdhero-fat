@@ -21,6 +21,7 @@ namespace ProcessUtils
     public class NonInteractiveProcess : INotifyPropertyChanged
     {
         private readonly IJobObjectFactory _jobObjectFactory;
+        private readonly IJobObjectManager _jobObjectManager;
 
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -138,9 +139,11 @@ namespace ProcessUtils
         ///     if the parent process exits prematurely.
         /// </summary>
         /// <param name="jobObjectFactory">Factory that creates instances of <see cref="IJobObject"/>.</param>
-        public NonInteractiveProcess(IJobObjectFactory jobObjectFactory)
+        /// <param name="jobObjectManager"></param>
+        public NonInteractiveProcess(IJobObjectFactory jobObjectFactory, IJobObjectManager jobObjectManager)
         {
             _jobObjectFactory = jobObjectFactory;
+            _jobObjectManager = jobObjectManager;
         }
 
         #endregion
@@ -180,56 +183,56 @@ namespace ProcessUtils
             if (!File.Exists(ExePath))
                 throw new FileNotFoundException(string.Format("Unable to Start NonInteractiveProcess: File \"{0}\" does not exist", ExePath));
 
-            using (var jobObject = _jobObjectFactory.CreateJobObject())
+            using (var process = CreateProcess())
             {
-                using (var process = CreateProcess())
+                process.StartInfo.FileName = ExePath;
+                process.StartInfo.Arguments = Arguments.ToString();
+                process.EnableRaisingEvents = true;
+                process.Exited += ProcessOnExited;
+
+                if (BeforeStart != null)
+                    BeforeStart(this, EventArgs.Empty);
+
+                process.OutputDataReceived += (sender, args) => HandleStdOut(args.Data);
+                process.ErrorDataReceived += (sender, args) => HandleStdErr(args.Data);
+
+                Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
+
+                process.Start();
+
+                _hasStarted = true;
+
+                Id = process.Id;
+                Name = process.ProcessName;
+                State = NonInteractiveProcessState.Running;
+
+                if (_jobObjectManager.IsAssignedToJob(process))
                 {
-                    process.StartInfo.FileName = ExePath;
-                    process.StartInfo.Arguments = Arguments.ToString();
-                    process.EnableRaisingEvents = true;
-                    process.Exited += ProcessOnExited;
-
-                    if (BeforeStart != null)
-                        BeforeStart(this, EventArgs.Empty);
-
-                    process.OutputDataReceived += (sender, args) => HandleStdOut(args.Data);
-                    process.ErrorDataReceived += (sender, args) => HandleStdErr(args.Data);
-
-                    Logger.DebugFormat("\"{0}\" {1}", ExePath, Arguments);
-
-                    process.Start();
-
-                    _hasStarted = true;
-
-                    Id = process.Id;
-                    Name = process.ProcessName;
-                    State = NonInteractiveProcessState.Running;
-
-                    if (JobObjectController.IsProcessMemberOfAnyJob(process))
-                    {
-                        Logger.Warn("WARNING: Child process already belongs to a Job Object.  If the parent process crashes, the child process will continue to run in the background until it finishes executing.");
-                    }
-                    else
+                    Logger.Warn("WARNING: Child process already belongs to a Job Object.  If the parent process crashes, the child process will continue to run in the background until it finishes executing.");
+                }
+                else
+                {
+                    using (var jobObject = _jobObjectFactory.CreateJobObject())
                     {
                         jobObject.Assign(process);
                         jobObject.KillOnClose();
                     }
-
-                    _stopwatch.Start();
-
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
-
-                    Logger.DebugFormat("Waiting for process \"{0}\" w/ PID = {1} to exit...", ExePath, Id);
-
-                    process.WaitForExit();
-
-                    _hasExited = true;
-
-                    Logger.DebugFormat("Process \"{0}\" w/ PID = {1} exited", ExePath, Id);
-
-                    ExitCode = process.ExitCode;
                 }
+
+                _stopwatch.Start();
+
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
+                Logger.DebugFormat("Waiting for process \"{0}\" w/ PID = {1} to exit...", ExePath, Id);
+
+                process.WaitForExit();
+
+                _hasExited = true;
+
+                Logger.DebugFormat("Process \"{0}\" w/ PID = {1} exited", ExePath, Id);
+
+                ExitCode = process.ExitCode;
             }
 
             ProcessOnExited();
