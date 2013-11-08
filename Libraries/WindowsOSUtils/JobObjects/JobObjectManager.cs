@@ -43,7 +43,6 @@ namespace WindowsOSUtils.JobObjects
 
                 var processStartInfo = new ProcessStartInfo(currentProcess.MainModule.FileName, new ArgumentList(args).ToString());
 
-//                var process = JobObjectController.CreateProcessInSeparateJob(processStartInfo);
                 var process = CreateProcessInSeparateJob(processStartInfo);
 
                 if (process == null) { return false; }

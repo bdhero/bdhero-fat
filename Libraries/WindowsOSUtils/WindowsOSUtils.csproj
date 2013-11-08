@@ -62,7 +62,6 @@
     <Compile Include="DriveDetector\WindowsDriveDetector.cs" />
     <Compile Include="JobObjects\ArgumentList.cs" />
     <Compile Include="JobObjects\JobObject.cs" />
-    <Compile Include="JobObjects\JobObjectController.cs" />
     <Compile Include="JobObjects\JobObjectManager.cs" />
     <Compile Include="JobObjects\WinAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
