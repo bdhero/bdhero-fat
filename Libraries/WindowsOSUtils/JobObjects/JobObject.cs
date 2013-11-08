@@ -78,32 +78,13 @@ namespace WindowsOSUtils.JobObjects
             PInvokeUtils.Try(() => WinAPI.AssignProcessToJobObject(_jobObjectHandle, process.Handle));
         }
 
-        // TODO: PICK AN IMPLEMENTATION
         public void KillOnClose()
         {
             var type = JobObjectInfoClass.ExtendedLimitInformation;
+            var limit = CreateKillOnCloseJobObjectInfo();
+            var length = GetKillOnCloseJobObjectInfoLength();
 
-            var v1 = false;
-
-            if (v1)
-            {
-                var limit = new JobObjectExtendedLimitInformation
-                            {
-                                BasicLimitInformation =
-                                    new JobObjectBasicLimitInformation {LimitFlags = LimitFlags.LimitKillOnJobClose}
-                            };
-
-                var length = (uint) Marshal.SizeOf(typeof (JobObjectExtendedLimitInformation));
-
-                PInvokeUtils.Try(() => SetInformationJobObject(_jobObjectHandle, type, ref limit, length));
-            }
-            else
-            {
-                var limit = CreateKillOnCloseJobObjectInfo();
-                var length = GetKillOnCloseJobObjectInfoLength();
-
-                PInvokeUtils.Try(() => WinAPI.SetInformationJobObject(_jobObjectHandle, type, ref limit, length));
-            }
+            PInvokeUtils.Try(() => WinAPI.SetInformationJobObject(_jobObjectHandle, type, ref limit, length));
         }
 
         private static uint GetKillOnCloseJobObjectInfoLength()
@@ -174,20 +155,5 @@ namespace WindowsOSUtils.JobObjects
         {
             return JobObjectManager.HasJobObject(process);
         }
-
-        #region Win32 P/Invoke Interop
-
-//        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Auto)]
-//        private static extern bool AssignProcessToJobObject(IntPtr hJob, IntPtr hProcess);
-//
-//        [DllImport("kernel32", SetLastError = true)]
-//        private static extern bool CloseHandle(IntPtr hJob);
-//
-        [DllImport("kernel32", SetLastError = true)]
-        private static extern bool SetInformationJobObject(IntPtr hJob, JobObjectInfoClass jobObjectInfoClass,
-                                                           [In] ref JobObjectExtendedLimitInformation lpJobObjectInfo,
-                                                           uint cbJobObjectInfoLength);
-
-        #endregion
     }
 }
