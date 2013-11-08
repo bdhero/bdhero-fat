@@ -495,14 +495,25 @@ namespace WindowsOSUtils.JobObjects
             out PROCESS_INFORMATION lpProcessInformation);
 
         /// <summary>
-        ///     The CloseHandle function lets us destroy a JobObject handle.
+        ///     Destroys a Job Object handle.
         /// </summary>
-        /// <param name="jobHandle">Handle to the job</param>
+        /// <param name="jobHandle">
+        ///     Handle to the job.
+        /// </param>
         /// <returns>
-        ///     If the function succeeds, the return value true.  If the function
-        ///     fails, the return value is false. To get extended error information,
-        ///     call GetLastError.
+        ///     <c>true</c> if the function succeeded, or <c>false</c> if it failed.
+        ///     To get extended error information, call GetLastError.
         /// </returns>
+        /// <remarks>
+        ///     <para>
+        ///         The job is destroyed when its last handle has been closed and all associated processes have exited.
+        ///     </para>
+        ///     <para>
+        ///         However, if the job has the <see cref="LimitFlags.LimitKillOnJobClose"/> flag specified,
+        ///         closing the last job object handle terminates <b>all</b> associated processes
+        ///         and then destroys the job object itself.
+        ///     </para>
+        /// </remarks>
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool CloseHandle(
             [In] IntPtr jobHandle);
