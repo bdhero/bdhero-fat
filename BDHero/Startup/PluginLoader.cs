@@ -13,7 +13,6 @@ namespace BDHero.Startup
         private readonly PluginService _pluginService;
         private readonly IDirectoryLocator _directoryLocator;
 
-        /// <exception cref="RequiredPluginNotFoundException{T}"></exception>
         public PluginLoader(PluginService pluginService, IDirectoryLocator directoryLocator)
         {
             _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
