@@ -98,9 +98,6 @@ namespace WindowsOSUtils.JobObjects
         [CanBeNull]
         private static Process CreateProcessInSeparateJob(ProcessStartInfo startInfo)
         {
-            // TODO: Is it necessary to call this method?
-            var newJobHandle = PInvokeUtils.Try(() => WinAPI.CreateJobObject(IntPtr.Zero, null));
-
             var securityAttributes = new SECURITY_ATTRIBUTES
                                      {
                                          nLength = Marshal.SizeOf(typeof (SECURITY_ATTRIBUTES)),
