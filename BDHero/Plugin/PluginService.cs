@@ -89,8 +89,14 @@ namespace BDHero.Plugin
 
             // If running in Visual Studio, load plugins from project bin dirs
             var installDir = AssemblyUtils.GetInstallDir();
-            var vhostFiles = Directory.GetFiles(installDir, "*.vshost.exe", SearchOption.TopDirectoryOnly);
-            if (vhostFiles.Any())
+
+            // Visual Studio
+            var vhostFiles = Directory.GetFiles(installDir, "*.vshost.exe", SearchOption.TopDirectoryOnly).ToArray();
+
+            // Xamarin / Mono
+            var debugFiles = Directory.GetFiles(installDir, "*.mdb", SearchOption.TopDirectoryOnly).ToArray();
+
+            if (vhostFiles.Any() || debugFiles.Any())
             {
                 LoadDevPlugins();
                 _devPluginsLoaded = true;

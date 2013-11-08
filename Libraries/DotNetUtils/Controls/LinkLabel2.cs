@@ -267,11 +267,20 @@ namespace DotNetUtils.Controls
             //WM_SETCURSOR == 32
             if (m.Msg == 32)
             {
-                //IDC_HAND == 32649
-                SetCursor(LoadCursor(0, 32649));
+                try
+                {
+                    //IDC_HAND == 32649
+                    SetCursor(LoadCursor(0, 32649));
+                }
+                catch (DllNotFoundException e)
+                {
+                    // Mono
+                    Cursor = Cursors.Hand;
+                }
 
-                //the message has been handled
+                // The message has been handled
                 m.Result = IntPtr.Zero;
+
                 return;
             }
 
