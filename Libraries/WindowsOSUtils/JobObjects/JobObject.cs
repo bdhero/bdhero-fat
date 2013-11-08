@@ -35,19 +35,49 @@ namespace WindowsOSUtils.JobObjects
             _jobObjectHandle = PInvokeUtils.Try(() => WinAPI.CreateJobObject(IntPtr.Zero, null));
         }
 
-        // TODO: Better IDisposable implementation
         #region IDisposable Members
 
-        /// <exception cref="Win32Exception">Thrown if the handle to the Job Object could not be released.</exception>
+        ~JobObject()
+        {
+            Dispose(false); // I am *not* calling you from Dispose, it's *not* safe to free managed resources
+        }
+
+        /// <summary>
+        ///     Frees managed and unmanaged resources.
+        /// </summary>
+        /// <param name="freeManagedObjectsAlso">
+        ///     Free managed resources.  Should only be set to <c>true</c> when called from <see cref="Dispose"/>.
+        /// </param>
+        /// <exception cref="Win32Exception">
+        ///     Thrown if the handle to the Job Object could not be released.
+        /// </exception>
+        /// <seealso cref="http://stackoverflow.com/a/538238/467582"/>
+        private void Dispose(bool freeManagedObjectsAlso)
+        {
+            // Free unmanaged resources
+            // ...
+
+            // Free managed resources too, but only if I'm being called from Dispose()
+            // (If I'm being called from Finalize then the objects might not exist anymore)
+            if (freeManagedObjectsAlso)
+            {
+                if (_disposed) { return; }
+                if (_jobObjectHandle == IntPtr.Zero) { return; }
+
+                _disposed = true;
+
+                PInvokeUtils.Try(() => WinAPI.CloseHandle(_jobObjectHandle));
+            }
+        }
+
+        /// <exception cref="Win32Exception">
+        ///     Thrown if the handle to the Job Object could not be released.
+        /// </exception>
+        /// <seealso cref="http://stackoverflow.com/a/538238/467582"/>
         public void Dispose()
         {
-            if (_disposed) { return; }
-
-            _disposed = true;
-
-            if (_jobObjectHandle == IntPtr.Zero) { return; }
-
-            PInvokeUtils.Try(() => WinAPI.CloseHandle(_jobObjectHandle));
+            Dispose(true); // I am calling you from Dispose, it's safe
+            GC.SuppressFinalize(this); // Hey, GC: don't bother calling finalize later
         }
 
         #endregion
