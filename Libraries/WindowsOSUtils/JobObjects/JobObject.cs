@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using DotNetUtils.Annotations;
 using OSUtils;
 using OSUtils.JobObjects;
 
@@ -29,7 +28,6 @@ namespace WindowsOSUtils.JobObjects
         /// <exception cref="Win32Exception">
         ///     Thrown if the operating system was unable to create a new Job Object.
         /// </exception>
-        [UsedImplicitly]
         public JobObject()
         {
             _jobObjectHandle = PInvokeUtils.Try(() => WinAPI.CreateJobObject(IntPtr.Zero, null));
