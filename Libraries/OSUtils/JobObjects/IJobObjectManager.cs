@@ -8,6 +8,13 @@ namespace OSUtils.JobObjects
     public interface IJobObjectManager
     {
         /// <summary>
+        ///     Creates a new instance of a class that implements the <see cref="IJobObject"/> interface
+        ///     for the current operating system.
+        /// </summary>
+        /// <returns>OS-specific <see cref="IJobObject"/> instance.</returns>
+        IJobObject CreateJobObject();
+
+        /// <summary>
         ///     Determines if the given <paramref name="process"/> is currently associated with a Windows Job Object.
         /// </summary>
         /// <param name="process">The process to check.</param>

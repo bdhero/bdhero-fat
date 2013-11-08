@@ -44,8 +44,8 @@ namespace BDHero.Plugin.FFmpegMuxer
 
         private readonly FFmpegTrackIndexer _indexer;
 
-        public FFmpeg(Job job, Playlist playlist, string outputMKVPath, IJobObjectFactory jobObjectFactory, IJobObjectManager jobObjectManager)
-            : base(jobObjectFactory, jobObjectManager)
+        public FFmpeg(Job job, Playlist playlist, string outputMKVPath, IJobObjectManager jobObjectManager)
+            : base(jobObjectManager)
         {
             _playlistLength = playlist.Length;
             _inputM2TSPaths = playlist.StreamClips.Select(clip => clip.FileInfo.FullName).ToList();

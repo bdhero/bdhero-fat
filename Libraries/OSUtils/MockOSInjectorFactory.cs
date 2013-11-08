@@ -21,7 +21,6 @@ namespace OSUtils
         public override void Load()
         {
             Bind<IJobObject>().To<MockJobObject>();
-            Bind<IJobObjectFactory>().To<MockJobObjectFactory>();
             Bind<IJobObjectManager>().To<MockJobObjectManager>();
         }
 
@@ -44,17 +43,13 @@ namespace OSUtils
         }
 
         [UsedImplicitly]
-        private class MockJobObjectFactory : IJobObjectFactory
+        private class MockJobObjectManager : IJobObjectManager
         {
             public IJobObject CreateJobObject()
             {
                 return new MockJobObject();
             }
-        }
 
-        [UsedImplicitly]
-        private class MockJobObjectManager : IJobObjectManager
-        {
             public bool IsAssignedToJob(Process process)
             {
                 return false;

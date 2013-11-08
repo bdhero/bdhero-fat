@@ -18,7 +18,6 @@ namespace BDHero.Plugin.FFmpegMuxer
 {
     public class MkvPropEdit : BackgroundProcessWorker
     {
-        private readonly IJobObjectFactory _jobObjectFactory;
         private const string MkvPropEditFileName = "mkvpropedit.exe";
 
         /// <summary>
@@ -42,10 +41,9 @@ namespace BDHero.Plugin.FFmpegMuxer
         private string _sourceFilePath;
 
         [UsedImplicitly]
-        public MkvPropEdit(IJobObjectFactory jobObjectFactory, IJobObjectManager jobObjectManager)
-            : base(jobObjectFactory, jobObjectManager)
+        public MkvPropEdit(IJobObjectManager jobObjectManager)
+            : base(jobObjectManager)
         {
-            _jobObjectFactory = jobObjectFactory;
             SetExePath();
         }
 

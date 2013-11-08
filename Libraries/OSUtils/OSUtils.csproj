@@ -53,7 +53,6 @@
     <Compile Include="DriveDetector\DriveDetectorEventHandler.cs" />
     <Compile Include="DriveDetector\IDriveDetector.cs" />
     <Compile Include="JobObjects\IJobObject.cs" />
-    <Compile Include="JobObjects\IJobObjectFactory.cs" />
     <Compile Include="JobObjects\IJobObjectManager.cs" />
     <Compile Include="MockOSInjectorFactory.cs" />
     <Compile Include="OS.cs" />

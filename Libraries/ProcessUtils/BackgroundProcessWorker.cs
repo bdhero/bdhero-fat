@@ -46,13 +46,12 @@ namespace ProcessUtils
 
         /// <summary>
         ///     Constructs a new <see cref="BackgroundProcessWorker"/> object that uses the given
-        ///     <paramref name="jobObjectFactory"/> to ensure that child processes are terminated
+        ///     <paramref name="jobObjectManager"/> to ensure that child processes are terminated
         ///     if the parent process exits prematurely.
         /// </summary>
-        /// <param name="jobObjectFactory">Factory that creates instances of <see cref="IJobObject"/>.</param>
         /// <param name="jobObjectManager"></param>
-        public BackgroundProcessWorker(IJobObjectFactory jobObjectFactory, IJobObjectManager jobObjectManager)
-            : base(jobObjectFactory, jobObjectManager)
+        public BackgroundProcessWorker(IJobObjectManager jobObjectManager)
+            : base(jobObjectManager)
         {
             PropertyChanged += OnPropertyChanged;
             _timer.Elapsed += TimerOnTick;

@@ -20,7 +20,6 @@ namespace ProcessUtils
     /// </summary>
     public class NonInteractiveProcess : INotifyPropertyChanged
     {
-        private readonly IJobObjectFactory _jobObjectFactory;
         private readonly IJobObjectManager _jobObjectManager;
 
         private static readonly log4net.ILog Logger =
@@ -135,14 +134,12 @@ namespace ProcessUtils
 
         /// <summary>
         ///     Constructs a new <see cref="NonInteractiveProcess"/> object that uses the given
-        ///     <paramref name="jobObjectFactory"/> to ensure that child processes are terminated
+        ///     <paramref name="jobObjectManager"/> to ensure that child processes are terminated
         ///     if the parent process exits prematurely.
         /// </summary>
-        /// <param name="jobObjectFactory">Factory that creates instances of <see cref="IJobObject"/>.</param>
         /// <param name="jobObjectManager"></param>
-        public NonInteractiveProcess(IJobObjectFactory jobObjectFactory, IJobObjectManager jobObjectManager)
+        public NonInteractiveProcess(IJobObjectManager jobObjectManager)
         {
-            _jobObjectFactory = jobObjectFactory;
             _jobObjectManager = jobObjectManager;
         }
 
@@ -212,7 +209,7 @@ namespace ProcessUtils
                 }
                 else
                 {
-                    using (var jobObject = _jobObjectFactory.CreateJobObject())
+                    using (var jobObject = _jobObjectManager.CreateJobObject())
                     {
                         jobObject.Assign(process);
                         jobObject.KillOnClose();

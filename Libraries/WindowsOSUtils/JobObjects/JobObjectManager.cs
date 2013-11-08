@@ -17,6 +17,11 @@ namespace WindowsOSUtils.JobObjects
         /// </summary>
         private static readonly IntPtr AnyJobHandle = IntPtr.Zero;
 
+        public IJobObject CreateJobObject()
+        {
+            return new JobObject();
+        }
+
         /// <summary>
         ///     Determines if the given <paramref name="process"/> already belongs to a Job Object.
         /// </summary>

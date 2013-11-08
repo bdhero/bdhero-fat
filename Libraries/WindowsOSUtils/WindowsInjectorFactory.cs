@@ -20,7 +20,6 @@ namespace WindowsOSUtils
         public override void Load()
         {
             Bind<IJobObject>().To<JobObject>();
-            Bind<IJobObjectFactory>().To<JobObjectFactory>();
             Bind<IJobObjectManager>().To<JobObjectManager>();
         }
     }
