@@ -48,10 +48,19 @@ namespace BDHero.Config
         {
             Bind<IDirectoryLocator>().To<DirectoryLocator>().InSingletonScope();
             Bind<LogInitializer>().ToSelf().InSingletonScope();
-            Bind<PluginService>().ToSelf().InSingletonScope();
+            Bind<IPluginRepository>().To<PluginRepository>().InSingletonScope();
             Bind<PluginLoader>().ToSelf().InSingletonScope();
             Bind<Updater>().ToSelf().InSingletonScope();
             Bind<IController>().To<Controller>();
+
+            if (DevPluginService.IsDevMode)
+            {
+                Bind<IPluginService>().To <DevPluginService>().InSingletonScope();
+            }
+            else
+            {
+                Bind<IPluginService>().To<PluginService>().InSingletonScope();
+            }
         }
     }
 }

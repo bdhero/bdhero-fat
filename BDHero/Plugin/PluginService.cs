@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,153 +8,40 @@ using System.Text.RegularExpressions;
 using BDHero.Startup;
 using DotNetUtils;
 using DotNetUtils.Annotations;
+using log4net;
 using Ninject;
 
-namespace BDHero.Plugin 
+namespace BDHero.Plugin
 {
-    /// <see cref="http://www.codeproject.com/Articles/6334/Plug-ins-in-C"/>
-    [UsedImplicitly]
-    public class PluginService : IPluginHost
+    /// <summary>
+    ///     Default implementation of <see cref="IPluginService"/>.
+    /// </summary>
+    internal class PluginService : IPluginService
     {
-        private readonly ConcurrentDictionary<string, ProgressProvider> _progressProviders =
-            new ConcurrentDictionary<string, ProgressProvider>();
+        protected readonly ILog Logger;
 
-        public readonly IList<IPlugin> Plugins = new List<IPlugin>();
-
-        public IList<IPlugin> PluginsByType
-        {
-            get
-            {
-                var plugins = new List<IPlugin>();
-                plugins.AddRange(DiscReaderPlugins);
-                plugins.AddRange(MetadataProviderPlugins);
-                plugins.AddRange(AutoDetectorPlugins);
-                plugins.AddRange(NameProviderPlugins);
-                plugins.AddRange(MuxerPlugins);
-                plugins.AddRange(PostProcessorPlugins);
-                return plugins;
-            }
-        }
-
-        public IList<IDiscReaderPlugin>       DiscReaderPlugins       { get { return PluginsOfType<IDiscReaderPlugin>(); } }
-        public IList<IMetadataProviderPlugin> MetadataProviderPlugins { get { return PluginsOfType<IMetadataProviderPlugin>(); } }
-        public IList<IAutoDetectorPlugin>     AutoDetectorPlugins     { get { return PluginsOfType<IAutoDetectorPlugin>(); } }
-        public IList<INameProviderPlugin>     NameProviderPlugins     { get { return PluginsOfType<INameProviderPlugin>(); } }
-        public IList<IMuxerPlugin>            MuxerPlugins            { get { return PluginsOfType<IMuxerPlugin>(); } }
-        public IList<IPostProcessorPlugin>    PostProcessorPlugins    { get { return PluginsOfType<IPostProcessorPlugin>(); } }
-
-        private IList<T> PluginsOfType<T>() where T : IPlugin
-        {
-            return Plugins.OfType<T>().OrderBy(plugin => plugin.RunOrder).ToList();
-        }
-
-        public event PluginProgressHandler PluginProgressChanged;
-
-        private readonly IDirectoryLocator _directoryLocator;
         private readonly IKernel _kernel;
+        private readonly IDirectoryLocator _directoryLocator;
+        private readonly IPluginRepository _repository;
 
-        public PluginService(IDirectoryLocator directoryLocator, IKernel kernel)
+        [UsedImplicitly]
+        public PluginService(ILog logger, IKernel kernel, IDirectoryLocator directoryLocator, IPluginRepository repository)
         {
-            _directoryLocator = directoryLocator;
+            Logger = logger;
+
             _kernel = kernel;
+            _directoryLocator = directoryLocator;
+            _repository = repository;
         }
 
-        public void ReportProgress(IPlugin plugin, double percentComplete, string status)
+        public virtual void LoadPlugins(string path)
         {
-            var progressProvider = GetProgressProvider(plugin);
-
-            progressProvider.Update(percentComplete, status);
-
-            if (PluginProgressChanged != null)
-                PluginProgressChanged(plugin, progressProvider);
-        }
-
-        public ProgressProvider GetProgressProvider(IPlugin plugin)
-        {
-            var progressProvider = _progressProviders.GetOrAdd(plugin.AssemblyInfo.Guid, guid => new ProgressProvider());
-            progressProvider.Plugin = plugin;
-            return progressProvider;
-        }
-
-        /// <summary>
-        /// Searches the Application's Startup Directory for Plugins
-        /// </summary>
-        /// <param name="path">Full path to the root Plugins directory</param>
-        public void LoadPlugins(string path)
-        {
-#if DEBUG
-            if (_devPluginsLoaded)
-                return;
-
-            // If running in Visual Studio, load plugins from project bin dirs
-            var installDir = AssemblyUtils.GetInstallDir();
-
-            // Visual Studio
-            var vhostFiles = Directory.GetFiles(installDir, "*.vshost.exe", SearchOption.TopDirectoryOnly).ToArray();
-
-            // Xamarin / Mono
-            var debugFiles = Directory.GetFiles(installDir, "*.mdb", SearchOption.TopDirectoryOnly).ToArray();
-
-            if (vhostFiles.Any() || debugFiles.Any())
-            {
-                LoadDevPlugins();
-                _devPluginsLoaded = true;
-                return;
-            }
-#endif
-
             AddPluginsRecursive(path);
         }
 
-#if DEBUG
-
-        private bool _devPluginsLoaded;
-
-        private void LoadDevPlugins()
+        public virtual void UnloadPlugins()
         {
-            var solutionDir = GetSolutionDirPath();
-            var projects = new[]
-                {
-                    "AutoDetectorPlugin", "ChapterGrabberPlugin", "ChapterWriterPlugin", "DiscReaderPlugin",
-                    "FFmpegMuxerPlugin", "FileNamerPlugin", "MKVMergeMuxerPlugin", "IsanPlugin", "TmdbPlugin"
-                };
-            foreach (var projectName in projects)
-            {
-                try
-                {
-                    var pluginDir = Path.Combine(solutionDir, "Plugins", projectName, "bin", "Debug");
-                    AddPluginsRecursive(pluginDir);
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        private static string GetSolutionDirPath()
-        {
-            var curDir = Directory.GetCurrentDirectory();
-            DirectoryInfo parent;
-            while (!SolutionFileExists(curDir) && (parent = new DirectoryInfo(curDir).Parent) != null)
-            {
-                curDir = parent.FullName;
-            }
-            return SolutionFileExists(curDir) ? curDir : @"C:\Projects\bdhero";
-        }
-
-        private static bool SolutionFileExists(string dirPath)
-        {
-            return File.Exists(Path.Combine(dirPath, "BDHero.sln"));
-        }
-
-#endif
-
-        /// <summary>
-        /// Unloads and clears all available loaded plugins.
-        /// </summary>
-        public void UnloadPlugins()
-        {
-            foreach (var plugin in Plugins)
+            foreach (var plugin in _repository.PluginsByType)
             {
                 // Close all plugin instances
                 // We call the plugins Dispose sub first incase it has to do
@@ -164,14 +50,14 @@ namespace BDHero.Plugin
             }
 
             // Finally, clear our collection of available plugins
-            Plugins.Clear();
+            _repository.Clear();
         }
 
         /// <summary>
         /// Searches the given directory and its subdirectories recursively for Plugins
         /// </summary>
         /// <param name="pluginDir">Root directory to search for Plugins in</param>
-        private void AddPluginsRecursive(string pluginDir)
+        protected void AddPluginsRecursive(string pluginDir)
         {
             if (!Directory.Exists(pluginDir))
                 return;
@@ -213,7 +99,7 @@ namespace BDHero.Plugin
                 // 1- Make one instance, and use it whenever we need it.. it's always there
                 // 2- Don't make an instance, and instead make an instance whenever we use it, then close it
                 // For now we'll just make an instance of all the plugins
-                var newPlugin = (IPlugin) _kernel.Get(pluginType);
+                var newPlugin = (IPlugin)_kernel.Get(pluginType);
 
                 // TODO: Store this in preferences file
                 newPlugin.Enabled = true;
@@ -225,10 +111,10 @@ namespace BDHero.Plugin
                                                           configFilePath);
 
                 // Initialize the plugin
-                newPlugin.LoadPlugin(this, assemblyInfo);
+                newPlugin.LoadPlugin(_repository, assemblyInfo);
 
                 // Add the new plugin to our collection here
-                Plugins.Add(newPlugin);
+                _repository.Add(newPlugin);
             }
         }
 
@@ -260,5 +146,3 @@ namespace BDHero.Plugin
         }
     }
 }
-
-

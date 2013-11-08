@@ -17,7 +17,7 @@ namespace BDHero
     {
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly PluginService _pluginService;
+        private readonly IPluginRepository _pluginRepository;
 
         /// <summary>
         /// Needed for <see cref="ProgressProviderOnUpdated"/> to invoke progress update callbacks on the correct thread.
@@ -32,7 +32,7 @@ namespace BDHero
 
         public IList<IPlugin> PluginsByType
         {
-            get { return _pluginService.PluginsByType; }
+            get { return _pluginRepository.PluginsByType; }
         }
 
         #endregion
@@ -54,9 +54,9 @@ namespace BDHero
 
         #endregion
 
-        public Controller(PluginService pluginService)
+        public Controller(IPluginRepository pluginRepository)
         {
-            _pluginService = pluginService;
+            _pluginRepository = pluginRepository;
         }
 
         public void SetEventScheduler(TaskScheduler scheduler = null)
@@ -209,7 +209,7 @@ namespace BDHero
                 .CancelWith(cancellationToken)
                 .BeforeStart(delegate
                     {
-                        var progressProvider = _pluginService.GetProgressProvider(plugin);
+                        var progressProvider = _pluginRepository.GetProgressProvider(plugin);
 
                         progressProvider.Updated -= ProgressProviderOnUpdated;
                         progressProvider.Updated += ProgressProviderOnUpdated;
@@ -223,7 +223,7 @@ namespace BDHero
                     })
                 .Fail(delegate(ExceptionEventArgs args)
                     {
-                        var progressProvider = _pluginService.GetProgressProvider(plugin);
+                        var progressProvider = _pluginRepository.GetProgressProvider(plugin);
                         if (args.Exception is OperationCanceledException)
                         {
                             progressProvider.Cancel();
@@ -236,7 +236,7 @@ namespace BDHero
                     })
                 .Succeed(delegate
                     {
-                        var progressProvider = _pluginService.GetProgressProvider(plugin);
+                        var progressProvider = _pluginRepository.GetProgressProvider(plugin);
                         if (cancellationToken.IsCancellationRequested)
                         {
                             progressProvider.Cancel();
@@ -260,7 +260,7 @@ namespace BDHero
 
         private bool ReadBDROM(CancellationToken cancellationToken, string bdromPath)
         {
-            IDiscReaderPlugin discReader = _pluginService.DiscReaderPlugins.First(plugin => plugin.Enabled);
+            IDiscReaderPlugin discReader = _pluginRepository.DiscReaderPlugins.First(plugin => plugin.Enabled);
             var pluginTask = RunPluginSync(cancellationToken, discReader, delegate(CancellationToken token)
                 {
                     var disc = discReader.ReadBDROM(token, bdromPath);
@@ -282,7 +282,7 @@ namespace BDHero
             Job.TVShows.Clear();
             Job.Disc.Playlists.ForEach(playlist => playlist.ChapterSearchResults.Clear());
 
-            foreach (var plugin in _pluginService.MetadataProviderPlugins.Where(plugin => plugin.Enabled))
+            foreach (var plugin in _pluginRepository.MetadataProviderPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 GetMetadata(cancellationToken, plugin);
@@ -300,7 +300,7 @@ namespace BDHero
 
         private void AutoDetect(CancellationToken cancellationToken)
         {
-            foreach (var plugin in _pluginService.AutoDetectorPlugins.Where(plugin => plugin.Enabled))
+            foreach (var plugin in _pluginRepository.AutoDetectorPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 AutoDetect(cancellationToken, plugin);
@@ -325,7 +325,7 @@ namespace BDHero
         {
             if (!string.IsNullOrWhiteSpace(mkvPath))
                 Job.OutputPath = mkvPath;
-            foreach (var plugin in _pluginService.NameProviderPlugins.Where(plugin => plugin.Enabled))
+            foreach (var plugin in _pluginRepository.NameProviderPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 Rename(cancellationToken, plugin);
@@ -351,7 +351,7 @@ namespace BDHero
 
         private bool Mux(CancellationToken cancellationToken)
         {
-            var enabledMuxerPlugins = _pluginService.MuxerPlugins.Where(plugin => plugin.Enabled).ToArray();
+            var enabledMuxerPlugins = _pluginRepository.MuxerPlugins.Where(plugin => plugin.Enabled).ToArray();
 
             if (!enabledMuxerPlugins.Any())
                 return false;
@@ -373,7 +373,7 @@ namespace BDHero
 
         private void PostProcess(CancellationToken cancellationToken)
         {
-            foreach (var plugin in _pluginService.PostProcessorPlugins.Where(plugin => plugin.Enabled))
+            foreach (var plugin in _pluginRepository.PostProcessorPlugins.Where(plugin => plugin.Enabled))
             {
                 if (cancellationToken.IsCancellationRequested) return;
                 PostProcess(cancellationToken, plugin);
