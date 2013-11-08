@@ -10,10 +10,15 @@ using OSUtils.JobObjects;
 
 namespace WindowsOSUtils.JobObjects
 {
+    /// <summary>
+    ///     Concrete implementation of the <see cref="IJobObjectManager"/> interface
+    ///     that accesses the Windows Job Objects API.
+    /// </summary>
+    /// <seealso cref="https://www-auth.cs.wisc.edu/lists/htcondor-users/2009-June/msg00106.shtml" />
     public class JobObjectManager : IJobObjectManager
     {
         /// <summary>
-        ///     This is a pseudo handle to the "any" job object handle.
+        ///     This is a pseudo handle to "any" job object.
         /// </summary>
         private static readonly IntPtr AnyJobHandle = IntPtr.Zero;
 
@@ -22,14 +27,6 @@ namespace WindowsOSUtils.JobObjects
             return new JobObject();
         }
 
-        /// <summary>
-        ///     Determines if the given <paramref name="process"/> already belongs to a Job Object.
-        /// </summary>
-        /// <param name="process">Process to check Job Object membership of.</param>
-        /// <returns>
-        ///     <c>true</c> if the given <paramref name="process"/> already belongs to a Job Object;
-        ///     otherwise <c>false</c>.
-        /// </returns>
         public bool IsAssignedToJob(Process process)
         {
             return HasJobObject(process);
