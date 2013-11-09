@@ -33,7 +33,7 @@ namespace DotNetUtils.Net
         /// Gets or sets the User-Agent HTTP request header sent to the web server when making requests.
         /// Defaults to <c>"ENTRY_ASSEMBLY_NAME/ENTRY_ASSEMBLY_VERSION"</c>.
         /// </summary>
-        public static string UserAgent;
+        public static string UserAgent = AssemblyUtils.GetAssemblyName() + "/" + AssemblyUtils.GetAssemblyVersion();
 
         /// <summary>
         /// Invoked before every HTTP request made by <strong>this class only</strong>.
@@ -49,11 +49,6 @@ namespace DotNetUtils.Net
         public static event BeforeRequestEventHandler BeforeRequestGlobal;
 
         private static readonly MemoryCache ImageCache = MemoryCache.Default;
-
-        static HttpRequest()
-        {
-            UserAgent = AssemblyUtils.GetAssemblyName() + "/" + AssemblyUtils.GetAssemblyVersion();
-        }
 
         /// <summary>
         /// Performs a synchronous HTTP GET request and returns the full response as a string.
