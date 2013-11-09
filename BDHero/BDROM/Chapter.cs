@@ -37,6 +37,9 @@ namespace BDHero.BDROM
 
         #endregion
 
+        /// <summary>
+        /// Gets or sets whether the chapter should be included in the resulting MKV file.
+        /// </summary>
         public bool Keep = true;
 
         #region Constructor
