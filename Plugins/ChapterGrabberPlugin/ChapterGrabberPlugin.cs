@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -7,6 +8,7 @@ using System.Xml;
 using BDHero.BDROM;
 using BDHero.Plugin;
 using BDHero.JobQueue;
+using DotNetUtils.Annotations;
 using DotNetUtils.Net;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
@@ -16,6 +18,7 @@ using System.IO;
 
 namespace ChapterGrabberPlugin
 {
+    [UsedImplicitly]
     public class ChapterGrabberPlugin : IMetadataProviderPlugin
     {
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -101,19 +104,22 @@ namespace ChapterGrabberPlugin
 
         private static ChapterSearchResult Transform(JsonChaps searchResult, Playlist playlist)
         {
-            var jsonChapters = searchResult.chapterInfo.chapters.chapter;
+            var jsonChapters = searchResult.chapterInfo.chapters.chapter.Take(playlist.ChapterCount).ToArray();
             return new ChapterSearchResult
                 {
                     Title =
                         string.Format("+{0}: {1}", searchResult.chapterInfo.confirmations,
                                       searchResult.chapterInfo.title),
-                    Chapters = jsonChapters.Take(playlist.ChapterCount).Select(Transform).ToList()
+                    Chapters = jsonChapters.Select(Transform).ToList()
                 };
         }
 
         private static Chapter Transform(JsonChapter jsonChapter, int i)
         {
-            return new Chapter(i + 1, jsonChapter.time.TotalSeconds) {Title = jsonChapter.name};
+            var title = (jsonChapter.name ?? "").Trim();
+            var isValidChapterName = IsValidChapterName(title);
+            var chapter = new Chapter(i + 1, jsonChapter.time.TotalSeconds) { Title = title, Keep = isValidChapterName };
+            return chapter;
         }
 
         static private List<JsonChaps> GetChapters(string movieName)
@@ -216,15 +222,20 @@ namespace ChapterGrabberPlugin
 
         private static bool IsInvalidChapter(JsonChapter jsonChapter)
         {
-            var trimmed = jsonChapter.name.Trim();
+            return !IsValidChapterName(jsonChapter.name);
+        }
+
+        private static bool IsValidChapterName([CanBeNull] string chapterName)
+        {
+            var trimmed = (chapterName ?? "").Trim();
             if (string.IsNullOrWhiteSpace(trimmed))
-                return true;
+                return false;
             TimeSpan parsed;
             if (TimeSpan.TryParse(trimmed, out parsed))
-                return true;
+                return false;
             if (Regex.IsMatch(trimmed, @"^(?:Chapter|Scene|Kapitel)?[\W_]*[0-9]+\s*$", RegexOptions.IgnoreCase))
-                return true;
-            return false;
+                return false;
+            return true;
         }
 
         private static bool IsMatch(JsonChaps jsonChaps, IList<Chapter> chapterDisc)

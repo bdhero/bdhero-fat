@@ -102,21 +102,6 @@ namespace BDHeroGUI.Components
 
         #region UI event handlers
 
-        private void ListViewChaptersOnAfterLabelEdit(object sender, LabelEditEventArgs args)
-        {
-            Playlist.Chapters[args.Item].Title = args.Label;
-
-            if (SelectedSearchResult != null)
-            {
-                SelectedSearchResult.Chapters[args.Item].Title = args.Label;
-            }
-        }
-
-        private void ListViewChaptersOnItemChecked(object sender, ItemCheckedEventArgs args)
-        {
-            Playlist.Chapters[args.Item.Index].Keep = args.Item.Checked;
-        }
-
         private void ComboBoxSearchResultsOnSelectedIndexChanged(object sender = null, EventArgs args = null)
         {
             listViewChapters.SuspendDrawing();
@@ -134,17 +119,49 @@ namespace BDHeroGUI.Components
             listViewChapters.ResumeDrawing();
         }
 
+        private void ListViewChaptersOnAfterLabelEdit(object sender, LabelEditEventArgs args)
+        {
+            var index = args.Item;
+            var text = args.Label;
+
+            // The new text to associate with the ListViewItem or null if the text is unchanged.
+            // http://msdn.microsoft.com/en-us/library/system.windows.forms.labelediteventargs.label(v=vs.100).aspx
+            if (text == null) { return; }
+
+            Playlist.Chapters[index].Title = text;
+
+            if (SelectedSearchResult != null)
+            {
+                SelectedSearchResult.Chapters[index].Title = text;
+            }
+        }
+
+        private void ListViewChaptersOnItemChecked(object sender, ItemCheckedEventArgs args)
+        {
+            var index = args.Item.Index;
+            var isChecked = args.Item.Checked;
+
+            Playlist.Chapters[index].Keep = isChecked;
+
+            if (SelectedSearchResult != null)
+            {
+                SelectedSearchResult.Chapters[index].Keep = isChecked;
+            }
+        }
+
         #endregion
 
-        private void ReplaceChapters(IList<Chapter> chapters, [CanBeNull] IList<Chapter> searchResult)
+        private void ReplaceChapters(IList<Chapter> playlistChapters, [CanBeNull] IList<Chapter> searchResult)
         {
-            var i = 0;
-            foreach (var chapter in chapters)
+            for (var i = 0; i < playlistChapters.Count; i++)
             {
+                var playlistChapter = playlistChapters[i];
+
                 // If "Default" is selected, reset chapter titles to null, which sets them to "Chapter 1", "Chapter 2", etc.
-                chapter.Title = searchResult != null ? searchResult[i].Title : null;
-                listViewChapters.Items.Add(ToListItem(chapter));
-                i++;
+                playlistChapter.Title = searchResult != null ? searchResult[i].Title : null;
+                playlistChapter.Keep = searchResult == null || searchResult[i].Keep;
+
+                listViewChapters.Items.Add(ToListItem(playlistChapter));
             }
             listViewChapters.AutoSizeColumns();
         }
