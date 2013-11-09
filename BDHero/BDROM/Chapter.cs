@@ -77,7 +77,7 @@ namespace BDHero.BDROM
 
         public override string ToString()
         {
-            return string.Format("{0:D2} - {1:G}: {2}", Number, StartTime, Title);
+            return string.Format("[{0}] {1:D2} - {2:G}: {3}", Keep ? "x" : "  ", Number, StartTime, Title);
         }
 
         #endregion
