@@ -37,6 +37,8 @@ namespace BDHero.BDROM
 
         #endregion
 
+        public bool Enabled = true;
+
         #region Constructor
 
         public Chapter(int number, double seconds)

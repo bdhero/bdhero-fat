@@ -52,6 +52,7 @@ namespace BDHeroGUI.Components
             comboBoxSearchResults.SelectedIndexChanged += ComboBoxSearchResultsOnSelectedIndexChanged;
 
             listViewChapters.AfterLabelEdit += ListViewChaptersOnAfterLabelEdit;
+            listViewChapters.ItemChecked += ListViewChaptersOnItemChecked;
 
             Load += OnLoad;
         }
@@ -111,6 +112,11 @@ namespace BDHeroGUI.Components
             }
         }
 
+        private void ListViewChaptersOnItemChecked(object sender, ItemCheckedEventArgs args)
+        {
+            Playlist.Chapters[args.Item.Index].Enabled = args.Item.Checked;
+        }
+
         private void ComboBoxSearchResultsOnSelectedIndexChanged(object sender = null, EventArgs args = null)
         {
             listViewChapters.SuspendDrawing();
@@ -145,7 +151,7 @@ namespace BDHeroGUI.Components
 
         private ListViewItem ToListItem(Chapter chapter)
         {
-            var item = new ListViewItem(chapter.Title) { Tag = chapter };
+            var item = new ListViewItem(chapter.Title) { Tag = chapter, Checked = chapter.Enabled };
             var subitems = new[]
                 {
                     new ListViewItem.ListViewSubItem(item, chapter.StartTime.ToStringMedium()) { Tag = chapter.StartTime },

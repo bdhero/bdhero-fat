@@ -20,7 +20,7 @@ namespace BDHero.Plugin.ChapterWriter
                 writer.WriteDocType("Chapters", null, "matroskachapters.dtd", null);
                 writer.WriteStartElement("Chapters");
                     writer.WriteStartElement("EditionEntry");
-                    foreach (var chapter in chapters)
+                    foreach (var chapter in chapters.Where(chapter => chapter.Enabled))
                     {
                         writer.WriteStartElement("ChapterAtom");
                             writer.WriteStartElement("ChapterTimeStart");
