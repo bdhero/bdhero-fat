@@ -41,7 +41,7 @@ namespace DotNetUtils.Net
         /// </summary>
         public static event BeforeRequestEventHandler BeforeRequestGlobal;
 
-        private static readonly MemoryCache ImageCache = new MemoryCache("http_image_cache");
+        private static readonly MemoryCache ImageCache = MemoryCache.Default;
 
         static HttpRequest()
         {
