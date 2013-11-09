@@ -8,7 +8,7 @@ using System.Text;
 namespace DotNetUtils.TaskUtils
 {
     /// <summary>
-    /// TODO: Add pause/resume support
+    ///     TODO: Test pause/resume support
     /// </summary>
     public class ProgressSample
     {
@@ -23,7 +23,7 @@ namespace DotNetUtils.TaskUtils
         private DateTime _lastEstimateTime;
 
         /// <summary>
-        /// Gets or sets the minimum number of samples required to generate a meaningful "time remaining" estimate.
+        ///     Gets or sets the minimum number of samples required to generate a meaningful "time remaining" estimate.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MinSampleSize"/> is set to a value less than 2.</exception>
         public int MinSampleSize
@@ -40,8 +40,8 @@ namespace DotNetUtils.TaskUtils
         }
 
         /// <summary>
-        /// Gets or sets the maximum number of samples to consider when calculating "time remaining" estimates.
-        /// Samples older than this number will be discarded.
+        ///     Gets or sets the maximum number of samples to consider when calculating "time remaining" estimates.
+        ///     Samples older than this number will be discarded.
         /// </summary>
         public int MaxSampleSize
         {
@@ -53,7 +53,7 @@ namespace DotNetUtils.TaskUtils
         }
 
         /// <summary>
-        /// Gets the estimated time remaining.
+        ///     Gets the estimated time remaining.
         /// </summary>
         public TimeSpan? EstimatedTimeRemaining
         {
@@ -93,7 +93,7 @@ namespace DotNetUtils.TaskUtils
         }
 
         /// <summary>
-        /// Adds a sample to the queue and recalculates the estimated time remaining.
+        ///     Adds a sample to the queue and recalculates the estimated time remaining.
         /// </summary>
         /// <param name="percentComplete">From 0.0 to 100.0.</param>
         public void Add(double percentComplete)
