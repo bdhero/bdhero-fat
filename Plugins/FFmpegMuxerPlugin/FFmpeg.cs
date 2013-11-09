@@ -31,6 +31,7 @@ namespace BDHero.Plugin.FFmpegMuxer
         private readonly List<string> _inputM2TSPaths;
         private readonly List<Track> _selectedTracks;
         private readonly string _outputMKVPath;
+        private readonly IJobObjectManager _jobObjectManager;
         private readonly string _progressFilePath;
 
         public long CurFrame { get; private set; }
@@ -51,6 +52,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             _inputM2TSPaths = playlist.StreamClips.Select(clip => clip.FileInfo.FullName).ToList();
             _selectedTracks = playlist.Tracks.Where(track => track.Keep).ToList();
             _outputMKVPath = outputMKVPath;
+            _jobObjectManager = jobObjectManager;
             _progressFilePath = Path.GetTempFileName();
             _indexer = new FFmpegTrackIndexer(playlist);
 
@@ -336,7 +338,7 @@ namespace BDHero.Plugin.FFmpegMuxer
             ExePath = Path.Combine(ffmpegAssemblyDir, FFmpegExeFilename);
         }
 
-        private static void OnExited(NonInteractiveProcessState processState, int exitCode, ReleaseMedium releaseMedium, Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
+        private void OnExited(NonInteractiveProcessState processState, int exitCode, ReleaseMedium releaseMedium, Playlist playlist, List<Track> selectedTracks, string outputMKVPath)
         {
             LogExit(processState, exitCode);
 
@@ -345,13 +347,13 @@ namespace BDHero.Plugin.FFmpegMuxer
 
             var coverArt = releaseMedium != null ? releaseMedium.CoverArtImages.FirstOrDefault(image => image.IsSelected) : null;
             var coverArtImage = coverArt != null ? coverArt.Image : null;
-//            var mkvPropEdit = new MkvPropEdit {SourceFilePath = outputMKVPath}
-//                .RemoveAllTags()
-//                .AddCoverArt(coverArtImage)
-//                .SetChapters(playlist.Chapters)
-////                .SetDefaultTracksAuto(selectedTracks) // Breaks MediaInfo
-//            ;
-//            mkvPropEdit.Start();
+            var mkvPropEdit = new MkvPropEdit(_jobObjectManager) { SourceFilePath = outputMKVPath }
+                .RemoveAllTags()
+                .AddCoverArt(coverArtImage)
+                .SetChapters(playlist.Chapters)
+//                .SetDefaultTracksAuto(selectedTracks) // Breaks MediaInfo
+            ;
+            mkvPropEdit.Start();
         }
 
         private static void LogExit(NonInteractiveProcessState processState, int exitCode)
