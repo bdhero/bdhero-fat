@@ -20,8 +20,6 @@ namespace DotNetUtils.TaskUtils
         private int _maxSampleSize = 10;
 
         private ProgressSampleState _state;
-        private TimeSpan? _lastEstimate;
-        private DateTime _lastEstimateTime;
 
         /// <summary>
         ///     Gets or sets the minimum number of samples required to generate a meaningful "time remaining" estimate.
@@ -62,21 +60,9 @@ namespace DotNetUtils.TaskUtils
         ///     Gets the estimated time remaining.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MinSampleSize"/> is greater than <see cref="MaxSampleSize"/>.</exception>
-        public TimeSpan? EstimatedTimeRemaining
+        public TimeSpan EstimatedTimeRemaining
         {
-            get
-            {
-                // TODO: Find a single place to do this instead of doing it in 3 different classes
-                if (DateTime.Now - _lastEstimateTime < TimeSpan.FromSeconds(1))
-                {
-                    return _lastEstimate;
-                }
-
-                var newEstimate = Calculate();
-                _lastEstimate = newEstimate;
-                _lastEstimateTime = DateTime.Now;
-                return newEstimate;
-            }
+            get { return Calculate(); }
         }
 
         private DateTime? LastSampleTime
@@ -123,6 +109,11 @@ namespace DotNetUtils.TaskUtils
 
         private void Enqueue(double percentComplete, TimeSpan duration)
         {
+            if (duration < TimeSpan.FromSeconds(0.1) && _samples.Any())
+            {
+                return;
+            }
+
             _samples.Enqueue(new ProgressSampleUnit
                              {
                                  DateSampled = DateTime.Now,
@@ -172,8 +163,6 @@ namespace DotNetUtils.TaskUtils
         public void Reset()
         {
             _state = ProgressSampleState.Stopped;
-            _lastEstimate = null;
-            _lastEstimateTime = DateTime.MinValue;
 
             ProgressSampleUnit result;
             while (_samples.TryDequeue(out result))
@@ -206,24 +195,25 @@ namespace DotNetUtils.TaskUtils
         }
 
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MinSampleSize"/> is greater than <see cref="MaxSampleSize"/>.</exception>
-        private TimeSpan? Calculate()
+        private TimeSpan Calculate()
         {
-            LimitSampleSize();
-
             if (!CanCalculate)
             {
-                return null;
+                return TimeSpan.Zero;
             }
 
-            return new ProgressEstimator(_samples, _state).EstimatedTimeRemaining;
-        }
-
-        private void LimitSampleSize()
-        {
-            ProgressSampleUnit result;
-            while (_samples.Count > _maxSampleSize && _samples.TryDequeue(out result))
+            var samples = new Queue<ProgressSampleUnit>(_samples);
+            while (samples.Count > MaxSampleSize)
             {
+                samples.Dequeue();
             }
+
+            if (samples.Count < MinSampleSize)
+            {
+                return TimeSpan.Zero;
+            }
+
+            return new ProgressEstimator(samples).EstimatedTimeRemaining;
         }
     }
 }

@@ -7,40 +7,22 @@ namespace DotNetUtils.TaskUtils
 {
     internal class ProgressEstimator
     {
-        private readonly ProgressSampleState _state;
         private readonly List<ProgressSampleUnit> _samples;
         private readonly ProgressSampleUnit _lastSample;
 
-        public TimeSpan? EstimatedTimeRemaining { get; private set; }
+        public TimeSpan EstimatedTimeRemaining { get; private set; }
 
-        public ProgressEstimator(IEnumerable<ProgressSampleUnit> samples, ProgressSampleState state)
+        public ProgressEstimator(IEnumerable<ProgressSampleUnit> samples)
         {
-            _state = state;
             _samples = samples.ToList();
             _lastSample = _samples.LastOrDefault();
 
-            AddRunningSample();
             Calculate();
-        }
-
-        private void AddRunningSample()
-        {
-            if (_lastSample == null) { return; }
-            if (_state != ProgressSampleState.Running) { return; }
-
-            var now = DateTime.Now;
-
-            _samples.Add(new ProgressSampleUnit
-                         {
-                             DateSampled = now,
-                             PercentComplete = _lastSample.PercentComplete,
-                             Duration = now - _lastSample.DateSampled
-                         });
         }
 
         private void Calculate()
         {
-            EstimatedTimeRemaining = null;
+            EstimatedTimeRemaining = TimeSpan.Zero;
 
             if (_lastSample == null) { return; }
 
@@ -74,7 +56,7 @@ namespace DotNetUtils.TaskUtils
 
             var percentageRemaining = 100.0 - _lastSample.PercentComplete;
 
-            TimeSpan? timeRemaining = null;
+            var timeRemaining = TimeSpan.Zero;
 
             if (avgVelocity > 0)
             {

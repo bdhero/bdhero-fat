@@ -146,6 +146,8 @@ namespace BDHero.Plugin
         /// </summary>
         private DateTime _lastTick;
 
+        private TimeSpan _lastEstimate;
+
         /// <summary>
         /// The value of <see cref="_lastTick"/> the last time <see cref="CalculateTimeRemaining"/> was called.
         /// </summary>
@@ -280,7 +282,7 @@ namespace BDHero.Plugin
             }
         }
 
-        private void CalculateTimeRemainingV1()
+        private void CalculateTimeRemaining()
         {
             lock (_lock)
             {
@@ -346,7 +348,7 @@ namespace BDHero.Plugin
             }
         }
 
-        private void CalculateTimeRemaining()
+        private void CalculateTimeRemainingV2()
         {
             lock (_lock)
             {
@@ -357,10 +359,107 @@ namespace BDHero.Plugin
 
                 LogMethodEntry();
 
-                var estimate = _progressSample.EstimatedTimeRemaining;
+                TimeRemaining = _progressSample.EstimatedTimeRemaining;
 
-                TimeRemaining = estimate.HasValue ? estimate.Value : TimeSpan.Zero;
+                _lastCalculationTick = lastTick;
 
+                LogMethodExit();
+            }
+        }
+
+        private void CalculateTimeRemainingV3()
+        {
+            lock (_lock)
+            {
+                var lastTick = _lastTick;
+
+                if (_lastCalculationTick == lastTick)
+                    return;
+
+                LogMethodEntry();
+
+                // Thread safety :-)
+                var percentComplete = PercentComplete;
+
+                // 0.0 to 1.0
+                var pct = percentComplete / 100;
+
+                // Previously calculated estimate from the last tick
+                var oldEstimate = TimeRemaining;
+
+                // Fresh estimate (might be jerky)
+                var newEstimate = TimeSpan.Zero;
+
+                // The final estimate value that will actually be used
+                var finalEstimate = oldEstimate;
+
+                // Make sure progress percentage is within legal bounds (0%, 100%)
+                if (pct > 0 && pct < 1)
+                    newEstimate = _progressSample.EstimatedTimeRemaining;
+
+                // Make sure the user gets fresh calculations when the process is first started and when it's nearly finished.
+                var criticalThreshold = TimeSpan.FromSeconds(10);
+                var isCriticalPeriod = percentComplete < 0.5 || percentComplete > 95 || oldEstimate < criticalThreshold || newEstimate < criticalThreshold;
+
+                // If the new estimate differs from the previous estimate by more than 2 minutes, use the new estimate.
+                var changeThreshold = pct < 0.2 ? TimeSpan.FromMinutes(2) : TimeSpan.FromSeconds(20);
+                var isLargeChange = Math.Abs(newEstimate.TotalSeconds - oldEstimate.TotalSeconds) > changeThreshold.TotalSeconds;
+
+                // If the previous estimate was less than 1 second remaining, use the new estimate.
+                var lowPreviousEstimate = oldEstimate < TimeSpan.FromSeconds(1);
+
+                // Use the new estimate
+                if (isCriticalPeriod || isLargeChange || lowPreviousEstimate)
+                {
+                    finalEstimate = newEstimate;
+                }
+                // Decrement the previous estimate by roughly 1 second
+                else
+                {
+                    finalEstimate -= (DateTime.Now - lastTick);
+                }
+
+                // If the estimate dips below 0, set it to 30 seconds
+                if (finalEstimate.TotalMilliseconds < 0)
+                    finalEstimate = TimeSpan.FromSeconds(30);
+
+                TimeRemaining = finalEstimate;
+
+                if (finalEstimate == TimeSpan.Zero && percentComplete > 60)
+                {
+//                    Debugger.Break();
+                }
+
+                _lastCalculationTick = lastTick;
+
+                LogMethodExit();
+            }
+        }
+
+        private void CalculateTimeRemainingV4()
+        {
+            lock (_lock)
+            {
+                var lastTick = _lastTick;
+
+                if (_lastCalculationTick == lastTick)
+                    return;
+
+                LogMethodEntry();
+
+                var oldEstimate = _lastEstimate;
+                var newEstimate = _progressSample.EstimatedTimeRemaining;
+
+                if (oldEstimate == newEstimate)
+                {
+                    TimeRemaining -= (DateTime.Now - lastTick);
+                }
+                else
+                {
+                    TimeRemaining = newEstimate;
+                }
+
+                _lastEstimate = newEstimate;
                 _lastCalculationTick = lastTick;
 
                 LogMethodExit();
