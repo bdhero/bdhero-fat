@@ -73,9 +73,11 @@ namespace BDHeroGUI.Components
             }
 
             comboBoxSearchResults.Enabled = true;
-
-            // TODO: Move this elsewhere so we don't erase the user's custom titles when they re-select "Default"
-            comboBoxSearchResults.Items.Add(new ChapterSearchResult { Title = "Default", Chapters = CopyChapters(playlist.Chapters) });
+            comboBoxSearchResults.Items.Add(new ChapterSearchResult
+                                            {
+                                                Title = "Default",
+                                                Chapters = CreateDefaultChapters(playlist.Chapters)
+                                            });
 
             foreach (var result in playlist.ChapterSearchResults)
             {
@@ -85,16 +87,18 @@ namespace BDHeroGUI.Components
             comboBoxSearchResults.SelectedIndex = playlist.ChapterSearchResults.Any() ? 1 : 0;
         }
 
-        private IList<Chapter> CopyChapters(IList<Chapter> chapters)
+        private static IList<Chapter> CreateDefaultChapters(IEnumerable<Chapter> chapters)
         {
-            return
-                chapters.Select(
-                    chapter =>
-                    new Chapter(chapter.Number, chapter.StartTime.TotalSeconds)
-                        {
-                            Title = chapter.Title,
-                            Language = chapter.Language
-                        }).ToList();
+            return chapters.Select(CreateDefaultChapter).ToList();
+        }
+
+        private static Chapter CreateDefaultChapter(Chapter chapter)
+        {
+            return new Chapter(chapter.Number, chapter.StartTime.TotalSeconds)
+                   {
+                       Title = null,
+                       Language = chapter.Language
+                   };
         }
 
         #region UI event handlers
@@ -109,8 +113,7 @@ namespace BDHeroGUI.Components
                 // Mark selected search result as such
                 Playlist.ChapterSearchResults.ForEach(result => result.IsSelected = (result == SelectedSearchResult));
 
-                // If "Default" is selected, reset chapter titles to null, which sets them to "Chapter 1", "Chapter 2", etc.
-                ReplaceChapters(Playlist.Chapters, SelectedSearchResultIndex > 0 ? SelectedSearchResult.Chapters : null);
+                ReplaceChapters(Playlist.Chapters, SelectedSearchResult.Chapters);
             }
 
             listViewChapters.ResumeDrawing();
@@ -148,15 +151,15 @@ namespace BDHeroGUI.Components
 
         #endregion
 
-        private void ReplaceChapters(IList<Chapter> playlistChapters, [CanBeNull] IList<Chapter> searchResult)
+        private void ReplaceChapters(IList<Chapter> playlistChapters, [NotNull] IList<Chapter> searchResult)
         {
             for (var i = 0; i < playlistChapters.Count; i++)
             {
                 var playlistChapter = playlistChapters[i];
 
                 // If "Default" is selected, reset chapter titles to null, which sets them to "Chapter 1", "Chapter 2", etc.
-                playlistChapter.Title = searchResult != null ? searchResult[i].Title : null;
-                playlistChapter.Keep = searchResult == null || searchResult[i].Keep;
+                playlistChapter.Title = searchResult[i].Title;
+                playlistChapter.Keep = searchResult[i].Keep;
 
                 listViewChapters.Items.Add(ToListItem(playlistChapter));
             }
