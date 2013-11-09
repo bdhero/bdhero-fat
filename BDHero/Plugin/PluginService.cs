@@ -99,7 +99,7 @@ namespace BDHero.Plugin
                 // 1- Make one instance, and use it whenever we need it.. it's always there
                 // 2- Don't make an instance, and instead make an instance whenever we use it, then close it
                 // For now we'll just make an instance of all the plugins
-                var newPlugin = (IPlugin)_kernel.Get(pluginType);
+                var newPlugin = (IPlugin) _kernel.Get(pluginType);
 
                 // TODO: Store this in preferences file
                 newPlugin.Enabled = true;
