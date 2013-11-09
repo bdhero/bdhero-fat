@@ -35,7 +35,7 @@ namespace DotNetUtils.Net
 
         private void TestIPv4(string url)
         {
-            var req = HttpRequest.BuildRequest(HttpRequest.METHOD_GET, url);
+            var req = HttpRequest.BuildRequest(HttpRequestMethod.Get, url);
             var resp = HttpRequest.Get(req);
             if (!IPRegex.IsMatch(resp))
                 throw new HttpListenerException();

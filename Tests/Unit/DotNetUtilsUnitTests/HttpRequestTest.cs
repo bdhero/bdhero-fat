@@ -15,7 +15,7 @@ namespace DotNetUtilsUnitTests
         {
             for (var i = 0; i < 10; i++)
             {
-                var req = HttpRequest.BuildRequest(HttpRequest.METHOD_GET, "http://www.google.com/search?q=" + i);
+                var req = HttpRequest.BuildRequest(HttpRequestMethod.Get, "http://www.google.com/search?q=" + i);
                 var html = HttpRequest.Get(req);
                 Assert.IsNotNull(html);
                 Assert.Greater(html.Length, 0);

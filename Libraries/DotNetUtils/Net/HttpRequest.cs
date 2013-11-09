@@ -22,10 +22,6 @@ namespace DotNetUtils.Net
     /// </summary>
     public static class HttpRequest
     {
-        public const string METHOD_GET = "GET";
-        public const string METHOD_PUT = "PUT";
-        public const string METHOD_POST = "POST";
-
         private static readonly log4net.ILog Logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -70,7 +66,7 @@ namespace DotNetUtils.Net
         /// <returns>Response body as a string</returns>
         public static string Get(string uri, List<string> headers = null)
         {
-            return Get(BuildRequest(METHOD_GET, uri, false, headers));
+            return Get(BuildRequest(HttpRequestMethod.Get, uri, false, headers));
         }
 
         /// <summary>
@@ -105,7 +101,7 @@ namespace DotNetUtils.Net
         /// <returns></returns>
         public static string Post(string uri, IDictionary<string, string> formData = null)
         {
-            return PutOrPost(METHOD_POST, uri, formData);
+            return PutOrPost(HttpRequestMethod.Post, uri, formData);
         }
 
         /// <summary>
@@ -116,7 +112,7 @@ namespace DotNetUtils.Net
         /// <returns></returns>
         public static string Put(string uri, IDictionary<string, string> formData = null)
         {
-            return PutOrPost(METHOD_PUT, uri, formData);
+            return PutOrPost(HttpRequestMethod.Put, uri, formData);
         }
 
         /// <summary>
@@ -127,13 +123,13 @@ namespace DotNetUtils.Net
         /// <param name="cache">Determines whether the request should be cached.</param>
         /// <param name="headers">HTTP request headers to send to the server.</param>
         /// <returns>A fully configured <see cref="HttpWebRequest"/> object.</returns>
-        public static HttpWebRequest BuildRequest(string method, string uri, bool cache = false, List<string> headers = null)
+        public static HttpWebRequest BuildRequest(HttpRequestMethod method, string uri, bool cache = false, List<string> headers = null)
         {
             LogBuildRequest(method, uri, cache, headers);
 
             var request = (HttpWebRequest) WebRequest.Create(uri);
 
-            request.Method = method;
+            request.Method = method.ToString("G").ToUpper();
             request.UserAgent = UserAgent;
             request.KeepAlive = true;
             request.CachePolicy = new RequestCachePolicy(cache ? RequestCacheLevel.CacheIfAvailable : RequestCacheLevel.BypassCache);
@@ -147,7 +143,7 @@ namespace DotNetUtils.Net
                 }
             }
 
-            if (METHOD_POST == method || METHOD_PUT == method)
+            if (HttpRequestMethod.Post == method || HttpRequestMethod.Put == method)
             {
                 request.ContentType = "application/x-www-form-urlencoded";
             }
@@ -155,18 +151,18 @@ namespace DotNetUtils.Net
             return request;
         }
 
-        private static void LogBuildRequest(string method, string uri, bool cache = false, List<string> headers = null)
+        private static void LogBuildRequest(HttpRequestMethod method, string uri, bool cache = false, List<string> headers = null)
         {
             var strHeaders = "";
             if (headers != null && headers.Count > 0)
             {
                 strHeaders = string.Format(" with headers: {0}", string.Join("; ", headers));
             }
-            Logger.DebugFormat("{0} \"{1}\" -- cache = {2}{3}", method, uri, cache, strHeaders);
+            Logger.DebugFormat("{0} \"{1}\" -- cache = {2}{3}", method.ToString("G").ToUpper(), uri, cache, strHeaders);
         }
 
         [CanBeNull]
-        private static string PutOrPost(string method, string uri, IDictionary<string, string> formData)
+        private static string PutOrPost(HttpRequestMethod method, string uri, IDictionary<string, string> formData)
         {
             var request = BuildRequest(method, uri);
 
@@ -237,7 +233,7 @@ namespace DotNetUtils.Net
         [CanBeNull]
         private static Image GetImageNoCache(string uri)
         {
-            var request = BuildRequest(METHOD_GET, uri, true);
+            var request = BuildRequest(HttpRequestMethod.Get, uri, true);
             NotifyBeforeRequest(request);
             using (var httpResponse = request.GetResponse())
             {

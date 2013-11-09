@@ -63,7 +63,7 @@ namespace DotNetUtils.Net
         /// <returns>Size of the download in bytes</returns>
         public long GetContentLength()
         {
-            var request = HttpRequest.BuildRequest("HEAD", Uri);
+            var request = HttpRequest.BuildRequest(HttpRequestMethod.Head, Uri);
 
             NotifyBeforeRequest(request);
 
@@ -78,7 +78,7 @@ namespace DotNetUtils.Net
         /// </summary>
         public void DownloadSync()
         {
-            var request = HttpRequest.BuildRequest("GET", Uri);
+            var request = HttpRequest.BuildRequest(HttpRequestMethod.Get, Uri);
 
             NotifyBeforeRequest(request);
 
