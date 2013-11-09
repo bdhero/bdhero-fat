@@ -282,6 +282,9 @@ namespace BDHero.Plugin
             }
         }
 
+        // TODO: Allow caller to choose estimation algorithm at runtime
+        // depending on whether the task is likely to have stable progress
+        // or change frequently.
         private void CalculateTimeRemaining()
         {
             lock (_lock)
