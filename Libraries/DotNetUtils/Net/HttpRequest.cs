@@ -120,6 +120,7 @@ namespace DotNetUtils.Net
         private static Image FetchAndCacheImage([NotNull] string url)
         {
             var image = GetImageNoCache(url);
+            if (image == null) { return null; }
             ImageCache.Set(url, image, new CacheItemPolicy());
             return image;
         }
