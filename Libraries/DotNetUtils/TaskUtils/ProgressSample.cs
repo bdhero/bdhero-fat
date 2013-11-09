@@ -43,11 +43,16 @@ namespace DotNetUtils.TaskUtils
         ///     Gets or sets the maximum number of samples to consider when calculating "time remaining" estimates.
         ///     Samples older than this number will be discarded.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MaxSampleSize"/> is set to a value less than 2.</exception>
         public int MaxSampleSize
         {
             get { return _maxSampleSize; }
             set
             {
+                if (value < LowestMinSampleSize)
+                {
+                    throw new ArgumentOutOfRangeException("MaxSampleSize cannot be less than " + LowestMinSampleSize);
+                }
                 _maxSampleSize = value;
             }
         }
