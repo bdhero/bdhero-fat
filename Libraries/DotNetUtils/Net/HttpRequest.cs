@@ -11,6 +11,13 @@ using DotNetUtils.Annotations;
 namespace DotNetUtils.Net
 {
     /// <summary>
+    /// Invoked just before an HTTP request is made, allowing observers to modify the request before it gets sent.
+    /// This can be useful to override the system's default proxy settings, set timeout values, etc.
+    /// </summary>
+    /// <param name="request"></param>
+    public delegate void BeforeRequestEventHandler(HttpWebRequest request);
+
+    /// <summary>
     /// Helper utility class for making HTTP requests and parsing/caching the responses.
     /// </summary>
     public static class HttpRequest
@@ -207,11 +214,4 @@ namespace DotNetUtils.Net
             return Uri.EscapeUriString(key) + "=" + Uri.EscapeUriString(value);
         }
     }
-
-    /// <summary>
-    /// Invoked just before an HTTP request is made, allowing observers to modify the request before it gets sent.
-    /// This can be useful to override the system's default proxy settings, set timeout values, etc.
-    /// </summary>
-    /// <param name="request"></param>
-    public delegate void BeforeRequestEventHandler(HttpWebRequest request);
 }
