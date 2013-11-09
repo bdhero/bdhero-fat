@@ -110,8 +110,14 @@ namespace BDHeroGUI.Components
         private void LoadSearchResults()
         {
             var media = _job != null
-                            ? _job.Movies.OfType<ReleaseMedium>().ToArray()
-                            : new Collection<ReleaseMedium>().ToArray();
+                            ? _job.Movies.OfType<ReleaseMedium>().ToList()
+                            : new Collection<ReleaseMedium>().ToList();
+
+            // TODO: Insert "No metadata" item
+//            media.Insert(0, new Movie()
+//                            {
+//                                Title = "No metadata"
+//                            });
 
             PopulateComboBox(media);
             OnSelectedMediaChanged();
