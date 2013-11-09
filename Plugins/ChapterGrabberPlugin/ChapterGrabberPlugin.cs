@@ -250,7 +250,7 @@ namespace ChapterGrabberPlugin
             return Math.Abs(timeDisc - timeApi) <= 1.0;
         }
 
-        static private void ReplaceChapters(JsonChaps apiData, IList<Chapter> discData )
+        static private void ReplaceChapters(JsonChaps apiData, IList<Chapter> discData)
         {
             for (var i=0; i<discData.Count; i++)
             {
