@@ -33,6 +33,8 @@ namespace DotNetUtils.Net
         /// Gets or sets the User-Agent HTTP request header sent to the web server when making requests.
         /// Defaults to <c>"ENTRY_ASSEMBLY_NAME/ENTRY_ASSEMBLY_VERSION"</c>.
         /// </summary>
+        // ReSharper disable once FieldCanBeMadeReadOnly.Global
+        // ReSharper disable once MemberCanBePrivate.Global
         public static string UserAgent = AssemblyUtils.GetAssemblyName() + "/" + AssemblyUtils.GetAssemblyVersion();
 
         /// <summary>
