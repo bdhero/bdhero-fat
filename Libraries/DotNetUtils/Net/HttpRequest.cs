@@ -73,9 +73,13 @@ namespace DotNetUtils.Net
             NotifyBeforeRequest(request);
             using (var httpResponse = request.GetResponse())
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                using (var responseStream = httpResponse.GetResponseStream())
                 {
-                    return streamReader.ReadToEnd();
+                    if (responseStream == null) { return null; }
+                    using (var streamReader = new StreamReader(responseStream))
+                    {
+                        return streamReader.ReadToEnd();
+                    }
                 }
             }
         }
