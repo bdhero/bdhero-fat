@@ -57,6 +57,7 @@
     <Compile Include="Concurrency\ConcurrentMultiValueDictionaryTest.cs" />
     <Compile Include="FileDownloaderUnitTest.cs" />
     <Compile Include="FileUtilsTest.cs" />
+    <Compile Include="HttpRequestTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskUtils\ProgressSampleTest.cs" />
   </ItemGroup>
