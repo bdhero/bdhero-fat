@@ -278,7 +278,7 @@ namespace BDHero.Plugin.FFmpegMuxer
                 writer.WriteDocType("Chapters", null, "matroskachapters.dtd", null);
                 writer.WriteStartElement("Chapters");
                     writer.WriteStartElement("EditionEntry");
-                    foreach (var chapter in chapters.Where(chapter => chapter.Enabled))
+                    foreach (var chapter in chapters.Where(chapter => chapter.Keep))
                     {
                         writer.WriteStartElement("ChapterAtom");
                             writer.WriteStartElement("ChapterTimeStart");

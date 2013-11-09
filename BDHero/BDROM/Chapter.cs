@@ -37,7 +37,7 @@ namespace BDHero.BDROM
 
         #endregion
 
-        public bool Enabled = true;
+        public bool Keep = true;
 
         #region Constructor
 
