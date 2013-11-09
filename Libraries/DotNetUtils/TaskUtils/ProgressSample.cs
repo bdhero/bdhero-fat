@@ -55,6 +55,7 @@ namespace DotNetUtils.TaskUtils
         /// <summary>
         ///     Gets the estimated time remaining.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <see cref="MinSampleSize"/> is greater than <see cref="MaxSampleSize"/>.</exception>
         public TimeSpan? EstimatedTimeRemaining
         {
             get
