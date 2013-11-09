@@ -19,6 +19,7 @@ namespace DotNetUtils.TaskUtils
         private int _minSampleSize = 5;
         private int _maxSampleSize = 10;
 
+        private ProgressSampleState _state;
         private TimeSpan? _lastEstimate;
         private DateTime _lastEstimateTime;
 
@@ -77,8 +78,6 @@ namespace DotNetUtils.TaskUtils
                 return newEstimate;
             }
         }
-
-        private ProgressSampleState _state;
 
         private DateTime? LastSampleTime
         {
