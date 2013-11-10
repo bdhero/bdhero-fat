@@ -877,6 +877,7 @@ namespace BDInfo
 
             if (referenceClip.StreamFile != null)
             {
+#if BDInfo
                 // TODO: Better way to add this in?
                 if (BDInfoSettings.EnableSSIF &&
                     referenceClip.StreamFile.InterleavedFile != null &&
@@ -890,6 +891,7 @@ namespace BDInfo
                         VideoStreams.Add((TSVideoStream)stream);
                     }
                 }
+#endif
 
                 foreach (TSStream clipStream
                     in referenceClip.StreamFile.Streams.Values)
@@ -958,10 +960,6 @@ namespace BDInfo
                 AngleStreams.Add(new Dictionary<ushort, TSStream>());
             }
 
-            if (!BDInfoSettings.KeepStreamOrder)
-            {
-                VideoStreams.Sort(CompareVideoStreams);
-            }
             foreach (TSStream stream in VideoStreams)
             {
                 SortedStreams.Add(stream);
@@ -974,28 +972,17 @@ namespace BDInfo
                 }
             }
 
-            if (!BDInfoSettings.KeepStreamOrder)
-            {
-                AudioStreams.Sort(CompareAudioStreams);
-            }
             foreach (TSStream stream in AudioStreams)
             {
                 SortedStreams.Add(stream);
             }
 
-            if (!BDInfoSettings.KeepStreamOrder)
-            {
-                GraphicsStreams.Sort(CompareGraphicsStreams);
-            }
+
             foreach (TSStream stream in GraphicsStreams)
             {
                 SortedStreams.Add(stream);
             }
 
-            if (!BDInfoSettings.KeepStreamOrder)
-            {
-                TextStreams.Sort(CompareTextStreams);
-            }
             foreach (TSStream stream in TextStreams)
             {
                 SortedStreams.Add(stream);
