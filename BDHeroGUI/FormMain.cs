@@ -50,6 +50,7 @@ namespace BDHeroGUI
         private CancellationTokenSource _cancellationTokenSource;
 
         private ProgressProviderState _state = ProgressProviderState.Ready;
+        private Stage _stage = Stage.None;
 
         public event WndProcEventHandler WndProcMessage;
 
@@ -101,8 +102,44 @@ namespace BDHeroGUI
             var currentVersion = AppUtils.AppVersion;
             _updateHelper = new UpdateHelper(_updater, currentVersion);
             _updateHelper.RegisterObserver(updateObserver);
-
             SystemEvents.SessionEnded += (sender, args) => DisableUpdates();
+
+            FormClosing += OnFormClosing;
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs args)
+        {
+            // Only prompt the user if they're currently scanning/muxing
+            if (_state != ProgressProviderState.Running &&
+                _state != ProgressProviderState.Paused)
+            {
+                return;
+            }
+
+            // Don't prompt the user if Windows is shutting down
+            // or some other piece of code called Application.Exit()
+            if (args.CloseReason == CloseReason.ApplicationExitCall ||
+                args.CloseReason == CloseReason.WindowsShutDown)
+            {
+                return;
+            }
+
+            var title = string.Format("Close {0}?", AppUtils.AppName);
+            var operation = _stage == Stage.Scan ? "scanning" : "conversion";
+            var message = string.Format("Are you sure you want to close {0}?\n\nThis will abort the {1} process.",
+                                        AppUtils.AppName, operation);
+
+            var result = MessageBox.Show(this,
+                                         message,
+                                         title,
+                                         MessageBoxButtons.OKCancel,
+                                         MessageBoxIcon.Question,
+                                         MessageBoxDefaultButton.Button2);
+
+            if (result != DialogResult.OK)
+            {
+                args.Cancel = true;
+            }
         }
 
         private void DisableUpdates()
@@ -553,6 +590,7 @@ namespace BDHeroGUI
 
         private void ControllerOnScanStarted()
         {
+            _stage = Stage.Scan;
             buttonScan.Text = "Scanning...";
             textBoxStatus.Text = "Scan started...";
             EnableControls(false);
@@ -587,6 +625,7 @@ namespace BDHeroGUI
 
         private void ControllerOnScanCompleted()
         {
+            _stage = Stage.None;
             buttonScan.Text = "Scan";
             EnableControls(true);
         }
@@ -597,6 +636,7 @@ namespace BDHeroGUI
 
         private void ControllerOnConvertStarted()
         {
+            _stage = Stage.Convert;
             buttonConvert.Text = "Converting...";
             AppendStatus("Convert started...");
             EnableControls(false);
@@ -629,6 +669,7 @@ namespace BDHeroGUI
 
         private void ControllerOnConvertCompleted()
         {
+            _stage = Stage.None;
             buttonConvert.Text = "Convert";
             EnableControls(true);
         }
@@ -916,5 +957,12 @@ namespace BDHeroGUI
         }
 
         #endregion
+    }
+
+    internal enum Stage
+    {
+        None,
+        Scan,
+        Convert
     }
 }
