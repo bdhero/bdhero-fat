@@ -6,6 +6,10 @@ using System.Text;
 
 namespace DotNetUtils
 {
+    /// <summary>
+    /// Static helper class that provides application assembly meta information,
+    /// such as app name, app version, build date, and product name.
+    /// </summary>
     public static class AppUtils
     {
         #region Assembly Attribute Accessors
