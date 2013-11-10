@@ -200,6 +200,12 @@ namespace BDHero.Plugin.AutoDetector
                     {
                         var subtitleTrack = subtitleTracksWithLang[i];
                         subtitleTrack.Type = i == 0 ? TrackType.MainFeature : TrackType.Commentary;
+
+                        var codec = subtitleTrack.Codec;
+                        if (!codec.IsKnown || !codec.IsMuxable)
+                        {
+                            subtitleTrack.Type = TrackType.Misc;
+                        }
                     }
                 }
             }
