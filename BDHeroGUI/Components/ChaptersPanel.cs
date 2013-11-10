@@ -56,7 +56,7 @@ namespace BDHeroGUI.Components
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
-            listViewChapters.SetSortColumn(columnHeaderIndex.Index);
+            listViewChapters.ToggleColumnSort(columnHeaderIndex.Index);
         }
 
         #endregion

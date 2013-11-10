@@ -134,7 +134,7 @@ namespace BDHero.Plugin.FileNamer
         {
             listViewCodecNames.AfterLabelEdit += ListViewCodecNamesOnAfterLabelEdit;
             PopulateCodecListView();
-            listViewCodecNames.SetSortColumn(columnHeaderNumber.Index);
+            listViewCodecNames.ToggleColumnSort(columnHeaderNumber.Index);
         }
 
         private void PopulateCodecListView()

@@ -62,7 +62,7 @@ namespace BDHeroGUI.Components
 
         public void OnLoad(object sender = null, EventArgs eventArgs = null)
         {
-            _listView.SetSortColumn(_listView.FirstDisplayedColumn.Index);
+            _listView.ToggleColumnSort(_listView.FirstDisplayedColumn.Index);
             _listView.AutoSizeColumns();
         }
 

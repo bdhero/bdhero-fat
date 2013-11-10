@@ -227,7 +227,7 @@ namespace BDHeroGUI.Components
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
-            listView.SetSortColumn(columnHeaderType.Index);
+            listView.ToggleColumnSort(columnHeaderType.Index);
         }
 
         private ListViewItem[] Transform(IEnumerable<Playlist> playlists)
