@@ -97,9 +97,9 @@ namespace DotNetUtils.Controls
             }
             else
             {
-                // Set the column number that is to be sorted; default to descending.
+                // Set the column number that is to be sorted; default to ascending.
                 _columnSorter.SortColumn = columnIndex;
-                _columnSorter.Order = SortOrder.Descending;
+                _columnSorter.Order = SortOrder.Ascending;
             }
 
             // Perform the sort with these new sort options.
