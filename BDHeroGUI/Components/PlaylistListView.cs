@@ -107,6 +107,11 @@ namespace BDHeroGUI.Components
             listView.MouseClick += ListViewOnMouseClick;
             listView.MouseDoubleClick += ListViewOnMouseDoubleClick;
             listView.KeyUp += ListViewOnKeyUp;
+
+            // Set initial sort order for columns that should default to descending instead of ascending
+            columnHeaderLength.Tag = SortOrder.Descending;
+            columnHeaderChapterCount.Tag = SortOrder.Descending;
+            columnHeaderFileSize.Tag = SortOrder.Descending;
         }
 
         private void ListViewOnKeyUp(object sender, KeyEventArgs args)

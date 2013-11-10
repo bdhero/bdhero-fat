@@ -51,6 +51,16 @@ namespace DotNetUtils.Controls
                       };
         }
 
+        private ColumnHeader[] ColumnHeaders
+        {
+            get { return Columns.OfType<ColumnHeader>().ToArray(); }
+        }
+
+        private ColumnHeader GetColumnHeader(int index)
+        {
+            return ColumnHeaders[index];
+        }
+
         /// <summary>
         ///     Gets the first column on the left based on <see cref="ColumnHeader.DisplayIndex" />.
         /// </summary>
@@ -100,6 +110,12 @@ namespace DotNetUtils.Controls
                 // Set the column number that is to be sorted; default to ascending.
                 _columnSorter.SortColumn = columnIndex;
                 _columnSorter.Order = SortOrder.Ascending;
+
+                var tag = GetColumnHeader(columnIndex).Tag;
+                if (tag is SortOrder)
+                {
+                    _columnSorter.Order = (SortOrder) tag;
+                }
             }
 
             // Perform the sort with these new sort options.

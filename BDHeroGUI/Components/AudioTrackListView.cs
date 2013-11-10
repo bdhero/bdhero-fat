@@ -25,6 +25,9 @@ namespace BDHeroGUI.Components
             _helper = new TrackListViewHelper(listViewAudioTracks, track => track.IsAudio && Filter(track), GetListItem);
             Load += _helper.OnLoad;
             _helper.PlaylistReconfigured += HelperOnPlaylistReconfigured;
+
+            // Set initial sort order for columns that should default to descending instead of ascending
+            columnHeaderChannels.Tag = SortOrder.Descending;
         }
 
         public void SetPlaylist(Playlist playlist, Language[] allLanguages)
