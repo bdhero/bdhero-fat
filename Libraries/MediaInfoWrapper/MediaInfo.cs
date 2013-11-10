@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if MediaInfo
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -3258,3 +3260,5 @@ namespace MediaInfoWrapper
     #endregion
 
 }
+
+#endif

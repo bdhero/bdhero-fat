@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if MediaInfo
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -555,3 +557,5 @@ namespace MediaInfoWrapper
         }
     }
 }
+
+#endif
